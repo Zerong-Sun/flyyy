@@ -56,6 +56,20 @@ python scripts/run_pipeline.py
 
 按 PRD：¥50,000 等值（冻结汇率 USD/CNY=7.2 → 约 **$6,944**）。计划表中的 “USD$50,000” 为笔误，以 PRD 为准。
 
+## 验收
+
+```bash
+source etl/.venv/bin/activate
+pytest tests/etl -q
+python tools/demo_smoke_logic.py
+```
+
+对照清单：[`docs/superpowers/plans/2026-07-26-demo-acceptance.md`](docs/superpowers/plans/2026-07-26-demo-acceptance.md)（PRD §27 二十二条）。
+
+手工剧本：新档 → 买特产 → 筛选航班购票 → 加速确认 → 三段过场 → 出售 → 存读档。1080p 下用编辑器 Profiler 抽检地球界面帧率（目标约 60FPS）。
+
+## 架构
+
 - `etl/` — Python 管线 → SQLite + JSON  
 - `game/` — Godot 客户端（只读 `game/data/`）  
 - `PRD_01.md` — 产品需求  

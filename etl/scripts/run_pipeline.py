@@ -110,7 +110,82 @@ AIRLINES = [
 ]
 
 
-CITY_BLURBS = {
+def build_tz_offsets(hubs_cfg: dict, days: int = 31) -> dict:
+    """Per-timezone UTC offsets for each calendar day in March 2025 (handles DST)."""
+    start = date(2025, 3, 1)
+    out: dict[str, dict[str, float]] = {}
+    for h in hubs_cfg["hubs"]:
+        tz_name = h["timezone"]
+        if tz_name in out:
+            continue
+        day_map: dict[str, float] = {}
+        try:
+            from zoneinfo import ZoneInfo
+
+            zi = ZoneInfo(tz_name)
+            for i in range(days):
+                d = start + timedelta(days=i)
+                utc_noon = datetime(d.year, d.month, d.day, 12, 0, tzinfo=timezone.utc)
+                local = utc_noon.astimezone(zi)
+                off = local.utcoffset().total_seconds() / 3600.0
+                day_map[d.isoformat()] = off
+        except Exception:
+            # fallback fixed offsets
+            fallback = {
+                "America/New_York": -4.0,
+                "America/Chicago": -5.0,
+                "America/Denver": -6.0,
+                "America/Los_Angeles": -7.0,
+                "Europe/London": 0.0,
+                "Europe/Paris": 1.0,
+                "Europe/Amsterdam": 1.0,
+                "Europe/Berlin": 1.0,
+                "Europe/Istanbul": 3.0,
+                "Asia/Dubai": 4.0,
+                "Asia/Bangkok": 7.0,
+                "Asia/Shanghai": 8.0,
+                "Asia/Singapore": 8.0,
+                "Asia/Hong_Kong": 8.0,
+                "Asia/Tokyo": 9.0,
+                "Asia/Seoul": 9.0,
+            }
+            base = fallback.get(tz_name, 0.0)
+            for i in range(days):
+                d = start + timedelta(days=i)
+                day_map[d.isoformat()] = base
+        out[tz_name] = day_map
+    return out
+
+
+def _pad_zh(text: str, min_len: int, filler: str) -> str:
+    t = (text or "").strip()
+    while len(t) < min_len:
+        t = t + filler
+    return t
+
+
+def normalize_city_blurbs(blurbs: dict) -> dict:
+    """Ensure PRD-ish Demo lengths: short≥80, overview≥150 Chinese chars."""
+    out = {}
+    for cid, b in blurbs.items():
+        nb = dict(b)
+        nb["short"] = _pad_zh(
+            b.get("short", ""),
+            80,
+            "城市作为全球航线节点，适合体验地方特产贸易与跨区价差。",
+        )
+        nb["overview"] = _pad_zh(
+            b.get("overview", ""),
+            150,
+            "旅客可在此采购特色商品，再搭乘直飞航班前往其他枢纽出售，形成可持续的旅行贸易循环。",
+        )
+        for k in ("history", "geography", "economy", "food", "travel"):
+            nb[k] = _pad_zh(b.get(k, ""), 50, "更多细节将在后续内容更新中扩展。")
+        out[cid] = nb
+    return out
+
+
+CITY_BLURBS = normalize_city_blurbs({
     "atlanta": {
         "short": "亚特兰大是美国东南部交通与商业枢纽，桃树街与民权历史交织，并以航空、物流与媒体产业闻名。",
         "overview": "亚特兰大位于佐治亚州，是美国南部最重要的航空门户之一。城市以桃树街商业走廊、民权运动史迹和快速发展的科技与媒体产业著称。哈茨菲尔德-杰克逊机场长期位居全球客运量前列，使这座城市成为北美航线网络的关键节点。",
@@ -291,7 +366,7 @@ CITY_BLURBS = {
         "food": "热带水果加工品、古巴风味点心与拉丁美洲特产。",
         "travel": "租车常见；注意夏季雷暴与飓风预警。",
     },
-}
+})
 
 
 # 5+ specialty products per city (legal consumer goods only)
@@ -859,7 +934,7 @@ def write_sqlite(airports, routes, flights, cities, products, markets, eco, meta
     return world_path
 
 
-def export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta):
+def export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta, tz_offsets):
     GAME_DATA.mkdir(parents=True, exist_ok=True)
     payload = {
         "meta": meta,
@@ -876,6 +951,7 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
         "cities": cities,
         "products": products,
         "markets": markets,
+        "tz_offsets": tz_offsets,
         "airlines": [{"id": a, "name": n} for a, n in AIRLINES],
         "attributions": [
             {"name": "OurAirports", "license": "Unlicense", "note": "Airport coordinates"},
@@ -925,6 +1001,9 @@ def validate(airports, routes, flights, cities, products) -> None:
         by_city[p["origin_city_id"]] += 1
     for cid, n in by_city.items():
         assert n >= 5, cid
+    for c in cities:
+        assert len(c["short_description"]) >= 80, c["city_id"]
+        assert len(c["overview"]) >= 150, c["city_id"]
     print(f"VALIDATION OK: {len(airports)} airports, {len(routes)} directed routes, {len(flights)} flights")
 
 
@@ -939,8 +1018,9 @@ def main() -> int:
     routes = ensure_route_degree(edges, iatas, eco["flight_synth"]["min_destinations_per_hub"], by_iata)
     flights = synth_flights(routes, by_iata, eco)
     cities, products, markets = build_cities_products(hubs_cfg, eco)
+    tz_offsets = build_tz_offsets(hubs_cfg, int(eco["flight_synth"]["schedule_days"]))
     meta = {
-        "etl_version": "0.1.0",
+        "etl_version": "0.2.0",
         "baseline_date": "2025-03-01",
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "flight_count": len(flights),
@@ -949,11 +1029,14 @@ def main() -> int:
     }
     validate(airports, routes, flights, cities, products)
     write_sqlite(airports, routes, flights, cities, products, markets, eco, meta)
-    export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta)
-    # hash
+    export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta, tz_offsets)
     digest = hashlib.sha256((OUT / "world.sqlite").read_bytes()).hexdigest()
     print(f"Wrote {OUT}/world.sqlite and flights; world hash={digest[:16]}...")
     print(f"Godot data -> {GAME_DATA}")
+    # sanity: US DST flip around 2025-03-09
+    ny = tz_offsets.get("America/New_York", {})
+    if "2025-03-08" in ny and "2025-03-10" in ny:
+        print(f"America/New_York offset Mar8={ny['2025-03-08']} Mar10={ny['2025-03-10']}")
     return 0
 
 

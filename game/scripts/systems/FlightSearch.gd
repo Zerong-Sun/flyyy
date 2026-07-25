@@ -7,7 +7,10 @@ static func search(
 	query: String,
 	max_results: int = 250,
 	only_unvisited: bool = false,
-	sort_by: String = "departure"
+	sort_by: String = "departure",
+	max_price_economy: float = 0.0,
+	max_duration_min: int = 0,
+	business_available_only: bool = false
 ) -> Array:
 	var now_iso: String = GameClock.now_iso()
 	var all: Array = DataService.flights_from(origin_id)
@@ -21,6 +24,12 @@ static func search(
 			var dest_id: String = str(fl.get("destination_airport_id", ""))
 			if AppState.visited_airports.has(dest_id):
 				continue
+		if max_price_economy > 0.0 and float(fl.get("ticket_base_price_economy", 0)) > max_price_economy:
+			continue
+		if max_duration_min > 0 and int(fl.get("duration_minutes", 0)) > max_duration_min:
+			continue
+		if business_available_only and not bool(fl.get("cabin_business_available", true)):
+			continue
 		if q != "":
 			var dest_a: Dictionary = DataService.get_airport(str(fl.get("destination_airport_id", "")))
 			var blob: String = "%s %s %s %s %s %s" % [

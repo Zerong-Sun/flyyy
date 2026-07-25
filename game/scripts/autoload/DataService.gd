@@ -10,6 +10,7 @@ var products_by_id: Dictionary = {}
 var markets: Array = []
 var routes: Array = []
 var economy: Dictionary = {}
+var tz_offsets: Dictionary = {}
 var disclaimer: String = ""
 var loaded: bool = false
 
@@ -30,6 +31,7 @@ func _load_all() -> void:
 	airports = world.get("airports", [])
 	routes = world.get("routes", [])
 	economy = world.get("economy", {})
+	tz_offsets = world.get("tz_offsets", {})
 	disclaimer = str(world.get("disclaimer", ""))
 	for a in airports:
 		airports_by_id[a["airport_id"]] = a

@@ -45,7 +45,11 @@ var _pending_cabin: String = ""
 var _filter_unvisited: bool = false
 var _sort_by: String = "departure"
 var _flight_page: int = 0
+var _max_price: float = 0.0
+var _max_duration: int = 0
+var _biz_only: bool = false
 const FLIGHTS_PER_PAGE := 80
+var _transition_running: bool = false
 
 
 func _ready() -> void:
@@ -358,15 +362,33 @@ func _do_fast_forward() -> void:
 func _on_transition_started(ticket: Dictionary) -> void:
 	_panel_host.visible = false
 	_overlay.visible = true
-	_overlay_label.text = "强制登机（不可取消）\n%s  %s → %s\n距离 %.0f km · %s舱\n飞行中…" % [
-		ticket.get("marketing_flight_number", ""), ticket.get("origin_iata", ""), ticket.get("destination_iata", ""),
-		float(ticket.get("distance_km", 0)), ticket.get("cabin", "")
-	]
+	_transition_running = true
+	_run_transition_sequence(ticket)
 	globe.draw_trip_route(str(ticket.get("origin_airport_id", "")), str(ticket.get("destination_airport_id", "")))
 
 
+func _run_transition_sequence(ticket: Dictionary) -> void:
+	var base: String = "%s  %s → %s\n距离 %.0f km · %s舱\n" % [
+		ticket.get("marketing_flight_number", ""), ticket.get("origin_iata", ""), ticket.get("destination_iata", ""),
+		float(ticket.get("distance_km", 0)), ticket.get("cabin", "")
+	]
+	var phases: Array = [
+		{"t": 0.0, "title": "强制登机 · 起飞", "bar": "■■■□□□□□□□"},
+		{"t": 1.6, "title": "巡航中", "bar": "□□■■■■■□□□"},
+		{"t": 3.4, "title": "降落进近", "bar": "□□□□□□■■■■"},
+	]
+	for ph in phases:
+		if not _transition_running:
+			return
+		_overlay_label.text = "%s\n%s\n%s\n（过场动画，飞行时间已计入世界时钟）" % [ph.title, base, ph.bar]
+		var wait: float = 1.6 if ph.t < 3.0 else 1.6
+		await get_tree().create_timer(wait).timeout
+
+
 func _on_transition_finished() -> void:
+	_transition_running = false
 	_overlay.visible = false
+	_overlay_label.text = ""
 
 
 func _on_arrived() -> void:
@@ -508,14 +530,44 @@ func _show_flights() -> void:
 	var bun := Button.new()
 	bun.text = "仅未访问"
 	bun.toggle_mode = true
+	bun.button_pressed = _filter_unvisited
 	bun.toggled.connect(func (on): _filter_unvisited = on; _flight_page = 0; _reload_flights())
 	filters.add_child(bun)
+	var bbiz := Button.new()
+	bbiz.text = "含公务舱"
+	bbiz.toggle_mode = true
+	bbiz.button_pressed = _biz_only
+	bbiz.toggled.connect(func (on): _biz_only = on; _flight_page = 0; _reload_flights())
+	filters.add_child(bbiz)
 	for pair in [["起飞", "departure"], ["票价", "price"], ["时长", "duration"], ["距离", "distance"]]:
 		var bs := Button.new()
 		bs.text = "排序:" + pair[0]
 		var key: String = pair[1]
 		bs.pressed.connect(func (): _sort_by = key; _flight_page = 0; _reload_flights())
 		filters.add_child(bs)
+	var filters2 := HBoxContainer.new()
+	v.add_child(filters2)
+	var bp := Button.new()
+	bp.text = "票价≤$800"
+	bp.toggle_mode = true
+	bp.toggled.connect(func (on): _max_price = 800.0 if on else 0.0; _flight_page = 0; _reload_flights())
+	filters2.add_child(bp)
+	var bd := Button.new()
+	bd.text = "时长≤8h"
+	bd.toggle_mode = true
+	bd.toggled.connect(func (on): _max_duration = 480 if on else 0; _flight_page = 0; _reload_flights())
+	filters2.add_child(bd)
+	var bclear := Button.new()
+	bclear.text = "清除筛选"
+	bclear.pressed.connect(func ():
+		_max_price = 0.0
+		_max_duration = 0
+		_biz_only = false
+		_filter_unvisited = false
+		_flight_page = 0
+		_reload_flights()
+	)
+	filters2.add_child(bclear)
 	_flight_list = ItemList.new()
 	_flight_list.custom_minimum_size = Vector2(700, 200)
 	_flight_list.item_selected.connect(_on_flight_selected)
@@ -577,7 +629,10 @@ func _reload_flights(_q: String = "") -> void:
 		return
 	_flight_list.clear()
 	var q: String = _flight_query.text if _flight_query else ""
-	var all: Array = _FlightSearch.search(AppState.current_airport_id, q, 0, _filter_unvisited, _sort_by)
+	var all: Array = _FlightSearch.search(
+		AppState.current_airport_id, q, 0, _filter_unvisited, _sort_by,
+		_max_price, _max_duration, _biz_only
+	)
 	var start: int = _flight_page * FLIGHTS_PER_PAGE
 	if start >= all.size() and _flight_page > 0:
 		_flight_page = maxi(0, (all.size() - 1) / FLIGHTS_PER_PAGE)

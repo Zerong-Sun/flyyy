@@ -16,6 +16,7 @@ var _pitch := 0.3
 var _distance := 28.0
 var _dragging := false
 var _airport_nodes: Dictionary = {}
+var _label_nodes: Dictionary = {}
 var _selected_id: String = ""
 
 
@@ -34,12 +35,33 @@ func _build_earth() -> void:
 	mesh.radial_segments = 64
 	mesh.rings = 32
 	earth.mesh = mesh
+	var img := Image.create(512, 256, false, Image.FORMAT_RGB8)
+	for y in 256:
+		for x in 512:
+			var u := float(x) / 511.0
+			var v := float(y) / 255.0
+			var lat := (0.5 - v) * PI
+			var lon := (u - 0.5) * TAU
+			# Cheap continent-ish mask (not geographic truth — Demo visual only)
+			var land := 0.0
+			land += max(0.0, sin(lon * 3.0 + 0.4) * cos(lat * 2.2) - 0.35)
+			land += max(0.0, sin(lon * 2.0 - 1.2) * cos(lat * 3.0 + 0.3) - 0.45)
+			land += max(0.0, sin(lon * 5.0) * cos(lat * 1.5 - 0.8) - 0.55)
+			var polar := absf(lat) > 1.2
+			var col: Color
+			if polar:
+				col = Color(0.85, 0.9, 0.95)
+			elif land > 0.12:
+				col = Color(0.22, 0.42, 0.28).lerp(Color(0.35, 0.32, 0.22), clampf(land, 0, 1))
+			else:
+				col = Color(0.08, 0.28, 0.48).lerp(Color(0.12, 0.4, 0.55), 0.5 + 0.5 * sin(lat))
+			img.set_pixel(x, y, col)
+	var tex := ImageTexture.create_from_image(img)
 	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.15, 0.35, 0.55)
-	mat.roughness = 0.85
-	mat.metallic = 0.05
+	mat.albedo_texture = tex
+	mat.roughness = 0.9
+	mat.metallic = 0.0
 	earth.material_override = mat
-	# Simple continent tint via second slightly smaller? Keep single sphere for Demo.
 
 
 func latlon_to_vec(lat: float, lon: float, radius: float = EARTH_RADIUS) -> Vector3:
@@ -55,6 +77,7 @@ func _spawn_airports() -> void:
 	for c in airports_root.get_children():
 		c.queue_free()
 	_airport_nodes.clear()
+	_label_nodes.clear()
 	for a in DataService.airports:
 		var mi := MeshInstance3D.new()
 		var sm := SphereMesh.new()
@@ -71,6 +94,16 @@ func _spawn_airports() -> void:
 		mi.name = str(a.airport_id)
 		airports_root.add_child(mi)
 		_airport_nodes[a.airport_id] = mi
+		var lab := Label3D.new()
+		lab.text = str(a.get("iata", ""))
+		lab.font_size = 48
+		lab.pixel_size = 0.008
+		lab.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		lab.position = pos.normalized() * (EARTH_RADIUS + 0.35)
+		lab.visible = false
+		lab.modulate = Color(1, 0.95, 0.7)
+		airports_root.add_child(lab)
+		_label_nodes[a.airport_id] = lab
 
 
 func _on_game_started() -> void:
@@ -88,7 +121,6 @@ func focus_airport(airport_id: String) -> void:
 	if a.is_empty():
 		return
 	var pos := latlon_to_vec(float(a.latitude), float(a.longitude), EARTH_RADIUS)
-	# Orient pivot toward airport
 	_yaw = atan2(pos.z, pos.x)
 	_pitch = asin(clampf(pos.y / EARTH_RADIUS, -1.0, 1.0))
 	_distance = 22.0
@@ -100,6 +132,10 @@ func _update_markers() -> void:
 	for id in _airport_nodes.keys():
 		var mi: MeshInstance3D = _airport_nodes[id]
 		var mat: StandardMaterial3D = mi.material_override
+		var lab: Label3D = _label_nodes.get(id)
+		var show_label: bool = id == _selected_id or id == AppState.current_airport_id
+		if lab:
+			lab.visible = show_label
 		if id == AppState.current_airport_id:
 			mat.albedo_color = Color(0.2, 1.0, 0.45)
 		elif id == _selected_id:
@@ -117,6 +153,7 @@ func draw_routes_from(origin_id: String) -> void:
 	if origin.is_empty():
 		return
 	var oiata := str(origin.iata)
+	var drawn := 0
 	for r_v in DataService.routes:
 		var r: Dictionary = r_v
 		if str(r.get("origin")) != oiata:
@@ -130,6 +167,9 @@ func draw_routes_from(origin_id: String) -> void:
 		if dest.is_empty():
 			continue
 		_add_great_circle(origin, dest)
+		drawn += 1
+		if drawn >= 24:
+			break
 
 
 func draw_trip_route(origin_id: String, dest_id: String) -> void:
@@ -162,7 +202,7 @@ func _add_great_circle(a: Dictionary, b: Dictionary, color: Color = Color(0.4, 0
 	mat.albedo_color = color
 	mi.material_override = mat
 	routes_root.add_child(mi)
-	# ignore unused width in ImmediateMesh line
+	var _w := width  # reserved for thicker ribbons later
 
 
 func _slerp(a: Vector3, b: Vector3, t: float) -> Vector3:

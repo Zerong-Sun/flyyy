@@ -55,22 +55,36 @@ func game_date_string() -> String:
 
 
 func format_local(tz_name: String) -> String:
-	# Approximate fixed offsets for Demo hubs (no DST flip mid-March edge cases handled simply)
-	var off := _offset_hours(tz_name)
+	var off: float = offset_hours_for(tz_name)
 	var local_unix := unix_time + off * 3600.0
 	return Time.get_datetime_string_from_unix_time(int(local_unix), true)
 
 
-func _offset_hours(tz_name: String) -> float:
+func offset_hours_for(tz_name: String) -> float:
+	var table: Dictionary = DataService.tz_offsets.get(tz_name, {})
+	var d: String = game_date_string()
+	if table.has(d):
+		return float(table[d])
+	# nearest known day or fixed fallback
+	if not table.is_empty():
+		var keys: Array = table.keys()
+		keys.sort()
+		if d < str(keys[0]):
+			return float(table[keys[0]])
+		return float(table[keys[keys.size() - 1]])
+	return _fallback_offset_hours(tz_name)
+
+
+func _fallback_offset_hours(tz_name: String) -> float:
 	match tz_name:
 		"America/New_York":
-			return -5.0
+			return -4.0
 		"America/Chicago":
-			return -6.0
+			return -5.0
 		"America/Denver":
-			return -7.0
+			return -6.0
 		"America/Los_Angeles":
-			return -8.0
+			return -7.0
 		"Europe/London":
 			return 0.0
 		"Europe/Paris", "Europe/Amsterdam", "Europe/Berlin":
