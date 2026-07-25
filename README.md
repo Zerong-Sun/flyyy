@@ -52,7 +52,9 @@ python scripts/run_pipeline.py
 | OpenFlights | 航线邻接种子 | ODbL |
 | 游戏原创 | 城市简介与商品 | 原创内容 |
 
-## 架构
+## 初始资金
+
+按 PRD：¥50,000 等值（冻结汇率 USD/CNY=7.2 → 约 **$6,944**）。计划表中的 “USD$50,000” 为笔误，以 PRD 为准。
 
 - `etl/` — Python 管线 → SQLite + JSON  
 - `game/` — Godot 客户端（只读 `game/data/`）  

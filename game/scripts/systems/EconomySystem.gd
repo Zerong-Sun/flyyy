@@ -48,6 +48,17 @@ static func quality_multiplier(quality: float) -> float:
 	return 0.1
 
 
+static func current_quality(item: Dictionary) -> float:
+	## Quality from purchased_unix so waiting time ages perishables.
+	var p: Dictionary = DataService.get_product(str(item.get("product_id", "")))
+	var life: float = float(p.get("shelf_life_hours", 99999))
+	if life >= 90000.0:
+		return 1.0
+	var bought: float = float(item.get("purchased_unix", GameClock.unix_time))
+	var hours: float = max(0.0, (GameClock.unix_time - bought) / 3600.0)
+	return max(0.0, 1.0 - hours / life)
+
+
 static func apply_sale_pressure(city_id: String, product_id: String, qty: int) -> void:
 	var key: String = "%s|%s" % [city_id, product_id]
 	var market: Dictionary = DataService.economy.get("market", {})
@@ -57,25 +68,61 @@ static func apply_sale_pressure(city_id: String, product_id: String, qty: int) -
 	AppState.demand_pressure[key] = p
 
 
+static func _parse_ymd(s: String) -> Dictionary:
+	var parts: PackedStringArray = s.split("-")
+	if parts.size() < 3:
+		return {}
+	return {"year": int(parts[0]), "month": int(parts[1]), "day": int(parts[2]), "hour": 0, "minute": 0, "second": 0}
+
+
+static func day_delta(prev_date: String, new_date: String) -> int:
+	if prev_date == "" or new_date == "" or prev_date == new_date:
+		return 0
+	var a: Dictionary = _parse_ymd(prev_date)
+	var b: Dictionary = _parse_ymd(new_date)
+	if a.is_empty() or b.is_empty():
+		return 1
+	var ua: int = Time.get_unix_time_from_datetime_dict(a)
+	var ub: int = Time.get_unix_time_from_datetime_dict(b)
+	return max(0, int((ub - ua) / 86400))
+
+
 static func recover_demand_for_new_day(prev_date: String, new_date: String) -> void:
-	if prev_date == new_date:
+	var days: int = day_delta(prev_date, new_date)
+	if days <= 0:
 		return
 	var market: Dictionary = DataService.economy.get("market", {})
 	var rec: float = float(market.get("demand_recovery_per_day", 0.05))
 	for k in AppState.demand_pressure.keys():
-		AppState.demand_pressure[k] = max(0.0, float(AppState.demand_pressure[k]) - rec)
+		AppState.demand_pressure[k] = max(0.0, float(AppState.demand_pressure[k]) - rec * float(days))
 
 
 static func age_inventory(hours: float) -> void:
+	## Kept for flight/FF paths; also bumps purchased_unix baseline via quality sync.
+	for item_v in AppState.inventory:
+		var item: Dictionary = item_v
+		item["quality"] = current_quality(item)
+
+
+static func apply_flight_fragility(duration_hours: float) -> void:
 	for item_v in AppState.inventory:
 		var item: Dictionary = item_v
 		var p: Dictionary = DataService.get_product(str(item.get("product_id", "")))
-		var life: float = float(p.get("shelf_life_hours", 99999))
-		if life >= 90000.0:
+		var frag: float = float(p.get("fragility", 0.0))
+		if frag <= 0.0:
 			continue
-		var q: float = float(item.get("quality", 1.0))
-		q = max(0.0, q - hours / life)
-		item["quality"] = q
+		var bought: float = float(item.get("purchased_unix", GameClock.unix_time))
+		# Simulate extra aging equivalent for fragile goods during flight.
+		item["purchased_unix"] = bought - duration_hours * 3600.0 * frag * 0.25
+		item["quality"] = current_quality(item)
+
+
+static func inventory_cargo_value_usd() -> float:
+	var total: float = 0.0
+	for item_v in AppState.inventory:
+		var item: Dictionary = item_v
+		total += float(item.get("unit_cost", 0)) * float(item.get("qty", 0))
+	return total
 
 
 static func format_money(usd: float) -> String:

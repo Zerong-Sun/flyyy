@@ -39,6 +39,13 @@ var _cargo_blocks: int = 0
 var _flights_cache: Array = []
 var _market_cache: Array = []
 var _last_hint_time := 0.0
+var _ff_dialog: ConfirmationDialog
+var _replace_ticket_dialog: ConfirmationDialog
+var _pending_cabin: String = ""
+var _filter_unvisited: bool = false
+var _sort_by: String = "departure"
+var _flight_page: int = 0
+const FLIGHTS_PER_PAGE := 80
 
 
 func _ready() -> void:
@@ -157,6 +164,20 @@ func _build_ui() -> void:
 	_overlay_label.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	_overlay_label.add_theme_font_size_override("font_size", 28)
 	_overlay.add_child(_overlay_label)
+
+	_ff_dialog = ConfirmationDialog.new()
+	_ff_dialog.title = "加速至起飞"
+	_ff_dialog.ok_button_text = "确认加速"
+	_ff_dialog.cancel_button_text = "取消"
+	_ff_dialog.confirmed.connect(_do_fast_forward)
+	add_child(_ff_dialog)
+
+	_replace_ticket_dialog = ConfirmationDialog.new()
+	_replace_ticket_dialog.title = "替换机票"
+	_replace_ticket_dialog.ok_button_text = "退旧票并购买"
+	_replace_ticket_dialog.cancel_button_text = "取消"
+	_replace_ticket_dialog.confirmed.connect(_do_replace_purchase)
+	add_child(_replace_ticket_dialog)
 
 	_new_game_panel = PanelContainer.new()
 	_new_game_panel.position = Vector2(360, 200)
@@ -297,20 +318,36 @@ func _refresh_countdown() -> void:
 		_btn_ff.visible = false
 		return
 	var dep: float = GameClock.parse_iso_to_unix(str(t.get("scheduled_departure_utc", "")))
-	var remain: float = dep - GameClock.unix_time
+	var remain: float = max(0.0, dep - GameClock.unix_time)
 	var hrs: int = int(remain / 3600.0)
 	var mins: int = int(fmod(remain, 3600.0) / 60.0)
-	_countdown.text = "下一班 %s %s→%s  倒计时 %dh%02dm  [%s]" % [
-		t.get("marketing_flight_number", ""), t.get("origin_iata", ""), t.get("destination_iata", ""), hrs, mins, t.get("cabin", "")
-	]
-	_btn_ff.visible = remain > 0 and AppState.game_started
-	if remain <= 0:
+	if remain <= 0.0:
+		_countdown.text = "下一班 %s %s→%s  登机中…" % [
+			t.get("marketing_flight_number", ""), t.get("origin_iata", ""), t.get("destination_iata", "")
+		]
 		_countdown.modulate = Color(1, 0.3, 0.3)
+		_btn_ff.visible = false
 	else:
+		_countdown.text = "下一班 %s %s→%s  倒计时 %dh%02dm  [%s]" % [
+			t.get("marketing_flight_number", ""), t.get("origin_iata", ""), t.get("destination_iata", ""),
+			hrs, mins, t.get("cabin", "")
+		]
 		_countdown.modulate = Color(1, 1, 1)
+		_btn_ff.visible = AppState.game_started
 
 
 func _on_fast_forward() -> void:
+	var t: Dictionary = _Tickets.next_ticket()
+	if t.is_empty():
+		_show_hint("没有已购航班")
+		return
+	var dep: float = GameClock.parse_iso_to_unix(str(t.get("scheduled_departure_utc", "")))
+	var hours: float = max(0.0, (dep - GameClock.unix_time) / 3600.0)
+	_ff_dialog.dialog_text = "将跳跃约 %.1f 游戏小时至起飞时刻。\n易腐商品品质会按等待时间衰减，市场价格按新日期刷新。\n确认加速？" % hours
+	_ff_dialog.popup_centered()
+
+
+func _do_fast_forward() -> void:
 	var err: String = flight_ops.fast_forward_to_departure()
 	if err != "":
 		_show_hint(err)
@@ -319,12 +356,13 @@ func _on_fast_forward() -> void:
 
 
 func _on_transition_started(ticket: Dictionary) -> void:
+	_panel_host.visible = false
 	_overlay.visible = true
-	_overlay_label.text = "强制登机\n%s  %s → %s\n距离 %.0f km · %s舱\n飞行中…" % [
-		ticket.marketing_flight_number, ticket.origin_iata, ticket.destination_iata,
-		float(ticket.distance_km), ticket.cabin
+	_overlay_label.text = "强制登机（不可取消）\n%s  %s → %s\n距离 %.0f km · %s舱\n飞行中…" % [
+		ticket.get("marketing_flight_number", ""), ticket.get("origin_iata", ""), ticket.get("destination_iata", ""),
+		float(ticket.get("distance_km", 0)), ticket.get("cabin", "")
 	]
-	globe.draw_trip_route(str(ticket.origin_airport_id), str(ticket.destination_airport_id))
+	globe.draw_trip_route(str(ticket.get("origin_airport_id", "")), str(ticket.get("destination_airport_id", "")))
 
 
 func _on_transition_finished() -> void:
@@ -348,7 +386,16 @@ func _clear_panel() -> void:
 	_panel_host.visible = true
 
 
+func _require_started() -> bool:
+	if not AppState.game_started:
+		_show_hint("请先选择机场开始游戏")
+		return false
+	return true
+
+
 func _show_city() -> void:
+	if not _require_started():
+		return
 	_clear_panel()
 	var c: Dictionary = DataService.get_city(AppState.current_city_id())
 	_city_text = RichTextLabel.new()
@@ -366,18 +413,19 @@ func _show_city() -> void:
 
 
 func _show_market() -> void:
+	if not _require_started():
+		return
 	_clear_panel()
 	var v := VBoxContainer.new()
 	_panel_host.add_child(v)
 	var title := Label.new()
-	title.text = "市场 — %s（点击买入；库存页出售）" % AppState.current_city_id()
+	title.text = "市场 — %s（超重可就地加购行李/货运）" % AppState.current_city_id()
 	v.add_child(title)
 	_market_list = ItemList.new()
-	_market_list.custom_minimum_size = Vector2(700, 360)
+	_market_list.custom_minimum_size = Vector2(700, 300)
 	v.add_child(_market_list)
 	_market_cache.clear()
 	var city := AppState.current_city_id()
-	# Show local specialties first, then a sample of others
 	var locals := DataService.products_for_city(city)
 	for p in locals:
 		_add_market_row(city, p, true)
@@ -400,6 +448,16 @@ func _show_market() -> void:
 	b2.text = "买入 1（货运）"
 	b2.pressed.connect(func (): _buy_selected(true))
 	row.add_child(b2)
+	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
+		var bx := Button.new()
+		bx.text = pair[0]
+		var tier: String = pair[1]
+		bx.pressed.connect(func (): _show_hint(_Inventory.expand_baggage(tier)); _refresh_bags())
+		row.add_child(bx)
+	var bc := Button.new()
+	bc.text = "+50kg货运"
+	bc.pressed.connect(func (): _show_hint(_Inventory.expand_cargo(1)); _refresh_bags())
+	row.add_child(bc)
 	var close := Button.new()
 	close.text = "关闭"
 	close.pressed.connect(func (): _panel_host.visible = false)
@@ -432,24 +490,49 @@ func _buy_market_item(idx: int) -> void:
 
 
 func _show_flights() -> void:
+	if not _require_started():
+		return
 	_clear_panel()
 	var v := VBoxContainer.new()
 	_panel_host.add_child(v)
 	var tip := Label.new()
-	tip.text = "全局航班检索（当前机场出港，未起飞均可购）· " + DataService.disclaimer
+	tip.text = "全局航班检索（当前机场出港）· " + DataService.disclaimer
 	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(tip)
 	_flight_query = LineEdit.new()
 	_flight_query.placeholder_text = "目的地 / IATA / 航空公司"
-	_flight_query.text_changed.connect(func (t): _reload_flights(t))
+	_flight_query.text_changed.connect(func (_t): _flight_page = 0; _reload_flights())
 	v.add_child(_flight_query)
+	var filters := HBoxContainer.new()
+	v.add_child(filters)
+	var bun := Button.new()
+	bun.text = "仅未访问"
+	bun.toggle_mode = true
+	bun.toggled.connect(func (on): _filter_unvisited = on; _flight_page = 0; _reload_flights())
+	filters.add_child(bun)
+	for pair in [["起飞", "departure"], ["票价", "price"], ["时长", "duration"], ["距离", "distance"]]:
+		var bs := Button.new()
+		bs.text = "排序:" + pair[0]
+		var key: String = pair[1]
+		bs.pressed.connect(func (): _sort_by = key; _flight_page = 0; _reload_flights())
+		filters.add_child(bs)
 	_flight_list = ItemList.new()
-	_flight_list.custom_minimum_size = Vector2(700, 220)
+	_flight_list.custom_minimum_size = Vector2(700, 200)
 	_flight_list.item_selected.connect(_on_flight_selected)
 	v.add_child(_flight_list)
+	var pager := HBoxContainer.new()
+	v.add_child(pager)
+	var prev := Button.new()
+	prev.text = "上一页"
+	prev.pressed.connect(func (): _flight_page = maxi(0, _flight_page - 1); _reload_flights())
+	pager.add_child(prev)
+	var nxt := Button.new()
+	nxt.text = "下一页"
+	nxt.pressed.connect(func (): _flight_page += 1; _reload_flights())
+	pager.add_child(nxt)
 	_flight_detail = RichTextLabel.new()
 	_flight_detail.bbcode_enabled = true
-	_flight_detail.custom_minimum_size = Vector2(700, 120)
+	_flight_detail.custom_minimum_size = Vector2(700, 100)
 	v.add_child(_flight_detail)
 	var row := HBoxContainer.new()
 	v.add_child(row)
@@ -461,17 +544,23 @@ func _show_flights() -> void:
 	bb.text = "公务舱购票×10"
 	bb.pressed.connect(func (): _purchase("business"))
 	row.add_child(bb)
-	var bx := Button.new()
-	bx.text = "+20kg行李"
-	bx.pressed.connect(func (): _extra_tier = "standard"; _show_hint("已选择标准行李扩展 +20kg"))
-	row.add_child(bx)
+	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
+		var bx := Button.new()
+		bx.text = pair[0]
+		var tier: String = pair[1]
+		bx.pressed.connect(func (): _extra_tier = tier; _show_hint("已选择行李扩展 " + pair[0]))
+		row.add_child(bx)
 	var bc := Button.new()
-	bc.text = "+50kg货运"
-	bc.pressed.connect(func (): _cargo_blocks = 1; _show_hint("已选择货运 50kg"))
+	bc.text = "货运+50"
+	bc.pressed.connect(func (): _cargo_blocks += 1; _show_hint("货运档位 ×%d（每档50kg）" % _cargo_blocks))
 	row.add_child(bc)
+	var bcr := Button.new()
+	bcr.text = "清零货运"
+	bcr.pressed.connect(func (): _cargo_blocks = 0; _show_hint("已清零货运加购"))
+	row.add_child(bcr)
 	var br := Button.new()
-	br.text = "退票(30%手续费)"
-	br.pressed.connect(func (): _show_hint(_Tickets.refund_current()))
+	br.text = "退票(30%)"
+	br.pressed.connect(func (): _show_hint(_Tickets.refund_current()); _refresh_bags())
 	row.add_child(br)
 	var close := Button.new()
 	close.text = "关闭"
@@ -479,12 +568,21 @@ func _show_flights() -> void:
 	row.add_child(close)
 	_extra_tier = ""
 	_cargo_blocks = 0
-	_reload_flights("")
+	_flight_page = 0
+	_reload_flights()
 
 
-func _reload_flights(q: String) -> void:
+func _reload_flights(_q: String = "") -> void:
+	if _flight_list == null:
+		return
 	_flight_list.clear()
-	_flights_cache = _FlightSearch.search(AppState.current_airport_id, q, 100)
+	var q: String = _flight_query.text if _flight_query else ""
+	var all: Array = _FlightSearch.search(AppState.current_airport_id, q, 0, _filter_unvisited, _sort_by)
+	var start: int = _flight_page * FLIGHTS_PER_PAGE
+	if start >= all.size() and _flight_page > 0:
+		_flight_page = maxi(0, (all.size() - 1) / FLIGHTS_PER_PAGE)
+		start = _flight_page * FLIGHTS_PER_PAGE
+	_flights_cache = all.slice(start, mini(all.size(), start + FLIGHTS_PER_PAGE))
 	for fl in _flights_cache:
 		_flight_list.add_item("%s  %s→%s  %s  经济$%.0f  公务$%.0f  %dmin" % [
 			fl.marketing_flight_number, fl.origin_iata, fl.destination_iata,
@@ -492,16 +590,22 @@ func _reload_flights(q: String) -> void:
 			float(fl.ticket_base_price_economy), float(fl.ticket_base_price_business),
 			int(fl.duration_minutes)
 		])
+	_show_hint("航班 %d–%d / 共 %d（页 %d）" % [
+		start + (1 if all.size() > 0 else 0), start + _flights_cache.size(), all.size(), _flight_page + 1
+	])
 
 
 func _on_flight_selected(idx: int) -> void:
+	if idx < 0 or idx >= _flights_cache.size():
+		return
 	_selected_flight = _flights_cache[idx]
-	var fl := _selected_flight
-	_flight_detail.text = "航班 %s（%s）\n%s → %s\n起飞 %s\n到达 %s\n距离 %.0f km · %d 分钟\n经济舱 $%.2f / 公务舱 $%.2f（10×）\n行李额：经济 %.0fkg / 公务 %.0fkg" % [
-		fl.marketing_flight_number, fl.airline_name, fl.origin_iata, fl.destination_iata,
-		fl.scheduled_departure_utc, fl.scheduled_arrival_utc, float(fl.distance_km), int(fl.duration_minutes),
-		float(fl.ticket_base_price_economy), float(fl.ticket_base_price_business),
-		float(fl.baggage_allowance_economy), float(fl.baggage_allowance_business)
+	var fl: Dictionary = _selected_flight
+	_flight_detail.text = "航班 %s（%s）\n%s → %s\n起飞 %s\n到达 %s\n距离 %.0f km · %d 分钟\n经济舱 $%.2f / 公务舱 $%.2f（10×）\n行李额：经济 %.0fkg / 公务 %.0fkg\n加购：行李档=%s  货运×%d" % [
+		fl.get("marketing_flight_number", ""), fl.get("airline_name", ""), fl.get("origin_iata", ""), fl.get("destination_iata", ""),
+		fl.get("scheduled_departure_utc", ""), fl.get("scheduled_arrival_utc", ""), float(fl.get("distance_km", 0)), int(fl.get("duration_minutes", 0)),
+		float(fl.get("ticket_base_price_economy", 0)), float(fl.get("ticket_base_price_business", 0)),
+		float(fl.get("baggage_allowance_economy", 20)), float(fl.get("baggage_allowance_business", 60)),
+		_extra_tier if _extra_tier != "" else "无", _cargo_blocks
 	]
 
 
@@ -509,7 +613,12 @@ func _purchase(cabin: String) -> void:
 	if _selected_flight.is_empty():
 		_show_hint("请先选择航班")
 		return
-	var err: String = _Tickets.purchase(_selected_flight, cabin, _extra_tier, _cargo_blocks)
+	var err: String = _Tickets.purchase(_selected_flight, cabin, _extra_tier, _cargo_blocks, false)
+	if err.find("已有机票") >= 0:
+		_pending_cabin = cabin
+		_replace_ticket_dialog.dialog_text = err + "\n将按 30% 手续费退旧票后购买新票，确认？"
+		_replace_ticket_dialog.popup_centered()
+		return
 	_show_hint(err if err != "" else "购票成功")
 	_refresh_bags()
 	_refresh_countdown()
@@ -517,7 +626,18 @@ func _purchase(cabin: String) -> void:
 		globe.draw_trip_route(AppState.current_airport_id, str(_selected_flight.destination_airport_id))
 
 
+func _do_replace_purchase() -> void:
+	var err: String = _Tickets.purchase(_selected_flight, _pending_cabin, _extra_tier, _cargo_blocks, true)
+	_show_hint(err if err != "" else "已替换购票")
+	_refresh_bags()
+	_refresh_countdown()
+	if err == "" and _selected_flight.has("destination_airport_id"):
+		globe.draw_trip_route(AppState.current_airport_id, str(_selected_flight.destination_airport_id))
+
+
 func _show_inventory() -> void:
+	if not _require_started():
+		return
 	_clear_panel()
 	var v := VBoxContainer.new()
 	_panel_host.add_child(v)
@@ -526,10 +646,11 @@ func _show_inventory() -> void:
 	v.add_child(_inv_list)
 	for i in AppState.inventory.size():
 		var item: Dictionary = AppState.inventory[i]
-		var p: Dictionary = DataService.get_product(item.product_id)
+		var p: Dictionary = DataService.get_product(str(item.get("product_id", "")))
+		var q: float = _Economy.current_quality(item)
 		_inv_list.add_item("%s ×%d  品质%.0f%%  成本%s  %s" % [
-			p.get("name_zh", item.product_id), int(item.qty), float(item.quality) * 100.0,
-			_Economy.format_money(float(item.unit_cost)),
+			p.get("name_zh", item.get("product_id", "")), int(item.get("qty", 0)), q * 100.0,
+			_Economy.format_money(float(item.get("unit_cost", 0))),
 			"货运" if item.get("in_cargo", false) else "行李"
 		])
 	var row := HBoxContainer.new()

@@ -8,3 +8,5 @@ game/.godot/
 *.translation
 .import/
 export_presets.cfg
+*.uid
+*.import

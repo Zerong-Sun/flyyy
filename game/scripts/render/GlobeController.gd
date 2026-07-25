@@ -188,16 +188,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		if mb.button_index == MOUSE_BUTTON_LEFT:
 			_dragging = mb.pressed
 			if mb.pressed:
-				_try_pick()
+				if mb.double_click:
+					_try_pick()
+					if _selected_id != "":
+						focus_airport(_selected_id)
+				else:
+					_try_pick()
 		elif mb.button_index == MOUSE_BUTTON_WHEEL_UP and mb.pressed:
 			_distance -= 1.5
 			_update_camera()
 		elif mb.button_index == MOUSE_BUTTON_WHEEL_DOWN and mb.pressed:
 			_distance += 1.5
 			_update_camera()
-		elif mb.button_index == MOUSE_BUTTON_LEFT and mb.double_click:
-			if _selected_id != "":
-				focus_airport(_selected_id)
 	elif event is InputEventMouseMotion and _dragging:
 		var mm := event as InputEventMouseMotion
 		_yaw -= mm.relative.x * 0.005

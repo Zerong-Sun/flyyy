@@ -20,6 +20,7 @@ var game_started: bool = false
 # Per-ticket trip baggage (cleared on arrival)
 var trip_baggage_extra_kg: float = 0.0
 var trip_cabin: String = "economy"  # economy|business
+var last_market_date: String = ""
 
 
 func reset_new_game(airport_id: String) -> void:
@@ -37,6 +38,7 @@ func reset_new_game(airport_id: String) -> void:
 	tutorial_flags = {}
 	trip_baggage_extra_kg = 0.0
 	trip_cabin = "economy"
+	last_market_date = "2025-03-01"
 	_mark_visit(airport_id)
 	game_started = true
 	GameClock.unix_time = GameClock.BASELINE_UNIX
@@ -113,6 +115,7 @@ func to_dict() -> Dictionary:
 		"tutorial_flags": tutorial_flags,
 		"trip_baggage_extra_kg": trip_baggage_extra_kg,
 		"trip_cabin": trip_cabin,
+		"last_market_date": last_market_date,
 		"game_started": game_started,
 	}
 
@@ -133,6 +136,7 @@ func from_dict(d: Dictionary) -> void:
 	tutorial_flags = d.get("tutorial_flags", {})
 	trip_baggage_extra_kg = float(d.get("trip_baggage_extra_kg", 0))
 	trip_cabin = str(d.get("trip_cabin", "economy"))
+	last_market_date = str(d.get("last_market_date", GameClock.game_date_string()))
 	game_started = bool(d.get("game_started", false))
 	if game_started:
 		GameClock.start_clock()

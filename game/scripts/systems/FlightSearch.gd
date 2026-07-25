@@ -2,7 +2,13 @@ extends RefCounted
 class_name FlightSearch
 
 
-static func search(origin_id: String, query: String, max_results: int = 80) -> Array:
+static func search(
+	origin_id: String,
+	query: String,
+	max_results: int = 250,
+	only_unvisited: bool = false,
+	sort_by: String = "departure"
+) -> Array:
 	var now_iso: String = GameClock.now_iso()
 	var all: Array = DataService.flights_from(origin_id)
 	var q: String = query.strip_edges().to_lower()
@@ -11,6 +17,10 @@ static func search(origin_id: String, query: String, max_results: int = 80) -> A
 		var fl: Dictionary = fl_v
 		if str(fl.get("scheduled_departure_utc", "")) <= now_iso:
 			continue
+		if only_unvisited:
+			var dest_id: String = str(fl.get("destination_airport_id", ""))
+			if AppState.visited_airports.has(dest_id):
+				continue
 		if q != "":
 			var dest_a: Dictionary = DataService.get_airport(str(fl.get("destination_airport_id", "")))
 			var blob: String = "%s %s %s %s %s %s" % [
@@ -21,6 +31,19 @@ static func search(origin_id: String, query: String, max_results: int = 80) -> A
 			if blob.to_lower().find(q) < 0:
 				continue
 		out.append(fl)
-		if out.size() >= max_results:
-			break
+	out.sort_custom(func(a, b): return _cmp(a, b, sort_by))
+	if max_results > 0 and out.size() > max_results:
+		return out.slice(0, max_results)
 	return out
+
+
+static func _cmp(a: Dictionary, b: Dictionary, sort_by: String) -> bool:
+	match sort_by:
+		"price":
+			return float(a.get("ticket_base_price_economy", 0)) < float(b.get("ticket_base_price_economy", 0))
+		"duration":
+			return int(a.get("duration_minutes", 0)) < int(b.get("duration_minutes", 0))
+		"distance":
+			return float(a.get("distance_km", 0)) < float(b.get("distance_km", 0))
+		_:
+			return str(a.get("scheduled_departure_utc", "")) < str(b.get("scheduled_departure_utc", ""))
