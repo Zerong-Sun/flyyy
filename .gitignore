@@ -1,0 +1,10 @@
+.DS_Store
+etl/.venv/
+etl/raw/
+*.pyc
+__pycache__/
+.godot/
+game/.godot/
+*.translation
+.import/
+export_presets.cfg

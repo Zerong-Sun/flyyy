@@ -1,0 +1,225 @@
+# Demo hub airports — PRD §24.2
+hubs:
+  - iata: ATL
+    icao: KATL
+    name_zh: 哈茨菲尔德-杰克逊
+    name_en: Hartsfield-Jackson Atlanta International
+    city_id: atlanta
+    city_zh: 亚特兰大
+    city_en: Atlanta
+    country_id: US
+    country_zh: 美国
+    timezone: America/New_York
+  - iata: DXB
+    icao: OMDB
+    name_zh: 迪拜国际
+    name_en: Dubai International
+    city_id: dubai
+    city_zh: 迪拜
+    city_en: Dubai
+    country_id: AE
+    country_zh: 阿联酋
+    timezone: Asia/Dubai
+  - iata: DFW
+    icao: KDFW
+    name_zh: 达拉斯/沃斯堡
+    name_en: Dallas/Fort Worth International
+    city_id: dallas
+    city_zh: 达拉斯
+    city_en: Dallas
+    country_id: US
+    country_zh: 美国
+    timezone: America/Chicago
+  - iata: DEN
+    icao: KDEN
+    name_zh: 丹佛国际
+    name_en: Denver International
+    city_id: denver
+    city_zh: 丹佛
+    city_en: Denver
+    country_id: US
+    country_zh: 美国
+    timezone: America/Denver
+  - iata: LHR
+    icao: EGLL
+    name_zh: 伦敦希思罗
+    name_en: London Heathrow
+    city_id: london
+    city_zh: 伦敦
+    city_en: London
+    country_id: GB
+    country_zh: 英国
+    timezone: Europe/London
+  - iata: ORD
+    icao: KORD
+    name_zh: 芝加哥奥黑尔
+    name_en: Chicago O'Hare International
+    city_id: chicago
+    city_zh: 芝加哥
+    city_en: Chicago
+    country_id: US
+    country_zh: 美国
+    timezone: America/Chicago
+  - iata: IST
+    icao: LTFM
+    name_zh: 伊斯坦布尔
+    name_en: Istanbul Airport
+    city_id: istanbul
+    city_zh: 伊斯坦布尔
+    city_en: Istanbul
+    country_id: TR
+    country_zh: 土耳其
+    timezone: Europe/Istanbul
+  - iata: LAX
+    icao: KLAX
+    name_zh: 洛杉矶国际
+    name_en: Los Angeles International
+    city_id: los_angeles
+    city_zh: 洛杉矶
+    city_en: Los Angeles
+    country_id: US
+    country_zh: 美国
+    timezone: America/Los_Angeles
+  - iata: HND
+    icao: RJTT
+    name_zh: 东京羽田
+    name_en: Tokyo Haneda
+    city_id: tokyo
+    city_zh: 东京
+    city_en: Tokyo
+    country_id: JP
+    country_zh: 日本
+    timezone: Asia/Tokyo
+  - iata: PVG
+    icao: ZSPD
+    name_zh: 上海浦东
+    name_en: Shanghai Pudong International
+    city_id: shanghai
+    city_zh: 上海
+    city_en: Shanghai
+    country_id: CN
+    country_zh: 中国
+    timezone: Asia/Shanghai
+  - iata: CDG
+    icao: LFPG
+    name_zh: 巴黎戴高乐
+    name_en: Paris Charles de Gaulle
+    city_id: paris
+    city_zh: 巴黎
+    city_en: Paris
+    country_id: FR
+    country_zh: 法国
+    timezone: Europe/Paris
+  - iata: AMS
+    icao: EHAM
+    name_zh: 阿姆斯特丹史基浦
+    name_en: Amsterdam Schiphol
+    city_id: amsterdam
+    city_zh: 阿姆斯特丹
+    city_en: Amsterdam
+    country_id: NL
+    country_zh: 荷兰
+    timezone: Europe/Amsterdam
+  - iata: CAN
+    icao: ZGGG
+    name_zh: 广州白云
+    name_en: Guangzhou Baiyun International
+    city_id: guangzhou
+    city_zh: 广州
+    city_en: Guangzhou
+    country_id: CN
+    country_zh: 中国
+    timezone: Asia/Shanghai
+  - iata: FRA
+    icao: EDDF
+    name_zh: 法兰克福
+    name_en: Frankfurt Airport
+    city_id: frankfurt
+    city_zh: 法兰克福
+    city_en: Frankfurt
+    country_id: DE
+    country_zh: 德国
+    timezone: Europe/Berlin
+  - iata: PEK
+    icao: ZBAA
+    name_zh: 北京首都
+    name_en: Beijing Capital International
+    city_id: beijing
+    city_zh: 北京
+    city_en: Beijing
+    country_id: CN
+    country_zh: 中国
+    timezone: Asia/Shanghai
+  - iata: SIN
+    icao: WSSS
+    name_zh: 新加坡樟宜
+    name_en: Singapore Changi
+    city_id: singapore
+    city_zh: 新加坡
+    city_en: Singapore
+    country_id: SG
+    country_zh: 新加坡
+    timezone: Asia/Singapore
+  - iata: ICN
+    icao: RKSI
+    name_zh: 仁川国际
+    name_en: Incheon International
+    city_id: seoul
+    city_zh: 首尔
+    city_en: Seoul
+    country_id: KR
+    country_zh: 韩国
+    timezone: Asia/Seoul
+  - iata: HKG
+    icao: VHHH
+    name_zh: 香港国际
+    name_en: Hong Kong International
+    city_id: hong_kong
+    city_zh: 香港
+    city_en: Hong Kong
+    country_id: HK
+    country_zh: 中国香港
+    timezone: Asia/Hong_Kong
+  - iata: BKK
+    icao: VTBS
+    name_zh: 曼谷素万那普
+    name_en: Bangkok Suvarnabhumi
+    city_id: bangkok
+    city_zh: 曼谷
+    city_en: Bangkok
+    country_id: TH
+    country_zh: 泰国
+    timezone: Asia/Bangkok
+  - iata: MIA
+    icao: KMIA
+    name_zh: 迈阿密国际
+    name_en: Miami International
+    city_id: miami
+    city_zh: 迈阿密
+    city_en: Miami
+    country_id: US
+    country_zh: 美国
+    timezone: America/New_York
+
+# Fallback coordinates if OurAirports fetch unavailable (approx)
+fallback_coords:
+  ATL: {lat: 33.6407, lon: -84.4277, elev_ft: 1026}
+  DXB: {lat: 25.2532, lon: 55.3657, elev_ft: 62}
+  DFW: {lat: 32.8998, lon: -97.0403, elev_ft: 607}
+  DEN: {lat: 39.8561, lon: -104.6737, elev_ft: 5431}
+  LHR: {lat: 51.4700, lon: -0.4543, elev_ft: 83}
+  ORD: {lat: 41.9742, lon: -87.9073, elev_ft: 672}
+  IST: {lat: 41.2753, lon: 28.7519, elev_ft: 325}
+  LAX: {lat: 33.9425, lon: -118.4081, elev_ft: 128}
+  HND: {lat: 35.5494, lon: 139.7798, elev_ft: 21}
+  PVG: {lat: 31.1443, lon: 121.8083, elev_ft: 13}
+  CDG: {lat: 49.0097, lon: 2.5479, elev_ft: 392}
+  AMS: {lat: 52.3105, lon: 4.7683, elev_ft: -11}
+  CAN: {lat: 23.3924, lon: 113.2988, elev_ft: 50}
+  FRA: {lat: 50.0379, lon: 8.5622, elev_ft: 364}
+  PEK: {lat: 40.0799, lon: 116.6031, elev_ft: 116}
+  SIN: {lat: 1.3644, lon: 103.9915, elev_ft: 22}
+  ICN: {lat: 37.4602, lon: 126.4407, elev_ft: 23}
+  HKG: {lat: 22.3080, lon: 113.9185, elev_ft: 28}
+  BKK: {lat: 13.6900, lon: 100.7501, elev_ft: 5}
+  MIA: {lat: 25.7959, lon: -80.2870, elev_ft: 8}

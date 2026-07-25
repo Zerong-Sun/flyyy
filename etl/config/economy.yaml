@@ -1,0 +1,46 @@
+# Ticket & baggage economy constants (materialized into flight_instance)
+ticket:
+  c_route: 40.0          # USD fixed
+  c_km: 0.085            # USD per km
+  airport_fee_default: 25.0
+  airline_factor_default: 1.0
+  demand_factor_min: 0.92
+  demand_factor_max: 1.18
+  random_factor_min: 0.95
+  random_factor_max: 1.08
+  business_multiplier: 10.0
+  baggage_economy_kg: 20.0
+  baggage_business_kg: 60.0
+  carry_on_kg: 5.0
+
+flight_synth:
+  cruise_km_per_min: 13.5   # ~810 km/h
+  taxi_pad_min: 40
+  duration_min_floor: 75
+  duration_min_ceil: 1080
+  flights_per_day_min: 2
+  flights_per_day_max: 4
+  min_destinations_per_hub: 8
+  schedule_start: "2025-03-01"
+  schedule_days: 31         # cover >=30 game days
+
+baggage_extras:
+  light: {extra_kg: 10, price_usd: 70}    # ~¥500
+  standard: {extra_kg: 20, price_usd: 125} # ~¥900
+  heavy: {extra_kg: 50, price_usd: 280}   # ~¥2000
+  cargo_per_50kg_usd: 168                 # ~60% of heavy tier
+  refund_fee_rate: 0.30
+
+starting_cash_usd: 6944.0   # ≈ ¥50,000 at ~7.2
+fx:
+  USD_CNY: 7.20
+  effective_date: "2025-03-01"
+
+market:
+  retail_markup: 1.12
+  buy_sell_spread: 0.18
+  daily_variation_amp: 0.06
+  origin_supply_bonus: 0.82
+  scarcity_remote_bonus: 1.35
+  demand_decay_per_sale: 0.08
+  demand_recovery_per_day: 0.05

@@ -1,0 +1,41 @@
+; Engine configuration for Airborne Trader Demo
+; Locked engine: Godot 4.x (developed against 4.7.x installed locally)
+config_version=5
+
+[application]
+
+config/name="环球航商"
+config/name_localized={"en": "Airborne Trader"}
+config/description="全球旅行贸易 Demo — 航班网络基于公开航空数据重建，不代表真实购票信息。"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.3", "Forward Plus")
+config/icon="res://icon.svg"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="AirborneTrader"
+
+[debug]
+
+gdscript/warnings/inferred_declaration=0
+gdscript/warnings/untyped_declaration=0
+gdscript/warnings/unsafe_method_access=0
+gdscript/warnings/unsafe_call_argument=0
+gdscript/warnings/return_value_discarded=0
+
+
+[autoload]
+
+EventBus="*res://scripts/autoload/EventBus.gd"
+DataService="*res://scripts/autoload/DataService.gd"
+GameClock="*res://scripts/autoload/GameClock.gd"
+AppState="*res://scripts/autoload/AppState.gd"
+SaveSystem="*res://scripts/autoload/SaveSystem.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
+[rendering]
+
+anti_aliasing/quality/msaa_3d=1
