@@ -1137,7 +1137,75 @@ func _sell_one() -> void:
 	if idxs.is_empty():
 		return
 	var qty: int = int(_trade_qty.value) if _trade_qty else 1
-	var result: Dictionary = _Inventory.sell(idxs[0], qty)
+	var index: int = idxs[0]
+	if index < 0 or index >= AppState.inventory.size():
+		return
+	var item: Dictionary = AppState.inventory[index]
+	var product_id: String = str(item.get("product_id", ""))
+	_check_accidental_premium(product_id, index, qty)
+
+
+func _check_accidental_premium(product_id: String, index: int, qty: int) -> void:
+	var city_id := AppState.current_city_id()
+	var date_hour := int(GameClock.unix_time / 3600.0)
+	var seed_val := PopupEvent.event_seed(city_id, date_hour, product_id, "accidental_premium")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_val
+
+	var base_chance := 0.075  # 7.5%, midpoint of 5-10%
+	if rng.randf() > base_chance:
+		_do_sell(index, qty)
+		return
+
+	var bonus_pct := rng.randi_range(20, 35)
+
+	var item: Dictionary = AppState.inventory[index]
+	var actual_qty: int = mini(qty, int(item.get("qty", 0)))
+	if actual_qty <= 0:
+		return
+	var quality: float = _Economy.current_quality(item)
+	var unit: float = _Economy.sell_price(city_id, product_id, quality)
+	var original_revenue: float = unit * float(actual_qty)
+	var premium_revenue: float = original_revenue * (1.0 + float(bonus_pct) / 100.0)
+
+	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+	popup.event_confirmed.connect(_on_premium_accepted.bind(index, actual_qty, bonus_pct, original_revenue, premium_revenue))
+	add_child(popup)
+	popup.show_event("accidental_premium", {
+		"bonus_pct": bonus_pct,
+		"original": int(original_revenue),
+		"premium": int(premium_revenue),
+	})
+
+
+func _on_premium_accepted(index: int, qty: int, bonus_pct: int, original_revenue: float, premium_revenue: float) -> void:
+	var result: Dictionary = _Inventory.sell(index, qty)
+
+	if not result.get("success", false):
+		_show_hint(str(result.get("msg", "")))
+		return
+
+	var bonus_cash: float = premium_revenue - original_revenue
+	AppState.add_cash(bonus_cash)
+
+	result["accidental_premium"] = true
+	result["accidental_premium_bonus"] = bonus_pct
+	result["revenue"] = premium_revenue
+	result["margin"] = premium_revenue - result["total_unit_cost"]
+	result["margin_rate"] = result["margin"] / result["total_unit_cost"] if result["total_unit_cost"] > 0 else 0.0
+
+	AudioService.play_sfx("sfx_sell")
+	_show_hint("溢价出售！收入 %s（含%d%%意外加成）  毛利 %s" % [
+		_Economy.format_money(premium_revenue),
+		bonus_pct,
+		_Economy.format_money(result["margin"]),
+	])
+	_show_inventory()
+	_refresh_bags()
+
+
+func _do_sell(index: int, qty: int) -> void:
+	var result: Dictionary = _Inventory.sell(index, qty)
 	AudioService.play_sfx("sfx_sell")
 	_show_hint(str(result.get("msg", "")))
 	_show_inventory()
