@@ -16,15 +16,17 @@ var travel_log: Array = []
 var demand_pressure: Dictionary = {}  # "city|product" -> float 0..1
 var tutorial_flags: Dictionary = {}
 var game_started: bool = false
+var sell_transactions: Array[Dictionary] = []
 
 # Per-ticket trip baggage (cleared on arrival)
 var trip_baggage_extra_kg: float = 0.0
 var trip_cabin: String = "economy"  # economy|business
+var last_market_date: String = ""
 
 
 func reset_new_game(airport_id: String) -> void:
 	save_id = "S%s_%d" % [Time.get_unix_time_from_system(), randi() % 10000]
-	cash_usd = float(DataService.economy.get("starting_cash_usd", 6944.0))
+	cash_usd = float(DataService.economy.get("starting_cash_usd", 50000.0))
 	current_airport_id = airport_id
 	visited_airports = {}
 	visited_cities = {}
@@ -35,8 +37,10 @@ func reset_new_game(airport_id: String) -> void:
 	travel_log = []
 	demand_pressure = {}
 	tutorial_flags = {}
+	sell_transactions = []
 	trip_baggage_extra_kg = 0.0
 	trip_cabin = "economy"
+	last_market_date = "2025-03-01"
 	_mark_visit(airport_id)
 	game_started = true
 	GameClock.unix_time = GameClock.BASELINE_UNIX
@@ -46,7 +50,10 @@ func reset_new_game(airport_id: String) -> void:
 	EventBus.inventory_changed.emit()
 	if not tutorial_flags.get("welcome", false):
 		tutorial_flags["welcome"] = true
-		EventBus.tutorial_hint.emit("欢迎来到《环球航商》。先查看城市特产，再打开航班面板购票。航班为公开数据重建，非真实时刻。")
+		var tip := I18nService.tutorial("new_game")
+		if tip.is_empty():
+			tip = "欢迎来到《环球航商》。先查看城市特产，再打开航班面板购票。航班为公开数据重建，非真实时刻。"
+		EventBus.tutorial_hint.emit(tip)
 
 
 func _mark_visit(airport_id: String) -> void:
@@ -95,6 +102,20 @@ func add_cash(delta: float) -> void:
 	EventBus.cash_changed.emit()
 
 
+## Log a completed sell transaction. Persists to save file via to_dict/from_dict.
+func log_sell_transaction(sell_city: String, product_id: String, qty: int,
+		total_revenue: float, total_unit_cost: float, game_timestamp: float) -> void:
+	sell_transactions.append({
+		"sell_city": sell_city,
+		"product_id": product_id,
+		"qty": qty,
+		"total_revenue": total_revenue,
+		"total_unit_cost": total_unit_cost,
+		"margin": total_revenue - total_unit_cost,
+		"timestamp": game_timestamp
+	})
+
+
 func to_dict() -> Dictionary:
 	return {
 		"save_version": SAVE_VERSION,
@@ -113,7 +134,9 @@ func to_dict() -> Dictionary:
 		"tutorial_flags": tutorial_flags,
 		"trip_baggage_extra_kg": trip_baggage_extra_kg,
 		"trip_cabin": trip_cabin,
+		"last_market_date": last_market_date,
 		"game_started": game_started,
+		"sell_transactions": sell_transactions,
 	}
 
 
@@ -133,7 +156,9 @@ func from_dict(d: Dictionary) -> void:
 	tutorial_flags = d.get("tutorial_flags", {})
 	trip_baggage_extra_kg = float(d.get("trip_baggage_extra_kg", 0))
 	trip_cabin = str(d.get("trip_cabin", "economy"))
+	last_market_date = str(d.get("last_market_date", GameClock.game_date_string()))
 	game_started = bool(d.get("game_started", false))
+	sell_transactions = d.get("sell_transactions", [])
 	if game_started:
 		GameClock.start_clock()
 	EventBus.cash_changed.emit()

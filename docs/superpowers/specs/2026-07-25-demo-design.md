@@ -3,6 +3,8 @@
 **日期：** 2026-07-25  
 **范围：** PRD §24 Demo（20 座枢纽）完整可玩闭环  
 
+**首版交付口径：** 可玩 Demo = PRD §27（含基础 UI Theme）；地图阶段一门控见历史文档。素材现状见 `docs/CONTENT_ASSET_SPEC.md` §0.5。
+
 ## 决策锁定
 
 - 引擎：Godot 4.x（GDScript），Forward+

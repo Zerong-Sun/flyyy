@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=1 format=3]
+
+[resource]
+; Runtime-built via ThemeFactory.build() and applied on MainHUD.
+; This stub documents the resource path for docs / project settings.
+default_font_size = 15

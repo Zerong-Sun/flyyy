@@ -1,0 +1,41 @@
+本游戏数据来源
+
+机场坐标与基础信息 — OurAirports
+数据来源：OurAirports 开放数据集（https://ourairports.com/data/）
+许可：Public Domain（Unlicense）
+说明：提供全球机场的IATA/ICAO代码、名称、经纬度、类型等基础信息。本游戏使用其中约 8.5 万条机场记录中的一部分用于地球端展示和航线分析。
+
+航线参考数据 — OpenFlights
+数据来源：OpenFlights 开放航线与航空公司数据集（https://openflights.org/data.html）
+许可：ODbL 1.0（Open Database License），基于该数据生成的衍生数据库须以相同许可共享并保留署名。
+
+ODbL 主要义务摘要：
+1. 署名：需注明数据来源于 OpenFlights。
+2. 相同方式共享：使用本数据构建的衍生作品须以 ODbL 或兼容许可公开。
+3. 无附加限制：不得以技术措施限制他人使用衍生数据库。
+完整的 ODbL 法律文本请参阅：https://opendatacommons.org/licenses/odbl/1.0/
+
+航班时刻表 — 合成重建
+本游戏中的航班号、起飞/到达时间由算法根据公开航线数据及航空业规则合成生成，并非任一同真实航空公司时刻表的完整拷贝。所有航班信息均为模拟数据，旨在提供一种合理的航线体验。
+
+商品价格参考 — 公开零售数据估算
+各城市商品基准价为模型估算，非实时市场价。参考来源包括：公开电商平台年中年均价格、国际贸易统计年鉴中品类单价中位数、以及城市间对比生活方式网站调查数据。价格冻结基准日为 2025年3月1日。
+
+汇率快照
+本游戏内部使用 USD 作为统一结算货币。展示时本地货币按快照汇率折算为 CNY（人民币），快照冻结日为 2025年3月1日。汇率取自当日公开中间价。此汇率仅供游戏内参考，不反映实时金融市场。
+
+城市背景文字
+城市简介、历史、地理、经济、饮食及旅行贴士均由游戏团队基于 Wikidata 结构化事实（CC0）原创撰写。未直接复制 Wikipedia 或其他受 CC BY-SA 许可约束的文本源。
+
+音频
+- Demo BGM（bgm_globe_day）及大部分玩法音效：程序合成占位包（Airborne Trader / tools/audio-gen-kit），许可 original-procedural。
+- 部分 UI 点击/面板音效：Kenney UI Audio（CC0），作者 Kenney（https://kenney.nl），经 Godot 插件镜像 https://github.com/Calinou/kenney-ui-audio 入库。完整清单见 game/assets/audio/AUDIO_MANIFEST.csv。
+
+字体
+- Noto Sans SC Regular（Subset OTF）：SIL Open Font License 1.1，https://github.com/notofonts/noto-cjk
+- JetBrains Mono Regular：SIL Open Font License 1.1，https://github.com/JetBrains/JetBrainsMono
+完整说明见 game/assets/fonts/LICENSE.txt。
+
+重要声明
+本游戏中的航班网络、票价和航班时刻均为模拟或模型估算，不代表任何航空公司的真实运营信息或实时购票建议。所有商品价格为固定快照，不反映实时市场价格。本游戏内容仅供娱乐目的。
+航班网络基于公开航空数据重建，不代表真实购票信息。
