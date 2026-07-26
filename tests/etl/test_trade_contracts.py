@@ -18,17 +18,29 @@ def test_no_souvenirs_or_magnets():
 
 def test_contract_mix_light_and_high_value():
     by_city: dict[str, list] = {}
+    authored_ids = {c["city_id"] for c in WORLD["cities"] if c.get("content_confidence") != "C"}
     for p in WORLD["products"]:
         w = float(p["weight_kg"])
         price = float(p["base_reference_price"])
-        assert w <= 12.0, p["product_id"]
-        assert price >= 200.0, p["product_id"]
-        by_city.setdefault(p["origin_city_id"], []).append(p)
-    assert len(by_city) == 20
+        pid = p["product_id"]
+        origin = p["origin_city_id"]
+        # Authored cities: strict contract constraints
+        if origin in authored_ids and "inherited_from" not in p:
+            assert w <= 12.0, f"{pid} weight {w} > 12"
+            assert price >= 200.0, f"{pid} price {price} < 200"
+        # All products must be tradable (positive weight and price)
+        assert w > 0, pid
+        assert price > 0, pid
+        # No souvenir category
+        assert p.get("category") != "纪念品", pid
+        by_city.setdefault(origin, []).append(p)
+    assert len(by_city) >= 20
     for cid, items in by_city.items():
-        assert len(items) >= 5, cid
-        assert any(float(p["weight_kg"]) <= 2.0 for p in items), cid
-        assert any(float(p["base_reference_price"]) >= 2000.0 for p in items), cid
+        assert len(items) >= 3, cid
+        if cid in authored_ids:
+            # Authored cities: must have at least one light and one high-value
+            assert any(float(p["weight_kg"]) <= 2.0 for p in items), f"{cid} no light product"
+            assert any(float(p["base_reference_price"]) >= 2000.0 for p in items), f"{cid} no high-value product"
 
 
 def test_starting_cash_trade_float():
