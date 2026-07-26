@@ -58,6 +58,7 @@ const FLIGHTS_PER_PAGE := 80
 var _transition_running: bool = false
 var _trade_qty: SpinBox
 var _flight_auto_focus: bool = false
+var _active_arrival_discount: Dictionary = {}
 
 
 func _ready() -> void:
@@ -425,6 +426,7 @@ func _on_transition_started(ticket: Dictionary) -> void:
 	_panel_host.visible = false
 	_overlay.visible = true
 	_transition_running = true
+	_active_arrival_discount = {}
 	AudioService.play_sfx("sfx_takeoff")
 	_run_transition_sequence(ticket)
 	globe.draw_trip_route(str(ticket.get("origin_airport_id", "")), str(ticket.get("destination_airport_id", "")))
@@ -462,11 +464,63 @@ func _on_arrived() -> void:
 	_refresh_top()
 	_refresh_bags()
 	globe.focus_airport(AppState.current_airport_id)
+	var city_id := AppState.current_city_id()
+	if city_id != "":
+		_check_arrival_encounter(city_id)
 
 
 func _show_hint(text: String) -> void:
 	_hint.text = text
 	_last_hint_time = Time.get_ticks_msec() / 1000.0
+
+
+func _get_market_products(_city_id: String) -> Array:
+	var out: Array = []
+	for p in DataService.world.get("products", []):
+		out.append(str(p.get("product_id", "")))
+	return out
+
+
+func _check_arrival_encounter(city_id: String) -> void:
+	var date_hour := int(GameClock.unix_time / 3600.0)
+	var seed_val := PopupEvent.event_seed(city_id, date_hour, "", "arrival_discount")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_val
+	if rng.randf() > 0.20:
+		return
+
+	var market_products := _get_market_products(city_id)
+	if market_products.size() == 0:
+		return
+	var product_idx := rng.randi() % market_products.size()
+	var product_id := market_products[product_idx]
+	var discount_pct := rng.randi_range(20, 40)
+
+	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+	popup.event_confirmed.connect(_on_arrival_discount_accepted.bind(product_id, discount_pct))
+	popup.event_cancelled.connect(_on_arrival_discount_declined.bind())
+	add_child(popup)
+	popup.show_event("arrival_discount", {
+		"product_name": product_id,
+		"discount_pct": discount_pct,
+		"product_id": product_id,
+	})
+
+	_active_arrival_discount = {
+		"product_id": product_id,
+		"discount_pct": discount_pct,
+		"city_id": city_id,
+	}
+
+
+func _on_arrival_discount_accepted(result: Dictionary, product_id: String, discount_pct: int) -> void:
+	AudioService.play_sfx("sfx_ui_click")
+	_show_hint("已接受 %s 折扣！买入时自动应用 %d%% 优惠" % [product_id, discount_pct])
+
+
+func _on_arrival_discount_declined(_result: Dictionary) -> void:
+	AudioService.play_sfx("sfx_ui_click")
+	_active_arrival_discount = {}
 
 
 func _clear_panel() -> void:
@@ -731,13 +785,18 @@ func _buy_selected(as_cargo: bool) -> void:
 	if _selected_market_product_id == "":
 		return
 	var qty: int = int(_trade_qty.value) if _trade_qty else 1
-	var err: String = _Inventory.buy(_selected_market_product_id, qty, as_cargo)
+	var discount_factor := 1.0
+	if (_active_arrival_discount.get("product_id", "") == _selected_market_product_id
+			and _active_arrival_discount.get("city_id", "") == AppState.current_city_id()):
+		discount_factor = 1.0 - float(_active_arrival_discount["discount_pct"]) / 100.0
+	var err: String = _Inventory.buy(_selected_market_product_id, qty, as_cargo, discount_factor)
 	if err != "":
 		AudioService.play_sfx("sfx_error")
 		_show_hint(err)
 	else:
 		AudioService.play_sfx("sfx_buy")
 		_show_hint("购买成功")
+	_active_arrival_discount = {}
 	_refresh_bags()
 
 

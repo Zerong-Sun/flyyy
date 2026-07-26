@@ -5,7 +5,7 @@ const _Economy = preload("res://scripts/systems/EconomySystem.gd")
 const _Tickets = preload("res://scripts/systems/TicketService.gd")
 
 
-static func buy(product_id: String, qty: int, as_cargo: bool = false) -> String:
+static func buy(product_id: String, qty: int, as_cargo: bool = false, discount_factor: float = 1.0) -> String:
 	if not AppState.game_started:
 		return "请先开始游戏"
 	if qty <= 0:
@@ -16,6 +16,7 @@ static func buy(product_id: String, qty: int, as_cargo: bool = false) -> String:
 	var price: float = _Economy.buy_price(city_id, product_id)
 	if price <= 0.0:
 		return "该商品暂无报价"
+	price *= discount_factor
 	var total: float = price * float(qty)
 	if total > AppState.cash_usd:
 		return "资金不足"
