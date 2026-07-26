@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpopevent0000001"]
+
+[ext_resource type="Script" path="res://scripts/components/PopupEvent.gd" id="1_popevent"]
+
+[node name="PopupEvent" type="AcceptDialog"]
+script = ExtResource("1_popevent")
+dialog_autowrap = true
+size = Vector2(400, 250)
+
+[connection signal="confirmed" from="." to="." method="_on_confirmed"]
+[connection signal="canceled" from="." to="." method="_on_cancelled"]
