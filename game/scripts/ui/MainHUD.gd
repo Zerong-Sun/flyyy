@@ -162,6 +162,7 @@ func _build_ui() -> void:
 		[I18nService.t("ui.tab.market"), "_show_market"],
 		[I18nService.t("ui.tab.flights"), "_show_flights"],
 		[I18nService.t("ui.tab.inventory"), "_show_inventory"],
+		["笔记", "_show_notes"],
 		[I18nService.t("ui.tab.log"), "_show_log"],
 		[I18nService.t("ui.tab.attribution"), "_show_attr"],
 		[I18nService.t("ui.save.manual"), "_save"],
@@ -1041,6 +1042,71 @@ func _sell_one() -> void:
 	_show_hint(str(result.get("msg", "")))
 	_show_inventory()
 	_refresh_bags()
+
+
+func _show_notes() -> void:
+	if not _require_started():
+		return
+	_clear_panel()
+	AudioService.play_sfx("sfx_ui_click")
+	var scroll := ScrollContainer.new()
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_panel_host.add_child(scroll)
+	var vbox := VBoxContainer.new()
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(vbox)
+
+	if AppState.sell_transactions.is_empty():
+		var empty := Label.new()
+		empty.text = "暂无交易记录"
+		empty.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+		vbox.add_child(empty)
+		return
+
+	var by_city: Dictionary = {}
+	for tx in AppState.sell_transactions:
+		var city_id := str(tx.get("sell_city", ""))
+		if city_id not in by_city:
+			by_city[city_id] = []
+		by_city[city_id].append(tx)
+
+	for city_id in by_city:
+		var city := DataService.get_city(city_id)
+		var city_name := str(city.get("name_zh", city_id))
+
+		var header := Label.new()
+		header.text = "📒 %s" % city_name
+		header.add_theme_font_size_override("font_size", 16)
+		header.add_theme_color_override("font_color", _Colors.ICE)
+		vbox.add_child(header)
+
+		var total_margin: float = 0.0
+		var wins: int = 0
+		var losses: int = 0
+		for tx in by_city[city_id]:
+			var product_id := str(tx.get("product_id", ""))
+			var p := DataService.get_product(product_id)
+			var product_name := str(p.get("name_zh", product_id))
+			var margin: float = float(tx.get("margin", 0.0))
+			total_margin += margin
+			var emoji := "✅" if margin >= 0 else "❌"
+			if margin >= 0:
+				wins += 1
+			else:
+				losses += 1
+			var row := Label.new()
+			row.text = "  %s %s：毛利 $%d" % [emoji, product_name, int(margin)]
+			row.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
+			vbox.add_child(row)
+
+		var sep := HSeparator.new()
+		vbox.add_child(sep)
+
+		var summary := Label.new()
+		summary.text = "  %d赚 %d亏  净利 $%d" % [wins, losses, int(total_margin)]
+		summary.add_theme_color_override("font_color", _Colors.ACCENT_TEAL if total_margin >= 0 else _Colors.WARN_RED)
+		vbox.add_child(summary)
 
 
 func _show_log() -> void:
