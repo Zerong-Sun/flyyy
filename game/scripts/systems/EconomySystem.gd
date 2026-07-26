@@ -126,5 +126,31 @@ static func inventory_cargo_value_usd() -> float:
 
 
 static func format_money(usd: float) -> String:
-	var cny: float = usd * float(DataService.economy.get("fx_usd_cny", 7.2))
-	return "$%.2f（约¥%.0f）" % [usd, cny]
+	return "$%.2f" % usd
+
+
+static func sell_price_estimate(city_id: String, product_id: String, quality: float, qty: int) -> Dictionary:
+	## Returns estimated sell price and margin data without executing a transaction.
+	## Used by UI preview before confirming a sell.
+	var row: Dictionary = DataService.market_row(city_id, product_id)
+	if row.is_empty() or qty <= 0:
+		return {
+			"unit_price": 0.0,
+			"revenue": 0.0,
+			"margin": 0.0,
+			"margin_rate": 0.0,
+			"valid": false,
+		}
+	var unit: float = sell_price(city_id, product_id, quality)
+	var total_revenue: float = unit * float(qty)
+	var total_unit_cost: float = float(row.get("unit_cost", 0)) * float(qty) if row.has("unit_cost") else 0.0
+	var margin: float = total_revenue - total_unit_cost
+	var margin_rate: float = margin / total_unit_cost if total_unit_cost > 0.0 else 0.0
+	return {
+		"unit_price": unit,
+		"revenue": total_revenue,
+		"total_unit_cost": total_unit_cost,
+		"margin": margin,
+		"margin_rate": margin_rate,
+		"valid": true,
+	}

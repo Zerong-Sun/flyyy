@@ -48,35 +48,56 @@ static func buy(product_id: String, qty: int, as_cargo: bool = false) -> String:
 	return ""
 
 
-static func sell(index: int, qty: int) -> String:
+static func sell(index: int, qty: int) -> Dictionary:
 	if not AppState.game_started:
-		return "请先开始游戏"
+		return {"success": false, "msg": "请先开始游戏"}
 	if index < 0 or index >= AppState.inventory.size():
-		return "无效库存"
+		return {"success": false, "msg": "无效库存"}
 	var item: Dictionary = AppState.inventory[index]
 	qty = mini(qty, int(item.get("qty", 0)))
 	if qty <= 0:
-		return "数量无效"
+		return {"success": false, "msg": "数量无效"}
 	var city_id: String = AppState.current_city_id()
+	var product_id: String = str(item.get("product_id", ""))
 	var q: float = _Economy.current_quality(item)
 	item["quality"] = q
-	var unit: float = _Economy.sell_price(city_id, str(item.get("product_id", "")), q)
+	var unit: float = _Economy.sell_price(city_id, product_id, q)
 	var revenue: float = unit * float(qty)
-	var cost: float = float(item.get("unit_cost", 0)) * float(qty)
+	var unit_cost: float = float(item.get("unit_cost", 0))
+	var total_unit_cost: float = unit_cost * float(qty)
+	var margin: float = revenue - total_unit_cost
+	var margin_rate: float = margin / total_unit_cost if total_unit_cost > 0.0 else 0.0
 	AppState.add_cash(revenue)
-	_Economy.apply_sale_pressure(city_id, str(item.get("product_id", "")), qty)
+	_Economy.apply_sale_pressure(city_id, product_id, qty)
 	item["qty"] = int(item.get("qty", 0)) - qty
 	if int(item.get("qty", 0)) <= 0:
 		AppState.inventory.remove_at(index)
+	AppState.log_sell_transaction(city_id, product_id, qty, revenue, total_unit_cost, GameClock.unix_time)
+	var msg: String = "售出收入 %s，账面毛利 %s" % [_Economy.format_money(revenue), _Economy.format_money(margin)]
+	var result := {
+		"success": true,
+		"msg": msg,
+		"revenue": revenue,
+		"qty": qty,
+		"product_id": product_id,
+		"unit_price": unit,
+		"unit_cost": unit_cost,
+		"total_unit_cost": total_unit_cost,
+		"margin": margin,
+		"margin_rate": margin_rate,
+		"accidental_premium": false,
+		"accidental_premium_bonus": 0.0,
+	}
 	EventBus.inventory_changed.emit()
 	EventBus.market_changed.emit()
+	EventBus.sell_completed.emit(result)
 	if not bool(AppState.tutorial_flags.get("sold", false)):
 		AppState.tutorial_flags["sold"] = true
 		var tip := I18nService.tutorial("first_sell")
 		if tip.is_empty():
 			tip = "出售完成。利润 = 售价 − 成本 − 机票。继续探索价差航线吧。"
 		EventBus.tutorial_hint.emit(tip)
-	return "售出收入 %s，账面毛利 %s" % [_Economy.format_money(revenue), _Economy.format_money(revenue - cost)]
+	return result
 
 
 static func expand_baggage(tier: String) -> String:

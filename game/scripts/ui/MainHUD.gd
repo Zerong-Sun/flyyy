@@ -5,6 +5,8 @@ const _Economy = preload("res://scripts/systems/EconomySystem.gd")
 const _Inventory = preload("res://scripts/systems/InventorySystem.gd")
 const _Tickets = preload("res://scripts/systems/TicketService.gd")
 const _FlightSearch = preload("res://scripts/systems/FlightSearch.gd")
+const _Colors = preload("res://themes/DemoColors.gd")
+const _ThemeFactory = preload("res://themes/ThemeFactory.gd")
 
 @onready var globe: Node3D = $"../Globe"
 @onready var flight_ops: Node = $"../FlightOps"
@@ -50,6 +52,8 @@ var _max_duration: int = 0
 var _biz_only: bool = false
 const FLIGHTS_PER_PAGE := 80
 var _transition_running: bool = false
+var _trade_qty: SpinBox
+var _flight_auto_focus: bool = false
 
 
 func _ready() -> void:
@@ -76,8 +80,9 @@ func _process(_d: float) -> void:
 func _build_ui() -> void:
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	theme = _ThemeFactory.build()
 
-	var top := _bar(Color(0.05, 0.08, 0.12, 0.85))
+	var top := _bar(_Colors.BG_DEEP)
 	top.position = Vector2(0, 0)
 	top.size = Vector2(1280, 52)
 	add_child(top)
@@ -88,20 +93,23 @@ func _build_ui() -> void:
 
 	_countdown = _label(self, Vector2(400, 60), "")
 	_countdown.add_theme_font_size_override("font_size", 16)
+	_countdown.add_theme_color_override("font_color", _Colors.WARN_RED)
 	_btn_ff = Button.new()
 	_btn_ff.text = I18nService.t("ui.ff.button")
 	_btn_ff.position = Vector2(720, 56)
 	_btn_ff.visible = false
 	_btn_ff.pressed.connect(_on_fast_forward)
+	_style_cta_button(_btn_ff)
 	add_child(_btn_ff)
 
 	_disclaimer = _label(self, Vector2(12, 690), I18nService.disclaimer())
 	_disclaimer.add_theme_font_size_override("font_size", 12)
+	_disclaimer.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 	_disclaimer.modulate = Color(1, 1, 1, 0.7)
 
 	_hint = _label(self, Vector2(200, 100), "")
 	_hint.size = Vector2(880, 40)
-	_hint.modulate = Color(1, 0.9, 0.5)
+	_hint.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 
 	# Left search
 	var left := PanelContainer.new()
@@ -164,11 +172,12 @@ func _build_ui() -> void:
 	_panel_host = PanelContainer.new()
 	_panel_host.position = Vector2(260, 150)
 	_panel_host.size = Vector2(720, 460)
+	_panel_host.clip_contents = true
 	_panel_host.visible = false
 	add_child(_panel_host)
 
 	_overlay = ColorRect.new()
-	_overlay.color = Color(0, 0, 0, 0.75)
+	_overlay.color = Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.82)
 	_overlay.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	_overlay.visible = false
 	_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -178,6 +187,7 @@ func _build_ui() -> void:
 	_overlay_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_overlay_label.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	_overlay_label.add_theme_font_size_override("font_size", 28)
+	_overlay_label.add_theme_color_override("font_color", _Colors.ICE)
 	_overlay.add_child(_overlay_label)
 
 	_ff_dialog = ConfirmationDialog.new()
@@ -203,16 +213,19 @@ func _build_ui() -> void:
 	var title := Label.new()
 	title.text = "《环球航商》Demo — " + I18nService.t("ui.new_game.title")
 	title.add_theme_font_size_override("font_size", 22)
+	title.add_theme_color_override("font_color", _Colors.ICE)
 	ngv.add_child(title)
 	var info := Label.new()
 	info.text = "在左侧搜索或点选地球机场，然后开始。也可随机。\n" + I18nService.disclaimer()
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 	ngv.add_child(info)
 	var row := HBoxContainer.new()
 	ngv.add_child(row)
 	var b1 := Button.new()
 	b1.text = I18nService.t("ui.new_game.start")
 	b1.pressed.connect(_start_selected)
+	_style_cta_button(b1)
 	row.add_child(b1)
 	var b2 := Button.new()
 	b2.text = I18nService.t("ui.new_game.random")
@@ -236,8 +249,29 @@ func _label(parent: Node, pos: Vector2, text: String) -> Label:
 	var l := Label.new()
 	l.position = pos
 	l.text = text
+	l.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
 	parent.add_child(l)
 	return l
+
+
+func _style_cta_button(btn: Button) -> void:
+	## Amber CTA for primary actions (加速 / 开始).
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = Color(_Colors.ACCENT_AMBER.r, _Colors.ACCENT_AMBER.g, _Colors.ACCENT_AMBER.b, 0.92)
+	normal.border_color = _Colors.ACCENT_AMBER
+	normal.set_border_width_all(1)
+	normal.set_corner_radius_all(6)
+	normal.content_margin_left = 12
+	normal.content_margin_right = 12
+	normal.content_margin_top = 8
+	normal.content_margin_bottom = 8
+	var hover := normal.duplicate() as StyleBoxFlat
+	hover.bg_color = _Colors.ACCENT_AMBER
+	btn.add_theme_stylebox_override("normal", normal)
+	btn.add_theme_stylebox_override("hover", hover)
+	btn.add_theme_stylebox_override("pressed", hover)
+	btn.add_theme_color_override("font_color", _Colors.BG_DEEP)
+	btn.add_theme_color_override("font_hover_color", _Colors.BG_DEEP)
 
 
 func _show_new_game() -> void:
@@ -349,14 +383,14 @@ func _refresh_countdown() -> void:
 		_countdown.text = "下一班 %s %s→%s  登机中…" % [
 			t.get("marketing_flight_number", ""), t.get("origin_iata", ""), t.get("destination_iata", "")
 		]
-		_countdown.modulate = Color(1, 0.3, 0.3)
+		_countdown.add_theme_color_override("font_color", _Colors.WARN_RED)
 		_btn_ff.visible = false
 	else:
 		_countdown.text = "下一班 %s %s→%s  倒计时 %dh%02dm  [%s]" % [
 			t.get("marketing_flight_number", ""), t.get("origin_iata", ""), t.get("destination_iata", ""),
 			hrs, mins, t.get("cabin", "")
 		]
-		_countdown.modulate = Color(1, 1, 1)
+		_countdown.add_theme_color_override("font_color", _Colors.WARN_RED if hrs < 2 else _Colors.TEXT_PRIMARY)
 		_btn_ff.visible = AppState.game_started
 
 
@@ -487,24 +521,42 @@ func _show_market() -> void:
 		if count >= 25:
 			break
 	_market_list.item_activated.connect(_buy_market_item)
+	var qty_row := HBoxContainer.new()
+	v.add_child(qty_row)
+	var qty_label := Label.new()
+	qty_label.text = "数量"
+	qty_row.add_child(qty_label)
+	_trade_qty = SpinBox.new()
+	_trade_qty.min_value = 1
+	_trade_qty.max_value = 9999
+	_trade_qty.value = 1
+	_trade_qty.rounded = true
+	_trade_qty.custom_minimum_size = Vector2(100, 0)
+	qty_row.add_child(_trade_qty)
+	for n in [1, 10, 100]:
+		var qb := Button.new()
+		qb.text = str(n)
+		var qn: int = n
+		qb.pressed.connect(func (): _trade_qty.value = qn)
+		qty_row.add_child(qb)
 	var row := HBoxContainer.new()
 	v.add_child(row)
 	var b1 := Button.new()
-	b1.text = "买入 1（行李）"
+	b1.text = "买入（行李）"
 	b1.pressed.connect(func (): _buy_selected(false))
 	row.add_child(b1)
 	var b2 := Button.new()
-	b2.text = "买入 1（货运）"
+	b2.text = "买入（货运）"
 	b2.pressed.connect(func (): _buy_selected(true))
 	row.add_child(b2)
 	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
 		var bx := Button.new()
-		bx.text = pair[0]
 		var tier: String = pair[1]
+		bx.text = "%s $%.0f" % [pair[0], _baggage_tier_price(tier)]
 		bx.pressed.connect(func (): _show_hint(_Inventory.expand_baggage(tier)); _refresh_bags())
 		row.add_child(bx)
 	var bc := Button.new()
-	bc.text = "+50kg货运"
+	bc.text = "+50kg货运 $%.0f" % _cargo_block_price()
 	bc.pressed.connect(func (): _show_hint(_Inventory.expand_cargo(1)); _refresh_bags())
 	row.add_child(bc)
 	var close := Button.new()
@@ -528,7 +580,8 @@ func _buy_selected(as_cargo: bool) -> void:
 	if idx.is_empty():
 		return
 	var pid: String = _market_cache[idx[0]]
-	var err: String = _Inventory.buy(pid, 1, as_cargo)
+	var qty: int = int(_trade_qty.value) if _trade_qty else 1
+	var err: String = _Inventory.buy(pid, qty, as_cargo)
 	if err != "":
 		AudioService.play_sfx("sfx_error")
 		_show_hint(err)
@@ -547,10 +600,19 @@ func _show_flights() -> void:
 	if not _require_started():
 		return
 	_clear_panel()
+	_flight_auto_focus = true
+	var scroll := ScrollContainer.new()
+	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_panel_host.add_child(scroll)
 	var v := VBoxContainer.new()
-	_panel_host.add_child(v)
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.add_child(v)
 	var tip := Label.new()
-	tip.text = "全局航班检索（当前机场出港）· " + I18nService.disclaimer()
+	tip.text = "当前机场出港 · 灰字=距起飞不足2小时"
 	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(tip)
 	_flight_query = LineEdit.new()
@@ -601,7 +663,8 @@ func _show_flights() -> void:
 	)
 	filters2.add_child(bclear)
 	_flight_list = ItemList.new()
-	_flight_list.custom_minimum_size = Vector2(700, 200)
+	_flight_list.custom_minimum_size = Vector2(680, 150)
+	_flight_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_flight_list.item_selected.connect(_on_flight_selected)
 	v.add_child(_flight_list)
 	var pager := HBoxContainer.new()
@@ -616,7 +679,10 @@ func _show_flights() -> void:
 	pager.add_child(nxt)
 	_flight_detail = RichTextLabel.new()
 	_flight_detail.bbcode_enabled = true
-	_flight_detail.custom_minimum_size = Vector2(700, 100)
+	_flight_detail.fit_content = false
+	_flight_detail.scroll_active = true
+	_flight_detail.custom_minimum_size = Vector2(680, 80)
+	_flight_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(_flight_detail)
 	var row := HBoxContainer.new()
 	v.add_child(row)
@@ -630,13 +696,19 @@ func _show_flights() -> void:
 	row.add_child(bb)
 	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
 		var bx := Button.new()
-		bx.text = pair[0]
 		var tier: String = pair[1]
-		bx.pressed.connect(func (): _extra_tier = tier; _show_hint("已选择行李扩展 " + pair[0]))
+		bx.text = "%s $%.0f" % [pair[0], _baggage_tier_price(tier)]
+		bx.pressed.connect(func ():
+			_extra_tier = tier
+			_show_hint("已选择行李扩展 %s（+$%.0f）" % [pair[0], _baggage_tier_price(tier)])
+		)
 		row.add_child(bx)
 	var bc := Button.new()
-	bc.text = "货运+50"
-	bc.pressed.connect(func (): _cargo_blocks += 1; _show_hint("货运档位 ×%d（每档50kg）" % _cargo_blocks))
+	bc.text = "货运+50 $%.0f" % _cargo_block_price()
+	bc.pressed.connect(func ():
+		_cargo_blocks += 1
+		_show_hint("货运档位 ×%d（每档50kg +$%.0f）" % [_cargo_blocks, _cargo_block_price()])
+	)
 	row.add_child(bc)
 	var bcr := Button.new()
 	bcr.text = "清零货运"
@@ -656,6 +728,18 @@ func _show_flights() -> void:
 	_reload_flights()
 
 
+func _baggage_tier_price(tier: String) -> float:
+	var extras: Dictionary = DataService.economy.get("baggage_extras", {})
+	if extras.has(tier):
+		return float(extras[tier].get("price_usd", 0))
+	return 0.0
+
+
+func _cargo_block_price() -> float:
+	var extras: Dictionary = DataService.economy.get("baggage_extras", {})
+	return float(extras.get("cargo_per_50kg_usd", 0))
+
+
 func _reload_flights(_q: String = "") -> void:
 	if _flight_list == null:
 		return
@@ -665,21 +749,45 @@ func _reload_flights(_q: String = "") -> void:
 		AppState.current_airport_id, q, 0, _filter_unvisited, _sort_by,
 		_max_price, _max_duration, _biz_only
 	)
+	if _flight_auto_focus and all.size() > 0:
+		var focus_idx: int = _FlightSearch.first_focus_index(all)
+		_flight_page = focus_idx / FLIGHTS_PER_PAGE
+		_flight_auto_focus = false
+		var start_f: int = _flight_page * FLIGHTS_PER_PAGE
+		_flights_cache = all.slice(start_f, mini(all.size(), start_f + FLIGHTS_PER_PAGE))
+		_fill_flight_rows()
+		var local_idx: int = focus_idx - start_f
+		if local_idx >= 0 and local_idx < _flights_cache.size():
+			_flight_list.select(local_idx)
+			_flight_list.ensure_current_is_visible()
+			_on_flight_selected(local_idx)
+		_show_hint("航班 %d–%d / 共 %d（页 %d）· 已定位≥2小时后班次" % [
+			start_f + 1, start_f + _flights_cache.size(), all.size(), _flight_page + 1
+		])
+		return
 	var start: int = _flight_page * FLIGHTS_PER_PAGE
 	if start >= all.size() and _flight_page > 0:
 		_flight_page = maxi(0, (all.size() - 1) / FLIGHTS_PER_PAGE)
 		start = _flight_page * FLIGHTS_PER_PAGE
 	_flights_cache = all.slice(start, mini(all.size(), start + FLIGHTS_PER_PAGE))
-	for fl in _flights_cache:
-		_flight_list.add_item("%s  %s→%s  %s  经济$%.0f  公务$%.0f  %dmin" % [
-			fl.marketing_flight_number, fl.origin_iata, fl.destination_iata,
-			str(fl.scheduled_departure_utc).substr(0, 16),
-			float(fl.ticket_base_price_economy), float(fl.ticket_base_price_business),
-			int(fl.duration_minutes)
-		])
+	_fill_flight_rows()
 	_show_hint("航班 %d–%d / 共 %d（页 %d）" % [
 		start + (1 if all.size() > 0 else 0), start + _flights_cache.size(), all.size(), _flight_page + 1
 	])
+
+
+func _fill_flight_rows() -> void:
+	var gray := Color(0.55, 0.55, 0.55)
+	for i in _flights_cache.size():
+		var fl: Dictionary = _flights_cache[i]
+		_flight_list.add_item("%s  %s→%s  %s  $%.0f  %dmin" % [
+			fl.marketing_flight_number, fl.origin_iata, fl.destination_iata,
+			str(fl.scheduled_departure_utc).substr(0, 16),
+			float(fl.ticket_base_price_economy),
+			int(fl.duration_minutes)
+		])
+		if _FlightSearch.is_short_lead(fl):
+			_flight_list.set_item_custom_fg_color(i, gray)
 
 
 func _on_flight_selected(idx: int) -> void:
@@ -744,10 +852,28 @@ func _show_inventory() -> void:
 			_Economy.format_money(float(item.get("unit_cost", 0))),
 			"货运" if item.get("in_cargo", false) else "行李"
 		])
+	var qty_row := HBoxContainer.new()
+	v.add_child(qty_row)
+	var qty_label := Label.new()
+	qty_label.text = "数量"
+	qty_row.add_child(qty_label)
+	_trade_qty = SpinBox.new()
+	_trade_qty.min_value = 1
+	_trade_qty.max_value = 9999
+	_trade_qty.value = 1
+	_trade_qty.rounded = true
+	_trade_qty.custom_minimum_size = Vector2(100, 0)
+	qty_row.add_child(_trade_qty)
+	for n in [1, 10, 100]:
+		var qb := Button.new()
+		qb.text = str(n)
+		var qn: int = n
+		qb.pressed.connect(func (): _trade_qty.value = qn)
+		qty_row.add_child(qb)
 	var row := HBoxContainer.new()
 	v.add_child(row)
 	var sell := Button.new()
-	sell.text = "出售 1"
+	sell.text = "出售"
 	sell.pressed.connect(_sell_one)
 	row.add_child(sell)
 	var close := Button.new()
@@ -760,9 +886,10 @@ func _sell_one() -> void:
 	var idxs := _inv_list.get_selected_items()
 	if idxs.is_empty():
 		return
-	var msg: String = _Inventory.sell(idxs[0], 1)
+	var qty: int = int(_trade_qty.value) if _trade_qty else 1
+	var result: Dictionary = _Inventory.sell(idxs[0], qty)
 	AudioService.play_sfx("sfx_sell")
-	_show_hint(msg)
+	_show_hint(str(result.get("msg", "")))
 	_show_inventory()
 	_refresh_bags()
 
