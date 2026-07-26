@@ -62,6 +62,18 @@ var _active_arrival_discount: Dictionary = {}
 var _free_cargo_on_flight: bool = false
 var _discovery_triggered_in_city: Dictionary = {}  # "city_id|product_id" -> true
 
+# Five-tier sell feedback
+var _sell_console_lines := [
+	"没事，学费而已",
+	"下一趟回本",
+	"做生意就是这样",
+	"这个城市不太行",
+	"及时止损也是赢",
+]
+var _sell_console_big_loss := "赔大了...但旅行本身就值得"
+var _celebration_w1 := ["这笔漂亮！", "眼光不错", "路走对了"]
+var _celebration_w2 := ["传奇交易！", "你就是这条航线的王", "同行看了都眼红"]
+
 
 func _ready() -> void:
 	_build_ui()
@@ -1195,12 +1207,7 @@ func _on_premium_accepted(index: int, qty: int, bonus_pct: int, original_revenue
 	result["margin"] = premium_revenue - result["total_unit_cost"]
 	result["margin_rate"] = result["margin"] / result["total_unit_cost"] if result["total_unit_cost"] > 0 else 0.0
 
-	AudioService.play_sfx("sfx_sell")
-	_show_hint("溢价出售！收入 %s（含%d%%意外加成）  毛利 %s" % [
-		_Economy.format_money(premium_revenue),
-		bonus_pct,
-		_Economy.format_money(result["margin"]),
-	])
+	_show_sell_result_card(result)
 	_show_inventory()
 	_refresh_bags()
 	_after_sell_check_discovery(result["product_id"])
@@ -1208,8 +1215,10 @@ func _on_premium_accepted(index: int, qty: int, bonus_pct: int, original_revenue
 
 func _do_sell(index: int, qty: int) -> void:
 	var result: Dictionary = _Inventory.sell(index, qty)
-	AudioService.play_sfx("sfx_sell")
-	_show_hint(str(result.get("msg", "")))
+	if not result.get("success", false):
+		_show_hint(str(result.get("msg", "")))
+		return
+	_show_sell_result_card(result)
 	_show_inventory()
 	_refresh_bags()
 	_after_sell_check_discovery(result["product_id"])
@@ -1409,6 +1418,113 @@ func _show_attr() -> void:
 		meta.get("etl_version", ""),
 		meta.get("generated_at", ""),
 	]
+
+
+func _determine_sell_tier(margin: float, margin_rate: float, accidental_premium: bool) -> String:
+	if accidental_premium or margin >= 10000:
+		return "W2"  # Grand Slam
+	elif margin >= 3000:
+		return "W1"  # Big Win
+	elif margin >= 0:
+		return "W0"  # Normal Win
+	elif margin_rate >= -0.20:
+		return "L1"  # Small Loss
+	else:
+		return "L2"  # Big Loss
+
+
+func _show_sell_result_card(sell_result: Dictionary) -> void:
+	var tier := _determine_sell_tier(
+		sell_result["margin"], sell_result["margin_rate"],
+		sell_result.get("accidental_premium", false)
+	)
+
+	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+
+	match tier:
+		"L2":
+			popup.title = "交易亏损"
+			FeedbackParticles.play(self, {"palette": "grey", "count": 25, "duration": 2.0, "direction": "down"})
+			AudioService.play_sfx("sfx_loss")
+
+		"L1":
+			popup.title = "交易亏损"
+			AudioService.play_sfx("sfx_loss_light")
+
+		"W0":
+			popup.title = "交易成功"
+			AudioService.play_sfx("sfx_sell")
+
+		"W1":
+			popup.title = "大赚一笔！"
+			FeedbackParticles.play(self, {"palette": "gold", "count": 30, "duration": 2.0, "direction": "right_arc"})
+			AudioService.play_sfx("sfx_big_win")
+
+		"W2":
+			popup.title = "大满贯！"
+			if sell_result.get("discovery_bonus", false):
+				popup.title = "✨发现者加成 — 大满贯！"
+			FeedbackParticles.play(self, {"palette": "gold_rain", "count": 60, "duration": 3.0, "direction": "down"})
+			AudioService.play_sfx("sfx_grand_slam")
+
+	# Build card body text
+	var body := ""
+	body += "售出数量：" + str(sell_result["qty"]) + "\n"
+	body += "售出收入：$" + str(int(sell_result["revenue"])) + "\n"
+
+	var margin := sell_result["margin"]
+	var sign := "+" if margin >= 0 else ""
+	body += "账面毛利：" + sign + "$" + str(int(margin)) + "\n"
+
+	# Net trip profit hint
+	if AppState.has("last_flight_price"):
+		var flight_cost: float = AppState.last_flight_price
+		var baggage_cost: float = AppState.last_baggage_cost if AppState.has("last_baggage_cost") else 0.0
+		if flight_cost > 0 or baggage_cost > 0:
+			body += "本趟机票：−$" + str(int(flight_cost))
+			if baggage_cost > 0:
+				body += "  行李/货运：−$" + str(int(baggage_cost))
+			body += "\n"
+			var net: float = margin - flight_cost - baggage_cost
+			var net_sign := "+" if net >= 0 else ""
+			body += "──────────────────\n"
+			body += "行程净利：" + net_sign + "$" + str(int(net)) + "\n"
+
+	# Consolation or celebration copy
+	match tier:
+		"L2":
+			body += "\n" + _sell_console_big_loss
+		"L1":
+			body += "\n" + _sell_console_lines[randi() % _sell_console_lines.size()]
+		"W1":
+			body += "\n" + _celebration_w1[randi() % _celebration_w1.size()]
+		"W2":
+			body += "\n" + _celebration_w2[randi() % _celebration_w2.size()]
+
+	# Wealth milestone toast
+	var start_cash := DataService.economy.get("starting_cash_usd", 50000.0)
+	if AppState.cash_usd >= 100000 or AppState.cash_usd >= start_cash * 2.0:
+		_show_toast("财富里程碑！")
+
+	popup.dialog_text = body
+	popup.add_button("继续", true)
+	popup.popup_centered()
+
+	add_child(popup)
+
+	# Cash roll animation (Task 14 will wire this)
+	popup.event_confirmed.connect(func(_r):
+		_cash_roll_animation(int(sell_result["revenue"] - sell_result["total_unit_cost"]))
+	)
+
+
+func _show_toast(text: String) -> void:
+	_show_hint(text)
+
+
+func _cash_roll_animation(margin: int) -> void:
+	# Stub — Task 14 will wire the full cash roll animation
+	_show_hint("利润 $" + str(margin))
 
 
 func _save() -> void:
