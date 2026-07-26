@@ -21,16 +21,18 @@ func _configure() -> void:
 	match _event_type:
 		"arrival_discount":
 			title = "偶遇商机！"
-			_show_two_button(data.get("product_name", ""), data.get("discount_pct", 0))
+			_show_two_button(_event_data.get("product_name", ""), _event_data.get("discount_pct", 0))
 		"free_cargo":
 			title = "舱位福利"
 			_show_two_button("额外 +50kg 免费货运", 0)
 		"accidental_premium":
 			title = "意外溢价！"
-			_show_one_button(data.get("bonus_pct", 0), data.get("original", 0.0), data.get("premium", 0.0))
+			_show_one_button(_event_data.get("bonus_pct", 0), _event_data.get("original", 0.0), _event_data.get("premium", 0.0))
 		"sell_result":
 			title = ""
-			_show_sell_result(data)
+			_show_sell_result(_event_data)
+		_:
+			push_error("PopupEvent: unknown event type '%s'" % _event_type)
 
 func _show_two_button(item_desc: String, discount_pct: int = 0) -> void:
 	var body := ""
