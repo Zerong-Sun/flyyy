@@ -129,7 +129,14 @@ static func format_money(usd: float) -> String:
 	return "$%.2f" % usd
 
 
-static func sell_price_estimate(city_id: String, product_id: String, quality: float, qty: int) -> Dictionary:
+static func sell_price_estimate(product_id: String, dest_city: String) -> float:
+	## Static approximate sell price — for UI preview, not actual transaction.
+	## Returns the sell_base_usd from world data (no runtime modifiers applied).
+	var row: Dictionary = DataService.market_row(dest_city, product_id)
+	return row.get("sell_base_usd", 0.0)
+
+
+static func sell_price_with_quality(city_id: String, product_id: String, quality: float, qty: int) -> Dictionary:
 	## Returns estimated sell price and margin data without executing a transaction.
 	## Used by UI preview before confirming a sell.
 	var row: Dictionary = DataService.market_row(city_id, product_id)

@@ -26,7 +26,8 @@ var _panel_host: Control
 var _flight_list: ItemList
 var _flight_query: LineEdit
 var _flight_detail: RichTextLabel
-var _market_list: ItemList
+const INTEL_UPGRADE_COST := 200.0
+var _market_container: VBoxContainer
 var _inv_list: ItemList
 var _city_text: RichTextLabel
 var _log_text: RichTextLabel
@@ -41,6 +42,8 @@ var _cargo_blocks: int = 0
 var _flights_cache: Array = []
 var _market_cache: Array = []
 var _product_market_tags: Dictionary = {}
+var _selected_market_product_id: String = ""
+var _market_row_panels: Dictionary = {}
 var _last_hint_time := 0.0
 var _ff_dialog: ConfirmationDialog
 var _replace_ticket_dialog: ConfirmationDialog
@@ -535,15 +538,20 @@ func _show_market() -> void:
 	if not _require_started():
 		return
 	_clear_panel()
+	_selected_market_product_id = ""
+	_market_row_panels.clear()
+	_market_cache.clear()
 	var v := VBoxContainer.new()
 	_panel_host.add_child(v)
 	var title := Label.new()
 	title.text = "市场 — %s（超重可就地加购行李/货运）" % AppState.current_city_id()
 	v.add_child(title)
-	_market_list = ItemList.new()
-	_market_list.custom_minimum_size = Vector2(700, 300)
-	v.add_child(_market_list)
-	_market_cache.clear()
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(700, 300)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	v.add_child(scroll)
+	_market_container = VBoxContainer.new()
+	scroll.add_child(_market_container)
 	var city := AppState.current_city_id()
 	var ticket_dest_city := _get_ticket_dest_city_id()
 	var locals := DataService.products_for_city(city)
@@ -557,7 +565,6 @@ func _show_market() -> void:
 		count += 1
 		if count >= 25:
 			break
-	_market_list.item_activated.connect(_buy_market_item)
 	var qty_row := HBoxContainer.new()
 	v.add_child(qty_row)
 	var qty_label := Label.new()
@@ -607,22 +614,123 @@ func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_ci
 	var sell: float = _Economy.sell_price(city, str(p.get("product_id", "")), 1.0)
 	var tag := "本地" if is_local else "外来"
 	var intel := _get_intelligence_tag(p, ticket_dest_city)
+	var product_id := str(p.get("product_id", ""))
+
+	var panel := PanelContainer.new()
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_market_container.add_child(panel)
+	_market_row_panels[product_id] = panel
+
+	var row := HBoxContainer.new()
+	row.mouse_filter = Control.MOUSE_FILTER_STOP
+	row.gui_input.connect(_on_market_row_input.bind(product_id))
+	panel.add_child(row)
+
+	var info_label := Label.new()
+	info_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var line := "[%s] %s  买%s  卖%s  %.2fkg" % [
 		tag, p.get("name_zh", ""), _Economy.format_money(buy), _Economy.format_money(sell), float(p.get("weight_kg", 0))
 	]
+	info_label.text = line
+	info_label.add_theme_font_size_override("font_size", 13)
+	info_label.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
+	row.add_child(info_label)
+
 	if intel != "":
-		line += "  " + intel
-	_market_list.add_item(line)
-	_market_cache.append(p.get("product_id", ""))
+		var intel_label := Label.new()
+		intel_label.name = "IntelligenceLabel"
+		intel_label.text = intel
+		intel_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		intel_label.add_theme_font_size_override("font_size", 13)
+		intel_label.add_theme_color_override("font_color", _get_intel_color(intel))
+		row.add_child(intel_label)
+
+		var upgrade_btn := Button.new()
+		upgrade_btn.text = "🔍"
+		upgrade_btn.tooltip_text = "精准预测 ($200)"
+		upgrade_btn.custom_minimum_size = Vector2(28, 28)
+		upgrade_btn.pressed.connect(_on_upgrade_intel.bind(product_id, row))
+		row.add_child(upgrade_btn)
+
+	_market_cache.append(product_id)
+
+
+func _on_market_row_input(event: InputEvent, product_id: String) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.double_click:
+				_buy_market_item(product_id)
+			else:
+				_select_market_row(product_id)
+
+
+func _select_market_row(product_id: String) -> void:
+	if _selected_market_product_id != "" and _market_row_panels.has(_selected_market_product_id):
+		var prev_panel: PanelContainer = _market_row_panels[_selected_market_product_id]
+		prev_panel.remove_theme_stylebox_override("panel")
+
+	_selected_market_product_id = product_id
+
+	if _market_row_panels.has(product_id):
+		var panel: PanelContainer = _market_row_panels[product_id]
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color(_Colors.ACCENT_TEAL.r, _Colors.ACCENT_TEAL.g, _Colors.ACCENT_TEAL.b, 0.25)
+		style.set_border_width_all(1)
+		style.border_color = _Colors.ACCENT_TEAL
+		style.set_corner_radius_all(4)
+		panel.add_theme_stylebox_override("panel", style)
+
+
+func _get_intel_color(intel: String) -> Color:
+	if intel.begins_with("📍"):
+		return _Colors.ACCENT_TEAL
+	elif intel.begins_with("⚠"):
+		return _Colors.WARN_RED
+	elif intel.begins_with("⭐"):
+		return _Colors.ACCENT_AMBER
+	return _Colors.TEXT_SECONDARY
+
+
+func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
+	if AppState.cash_usd < INTEL_UPGRADE_COST:
+		_show_hint("资金不足")
+		AudioService.play_sfx("sfx_error")
+		return
+
+	var ticket_dest_city := _get_ticket_dest_city_id()
+	if ticket_dest_city == "":
+		_show_hint("请先购买机票")
+		AudioService.play_sfx("sfx_error")
+		return
+
+	AppState.cash_usd -= INTEL_UPGRADE_COST
+	_refresh_top()
+
+	var buy_price_val: float = DataService.market_row(AppState.current_city_id(), product_id).get("buy_base_usd", 0.0)
+	var sell_price_est: float = EconomySystem.sell_price_estimate(product_id, ticket_dest_city)
+
+	var daily_amp := 0.06
+	var low := (sell_price_est * buy_price_val * (1.0 - daily_amp)) - (buy_price_val * 1.0)
+	var high := (sell_price_est * buy_price_val * (1.0 + daily_amp)) - (buy_price_val * 1.0)
+
+	var free_label: Label = product_row.find_child("IntelligenceLabel", true, false)
+	if free_label:
+		free_label.text = "预计毛利 $" + str(int(low)) + "–$" + str(int(high))
+		free_label.add_theme_color_override("font_color", Color.CYAN)
+
+	for child in product_row.get_children():
+		if child is Button and child.text == "🔍":
+			child.queue_free()
+			break
+
+	AudioService.play_sfx("sfx_ui_click")
 
 
 func _buy_selected(as_cargo: bool) -> void:
-	var idx := _market_list.get_selected_items()
-	if idx.is_empty():
+	if _selected_market_product_id == "":
 		return
-	var pid: String = _market_cache[idx[0]]
 	var qty: int = int(_trade_qty.value) if _trade_qty else 1
-	var err: String = _Inventory.buy(pid, qty, as_cargo)
+	var err: String = _Inventory.buy(_selected_market_product_id, qty, as_cargo)
 	if err != "":
 		AudioService.play_sfx("sfx_error")
 		_show_hint(err)
@@ -632,8 +740,8 @@ func _buy_selected(as_cargo: bool) -> void:
 	_refresh_bags()
 
 
-func _buy_market_item(idx: int) -> void:
-	_market_list.select(idx)
+func _buy_market_item(product_id: String) -> void:
+	_select_market_row(product_id)
 	_buy_selected(false)
 
 
