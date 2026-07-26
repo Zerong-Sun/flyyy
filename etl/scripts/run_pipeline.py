@@ -369,149 +369,15 @@ CITY_BLURBS = normalize_city_blurbs({
 })
 
 
-# 5+ specialty products per city (legal consumer goods only)
-PRODUCT_TEMPLATES: dict[str, list[dict]] = {
-    "atlanta": [
-        {"id": "atl_peach_candy", "name_zh": "桃味软糖", "category": "糖果", "weight_kg": 0.4, "shelf_life_hours": 2160, "rarity": 0.4, "base": 8},
-        {"id": "atl_pecan_snack", "name_zh": "山核桃零食", "category": "食品", "weight_kg": 0.5, "shelf_life_hours": 1800, "rarity": 0.5, "base": 12},
-        {"id": "atl_civil_rights_book", "name_zh": "民权历史读本", "category": "文具", "weight_kg": 0.6, "shelf_life_hours": 99999, "rarity": 0.3, "base": 18},
-        {"id": "atl_cotton_scarf", "name_zh": "棉质围巾", "category": "纺织品", "weight_kg": 0.3, "shelf_life_hours": 99999, "rarity": 0.35, "base": 22},
-        {"id": "atl_skyline_mug", "name_zh": "天际线马克杯", "category": "纪念品", "weight_kg": 0.45, "shelf_life_hours": 99999, "rarity": 0.25, "base": 15},
-    ],
-    "dubai": [
-        {"id": "dxb_dates", "name_zh": "椰枣礼盒", "category": "食品", "weight_kg": 0.8, "shelf_life_hours": 2400, "rarity": 0.55, "base": 16},
-        {"id": "dxb_saffron", "name_zh": "藏红花小包装", "category": "香料", "weight_kg": 0.05, "shelf_life_hours": 3600, "rarity": 0.85, "base": 45},
-        {"id": "dxb_oud_incense", "name_zh": "沉香熏香", "category": "日用品", "weight_kg": 0.2, "shelf_life_hours": 99999, "rarity": 0.7, "base": 28},
-        {"id": "dxb_desert_scarf", "name_zh": "沙漠纹围巾", "category": "纺织品", "weight_kg": 0.35, "shelf_life_hours": 99999, "rarity": 0.4, "base": 24},
-        {"id": "dxb_spice_mix", "name_zh": "海湾香料粉", "category": "香料", "weight_kg": 0.25, "shelf_life_hours": 3000, "rarity": 0.6, "base": 14},
-    ],
-    "dallas": [
-        {"id": "dfw_bbq_rub", "name_zh": "烧烤香料rub", "category": "香料", "weight_kg": 0.3, "shelf_life_hours": 3600, "rarity": 0.45, "base": 11},
-        {"id": "dfw_boot_charm", "name_zh": "牛仔靴挂饰", "category": "纪念品", "weight_kg": 0.15, "shelf_life_hours": 99999, "rarity": 0.35, "base": 13},
-        {"id": "dfw_pecan_pie_bite", "name_zh": "山核桃派点心", "category": "食品", "weight_kg": 0.5, "shelf_life_hours": 720, "rarity": 0.5, "base": 10},
-        {"id": "dfw_denim_patch", "name_zh": "牛仔布补丁套装", "category": "纺织品", "weight_kg": 0.2, "shelf_life_hours": 99999, "rarity": 0.3, "base": 9},
-        {"id": "dfw_star_mug", "name_zh": "孤星马克杯", "category": "纪念品", "weight_kg": 0.4, "shelf_life_hours": 99999, "rarity": 0.25, "base": 14},
-    ],
-    "denver": [
-        {"id": "den_trail_mix", "name_zh": "登山坚果混合包", "category": "食品", "weight_kg": 0.45, "shelf_life_hours": 1800, "rarity": 0.4, "base": 12},
-        {"id": "den_fleece_beanie", "name_zh": "抓绒帽", "category": "纺织品", "weight_kg": 0.25, "shelf_life_hours": 99999, "rarity": 0.45, "base": 20},
-        {"id": "den_mineral_soap", "name_zh": "矿物手工皂", "category": "日用品", "weight_kg": 0.2, "shelf_life_hours": 4800, "rarity": 0.35, "base": 11},
-        {"id": "den_postcard_set", "name_zh": "落基山明信片", "category": "文具", "weight_kg": 0.1, "shelf_life_hours": 99999, "rarity": 0.2, "base": 6},
-        {"id": "den_ceramic_mug", "name_zh": "高原陶瓷杯", "category": "陶瓷", "weight_kg": 0.5, "shelf_life_hours": 99999, "rarity": 0.3, "base": 16},
-    ],
-    "london": [
-        {"id": "lhr_tea_tin", "name_zh": "英式红茶罐", "category": "茶叶", "weight_kg": 0.35, "shelf_life_hours": 4800, "rarity": 0.5, "base": 18},
-        {"id": "lhr_shortbread", "name_zh": "黄油酥饼", "category": "食品", "weight_kg": 0.4, "shelf_life_hours": 1200, "rarity": 0.4, "base": 10},
-        {"id": "lhr_umbrella_mini", "name_zh": "迷你雨伞模型", "category": "纪念品", "weight_kg": 0.2, "shelf_life_hours": 99999, "rarity": 0.3, "base": 12},
-        {"id": "lhr_wool_scarf", "name_zh": "羊毛围巾", "category": "纺织品", "weight_kg": 0.4, "shelf_life_hours": 99999, "rarity": 0.55, "base": 32},
-        {"id": "lhr_notebook", "name_zh": "书店风笔记本", "category": "文具", "weight_kg": 0.25, "shelf_life_hours": 99999, "rarity": 0.25, "base": 14},
-    ],
-    "chicago": [
-        {"id": "ord_deepdish_kit", "name_zh": "深盘披萨调料包", "category": "食品", "weight_kg": 0.5, "shelf_life_hours": 1800, "rarity": 0.45, "base": 13},
-        {"id": "ord_architecture_book", "name_zh": "建筑导览册", "category": "文具", "weight_kg": 0.55, "shelf_life_hours": 99999, "rarity": 0.35, "base": 20},
-        {"id": "ord_lake_candle", "name_zh": "湖岸香氛蜡烛", "category": "日用品", "weight_kg": 0.4, "shelf_life_hours": 99999, "rarity": 0.4, "base": 17},
-        {"id": "ord_skyline_print", "name_zh": "天际线版画", "category": "纪念品", "weight_kg": 0.3, "shelf_life_hours": 99999, "rarity": 0.3, "base": 15},
-        {"id": "ord_popcorn_tin", "name_zh": "焦糖爆米花罐", "category": "食品", "weight_kg": 0.6, "shelf_life_hours": 900, "rarity": 0.35, "base": 11},
-    ],
-    "istanbul": [
-        {"id": "ist_lokum", "name_zh": "土耳其软糖", "category": "糖果", "weight_kg": 0.5, "shelf_life_hours": 1500, "rarity": 0.55, "base": 12},
-        {"id": "ist_spice_bazaar", "name_zh": "巴扎香料组合", "category": "香料", "weight_kg": 0.35, "shelf_life_hours": 3600, "rarity": 0.65, "base": 16},
-        {"id": "ist_ceramic_tile", "name_zh": "伊斯尼克风格瓷砖", "category": "陶瓷", "weight_kg": 0.7, "shelf_life_hours": 99999, "rarity": 0.6, "base": 26},
-        {"id": "ist_silk_scarf", "name_zh": "丝绸围巾", "category": "纺织品", "weight_kg": 0.2, "shelf_life_hours": 99999, "rarity": 0.7, "base": 35},
-        {"id": "ist_evil_eye", "name_zh": "蓝眼睛挂饰", "category": "纪念品", "weight_kg": 0.1, "shelf_life_hours": 99999, "rarity": 0.4, "base": 8},
-    ],
-    "los_angeles": [
-        {"id": "lax_citrus_candy", "name_zh": "柑橘软糖", "category": "糖果", "weight_kg": 0.35, "shelf_life_hours": 1800, "rarity": 0.35, "base": 9},
-        {"id": "lax_surf_tote", "name_zh": "冲浪风帆布袋", "category": "纺织品", "weight_kg": 0.35, "shelf_life_hours": 99999, "rarity": 0.4, "base": 18},
-        {"id": "lax_film_poster", "name_zh": "复古电影海报", "category": "纪念品", "weight_kg": 0.15, "shelf_life_hours": 99999, "rarity": 0.45, "base": 14},
-        {"id": "lax_almond_snack", "name_zh": "加州杏仁零食", "category": "食品", "weight_kg": 0.4, "shelf_life_hours": 2000, "rarity": 0.4, "base": 11},
-        {"id": "lax_enamel_pin", "name_zh": "城市珐琅徽章", "category": "纪念品", "weight_kg": 0.05, "shelf_life_hours": 99999, "rarity": 0.3, "base": 7},
-    ],
-    "tokyo": [
-        {"id": "hnd_matcha_sweet", "name_zh": "抹茶点心", "category": "食品", "weight_kg": 0.3, "shelf_life_hours": 480, "rarity": 0.55, "base": 14},
-        {"id": "hnd_senbei", "name_zh": "米果礼盒", "category": "食品", "weight_kg": 0.45, "shelf_life_hours": 1200, "rarity": 0.45, "base": 12},
-        {"id": "hnd_washi_tape", "name_zh": "和纸胶带套装", "category": "文具", "weight_kg": 0.1, "shelf_life_hours": 99999, "rarity": 0.5, "base": 10},
-        {"id": "hnd_ceramic_cup", "name_zh": "日式茶杯", "category": "陶瓷", "weight_kg": 0.35, "shelf_life_hours": 99999, "rarity": 0.55, "base": 22},
-        {"id": "hnd_folding_fan", "name_zh": "折扇", "category": "工艺品", "weight_kg": 0.15, "shelf_life_hours": 99999, "rarity": 0.4, "base": 16},
-    ],
-    "shanghai": [
-        {"id": "pvg_qingan_pastry", "name_zh": "城隍庙糕点", "category": "食品", "weight_kg": 0.4, "shelf_life_hours": 360, "rarity": 0.5, "base": 10},
-        {"id": "pvg_longjing", "name_zh": "龙井茶小包装", "category": "茶叶", "weight_kg": 0.2, "shelf_life_hours": 3600, "rarity": 0.65, "base": 28},
-        {"id": "pvg_silk_handkerchief", "name_zh": "真丝手帕", "category": "纺织品", "weight_kg": 0.08, "shelf_life_hours": 99999, "rarity": 0.55, "base": 24},
-        {"id": "pvg_pearl_accessory", "name_zh": "淡水珠饰品", "category": "工艺品", "weight_kg": 0.1, "shelf_life_hours": 99999, "rarity": 0.6, "base": 30},
-        {"id": "pvg_magnet", "name_zh": "外滩冰箱贴", "category": "纪念品", "weight_kg": 0.05, "shelf_life_hours": 99999, "rarity": 0.25, "base": 5},
-    ],
-    "paris": [
-        {"id": "cdg_macaron_box", "name_zh": "马卡龙礼盒", "category": "食品", "weight_kg": 0.35, "shelf_life_hours": 240, "rarity": 0.6, "base": 22},
-        {"id": "cdg_lavender_soap", "name_zh": "薰衣草皂", "category": "日用品", "weight_kg": 0.2, "shelf_life_hours": 4800, "rarity": 0.45, "base": 12},
-        {"id": "cdg_scarf_print", "name_zh": "印花丝巾", "category": "纺织品", "weight_kg": 0.15, "shelf_life_hours": 99999, "rarity": 0.65, "base": 38},
-        {"id": "cdg_cafe_bowl", "name_zh": "咖啡馆碗", "category": "陶瓷", "weight_kg": 0.45, "shelf_life_hours": 99999, "rarity": 0.4, "base": 18},
-        {"id": "cdg_sketchbook", "name_zh": "素描本", "category": "文具", "weight_kg": 0.3, "shelf_life_hours": 99999, "rarity": 0.3, "base": 14},
-    ],
-    "amsterdam": [
-        {"id": "ams_cheese_wax", "name_zh": "蜡封奶酪小轮", "category": "食品", "weight_kg": 0.5, "shelf_life_hours": 1500, "rarity": 0.55, "base": 16},
-        {"id": "ams_tulip_bulb_decor", "name_zh": "郁金香装饰球", "category": "纪念品", "weight_kg": 0.25, "shelf_life_hours": 99999, "rarity": 0.5, "base": 12},
-        {"id": "ams_stroopwafel", "name_zh": "荷式焦糖饼", "category": "食品", "weight_kg": 0.4, "shelf_life_hours": 900, "rarity": 0.45, "base": 9},
-        {"id": "ams_bike_bell", "name_zh": "自行车铃纪念品", "category": "纪念品", "weight_kg": 0.15, "shelf_life_hours": 99999, "rarity": 0.35, "base": 11},
-        {"id": "ams_delft_tile", "name_zh": "代尔夫特蓝瓷片", "category": "陶瓷", "weight_kg": 0.35, "shelf_life_hours": 99999, "rarity": 0.6, "base": 24},
-    ],
-    "guangzhou": [
-        {"id": "can_chenpi", "name_zh": "新会陈皮", "category": "食品", "weight_kg": 0.25, "shelf_life_hours": 4800, "rarity": 0.7, "base": 20},
-        {"id": "can_herbal_tea", "name_zh": "凉茶配方茶包", "category": "茶叶", "weight_kg": 0.2, "shelf_life_hours": 3600, "rarity": 0.5, "base": 10},
-        {"id": "can_canton_pastry", "name_zh": "广式点心礼盒", "category": "食品", "weight_kg": 0.6, "shelf_life_hours": 480, "rarity": 0.45, "base": 14},
-        {"id": "can_silk_fan", "name_zh": "粤绣团扇", "category": "工艺品", "weight_kg": 0.2, "shelf_life_hours": 99999, "rarity": 0.65, "base": 28},
-        {"id": "can_ceramic_spoon", "name_zh": "广彩瓷勺", "category": "陶瓷", "weight_kg": 0.15, "shelf_life_hours": 99999, "rarity": 0.4, "base": 12},
-    ],
-    "frankfurt": [
-        {"id": "fra_pretzel_kit", "name_zh": "椒盐卷饼预拌粉", "category": "食品", "weight_kg": 0.5, "shelf_life_hours": 2400, "rarity": 0.4, "base": 9},
-        {"id": "fra_cuckoo_magnet", "name_zh": "布谷鸟钟磁贴", "category": "纪念品", "weight_kg": 0.08, "shelf_life_hours": 99999, "rarity": 0.35, "base": 7},
-        {"id": "fra_marzipan", "name_zh": "杏仁糖膏点心", "category": "糖果", "weight_kg": 0.35, "shelf_life_hours": 1200, "rarity": 0.5, "base": 13},
-        {"id": "fra_linen_towel", "name_zh": "亚麻茶巾", "category": "纺织品", "weight_kg": 0.25, "shelf_life_hours": 99999, "rarity": 0.4, "base": 16},
-        {"id": "fra_river_print", "name_zh": "美因河版画", "category": "纪念品", "weight_kg": 0.2, "shelf_life_hours": 99999, "rarity": 0.3, "base": 14},
-    ],
-    "beijing": [
-        {"id": "pek_douzhi_snack", "name_zh": "京味点心组合", "category": "食品", "weight_kg": 0.45, "shelf_life_hours": 360, "rarity": 0.5, "base": 11},
-        {"id": "pek_jasmine_tea", "name_zh": "茉莉花茶", "category": "茶叶", "weight_kg": 0.2, "shelf_life_hours": 3600, "rarity": 0.55, "base": 16},
-        {"id": "pek_cloisonne", "name_zh": "景泰蓝小件", "category": "工艺品", "weight_kg": 0.3, "shelf_life_hours": 99999, "rarity": 0.75, "base": 40},
-        {"id": "pek_opera_mask", "name_zh": "京剧脸谱饰品", "category": "纪念品", "weight_kg": 0.15, "shelf_life_hours": 99999, "rarity": 0.55, "base": 18},
-        {"id": "pek_hawthorn", "name_zh": "山楂制品", "category": "食品", "weight_kg": 0.35, "shelf_life_hours": 1800, "rarity": 0.4, "base": 8},
-    ],
-    "singapore": [
-        {"id": "sin_kaya_jam", "name_zh": "咖椰酱", "category": "食品", "weight_kg": 0.4, "shelf_life_hours": 1200, "rarity": 0.55, "base": 12},
-        {"id": "sin_pineapple_tart", "name_zh": "黄梨塔", "category": "食品", "weight_kg": 0.35, "shelf_life_hours": 720, "rarity": 0.5, "base": 11},
-        {"id": "sin_batik_pouch", "name_zh": "峇迪布袋", "category": "纺织品", "weight_kg": 0.2, "shelf_life_hours": 99999, "rarity": 0.45, "base": 17},
-        {"id": "sin_orchid_soap", "name_zh": "兰花香氛皂", "category": "日用品", "weight_kg": 0.18, "shelf_life_hours": 4800, "rarity": 0.4, "base": 10},
-        {"id": "sin_merlion_magnet", "name_zh": "鱼尾狮磁贴", "category": "纪念品", "weight_kg": 0.05, "shelf_life_hours": 99999, "rarity": 0.25, "base": 5},
-    ],
-    "seoul": [
-        {"id": "icn_seaweed", "name_zh": "调味海苔", "category": "食品", "weight_kg": 0.2, "shelf_life_hours": 1800, "rarity": 0.45, "base": 8},
-        {"id": "icn_rice_cake", "name_zh": "传统糕点礼盒", "category": "食品", "weight_kg": 0.5, "shelf_life_hours": 360, "rarity": 0.5, "base": 13},
-        {"id": "icn_cosmetic_pouch", "name_zh": "美妆收纳袋", "category": "纺织品", "weight_kg": 0.15, "shelf_life_hours": 99999, "rarity": 0.4, "base": 14},
-        {"id": "icn_hanji_notebook", "name_zh": "韩纸笔记本", "category": "文具", "weight_kg": 0.25, "shelf_life_hours": 99999, "rarity": 0.45, "base": 15},
-        {"id": "icn_palace_pin", "name_zh": "宫殿珐琅针", "category": "纪念品", "weight_kg": 0.04, "shelf_life_hours": 99999, "rarity": 0.35, "base": 9},
-    ],
-    "hong_kong": [
-        {"id": "hkg_egg_roll", "name_zh": "鸡蛋卷", "category": "食品", "weight_kg": 0.35, "shelf_life_hours": 900, "rarity": 0.5, "base": 12},
-        {"id": "hkg_pineapple_bun_kit", "name_zh": "菠萝包预拌粉", "category": "食品", "weight_kg": 0.45, "shelf_life_hours": 1800, "rarity": 0.4, "base": 10},
-        {"id": "hkg_milk_tea_mix", "name_zh": "港式奶茶粉", "category": "茶叶", "weight_kg": 0.3, "shelf_life_hours": 2400, "rarity": 0.55, "base": 11},
-        {"id": "hkg_tram_model", "name_zh": "叮叮车模型", "category": "玩具", "weight_kg": 0.25, "shelf_life_hours": 99999, "rarity": 0.45, "base": 18},
-        {"id": "hkg_jade_charm", "name_zh": "玉石小挂饰", "category": "工艺品", "weight_kg": 0.08, "shelf_life_hours": 99999, "rarity": 0.6, "base": 26},
-    ],
-    "bangkok": [
-        {"id": "bkk_coconut_candy", "name_zh": "椰子糖", "category": "糖果", "weight_kg": 0.3, "shelf_life_hours": 1500, "rarity": 0.45, "base": 7},
-        {"id": "bkk_thai_tea", "name_zh": "泰式茶粉", "category": "茶叶", "weight_kg": 0.25, "shelf_life_hours": 2400, "rarity": 0.5, "base": 9},
-        {"id": "bkk_silk_runner", "name_zh": "泰丝桌旗", "category": "纺织品", "weight_kg": 0.3, "shelf_life_hours": 99999, "rarity": 0.65, "base": 28},
-        {"id": "bkk_celadon_cup", "name_zh": "青瓷小杯", "category": "陶瓷", "weight_kg": 0.3, "shelf_life_hours": 99999, "rarity": 0.55, "base": 16},
-        {"id": "bkk_elephant_carving", "name_zh": "木雕小象", "category": "工艺品", "weight_kg": 0.35, "shelf_life_hours": 99999, "rarity": 0.5, "base": 14},
-    ],
-    "miami": [
-        {"id": "mia_key_lime", "name_zh": "青柠派点心", "category": "食品", "weight_kg": 0.4, "shelf_life_hours": 240, "rarity": 0.5, "base": 11},
-        {"id": "mia_guava_paste", "name_zh": "番石榴酱", "category": "食品", "weight_kg": 0.45, "shelf_life_hours": 1800, "rarity": 0.45, "base": 9},
-        {"id": "mia_cuba_coffee", "name_zh": "古巴风味咖啡豆", "category": "咖啡", "weight_kg": 0.4, "shelf_life_hours": 2400, "rarity": 0.55, "base": 15},
-        {"id": "mia_pastel_tote", "name_zh": "粉彩帆布袋", "category": "纺织品", "weight_kg": 0.3, "shelf_life_hours": 99999, "rarity": 0.35, "base": 16},
-        {"id": "mia_art_deco_magnet", "name_zh": "装饰艺术磁贴", "category": "纪念品", "weight_kg": 0.05, "shelf_life_hours": 99999, "rarity": 0.3, "base": 6},
-    ],
-}
+# Products authored in etl/content/products/{city_id}.yaml (trade contracts for Demo).
+
+
+def load_city_product_rows(city_id: str) -> list[dict]:
+    path = CONTENT / "products" / f"{city_id}.yaml"
+    data = load_yaml(path)
+    rows = data.get("products") or []
+    assert len(rows) >= 5, f"{city_id}: need >=5 products in {path}"
+    return rows
 
 
 COUNTRY_PRICE_LEVEL = {
@@ -699,48 +565,54 @@ def localize_to_utc(local_dt: datetime, tz_name: str) -> datetime:
         return local_dt - timedelta(hours=off)
 
 
+def load_city_blurb(city_id: str) -> dict:
+    path = CONTENT / "cities" / f"{city_id}.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return data
+
+
 def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[dict], list[dict]]:
     cities = []
     products = []
     markets = []
     for h in hubs_cfg["hubs"]:
         cid = h["city_id"]
-        blur = CITY_BLURBS[cid]
+        blur = load_city_blurb(cid)
         cities.append(
             {
                 "city_id": cid,
-                "name_zh": h["city_zh"],
-                "name_en": h["city_en"],
-                "country_id": h["country_id"],
-                "country_zh": h["country_zh"],
-                "timezone": h["timezone"],
-                "short_description": blur["short"][:150],
+                "name_zh": blur.get("name_zh", h["city_zh"]),
+                "name_en": blur.get("name_en", h["city_en"]),
+                "country_id": blur.get("country_id", h["country_id"]),
+                "country_zh": blur.get("country_zh", h["country_zh"]),
+                "timezone": blur.get("timezone", h["timezone"]),
+                "short_description": blur["short_description"][:150],
                 "overview": blur["overview"],
-                "history_summary": blur["history"],
-                "geography_summary": blur["geography"],
-                "economy_summary": blur["economy"],
-                "food_summary": blur["food"],
-                "travel_note": blur["travel"],
-                "content_confidence": "B",
+                "history_summary": blur["history_summary"],
+                "geography_summary": blur["geography_summary"],
+                "economy_summary": blur["economy_summary"],
+                "food_summary": blur["food_summary"],
+                "travel_note": blur["travel_note"],
+                "content_confidence": blur.get("content_confidence", "B"),
             }
         )
-        cpl = COUNTRY_PRICE_LEVEL.get(h["country_id"], 1.0)
-        for p in PRODUCT_TEMPLATES[cid]:
+        for p in load_city_product_rows(cid):
+            weight = float(p["weight_kg"])
             products.append(
                 {
-                    "product_id": p["id"],
+                    "product_id": p["product_id"],
                     "name_zh": p["name_zh"],
                     "category": p["category"],
                     "origin_city_id": cid,
                     "origin_country_id": h["country_id"],
-                    "weight_kg": p["weight_kg"],
-                    "volume_l": round(p["weight_kg"] * 1.2, 2),
-                    "base_reference_price": float(p["base"]),
-                    "reference_currency": "USD",
+                    "weight_kg": weight,
+                    "volume_l": round(weight * 1.2, 2),
+                    "base_reference_price": float(p["base_reference_price"]),
+                    "reference_currency": p.get("reference_currency", "USD"),
                     "shelf_life_hours": p["shelf_life_hours"],
-                    "fragility": 0.1 if p["category"] in ("陶瓷", "工艺品") else 0.0,
-                    "rarity": p["rarity"],
-                    "description": f"{h['city_zh']}特色：{p['name_zh']}",
+                    "fragility": float(p.get("fragility", 0.0)),
+                    "rarity": float(p["rarity"]),
+                    "description": p["description"],
                     "price_confidence": "C",
                 }
             )
@@ -934,7 +806,7 @@ def write_sqlite(airports, routes, flights, cities, products, markets, eco, meta
     return world_path
 
 
-def export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta, tz_offsets):
+def export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta, tz_offsets, product_market_tags):
     GAME_DATA.mkdir(parents=True, exist_ok=True)
     payload = {
         "meta": meta,
@@ -951,6 +823,7 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
         "cities": cities,
         "products": products,
         "markets": markets,
+        "product_market_tags": product_market_tags,
         "tz_offsets": tz_offsets,
         "airlines": [{"id": a, "name": n} for a, n in AIRLINES],
         "attributions": [
@@ -1018,6 +891,38 @@ def main() -> int:
     routes = ensure_route_degree(edges, iatas, eco["flight_synth"]["min_destinations_per_hub"], by_iata)
     flights = synth_flights(routes, by_iata, eco)
     cities, products, markets = build_cities_products(hubs_cfg, eco)
+
+    # Build product_market_tags: for each (origin_city, product_id), classify
+    # every destination city as hot / normal / cold based on sell_buy_ratio.
+    product_market_tags: dict[str, dict] = {}
+    market_index: dict[tuple, dict] = {}
+    for m in markets:
+        market_index[(m["city_id"], m["product_id"])] = {
+            "buy": m["buy_base_usd"],
+            "sell": m["sell_base_usd"],
+        }
+
+    city_ids = [c["city_id"] for c in cities]
+    for origin_city in city_ids:
+        for product in products:
+            product_id = product["product_id"]
+            key = f"{origin_city}|{product_id}"
+            product_market_tags[key] = {"hot": [], "normal": [], "cold": []}
+            buy_origin = market_index[(origin_city, product_id)]["buy"]
+
+            for dest_city in city_ids:
+                sell_remote = market_index[(dest_city, product_id)]["sell"]
+                sell_buy_ratio = sell_remote / buy_origin if buy_origin > 0 else 1.0
+
+                if sell_buy_ratio >= 1.15:
+                    tag = "hot"
+                elif sell_buy_ratio >= 1.0:
+                    tag = "normal"
+                else:
+                    tag = "cold"
+
+                product_market_tags[key][tag].append(dest_city)
+
     tz_offsets = build_tz_offsets(hubs_cfg, int(eco["flight_synth"]["schedule_days"]))
     meta = {
         "etl_version": "0.2.0",
@@ -1029,7 +934,7 @@ def main() -> int:
     }
     validate(airports, routes, flights, cities, products)
     write_sqlite(airports, routes, flights, cities, products, markets, eco, meta)
-    export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta, tz_offsets)
+    export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta, tz_offsets, product_market_tags)
     digest = hashlib.sha256((OUT / "world.sqlite").read_bytes()).hexdigest()
     print(f"Wrote {OUT}/world.sqlite and flights; world hash={digest[:16]}...")
     print(f"Godot data -> {GAME_DATA}")
