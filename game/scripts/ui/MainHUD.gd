@@ -59,6 +59,7 @@ var _transition_running: bool = false
 var _trade_qty: SpinBox
 var _flight_auto_focus: bool = false
 var _active_arrival_discount: Dictionary = {}
+var _free_cargo_on_flight: bool = false
 
 
 func _ready() -> void:
@@ -467,6 +468,7 @@ func _on_arrived() -> void:
 	var city_id := AppState.current_city_id()
 	if city_id != "":
 		_check_arrival_encounter(city_id)
+		_check_free_cargo(city_id)
 
 
 func _show_hint(text: String) -> void:
@@ -521,6 +523,31 @@ func _on_arrival_discount_accepted(result: Dictionary, product_id: String, disco
 func _on_arrival_discount_declined(_result: Dictionary) -> void:
 	AudioService.play_sfx("sfx_ui_click")
 	_active_arrival_discount = {}
+
+
+func _check_free_cargo(city_id: String) -> void:
+	var date_hour := int(AppState.game_time_seconds / 3600.0)
+	var seed_val := PopupEvent.event_seed(city_id, date_hour, "", "free_cargo")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_val
+	if rng.randf() > 0.10:
+		return
+
+	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+	popup.event_confirmed.connect(_on_free_cargo_accepted.bind())
+	popup.event_cancelled.connect(_on_free_cargo_declined.bind())
+	add_child(popup)
+	popup.show_event("free_cargo", {})
+
+
+func _on_free_cargo_accepted(_result: Dictionary) -> void:
+	AudioService.play_sfx("sfx_ui_click")
+	_free_cargo_on_flight = true
+
+
+func _on_free_cargo_declined(_result: Dictionary) -> void:
+	AudioService.play_sfx("sfx_ui_click")
+	_free_cargo_on_flight = false
 
 
 func _clear_panel() -> void:
@@ -913,7 +940,7 @@ func _show_flights() -> void:
 		)
 		row.add_child(bx)
 	var bc := Button.new()
-	bc.text = "货运+50 $%.0f" % _cargo_block_price()
+	bc.text = "货运+50 FREE" if _free_cargo_on_flight else "货运+50 $%.0f" % _cargo_block_price()
 	bc.pressed.connect(func ():
 		_cargo_blocks += 1
 		_show_hint("货运档位 ×%d（每档50kg +$%.0f）" % [_cargo_blocks, _cargo_block_price()])
@@ -1032,6 +1059,13 @@ func _purchase(cabin: String) -> void:
 	_refresh_countdown()
 	if err == "" and _selected_flight.has("destination_airport_id"):
 		globe.draw_trip_route(AppState.current_airport_id, str(_selected_flight.destination_airport_id))
+	if err == "" and _free_cargo_on_flight and _cargo_blocks > 0:
+		AppState.add_cash(_cargo_block_price())
+		_free_cargo_on_flight = false
+		_refresh_top()
+		_show_hint("免费货运额度已使用！")
+	if err == "":
+		_check_free_cargo(AppState.current_city_id())
 
 
 func _do_replace_purchase() -> void:
@@ -1041,6 +1075,13 @@ func _do_replace_purchase() -> void:
 	_refresh_countdown()
 	if err == "" and _selected_flight.has("destination_airport_id"):
 		globe.draw_trip_route(AppState.current_airport_id, str(_selected_flight.destination_airport_id))
+	if err == "" and _free_cargo_on_flight and _cargo_blocks > 0:
+		AppState.add_cash(_cargo_block_price())
+		_free_cargo_on_flight = false
+		_refresh_top()
+		_show_hint("免费货运额度已使用！")
+	if err == "":
+		_check_free_cargo(AppState.current_city_id())
 
 
 func _show_inventory() -> void:
