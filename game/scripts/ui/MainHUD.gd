@@ -55,6 +55,7 @@ var _max_price: float = 0.0
 var _max_duration: int = 0
 var _biz_only: bool = false
 const FLIGHTS_PER_PAGE := 80
+var _cash_rolling: bool = false
 var _transition_running: bool = false
 var _trade_qty: SpinBox
 var _flight_auto_focus: bool = false
@@ -378,6 +379,8 @@ func _refresh_clock() -> void:
 
 
 func _refresh_top() -> void:
+	if _cash_rolling:
+		return
 	_cash_label.text = "资金 " + _Economy.format_money(AppState.cash_usd)
 	var a := AppState.current_airport()
 	_airport_label.text = "当前位置 %s" % (a.get("iata", "-"))
@@ -1522,9 +1525,41 @@ func _show_toast(text: String) -> void:
 	_show_hint(text)
 
 
-func _cash_roll_animation(margin: int) -> void:
-	# Stub — Task 14 will wire the full cash roll animation
-	_show_hint("利润 $" + str(margin))
+func _cash_roll_animation(delta_margin: float) -> void:
+	var cash_label := _find_cash_label()
+	if not cash_label:
+		return
+
+	var old_value: float = AppState.cash_usd - delta_margin
+	var new_value: float = AppState.cash_usd
+	var duration := 1.0
+	var is_grand_slam := delta_margin >= 10000
+
+	_cash_rolling = true
+
+	if is_grand_slam:
+		duration = 0.5  # double speed
+		# Flash gold once
+		cash_label.add_theme_color_override("font_color", Color.GOLD)
+		await get_tree().create_timer(0.3).timeout
+		cash_label.remove_theme_color_override("font_color")
+
+	var tween := create_tween()
+	tween.set_ease(Tween.EASE_OUT)
+	tween.set_trans(Tween.TRANS_QUINT)
+	tween.tween_method(_update_cash_display.bind(cash_label), old_value, new_value, duration)
+	await tween.finished
+
+	_cash_rolling = false
+	_refresh_top()
+
+
+func _update_cash_display(value: float, label: Label) -> void:
+	label.text = "$" + str(int(value))
+
+
+func _find_cash_label() -> Label:
+	return _cash_label
 
 
 func _save() -> void:
