@@ -58,6 +58,7 @@ func start_boarding(ticket: Dictionary) -> void:
 		return
 	_boarding = true
 	GameClock.set_paused(true)
+	AudioService.play_sfx("sfx_boarding_alert")
 	transition_started.emit(ticket)
 	var dur: float = float(ticket.get("duration_minutes", 0))
 	var hours: float = dur / 60.0
@@ -106,4 +107,7 @@ func _arrive(ticket: Dictionary) -> void:
 	EventBus.inventory_changed.emit()
 	if not bool(AppState.tutorial_flags.get("arrived", false)):
 		AppState.tutorial_flags["arrived"] = true
-		EventBus.tutorial_hint.emit("已抵达目的地。打开「市场」出售商品结算利润。")
+		var tip := I18nService.tutorial("first_arrive")
+		if tip.is_empty():
+			tip = "已抵达目的地。打开「市场」出售商品结算利润。"
+		EventBus.tutorial_hint.emit(tip)

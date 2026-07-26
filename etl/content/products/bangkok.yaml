@@ -1,0 +1,55 @@
+products:
+  - product_id: "bkk_coconut_candy"
+    name_zh: "椰子糖"
+    category: "糖果"
+    weight_kg: 0.3
+    base_reference_price: 7.0
+    reference_currency: "USD"
+    shelf_life_hours: 1500
+    fragility: 0.0
+    rarity: 0.25
+    description: "泰国是世界最大的椰子出口国之一，椰浆加工厂遍布中部平原。这款糖果以椰浆和棕榈糖慢火熬煮至浓稠，冷却后切块裹上糯米纸，口感在硬糖和软糖之间找到一种柔韧的平衡。甜味来自未经精炼的棕榈糖——带有淡焦糖和蜂蜜的复合风味，远非精制白糖可比。干燥环境下可保存约两月。"
+
+  - product_id: "bkk_thai_tea"
+    name_zh: "泰式茶粉"
+    category: "茶叶"
+    weight_kg: 0.25
+    base_reference_price: 9.0
+    reference_currency: "USD"
+    shelf_life_hours: 2400
+    fragility: 0.0
+    rarity: 0.3
+    description: "泰式奶茶的招牌橙色来自配方中的罗望子籽（sua son）或食用黄色色素——与阿萨姆红茶叶一同烘焙后的茶粉在热水冲泡后呈现出鲜明的琥珀色。加入炼乳和淡奶搅匀，浇在满满一杯碎冰上，是曼谷街头对抗湿热气候的液态避难所。茶粉密封罐装可保存约三个半月。"
+
+  - product_id: "bkk_silk_runner"
+    name_zh: "泰丝桌旗"
+    category: "纺织品"
+    weight_kg: 0.3
+    base_reference_price: 28.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.45
+    description: "泰国东北部伊桑省以养蚕和手工织丝为传统生计之一。这条桌旗以天然蚕丝手工纺织，未经漂染保留蚕丝自有的浅金色光泽。平纹织造使丝线之间的反射角在移动中不断变化，呈现水波般的流动感。尺寸约35×180cm，适合置于餐边柜或玄关台面上。手洗后用毛巾压干水分——不能拧绞——阴干即可。"
+
+  - product_id: "bkk_celadon_cup"
+    name_zh: "青瓷小杯"
+    category: "陶瓷"
+    weight_kg: 0.3
+    base_reference_price: 16.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.1
+    rarity: 0.3
+    description: "泰国青瓷（Celadon）在素可泰和清迈山区延续着14世纪以来的传统工艺——在坯体上刷一层木灰和粘土混合的釉浆后在1250°C还原焰中烧制。釉层玻璃化后呈现从灰绿到橄榄绿的区间，偶尔出现细微的裂纹（Craquelure），这是釉与坯体收缩率不完全匹配的自然效果，而非次品。"
+
+  - product_id: "bkk_elephant_carving"
+    name_zh: "木雕小象"
+    category: "工艺品"
+    weight_kg: 0.35
+    base_reference_price: 14.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.25
+    description: "大象在泰国文化中是皇家和宗教的双重神圣象征——白象曾出现在今天的泰国国旗设计中。这只小象由柚木或雨树木以雕刻刀手工成形，象鼻上扬的姿态在南亚文化中代表迎接和吉祥。表面施以亚光滑面漆保留木纹的自然肌理。底座平坦可直接放置桌面，高度约10cm。"

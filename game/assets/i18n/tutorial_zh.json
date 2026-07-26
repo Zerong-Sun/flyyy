@@ -1,0 +1,44 @@
+{
+  "tutorials": [
+    {
+      "id": "tutorial.new_game",
+      "trigger": "new_game",
+      "title": "欢迎来到环球航商",
+      "text": "欢迎来到环球航商。你将从这里出发，沿着真实航线在世界各地采购特产、赚取差价。建议先浏览当地市场特色商品，再选购前往下一站的机票。\n\n航班网络基于公开航空数据重建，不代表真实购票信息。",
+      "can_skip": true,
+      "show_once": true
+    },
+    {
+      "id": "tutorial.first_buy",
+      "trigger": "first_buy",
+      "title": "购买商品",
+      "text": "商品已放入行李。点击「航班」标签可查看所有出港航班。公务舱提供更多行李配额，适合长途贸易。",
+      "can_skip": true,
+      "show_once": true
+    },
+    {
+      "id": "tutorial.first_ticket",
+      "trigger": "first_ticket",
+      "title": "前往登机",
+      "text": "机票已购买。你可使用「加速至起飞」跳跃时间至登机时刻，或等待游戏时间自然流逝。注意：加速时易腐商品的品质会衰减。",
+      "can_skip": true,
+      "show_once": true
+    },
+    {
+      "id": "tutorial.first_arrive",
+      "trigger": "first_arrive",
+      "title": "抵达新城市",
+      "text": "欢迎抵达新城市。前往「市场」标签查看当地商品价格。原产地购买廉价、稀缺地高价售出，是利润的关键。",
+      "can_skip": true,
+      "show_once": true
+    },
+    {
+      "id": "tutorial.first_sell",
+      "trigger": "first_sell",
+      "title": "首次出售",
+      "text": "成功完成第一次出售。留意各城市间的供需差异和价差，规划一条利润最大化的航线将继续你的旅程。",
+      "can_skip": true,
+      "show_once": true
+    }
+  ]
+}

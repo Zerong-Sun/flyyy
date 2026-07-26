@@ -1,0 +1,55 @@
+products:
+  - product_id: "pvg_qingan_pastry"
+    name_zh: "城隍庙糕点"
+    category: "食品"
+    weight_kg: 0.4
+    base_reference_price: 10.0
+    reference_currency: "USD"
+    shelf_life_hours: 360
+    fragility: 0.1
+    rarity: 0.25
+    description: "上海城隍庙周边的传统糕点店铺延续着百年前的配方和手艺。五香豆以茴香和桂皮慢火炒制，外壳硬中带糯。梨膏糖将梨汁和冰糖文火熬至粘稠后倒模冷却，含在口中缓缓化开的甜润是感冒季江南人的童年记忆。绿豆糕油润细腻。保质期仅两周左右，跨洋贸易风险较高但在亚洲城市间是理想的短途伴手礼。"
+
+  - product_id: "pvg_longjing"
+    name_zh: "龙井茶小包装"
+    category: "茶叶"
+    weight_kg: 0.2
+    base_reference_price: 28.0
+    reference_currency: "USD"
+    shelf_life_hours: 3600
+    fragility: 0.0
+    rarity: 0.4
+    description: "龙井茶以杭州西湖周边丘陵为原产地，上海自19世纪以来就是龙井茶最重要的集散和出口港口。这款明前茶在清明前手工采摘一芽一叶，以炒茶师傅在铁锅中的手工压扁和翻炒完成标志性的扁平形态。冲泡后叶片在水中竖立悬浮、豆香混合着淡淡的炒米香。密封避光储存可保持风味半年以上。"
+
+  - product_id: "pvg_silk_handkerchief"
+    name_zh: "真丝手帕"
+    category: "纺织品"
+    weight_kg: 0.08
+    base_reference_price: 24.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.35
+    description: "苏杭地区出产的真丝自丝绸之路以来就是全球最悠久的奢侈品之一。手帕以12姆米以上的桑蚕丝平纹织成，四边以手工卷边缝线，轻得几乎没有风阻。手洗后悬挂阴干可在十分钟内自然平整。注意避免与粗糙面料摩擦，干燥通风处保存可免虫蛀。折叠后体积不及一枚鸡蛋。"
+
+  - product_id: "pvg_pearl_accessory"
+    name_zh: "淡水珠饰品"
+    category: "工艺品"
+    weight_kg: 0.1
+    base_reference_price: 30.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.45
+    description: "长江中下游的淡水育珠蚌养殖已超过半个世纪，中国出产的淡水珍珠占全球产量的95%以上。这件饰品选用直径6-7mm的圆形至近圆形淡水有核珠，珍珠质层厚度至少0.8mm，在自然光下呈现淡粉、象牙白或紫罗兰的偏移光泽。单颗搭配925银链，风格简约易于搭配。"
+
+  - product_id: "pvg_magnet"
+    name_zh: "外滩冰箱贴"
+    category: "纪念品"
+    weight_kg: 0.05
+    base_reference_price: 5.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.1
+    description: "软胶立体浮雕呈现外滩天际线的黄昏剪影——从外白渡桥到和平饭店的绿色金字塔顶再到陆家嘴的东方明珠。背面整面磁性，吸附力足以挂住几张明信片。是行李中最轻量的商品选项，几乎不产生重量和体积成本，但在异地旅游礼品商店的零售价通常是采购价的数倍。"

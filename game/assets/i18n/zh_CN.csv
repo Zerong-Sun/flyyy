@@ -1,0 +1,101 @@
+keys,zh_CN
+ui.new_game.title,选择起始机场
+ui.new_game.random,随机机场
+ui.new_game.start,以当前选中机场开始
+ui.new_game.search,搜索机场
+ui.new_game.no_results,未找到匹配机场
+ui.tab.city,城市
+ui.tab.market,市场
+ui.tab.flights,航班
+ui.tab.inventory,库存
+ui.tab.log,旅行记录
+ui.tab.attribution,数据来源
+ui.ff.button,加速至起飞
+ui.ff.confirm,将跳跃约 {hours} 游戏小时至起飞时刻。易腐商品品质会衰减，市场价格按新日期刷新。确认加速？
+ui.ticket.economy,经济舱购票
+ui.ticket.business,公务舱购票（10×）
+ui.ticket.refund,退票（30% 手续费）
+ui.ticket.no_ticket,未持有有效机票
+ui.boarding.title,强制登机（不可取消）
+ui.boarding.countdown,登机倒计时：{minutes}分
+ui.notify.perishable_decay,部分商品品质已开始衰减，请尽快出售
+ui.notify.boarding_soon,"{flight} 将于30分钟内登机，请做好准备"
+ui.notify.arrived,"已抵达 {city}（{iata}）"
+ui.notify.left_boarding,"已错过 {flight} 登机时间，请重新购票"
+ui.confirm.refund,"确定退票 {flight}？将收取30%手续费，退还 {amount}。此操作不可撤销。"
+ui.confirm.purchase,"确认购买 {qty}×{product}，共 {amount}？"
+ui.confirm.baggage_extend,"确认加购 {type} 行李扩展（+{kg}kg），费用 {amount}？"
+ui.confirm.quit,确定退出游戏？未保存进度将丢失。
+ui.error.overweight,行李超重：请加购行李扩展或改走货运
+ui.error.insufficient_funds,"资金不足：需要 {need}，当前持有 {have}"
+ui.error.no_flights,该机场当前无可售定期航班
+ui.error.max_baggage,已超出最大行李容量上限
+ui.error.expired_product,"{product} 已过期，无法出售"
+ui.error.already_boarding,正在登机流程中，无法执行此操作
+ui.error.save_failed,"保存失败：{reason}"
+ui.empty.inventory,库存为空。前往市场采购当地特色商品开始贸易。
+ui.empty.flights,当前无可用的出港航班
+ui.empty.market,当前市场无商品在售
+ui.empty.log,尚未开始旅行。选择一个起始机场出发吧。
+ui.empty.save,暂无存档
+ui.settings.title,设置
+ui.settings.volume_master,主音量
+ui.settings.volume_bgm,音乐
+ui.settings.volume_sfx,音效
+ui.settings.back,返回
+ui.baggage.title,行李管理
+ui.baggage.weight_used,"已用 {used} / 上限 {max} kg"
+ui.baggage.extend,扩展行李容量
+ui.baggage.extend_light,轻量扩展 +10kg（$70）
+ui.baggage.extend_standard,标准扩展 +20kg（$125）
+ui.baggage.extend_heavy,重型扩展 +50kg（$280）
+ui.save.auto,自动存档中...
+ui.save.complete,存档完成
+ui.save.manual,手动存档
+ui.save.load,读取存档
+ui.game.bankrupt,资金耗尽，你已破产。旅行贸易就此告一段落。
+ui.game.start_new,开始新游戏
+ui.game.stats,本次旅行统计
+ui.game.total_cities,途经城市
+ui.game.total_profit,总利润
+ui.game.total_flights,搭乘航班
+ui.common.ok,确定
+ui.common.cancel,取消
+ui.common.back,返回
+ui.common.price,价格
+ui.common.qty,数量
+ui.common.total,合计
+ui.common.buy,购买
+ui.common.sell,出售
+ui.common.loading,加载中...
+ui.disclaimer,航班网络基于公开航空数据重建，不代表真实购票信息。
+ui.notify.quality_decay,"{product} 品质已衰减至 {level}，建议尽快出售。"
+ui.notify.product_expiring,"{product} 将在 {hours} 小时内过期，建议尽快出售或丢弃。"
+ui.notify.product_rotten,"{product} 已完全过期，从库存中自动移除。"
+ui.notify.flight_missed,"已错过 {flight} 的登机时间，机票作废。请重新购票。"
+ui.notify.last_call,"{flight} 最后登机提醒，请立即前往登机口。"
+ui.notify.flight_departed,"{flight} 已从 {origin} 出发前往 {dest}。"
+ui.notify.low_funds,"当前资金低于 {threshold}，请谨慎消费。"
+ui.notify.profit_milestone,"累计利润突破 {amount}！"
+ui.save.reminder,"距离上次保存已 {minutes} 分钟，建议手动存档。"
+ui.save.before_flight,即将登机，是否手动存档？
+ui.refund.refunded,"已退票 {flight}，退款 {amount} 已到账。"
+ui.refund.cannot_refund,已开始登机流程，无法退票。
+ui.transition.departing,"正在离开 {city}..."
+ui.transition.arriving,"即将抵达 {city}..."
+ui.transition.flight_info,"{flight} | {origin} → {dest} | {distance}km | {cabin}"
+ui.loading.tip_1,全球每天约有10万架次商业航班起飞，连接超过1.7万对城市。
+ui.loading.tip_2,"哈茨菲尔德-杰克逊机场（ATL）自1998年以来几乎每年都是全球最繁忙机场。"
+ui.loading.tip_3,"一架波音777的巡航速度约为900km/h，相当于每秒前进250米。"
+ui.loading.tip_4,"藏红花是世界上最贵的香料之一，每克价格可超过黄金。"
+ui.loading.tip_5,"香港国际机场建于填海造地的人工岛上，1998年启用前启德机场是世界上最难降落的机场之一。"
+ui.loading.tip_6,"阿姆斯特丹史基浦机场位于海平面以下约3米，跑道在荷兰围海造田的低地上。"
+ui.loading.tip_7,"新加坡樟宜机场连续多年被评为全球最佳机场，设有蝴蝶园与室内瀑布。"
+ui.loading.tip_8,"从东京飞往伦敦的航班，因地球自转和高空急流，去程比回程长约1小时。"
+ui.loading.tip_9,"OpenFlights 航线数据库包含超过6万条航空公司运营的城市对航线。"
+ui.loading.tip_10,"民航客机通常在1万米左右的高度巡航，该高度层空气稀薄、阻力小、燃油经济性最佳。"
+ui.loading.tip_11,"北京首都机场T3航站楼单体建筑面积约98万平方米，是近几十年全球最大的航站楼之一。"
+ui.loading.tip_12,"茶叶是世界上仅次于水的第二大消费饮料，最早可追溯至中国商代。"
+ui.loading.tip_13,"伊斯坦布尔是世界上唯一横跨两大洲的城市，博斯普鲁斯海峡分隔了欧洲和亚洲。"
+ui.loading.tip_14,"迪拜国际机场免税店年销售额超过20亿美元，是世界上最大的机场零售空间之一。"
+ui.loading.tip_15,"芝加哥奥黑尔机场的IATA代码ORD源自其前身""Orchard Field""（果园机场）。"

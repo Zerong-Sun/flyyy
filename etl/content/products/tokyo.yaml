@@ -1,0 +1,55 @@
+products:
+  - product_id: "hnd_matcha_sweet"
+    name_zh: "抹茶点心"
+    category: "食品"
+    weight_kg: 0.3
+    base_reference_price: 14.0
+    reference_currency: "USD"
+    shelf_life_hours: 480
+    fragility: 0.1
+    rarity: 0.3
+    description: "使用京都宇治产的碾茶经石臼低速研磨成微米级粉末，与白巧克力和黄油烘焙成一口大小的立方体。抹茶的苦味被白巧克力的甜柔和地托起，咀嚼时茶香在口腔中线性释放。保质期仅20天，跨洋贸易需充分考虑航班时效——抵达后尽快出售避免过期损失。在欧美抹茶爱好者群体中非常受欢迎。"
+
+  - product_id: "hnd_senbei"
+    name_zh: "米果礼盒"
+    category: "食品"
+    weight_kg: 0.45
+    base_reference_price: 12.0
+    reference_currency: "USD"
+    shelf_life_hours: 1200
+    fragility: 0.0
+    rarity: 0.25
+    description: "仙贝以日本国产糯米或粳米为主料，经蒸米、捣揉、整形后高温烘烤或油炸膨化，再刷上酱油或味醂调味。酱油味型的鲜味和咸脆是茶道的绝配，芥末味型则提供瞬间的鼻腔冲刺激。依靠低含水率实现的自然防腐效果在干燥环境下可维持两个月以上，是极为旅行的咸味零食。"
+
+  - product_id: "hnd_washi_tape"
+    name_zh: "和纸胶带套装"
+    category: "文具"
+    weight_kg: 0.1
+    base_reference_price: 10.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.2
+    description: "和纸以构树或雁皮等长纤维植物为原料，湿润条件下的抗撕裂性能远超普通木浆纸。这款胶带将传统的和纸与易撕的压敏胶结合，套装含6卷不同图案：樱花、海浪、燕子、富士山剪影、金鱼和几何扇纹。在全球手账和DIY装饰社群中，日系和纸胶带是一类持续热门的消耗品。"
+
+  - product_id: "hnd_ceramic_cup"
+    name_zh: "日式茶杯"
+    category: "陶瓷"
+    weight_kg: 0.35
+    base_reference_price: 22.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.1
+    rarity: 0.25
+    description: "以岐阜县美浓地区的粗陶土拉坯成型，外壁不施釉、保留手工刮削的自然肌理，内壁施以淡绿釉调（织部绿），触感与视觉之间的反差构成了日式侘寂美学的基本语言。容量约150ml，恰好是一人份的煎茶或玉露茶汤量。杯口略不平整是手作拉坯的痕迹而非缺陷。"
+
+  - product_id: "hnd_folding_fan"
+    name_zh: "折扇"
+    category: "工艺品"
+    weight_kg: 0.15
+    base_reference_price: 16.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.35
+    description: "日式折扇（Sensu）以竹为扇骨、和纸为扇面，收拢时仅一根手指粗细。扇面以木版手工押印浮世绘风格的雪景或花鸟图，展开后约21厘米半径。在日本庆典和传统舞蹈中扇子不仅是实用工具也是道具。在全球范围内，日式折扇作为文化礼品的需求持续存在。"

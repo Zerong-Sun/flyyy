@@ -18,6 +18,8 @@ var _dragging := false
 var _airport_nodes: Dictionary = {}
 var _label_nodes: Dictionary = {}
 var _selected_id: String = ""
+var _routes_origin_id: String = ""
+var _routes_visible: bool = false
 
 
 func _ready() -> void:
@@ -116,6 +118,23 @@ func _on_selected(airport_id: String) -> void:
 	draw_routes_from(airport_id)
 
 
+func set_routes_visible(visible: bool) -> void:
+	if visible:
+		if _selected_id != "":
+			draw_routes_from(_selected_id)
+	else:
+		clear_routes()
+
+
+func toggle_routes() -> bool:
+	if _routes_visible:
+		clear_routes()
+		return false
+	if _selected_id != "":
+		draw_routes_from(_selected_id)
+	return _routes_visible
+
+
 func focus_airport(airport_id: String) -> void:
 	var a: Dictionary = DataService.get_airport(airport_id)
 	if a.is_empty():
@@ -146,40 +165,51 @@ func _update_markers() -> void:
 			mat.albedo_color = Color(1.0, 0.85, 0.2)
 
 
-func draw_routes_from(origin_id: String) -> void:
+func clear_routes() -> void:
 	for c in routes_root.get_children():
 		c.queue_free()
+	_routes_visible = false
+	_routes_origin_id = ""
+
+
+func draw_routes_from(origin_id: String) -> void:
+	clear_routes()
 	var origin: Dictionary = DataService.get_airport(origin_id)
 	if origin.is_empty():
 		return
-	var oiata := str(origin.iata)
+	var oiata := str(origin.get("iata", "")).to_upper()
+	if oiata == "":
+		return
 	var drawn := 0
 	for r_v in DataService.routes:
 		var r: Dictionary = r_v
-		if str(r.get("origin")) != oiata:
+		var dest_iata := str(r.get("destination", "")).to_upper()
+		if str(r.get("origin", "")).to_upper() != oiata:
 			continue
-		var dest: Dictionary = {}
-		for a_v in DataService.airports:
-			var a: Dictionary = a_v
-			if str(a.get("iata")) == str(r.get("destination")):
-				dest = a
-				break
+		if dest_iata == "" or dest_iata == oiata:
+			continue  # no self-loops
+		var dest: Dictionary = DataService.get_airport_by_iata(dest_iata)
 		if dest.is_empty():
 			continue
 		_add_great_circle(origin, dest)
 		drawn += 1
 		if drawn >= 24:
 			break
+	_routes_origin_id = origin_id
+	_routes_visible = drawn > 0
 
 
 func draw_trip_route(origin_id: String, dest_id: String) -> void:
-	for c in routes_root.get_children():
-		c.queue_free()
+	clear_routes()
 	var o := DataService.get_airport(origin_id)
 	var d := DataService.get_airport(dest_id)
 	if o.is_empty() or d.is_empty():
 		return
+	if str(o.get("airport_id", "")) == str(d.get("airport_id", "")):
+		return
 	_add_great_circle(o, d, Color(1.0, 0.55, 0.15), 0.06)
+	_routes_origin_id = origin_id
+	_routes_visible = true
 
 
 func _add_great_circle(a: Dictionary, b: Dictionary, color: Color = Color(0.4, 0.85, 1.0, 0.85), width: float = 0.035) -> void:
@@ -228,12 +258,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		if mb.button_index == MOUSE_BUTTON_LEFT:
 			_dragging = mb.pressed
 			if mb.pressed:
+				var picked := _pick_nearest_airport_id()
 				if mb.double_click:
-					_try_pick()
-					if _selected_id != "":
-						focus_airport(_selected_id)
-				else:
-					_try_pick()
+					# Double-click: select + camera focus on the hit airport.
+					if picked != "":
+						focus_airport(picked)
+						airport_clicked.emit(picked)
+				elif picked != "":
+					EventBus.airport_selected.emit(picked)
+					airport_clicked.emit(picked)
 		elif mb.button_index == MOUSE_BUTTON_WHEEL_UP and mb.pressed:
 			_distance -= 1.5
 			_update_camera()
@@ -247,7 +280,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_update_camera()
 
 
-func _try_pick() -> void:
+func _pick_nearest_airport_id() -> String:
 	var cam := camera
 	var mouse := get_viewport().get_mouse_position()
 	var from := cam.project_ray_origin(mouse)
@@ -265,6 +298,4 @@ func _try_pick() -> void:
 		if d < best_dist:
 			best_dist = d
 			best_id = id
-	if best_id != "":
-		EventBus.airport_selected.emit(best_id)
-		airport_clicked.emit(best_id)
+	return best_id

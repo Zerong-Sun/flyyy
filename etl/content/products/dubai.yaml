@@ -1,0 +1,55 @@
+products:
+  - product_id: "dxb_dates"
+    name_zh: "椰枣礼盒"
+    category: "食品"
+    weight_kg: 0.8
+    base_reference_price: 16.0
+    reference_currency: "USD"
+    shelf_life_hours: 2400
+    fragility: 0.0
+    rarity: 0.4
+    description: "椰枣是阿拉伯半岛的传统主食之一，贝都因人在沙漠中依赖其高糖分和长保质期穿越酷热。这款礼盒精选约旦河谷种植的梅朱尔（Medjool）品种，果肉肥厚、纤维细腻，带有焦糖与蜂蜜混合的天然甜味。常温阴凉处可存放三个月以上，迪拜免税市场常以此作为高端手信。"
+
+  - product_id: "dxb_saffron"
+    name_zh: "藏红花小包装"
+    category: "香料"
+    weight_kg: 0.05
+    base_reference_price: 45.0
+    reference_currency: "USD"
+    shelf_life_hours: 3600
+    fragility: 0.0
+    rarity: 0.55
+    description: "全球最昂贵的香料之一，每克由约150朵藏红花的手工摘取柱头制成。主要产自伊朗呼罗珊地区，经迪拜香料市场分销全球。仅需数丝即可为米饭或甜点染上金黄色泽与独特麝香气息。体积微小、单价极高，是行李容量受限时最优的单位重量利润商品。密封避光玻璃瓶保存，香气半年不散。"
+
+  - product_id: "dxb_oud_incense"
+    name_zh: "沉香熏香"
+    category: "日用品"
+    weight_kg: 0.2
+    base_reference_price: 28.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.5
+    description: "沉香（Oud）是瑞香科树木在真菌感染后分泌的树脂浸透木材形成的珍贵香料，在中东的待客文化中地位尊崇。这款熏香含不低于15%的天然沉香粉末，燃烧时释放出深沉木质香调，带有皮革和烟熏的复杂层次。密封铁盒包装可永久保存，重量轻、体积小。"
+
+  - product_id: "dxb_desert_scarf"
+    name_zh: "沙漠纹围巾"
+    category: "纺织品"
+    weight_kg: 0.35
+    base_reference_price: 24.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.35
+    description: "以风蚀沙丘的流线轮廓为灵感，采用埃及长绒棉和人造丝混纺织成，兼具棉的透气性和丝的光泽感。围巾四边以机器锁边后手工卷边，不易脱线。沙色、赭红和靛蓝三个色系可选，分别对应阿拉伯沙漠的黎明、正午和黄昏色调。折叠后极扁平，几乎不占行李体积。"
+
+  - product_id: "dxb_spice_mix"
+    name_zh: "海湾香料粉"
+    category: "香料"
+    weight_kg: 0.25
+    base_reference_price: 14.0
+    reference_currency: "USD"
+    shelf_life_hours: 3000
+    fragility: 0.0
+    rarity: 0.25
+    description: "Baharat（意为'香料'）是海湾地区厨房的万能调味基础，以黑胡椒、孜然、肉桂、丁香和豆蔻为核心配方，不同香料商有各自的秘方调整。烤肉前抹上一撮即可让肉香提升数个层次。密封罐装可保存约四个月，在非中东香料市场稀缺的地区溢价极高。"

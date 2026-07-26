@@ -1,0 +1,55 @@
+products:
+  - product_id: "lhr_tea_tin"
+    name_zh: "英式红茶罐"
+    category: "茶叶"
+    weight_kg: 0.35
+    base_reference_price: 18.0
+    reference_currency: "USD"
+    shelf_life_hours: 4800
+    fragility: 0.0
+    rarity: 0.35
+    description: "英国本身不种植茶叶，但伦敦自17世纪东印度公司垄断茶叶贸易以来就是全球茶叶调配与定价的中心。这款锡罐中混合了来自阿萨姆、肯尼亚和斯里兰卡三个产区的红茶叶碎，调配出浓郁的琥珀色茶汤——英式早餐茶的标准风味。锡罐密封可保存半年以上，罐体印刷维多利亚时代的植物图鉴风格。"
+
+  - product_id: "lhr_shortbread"
+    name_zh: "黄油酥饼"
+    category: "食品"
+    weight_kg: 0.4
+    base_reference_price: 10.0
+    reference_currency: "USD"
+    shelf_life_hours: 1200
+    fragility: 0.1
+    rarity: 0.35
+    description: "苏格兰的黄油酥饼传统配方：一份糖、两份黄油加上三份面粉，极致的简单比例成就了超越复杂配方的满足感。烘烤至淡金色的酥饼在口腔中以一种几乎不存在的方式融化。高黄油含量在常温下可稳定存在约7周，但在热带地区需防表面油脂析出。英国大小超市和机场免税店均有出售。"
+
+  - product_id: "lhr_umbrella_mini"
+    name_zh: "迷你雨伞模型"
+    category: "纪念品"
+    weight_kg: 0.2
+    base_reference_price: 12.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.2
+    description: "以微型金属框架搭配防水尼龙伞面，做成传统英国绅士伞的比例模型，全长约15厘米。可以实际撑开和收拢，在办公桌上可压住纸张防风吹。伦敦雨天超过100天，雨伞作为城市符号的地位几乎与巴士和电话亭相当。对收藏微型日常物件的爱好者有明确吸引力。"
+
+  - product_id: "lhr_wool_scarf"
+    name_zh: "羊毛围巾"
+    category: "纺织品"
+    weight_kg: 0.4
+    base_reference_price: 32.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.4
+    description: "设得兰群岛出产的设得兰羊毛以纤维细软和保暖性强闻名，经由苏格兰传统织布厂整经、织造、缩绒和起毛处理。围巾织入经典的格伦厄克特格纹（Glen Check），是1860年代坎贝尔伯爵夫人委托设计的地产专属格纹，后成为英伦风格最广泛使用的通用格纹之一。"
+
+  - product_id: "lhr_notebook"
+    name_zh: "书店风笔记本"
+    category: "文具"
+    weight_kg: 0.25
+    base_reference_price: 14.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.2
+    description: "伦敦是全球新书出版密度最高的城市之一，市内独立书店数量超过100家。这款软皮封面笔记本的设计灵感来自查令十字街的旧书店橱窗——布面封面压印烫金标题，内页为80g/m²的无酸奶油色纸张，适配钢笔和铅笔。页边预留书脊式样索引区，鼓励手工编目。"

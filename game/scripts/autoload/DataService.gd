@@ -5,6 +5,7 @@ var world: Dictionary = {}
 var flights_by_origin: Dictionary = {}
 var airports: Array = []
 var airports_by_id: Dictionary = {}
+var airports_by_iata: Dictionary = {}
 var cities_by_id: Dictionary = {}
 var products_by_id: Dictionary = {}
 var markets: Array = []
@@ -33,8 +34,13 @@ func _load_all() -> void:
 	economy = world.get("economy", {})
 	tz_offsets = world.get("tz_offsets", {})
 	disclaimer = str(world.get("disclaimer", ""))
+	airports_by_id.clear()
+	airports_by_iata.clear()
 	for a in airports:
 		airports_by_id[a["airport_id"]] = a
+		var iata := str(a.get("iata", "")).to_upper()
+		if iata != "":
+			airports_by_iata[iata] = a
 	for c in world.get("cities", []):
 		cities_by_id[c["city_id"]] = c
 	for p in world.get("products", []):
@@ -53,6 +59,10 @@ func get_airport(airport_id: String) -> Dictionary:
 	return airports_by_id.get(airport_id, {})
 
 
+func get_airport_by_iata(iata: String) -> Dictionary:
+	return airports_by_iata.get(iata.strip_edges().to_upper(), {})
+
+
 func get_city(city_id: String) -> Dictionary:
 	return cities_by_id.get(city_id, {})
 
@@ -67,11 +77,17 @@ func search_airports(query: String) -> Array:
 		return airports.duplicate()
 	var out: Array = []
 	for a in airports:
+		var iata := str(a.get("iata", "")).to_lower()
+		var icao := str(a.get("icao", "")).to_lower()
+		# Exact code match first (IATA / ICAO), then name / city substring.
+		if iata == q or icao == q:
+			out.append(a)
+			continue
 		var blob := "%s %s %s %s %s %s" % [
-			a.get("iata", ""), a.get("icao", ""), a.get("name_zh", ""),
+			iata, icao, a.get("name_zh", ""),
 			a.get("name_en", ""), a.get("city_zh", ""), a.get("city_en", "")
 		]
-		if blob.to_lower().find(q) >= 0:
+		if blob.find(q) >= 0:
 			out.append(a)
 	return out
 

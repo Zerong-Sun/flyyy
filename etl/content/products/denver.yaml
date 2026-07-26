@@ -1,0 +1,55 @@
+products:
+  - product_id: "den_trail_mix"
+    name_zh: "登山坚果混合包"
+    category: "食品"
+    weight_kg: 0.45
+    base_reference_price: 12.0
+    reference_currency: "USD"
+    shelf_life_hours: 1800
+    fragility: 0.0
+    rarity: 0.3
+    description: "落基山脉徒步文化催生了丰富的能量补充食品。这款混合包将科罗拉多本地杏仁、葵花籽和有机南瓜籽以低温烘烤后混合脱水蓝莓和黑巧克力碎。每100克提供超过500大卡能量，重量轻但饱腹感强。干燥环境下可保存两个半月，登山包侧袋常备之物。"
+
+  - product_id: "den_fleece_beanie"
+    name_zh: "抓绒帽"
+    category: "纺织品"
+    weight_kg: 0.25
+    base_reference_price: 20.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.3
+    description: "丹佛多家户外品牌的总部设在市区至博尔德一线，抓绒面料是科罗拉多户外装备产业的基石之一。这款双层抓绒帽以回收聚酯纤维制成，保暖而不臃肿，内层摇粒绒触感柔软。折叠后体积与橙子相当。在热带和亚热带地区几乎用不到，因此在这些市场极少有现货，适合反季节贸易。"
+
+  - product_id: "den_mineral_soap"
+    name_zh: "矿物手工皂"
+    category: "日用品"
+    weight_kg: 0.2
+    base_reference_price: 11.0
+    reference_currency: "USD"
+    shelf_life_hours: 4800
+    fragility: 0.0
+    rarity: 0.25
+    description: "落基山脉的温泉水富含硫、镁、钙等矿物元素，这款手工皂将本地矿物泥与乳木果油和薄荷精油混合冷制而成。适合户外运动后清洁皮肤，也可缓解干燥地区的肌肤紧绷感。天然皂化过程中保留甘油，洗后不拔干。硬纸盒包装可保存半年以上。"
+
+  - product_id: "den_postcard_set"
+    name_zh: "落基山明信片"
+    category: "文具"
+    weight_kg: 0.1
+    base_reference_price: 6.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.1
+    description: "一套12张，采用厚白卡纸与UV油墨印刷，在日光下可呈现落基山脉峰顶积雪的细微渐变。拍摄角度包括马龙贝尔斯峰、埃文斯山公路和大沙丘国家公园的罕见沙漠地貌。在亚洲和欧洲自然摄影爱好者中有收藏价值，几乎不占行李空间。"
+
+  - product_id: "den_ceramic_mug"
+    name_zh: "高原陶瓷杯"
+    category: "陶瓷"
+    weight_kg: 0.5
+    base_reference_price: 16.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.1
+    rarity: 0.25
+    description: "杯口的深钴蓝色渐变模拟了落基山脉从山麓草原到顶峰雪线的视觉旅程。杯底标注'MILE HIGH CITY'-丹佛的官方别名。手工拉坯后喷釉再烧，每一只杯子的釉面纹理都有细微不同。对于热衷收集地理主题器物的消费者，这个杯子是落基山的物理切片。"

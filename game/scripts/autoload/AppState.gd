@@ -48,7 +48,10 @@ func reset_new_game(airport_id: String) -> void:
 	EventBus.inventory_changed.emit()
 	if not tutorial_flags.get("welcome", false):
 		tutorial_flags["welcome"] = true
-		EventBus.tutorial_hint.emit("欢迎来到《环球航商》。先查看城市特产，再打开航班面板购票。航班为公开数据重建，非真实时刻。")
+		var tip := I18nService.tutorial("new_game")
+		if tip.is_empty():
+			tip = "欢迎来到《环球航商》。先查看城市特产，再打开航班面板购票。航班为公开数据重建，非真实时刻。"
+		EventBus.tutorial_hint.emit(tip)
 
 
 func _mark_visit(airport_id: String) -> void:

@@ -65,7 +65,7 @@ func _ready() -> void:
 	flight_ops.transition_finished.connect(_on_transition_finished)
 	_show_new_game()
 	_refresh_airport_list("")
-	_disclaimer.text = DataService.disclaimer
+	_disclaimer.text = I18nService.disclaimer()
 
 
 func _process(_d: float) -> void:
@@ -89,13 +89,13 @@ func _build_ui() -> void:
 	_countdown = _label(self, Vector2(400, 60), "")
 	_countdown.add_theme_font_size_override("font_size", 16)
 	_btn_ff = Button.new()
-	_btn_ff.text = "加速至起飞"
+	_btn_ff.text = I18nService.t("ui.ff.button")
 	_btn_ff.position = Vector2(720, 56)
 	_btn_ff.visible = false
 	_btn_ff.pressed.connect(_on_fast_forward)
 	add_child(_btn_ff)
 
-	_disclaimer = _label(self, Vector2(12, 690), DataService.disclaimer)
+	_disclaimer = _label(self, Vector2(12, 690), I18nService.disclaimer())
 	_disclaimer.add_theme_font_size_override("font_size", 12)
 	_disclaimer.modulate = Color(1, 1, 1, 0.7)
 
@@ -111,7 +111,7 @@ func _build_ui() -> void:
 	var lv := VBoxContainer.new()
 	left.add_child(lv)
 	_search = LineEdit.new()
-	_search.placeholder_text = "搜索机场 / IATA / 城市"
+	_search.placeholder_text = "搜索机场 / IATA / ICAO / 城市"
 	_search.text_changed.connect(_refresh_airport_list)
 	lv.add_child(_search)
 	_airport_list = ItemList.new()
@@ -119,9 +119,13 @@ func _build_ui() -> void:
 	_airport_list.item_selected.connect(_on_list_airport)
 	lv.add_child(_airport_list)
 	var btn_rand := Button.new()
-	btn_rand.text = "随机起点"
+	btn_rand.text = I18nService.t("ui.new_game.random")
 	btn_rand.pressed.connect(_on_random)
 	lv.add_child(btn_rand)
+	var btn_routes := Button.new()
+	btn_routes.text = "显示/隐藏航线"
+	btn_routes.pressed.connect(_on_toggle_routes)
+	lv.add_child(btn_routes)
 
 	# Right airport card
 	var right := PanelContainer.new()
@@ -141,13 +145,20 @@ func _build_ui() -> void:
 	bottom.size = Vector2(880, 40)
 	add_child(bottom)
 	for pair in [
-		["城市", "_show_city"], ["市场", "_show_market"], ["航班", "_show_flights"],
-		["库存", "_show_inventory"], ["旅行记录", "_show_log"], ["数据来源", "_show_attr"],
-		["存档", "_save"], ["读档", "_load"], ["设置暂停", "_toggle_pause"]
+		[I18nService.t("ui.tab.city"), "_show_city"],
+		[I18nService.t("ui.tab.market"), "_show_market"],
+		[I18nService.t("ui.tab.flights"), "_show_flights"],
+		[I18nService.t("ui.tab.inventory"), "_show_inventory"],
+		[I18nService.t("ui.tab.log"), "_show_log"],
+		[I18nService.t("ui.tab.attribution"), "_show_attr"],
+		[I18nService.t("ui.save.manual"), "_save"],
+		[I18nService.t("ui.save.load"), "_load"],
+		[I18nService.t("ui.settings.title"), "_toggle_pause"],
 	]:
 		var b := Button.new()
 		b.text = pair[0]
 		b.pressed.connect(Callable(self, pair[1]))
+		b.pressed.connect(func (): AudioService.play_sfx("sfx_ui_click"))
 		bottom.add_child(b)
 
 	_panel_host = PanelContainer.new()
@@ -190,26 +201,26 @@ func _build_ui() -> void:
 	var ngv := VBoxContainer.new()
 	_new_game_panel.add_child(ngv)
 	var title := Label.new()
-	title.text = "《环球航商》Demo — 选择起始机场"
+	title.text = "《环球航商》Demo — " + I18nService.t("ui.new_game.title")
 	title.add_theme_font_size_override("font_size", 22)
 	ngv.add_child(title)
 	var info := Label.new()
-	info.text = "在左侧搜索或点选地球机场，然后开始。也可随机。\n航班网络基于公开航空数据重建，不代表真实购票信息。"
+	info.text = "在左侧搜索或点选地球机场，然后开始。也可随机。\n" + I18nService.disclaimer()
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ngv.add_child(info)
 	var row := HBoxContainer.new()
 	ngv.add_child(row)
 	var b1 := Button.new()
-	b1.text = "以当前选中机场开始"
+	b1.text = I18nService.t("ui.new_game.start")
 	b1.pressed.connect(_start_selected)
 	row.add_child(b1)
 	var b2 := Button.new()
-	b2.text = "随机机场开始"
+	b2.text = I18nService.t("ui.new_game.random")
 	b2.pressed.connect(func (): _on_random(); _start_selected())
 	row.add_child(b2)
 	if SaveSystem.has_save():
 		var b3 := Button.new()
-		b3.text = "继续存档"
+		b3.text = I18nService.t("ui.save.load")
 		b3.pressed.connect(_load)
 		row.add_child(b3)
 
@@ -258,12 +269,15 @@ func _on_game_started() -> void:
 	_refresh_top()
 	_refresh_bags()
 	globe.focus_airport(AppState.current_airport_id)
+	AudioService.set_bgm("bgm_globe_day")
+	AudioService.play_sfx("sfx_ui_click")
 
 
 func _on_random() -> void:
 	var id := DataService.random_hub_id()
 	EventBus.airport_selected.emit(id)
 	globe.focus_airport(id)
+	AudioService.play_sfx("sfx_ui_click")
 
 
 func _refresh_airport_list(q: String) -> void:
@@ -277,6 +291,7 @@ func _on_list_airport(idx: int) -> void:
 	var id: String = _airport_list.get_item_metadata(idx)
 	EventBus.airport_selected.emit(id)
 	globe.focus_airport(id)
+	AudioService.play_sfx("sfx_airport_select")
 
 
 func _on_airport_selected(airport_id: String) -> void:
@@ -290,8 +305,13 @@ func _on_airport_selected(airport_id: String) -> void:
 		a.name_zh, a.iata, a.icao, a.city_zh, a.city_en, a.country_zh, local,
 		float(a.elevation_ft), dests, a.type, a.data_confidence
 	]
-	if AppState.game_started and airport_id == AppState.current_airport_id:
-		globe.draw_routes_from(airport_id)
+	# Routes are drawn by GlobeController on selection; card only refreshes info.
+
+
+func _on_toggle_routes() -> void:
+	var shown: bool = globe.toggle_routes()
+	_show_hint("航线已显示" if shown else "航线已隐藏")
+	AudioService.play_sfx("sfx_ui_click")
 
 
 func _refresh_clock() -> void:
@@ -347,15 +367,17 @@ func _on_fast_forward() -> void:
 		return
 	var dep: float = GameClock.parse_iso_to_unix(str(t.get("scheduled_departure_utc", "")))
 	var hours: float = max(0.0, (dep - GameClock.unix_time) / 3600.0)
-	_ff_dialog.dialog_text = "将跳跃约 %.1f 游戏小时至起飞时刻。\n易腐商品品质会按等待时间衰减，市场价格按新日期刷新。\n确认加速？" % hours
+	_ff_dialog.dialog_text = I18nService.t("ui.ff.confirm", {"hours": "%.1f" % hours})
 	_ff_dialog.popup_centered()
 
 
 func _do_fast_forward() -> void:
 	var err: String = flight_ops.fast_forward_to_departure()
 	if err != "":
+		AudioService.play_sfx("sfx_error")
 		_show_hint(err)
 	else:
+		AudioService.play_sfx("sfx_ff_confirm")
 		_show_hint("已加速至起飞时刻。")
 
 
@@ -363,6 +385,7 @@ func _on_transition_started(ticket: Dictionary) -> void:
 	_panel_host.visible = false
 	_overlay.visible = true
 	_transition_running = true
+	AudioService.play_sfx("sfx_takeoff")
 	_run_transition_sequence(ticket)
 	globe.draw_trip_route(str(ticket.get("origin_airport_id", "")), str(ticket.get("destination_airport_id", "")))
 
@@ -373,13 +396,15 @@ func _run_transition_sequence(ticket: Dictionary) -> void:
 		float(ticket.get("distance_km", 0)), ticket.get("cabin", "")
 	]
 	var phases: Array = [
-		{"t": 0.0, "title": "强制登机 · 起飞", "bar": "■■■□□□□□□□"},
-		{"t": 1.6, "title": "巡航中", "bar": "□□■■■■■□□□"},
-		{"t": 3.4, "title": "降落进近", "bar": "□□□□□□■■■■"},
+		{"t": 0.0, "title": "强制登机 · 起飞", "bar": "■■■□□□□□□□", "sfx": ""},
+		{"t": 1.6, "title": "巡航中", "bar": "□□■■■■■□□□", "sfx": "sfx_cruise"},
+		{"t": 3.4, "title": "降落进近", "bar": "□□□□□□■■■■", "sfx": "sfx_landing"},
 	]
 	for ph in phases:
 		if not _transition_running:
 			return
+		if str(ph.sfx) != "":
+			AudioService.play_sfx(str(ph.sfx))
 		_overlay_label.text = "%s\n%s\n%s\n（过场动画，飞行时间已计入世界时钟）" % [ph.title, base, ph.bar]
 		var wait: float = 1.6 if ph.t < 3.0 else 1.6
 		await get_tree().create_timer(wait).timeout
@@ -389,6 +414,8 @@ func _on_transition_finished() -> void:
 	_transition_running = false
 	_overlay.visible = false
 	_overlay_label.text = ""
+	AudioService.end_transition_duck()
+	AudioService.play_sfx("sfx_arrive")
 
 
 func _on_arrived() -> void:
@@ -502,7 +529,12 @@ func _buy_selected(as_cargo: bool) -> void:
 		return
 	var pid: String = _market_cache[idx[0]]
 	var err: String = _Inventory.buy(pid, 1, as_cargo)
-	_show_hint(err if err != "" else "购买成功")
+	if err != "":
+		AudioService.play_sfx("sfx_error")
+		_show_hint(err)
+	else:
+		AudioService.play_sfx("sfx_buy")
+		_show_hint("购买成功")
 	_refresh_bags()
 
 
@@ -518,7 +550,7 @@ func _show_flights() -> void:
 	var v := VBoxContainer.new()
 	_panel_host.add_child(v)
 	var tip := Label.new()
-	tip.text = "全局航班检索（当前机场出港）· " + DataService.disclaimer
+	tip.text = "全局航班检索（当前机场出港）· " + I18nService.disclaimer()
 	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(tip)
 	_flight_query = LineEdit.new()
@@ -589,11 +621,11 @@ func _show_flights() -> void:
 	var row := HBoxContainer.new()
 	v.add_child(row)
 	var be := Button.new()
-	be.text = "经济舱购票"
+	be.text = I18nService.t("ui.ticket.economy")
 	be.pressed.connect(func (): _purchase("economy"))
 	row.add_child(be)
 	var bb := Button.new()
-	bb.text = "公务舱购票×10"
+	bb.text = I18nService.t("ui.ticket.business")
 	bb.pressed.connect(func (): _purchase("business"))
 	row.add_child(bb)
 	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
@@ -611,7 +643,7 @@ func _show_flights() -> void:
 	bcr.pressed.connect(func (): _cargo_blocks = 0; _show_hint("已清零货运加购"))
 	row.add_child(bcr)
 	var br := Button.new()
-	br.text = "退票(30%)"
+	br.text = I18nService.t("ui.ticket.refund")
 	br.pressed.connect(func (): _show_hint(_Tickets.refund_current()); _refresh_bags())
 	row.add_child(br)
 	var close := Button.new()
@@ -675,6 +707,10 @@ func _purchase(cabin: String) -> void:
 		_replace_ticket_dialog.popup_centered()
 		return
 	_show_hint(err if err != "" else "购票成功")
+	if err == "":
+		AudioService.play_sfx("sfx_ticket_ok")
+	else:
+		AudioService.play_sfx("sfx_error")
 	_refresh_bags()
 	_refresh_countdown()
 	if err == "" and _selected_flight.has("destination_airport_id"):
@@ -725,6 +761,7 @@ func _sell_one() -> void:
 	if idxs.is_empty():
 		return
 	var msg: String = _Inventory.sell(idxs[0], 1)
+	AudioService.play_sfx("sfx_sell")
 	_show_hint(msg)
 	_show_inventory()
 	_refresh_bags()
@@ -752,15 +789,22 @@ func _show_attr() -> void:
 	_attr_text = RichTextLabel.new()
 	_attr_text.bbcode_enabled = true
 	_attr_text.custom_minimum_size = Vector2(700, 440)
+	_attr_text.scroll_active = true
 	_panel_host.add_child(_attr_text)
-	var s := "[b]数据来源与许可证[/b]\n\n%s\n\n" % DataService.disclaimer
-	for a in DataService.world.get("attributions", []):
-		s += "• %s — %s\n  %s\n" % [a.get("name", ""), a.get("license", ""), a.get("note", "")]
+	AudioService.play_sfx("sfx_ui_open_panel")
+	var body := I18nService.attribution_body
+	if body.is_empty():
+		body = I18nService.disclaimer()
+		for a in DataService.world.get("attributions", []):
+			body += "\n• %s — %s\n  %s" % [a.get("name", ""), a.get("license", ""), a.get("note", "")]
 	var meta: Dictionary = DataService.world.get("meta", {})
-	s += "\n基准日：%s\nETL：%s\n生成：%s\n" % [
-		meta.get("baseline_date", ""), meta.get("etl_version", ""), meta.get("generated_at", "")
+	_attr_text.text = "[b]%s[/b]\n\n%s\n\n基准日：%s\nETL：%s\n生成：%s\n" % [
+		I18nService.t("ui.tab.attribution"),
+		body,
+		meta.get("baseline_date", ""),
+		meta.get("etl_version", ""),
+		meta.get("generated_at", ""),
 	]
-	_attr_text.text = s
 
 
 func _save() -> void:

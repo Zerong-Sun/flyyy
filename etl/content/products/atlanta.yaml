@@ -1,0 +1,55 @@
+products:
+  - product_id: "atl_peach_candy"
+    name_zh: "桃味软糖"
+    category: "糖果"
+    weight_kg: 0.4
+    base_reference_price: 8.0
+    reference_currency: "USD"
+    shelf_life_hours: 2160
+    fragility: 0.0
+    rarity: 0.4
+    description: "佐治亚州因桃产量居全美前列而被昵称为'桃州'，亚特兰大市中心的桃树街更是将这一身份写入了地图。这款软糖以浓缩桃汁和果胶制成，咀嚼时释放出明显的蜜桃香气和淡淡酸味。密封保存可维持软糯质地三个月，高温潮湿环境会使糖粒粘连，建议夹层隔纸包装。"
+
+  - product_id: "atl_pecan_snack"
+    name_zh: "山核桃零食"
+    category: "食品"
+    weight_kg: 0.5
+    base_reference_price: 12.0
+    reference_currency: "USD"
+    shelf_life_hours: 1800
+    fragility: 0.0
+    rarity: 0.5
+    description: "乔治亚州是美国山核桃（Pecan）产量第一的州，南方阳光和红土共同赋予了这种坚果饱满的油脂香气。经低温烘烤后以海盐和枫糖调味，酥脆而不油腻。坚果富含不饱和脂肪酸，在干燥凉爽的条件下可保存约两个半月，是长途飞行中高能量密度的零食伴侣。"
+
+  - product_id: "atl_civil_rights_book"
+    name_zh: "民权历史读本"
+    category: "文具"
+    weight_kg: 0.6
+    base_reference_price: 18.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.3
+    description: "亚特兰大是马丁·路德·金博士的故乡和民权运动的策源地之一。这本读本收录了从蒙哥马利巴士抵制到1964年民权法案签署的关键事件照片与演讲稿摘录。英文原文搭配插画地图，适合对20世纪美国社会史感兴趣的读者。纸质封面建议使用硬壳书套防压。"
+
+  - product_id: "atl_cotton_scarf"
+    name_zh: "棉质围巾"
+    category: "纺织品"
+    weight_kg: 0.3
+    base_reference_price: 22.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.35
+    description: "美国南方棉花种植历史可追溯至殖民时期，今天佐治亚州仍是东南部优质棉产地之一。这条围巾以长绒棉纺制的细纱平纹织成，手感柔软贴肤，染色采用桃树街两侧老橡树的深绿为主色调。折叠后仅占手帕大小的行李空间，四季皆宜。"
+
+  - product_id: "atl_skyline_mug"
+    name_zh: "天际线马克杯"
+    category: "纪念品"
+    weight_kg: 0.45
+    base_reference_price: 15.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.1
+    rarity: 0.25
+    description: "杯身以简约线条勾勒亚特兰大天际线——桃树街摩天楼群与远处的肯尼索山轮廓。陶瓷材质、约350ml容量，适配标准咖啡机和手冲设备。亚特兰大作为可口可乐总部所在地，这款杯子在本地咖啡店中随处可见。长途托运时建议用衣物包裹防碰撞。"

@@ -1,0 +1,55 @@
+products:
+  - product_id: "ord_deepdish_kit"
+    name_zh: "深盘披萨调料包"
+    category: "食品"
+    weight_kg: 0.5
+    base_reference_price: 13.0
+    reference_currency: "USD"
+    shelf_life_hours: 1800
+    fragility: 0.0
+    rarity: 0.3
+    description: "芝加哥深盘披萨的形态更像一块馅饼——高边饼皮中奶酪在下、番茄酱在上。这款调料包提供干酵母、意式调味香料和粗粒黄玉米粉（撒在烤盘底部防止粘连），只需自备面粉、奶酪和番茄罐头即可在家还原。干燥配料在密封状态下可保持活力约两个半月。"
+
+  - product_id: "ord_architecture_book"
+    name_zh: "建筑导览册"
+    category: "文具"
+    weight_kg: 0.55
+    base_reference_price: 20.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.25
+    description: "芝加哥是现代摩天大楼的诞生地——1885年的家庭保险大楼是世界首座钢结构高层建筑。这本口袋导览按从密歇根湖往西的地理顺序收录了约100座标志性建筑，包括路易斯·沙利文的装饰性铸铁立面、密斯·凡·德·罗的极简主义玻璃盒子以及弗兰克·盖里在千禧公园的曲面不锈钢音乐亭。"
+
+  - product_id: "ord_lake_candle"
+    name_zh: "湖岸香氛蜡烛"
+    category: "日用品"
+    weight_kg: 0.4
+    base_reference_price: 17.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.3
+    description: "密歇根湖畔的夏日记忆封装在大豆蜡中——前调为湖水矿物质和沙地松的清凉，中调释放野生薄荷与紫花苜蓿的草本气息，尾调带一丝烧烤木炭的烟熏温暖。纯大豆蜡燃烧无黑烟，200克可燃烧约40小时。在远离大湖的内陆城市，这款蜡烛携带的是一个无法搬运的自然景观。"
+
+  - product_id: "ord_skyline_print"
+    name_zh: "天际线版画"
+    category: "纪念品"
+    weight_kg: 0.3
+    base_reference_price: 15.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.2
+    description: "以胶版印刷技术将芝加哥河两岸从威利斯大厦到特朗普大厦的天际线复刻在无酸美术纸上。版本包含建筑名称标注与竣工年份的小字注释，兼具装饰和教育功能。卷装于纸管中运输，到达目的地展开后四角几乎无折痕。"
+
+  - product_id: "ord_popcorn_tin"
+    name_zh: "焦糖爆米花罐"
+    category: "食品"
+    weight_kg: 0.6
+    base_reference_price: 11.0
+    reference_currency: "USD"
+    shelf_life_hours: 900
+    fragility: 0.0
+    rarity: 0.3
+    description: "芝加哥混合是这座城市独有的零食传统——焦糖味爆米花与切达奶酪味爆米花混在一罐中，甜咸交织的矛盾口感令人上瘾。金属罐密封可保持脆度约五周，但一旦开罐后需在两周内食用完毕。罐体复刻了1920年代芝加哥电影院老海报的美术字体风格。"

@@ -1,0 +1,55 @@
+products:
+  - product_id: "mia_key_lime"
+    name_zh: "青柠派点心"
+    category: "食品"
+    weight_kg: 0.4
+    base_reference_price: 11.0
+    reference_currency: "USD"
+    shelf_life_hours: 240
+    fragility: 0.1
+    rarity: 0.3
+    description: "佛罗里达群岛（Florida Keys）出产一种比波斯青柠更小、皮更薄、香气更浓的品种——在墨西哥湾的珊瑚礁土壤和海风条件下生长出的青柠汁酸度明亮而不尖刻。这款派以全麦饼干饼底承托青柠汁、浓缩牛奶和蛋黄搅拌成的凝乳层，在舌尖上同时发生酸与甜的化学推拉。冷藏可保存10天，跨洋贸易极度依赖冷藏供应链。"
+
+  - product_id: "mia_guava_paste"
+    name_zh: "番石榴酱"
+    category: "食品"
+    weight_kg: 0.45
+    base_reference_price: 9.0
+    reference_currency: "USD"
+    shelf_life_hours: 1800
+    fragility: 0.0
+    rarity: 0.3
+    description: "番石榴（Guava）在加勒比海和拉丁美洲的烹饪中既是水果也是馅料。这款果酱将成熟番石榴的果肉和少量蔗糖在铜锅中慢火熬煮至水分大部分蒸发，冷却后凝固成半透明的深玫红色固体。古巴裔迈阿密人习惯切一块放在咸饼干上夹一片白奶酪。塑料袋真空密封后可在常温下保存两个半月。"
+
+  - product_id: "mia_cuba_coffee"
+    name_zh: "古巴风味咖啡豆"
+    category: "咖啡"
+    weight_kg: 0.4
+    base_reference_price: 15.0
+    reference_currency: "USD"
+    shelf_life_hours: 2400
+    fragility: 0.0
+    rarity: 0.4
+    description: "迈阿密的小哈瓦那街区拥有全球古巴以外最高密度的古巴咖啡馆——窗口前永远有人靠在柜台边小口喝一杯Cafecito（以黄糖与浓缩咖啡一同萃取的小杯甜咖啡）。这款咖啡豆以深度烘焙的阿拉比卡豆研磨而成，在萃取时加入的Demerara砂糖在高温下轻微焦化，为咖啡增加难以复制的焦糖尾韵。"
+
+  - product_id: "mia_pastel_tote"
+    name_zh: "粉彩帆布袋"
+    category: "纺织品"
+    weight_kg: 0.3
+    base_reference_price: 16.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.25
+    description: "南迈阿密海滩的救生亭自从1980年代《迈阿密风云》电视剧播出以来就是全球公认的消夏美学符号。这款帆布袋以粉彩调色板（淡粉、薄荷绿和淡紫）印刷一排艺术装饰风格的救生亭剪影。12oz帆布加交叉缝线的手柄可承载约10kg负载，同时具有在沙滩上抖掉沙粒的实用性。"
+
+  - product_id: "mia_art_deco_magnet"
+    name_zh: "装饰艺术磁贴"
+    category: "纪念品"
+    weight_kg: 0.05
+    base_reference_price: 6.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.1
+    description: "迈阿密南海滩的海洋大道拥有全球最集中的1920-30年代装饰艺术酒店群之一——柔和的曲线外缘、霓虹字母和舷窗式窗户构成了热带现代主义的面孔。这款磁贴以亚克力镭射切割后UV喷涂，复刻了其中最具代表性的殖民酒店（The Colony Hotel）的桃红色和淡绿几何色块立面。"

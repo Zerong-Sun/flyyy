@@ -82,7 +82,10 @@ static func purchase(flight: Dictionary, cabin: String, extra_tier: String, carg
 	EventBus.ticket_purchased.emit()
 	if not bool(AppState.tutorial_flags.get("ticket", false)):
 		AppState.tutorial_flags["ticket"] = true
-		EventBus.tutorial_hint.emit("购票成功。可点击「加速至起飞」，或等待时间流逝后强制登机。")
+		var tip := I18nService.tutorial("first_ticket")
+		if tip.is_empty():
+			tip = "购票成功。可点击「加速至起飞」，或等待时间流逝后强制登机。"
+		EventBus.tutorial_hint.emit(tip)
 	return ""
 
 

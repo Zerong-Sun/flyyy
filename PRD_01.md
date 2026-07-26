@@ -1465,6 +1465,8 @@ Demo覆盖以下20座全球客运量最大的枢纽机场及其服务城市：
 * 任意两机场间大圆航线可视化；
 * SQLite读取测试。
 
+素材规格与仓库缺口盘点见 [`docs/CONTENT_ASSET_SPEC.md`](docs/CONTENT_ASSET_SPEC.md) §0.5（阶段一验收不依赖正式美术包 D1；地球可用程序占位贴图）。运行时以 JSON 为主，SQLite 为 ETL 校验产物。门控清单见 [`docs/superpowers/plans/2026-07-26-map-prototype-acceptance.md`](docs/superpowers/plans/2026-07-26-map-prototype-acceptance.md)。
+
 退出条件：
 
 * 可以从任意20座机场之一选择另一机场；

@@ -29,6 +29,12 @@ DataService="*res://scripts/autoload/DataService.gd"
 GameClock="*res://scripts/autoload/GameClock.gd"
 AppState="*res://scripts/autoload/AppState.gd"
 SaveSystem="*res://scripts/autoload/SaveSystem.gd"
+I18nService="*res://scripts/autoload/I18nService.gd"
+AudioService="*res://scripts/autoload/AudioService.gd"
+
+[audio]
+
+buses/default_bus_layout="res://default_bus_layout.tres"
 
 [display]
 

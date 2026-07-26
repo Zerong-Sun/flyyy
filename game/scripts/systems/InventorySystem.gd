@@ -41,7 +41,10 @@ static func buy(product_id: String, qty: int, as_cargo: bool = false) -> String:
 	EventBus.inventory_changed.emit()
 	if not bool(AppState.tutorial_flags.get("bought", false)):
 		AppState.tutorial_flags["bought"] = true
-		EventBus.tutorial_hint.emit("已采购商品。打开「航班」选择目的地，公务舱行李额度为经济舱 3 倍。")
+		var tip := I18nService.tutorial("first_buy")
+		if tip.is_empty():
+			tip = "已采购商品。打开「航班」选择目的地，公务舱行李额度为经济舱 3 倍。"
+		EventBus.tutorial_hint.emit(tip)
 	return ""
 
 
@@ -69,7 +72,10 @@ static func sell(index: int, qty: int) -> String:
 	EventBus.market_changed.emit()
 	if not bool(AppState.tutorial_flags.get("sold", false)):
 		AppState.tutorial_flags["sold"] = true
-		EventBus.tutorial_hint.emit("出售完成。利润 = 售价 − 成本 − 机票。继续探索价差航线吧。")
+		var tip := I18nService.tutorial("first_sell")
+		if tip.is_empty():
+			tip = "出售完成。利润 = 售价 − 成本 − 机票。继续探索价差航线吧。"
+		EventBus.tutorial_hint.emit(tip)
 	return "售出收入 %s，账面毛利 %s" % [_Economy.format_money(revenue), _Economy.format_money(revenue - cost)]
 
 

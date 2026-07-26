@@ -1,0 +1,18 @@
+id,filename,license,author,source_url,source,loop,loop_start_ms,loop_end_ms,bus,notes
+bgm_globe_day,bgm/audio_bgm_globe_day.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,true,8000,133000,BGM,Demo P0 ambient pad; ~135s
+sfx_ui_click,sfx/audio_sfx_ui_click.ogg,CC0,Kenney,https://github.com/Calinou/kenney-ui-audio/archive/refs/heads/master.zip,cc0,false,,,UI,Kenney UI Audio: kenney-ui-audio-master/addons/kenney_ui_audio/click1.wav
+sfx_ui_hover,sfx/audio_sfx_ui_hover.ogg,CC0,Kenney,https://github.com/Calinou/kenney-ui-audio/archive/refs/heads/master.zip,cc0,false,,,UI,Kenney UI Audio: kenney-ui-audio-master/addons/kenney_ui_audio/rollover1.wav
+sfx_ui_open_panel,sfx/audio_sfx_ui_open_panel.ogg,CC0,Kenney,https://github.com/Calinou/kenney-ui-audio/archive/refs/heads/master.zip,cc0,false,,,UI,Kenney UI Audio: kenney-ui-audio-master/addons/kenney_ui_audio/switch1.wav
+sfx_ui_close_panel,sfx/audio_sfx_ui_close_panel.ogg,CC0,Kenney,https://github.com/Calinou/kenney-ui-audio/archive/refs/heads/master.zip,cc0,false,,,UI,Kenney UI Audio: kenney-ui-audio-master/addons/kenney_ui_audio/switch4.wav
+sfx_search_type,sfx/audio_sfx_search_type.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,UI,Demo P0 procedural
+sfx_airport_select,sfx/audio_sfx_airport_select.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 procedural
+sfx_buy,sfx/audio_sfx_buy.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 procedural
+sfx_sell,sfx/audio_sfx_sell.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 procedural
+sfx_error,sfx/audio_sfx_error.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 procedural
+sfx_ticket_ok,sfx/audio_sfx_ticket_ok.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 procedural
+sfx_ff_confirm,sfx/audio_sfx_ff_confirm.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 procedural
+sfx_boarding_alert,sfx/audio_sfx_boarding_alert.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 procedural
+sfx_takeoff,sfx/audio_sfx_takeoff.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,Transition,Demo P0 procedural
+sfx_cruise,sfx/audio_sfx_cruise.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,true,100,1700,Transition,Demo P0 procedural
+sfx_landing,sfx/audio_sfx_landing.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,Transition,Demo P0 procedural
+sfx_arrive,sfx/audio_sfx_arrive.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 procedural

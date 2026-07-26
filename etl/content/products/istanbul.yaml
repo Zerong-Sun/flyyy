@@ -1,0 +1,55 @@
+products:
+  - product_id: "ist_lokum"
+    name_zh: "土耳其软糖"
+    category: "糖果"
+    weight_kg: 0.5
+    base_reference_price: 12.0
+    reference_currency: "USD"
+    shelf_life_hours: 1500
+    fragility: 0.0
+    rarity: 0.5
+    description: "土耳其软糖（Lokum）自15世纪以来一直是安纳托利亚甜点的代表。以淀粉和糖为基底缓慢熬煮，加入玫瑰水、开心果或石榴汁调味增色，切为方块后裹上细糖粉防止粘连。口感在弹韧与软糯之间找到一种微妙的平衡。在干燥阴凉的天气下可保存两月有余，在潮湿的东南亚地区需密封防潮。"
+
+  - product_id: "ist_spice_bazaar"
+    name_zh: "巴扎香料组合"
+    category: "香料"
+    weight_kg: 0.35
+    base_reference_price: 16.0
+    reference_currency: "USD"
+    shelf_life_hours: 3600
+    fragility: 0.0
+    rarity: 0.25
+    description: "伊斯坦布尔的埃及巴扎（香料市集）自1660年开市至今仍是全球最壮观的香料集散地之一。组合含五种核心香料：孜然粒、苏木那克（深红酒红色、柠檬酸味）、薄荷碎、红甜椒粉和阿勒颇辣椒碎。每款独立小袋真空封装，在打开前可保存半年以上，为厨房提供中东料理的全套味觉画布。"
+
+  - product_id: "ist_ceramic_tile"
+    name_zh: "伊斯尼克风格瓷砖"
+    category: "陶瓷"
+    weight_kg: 0.7
+    base_reference_price: 26.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.1
+    rarity: 0.35
+    description: "伊斯尼克是16-17世纪奥斯曼帝国陶瓷生产的巅峰之地——清真寺和宫殿中的钴蓝、青绿和珊瑚红花卉纹饰多出于此地匠人之手。这片瓷砖以传统石英砂坯料在约900°C下两次烧制，玻璃质的釉面在光线折射下呈现宝石般的光泽。约20×20cm见方，适合悬挂或桌面展示。"
+
+  - product_id: "ist_silk_scarf"
+    name_zh: "丝绸围巾"
+    category: "纺织品"
+    weight_kg: 0.2
+    base_reference_price: 35.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.4
+    description: "土耳其是古丝绸之路上位于欧亚交界的关键段落，布尔斯至今仍是土耳其最大的丝绸生产和交易中心。这条围巾以20姆米以上的桑蚕丝平纹或斜纹织造，数码印花复刻托普卡帕宫中奥斯曼宫廷的郁金香纹样。斜纹技法赋予面料温柔的垂坠感和光泽，在时尚配件市场溢价弹性很高。"
+
+  - product_id: "ist_evil_eye"
+    name_zh: "蓝眼睛挂饰"
+    category: "纪念品"
+    weight_kg: 0.1
+    base_reference_price: 8.0
+    reference_currency: "USD"
+    shelf_life_hours: 99999
+    fragility: 0.0
+    rarity: 0.3
+    description: "Nazar Boncugu是源自中亚和安纳托利亚的古老护佑符号——深蓝、浅蓝和白色的同心圆形玻璃珠模拟一只永不闭合的眼睛，传统认为可以反射嫉妒和不善的凝视。土耳其人将其挂在房屋入口、汽车后视镜和新生婴儿的衣物上。在全球化的文化商品市场中，这一符号的识别度极高。"
