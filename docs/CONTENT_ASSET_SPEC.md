@@ -3,12 +3,12 @@
 | 字段 | 内容 |
 |------|------|
 | 文档编号 | CAS-01 |
-| 版本 | v1.2 |
+| 版本 | v1.4 |
 | 产品 | 《环球航商》/ Airborne Trader |
-| 关联 | [PRD_01.md](../PRD_01.md) §10 / §13–14 / §18 / §24 / §26.1 |
+| 关联 | [PRD_01.md](../PRD_01.md) §10 / §13–14 / §18 / §24 / §26.1 / §27 |
 | 引擎 | Godot 4.x |
 | 语言 | 简体中文（Demo）；英文键名与资源 ID 使用 ASCII |
-| 状态 | 首版里程碑=地图与数据原型（PRD §26 第一阶段）；素材现状见 §0.5 |
+| 状态 | 可玩 Demo（§27）+ 基础 UI Theme + 美术代码占位符；正式地球/过场/图标仍属美术包 D1 |
 
 本文档供美术、音频、文案与程序导入共同遵守。与 PRD 冲突时以 PRD 玩法/法律约束为准，表现层以本文档为准。
 
@@ -45,31 +45,38 @@ Demo **不要求**城市摄影图、航司 Logo、完整飞机驾驶舱模拟（
 - 写实血腥、政治敏感符号、宗教圣物戏谑化。  
 - 未授权商标、球队/奢侈品/香烟酒类包装复刻。
 
-### 0.5 仓库现状盘点（2026-07-26）
+### 0.5 仓库现状盘点（2026-07-27；美术占位符收口）
 
 对照本章资产 ID，核对 `game/assets/` 与运行时占位实现。  
-**PRD §26 第一阶段（地图与数据原型）验收不依赖美术包 D1**；正式贴图/字体/过场视觉归后续美术包 D1。
+**可玩 Demo（PRD §27）** 已落地基础 UI Theme、字体，以及地球/机场/网格/过场/图标的**代码生成占位符**。正式贴图 / 插画 / SVG 图标仍归美术包 D1。
 
 | CAS ID / 类别 | 状态 | 现状说明 |
 |---------------|------|----------|
-| `EARTH_ALBEDO` | **占位** | 无正式 PNG/WebP；[`GlobeController._build_earth`](../game/scripts/render/GlobeController.gd) 运行时生成 512×256 假大陆 |
+| `EARTH_ALBEDO` | **占位（代码生成）** | 无正式 PNG/WebP；[`GlobeController._build_earth`](../game/scripts/render/GlobeController.gd) 运行时生成 1024×512 大洲椭圆近似贴图（亚欧/北美/南美/非洲/澳洲可辨） |
 | `EARTH_NORMAL` / `EARTH_SPEC` / `EARTH_NIGHT` | **缺（可选）** | Demo 可省略 |
-| `GRID_OVERLAY` | **缺** | 未实现；阶段一不阻塞 |
-| `MESH_AIRPORT_PIN` | **占位** | 代码内建 `SphereMesh`，无独立 glTF；四色由程序驱动 |
+| `GRID_OVERLAY` | **占位（代码生成）** | [`_build_grid_overlay`](../game/scripts/render/GlobeController.gd)：每 15° 经纬线，`ImmediateMesh`，远淡近显 |
+| `MESH_AIRPORT_PIN` | **占位（代码生成）** | 低模 Pin（圆柱+球头 ArrayMesh）；四色由程序驱动；无独立 glTF |
 | `FX_ROUTE_LINE` | **占位** | `ImmediateMesh` 大圆弧 + Unshaded 材质 |
-| `ICON_PLANE_TINY` | **缺** | 可用三角形代替；阶段一不需要 |
-| 过场三段视觉 `anim_flight_*` | **缺** | 音频三段已齐；视觉未交付 |
-| UI Theme / 图标全套 | **缺** | HUD 代码绘制；无独立 StyleBox 图集 |
-| 字体（Noto Sans SC / 等宽数字） | **缺** | 依赖系统/引擎默认字体 |
+| `ICON_PLANE_TINY` | **占位（代码生成）** | 三角飞机标记；行程航线时显示并沿弧推进 |
+| 过场三段视觉 `anim_flight_*` | **占位（几何动效）** | SFX 三段已齐；[`MainHUD._play_transition_fx`](../game/scripts/ui/MainHUD.gd) 起飞灯条 / 巡航弧线 / 降落条+城名；正式插画仍属 D1 |
+| UI Theme（色板 + StyleBox） | **已齐（基础）** | [`ThemeFactory.gd`](../game/themes/ThemeFactory.gd) + [`DemoColors.gd`](../game/themes/DemoColors.gd)；挂载于 MainHUD |
+| 图标图集 | **占位（代码生成）** | [`IconFactory.gd`](../game/themes/IconFactory.gd)：§1.2.E 全套 + 笔记/情报扩展；光栅 ImageTexture 挂按钮 |
+| 字体（Noto Sans SC / JetBrains Mono） | **已齐（基础）** | [`game/assets/fonts/`](../game/assets/fonts/) OFL；见 LICENSE.txt |
 | `bgm_globe_day` + §2.3 P0 SFX（17 项） | **已齐** | [`AUDIO_MANIFEST.csv`](../game/assets/audio/AUDIO_MANIFEST.csv) 与文件一一对应 |
-| `bgm_market` / `bgm_menu` / `bgm_night` | **缺（P1）** | 规格预留，不阻塞阶段一 |
-| 文本包：UI CSV + 20 城 + 100 商品 + 来源页 | **已齐** | `zh_CN.csv` / `tutorial_zh.json` / `attribution_zh.txt` + ETL 内容 |
-| 城市插画 / 商品图鉴图标 | **缺（P1）** | 阶段一不需要 |
+| `bgm_market` / `bgm_menu` / `bgm_night` | **缺（P1）** | 规格预留 |
+| 文本包：UI CSV + 20 城 + 100 商品 + 来源页 | **已齐** | 含字体署名 |
+| 城市插画 / 商品图鉴图标 | **缺（P1）** | |
 
-**运行时数据：** Godot 只读 [`game/data/world.json`](../game/data/world.json)（及 `flights.json`）；SQLite（`world.sqlite` 等）为 ETL 校验产物，不作为客户端主路径。
+**运行时数据：** Godot 只读 [`game/data/world.json`](../game/data/world.json)（及 `flights.json`）；SQLite 为 ETL 校验产物。
 
-**阶段一与美术包关系：** 地图原型可用上述程序占位通过手测；补齐 `EARTH_ALBEDO`、字体与 UI 图标属于美术包 D1，不纳入本里程碑退出条件。
+**与美术包 D1 关系：** Theme/字体/代码占位符已满足可玩 Demo；正式 `EARTH_ALBEDO` PNG、过场插画三帧、SVG 图标图集仍属 D1 交付。
 
+**美术包 D1 待交付清单（需求写入本文档，Demo 用占位符）：**
+
+1. `earth_albedo_day_2k.png`（等距柱状 ≥2048×1024）  
+2. `anim_flight_takeoff` / `cruise` / `land` 序列帧或 Motion 片  
+3. `icon_*.svg` × §1.2.E 全套（24/32）+ `icon_plane_tiny`  
+4. 可选：`MESH_AIRPORT_PIN.glb`、品牌字标 `logo_*`
 ---
 
 ## 1. 美术需求
@@ -699,9 +706,10 @@ Demo：20 座枢纽城必须齐套。命名与机场映射以 `etl/config/hubs_2
 
 | 字段 | 要求 |
 |------|------|
-| `name_zh` | 通用类别名，**不用注册商标**（可写「抹茶点心」不写某品牌全称） |
+| `name_zh` | 通用类别名，**不用注册商标**（可写「上海纺织品合约」不写某品牌全称） |
+| `category` | 枚举：食品/香料/茶叶/咖啡/糖果/工艺品/纺织品/陶瓷/文具/玩具/日用品/机械/能源/电子/矿产；Demo **禁止** `纪念品`；允许轻合约、样品与高价值代购/核心器件 |
 | `description` | 40–120 字：产地关联、保存注意、贸易趣味 |
-| `category` | 枚举：食品/香料/茶叶/咖啡/糖果/工艺品/纺织品/陶瓷/文具/玩具/纪念品/日用品 |
+| `weight_kg` | Demo：轻合约约 0.5–2；样品约 3–10；高价值代购/核心器件约 0.2–1.5（均 ≤12） |
 
 每城 Demo ≥5 种；禁售类见 PRD §14.1（酒烟药武等）。
 
@@ -908,7 +916,7 @@ ODbL 主要义务摘要：
 
 | 类型 | 格式 |
 |------|------|
-| 货币 | 内结算 USD；展示 `$1,234.56（约¥8,889）` 或程序 `EconomySystem.format_money` |
+| 货币 | 内结算 USD；展示 `$1234.56`（`EconomySystem.format_money`，不折算人民币） |
 | 重量 | `12.5kg`，小数最多 1 位 |
 | 时间 | UTC：`2025-03-01 12:00`；当地：同时区名或「当地」前缀 |
 | 航班号 | 大写 IATA+数字，如 `MU510` |
@@ -1058,6 +1066,8 @@ ATL 亚特兰大 · DXB 迪拜 · DFW 达拉斯 · DEN 丹佛 · LHR 伦敦 · O
 | v1.0 | 2026-07-26 | 首版：覆盖美术/音乐/文本风格、内容、格式、命名与验收 |
 | v1.1 | 2026-07-26 | §2 音频章补全（总线/环境音/合成约定/Import）+ Demo 音频包 D1 交付说明 |
 | v1.2 | 2026-07-26 | 新增 §0.5 仓库现状盘点；标明阶段一不依赖美术包 D1 |
+| v1.3 | 2026-07-26 | §0.5：基础 Theme + 字体标为已齐；对齐可玩 Demo §27 |
+| v1.4 | 2026-07-27 | §0.5：地球/网格/Pin/飞机/过场几何/IconFactory 代码占位符已齐；明确 D1 待交付清单 |
 
 ---
 

@@ -61,6 +61,52 @@ func _run() -> void:
 			ok = false
 			errors.append("expected 20 cities, got %d" % cities.size())
 
+	if not FileAccess.file_exists("res://assets/fonts/NotoSansSC-Regular.otf"):
+		ok = false
+		errors.append("NotoSansSC font missing")
+	if not FileAccess.file_exists("res://themes/ThemeFactory.gd"):
+		ok = false
+		errors.append("ThemeFactory missing")
+	else:
+		var tf: GDScript = load("res://themes/ThemeFactory.gd") as GDScript
+		if tf == null:
+			ok = false
+			errors.append("ThemeFactory load failed")
+		else:
+			var theme: Theme = tf.call("build") as Theme
+			if theme == null or theme.default_font_size < 10:
+				ok = false
+				errors.append("ThemeFactory.build failed")
+
+	if not FileAccess.file_exists("res://themes/IconFactory.gd"):
+		ok = false
+		errors.append("IconFactory missing")
+	else:
+		var icf: GDScript = load("res://themes/IconFactory.gd") as GDScript
+		if icf == null:
+			ok = false
+			errors.append("IconFactory load failed")
+		else:
+			var ids: PackedStringArray = icf.call("all_ids")
+			if ids.size() < 19:
+				ok = false
+				errors.append("IconFactory expected ≥19 icons, got %d" % ids.size())
+			var tex: ImageTexture = icf.call("make_texture", "ic_flight", 24) as ImageTexture
+			if tex == null:
+				ok = false
+				errors.append("IconFactory.make_texture failed")
+
+	var globe_script := "res://scripts/render/GlobeController.gd"
+	if not FileAccess.file_exists(globe_script):
+		ok = false
+		errors.append("GlobeController missing")
+	else:
+		var src := FileAccess.get_file_as_string(globe_script)
+		for marker in ["_build_grid_overlay", "_make_pin_mesh", "_CONTINENT_BLOBS", "set_plane_on_route"]:
+			if src.find(marker) < 0:
+				ok = false
+				errors.append("GlobeController missing %s" % marker)
+
 	if ok:
 		print("SMOKE_CONTENT_OK")
 		quit(0)

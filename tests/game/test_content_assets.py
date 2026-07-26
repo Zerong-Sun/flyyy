@@ -142,6 +142,8 @@ def test_godot_autoload_and_wiring_markers():
     assert "I18nService.disclaimer()" in main
     assert "AudioService.set_bgm" in main
     assert "AudioService.play_sfx" in main
+    assert "_play_transition_fx" in main
+    assert "IconFactory" in main
 
     ops = (GAME / "scripts" / "systems" / "FlightOps.gd").read_text(encoding="utf-8")
     assert 'AudioService.play_sfx("sfx_boarding_alert")' in ops
@@ -149,3 +151,47 @@ def test_godot_autoload_and_wiring_markers():
 
     app = (GAME / "scripts" / "autoload" / "AppState.gd").read_text(encoding="utf-8")
     assert 'I18nService.tutorial("new_game")' in app
+
+
+def test_icon_factory_and_globe_placeholders():
+    """CAS Demo art placeholders: IconFactory (≥19) + GlobeController code gen."""
+    icon_path = GAME / "themes" / "IconFactory.gd"
+    assert icon_path.is_file()
+    icon_src = icon_path.read_text(encoding="utf-8")
+    for icon_id in (
+        "ic_city",
+        "ic_market",
+        "ic_flight",
+        "ic_inventory",
+        "ic_log",
+        "ic_attr",
+        "ic_search",
+        "ic_random",
+        "ic_economy",
+        "ic_business",
+        "ic_baggage",
+        "ic_cargo",
+        "ic_fast_forward",
+        "ic_save",
+        "ic_load",
+        "ic_money",
+        "ic_weight",
+        "ic_clock",
+        "ic_warning",
+    ):
+        assert f'"{icon_id}"' in icon_src, icon_id
+
+    globe = (GAME / "scripts" / "render" / "GlobeController.gd").read_text(encoding="utf-8")
+    for marker in (
+        "_CONTINENT_BLOBS",
+        "_build_grid_overlay",
+        "_make_pin_mesh",
+        "set_plane_on_route",
+        "_build_plane_marker",
+    ):
+        assert marker in globe, marker
+
+    assert (GAME / "themes" / "ThemeFactory.gd").is_file()
+    assert (GAME / "themes" / "DemoColors.gd").is_file()
+    assert (GAME / "assets" / "fonts" / "NotoSansSC-Regular.otf").is_file()
+    assert (GAME / "assets" / "fonts" / "JetBrainsMono-Regular.ttf").is_file()
