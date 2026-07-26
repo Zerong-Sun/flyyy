@@ -7,6 +7,7 @@ const _Tickets = preload("res://scripts/systems/TicketService.gd")
 const _FlightSearch = preload("res://scripts/systems/FlightSearch.gd")
 const _Colors = preload("res://themes/DemoColors.gd")
 const _ThemeFactory = preload("res://themes/ThemeFactory.gd")
+const _IconFactory = preload("res://themes/IconFactory.gd")
 
 @onready var globe: Node3D = $"../Globe"
 @onready var flight_ops: Node = $"../FlightOps"
@@ -34,6 +35,7 @@ var _log_text: RichTextLabel
 var _attr_text: RichTextLabel
 var _overlay: ColorRect
 var _overlay_label: Label
+var _overlay_fx: Control
 var _new_game_panel: PanelContainer
 var _selected_flight: Dictionary = {}
 var _cabin: String = "economy"
@@ -57,6 +59,7 @@ var _biz_only: bool = false
 const FLIGHTS_PER_PAGE := 80
 var _cash_rolling: bool = false
 var _transition_running: bool = false
+var _transition_ticket: Dictionary = {}
 var _trade_qty: SpinBox
 var _flight_auto_focus: bool = false
 var _active_arrival_discount: Dictionary = {}
@@ -107,10 +110,16 @@ func _build_ui() -> void:
 	top.position = Vector2(0, 0)
 	top.size = Vector2(1280, 52)
 	add_child(top)
-	_clock_label = _label(top, Vector2(12, 8), "时间")
-	_cash_label = _label(top, Vector2(520, 8), "资金")
-	_bag_label = _label(top, Vector2(820, 8), "行李")
+	_clock_label = _label(top, Vector2(36, 8), "时间")
+	_cash_label = _label(top, Vector2(544, 8), "资金")
+	_bag_label = _label(top, Vector2(844, 8), "行李")
 	_airport_label = _label(top, Vector2(1000, 8), "机场")
+	top.add_child(_IconFactory.make("ic_clock", 22.0))
+	top.get_child(top.get_child_count() - 1).position = Vector2(10, 14)
+	top.add_child(_IconFactory.make("ic_money", 22.0))
+	top.get_child(top.get_child_count() - 1).position = Vector2(518, 14)
+	top.add_child(_IconFactory.make("ic_weight", 22.0))
+	top.get_child(top.get_child_count() - 1).position = Vector2(818, 14)
 
 	_countdown = _label(self, Vector2(400, 60), "")
 	_countdown.add_theme_font_size_override("font_size", 16)
@@ -121,6 +130,7 @@ func _build_ui() -> void:
 	_btn_ff.visible = false
 	_btn_ff.pressed.connect(_on_fast_forward)
 	_style_cta_button(_btn_ff)
+	_IconFactory.decorate_button(_btn_ff, "ic_fast_forward", 18.0)
 	add_child(_btn_ff)
 
 	_disclaimer = _label(self, Vector2(12, 690), I18nService.disclaimer())
@@ -150,6 +160,7 @@ func _build_ui() -> void:
 	var btn_rand := Button.new()
 	btn_rand.text = I18nService.t("ui.new_game.random")
 	btn_rand.pressed.connect(_on_random)
+	_IconFactory.decorate_button(btn_rand, "ic_random", 18.0)
 	lv.add_child(btn_rand)
 	var btn_routes := Button.new()
 	btn_routes.text = "显示/隐藏航线"
@@ -174,21 +185,23 @@ func _build_ui() -> void:
 	bottom.size = Vector2(880, 40)
 	add_child(bottom)
 	for pair in [
-		[I18nService.t("ui.tab.city"), "_show_city"],
-		[I18nService.t("ui.tab.market"), "_show_market"],
-		[I18nService.t("ui.tab.flights"), "_show_flights"],
-		[I18nService.t("ui.tab.inventory"), "_show_inventory"],
-		["笔记", "_show_notes"],
-		[I18nService.t("ui.tab.log"), "_show_log"],
-		[I18nService.t("ui.tab.attribution"), "_show_attr"],
-		[I18nService.t("ui.save.manual"), "_save"],
-		[I18nService.t("ui.save.load"), "_load"],
-		[I18nService.t("ui.settings.title"), "_toggle_pause"],
+		[I18nService.t("ui.tab.city"), "_show_city", "ic_city"],
+		[I18nService.t("ui.tab.market"), "_show_market", "ic_market"],
+		[I18nService.t("ui.tab.flights"), "_show_flights", "ic_flight"],
+		[I18nService.t("ui.tab.inventory"), "_show_inventory", "ic_inventory"],
+		["笔记", "_show_notes", "ic_notes"],
+		[I18nService.t("ui.tab.log"), "_show_log", "ic_log"],
+		[I18nService.t("ui.tab.attribution"), "_show_attr", "ic_attr"],
+		[I18nService.t("ui.save.manual"), "_save", "ic_save"],
+		[I18nService.t("ui.save.load"), "_load", "ic_load"],
+		[I18nService.t("ui.settings.title"), "_toggle_pause", ""],
 	]:
 		var b := Button.new()
 		b.text = pair[0]
 		b.pressed.connect(Callable(self, pair[1]))
 		b.pressed.connect(func (): AudioService.play_sfx("sfx_ui_click"))
+		if str(pair[2]) != "":
+			_IconFactory.decorate_button(b, str(pair[2]), 18.0)
 		bottom.add_child(b)
 
 	_panel_host = PanelContainer.new()
@@ -204,6 +217,10 @@ func _build_ui() -> void:
 	_overlay.visible = false
 	_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(_overlay)
+	_overlay_fx = Control.new()
+	_overlay_fx.set_anchors_and_offsets_preset(PRESET_FULL_RECT)
+	_overlay_fx.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_overlay.add_child(_overlay_fx)
 	_overlay_label = Label.new()
 	_overlay_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_overlay_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -443,36 +460,115 @@ func _on_transition_started(ticket: Dictionary) -> void:
 	_panel_host.visible = false
 	_overlay.visible = true
 	_transition_running = true
+	_transition_ticket = ticket
 	_active_arrival_discount = {}
 	AudioService.play_sfx("sfx_takeoff")
-	_run_transition_sequence(ticket)
 	globe.draw_trip_route(str(ticket.get("origin_airport_id", "")), str(ticket.get("destination_airport_id", "")))
+	_run_transition_sequence(ticket)
 
 
 func _run_transition_sequence(ticket: Dictionary) -> void:
+	var dest := DataService.get_airport(str(ticket.get("destination_airport_id", "")))
+	var dest_city := str(ticket.get("destination_iata", ""))
+	if not dest.is_empty():
+		var cid := str(dest.get("city_id", ""))
+		if cid != "" and DataService.cities_by_id.has(cid):
+			dest_city = str(DataService.cities_by_id[cid].get("name_zh", dest_city))
+		elif str(dest.get("city_name_zh", "")) != "":
+			dest_city = str(dest.get("city_name_zh"))
 	var base: String = "%s  %s → %s\n距离 %.0f km · %s舱\n" % [
 		ticket.get("marketing_flight_number", ""), ticket.get("origin_iata", ""), ticket.get("destination_iata", ""),
 		float(ticket.get("distance_km", 0)), ticket.get("cabin", "")
 	]
 	var phases: Array = [
-		{"t": 0.0, "title": "强制登机 · 起飞", "bar": "■■■□□□□□□□", "sfx": ""},
-		{"t": 1.6, "title": "巡航中", "bar": "□□■■■■■□□□", "sfx": "sfx_cruise"},
-		{"t": 3.4, "title": "降落进近", "bar": "□□□□□□■■■■", "sfx": "sfx_landing"},
+		{"t": 0.0, "title": "强制登机 · 起飞", "bar": "■■■□□□□□□□", "sfx": "", "fx": "takeoff"},
+		{"t": 1.6, "title": "巡航中", "bar": "□□■■■■■□□□", "sfx": "sfx_cruise", "fx": "cruise"},
+		{"t": 3.4, "title": "降落进近 · %s" % dest_city, "bar": "□□□□□□■■■■", "sfx": "sfx_landing", "fx": "land"},
 	]
-	for ph in phases:
+	var origin := DataService.get_airport(str(ticket.get("origin_airport_id", "")))
+	for i in phases.size():
+		var ph: Dictionary = phases[i]
 		if not _transition_running:
 			return
 		if str(ph.sfx) != "":
 			AudioService.play_sfx(str(ph.sfx))
 		_overlay_label.text = "%s\n%s\n%s\n（过场动画，飞行时间已计入世界时钟）" % [ph.title, base, ph.bar]
-		var wait: float = 1.6 if ph.t < 3.0 else 1.6
-		await get_tree().create_timer(wait).timeout
+		_play_transition_fx(str(ph.fx), dest_city)
+		# Advance plane along great-circle during phases
+		if globe and globe.has_method("set_plane_on_route") and not origin.is_empty() and not dest.is_empty():
+			globe.set_plane_on_route(origin, dest, 0.15 + 0.35 * float(i))
+		await get_tree().create_timer(1.6).timeout
+	_clear_transition_fx()
+
+
+func _play_transition_fx(phase: String, dest_city: String = "") -> void:
+	_clear_transition_fx()
+	match phase:
+		"takeoff":
+			# Rising runway-light bars from bottom
+			for i in 8:
+				var bar := ColorRect.new()
+				bar.color = Color(_Colors.ACCENT_AMBER.r, _Colors.ACCENT_AMBER.g, _Colors.ACCENT_AMBER.b, 0.55)
+				bar.size = Vector2(14, 48)
+				bar.position = Vector2(520 + i * 28, 720)
+				_overlay_fx.add_child(bar)
+				var tw := create_tween()
+				tw.tween_property(bar, "position:y", 280.0 - i * 18.0, 1.4).set_ease(Tween.EASE_OUT)
+				tw.parallel().tween_property(bar, "modulate:a", 0.15, 1.4)
+		"cruise":
+			# Arc / route progress line left → right
+			var arc := ColorRect.new()
+			arc.color = Color(_Colors.ACCENT_TEAL.r, _Colors.ACCENT_TEAL.g, _Colors.ACCENT_TEAL.b, 0.7)
+			arc.size = Vector2(8, 6)
+			arc.position = Vector2(200, 360)
+			_overlay_fx.add_child(arc)
+			var trail := ColorRect.new()
+			trail.color = Color(_Colors.ICE.r, _Colors.ICE.g, _Colors.ICE.b, 0.35)
+			trail.size = Vector2(8, 4)
+			trail.position = Vector2(200, 362)
+			_overlay_fx.add_child(trail)
+			var tw2 := create_tween()
+			tw2.tween_property(arc, "position:x", 1000.0, 1.5).set_ease(Tween.EASE_IN_OUT)
+			tw2.parallel().tween_property(arc, "position:y", 280.0, 0.75).set_ease(Tween.EASE_OUT)
+			tw2.chain().tween_property(arc, "position:y", 360.0, 0.75).set_ease(Tween.EASE_IN)
+			tw2.parallel().tween_property(trail, "size:x", 800.0, 1.5)
+		"land":
+			# Descending bars + destination name fade-in
+			for i in 6:
+				var bar2 := ColorRect.new()
+				bar2.color = Color(_Colors.ICE.r, _Colors.ICE.g, _Colors.ICE.b, 0.5)
+				bar2.size = Vector2(18, 36)
+				bar2.position = Vector2(540 + i * 32, 80)
+				_overlay_fx.add_child(bar2)
+				var tw3 := create_tween()
+				tw3.tween_property(bar2, "position:y", 520.0 + i * 10.0, 1.4).set_ease(Tween.EASE_IN)
+			var city_lab := Label.new()
+			city_lab.text = dest_city
+			city_lab.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			city_lab.position = Vector2(340, 200)
+			city_lab.size = Vector2(600, 60)
+			city_lab.add_theme_font_size_override("font_size", 36)
+			city_lab.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+			city_lab.modulate.a = 0.0
+			_overlay_fx.add_child(city_lab)
+			var tw4 := create_tween()
+			tw4.tween_property(city_lab, "modulate:a", 1.0, 0.8)
+
+
+func _clear_transition_fx() -> void:
+	if _overlay_fx == null:
+		return
+	for c in _overlay_fx.get_children():
+		c.queue_free()
 
 
 func _on_transition_finished() -> void:
 	_transition_running = false
+	_clear_transition_fx()
 	_overlay.visible = false
 	_overlay_label.text = ""
+	if globe and globe.has_method("clear_plane_marker"):
+		globe.clear_plane_marker()
 	AudioService.end_transition_duck()
 	AudioService.play_sfx("sfx_arrive")
 
@@ -513,10 +609,10 @@ func _check_arrival_encounter(city_id: String) -> void:
 	if market_products.size() == 0:
 		return
 	var product_idx := rng.randi() % market_products.size()
-	var product_id := market_products[product_idx]
+	var product_id: String = market_products[product_idx]
 	var discount_pct := rng.randi_range(20, 40)
 
-	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
 	popup.event_confirmed.connect(_on_arrival_discount_accepted.bind(product_id, discount_pct))
 	popup.event_cancelled.connect(_on_arrival_discount_declined.bind())
 	add_child(popup)
@@ -551,7 +647,7 @@ func _check_free_cargo(city_id: String) -> void:
 	if rng.randf() > 0.10:
 		return
 
-	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
 	popup.event_confirmed.connect(_on_free_cargo_accepted.bind())
 	popup.event_cancelled.connect(_on_free_cargo_declined.bind())
 	add_child(popup)
@@ -597,7 +693,7 @@ func _get_intelligence_tag(p: Dictionary, ticket_dest_city: String) -> String:
 	var origin_city := str(p.get("origin_city_id", ""))
 	var product_id := str(p.get("product_id", ""))
 	var tag_key := "%s|%s" % [origin_city, product_id]
-	var tags := _product_market_tags.get(tag_key, {})
+	var tags: Dictionary = _product_market_tags.get(tag_key, {})
 	if ticket_dest_city != "":
 		if ticket_dest_city in tags.get("hot", []):
 			return "📍" + ticket_dest_city + "热卖"
@@ -607,7 +703,7 @@ func _get_intelligence_tag(p: Dictionary, ticket_dest_city: String) -> String:
 			return "⚠️不建议"
 		return ""
 	else:
-		var hot_cities := tags.get("hot", [])
+		var hot_cities: Array = tags.get("hot", [])
 		if hot_cities.size() > 0:
 			var city := DataService.get_city(hot_cities[0])
 			var city_name := str(city.get("name_zh", hot_cities[0]))
@@ -945,10 +1041,12 @@ func _show_flights() -> void:
 	var be := Button.new()
 	be.text = I18nService.t("ui.ticket.economy")
 	be.pressed.connect(func (): _purchase("economy"))
+	_IconFactory.decorate_button(be, "ic_economy", 18.0)
 	row.add_child(be)
 	var bb := Button.new()
 	bb.text = I18nService.t("ui.ticket.business")
 	bb.pressed.connect(func (): _purchase("business"))
+	_IconFactory.decorate_button(bb, "ic_business", 18.0)
 	row.add_child(bb)
 	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
 		var bx := Button.new()
@@ -958,6 +1056,7 @@ func _show_flights() -> void:
 			_extra_tier = tier
 			_show_hint("已选择行李扩展 %s（+$%.0f）" % [pair[0], _baggage_tier_price(tier)])
 		)
+		_IconFactory.decorate_button(bx, "ic_baggage", 16.0)
 		row.add_child(bx)
 	var bc := Button.new()
 	bc.text = "货运+50 FREE" if _free_cargo_on_flight else "货运+50 $%.0f" % _cargo_block_price()
@@ -965,6 +1064,7 @@ func _show_flights() -> void:
 		_cargo_blocks += 1
 		_show_hint("货运档位 ×%d（每档50kg +$%.0f）" % [_cargo_blocks, _cargo_block_price()])
 	)
+	_IconFactory.decorate_button(bc, "ic_cargo", 16.0)
 	row.add_child(bc)
 	var bcr := Button.new()
 	bcr.text = "清零货运"
@@ -1188,7 +1288,7 @@ func _check_accidental_premium(product_id: String, index: int, qty: int) -> void
 	var original_revenue: float = unit * float(actual_qty)
 	var premium_revenue: float = original_revenue * (1.0 + float(bonus_pct) / 100.0)
 
-	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
 	popup.event_confirmed.connect(_on_premium_accepted.bind(index, actual_qty, bonus_pct, original_revenue, premium_revenue))
 	add_child(popup)
 	popup.show_event("accidental_premium", {
@@ -1247,7 +1347,7 @@ func _after_sell_check_discovery(sold_product_id: String) -> void:
 
 	# Check if this destination is COLD for the product
 	var tag_key := "%s|%s" % [origin_city, sold_product_id]
-	var tags := _product_market_tags.get(tag_key, {})
+	var tags: Dictionary = _product_market_tags.get(tag_key, {})
 	if city_id not in tags.get("cold", []):
 		return
 
@@ -1269,7 +1369,7 @@ func _after_sell_check_discovery(sold_product_id: String) -> void:
 		return
 	_discovery_triggered_in_city[trigger_key] = true
 
-	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
 	popup.event_confirmed.connect(_on_discovery_sell_all.bind(sold_product_id, city_id))
 	add_child(popup)
 	popup.dialog_text = (
@@ -1446,7 +1546,7 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 		sell_result.get("accidental_premium", false)
 	)
 
-	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
 
 	match tier:
 		"L2":
@@ -1479,7 +1579,7 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 	body += "售出数量：" + str(sell_result["qty"]) + "\n"
 	body += "售出收入：$" + str(int(sell_result["revenue"])) + "\n"
 
-	var margin := sell_result["margin"]
+	var margin: float = sell_result["margin"]
 	var sign := "+" if margin >= 0 else ""
 	body += "账面毛利：" + sign + "$" + str(int(margin)) + "\n"
 
@@ -1509,7 +1609,7 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 			body += "\n" + _celebration_w2[randi() % _celebration_w2.size()]
 
 	# Wealth milestone toast
-	var start_cash := DataService.economy.get("starting_cash_usd", 50000.0)
+	var start_cash: float = DataService.economy.get("starting_cash_usd", 50000.0)
 	if AppState.cash_usd >= 100000 or AppState.cash_usd >= start_cash * 2.0:
 		_show_toast("财富里程碑！")
 
