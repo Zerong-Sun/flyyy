@@ -31,6 +31,14 @@ P0_AUDIO = [
     "sfx_arrive",
 ]
 
+# Sell feedback SFX added in trade-feedback-anchors (placeholder mapping verified in manifest)
+FEEDBACK_SFX = [
+    "sfx_loss",
+    "sfx_loss_light",
+    "sfx_big_win",
+    "sfx_grand_slam",
+]
+
 TUTORIAL_TRIGGERS = [
     "new_game",
     "first_buy",
@@ -87,6 +95,7 @@ def test_attribution_file_mentions_audio_and_sources():
     assert "OpenFlights" in text
     assert "Kenney" in text or "CC0" in text
     assert "公开航空数据重建" in text
+    assert "Noto Sans" in text or "OFL" in text
 
 
 def test_audio_manifest_and_files():
@@ -101,6 +110,12 @@ def test_audio_manifest_and_files():
         path = AUDIO / rel
         assert path.is_file(), path
         assert path.stat().st_size > 200
+    # Verify sell-feedback SFX are registered (use placeholder mappings)
+    for aid in FEEDBACK_SFX:
+        assert aid in by_id, f"Missing audio ID in manifest: {aid}"
+        rel = by_id[aid]["filename"]
+        path = AUDIO / rel
+        assert path.is_file(), f"Missing audio file for {aid}: {path}"
 
 
 def test_city_product_content_not_template():

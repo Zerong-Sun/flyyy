@@ -16,3 +16,7 @@ sfx_takeoff,sfx/audio_sfx_takeoff.ogg,original-procedural,Airborne Trader / audi
 sfx_cruise,sfx/audio_sfx_cruise.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,true,100,1700,Transition,Demo P0 procedural
 sfx_landing,sfx/audio_sfx_landing.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,Transition,Demo P0 procedural
 sfx_arrive,sfx/audio_sfx_arrive.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 procedural
+sfx_loss,sfx/audio_sfx_error.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 placeholder - maps to sfx_error until custom asset
+sfx_loss_light,sfx/audio_sfx_error.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 placeholder - maps to sfx_error until custom asset
+sfx_big_win,sfx/audio_sfx_sell.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 placeholder - maps to sfx_sell until custom asset
+sfx_grand_slam,sfx/audio_sfx_sell.ogg,original-procedural,Airborne Trader / audio-gen-kit,,procedural,false,,,SFX,Demo P0 placeholder - maps to sfx_sell until custom asset

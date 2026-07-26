@@ -483,6 +483,7 @@ func _on_arrived() -> void:
 	globe.focus_airport(AppState.current_airport_id)
 	var city_id := AppState.current_city_id()
 	if city_id != "":
+		_discovery_triggered_in_city.clear()
 		_check_arrival_encounter(city_id)
 		_check_free_cargo(city_id)
 
@@ -745,6 +746,7 @@ func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_ci
 		row.add_child(intel_label)
 
 		var upgrade_btn := Button.new()
+		upgrade_btn.name = "IntelUpgradeBtn"
 		upgrade_btn.text = "🔍"
 		upgrade_btn.tooltip_text = "精准预测 ($200)"
 		upgrade_btn.custom_minimum_size = Vector2(28, 28)
@@ -819,7 +821,7 @@ func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
 		free_label.add_theme_color_override("font_color", Color.CYAN)
 
 	for child in product_row.get_children():
-		if child is Button and child.text == "🔍":
+		if child is Button and child.name == "IntelUpgradeBtn":
 			child.queue_free()
 			break
 
