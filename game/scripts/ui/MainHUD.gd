@@ -60,6 +60,7 @@ var _trade_qty: SpinBox
 var _flight_auto_focus: bool = false
 var _active_arrival_discount: Dictionary = {}
 var _free_cargo_on_flight: bool = false
+var _discovery_triggered_in_city: Dictionary = {}  # "city_id|product_id" -> true
 
 
 func _ready() -> void:
@@ -1202,12 +1203,105 @@ func _on_premium_accepted(index: int, qty: int, bonus_pct: int, original_revenue
 	])
 	_show_inventory()
 	_refresh_bags()
+	_after_sell_check_discovery(result["product_id"])
 
 
 func _do_sell(index: int, qty: int) -> void:
 	var result: Dictionary = _Inventory.sell(index, qty)
 	AudioService.play_sfx("sfx_sell")
 	_show_hint(str(result.get("msg", "")))
+	_show_inventory()
+	_refresh_bags()
+	_after_sell_check_discovery(result["product_id"])
+
+
+func _player_has_more_of(product_id: String) -> bool:
+	for stack in AppState.inventory:
+		if str(stack.get("product_id", "")) == product_id and int(stack.get("qty", 0)) > 0:
+			return true
+	return false
+
+
+func _after_sell_check_discovery(sold_product_id: String) -> void:
+	var city_id := AppState.current_city_id()
+
+	# Get origin city from product data (where the product was sourced)
+	var product_data := DataService.get_product(sold_product_id)
+	var origin_city := str(product_data.get("origin_city_id", ""))
+
+	# Check if this destination is COLD for the product
+	var tag_key := "%s|%s" % [origin_city, sold_product_id]
+	var tags := _product_market_tags.get(tag_key, {})
+	if city_id not in tags.get("cold", []):
+		return
+
+	# Check if player still has more of this product in inventory
+	if not _player_has_more_of(sold_product_id):
+		return
+
+	# Roll for discovery (5% chance, deterministic seed)
+	var date_hour := int(GameClock.unix_time / 3600.0)
+	var seed_val := PopupEvent.event_seed(city_id, date_hour, sold_product_id, "city_discovery")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_val
+	if rng.randf() > 0.05:
+		return
+
+	# Check already triggered this stay
+	var trigger_key := city_id + "|" + sold_product_id
+	if _discovery_triggered_in_city.has(trigger_key):
+		return
+	_discovery_triggered_in_city[trigger_key] = true
+
+	var popup := load("res://scenes/PopupEvent.tscn").instantiate()
+	popup.event_confirmed.connect(_on_discovery_sell_all.bind(sold_product_id, city_id))
+	add_child(popup)
+	popup.dialog_text = (
+		'"这里的人从没见过%s！"\n\n库存中所有%s 卖出价额外 ×2.0'
+		% [sold_product_id, sold_product_id]
+	)
+	popup.title = "✨ 意外发现！"
+	popup.add_button("全部溢价卖出", true)
+	popup.add_cancel_button("暂不处理")
+	popup.popup_centered()
+
+
+func _on_discovery_sell_all(_result: Dictionary, product_id: String, city_id: String) -> void:
+	var total_revenue: float = 0.0
+	var total_cost: float = 0.0
+	var total_qty: int = 0
+
+	# Sell all stacks of this product across baggage and cargo at 2x
+	for stack in AppState.inventory:
+		if str(stack.get("product_id", "")) == product_id:
+			var quality: float = _Economy.current_quality(stack)
+			var base_price: float = _Economy.sell_price(city_id, product_id, quality)
+			var sell_price: float = base_price * 2.0
+			var qty: int = int(stack.get("qty", 0))
+			var revenue: float = sell_price * qty
+			total_revenue += revenue
+			total_cost += float(stack.get("unit_cost", 0)) * qty
+			total_qty += qty
+			AppState.add_cash(revenue)
+			_Economy.apply_sale_pressure(city_id, product_id, qty)
+			AppState.log_sell_transaction(city_id, product_id, qty, revenue, float(stack.get("unit_cost", 0)) * qty, GameClock.unix_time)
+
+	# Remove all stacks of this product
+	AppState.inventory = AppState.inventory.filter(func(s): return str(s.get("product_id", "")) != product_id)
+	EventBus.inventory_changed.emit()
+	EventBus.market_changed.emit()
+
+	var margin: float = total_revenue - total_cost
+	var margin_rate: float = margin / total_cost if total_cost > 0 else 0.0
+
+	AudioService.play_sfx("sfx_sell")
+	_show_hint("🎉 意外发现！售出 %s ×%d，收入 %s，毛利 %s（溢价%d%%）" % [
+		product_id,
+		total_qty,
+		_Economy.format_money(total_revenue),
+		_Economy.format_money(margin),
+		int(margin_rate * 100),
+	])
 	_show_inventory()
 	_refresh_bags()
 
