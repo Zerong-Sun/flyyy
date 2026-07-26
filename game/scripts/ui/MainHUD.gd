@@ -40,6 +40,7 @@ var _extra_tier: String = ""
 var _cargo_blocks: int = 0
 var _flights_cache: Array = []
 var _market_cache: Array = []
+var _product_market_tags: Dictionary = {}
 var _last_hint_time := 0.0
 var _ff_dialog: ConfirmationDialog
 var _replace_ticket_dialog: ConfirmationDialog
@@ -67,6 +68,7 @@ func _ready() -> void:
 	EventBus.game_started.connect(_on_game_started)
 	flight_ops.transition_started.connect(_on_transition_started)
 	flight_ops.transition_finished.connect(_on_transition_finished)
+	_load_market_tags()
 	_show_new_game()
 	_refresh_airport_list("")
 	_disclaimer.text = I18nService.disclaimer()
@@ -476,6 +478,40 @@ func _require_started() -> bool:
 	return true
 
 
+func _load_market_tags() -> void:
+	_product_market_tags = DataService.world.get("product_market_tags", {})
+
+
+func _get_ticket_dest_city_id() -> String:
+	var ticket := _Tickets.next_ticket()
+	if ticket.is_empty():
+		return ""
+	var dest_airport := DataService.get_airport(str(ticket.get("destination_airport_id", "")))
+	return str(dest_airport.get("city_id", ""))
+
+
+func _get_intelligence_tag(p: Dictionary, ticket_dest_city: String) -> String:
+	var origin_city := str(p.get("origin_city_id", ""))
+	var product_id := str(p.get("product_id", ""))
+	var tag_key := "%s|%s" % [origin_city, product_id]
+	var tags := _product_market_tags.get(tag_key, {})
+	if ticket_dest_city != "":
+		if ticket_dest_city in tags.get("hot", []):
+			return "📍" + ticket_dest_city + "热卖"
+		elif ticket_dest_city in tags.get("normal", []):
+			return "📍" + ticket_dest_city + "可售"
+		elif ticket_dest_city in tags.get("cold", []):
+			return "⚠️不建议"
+		return ""
+	else:
+		var hot_cities := tags.get("hot", [])
+		if hot_cities.size() > 0:
+			var city := DataService.get_city(hot_cities[0])
+			var city_name := str(city.get("name_zh", hot_cities[0]))
+			return "⭐最佳目的地：" + city_name
+		return ""
+
+
 func _show_city() -> void:
 	if not _require_started():
 		return
@@ -509,14 +545,15 @@ func _show_market() -> void:
 	v.add_child(_market_list)
 	_market_cache.clear()
 	var city := AppState.current_city_id()
+	var ticket_dest_city := _get_ticket_dest_city_id()
 	var locals := DataService.products_for_city(city)
 	for p in locals:
-		_add_market_row(city, p, true)
+		_add_market_row(city, p, true, ticket_dest_city)
 	var count := 0
 	for p in DataService.world.get("products", []):
 		if p.origin_city_id == city:
 			continue
-		_add_market_row(city, p, false)
+		_add_market_row(city, p, false, ticket_dest_city)
 		count += 1
 		if count >= 25:
 			break
@@ -565,13 +602,17 @@ func _show_market() -> void:
 	row.add_child(close)
 
 
-func _add_market_row(city: String, p: Dictionary, is_local: bool) -> void:
+func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_city: String = "") -> void:
 	var buy: float = _Economy.buy_price(city, str(p.get("product_id", "")))
 	var sell: float = _Economy.sell_price(city, str(p.get("product_id", "")), 1.0)
 	var tag := "本地" if is_local else "外来"
-	_market_list.add_item("[%s] %s  买%s  卖%s  %.2fkg" % [
+	var intel := _get_intelligence_tag(p, ticket_dest_city)
+	var line := "[%s] %s  买%s  卖%s  %.2fkg" % [
 		tag, p.get("name_zh", ""), _Economy.format_money(buy), _Economy.format_money(sell), float(p.get("weight_kg", 0))
-	])
+	]
+	if intel != "":
+		line += "  " + intel
+	_market_list.add_item(line)
 	_market_cache.append(p.get("product_id", ""))
 
 
