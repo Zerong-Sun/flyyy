@@ -492,10 +492,11 @@ func _show_hint(text: String) -> void:
 	_last_hint_time = Time.get_ticks_msec() / 1000.0
 
 
-func _get_market_products(_city_id: String) -> Array:
+func _get_market_products(city_id: String) -> Array:
 	var out: Array = []
-	for p in DataService.world.get("products", []):
-		out.append(str(p.get("product_id", "")))
+	for m in DataService.markets:
+		if str(m.get("city_id", "")) == city_id:
+			out.append(str(m.get("product_id", "")))
 	return out
 
 
@@ -542,7 +543,7 @@ func _on_arrival_discount_declined(_result: Dictionary) -> void:
 
 
 func _check_free_cargo(city_id: String) -> void:
-	var date_hour := int(AppState.game_time_seconds / 3600.0)
+	var date_hour := int(GameClock.unix_time / 3600.0)
 	var seed_val := PopupEvent.event_seed(city_id, date_hour, "", "free_cargo")
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_val
@@ -808,8 +809,9 @@ func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
 	var sell_price_est: float = EconomySystem.sell_price_estimate(product_id, ticket_dest_city)
 
 	var daily_amp := 0.06
-	var low := (sell_price_est * buy_price_val * (1.0 - daily_amp)) - (buy_price_val * 1.0)
-	var high := (sell_price_est * buy_price_val * (1.0 + daily_amp)) - (buy_price_val * 1.0)
+	var mid := sell_price_est - buy_price_val
+	var low := mid * (1.0 - daily_amp)
+	var high := mid * (1.0 + daily_amp)
 
 	var free_label: Label = product_row.find_child("IntelligenceLabel", true, false)
 	if free_label:
