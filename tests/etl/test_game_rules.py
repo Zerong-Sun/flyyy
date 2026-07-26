@@ -48,3 +48,32 @@ def test_refund_fee_30_percent():
 
 def test_business_is_10x():
     assert business_price(123.45) == 1234.5
+
+
+def test_baggage_tiers_match_economy_yaml():
+    import yaml
+    from pathlib import Path
+
+    eco = yaml.safe_load((Path(__file__).resolve().parents[2] / "etl" / "config" / "economy.yaml").read_text())
+    extras = eco["baggage_extras"]
+    assert extras["light"]["extra_kg"] == 10
+    assert extras["standard"]["extra_kg"] == 20
+    assert extras["heavy"]["extra_kg"] == 50
+    assert abs(extras["refund_fee_rate"] - 0.3) < 1e-9
+    assert eco["ticket"]["business_multiplier"] == 10.0
+    assert eco["ticket"]["baggage_business_kg"] == 60.0
+    assert abs(eco["starting_cash_usd"] - 50000.0) < 0.5
+
+
+def test_theme_fonts_and_colors_present():
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[2]
+    assert (root / "game" / "assets" / "fonts" / "NotoSansSC-Regular.otf").stat().st_size > 100_000
+    assert (root / "game" / "assets" / "fonts" / "JetBrainsMono-Regular.ttf").stat().st_size > 10_000
+    colors = (root / "game" / "themes" / "DemoColors.gd").read_text(encoding="utf-8")
+    assert "E89A3C" in colors  # accent-amber
+    assert "0B1C2C" in colors  # bg-deep
+    factory = (root / "game" / "themes" / "ThemeFactory.gd").read_text(encoding="utf-8")
+    assert "NotoSansSC-Regular.otf" in factory
+    assert "build()" in factory

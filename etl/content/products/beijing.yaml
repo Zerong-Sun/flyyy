@@ -1,55 +1,51 @@
 products:
-  - product_id: "pek_douzhi_snack"
-    name_zh: "京味点心组合"
-    category: "食品"
-    weight_kg: 0.45
-    base_reference_price: 11.0
-    reference_currency: "USD"
-    shelf_life_hours: 360
-    fragility: 0.1
-    rarity: 0.3
-    description: "北京人早餐以咸味面食为绝对主流——烧饼夹肉、焦圈配豆汁、糖火烧等。这款组合包将豌豆黄（去皮豌豆泥加糖冷凝成块，入口即化）、驴打滚（糯米皮裹黄豆粉和红豆馅）和艾窝窝（糯米团包芝麻糖）以独立小盒真空封存，在冷藏条件下可保鲜两周。豌豆黄含水量较高，热带运输风险较大。"
-
-  - product_id: "pek_jasmine_tea"
-    name_zh: "茉莉花茶"
-    category: "茶叶"
-    weight_kg: 0.2
-    base_reference_price: 16.0
-    reference_currency: "USD"
-    shelf_life_hours: 3600
-    fragility: 0.0
-    rarity: 0.35
-    description: "北京不是茶叶产地，但自元明清以来作为帝都一直是茶叶消费和品鉴的最高殿堂——老字号茶庄的拼配技艺往往传承超过百年。这款茉莉花茶以福州和横县的烘青绿茶为底，经五至七次进花（茉莉鲜花与茶叶反复接触吸附花香），成品花香浸入茶骨而不浮于水面。冲泡后汤色黄绿明亮，花香悠长。"
-
-  - product_id: "pek_cloisonne"
-    name_zh: "景泰蓝小件"
-    category: "工艺品"
-    weight_kg: 0.3
-    base_reference_price: 40.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.1
-    rarity: 0.55
-    description: "景泰蓝（铜胎掐丝珐琅）是明代景泰年间在宫廷发展至顶峰的一项金属工艺——以细铜丝在铜胎上弯曲焊接出花卉或几何轮廓，再以釉料填充不同色区后高温烧制。每一件成品需经过制胎、掐丝、点蓝、烧蓝、磨光和镀金六道工序。这只小匣为孔雀蓝底色配缠枝莲纹，可放首饰件或印章。"
-
-  - product_id: "pek_opera_mask"
-    name_zh: "京剧脸谱饰品"
-    category: "纪念品"
-    weight_kg: 0.15
-    base_reference_price: 18.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.35
-    description: "京剧脸谱以色彩和纹样编码角色性格——红色代表忠勇（关羽）、白色代表奸诈（曹操）、黑色粗直笔画代表刚正（包拯）。这款饰品以石膏翻模浮雕脸谱后手绘上色，背面安装别针或磁铁两用。在国际文化交流场合中，京剧脸谱是全球辨识度最高的中国传统文化符号之一。"
-
-  - product_id: "pek_hawthorn"
-    name_zh: "山楂制品"
-    category: "食品"
-    weight_kg: 0.35
-    base_reference_price: 8.0
-    reference_currency: "USD"
-    shelf_life_hours: 1800
-    fragility: 0.0
-    rarity: 0.25
-    description: "山楂（Hawthorn）在北京周边的燕山山地广泛分布，秋季收成的红果以冰糖熬煮后串在竹签上制成'冰糖葫芦'。烘干后的山楂片保持果胶和有机酸的天然平衡——酸度大约在pH2.5左右，与苹果酸和柠檬酸构成复杂的酸味层次。山楂制品在海外中药店和健康食品店中的需求稳定，被视为天然消食助剂。"
+- product_id: pek_steel_contract
+  name_zh: 华北钢材合约
+  category: 矿产
+  weight_kg: 1.5
+  base_reference_price: 480.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.45
+  description: 板材与长材远期合约。交割单轻便，实物由目的地仓库提货。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: pek_textile_contract
+  name_zh: 华北纺织合约
+  category: 纺织品
+  weight_kg: 1.0
+  base_reference_price: 450.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.5
+  description: 产业用纺织品合约。无大件样品，适合跨城套利。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: pek_machinery_sample
+  name_zh: 机床配件样品
+  category: 机械
+  weight_kg: 7.0
+  base_reference_price: 1100.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.55
+  description: 数控配件样品箱，附采购合约。中等重量，建议货运。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: pek_jade_proxy
+  name_zh: 和田玉代购件
+  category: 工艺品
+  weight_kg: 0.35
+  base_reference_price: 3500.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.1
+  rarity: 0.8
+  description: 小件玉饰代购。高价值轻货，注意防撞包装。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: pek_sensor_core
+  name_zh: 传感器核心器件
+  category: 电子
+  weight_kg: 0.6
+  base_reference_price: 3900.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.75
+  description: 工业传感器与采集模块。体积小，远端工厂升级需求强。适合轻装跨境贸易。适合轻装跨境贸易。

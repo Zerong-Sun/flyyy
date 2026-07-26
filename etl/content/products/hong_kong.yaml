@@ -1,55 +1,51 @@
 products:
-  - product_id: "hkg_egg_roll"
-    name_zh: "鸡蛋卷"
-    category: "食品"
-    weight_kg: 0.35
-    base_reference_price: 12.0
-    reference_currency: "USD"
-    shelf_life_hours: 900
-    fragility: 0.1
-    rarity: 0.3
-    description: "元朗是香港蛋卷的发源地，街角老字号以铁板手压的手艺传承超过半个世纪。师傅将蛋浆倒在两块约180°C的铁板之间压合数秒——厚度不过1.5毫米的蛋卷在短短几秒内蒸发出大部分水分，余下云母片般的薄脆层叠。牛油味为主、椰汁味为变体。铁罐包装可保持脆度约六周，但一旦开罐后要在两周内吃完。"
-
-  - product_id: "hkg_pineapple_bun_kit"
-    name_zh: "菠萝包预拌粉"
-    category: "食品"
-    weight_kg: 0.45
-    base_reference_price: 10.0
-    reference_currency: "USD"
-    shelf_life_hours: 1800
-    fragility: 0.0
-    rarity: 0.25
-    description: "菠萝包里没有菠萝——名字来自面包表面那层糖、面粉和黄油混合的甜酥皮在烤制后开裂成菠萝状网格纹路。这款预拌粉提供酥皮用料和干酵母，自备面粉和黄油即可在家烤出接近茶餐厅水平的菠萝包。部分烘焙爱好者会在早餐时将一片冷藏黄油夹入刚出炉的菠萝包中，让微咸的黄油在热面包中半融化。"
-
-  - product_id: "hkg_milk_tea_mix"
-    name_zh: "港式奶茶粉"
-    category: "茶叶"
-    weight_kg: 0.3
-    base_reference_price: 11.0
-    reference_currency: "USD"
-    shelf_life_hours: 2400
-    fragility: 0.0
-    rarity: 0.3
-    description: "丝袜奶茶的名字来自冲泡工具——多层布袋在反复使用后被茶液染成深褐色、看起来像丝袜。混合三种以上的斯里兰卡和印度碎茶，以滚水在布袋中反复冲拉四五次至茶汤浓郁如咖啡。这款速溶粉含奶粉和高浓缩茶粉，热水冲泡即可还原约七成茶餐厅的色香味——足够解一部分乡愁。"
-
-  - product_id: "hkg_tram_model"
-    name_zh: "叮叮车模型"
-    category: "玩具"
-    weight_kg: 0.25
-    base_reference_price: 18.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.4
-    description: "香港电车自1904年投入服务，是香港岛最古老且仍在运作的公共交通工具。这款1:64比例的压铸金属模型还原了第五代电车的双层绿色车身和'嘟嘟'的钟声按钮（按一下，真的会响）。车顶的辫子可向两侧拨动以模拟交叉路口的轨道切换。对城市交通历史爱好者和铁路模型收藏圈均有吸引力。"
-
-  - product_id: "hkg_jade_charm"
-    name_zh: "玉石小挂饰"
-    category: "工艺品"
-    weight_kg: 0.08
-    base_reference_price: 26.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.1
-    rarity: 0.45
-    description: "香港是东亚玉石珠宝的重要贸易和加工中心，玉器市场的专业鉴别水平在亚洲名列前茅。这款小挂饰以缅甸产的翡翠A货（未经化学处理的天然硬玉）雕成平安扣或如意轮廓，直径约2cm。翡翠的硬度为6.5-7莫氏硬度，与石英相当——日常磨损不易刮花，但剧烈冲击仍可碎裂。挂绳可更换为金银链。"
+- product_id: hkg_electronics_contract
+  name_zh: 电子转口合约
+  category: 电子
+  weight_kg: 0.8
+  base_reference_price: 720.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.65
+  description: 转口电子权益合约。枢纽套利友好，几乎无重量。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: hkg_textile_contract
+  name_zh: 纺织转口合约
+  category: 纺织品
+  weight_kg: 1.0
+  base_reference_price: 560.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.55
+  description: 高档面料转口合约单据。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: hkg_logistics_sample
+  name_zh: 物流耗材样品
+  category: 日用品
+  weight_kg: 4.0
+  base_reference_price: 380.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.35
+  description: 工业包装耗材样品包，附批量合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: hkg_gold_proxy
+  name_zh: 金饰加工料代购
+  category: 工艺品
+  weight_kg: 0.25
+  base_reference_price: 5200.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.1
+  rarity: 0.85
+  description: 工业用金饰加工小件。单位价值极高，注意申报。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: hkg_optic_core
+  name_zh: 光通信核心器件
+  category: 电子
+  weight_kg: 0.5
+  base_reference_price: 4800.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.85
+  description: 光模块与连接器精品小批量。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。

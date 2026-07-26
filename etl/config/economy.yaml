@@ -25,13 +25,13 @@ flight_synth:
   schedule_days: 31         # cover >=30 game days
 
 baggage_extras:
-  light: {extra_kg: 10, price_usd: 70}    # ~¥500
-  standard: {extra_kg: 20, price_usd: 125} # ~¥900
-  heavy: {extra_kg: 50, price_usd: 280}   # ~¥2000
-  cargo_per_50kg_usd: 168                 # ~60% of heavy tier
+  light: {extra_kg: 10, price_usd: 160}
+  standard: {extra_kg: 20, price_usd: 320}
+  heavy: {extra_kg: 50, price_usd: 650}
+  cargo_per_50kg_usd: 380
   refund_fee_rate: 0.30
 
-starting_cash_usd: 6944.0   # ≈ ¥50,000 at ~7.2
+starting_cash_usd: 50000.0   # demo trade float; ~¥360,000 at ~7.2
 fx:
   USD_CNY: 7.20
   effective_date: "2025-03-01"

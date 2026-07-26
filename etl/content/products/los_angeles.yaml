@@ -1,55 +1,51 @@
 products:
-  - product_id: "lax_citrus_candy"
-    name_zh: "柑橘软糖"
-    category: "糖果"
-    weight_kg: 0.35
-    base_reference_price: 9.0
-    reference_currency: "USD"
-    shelf_life_hours: 1800
-    fragility: 0.0
-    rarity: 0.25
-    description: "南加州地中海气候孕育了全美最优质的柑橘产区。这款糖果以瓦伦西亚橙和尤里卡柠檬的真实果汁为基底，外层裹上细砂糖粒后冷风干燥，形成咬开时清脆的砂糖壳和内部柔韧的果汁凝胶。干燥凉爽环境下可保存两个半月。在亚热带和热带地区几乎没有柑橘种植的气候条件，糖果成了携带阳光的介质。"
-
-  - product_id: "lax_surf_tote"
-    name_zh: "冲浪风帆布袋"
-    category: "纺织品"
-    weight_kg: 0.35
-    base_reference_price: 18.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.25
-    description: "加州冲浪文化自1960年代Jan and Dean的音乐传向世界之后，帆布袋就成了南加州生活方式最方便的外销产品。以10oz帆布缝制，印有经典长板冲浪板轮廓和日落渐变色。容量可装下笔记本电脑、沙滩巾和一本书，肩带长度适合肩背和斜挎两用。"
-
-  - product_id: "lax_film_poster"
-    name_zh: "复古电影海报"
-    category: "纪念品"
-    weight_kg: 0.15
-    base_reference_price: 14.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.2
-    description: "好莱坞是世界电影工业的中心——以洛杉矶的山丘为名称起源。这款海报精选1930至1960年代好莱坞黄金时期的经典影片海报，以微喷技术在高克重哑光纸上还原原版的色彩饱和度与半色调网点。纸筒装运，打开后有轻微卷曲，夹在书堆下压一晚即可平整挂墙。"
-
-  - product_id: "lax_almond_snack"
-    name_zh: "加州杏仁零食"
-    category: "食品"
-    weight_kg: 0.4
-    base_reference_price: 11.0
-    reference_currency: "USD"
-    shelf_life_hours: 2000
-    fragility: 0.0
-    rarity: 0.3
-    description: "全球约80%的杏仁产自加利福尼亚中央山谷。清晨的冷水灌溉和夏季的干热风共同塑造了这种坚果的高油分和脆度。这批杏仁经高温瞬时烘烤以减少水分、锁住油脂，调以迷迭香和海盐碾碎的外壳——地中海与太平洋的口味在加州交汇。高油脂含量在真空密封状态下可保存约三个月。"
-
-  - product_id: "lax_enamel_pin"
-    name_zh: "城市珐琅徽章"
-    category: "纪念品"
-    weight_kg: 0.05
-    base_reference_price: 7.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.15
-    description: "以软珐琅填充的金属徽章描绘了洛杉矶的终极图标——棕榈树剪影和落日橙粉色渐变。直径约3厘米，背面为蝶形扣针，可固定在帆布背包或牛仔夹克上。极轻极小的体积使其成为填满行李任何缝隙的完美商品，几乎不产生运输成本。"
+- product_id: lax_textile_contract
+  name_zh: 成衣半成品合约
+  category: 纺织品
+  weight_kg: 1.0
+  base_reference_price: 530.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.5
+  description: 成衣半成品合约。时尚季溢价。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: lax_chem_contract
+  name_zh: 化工品合约
+  category: 能源
+  weight_kg: 1.1
+  base_reference_price: 660.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.45
+  description: 塑料涂料原料合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: lax_auto_sample
+  name_zh: 汽车配件样品
+  category: 机械
+  weight_kg: 6.0
+  base_reference_price: 820.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.5
+  description: 进口车售后件样品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: lax_film_proxy
+  name_zh: 影视道具珠宝代购
+  category: 工艺品
+  weight_kg: 0.4
+  base_reference_price: 2700.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.1
+  rarity: 0.65
+  description: 影视用珠宝道具级代购（合法民用）。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: lax_pacific_core
+  name_zh: 太平洋电子核心
+  category: 电子
+  weight_kg: 0.75
+  base_reference_price: 4200.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.75
+  description: 亚太转口电子精品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。

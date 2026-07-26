@@ -1,55 +1,51 @@
 products:
-  - product_id: "fra_pretzel_kit"
-    name_zh: "椒盐卷饼预拌粉"
-    category: "食品"
-    weight_kg: 0.5
-    base_reference_price: 9.0
-    reference_currency: "USD"
-    shelf_life_hours: 2400
-    fragility: 0.0
-    rarity: 0.2
-    description: "德国椒盐卷饼（Brezel）的标志性深棕色硬壳不是烤出来的——而是在浓度为3-5%的食用碱水（NaOH溶液）中浸泡数秒后才入烤箱，碱水与面团表面的蛋白质和糖类发生美拉德反应，生成独特的焦红色而有嚼劲的外皮。这款预拌粉包含碱水和粗海盐，自备酵母即可在家挑战这种南部德国最古老的面包造型。"
-
-  - product_id: "fra_cuckoo_magnet"
-    name_zh: "布谷鸟钟磁贴"
-    category: "纪念品"
-    weight_kg: 0.08
-    base_reference_price: 7.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.15
-    description: "黑森林地区的布谷鸟钟传统可追溯至1730年代。这款磁贴以软珐琅和铜片制成微型布谷鸟钟屋顶轮廓——陡峭的三角山墙下两只小鸟从窗户中探出。背面整面磁吸，适合冰箱和铁皮文件柜。极其轻便且生产成本低，是典型的批量携带型利润品。"
-
-  - product_id: "fra_marzipan"
-    name_zh: "杏仁糖膏点心"
-    category: "糖果"
-    weight_kg: 0.35
-    base_reference_price: 13.0
-    reference_currency: "USD"
-    shelf_life_hours: 1200
-    fragility: 0.0
-    rarity: 0.3
-    description: "吕贝克是德国杏仁糖膏（Marzipan）的圣地——将去皮甜杏仁与糖粉以不低于50%的杏仁比例研磨成极细的膏状，塑形为水果、动物或小人后以食用色素手绘细节。内部组织中细微的杏仁颗粒释放出浓缩的坚果脂香。高糖分天然防腐，但潮湿表面会在高温中微微渗油，建议维持密封包装。"
-
-  - product_id: "fra_linen_towel"
-    name_zh: "亚麻茶巾"
-    category: "纺织品"
-    weight_kg: 0.25
-    base_reference_price: 16.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.25
-    description: "欧洲西北部——尤其比利时和法国北部——是世界上最优质的的亚麻产区。亚麻纤维中空的植物髓管结构赋予其无与伦比的吸水和速干能力。茶巾以湿纺工艺制成，未经漂白保留亚麻的天然燕麦色。印花为蓝白菱格纹或德语区的Bauhaus几何图案。新的亚麻茶巾手感微硬，随时间和水洗次数增加逐渐柔化。"
-
-  - product_id: "fra_river_print"
-    name_zh: "美因河版画"
-    category: "纪念品"
-    weight_kg: 0.2
-    base_reference_price: 14.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.15
-    description: "从法兰克福铁桥拍摄的美因河全景——左侧为萨克森豪森苹果酒区低矮的老房子，右侧为欧洲央行的玻璃幕墙塔楼。版画以平版四色套印在无酸纸上，每种颜色单独制版确保墨水饱和度。法兰克福是欧洲印刷和图书出版的传统中心，书展历史超过500年。纸筒装运。"
+- product_id: fra_machinery_contract
+  name_zh: 法兰克福机械合约
+  category: 机械
+  weight_kg: 1.3
+  base_reference_price: 1200.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.7
+  description: 工业泵阀远期合约。欧洲制造心脏。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: fra_chem_contract
+  name_zh: 化工品合约
+  category: 能源
+  weight_kg: 1.1
+  base_reference_price: 860.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.55
+  description: 特种树脂合约单据。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: fra_auto_sample
+  name_zh: 汽车零件样品
+  category: 机械
+  weight_kg: 6.5
+  base_reference_price: 1000.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.65
+  description: 德系售后零件样品托盘。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: fra_optical_proxy
+  name_zh: 光学仪器代购
+  category: 电子
+  weight_kg: 0.9
+  base_reference_price: 4500.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.8
+  description: 精密光学组件代购。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: fra_plc_core
+  name_zh: PLC核心器件
+  category: 电子
+  weight_kg: 0.8
+  base_reference_price: 4900.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.8
+  description: 工控 PLC 与 I/O 精品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。

@@ -1,55 +1,51 @@
 products:
-  - product_id: "dfw_bbq_rub"
-    name_zh: "烧烤香料rub"
-    category: "香料"
-    weight_kg: 0.3
-    base_reference_price: 11.0
-    reference_currency: "USD"
-    shelf_life_hours: 3600
-    fragility: 0.0
-    rarity: 0.25
-    description: "德克萨斯烧烤的核心秘密不在烤炉而在调味——这款Dry Rub以烟熏辣椒粉、黑糖、蒜粉、盐和孜然为基底，部分配方加入咖啡粉末增加焦香层次。涂抹于牛腩表面冷藏腌制一夜后慢烤8小时，是德州后院聚餐的标准节奏。在非烧烤文化地区几乎无法买到，溢价空间可观。"
-
-  - product_id: "dfw_boot_charm"
-    name_zh: "牛仔靴挂饰"
-    category: "纪念品"
-    weight_kg: 0.15
-    base_reference_price: 13.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.3
-    description: "手工鞣制小牛皮按真实牛仔靴比例1:6缩小缝制，靴筒纹理和缝线均完整复刻。底部带有可拆卸钥匙扣环。达拉斯周边至今仍有数百个牧场，每年德州博览会上的牛仔竞技是城市文化不可分割的部分。这个小物件挂在拉链上，是德州精神最浓缩的旅行纪念。"
-
-  - product_id: "dfw_pecan_pie_bite"
-    name_zh: "山核桃派点心"
-    category: "食品"
-    weight_kg: 0.5
-    base_reference_price: 10.0
-    reference_currency: "USD"
-    shelf_life_hours: 720
-    fragility: 0.1
-    rarity: 0.35
-    description: "德州山核桃派以甜得几乎发苦的焦糖化糖浆为基底，将整颗山核桃嵌入其中高温烘焙。这款一口大小的版本保留了完整派的口感结构——酥脆的黄油派皮承托粘稠的焦糖山核桃馅。含糖量高天然防腐，但保质期仅约一个月。派皮易碎，行李中勿压重物。"
-
-  - product_id: "dfw_denim_patch"
-    name_zh: "牛仔布补丁套装"
-    category: "纺织品"
-    weight_kg: 0.2
-    base_reference_price: 9.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.2
-    description: "德州牛仔文化催生了全球牛仔裤产业。套装含6枚不同洗水色阶的牛仔布补丁，背面带热熔胶膜，用电熨斗即可熨贴到任何纯棉面料上。尺寸从5×5cm到15×15cm覆盖不同修补需求。在推崇DIY和二手再造服装的都市消费者中，这类小配件有稳定的细分类目追随者。"
-
-  - product_id: "dfw_star_mug"
-    name_zh: "孤星马克杯"
-    category: "纪念品"
-    weight_kg: 0.4
-    base_reference_price: 14.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.1
-    rarity: 0.2
-    description: "杯身以德州州旗的孤星为核心视觉元素——蓝底上的单一白色五角星是德州短暂共和国历史的符号。红白蓝三色釉下彩在1300°C烧制后色泽永不褪色。德州本地人对本州符号的忠诚度极高，这类周边在德州以外市场中携带的是对'孤星之州'的异域想象。"
+- product_id: dfw_energy_contract
+  name_zh: 能源化工合约
+  category: 能源
+  weight_kg: 1.2
+  base_reference_price: 800.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.55
+  description: 炼化助剂远期合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: dfw_cotton_contract
+  name_zh: 棉纺织合约
+  category: 纺织品
+  weight_kg: 1.0
+  base_reference_price: 430.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.45
+  description: 棉纱坯布合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: dfw_oilfield_sample
+  name_zh: 油气设备样品
+  category: 机械
+  weight_kg: 7.5
+  base_reference_price: 1200.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.65
+  description: 油田地面设备备件样品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: dfw_western_proxy
+  name_zh: 银饰代购
+  category: 工艺品
+  weight_kg: 0.35
+  base_reference_price: 2400.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.1
+  rarity: 0.6
+  description: 西部风格银饰代购。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: dfw_telecom_core
+  name_zh: 电信核心器件
+  category: 电子
+  weight_kg: 0.65
+  base_reference_price: 4100.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.75
+  description: 电信与射频精品模块。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。

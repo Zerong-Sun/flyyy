@@ -1,55 +1,51 @@
 products:
-  - product_id: "ams_cheese_wax"
-    name_zh: "蜡封奶酪小轮"
-    category: "食品"
-    weight_kg: 0.5
-    base_reference_price: 16.0
-    reference_currency: "USD"
-    shelf_life_hours: 1500
-    fragility: 0.0
-    rarity: 0.4
-    description: "高达（Gouda）是荷兰出口最多的奶酪品种——以巴氏杀菌牛奶凝乳后压入模具，盐水浸泡数日后在控温控湿的仓库中熟成。红色蜡封将奶酪与外界隔离，创造了一个微型无氧环境，在常温下可维持品质约两个月。切开后蜡封即破坏，需在一周内食用完毕。这种古典的保存技术是16世纪荷兰远洋航行留给现代食品工业的遗产。"
-
-  - product_id: "ams_tulip_bulb_decor"
-    name_zh: "郁金香装饰球"
-    category: "纪念品"
-    weight_kg: 0.25
-    base_reference_price: 12.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.3
-    description: "郁金香在17世纪的荷兰曾引发人类历史上第一次有记载的投机泡沫——一枚珍贵的郁金香球茎在1637年售价相当于阿姆斯特丹运河旁一栋房屋。今天的这款装饰球以木料车削成型后手工绘制，模拟红色鹦鹉郁金香的羽状花瓣形态。不涉及任何活体植物检疫问题，可自由跨国携带。"
-
-  - product_id: "ams_stroopwafel"
-    name_zh: "荷式焦糖饼"
-    category: "食品"
-    weight_kg: 0.4
-    base_reference_price: 9.0
-    reference_currency: "USD"
-    shelf_life_hours: 900
-    fragility: 0.0
-    rarity: 0.3
-    description: "焦糖华夫饼（Stroopwafel）诞生于19世纪的高达市——面包师将日间剩余的华夫饼干碎屑混合糖浆重新压成圆饼。两块薄华夫饼之间填充一层焦糖和肉桂加热而成的糖浆，芝麻大小直径约10厘米。在本地置于热咖啡或茶壶盖上加热数秒后，内层的焦糖重新变得温热拉丝。密封袋装可保存约5周。"
-
-  - product_id: "ams_bike_bell"
-    name_zh: "自行车铃纪念品"
-    category: "纪念品"
-    weight_kg: 0.15
-    base_reference_price: 11.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.2
-    description: "荷兰人均拥有自行车超过1.3辆，阿姆斯特丹的自行车道总长约500公里。这个黄铜车铃以荷兰国旗的橙红色为底色，单拨指弹片可发出清亮的'叮——'声。安装在把手上孔径适配几乎所有标准车把管径。对自行车文化国家以外市场的消费者来说，携带的是一个被誉为世界第一自行车城市的固体剪影。"
-
-  - product_id: "ams_delft_tile"
-    name_zh: "代尔夫特蓝瓷片"
-    category: "陶瓷"
-    weight_kg: 0.35
-    base_reference_price: 24.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.1
-    rarity: 0.4
-    description: "代尔夫特蓝瓷（Delft Blue）是荷兰在17世纪模仿和本土化中国青花瓷的产物。瓷片在白色锡釉上以氧化钴手绘风车、帆船或郁金香纹样，二次烧制后钴蓝原料渗入釉面永不褪色。自1653年皇家代尔夫特工厂建立以来，这项工艺已传承超过350年。瓷片约13×13cm，木质展示架需另购。"
+- product_id: ams_chem_contract
+  name_zh: 港区化工合约
+  category: 能源
+  weight_kg: 1.2
+  base_reference_price: 820.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.6
+  description: 化工转口合约。欧洲枢纽品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: ams_electronics_contract
+  name_zh: 电子转口合约
+  category: 电子
+  weight_kg: 0.9
+  base_reference_price: 760.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.55
+  description: 消费与工业电子转口合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: ams_metal_sample
+  name_zh: 有色金属样品
+  category: 矿产
+  weight_kg: 7.5
+  base_reference_price: 680.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.45
+  description: 再生有色金属样品包。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: ams_diamond_proxy
+  name_zh: 切割钻石代购
+  category: 工艺品
+  weight_kg: 0.12
+  base_reference_price: 7800.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.1
+  rarity: 0.9
+  description: 工业/首饰级切割石代购。极轻。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: ams_sensor_core
+  name_zh: 环境传感核心
+  category: 电子
+  weight_kg: 0.55
+  base_reference_price: 3800.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.7
+  description: 环境与工业传感器精品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。

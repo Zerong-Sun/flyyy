@@ -1,6 +1,24 @@
 extends RefCounted
 class_name FlightSearch
 
+const FOCUS_LEAD_SEC := 7200.0
+
+
+static func seconds_until_departure(fl: Dictionary) -> float:
+	var dep: float = GameClock.parse_iso_to_unix(str(fl.get("scheduled_departure_utc", "")))
+	return dep - GameClock.unix_time
+
+
+static func is_short_lead(fl: Dictionary) -> bool:
+	return seconds_until_departure(fl) < FOCUS_LEAD_SEC
+
+
+static func first_focus_index(flights: Array) -> int:
+	for i in flights.size():
+		if not is_short_lead(flights[i]):
+			return i
+	return 0
+
 
 static func search(
 	origin_id: String,

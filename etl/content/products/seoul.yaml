@@ -1,55 +1,51 @@
 products:
-  - product_id: "icn_seaweed"
-    name_zh: "调味海苔"
-    category: "食品"
-    weight_kg: 0.2
-    base_reference_price: 8.0
-    reference_currency: "USD"
-    shelf_life_hours: 1800
-    fragility: 0.0
-    rarity: 0.25
-    description: "韩国的海苔（Gim）比日式海苔更薄，经过盐炒或植物油涂刷后再烘烤，脆度类似薯片。调味有原味、酱油味和芥末味三种，每片仅约2毫米厚但面积等于半张明信片。独立铝箔袋内充氮保鲜，开袋即食。低水分、高脆度在西北欧干燥气候中保质极好，在东南亚潮湿地区需两周内吃完。"
-
-  - product_id: "icn_rice_cake"
-    name_zh: "传统糕点礼盒"
-    category: "食品"
-    weight_kg: 0.5
-    base_reference_price: 13.0
-    reference_currency: "USD"
-    shelf_life_hours: 360
-    fragility: 0.1
-    rarity: 0.3
-    description: "韩果（Hangwa）是韩国传统节日和先祖祭礼上出现的糕点总称——以米粉、蜂蜜和芝麻油为基础食材，通过不同的油炸、烘烤和蒸制手法变化出数十种形态。药果（Yakgwa）为一寸见方的油炸蜂蜜饼，表面裂开的纹理如菊花花瓣；茶食（Dasik）以松仁粉和绿豆粉压花模具成形后在口中有沙质感。保质期极短，适合短途贸易。"
-
-  - product_id: "icn_cosmetic_pouch"
-    name_zh: "美妆收纳袋"
-    category: "纺织品"
-    weight_kg: 0.15
-    base_reference_price: 14.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.2
-    description: "首尔是全球人均护肤品消费额最高的城市之一，美妆文化渗透到街头美妆专卖店的密度和地铁广告的频率中。这个收纳袋以防水PVC内衬加外层韩国传统拼布（Jogakbo）棉布缝制——将多边形废布以几何方式拼缝为新的完整织物，是韩国女性自朝鲜王朝以来代代相传的节俭美学。"
-
-  - product_id: "icn_hanji_notebook"
-    name_zh: "韩纸笔记本"
-    category: "文具"
-    weight_kg: 0.25
-    base_reference_price: 15.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.3
-    description: "韩纸以构树皮纤维制造，纸张寿命可达数百年——韩国现存最古老的木版印刷佛经《无垢净光大陀罗尼经》（约公元751年）即以韩纸为载体。这本笔记本的内页为手工韩纸，纸面细致的纤维纹理使钢笔笔尖有轻微的阻尼感应。封皮以韩纸和亚麻线装订，脊部保留未切的书皮天然的参差边缘。"
-
-  - product_id: "icn_palace_pin"
-    name_zh: "宫殿珐琅针"
-    category: "纪念品"
-    weight_kg: 0.04
-    base_reference_price: 9.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.2
-    description: "景福宫勤政殿屋顶的斗拱结构在韩元硬币上出现无数次——它是首尔五大宫殿中规模最大的一座。这枚珐琅针以硬珐琅填充勤政殿的朱红色木柱和绿色斗拱的微小空间，底部以金色镀层分隔每一块颜色。直径约2.5厘米，是游客行李中最小型也最不易损坏的纪念品选择。"
+- product_id: icn_chem_contract
+  name_zh: 石化中间体合约
+  category: 能源
+  weight_kg: 1.1
+  base_reference_price: 700.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.5
+  description: 合成树脂远期合约。无袋装实物。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: icn_textile_contract
+  name_zh: 产业纺织合约
+  category: 纺织品
+  weight_kg: 1.0
+  base_reference_price: 520.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.5
+  description: 过滤材料与无纺布合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: icn_auto_sample
+  name_zh: 汽车电子样品
+  category: 机械
+  weight_kg: 5.5
+  base_reference_price: 880.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.55
+  description: 制动电子与线束样品箱。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: icn_cosmetic_proxy
+  name_zh: 美妆器件代购
+  category: 电子
+  weight_kg: 0.4
+  base_reference_price: 2400.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.65
+  description: 高端美妆设备核心部件代购（非药品）。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: icn_display_core
+  name_zh: 显示驱动核心
+  category: 电子
+  weight_kg: 0.65
+  base_reference_price: 4700.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.8
+  description: 显示驱动与时序控制芯片。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。

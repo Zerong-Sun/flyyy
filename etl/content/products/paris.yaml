@@ -1,55 +1,51 @@
 products:
-  - product_id: "cdg_macaron_box"
-    name_zh: "马卡龙礼盒"
-    category: "食品"
-    weight_kg: 0.35
-    base_reference_price: 22.0
-    reference_currency: "USD"
-    shelf_life_hours: 240
-    fragility: 0.2
-    rarity: 0.4
-    description: "巴黎马卡龙以双层杏仁蛋白饼加上甘纳许或果酱夹心构成，外壳在指尖轻压时应发出细微的碎裂声，内部则是略带嚼劲的湿润感。礼盒含6种经典风味：开心果、玫瑰、香草、焦糖、柠檬和巧克力。极度易碎且保质期仅10天左右——必须在行李中单独用气泡膜包裹并减少中转时间。"
-
-  - product_id: "cdg_lavender_soap"
-    name_zh: "薰衣草皂"
-    category: "日用品"
-    weight_kg: 0.2
-    base_reference_price: 12.0
-    reference_currency: "USD"
-    shelf_life_hours: 4800
-    fragility: 0.0
-    rarity: 0.3
-    description: "普罗旺斯的夏季—瓦朗索勒高原上的薰衣草田在6月下旬进入盛花期，空气中油脂浓度高到连蜜蜂都放慢了翅膀频率。这款冷制皂以当地冷榨薰衣草精油和碾碎的花蕾浸泡橄榄油为基底，泡沫细腻温和。薰衣草本身具有抗菌性，天然防腐使皂体在干燥空气中可存放半年以上。"
-
-  - product_id: "cdg_scarf_print"
-    name_zh: "印花丝巾"
-    category: "纺织品"
-    weight_kg: 0.15
-    base_reference_price: 38.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.45
-    description: "巴黎高级时装屋的设计师每年创作数以千计的丝巾图案——从1900年代的博物学版画到当代街头艺术。这条丝巾以14姆米斜纹真丝为底，双面数码印花将蒙马特的石板路与杜乐丽花园的几何苗圃抽象为色块拼贴。重量极轻、折叠体积极小，但单价和品牌溢价使单位行李利润高得惊人。"
-
-  - product_id: "cdg_cafe_bowl"
-    name_zh: "咖啡馆碗"
-    category: "陶瓷"
-    weight_kg: 0.45
-    base_reference_price: 18.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.1
-    rarity: 0.25
-    description: "法国咖啡馆每天早晨供应牛奶咖啡（Café au Lait）的容器通常是这种无把手的宽口碗——方便将可颂浸入咖啡而不会溢出。碗体外壁施以不规则的米白釉，底部留一圈未经上釉的素烧陶土，还原了传统窑厂的简朴审美。手工拉坯痕迹在每一次转盘的停顿中留下微妙的指纹。"
-
-  - product_id: "cdg_sketchbook"
-    name_zh: "素描本"
-    category: "文具"
-    weight_kg: 0.3
-    base_reference_price: 14.0
-    reference_currency: "USD"
-    shelf_life_hours: 99999
-    fragility: 0.0
-    rarity: 0.2
-    description: "巴黎的艺术材料商店——如Sennelier在塞纳河左岸的百年老店——至今仍在以19世纪的配方研磨颜料。这本素描本的封皮为法国Arches手工纸厂生产的160g/m²冷压水彩纸，纸面粗糙度正好抓住炭笔的每一粒粉尘。A5开本适合街头速写的大小，绑带可扣住铅笔不散落。"
+- product_id: cdg_textile_contract
+  name_zh: 成衣面料合约
+  category: 纺织品
+  weight_kg: 1.0
+  base_reference_price: 750.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.7
+  description: 高档成衣面料合约。时尚季前后溢价。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: cdg_chem_contract
+  name_zh: 日化原料合约
+  category: 能源
+  weight_kg: 1.1
+  base_reference_price: 680.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.55
+  description: 日化基料远期合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: cdg_aero_sample
+  name_zh: 航空机电样品
+  category: 机械
+  weight_kg: 6.0
+  base_reference_price: 1400.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.75
+  description: 地面设备机电样品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: cdg_bijou_proxy
+  name_zh: 时尚珠宝代购
+  category: 工艺品
+  weight_kg: 0.3
+  base_reference_price: 3300.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.1
+  rarity: 0.75
+  description: 时尚珠宝与配饰代购。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+- product_id: cdg_lab_core
+  name_zh: 实验室核心器件
+  category: 电子
+  weight_kg: 0.7
+  base_reference_price: 4400.0
+  reference_currency: USD
+  shelf_life_hours: 99999
+  fragility: 0.0
+  rarity: 0.75
+  description: 实验室仪器核心模块。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。

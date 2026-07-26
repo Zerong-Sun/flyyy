@@ -2,7 +2,7 @@
   "meta": {
     "etl_version": "0.2.0",
     "baseline_date": "2025-03-01",
-    "generated_at": "2026-07-26T13:38:40Z",
+    "generated_at": "2026-07-26T14:34:00Z",
     "flight_count": 25606,
     "route_count": 282,
     "disclaimer": "synthetic schedules from open route data"
