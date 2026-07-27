@@ -155,7 +155,7 @@ static func load_art(stem: String) -> Texture2D:
 		return _tex_cache[stem]
 	for dir_path in _dirs_for_stem(stem):
 		for ext in [".webp", ".png"]:
-			var path := str(dir_path) + stem + ext
+			var path: String = str(dir_path) + stem + str(ext)
 			if ResourceLoader.exists(path):
 				var tex: Texture2D = load(path) as Texture2D
 				if tex != null:
@@ -284,8 +284,8 @@ static func get_product_icon(product_id: String) -> Texture2D:
 	return load_art("product_generic_placeholder_64")
 
 
-static func get_achievement_icon(ach_id: String, unlocked: bool = true) -> Texture2D:
-	## Load achievement icon; apply alias map; desaturate when locked.
+static func get_achievement_icon(ach_id: String, _unlocked: bool = true) -> Texture2D:
+	## Load achievement icon; apply alias map. Callers tint locked icons via modulate.
 	var stem := ach_id
 	if not stem.begins_with("icon_ach_"):
 		stem = "icon_ach_%s_64" % ach_id.trim_prefix("ach_")
@@ -306,7 +306,6 @@ static func get_achievement_icon(ach_id: String, unlocked: bool = true) -> Textu
 			tex = load_art("icon_ach_completionist_34_64")
 	if tex == null:
 		return make_texture("ic_log", 64)
-	# Locked tint is applied by callers via TextureRect.modulate.
 	return tex
 
 

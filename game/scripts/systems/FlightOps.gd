@@ -79,14 +79,24 @@ func _arrive(ticket: Dictionary) -> void:
 	var cash_before_note: float = AppState.cash_usd
 	AppState.current_airport_id = dest
 	AppState._mark_visit(dest)
-	AppState.held_tickets.clear()
-	AppState.trip_baggage_extra_kg = 0.0
-	AppState.trip_cabin = "economy"
-	for item_v in AppState.inventory:
-		var item: Dictionary = item_v
-		item["in_cargo"] = false
-		item["quality"] = _Economy.current_quality(item)
-	AppState.cargo_kg_capacity = 0.0
+	# Keep remaining connection legs that depart from the arrival airport.
+	var remaining: Array = []
+	var consumed_id := str(ticket.get("flight_instance_id", ""))
+	for t_v in AppState.held_tickets:
+		var t: Dictionary = t_v
+		if str(t.get("flight_instance_id", "")) == consumed_id:
+			continue
+		if str(t.get("origin_airport_id", "")) == dest:
+			remaining.append(t)
+	AppState.held_tickets = remaining
+	if remaining.is_empty():
+		AppState.trip_baggage_extra_kg = 0.0
+		AppState.trip_cabin = "economy"
+		for item_v in AppState.inventory:
+			var item: Dictionary = item_v
+			item["in_cargo"] = false
+			item["quality"] = _Economy.current_quality(item)
+		AppState.cargo_kg_capacity = 0.0
 	AppState.travel_log.append({
 		"departure_airport": ticket.get("origin_iata", ""),
 		"arrival_airport": ticket.get("destination_iata", ""),
@@ -100,6 +110,14 @@ func _arrive(ticket: Dictionary) -> void:
 		"profit_after_arrival": cash_before_note - float(ticket.get("total_paid", ticket.get("ticket_price", 0))),
 		"cash_on_arrival": cash_before_note,
 	})
+	# Achievement / stats tracking
+	AppState.log_stat("total_flight_segments", 1.0)
+	AppState.log_stat("total_distance_km", float(ticket.get("distance_km", 0)))
+	if str(ticket.get("cabin", "")) == "business":
+		AppState.log_stat("business_flights", 1.0)
+	if float(ticket.get("cargo_kg", 0)) > 0.0 or AppState.cargo_kg_capacity > 0.0:
+		AppState.log_stat("cargo_flights", 1.0)
+	AppState.update_extreme_airport(dest)
 	AppState.last_market_date = GameClock.game_date_string()
 	SaveSystem.save_game()
 	EventBus.arrived.emit()

@@ -23,7 +23,7 @@ run/main_scene="res://scenes/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="AirborneTrader"
 config/features=PackedStringArray("4.7", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://assets/brand/app_icon.webp"
 
 [autoload]
 
@@ -34,6 +34,7 @@ AppState="*res://scripts/autoload/AppState.gd"
 SaveSystem="*res://scripts/autoload/SaveSystem.gd"
 I18nService="*res://scripts/autoload/I18nService.gd"
 AudioService="*res://scripts/autoload/AudioService.gd"
+AchievementSystem="*res://scripts/systems/AchievementSystem.gd"
 
 [display]
 

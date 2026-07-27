@@ -13,6 +13,8 @@ var routes: Array = []
 var economy: Dictionary = {}
 var tz_offsets: Dictionary = {}
 var disclaimer: String = ""
+var product_market_tags: Dictionary = {}
+var transfer_edges: Dictionary = {}
 var loaded: bool = false
 
 
@@ -46,13 +48,17 @@ func _load_all() -> void:
 	for p in world.get("products", []):
 		products_by_id[p["product_id"]] = p
 	markets = world.get("markets", [])
+	product_market_tags = world.get("product_market_tags", {})
+	transfer_edges = world.get("transfer_edges", {})
 	if FileAccess.file_exists(flights_path):
 		var ff := FileAccess.open(flights_path, FileAccess.READ)
 		var fdata = JSON.parse_string(ff.get_as_text())
 		ff.close()
 		flights_by_origin = fdata.get("by_origin", {})
 	loaded = true
-	print("DataService loaded: %d airports, %d products" % [airports.size(), products_by_id.size()])
+	print("DataService loaded: %d airports, %d products, %d tags, %d transfers" % [
+		airports.size(), products_by_id.size(), product_market_tags.size(), transfer_edges.size()
+	])
 
 
 func get_airport(airport_id: String) -> Dictionary:
@@ -123,3 +129,25 @@ func products_for_city(city_id: String) -> Array:
 
 func flights_from(origin_airport_id: String) -> Array:
 	return flights_by_origin.get(origin_airport_id, [])
+
+
+func transfer_options(from_iata: String, to_iata: String = "") -> Array:
+	## Return transfer edge dicts for origin→dest. If to_iata empty, return all from origin.
+	var origin := from_iata.strip_edges().to_upper()
+	if origin == "":
+		return []
+	if to_iata != "":
+		var key := "%s|%s" % [origin, to_iata.strip_edges().to_upper()]
+		return transfer_edges.get(key, [])
+	var out: Array = []
+	var prefix := origin + "|"
+	for key in transfer_edges.keys():
+		var k := str(key)
+		if k.begins_with(prefix):
+			var dest := k.substr(prefix.length())
+			for edge_v in transfer_edges[key]:
+				var edge: Dictionary = edge_v.duplicate(true)
+				edge["origin_iata"] = origin
+				edge["dest_iata"] = dest
+				out.append(edge)
+	return out

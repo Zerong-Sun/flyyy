@@ -104,9 +104,10 @@ def main() -> int:
     assert (ROOT / "game" / "themes" / "ThemeFactory.gd").is_file()
     assert (ROOT / "game" / "themes" / "IconFactory.gd").is_file()
     globe_src = (ROOT / "game" / "scripts" / "render" / "GlobeController.gd").read_text(encoding="utf-8")
-    assert "_CONTINENT_BLOBS" in globe_src
+    assert "earth_albedo_placeholder.png" in globe_src
     assert "_build_grid_overlay" in globe_src
     assert "_make_pin_mesh" in globe_src
+    assert (ROOT / "game" / "assets" / "earth" / "earth_albedo_placeholder.png").is_file()
 
     print(
         "SMOKE OK:",

@@ -148,6 +148,104 @@ def synth_bgm_globe_day() -> np.ndarray:
     return _stereo(sig, width=0.25)
 
 
+def synth_bgm_market() -> np.ndarray:
+    """~120s market BGM — globe-day弱变奏, slightly more rhythmic, -16 LUFS."""
+    rng = np.random.default_rng(SEED + 100)
+    dur = 120.0
+    n = int(SR * dur)
+    t = np.arange(n) / SR
+    # Pad stack slightly higher/busier than globe_day
+    freqs = [130.8, 196.0, 261.6, 349.2]  # C3-ish stack
+    sig = np.zeros(n)
+    for i, f in enumerate(freqs):
+        lfo = 0.5 + 0.5 * np.sin(2 * math.pi * (0.04 + i * 0.009) * t)
+        sig += np.sin(2 * math.pi * f * t + 0.4 * np.sin(2 * math.pi * 0.06 * t)) * (0.07 / (i + 1)) * lfo
+    # rhythmic soft pulses every ~3s, slightly more present
+    pulse_len = int(0.4 * SR)
+    for k in range(0, n - pulse_len, int(3.0 * SR)):
+        offset = int(rng.uniform(0, 0.3) * SR)
+        i0 = k + offset
+        if i0 + pulse_len >= n:
+            break
+        pt = np.arange(pulse_len) / SR
+        pulse = np.sin(2 * math.pi * 587.33 * pt) * np.exp(-pt * 5) * 0.08
+        sig[i0 : i0 + pulse_len] += pulse
+    # gentle percussive tick ~every 2s
+    tick_len = int(0.06 * SR)
+    for k in range(0, n - tick_len, int(2.0 * SR)):
+        i0 = k + int(rng.uniform(0, 0.5) * SR)
+        if i0 + tick_len >= n:
+            break
+        tick = _tone(2400, 0.06, amp=0.06, attack=0.001, release=0.05, seed=200 + k)
+        if len(tick) >= tick_len:
+            sig[i0 : i0 + tick_len] += tick[:tick_len]
+        else:
+            sig[i0 : i0 + len(tick)] += tick
+    sig += rng.normal(0, 0.003, n)
+    sig *= _fade(n, int(1.5 * SR), int(2.0 * SR))
+    sig = _normalize(sig, peak=0.26)
+    return _stereo(sig, width=0.30)
+
+
+def synth_bgm_menu() -> np.ndarray:
+    """~90s menu BGM — slower, quieter, sparse tones, -18 LUFS."""
+    rng = np.random.default_rng(SEED + 200)
+    dur = 90.0
+    n = int(SR * dur)
+    t = np.arange(n) / SR
+    # Very sparse, low pad
+    freqs = [98.0, 146.8, 196.0]
+    sig = np.zeros(n)
+    for i, f in enumerate(freqs):
+        lfo = 0.5 + 0.5 * np.sin(2 * math.pi * (0.015 + i * 0.005) * t)
+        sig += np.sin(2 * math.pi * f * t + 0.2 * np.sin(2 * math.pi * 0.03 * t)) * (0.05 / (i + 1)) * lfo
+    # very sparse soft bell-like tones every ~8s
+    tone_len = int(0.6 * SR)
+    for k in range(0, n - tone_len, int(8.0 * SR)):
+        offset = int(rng.uniform(0, 1.0) * SR)
+        i0 = k + offset
+        if i0 + tone_len >= n:
+            break
+        tt = np.arange(tone_len) / SR
+        bell = np.sin(2 * math.pi * 440 * tt) * np.exp(-tt * 3) * 0.06
+        sig[i0 : i0 + tone_len] += bell
+    sig += rng.normal(0, 0.002, n)
+    sig *= _fade(n, int(2.0 * SR), int(3.0 * SR))
+    sig = _normalize(sig, peak=0.18)  # quieter for -18 LUFS
+    return _stereo(sig, width=0.20)
+
+
+def synth_bgm_night() -> np.ndarray:
+    """~120s night BGM — globe_day低通版, darker frequencies, -16 LUFS."""
+    rng = np.random.default_rng(SEED + 300)
+    dur = 120.0
+    n = int(SR * dur)
+    t = np.arange(n) / SR
+    # Deeper pad stack, lower frequencies
+    freqs = [82.4, 110.0, 164.8, 220.0]  # E2/E3 range
+    sig = np.zeros(n)
+    for i, f in enumerate(freqs):
+        lfo = 0.5 + 0.5 * np.sin(2 * math.pi * (0.02 + i * 0.006) * t)
+        sig += np.sin(2 * math.pi * f * t + 0.25 * np.sin(2 * math.pi * 0.04 * t)) * (0.08 / (i + 1)) * lfo
+    # sparse deeper pulses every ~5s
+    pulse_len = int(0.5 * SR)
+    for k in range(0, n - pulse_len, int(5.0 * SR)):
+        offset = int(rng.uniform(0, 0.5) * SR)
+        i0 = k + offset
+        if i0 + pulse_len >= n:
+            break
+        pt = np.arange(pulse_len) / SR
+        pulse = np.sin(2 * math.pi * 349.23 * pt) * np.exp(-pt * 4) * 0.05
+        sig[i0 : i0 + pulse_len] += pulse
+    # low-pass filter by convolution
+    kern = np.ones(256) / 256
+    sig = np.convolve(sig, kern, mode="same")
+    sig += rng.normal(0, 0.003, n)
+    sig *= _fade(n, int(3.0 * SR), int(3.0 * SR))
+    sig = _normalize(sig, peak=0.25)
+    return _stereo(sig, width=0.18)
+
+
 def synth_sfx(sid: str) -> tuple[np.ndarray, dict]:
     """Return stereo samples + manifest meta."""
     meta = {"bus": "SFX", "loop": "false", "loop_start_ms": "", "loop_end_ms": ""}
@@ -247,6 +345,54 @@ def synth_sfx(sid: str) -> tuple[np.ndarray, dict]:
             ton = _tone(f, 0.12, amp=0.25, seed=40 + i)
             off = int(0.06 * i * SR)
             mono[off : off + len(ton)] += ton
+    elif sid == "sfx_loss":
+        # ~0.3s downward sweep, low rumble
+        mono = _chirp(380, 140, 0.32, amp=0.35, seed=50)
+    elif sid == "sfx_loss_light":
+        # ~0.15s very light downward click
+        mono = _chirp(520, 300, 0.15, amp=0.22, seed=51)
+    elif sid == "sfx_big_win":
+        # ~0.5s rising arpeggio C5-E5-G5-C6 with bright tone
+        mono = np.zeros(int(0.55 * SR))
+        for i, f in enumerate([523.25, 659.25, 783.99, 1046.5]):
+            ton = _tone(f, 0.15, amp=0.28, attack=0.01, release=0.06, seed=52 + i)
+            off = int(0.08 * i * SR)
+            if off + len(ton) <= len(mono):
+                mono[off : off + len(ton)] += ton
+    elif sid == "sfx_grand_slam":
+        # ~1.0s fanfare — majestic multi-tone rise
+        mono = np.zeros(int(1.1 * SR))
+        fanfare_freqs = [392.0, 523.25, 659.25, 783.99, 1046.5, 1318.5]
+        for i, f in enumerate(fanfare_freqs):
+            ton = _tone(f, 0.25, amp=0.22 * (1.0 + i * 0.15), attack=0.02, release=0.1, seed=60 + i)
+            off = int(0.1 * i * SR)
+            if off + len(ton) <= len(mono):
+                mono[off : off + len(ton)] += ton
+        # final chord sustain
+        chord_n = int(0.4 * SR)
+        chord_sig = np.zeros(chord_n)
+        for f in [523.25, 659.25, 783.99]:
+            ct = np.arange(chord_n) / SR
+            chord_sig += np.sin(2 * math.pi * f * ct) * np.exp(-ct * 4) * 0.1
+        chord_start = int(0.5 * SR)
+        if chord_start + chord_n <= len(mono):
+            mono[chord_start : chord_start + chord_n] += chord_sig
+    elif sid == "sfx_coin_roll":
+        # ~0.45s repetitive metallic tick loop
+        dur_loop = 0.45
+        n = int(SR * dur_loop)
+        mono = np.zeros(n)
+        rng = np.random.default_rng(70)
+        for i in range(12):
+            t0 = int(i * 0.035 * SR)
+            tick = _tone(800 + rng.uniform(-100, 200), 0.018, amp=0.25, attack=0.001, release=0.015, seed=71 + i)
+            tlen = min(len(tick), n - t0)
+            if t0 < n:
+                mono[t0 : t0 + tlen] += tick[:tlen]
+        mono *= _fade(n, int(0.005 * SR), int(0.03 * SR))
+        meta["loop"] = "true"
+        meta["loop_start_ms"] = "10"
+        meta["loop_end_ms"] = str(int(dur_loop * 1000) - 10)
     else:
         raise ValueError(f"unknown sfx id: {sid}")
 
@@ -271,6 +417,11 @@ P0_SFX = [
     "sfx_cruise",
     "sfx_landing",
     "sfx_arrive",
+    "sfx_loss",
+    "sfx_loss_light",
+    "sfx_big_win",
+    "sfx_grand_slam",
+    "sfx_coin_roll",
 ]
 
 
@@ -284,6 +435,18 @@ def _cc0_meta(sid: str) -> dict | None:
             k, v = line.split("=", 1)
             data[k.strip()] = v.strip()
     return data
+
+
+def _sfx_note(sid: str) -> str:
+    """Return a descriptive note for each SFX id."""
+    v02_notes = {
+        "sfx_loss": "v0.2 trade feedback: ~0.3s downward sweep",
+        "sfx_loss_light": "v0.2 trade feedback: ~0.15s light downward click",
+        "sfx_big_win": "v0.2 trade feedback: ~0.5s rising arpeggio",
+        "sfx_grand_slam": "v0.2 trade feedback: ~1.0s fanfare",
+        "sfx_coin_roll": "v0.2 trade feedback: ~0.45s loopable coin tick",
+    }
+    return v02_notes.get(sid, "Demo P0 procedural")
 
 
 def main() -> int:
@@ -319,6 +482,32 @@ def main() -> int:
         "bus": "BGM",
         "notes": "Demo P0 ambient pad; ~135s",
     })
+
+    # v0.2 MR3 BGM: market, menu, night
+    for bgm_id, synth_fn, dur_s, notes, loop_start_ms, loop_end_ms in [
+        ("bgm_market", synth_bgm_market, 120, "v0.2 market BGM; globe-day弱变奏; ~120s", "6000", "118000"),
+        ("bgm_menu", synth_bgm_menu, 90, "v0.2 menu BGM; slower quieter sparse; ~90s", "5000", "88000"),
+        ("bgm_night", synth_bgm_night, 120, "v0.2 night BGM; globe-day低通版; ~120s", "6000", "118000"),
+    ]:
+        print(f"Synthesizing {bgm_id} ...")
+        stereo = synth_fn()
+        wav = tmp / f"audio_{bgm_id}.wav"
+        ogg = BGM_DIR / f"audio_{bgm_id}.ogg"
+        write_wav(wav, stereo)
+        wav_to_ogg(wav, ogg)
+        rows.append({
+            "id": bgm_id,
+            "filename": f"bgm/audio_{bgm_id}.ogg",
+            "license": "original-procedural",
+            "author": "Airborne Trader / audio-gen-kit",
+            "source_url": "",
+            "source": "procedural",
+            "loop": "true",
+            "loop_start_ms": loop_start_ms,
+            "loop_end_ms": loop_end_ms,
+            "bus": "BGM",
+            "notes": notes,
+        })
 
     for sid in P0_SFX:
         dest = SFX_DIR / f"audio_{sid}.ogg"
@@ -356,7 +545,7 @@ def main() -> int:
             "loop_start_ms": meta["loop_start_ms"],
             "loop_end_ms": meta["loop_end_ms"],
             "bus": meta["bus"],
-            "notes": "Demo P0 procedural",
+            "notes": _sfx_note(sid),
         })
 
     manifest = AUDIO / "AUDIO_MANIFEST.csv"

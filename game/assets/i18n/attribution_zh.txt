@@ -29,13 +29,14 @@ ODbL 主要义务摘要：
 
 音频
 - Demo BGM（bgm_globe_day）及大部分玩法音效：程序合成占位包（Airborne Trader / tools/audio-gen-kit），许可 original-procedural。
+- v0.2 新增 BGM（bgm_market, bgm_menu, bgm_night）：程序合成（Airborne Trader / tools/audio-gen-kit），许可 original-procedural。
+- v0.2 贸易反馈 SFX（sfx_loss, sfx_loss_light, sfx_big_win, sfx_grand_slam, sfx_coin_roll）：程序合成（Airborne Trader / tools/audio-gen-kit），许可 original-procedural。
 - 部分 UI 点击/面板音效：Kenney UI Audio（CC0），作者 Kenney（https://kenney.nl），经 Godot 插件镜像 https://github.com/Calinou/kenney-ui-audio 入库。完整清单见 game/assets/audio/AUDIO_MANIFEST.csv。
 
 字体
 - Noto Sans SC Regular（Subset OTF）：SIL Open Font License 1.1，https://github.com/notofonts/noto-cjk
 - JetBrains Mono Regular：SIL Open Font License 1.1，https://github.com/JetBrains/JetBrainsMono
 完整说明见 game/assets/fonts/LICENSE.txt。
-
 
 美术（A2）
 - UI 图标、商品图标、成就图标、城市头图、飞行过场帧、品牌标：原创 AI 辅助插画（Airborne Trader / tools/art-gen-kit），许可 original。无航司 Logo、无商标包装复刻。

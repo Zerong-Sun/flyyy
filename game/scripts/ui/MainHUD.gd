@@ -47,6 +47,9 @@ var _product_market_tags: Dictionary = {}
 var _selected_market_product_id: String = ""
 var _market_row_panels: Dictionary = {}
 var _last_hint_time := 0.0
+var _last_clock_s := 0.0
+var _last_countdown_s := 0.0
+var _market_built_city := ""
 var _ff_dialog: ConfirmationDialog
 var _replace_ticket_dialog: ConfirmationDialog
 var _pending_cabin: String = ""
@@ -58,6 +61,7 @@ var _max_duration: int = 0
 var _biz_only: bool = false
 const FLIGHTS_PER_PAGE := 80
 var _cash_rolling: bool = false
+var _search_sfx_at: float = 0.0
 var _transition_running: bool = false
 var _transition_ticket: Dictionary = {}
 var _trade_qty: SpinBox
@@ -65,6 +69,12 @@ var _flight_auto_focus: bool = false
 var _active_arrival_discount: Dictionary = {}
 var _free_cargo_on_flight: bool = false
 var _discovery_triggered_in_city: Dictionary = {}  # "city_id|product_id" -> true
+var _show_connections: bool = false
+var _connection_cache: Array = []
+var _selected_connection: Dictionary = {}
+var _ach_filter_category: String = "all"
+var _ach_filter_unlocked_only: bool = false
+var _recommend_box: VBoxContainer
 
 # Five-tier sell feedback
 var _sell_console_lines := [
@@ -97,8 +107,13 @@ func _ready() -> void:
 
 
 func _process(_d: float) -> void:
-	_refresh_clock()
-	_refresh_countdown()
+	var t := Time.get_ticks_msec() * 0.001
+	if t - _last_clock_s >= 0.25:
+		_refresh_clock()
+		_last_clock_s = t
+	if t - _last_countdown_s >= 0.5:
+		_refresh_countdown()
+		_last_countdown_s = t
 
 
 func _build_ui() -> void:
@@ -151,7 +166,7 @@ func _build_ui() -> void:
 	left.add_child(lv)
 	_search = LineEdit.new()
 	_search.placeholder_text = "搜索机场 / IATA / ICAO / 城市"
-	_search.text_changed.connect(_refresh_airport_list)
+	_search.text_changed.connect(_on_search_changed)
 	lv.add_child(_search)
 	_airport_list = ItemList.new()
 	_airport_list.custom_minimum_size = Vector2(230, 300)
@@ -190,11 +205,12 @@ func _build_ui() -> void:
 		[I18nService.t("ui.tab.flights"), "_show_flights", "ic_flight"],
 		[I18nService.t("ui.tab.inventory"), "_show_inventory", "ic_inventory"],
 		["笔记", "_show_notes", "ic_notes"],
+		[I18nService.t("ui.tab.achievements"), "_show_achievements", "ic_log"],
 		[I18nService.t("ui.tab.log"), "_show_log", "ic_log"],
 		[I18nService.t("ui.tab.attribution"), "_show_attr", "ic_attr"],
 		[I18nService.t("ui.save.manual"), "_save", "ic_save"],
 		[I18nService.t("ui.save.load"), "_load", "ic_load"],
-		[I18nService.t("ui.settings.title"), "_toggle_pause", ""],
+		[I18nService.t("ui.settings.title"), "_toggle_pause", "ic_settings"],
 	]:
 		var b := Button.new()
 		b.text = pair[0]
@@ -202,6 +218,7 @@ func _build_ui() -> void:
 		b.pressed.connect(func (): AudioService.play_sfx("sfx_ui_click"))
 		if str(pair[2]) != "":
 			_IconFactory.decorate_button(b, str(pair[2]), 18.0)
+		_wire_ui_sound(b)
 		bottom.add_child(b)
 
 	_panel_host = PanelContainer.new()
@@ -244,16 +261,50 @@ func _build_ui() -> void:
 	add_child(_replace_ticket_dialog)
 
 	_new_game_panel = PanelContainer.new()
-	_new_game_panel.position = Vector2(360, 200)
-	_new_game_panel.size = Vector2(560, 280)
+	_new_game_panel.position = Vector2(360, 160)
+	_new_game_panel.size = Vector2(560, 360)
 	add_child(_new_game_panel)
 	var ngv := VBoxContainer.new()
 	_new_game_panel.add_child(ngv)
-	var title := Label.new()
-	title.text = "《环球航商》Demo — " + I18nService.t("ui.new_game.title")
-	title.add_theme_font_size_override("font_size", 22)
-	title.add_theme_color_override("font_color", _Colors.ICE)
-	ngv.add_child(title)
+	var splash_tex: Texture2D = _IconFactory.get_brand("splash")
+	if splash_tex != null:
+		var splash := TextureRect.new()
+		splash.texture = splash_tex
+		splash.custom_minimum_size = Vector2(520, 120)
+		splash.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		splash.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		splash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ngv.add_child(splash)
+	var brand_row := HBoxContainer.new()
+	brand_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	ngv.add_child(brand_row)
+	var logo_tex: Texture2D = _IconFactory.get_brand("logo")
+	if logo_tex != null:
+		var logo := TextureRect.new()
+		logo.texture = logo_tex
+		logo.custom_minimum_size = Vector2(56, 56)
+		logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		brand_row.add_child(logo)
+	var word_tex: Texture2D = _IconFactory.get_brand("wordmark")
+	if word_tex != null:
+		var word := TextureRect.new()
+		word.texture = word_tex
+		word.custom_minimum_size = Vector2(280, 56)
+		word.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		word.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		brand_row.add_child(word)
+	else:
+		var title := Label.new()
+		title.text = "《环球航商》"
+		title.add_theme_font_size_override("font_size", 22)
+		title.add_theme_color_override("font_color", _Colors.ICE)
+		brand_row.add_child(title)
+	var subtitle := Label.new()
+	subtitle.text = I18nService.t("ui.new_game.title")
+	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	subtitle.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+	ngv.add_child(subtitle)
 	var info := Label.new()
 	info.text = "在左侧搜索或点选地球机场，然后开始。也可随机。\n" + I18nService.disclaimer()
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -265,15 +316,20 @@ func _build_ui() -> void:
 	b1.text = I18nService.t("ui.new_game.start")
 	b1.pressed.connect(_start_selected)
 	_style_cta_button(b1)
+	_wire_ui_sound(b1)
 	row.add_child(b1)
 	var b2 := Button.new()
 	b2.text = I18nService.t("ui.new_game.random")
 	b2.pressed.connect(func (): _on_random(); _start_selected())
+	_IconFactory.decorate_button(b2, "ic_random", 18.0)
+	_wire_ui_sound(b2)
 	row.add_child(b2)
 	if SaveSystem.has_save():
 		var b3 := Button.new()
 		b3.text = I18nService.t("ui.save.load")
 		b3.pressed.connect(_load)
+		_IconFactory.decorate_button(b3, "ic_load", 18.0)
+		_wire_ui_sound(b3)
 		row.add_child(b3)
 
 
@@ -313,9 +369,29 @@ func _style_cta_button(btn: Button) -> void:
 	btn.add_theme_color_override("font_hover_color", _Colors.BG_DEEP)
 
 
+func _wire_ui_sound(btn: Button) -> void:
+	btn.mouse_entered.connect(func (): AudioService.play_sfx("sfx_ui_hover"))
+
+
 func _show_new_game() -> void:
 	_new_game_panel.visible = true
 	GameClock.set_paused(true)
+	AudioService.set_bgm("bgm_menu")
+
+
+func _on_search_changed(q: String) -> void:
+	_refresh_airport_list(q)
+	if q.length() > 0:
+		var now := Time.get_ticks_msec() * 0.001
+		if now - _search_sfx_at >= 0.12:
+			_search_sfx_at = now
+			AudioService.play_sfx("sfx_search_type")
+
+
+func _close_panel() -> void:
+	_panel_host.visible = false
+	AudioService.play_sfx("sfx_ui_close_panel")
+	_set_panel_bgm("globe")
 
 
 func _start_selected() -> void:
@@ -342,7 +418,7 @@ func _on_game_started() -> void:
 	_refresh_top()
 	_refresh_bags()
 	globe.focus_airport(AppState.current_airport_id)
-	AudioService.set_bgm("bgm_globe_day")
+	_set_panel_bgm("globe")
 	AudioService.play_sfx("sfx_ui_click")
 
 
@@ -452,8 +528,10 @@ func _do_fast_forward() -> void:
 		AudioService.play_sfx("sfx_error")
 		_show_hint(err)
 	else:
+		AppState.log_stat("fast_forwards", 1.0)
 		AudioService.play_sfx("sfx_ff_confirm")
 		_show_hint("已加速至起飞时刻。")
+		AchievementSystem.check_all()
 
 
 func _on_transition_started(ticket: Dictionary) -> void:
@@ -503,6 +581,16 @@ func _run_transition_sequence(ticket: Dictionary) -> void:
 
 func _play_transition_fx(phase: String, dest_city: String = "") -> void:
 	_clear_transition_fx()
+	var art: Texture2D = _IconFactory.get_transition_art(phase)
+	if art != null:
+		var bg := TextureRect.new()
+		bg.texture = art
+		bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		bg.modulate = Color(1, 1, 1, 0.85)
+		bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_overlay_fx.add_child(bg)
 	match phase:
 		"takeoff":
 			# Rising runway-light bars from bottom
@@ -578,10 +666,17 @@ func _on_arrived() -> void:
 	_refresh_bags()
 	globe.focus_airport(AppState.current_airport_id)
 	var city_id := AppState.current_city_id()
+	if not AppState.held_tickets.is_empty():
+		var next_t: Dictionary = _Tickets.next_ticket()
+		_show_hint("转机中 → %s（约 90 分钟转机后继续）" % str(next_t.get("destination_iata", "")))
+		_set_panel_bgm("globe")
+		return
 	if city_id != "":
 		_discovery_triggered_in_city.clear()
 		_check_arrival_encounter(city_id)
 		_check_free_cargo(city_id)
+	AchievementSystem.check_all()
+	_set_panel_bgm("globe")
 
 
 func _show_hint(text: String) -> void:
@@ -668,6 +763,10 @@ func _clear_panel() -> void:
 	for c in _panel_host.get_children():
 		c.queue_free()
 	_panel_host.visible = true
+	_market_built_city = ""
+	_market_container = null
+	_selected_market_product_id = ""
+	AudioService.play_sfx("sfx_ui_open_panel")
 
 
 func _require_started() -> bool:
@@ -678,7 +777,9 @@ func _require_started() -> bool:
 
 
 func _load_market_tags() -> void:
-	_product_market_tags = DataService.world.get("product_market_tags", {})
+	_product_market_tags = DataService.product_market_tags
+	if _product_market_tags.is_empty():
+		_product_market_tags = DataService.world.get("product_market_tags", {})
 
 
 func _get_ticket_dest_city_id() -> String:
@@ -714,14 +815,28 @@ func _get_intelligence_tag(p: Dictionary, ticket_dest_city: String) -> String:
 func _show_city() -> void:
 	if not _require_started():
 		return
+	_set_panel_bgm("market")
 	_clear_panel()
-	var c: Dictionary = DataService.get_city(AppState.current_city_id())
+	var city_id := AppState.current_city_id()
+	var c: Dictionary = DataService.get_city(city_id)
+	var col := VBoxContainer.new()
+	_panel_host.add_child(col)
+	var hero_tex: Texture2D = _IconFactory.get_city_hero(city_id)
+	if hero_tex != null:
+		var hero := TextureRect.new()
+		hero.texture = hero_tex
+		hero.custom_minimum_size = Vector2(700, 200)
+		hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		hero.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		hero.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		col.add_child(hero)
 	_city_text = RichTextLabel.new()
 	_city_text.bbcode_enabled = true
-	_city_text.custom_minimum_size = Vector2(700, 440)
+	_city_text.custom_minimum_size = Vector2(700, 280)
 	_city_text.fit_content = false
 	_city_text.scroll_active = true
-	_panel_host.add_child(_city_text)
+	_city_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	col.add_child(_city_text)
 	if c.is_empty():
 		_city_text.text = "无城市数据"
 		return
@@ -733,14 +848,22 @@ func _show_city() -> void:
 func _show_market() -> void:
 	if not _require_started():
 		return
+	_set_panel_bgm("market")
+	var city := AppState.current_city_id()
+	if city == _market_built_city and _market_container != null:
+		_update_market_rows(city)
+		_panel_host.visible = true
+		_selected_market_product_id = ""
+		return
 	_clear_panel()
 	_selected_market_product_id = ""
 	_market_row_panels.clear()
 	_market_cache.clear()
+	_market_built_city = city
 	var v := VBoxContainer.new()
 	_panel_host.add_child(v)
 	var title := Label.new()
-	title.text = "市场 — %s（超重可就地加购行李/货运）" % AppState.current_city_id()
+	title.text = "市场 — %s（超重可就地加购行李/货运）" % city
 	v.add_child(title)
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(700, 300)
@@ -748,7 +871,6 @@ func _show_market() -> void:
 	v.add_child(scroll)
 	_market_container = VBoxContainer.new()
 	scroll.add_child(_market_container)
-	var city := AppState.current_city_id()
 	var ticket_dest_city := _get_ticket_dest_city_id()
 	var locals := DataService.products_for_city(city)
 	for p in locals:
@@ -801,8 +923,40 @@ func _show_market() -> void:
 	row.add_child(bc)
 	var close := Button.new()
 	close.text = "关闭"
-	close.pressed.connect(func (): _panel_host.visible = false)
+	close.pressed.connect(_close_panel)
 	row.add_child(close)
+
+
+## Updates cached market row labels without rebuilding nodes.
+func _update_market_rows(city: String) -> void:
+	var ticket_dest_city := _get_ticket_dest_city_id()
+	for product_id in _market_cache:
+		var panel: PanelContainer = _market_row_panels.get(product_id)
+		if panel == null:
+			continue
+		var p: Dictionary = DataService.get_product(product_id)
+		if p.is_empty():
+			continue
+		var is_local: bool = str(p.get("origin_city_id", "")) == city
+		var buy: float = _Economy.buy_price(city, product_id)
+		var sell: float = _Economy.sell_price(city, product_id, 1.0)
+		var tag := "本地" if is_local else "外来"
+		var intel := _get_intelligence_tag(p, ticket_dest_city)
+		var row: HBoxContainer = panel.get_child(0)
+		for child in row.get_children():
+			if child is Label and child.name != "IntelligenceLabel" and child.name != "IntelUpgradeBtn":
+				child.text = "[%s] %s  买%s  卖%s  %.2fkg" % [
+					tag, p.get("name_zh", ""), _Economy.format_money(buy),
+					_Economy.format_money(sell), float(p.get("weight_kg", 0))
+				]
+				break
+		# Update intel label if present
+		for child in row.get_children():
+			if child is Label and child.name == "IntelligenceLabel":
+				child.text = intel
+				if intel != "":
+					child.add_theme_color_override("font_color", _get_intel_color(intel))
+				break
 
 
 func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_city: String = "") -> void:
@@ -822,6 +976,16 @@ func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_ci
 	row.gui_input.connect(_on_market_row_input.bind(product_id))
 	panel.add_child(row)
 
+	var icon_tex: Texture2D = _IconFactory.get_product_icon(product_id)
+	if icon_tex != null:
+		var icon := TextureRect.new()
+		icon.texture = icon_tex
+		icon.custom_minimum_size = Vector2(28, 28)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(icon)
+
 	var info_label := Label.new()
 	info_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var line := "[%s] %s  买%s  卖%s  %.2fkg" % [
@@ -832,7 +996,36 @@ func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_ci
 	info_label.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
 	row.add_child(info_label)
 
+	var inherited := str(p.get("inherited_from", ""))
+	if inherited != "":
+		var inh := Label.new()
+		inh.name = "InheritedLabel"
+		if inherited.find("region") >= 0:
+			inh.text = I18nService.t("ui.product.inherited_region")
+			if inh.text == "" or inh.text.begins_with("ui."):
+				inh.text = "区域特产"
+		else:
+			inh.text = I18nService.t("ui.product.inherited_country")
+			if inh.text == "" or inh.text.begins_with("ui."):
+				inh.text = "国家标准品"
+		inh.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		inh.add_theme_font_size_override("font_size", 11)
+		inh.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+		row.add_child(inh)
+
 	if intel != "":
+		var tag_icon_id := _intel_icon_id(intel)
+		if tag_icon_id != "":
+			var tag_tex: Texture2D = _IconFactory.get_ui_icon(tag_icon_id)
+			if tag_tex != null:
+				var tag_icon := TextureRect.new()
+				tag_icon.name = "IntelTagIcon"
+				tag_icon.texture = tag_tex
+				tag_icon.custom_minimum_size = Vector2(18, 18)
+				tag_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+				tag_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				tag_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+				row.add_child(tag_icon)
 		var intel_label := Label.new()
 		intel_label.name = "IntelligenceLabel"
 		intel_label.text = intel
@@ -843,9 +1036,10 @@ func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_ci
 
 		var upgrade_btn := Button.new()
 		upgrade_btn.name = "IntelUpgradeBtn"
-		upgrade_btn.text = "🔍"
+		upgrade_btn.text = ""
 		upgrade_btn.tooltip_text = "精准预测 ($200)"
 		upgrade_btn.custom_minimum_size = Vector2(28, 28)
+		_IconFactory.decorate_button(upgrade_btn, "ic_intel", 18.0)
 		upgrade_btn.pressed.connect(_on_upgrade_intel.bind(product_id, row))
 		row.add_child(upgrade_btn)
 
@@ -888,6 +1082,14 @@ func _get_intel_color(intel: String) -> Color:
 	return _Colors.TEXT_SECONDARY
 
 
+func _intel_icon_id(intel: String) -> String:
+	if intel.begins_with("⚠") or intel.find("不建议") >= 0:
+		return "ic_cold"
+	if intel.begins_with("📍") or intel.begins_with("⭐") or intel.find("热卖") >= 0:
+		return "ic_hot"
+	return ""
+
+
 func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
 	if AppState.cash_usd < INTEL_UPGRADE_COST:
 		_show_hint("资金不足")
@@ -901,6 +1103,7 @@ func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
 		return
 
 	AppState.cash_usd -= INTEL_UPGRADE_COST
+	AppState.log_stat("intel_purchases", 1.0)
 	_refresh_top()
 
 	var buy_price_val: float = DataService.market_row(AppState.current_city_id(), product_id).get("buy_base_usd", 0.0)
@@ -922,6 +1125,7 @@ func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
 			break
 
 	AudioService.play_sfx("sfx_ui_click")
+	AchievementSystem.check_all()
 
 
 func _buy_selected(as_cargo: bool) -> void:
@@ -951,8 +1155,10 @@ func _buy_market_item(product_id: String) -> void:
 func _show_flights() -> void:
 	if not _require_started():
 		return
+	_set_panel_bgm("globe")
 	_clear_panel()
 	_flight_auto_focus = true
+	_selected_connection = {}
 	var scroll := ScrollContainer.new()
 	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -963,14 +1169,34 @@ func _show_flights() -> void:
 	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.add_child(v)
+	# Recommended routes
+	_recommend_box = VBoxContainer.new()
+	v.add_child(_recommend_box)
+	_rebuild_recommendations()
 	var tip := Label.new()
-	tip.text = "当前机场出港 · 灰字=距起飞不足2小时"
+	tip.text = "当前机场出港 · 灰字=距起飞不足2小时 · 联程为重建网络拼装"
 	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(tip)
 	_flight_query = LineEdit.new()
 	_flight_query.placeholder_text = "目的地 / IATA / 航空公司"
 	_flight_query.text_changed.connect(func (_t): _flight_page = 0; _reload_flights())
 	v.add_child(_flight_query)
+	var mode_row := HBoxContainer.new()
+	v.add_child(mode_row)
+	var b_direct := Button.new()
+	b_direct.text = "直飞"
+	b_direct.toggle_mode = true
+	b_direct.button_pressed = not _show_connections
+	b_direct.pressed.connect(func (): _show_connections = false; b_direct.button_pressed = true; _flight_page = 0; _reload_flights())
+	mode_row.add_child(b_direct)
+	var b_cnx := Button.new()
+	b_cnx.text = I18nService.t("ui.transfer.tab")
+	if b_cnx.text == "" or b_cnx.text.begins_with("ui."):
+		b_cnx.text = "联程"
+	b_cnx.toggle_mode = true
+	b_cnx.button_pressed = _show_connections
+	b_cnx.pressed.connect(func (): _show_connections = true; b_cnx.button_pressed = true; _flight_page = 0; _reload_flights())
+	mode_row.add_child(b_cnx)
 	var filters := HBoxContainer.new()
 	v.add_child(filters)
 	var bun := Button.new()
@@ -1076,12 +1302,87 @@ func _show_flights() -> void:
 	row.add_child(br)
 	var close := Button.new()
 	close.text = "关闭"
-	close.pressed.connect(func (): _panel_host.visible = false)
+	close.pressed.connect(_close_panel)
 	row.add_child(close)
 	_extra_tier = ""
 	_cargo_blocks = 0
 	_flight_page = 0
 	_reload_flights()
+
+
+func _get_recommended_destinations(limit: int = 5) -> Array:
+	var scores: Dictionary = {}
+	for item_v in AppState.inventory:
+		var item: Dictionary = item_v
+		var product_id := str(item.get("product_id", ""))
+		var origin := str(DataService.get_product(product_id).get("origin_city_id", AppState.current_city_id()))
+		var tag_key := "%s|%s" % [origin, product_id]
+		var tags: Dictionary = DataService.product_market_tags.get(tag_key, {})
+		for dest in tags.get("hot", []):
+			scores[dest] = int(scores.get(dest, 0)) + 1
+	var sorted_keys: Array = scores.keys()
+	sorted_keys.sort_custom(func(a, b): return int(scores[a]) > int(scores[b]))
+	var out: Array = []
+	var origin_iata := str(AppState.current_airport().get("iata", "")).to_upper()
+	var direct_dests := {}
+	for d in DataService.destinations_from(origin_iata):
+		direct_dests[str(d).to_upper()] = true
+	for city_id in sorted_keys:
+		var city: Dictionary = DataService.get_city(str(city_id))
+		var city_iata := ""
+		# Find a passenger airport for this city
+		for a in DataService.airports:
+			if str(a.get("city_id", "")) == str(city_id):
+				city_iata = str(a.get("iata", "")).to_upper()
+				break
+		var is_direct := city_iata != "" and direct_dests.has(city_iata)
+		out.append({
+			"city_id": city_id,
+			"name_zh": city.get("name_zh", city_id),
+			"iata": city_iata,
+			"hot_count": scores[city_id],
+			"direct": is_direct,
+		})
+		if out.size() >= limit:
+			break
+	return out
+
+
+func _rebuild_recommendations() -> void:
+	if _recommend_box == null:
+		return
+	for c in _recommend_box.get_children():
+		c.queue_free()
+	var header := Label.new()
+	header.text = I18nService.t("ui.recommend.title")
+	if header.text == "" or header.text.begins_with("ui."):
+		header.text = "推荐航线"
+	header.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+	_recommend_box.add_child(header)
+	var recs := _get_recommended_destinations(5)
+	if recs.is_empty():
+		var empty := Label.new()
+		empty.text = "（库存为空时无推荐；买入商品后根据热卖目的地生成）"
+		empty.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+		_recommend_box.add_child(empty)
+		return
+	var row := HBoxContainer.new()
+	_recommend_box.add_child(row)
+	for rec_v in recs:
+		var rec: Dictionary = rec_v
+		var btn := Button.new()
+		var mode := "直飞" if rec.get("direct", false) else "联程"
+		btn.text = "%s · %s件 · %s" % [rec.get("name_zh", ""), rec.get("hot_count", 0), mode]
+		var dest_iata := str(rec.get("iata", ""))
+		var want_cnx := not bool(rec.get("direct", false))
+		btn.pressed.connect(func ():
+			_show_connections = want_cnx
+			if _flight_query:
+				_flight_query.text = dest_iata
+			_flight_page = 0
+			_reload_flights()
+		)
+		row.add_child(btn)
 
 
 func _baggage_tier_price(tier: String) -> float:
@@ -1100,7 +1401,34 @@ func _reload_flights(_q: String = "") -> void:
 	if _flight_list == null:
 		return
 	_flight_list.clear()
+	_selected_flight = {}
+	_selected_connection = {}
 	var q: String = _flight_query.text if _flight_query else ""
+	if _show_connections:
+		var origin_iata := str(AppState.current_airport().get("iata", ""))
+		var all_cnx: Array = _FlightSearch.search_connections(origin_iata, q, 0)
+		if _filter_unvisited:
+			var filtered: Array = []
+			for c_v in all_cnx:
+				var c: Dictionary = c_v
+				if not AppState.visited_airports.has(str(c.get("destination_airport_id", ""))):
+					filtered.append(c)
+			all_cnx = filtered
+		if _max_price > 0.0:
+			all_cnx = all_cnx.filter(func(c): return float(c.get("ticket_base_price_economy", 0)) <= _max_price)
+		if _max_duration > 0:
+			all_cnx = all_cnx.filter(func(c): return int(c.get("duration_minutes", 0)) <= _max_duration)
+		var start_c: int = _flight_page * FLIGHTS_PER_PAGE
+		if start_c >= all_cnx.size() and _flight_page > 0:
+			_flight_page = maxi(0, (all_cnx.size() - 1) / FLIGHTS_PER_PAGE)
+			start_c = _flight_page * FLIGHTS_PER_PAGE
+		_connection_cache = all_cnx.slice(start_c, mini(all_cnx.size(), start_c + FLIGHTS_PER_PAGE))
+		_flights_cache = []
+		_fill_connection_rows()
+		_show_hint("联程 %d–%d / 共 %d（页 %d）" % [
+			start_c + (1 if all_cnx.size() > 0 else 0), start_c + _connection_cache.size(), all_cnx.size(), _flight_page + 1
+		])
+		return
 	var all: Array = _FlightSearch.search(
 		AppState.current_airport_id, q, 0, _filter_unvisited, _sort_by,
 		_max_price, _max_duration, _biz_only
@@ -1146,10 +1474,35 @@ func _fill_flight_rows() -> void:
 			_flight_list.set_item_custom_fg_color(i, gray)
 
 
+func _fill_connection_rows() -> void:
+	for i in _connection_cache.size():
+		var c: Dictionary = _connection_cache[i]
+		_flight_list.add_item("%s→%s→%s  %.0fkm  ~%dmin  $%.0f  经%s中转" % [
+			c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", ""),
+			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)),
+			float(c.get("ticket_base_price_economy", 0)), c.get("hub_iata", "")
+		])
+		_flight_list.set_item_custom_fg_color(i, _Colors.ACCENT_TEAL)
+
+
 func _on_flight_selected(idx: int) -> void:
+	if _show_connections:
+		if idx < 0 or idx >= _connection_cache.size():
+			return
+		_selected_connection = _connection_cache[idx]
+		_selected_flight = {}
+		var c: Dictionary = _selected_connection
+		_flight_detail.text = "[b]联程[/b] %s → %s → %s\n总距离 %.0f km · 估计时长 %d 分钟（含转机 90 分钟）\n经济舱 $%.2f / 公务舱 $%.2f\n声明：联程为重建网络上的合理拼装，不代表真实联程票\n加购：行李档=%s  货运×%d" % [
+			c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", ""),
+			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)),
+			float(c.get("ticket_base_price_economy", 0)), float(c.get("ticket_base_price_business", 0)),
+			_extra_tier if _extra_tier != "" else "无", _cargo_blocks
+		]
+		return
 	if idx < 0 or idx >= _flights_cache.size():
 		return
 	_selected_flight = _flights_cache[idx]
+	_selected_connection = {}
 	var fl: Dictionary = _selected_flight
 	_flight_detail.text = "航班 %s（%s）\n%s → %s\n起飞 %s\n到达 %s\n距离 %.0f km · %d 分钟\n经济舱 $%.2f / 公务舱 $%.2f（10×）\n行李额：经济 %.0fkg / 公务 %.0fkg\n加购：行李档=%s  货运×%d" % [
 		fl.get("marketing_flight_number", ""), fl.get("airline_name", ""), fl.get("origin_iata", ""), fl.get("destination_iata", ""),
@@ -1161,6 +1514,34 @@ func _on_flight_selected(idx: int) -> void:
 
 
 func _purchase(cabin: String) -> void:
+	if _show_connections or not _selected_connection.is_empty():
+		if _selected_connection.is_empty():
+			_show_hint("请先选择联程航线")
+			return
+		var err_c: String = _Tickets.purchase_connection(_selected_connection, cabin, _extra_tier, _cargo_blocks, false)
+		if err_c.find("已有机票") >= 0:
+			_pending_cabin = cabin
+			_replace_ticket_dialog.dialog_text = err_c + "\n将按 30% 手续费退旧票后购买联程，确认？"
+			_replace_ticket_dialog.popup_centered()
+			return
+		_show_hint(err_c if err_c != "" else "联程购票成功（两段）")
+		if err_c == "":
+			AudioService.play_sfx("sfx_ticket_ok")
+			if _selected_connection.has("hub_airport_id"):
+				globe.draw_trip_route(AppState.current_airport_id, str(_selected_connection.hub_airport_id))
+		else:
+			AudioService.play_sfx("sfx_error")
+		_refresh_bags()
+		_refresh_countdown()
+		if err_c == "" and _free_cargo_on_flight and _cargo_blocks > 0:
+			AppState.add_cash(_cargo_block_price())
+			_free_cargo_on_flight = false
+			_refresh_top()
+			_show_hint("免费货运额度已使用！")
+		if err_c == "":
+			_check_free_cargo(AppState.current_city_id())
+			AchievementSystem.check_all()
+		return
 	if _selected_flight.is_empty():
 		_show_hint("请先选择航班")
 		return
@@ -1189,12 +1570,19 @@ func _purchase(cabin: String) -> void:
 
 
 func _do_replace_purchase() -> void:
-	var err: String = _Tickets.purchase(_selected_flight, _pending_cabin, _extra_tier, _cargo_blocks, true)
-	_show_hint(err if err != "" else "已替换购票")
+	var err: String = ""
+	if _show_connections or not _selected_connection.is_empty():
+		err = _Tickets.purchase_connection(_selected_connection, _pending_cabin, _extra_tier, _cargo_blocks, true)
+		_show_hint(err if err != "" else "已替换联程购票")
+	else:
+		err = _Tickets.purchase(_selected_flight, _pending_cabin, _extra_tier, _cargo_blocks, true)
+		_show_hint(err if err != "" else "已替换购票")
 	_refresh_bags()
 	_refresh_countdown()
-	if err == "" and _selected_flight.has("destination_airport_id"):
+	if err == "" and not _selected_flight.is_empty() and _selected_flight.has("destination_airport_id"):
 		globe.draw_trip_route(AppState.current_airport_id, str(_selected_flight.destination_airport_id))
+	elif err == "" and not _selected_connection.is_empty() and _selected_connection.has("hub_airport_id"):
+		globe.draw_trip_route(AppState.current_airport_id, str(_selected_connection.hub_airport_id))
 	if err == "" and _free_cargo_on_flight and _cargo_blocks > 0:
 		AppState.add_cash(_cargo_block_price())
 		_free_cargo_on_flight = false
@@ -1202,6 +1590,7 @@ func _do_replace_purchase() -> void:
 		_show_hint("免费货运额度已使用！")
 	if err == "":
 		_check_free_cargo(AppState.current_city_id())
+		AchievementSystem.check_all()
 
 
 func _show_inventory() -> void:
@@ -1212,16 +1601,21 @@ func _show_inventory() -> void:
 	_panel_host.add_child(v)
 	_inv_list = ItemList.new()
 	_inv_list.custom_minimum_size = Vector2(700, 360)
+	_inv_list.fixed_icon_size = Vector2i(28, 28)
 	v.add_child(_inv_list)
 	for i in AppState.inventory.size():
 		var item: Dictionary = AppState.inventory[i]
-		var p: Dictionary = DataService.get_product(str(item.get("product_id", "")))
+		var pid := str(item.get("product_id", ""))
+		var p: Dictionary = DataService.get_product(pid)
 		var q: float = _Economy.current_quality(item)
-		_inv_list.add_item("%s ×%d  品质%.0f%%  成本%s  %s" % [
-			p.get("name_zh", item.get("product_id", "")), int(item.get("qty", 0)), q * 100.0,
+		var idx := _inv_list.add_item("%s ×%d  品质%.0f%%  成本%s  %s" % [
+			p.get("name_zh", pid), int(item.get("qty", 0)), q * 100.0,
 			_Economy.format_money(float(item.get("unit_cost", 0))),
 			"货运" if item.get("in_cargo", false) else "行李"
 		])
+		var ptex: Texture2D = _IconFactory.get_product_icon(pid)
+		if ptex != null:
+			_inv_list.set_item_icon(idx, ptex)
 	var qty_row := HBoxContainer.new()
 	v.add_child(qty_row)
 	var qty_label := Label.new()
@@ -1248,7 +1642,7 @@ func _show_inventory() -> void:
 	row.add_child(sell)
 	var close := Button.new()
 	close.text = "关闭"
-	close.pressed.connect(func (): _panel_host.visible = false)
+	close.pressed.connect(_close_panel)
 	row.add_child(close)
 
 
@@ -1409,6 +1803,7 @@ func _on_discovery_sell_all(_result: Dictionary, product_id: String, city_id: St
 
 	var margin: float = total_revenue - total_cost
 	var margin_rate: float = margin / total_cost if total_cost > 0 else 0.0
+	AppState.log_stat("discovery_triggered", 1.0)
 
 	AudioService.play_sfx("sfx_sell")
 	_show_hint("🎉 意外发现！售出 %s ×%d，收入 %s，毛利 %s（溢价%d%%）" % [
@@ -1420,11 +1815,13 @@ func _on_discovery_sell_all(_result: Dictionary, product_id: String, city_id: St
 	])
 	_show_inventory()
 	_refresh_bags()
+	AchievementSystem.check_all()
 
 
 func _show_notes() -> void:
 	if not _require_started():
 		return
+	_set_panel_bgm("menu")
 	_clear_panel()
 	AudioService.play_sfx("sfx_ui_click")
 	var scroll := ScrollContainer.new()
@@ -1487,6 +1884,93 @@ func _show_notes() -> void:
 		vbox.add_child(summary)
 
 
+func _show_achievements() -> void:
+	if not _require_started():
+		return
+	_set_panel_bgm("menu")
+	_clear_panel()
+	var v := VBoxContainer.new()
+	_panel_host.add_child(v)
+	var title := Label.new()
+	title.text = I18nService.t("ui.tab.achievements")
+	if title.text == "" or title.text.begins_with("ui."):
+		title.text = "成就"
+	title.add_theme_font_size_override("font_size", 18)
+	title.add_theme_color_override("font_color", _Colors.ICE)
+	v.add_child(title)
+	var filters := HBoxContainer.new()
+	v.add_child(filters)
+	for pair in [["全部", "all"], ["探索", "explore"], ["贸易", "trade"], ["飞行", "flight"], ["收集", "collect"]]:
+		var b := Button.new()
+		b.text = pair[0]
+		b.toggle_mode = true
+		b.button_pressed = _ach_filter_category == pair[1]
+		var cat: String = pair[1]
+		b.pressed.connect(func (): _ach_filter_category = cat; _show_achievements())
+		filters.add_child(b)
+	var bun := Button.new()
+	bun.text = "仅已解锁" if not _ach_filter_unlocked_only else "显示全部"
+	bun.pressed.connect(func (): _ach_filter_unlocked_only = not _ach_filter_unlocked_only; _show_achievements())
+	filters.add_child(bun)
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(700, 360)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	v.add_child(scroll)
+	var list := VBoxContainer.new()
+	scroll.add_child(list)
+	for ach_v in AchievementSystem.definitions:
+		var ach: Dictionary = ach_v
+		if _ach_filter_category != "all" and str(ach.get("category", "")) != _ach_filter_category:
+			continue
+		var unlocked := AchievementSystem.is_unlocked(str(ach.get("id", "")))
+		if _ach_filter_unlocked_only and not unlocked:
+			continue
+		var row := HBoxContainer.new()
+		list.add_child(row)
+		var icon_key := str(ach.get("icon", ach.get("id", "")))
+		var ach_tex: Texture2D = _IconFactory.get_achievement_icon(icon_key, unlocked)
+		var icon := TextureRect.new()
+		icon.texture = ach_tex
+		icon.custom_minimum_size = Vector2(40, 40)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		if not unlocked:
+			icon.modulate = Color(0.45, 0.45, 0.5, 0.8)
+		row.add_child(icon)
+		var body := VBoxContainer.new()
+		body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(body)
+		var name_l := Label.new()
+		name_l.text = str(ach.get("name", ach.get("id", "")))
+		name_l.add_theme_color_override("font_color", _Colors.ACCENT_AMBER if unlocked else _Colors.TEXT_SECONDARY)
+		body.add_child(name_l)
+		var desc_l := Label.new()
+		desc_l.text = str(ach.get("desc", ""))
+		desc_l.add_theme_font_size_override("font_size", 12)
+		desc_l.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+		body.add_child(desc_l)
+		var prog := ProgressBar.new()
+		prog.min_value = 0
+		prog.max_value = 1
+		prog.value = AchievementSystem.progress_of(ach)
+		prog.custom_minimum_size = Vector2(200, 12)
+		prog.show_percentage = false
+		body.add_child(prog)
+		var prog_l := Label.new()
+		prog_l.text = AchievementSystem.current_display(ach)
+		prog_l.add_theme_font_size_override("font_size", 11)
+		row.add_child(prog_l)
+	var footer := Label.new()
+	footer.text = "已解锁 %d / %d" % [AppState.unlocked_achievements.size(), AchievementSystem.definitions.size()]
+	footer.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+	v.add_child(footer)
+	var close := Button.new()
+	close.text = "关闭"
+	close.pressed.connect(_close_panel)
+	v.add_child(close)
+
+
 func _show_log() -> void:
 	_clear_panel()
 	_log_text = RichTextLabel.new()
@@ -1511,7 +1995,6 @@ func _show_attr() -> void:
 	_attr_text.custom_minimum_size = Vector2(700, 440)
 	_attr_text.scroll_active = true
 	_panel_host.add_child(_attr_text)
-	AudioService.play_sfx("sfx_ui_open_panel")
 	var body := I18nService.attribution_body
 	if body.is_empty():
 		body = I18nService.disclaimer()
@@ -1551,7 +2034,8 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 	match tier:
 		"L2":
 			popup.title = "交易亏损"
-			FeedbackParticles.play(self, {"palette": "grey", "count": 25, "duration": 2.0, "direction": "down"})
+			if not AppState.reduced_animations:
+				FeedbackParticles.play(self, {"palette": "grey", "count": 25, "duration": 2.0, "direction": "down"})
 			AudioService.play_sfx("sfx_loss")
 
 		"L1":
@@ -1564,14 +2048,16 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 
 		"W1":
 			popup.title = "大赚一笔！"
-			FeedbackParticles.play(self, {"palette": "gold", "count": 30, "duration": 2.0, "direction": "right_arc"})
+			if not AppState.reduced_animations:
+				FeedbackParticles.play(self, {"palette": "gold", "count": 30, "duration": 2.0, "direction": "right_arc"})
 			AudioService.play_sfx("sfx_big_win")
 
 		"W2":
 			popup.title = "大满贯！"
 			if sell_result.get("discovery_bonus", false):
 				popup.title = "✨发现者加成 — 大满贯！"
-			FeedbackParticles.play(self, {"palette": "gold_rain", "count": 60, "duration": 3.0, "direction": "down"})
+			if not AppState.reduced_animations:
+				FeedbackParticles.play(self, {"palette": "gold_rain", "count": 60, "duration": 3.0, "direction": "down"})
 			AudioService.play_sfx("sfx_grand_slam")
 
 	# Build card body text
@@ -1584,18 +2070,17 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 	body += "账面毛利：" + sign + "$" + str(int(margin)) + "\n"
 
 	# Net trip profit hint
-	if AppState.has("last_flight_price"):
-		var flight_cost: float = AppState.last_flight_price
-		var baggage_cost: float = AppState.last_baggage_cost if AppState.has("last_baggage_cost") else 0.0
-		if flight_cost > 0 or baggage_cost > 0:
-			body += "本趟机票：−$" + str(int(flight_cost))
-			if baggage_cost > 0:
-				body += "  行李/货运：−$" + str(int(baggage_cost))
-			body += "\n"
-			var net: float = margin - flight_cost - baggage_cost
-			var net_sign := "+" if net >= 0 else ""
-			body += "──────────────────\n"
-			body += "行程净利：" + net_sign + "$" + str(int(net)) + "\n"
+	var flight_cost: float = AppState.last_flight_price
+	var baggage_cost: float = AppState.last_baggage_cost
+	if flight_cost > 0 or baggage_cost > 0:
+		body += "本趟机票：−$" + str(int(flight_cost))
+		if baggage_cost > 0:
+			body += "  行李/货运：−$" + str(int(baggage_cost))
+		body += "\n"
+		var net: float = margin - flight_cost - baggage_cost
+		var net_sign := "+" if net >= 0 else ""
+		body += "──────────────────\n"
+		body += "行程净利：" + net_sign + "$" + str(int(net)) + "\n"
 
 	# Consolation or celebration copy
 	match tier:
@@ -1640,6 +2125,7 @@ func _cash_roll_animation(delta_margin: float) -> void:
 	var is_grand_slam := delta_margin >= 10000
 
 	_cash_rolling = true
+	AudioService.play_loop_sfx("sfx_coin_roll")
 
 	if is_grand_slam:
 		duration = 0.5  # double speed
@@ -1653,6 +2139,7 @@ func _cash_roll_animation(delta_margin: float) -> void:
 	tween.set_trans(Tween.TRANS_QUINT)
 	tween.tween_method(_update_cash_display.bind(cash_label), old_value, new_value, duration)
 	await tween.finished
+	AudioService.stop_loop_sfx()
 
 	_cash_rolling = false
 	_refresh_top()
@@ -1689,5 +2176,100 @@ func _load() -> void:
 
 
 func _toggle_pause() -> void:
-	GameClock.set_paused(not GameClock.paused)
-	_show_hint("时间暂停" if GameClock.paused else "时间继续")
+	_clear_panel()
+	_set_panel_bgm("menu")
+	var v := VBoxContainer.new()
+	_panel_host.add_child(v)
+	var title := Label.new()
+	title.text = I18nService.t("ui.settings.title")
+	title.add_theme_font_size_override("font_size", 18)
+	v.add_child(title)
+	var pause_btn := Button.new()
+	pause_btn.text = "继续时间" if GameClock.paused else "暂停时间"
+	pause_btn.pressed.connect(func ():
+		GameClock.set_paused(not GameClock.paused)
+		_show_hint("时间暂停" if GameClock.paused else "时间继续")
+		_toggle_pause()
+	)
+	v.add_child(pause_btn)
+	var reduced := CheckButton.new()
+	reduced.text = I18nService.t("ui.settings.reduced_anims")
+	if reduced.text == "" or reduced.text.begins_with("ui."):
+		reduced.text = "减少动态效果"
+	reduced.button_pressed = AppState.reduced_animations
+	reduced.toggled.connect(func (on): AppState.reduced_animations = on)
+	v.add_child(reduced)
+	var night := CheckButton.new()
+	night.text = I18nService.t("ui.settings.night_bgm")
+	if night.text == "" or night.text.begins_with("ui."):
+		night.text = "夜时 BGM 变奏"
+	night.button_pressed = AppState.night_bgm_enabled
+	night.toggled.connect(func (on):
+		AppState.night_bgm_enabled = on
+		_set_panel_bgm("menu")
+	)
+	v.add_child(night)
+	var mute := CheckButton.new()
+	mute.text = "静音"
+	mute.button_pressed = AudioService.is_muted()
+	mute.toggled.connect(func (on): AudioService.set_muted(on))
+	v.add_child(mute)
+	var bgm_row := HBoxContainer.new()
+	v.add_child(bgm_row)
+	var bgm_l := Label.new()
+	bgm_l.text = I18nService.t("ui.settings.volume_bgm")
+	if bgm_l.text == "" or bgm_l.text.begins_with("ui."):
+		bgm_l.text = "音乐"
+	bgm_l.custom_minimum_size = Vector2(72, 0)
+	bgm_row.add_child(bgm_l)
+	var bgm_slider := HSlider.new()
+	bgm_slider.min_value = 0.0
+	bgm_slider.max_value = 1.0
+	bgm_slider.step = 0.05
+	bgm_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bgm_slider.value = AudioService.get_bgm_volume()
+	bgm_slider.value_changed.connect(func (v: float): AudioService.set_bus_volume("BGM", v))
+	bgm_row.add_child(bgm_slider)
+	var sfx_row := HBoxContainer.new()
+	v.add_child(sfx_row)
+	var sfx_l := Label.new()
+	sfx_l.text = I18nService.t("ui.settings.volume_sfx")
+	if sfx_l.text == "" or sfx_l.text.begins_with("ui."):
+		sfx_l.text = "音效"
+	sfx_l.custom_minimum_size = Vector2(72, 0)
+	sfx_row.add_child(sfx_l)
+	var sfx_slider := HSlider.new()
+	sfx_slider.min_value = 0.0
+	sfx_slider.max_value = 1.0
+	sfx_slider.step = 0.05
+	sfx_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	sfx_slider.value = AudioService.get_sfx_volume()
+	sfx_slider.value_changed.connect(func (v: float):
+		AudioService.set_bus_volume("SFX", v)
+		AudioService.set_bus_volume("UI", v)
+		AudioService.set_bus_volume("Transition", v)
+	)
+	sfx_row.add_child(sfx_slider)
+	var close := Button.new()
+	close.text = "关闭"
+	close.pressed.connect(_close_panel)
+	v.add_child(close)
+
+
+func _set_panel_bgm(mode: String) -> void:
+	## mode: globe | market | menu
+	var a := AppState.current_airport()
+	var local_hour := -1
+	if not a.is_empty() and AppState.night_bgm_enabled:
+		# Approximate local hour from UTC + tz offset if available
+		var tz := str(a.get("timezone", ""))
+		var off := float(DataService.tz_offsets.get(tz, 0.0))
+		local_hour = int(fposmod((GameClock.unix_time + off * 3600.0) / 3600.0, 24.0))
+	var use_night := AppState.night_bgm_enabled and local_hour >= 0 and (local_hour >= 22 or local_hour < 5)
+	match mode:
+		"market":
+			AudioService.set_bgm("bgm_market")
+		"menu":
+			AudioService.set_bgm("bgm_menu")
+		_:
+			AudioService.set_bgm("bgm_night" if use_night else "bgm_globe_day")
