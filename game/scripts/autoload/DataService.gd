@@ -38,11 +38,11 @@ func _load_json(path: String) -> Variant:
 
 func _load_all() -> void:
 	# ── world.json (lightweight core) ──
-	var w := _load_json("res://data/world.json")
-	if w == null:
+	var w = _load_json("res://data/world.json")
+	if w == null or not (w is Dictionary):
 		push_error("Missing world.json — run etl/scripts/run_pipeline.py")
 		return
-	world = w
+	world = w as Dictionary
 	airports = world.get("airports", [])
 	routes = world.get("routes", [])
 	economy = world.get("economy", {})
@@ -63,32 +63,33 @@ func _load_all() -> void:
 		products_by_id[p["product_id"]] = p
 
 	# ── markets.json (indexed by city_id, compact keys) ──
-	var m := _load_json("res://data/markets.json")
-	if m != null:
-		markets_by_city = m
+	var m = _load_json("res://data/markets.json")
+	if m != null and m is Dictionary:
+		markets_by_city = m as Dictionary
 
 	# ── product_market_tags.json ──
-	var t := _load_json("res://data/product_market_tags.json")
-	if t != null:
-		product_market_tags = t
+	var t = _load_json("res://data/product_market_tags.json")
+	if t != null and t is Dictionary:
+		product_market_tags = t as Dictionary
 
 	# ── transfer_edges.json ──
-	var e := _load_json("res://data/transfer_edges.json")
-	if e != null:
-		transfer_edges = e
+	var e = _load_json("res://data/transfer_edges.json")
+	if e != null and e is Dictionary:
+		transfer_edges = e as Dictionary
 
 	# ── flights/ (per-origin, lazy-loaded) ──
-	var manifest := _load_json("res://data/flights/_manifest.json")
-	if manifest != null:
+	var manifest = _load_json("res://data/flights/_manifest.json")
+	if manifest != null and manifest is Dictionary:
+		var mf: Dictionary = manifest
 		print("Flights manifest: %d origins, %d total flights" % [
-			manifest.size() - 1,  # minus _total key
-			manifest.get("_total", 0)
+			mf.size() - 1,  # minus _total key
+			mf.get("_total", 0)
 		])
 	else:
 		# Fallback to old monolithic flights.json
-		var fdata := _load_json("res://data/flights.json")
-		if fdata != null:
-			flights_by_origin = fdata.get("by_origin", {})
+		var fdata = _load_json("res://data/flights.json")
+		if fdata != null and fdata is Dictionary:
+			flights_by_origin = (fdata as Dictionary).get("by_origin", {})
 
 	loaded = true
 	print("DataService loaded: %d airports, %d products, %d market-cities, %d tags, %d transfers" % [
@@ -177,11 +178,11 @@ func flights_from(origin_airport_id: String) -> Array:
 	if _flights_loaded.has(origin_airport_id):
 		return flights_by_origin.get(origin_airport_id, [])
 	var path := "res://data/flights/%s.json" % origin_airport_id
-	var data := _load_json(path)
+	var data = _load_json(path)
 	if data != null and data is Array:
 		flights_by_origin[origin_airport_id] = data
 		_flights_loaded[origin_airport_id] = true
-		return data
+		return data as Array
 	_flights_loaded[origin_airport_id] = true
 	return []
 
