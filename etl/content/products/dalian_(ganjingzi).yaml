@@ -1,0 +1,51 @@
+products:
+- product_id: dalian_(ganjingzi)_电子_B
+  name_zh: Dalian (Ganjingzi)电子合约
+  category: 电子
+  weight_kg: 1.7
+  base_reference_price: 1828.24
+  reference_currency: USD
+  shelf_life_hours: 10565
+  fragility: 0.3
+  rarity: 0.73
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
+- product_id: dalian_(ganjingzi)_茶叶_B
+  name_zh: Dalian (Ganjingzi)茶叶合约
+  category: 茶叶
+  weight_kg: 6.3
+  base_reference_price: 210.13
+  reference_currency: USD
+  shelf_life_hours: 5465
+  fragility: 0.1
+  rarity: 0.53
+  description: 产区直供茶叶合约，密封可保持风味一年以上。
+- product_id: dalian_(ganjingzi)_纺织品_B
+  name_zh: Dalian (Ganjingzi)纺织品合约
+  category: 纺织品
+  weight_kg: 12.1
+  base_reference_price: 390.78
+  reference_currency: USD
+  shelf_life_hours: 23948
+  fragility: 0.0
+  rarity: 0.44
+  description: 地区纺织产品合约，不易变质适合长途贸易。
+- product_id: dalian_(ganjingzi)_机械_B
+  name_zh: Dalian (Ganjingzi)机械合约
+  category: 机械
+  weight_kg: 40.5
+  base_reference_price: 1189.46
+  reference_currency: USD
+  shelf_life_hours: 56184
+  fragility: 0.2
+  rarity: 0.59
+  description: 工业机械配件合约，重量大但单位价值极高。
+- product_id: dalian_(ganjingzi)_陶瓷_B
+  name_zh: Dalian (Ganjingzi)陶瓷合约
+  category: 陶瓷
+  weight_kg: 29.7
+  base_reference_price: 163.86
+  reference_currency: USD
+  shelf_life_hours: 34617
+  fragility: 0.7
+  rarity: 0.47
+  description: 本地陶瓷器具合约，运输需严密包装防破损。

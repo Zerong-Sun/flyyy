@@ -1,0 +1,51 @@
+products:
+- product_id: general_santos_纺织品_B
+  name_zh: General Santos纺织品合约
+  category: 纺织品
+  weight_kg: 14.6
+  base_reference_price: 264.55
+  reference_currency: USD
+  shelf_life_hours: 95251
+  fragility: 0.0
+  rarity: 0.43
+  description: 地区纺织产品合约，不易变质适合长途贸易。
+- product_id: general_santos_玩具_B
+  name_zh: General Santos玩具合约
+  category: 玩具
+  weight_kg: 3.1
+  base_reference_price: 60.04
+  reference_currency: USD
+  shelf_life_hours: 65396
+  fragility: 0.1
+  rarity: 0.29
+  description: 本地特色玩具合约，适合作为伴手礼转售。
+- product_id: general_santos_日用品_B
+  name_zh: General Santos日用品合约
+  category: 日用品
+  weight_kg: 9.1
+  base_reference_price: 66.02
+  reference_currency: USD
+  shelf_life_hours: 74794
+  fragility: 0.0
+  rarity: 0.16
+  description: 地方日用品合约，需求平稳利润适中。
+- product_id: general_santos_食品_B
+  name_zh: General Santos食品合约
+  category: 食品
+  weight_kg: 29.3
+  base_reference_price: 176.4
+  reference_currency: USD
+  shelf_life_hours: 1179
+  fragility: 0.2
+  rarity: 0.36
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: general_santos_电子_B
+  name_zh: General Santos电子合约
+  category: 电子
+  weight_kg: 2.8
+  base_reference_price: 1465.22
+  reference_currency: USD
+  shelf_life_hours: 45428
+  fragility: 0.3
+  rarity: 0.68
+  description: 电子元器件合约，体积小价值极高，航空快运首选。

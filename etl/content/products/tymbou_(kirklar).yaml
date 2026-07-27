@@ -1,0 +1,51 @@
+products:
+- product_id: tymbou_(kirklar)_日用品_B
+  name_zh: Tymbou (Kirklar)日用品合约
+  category: 日用品
+  weight_kg: 11.3
+  base_reference_price: 77.78
+  reference_currency: USD
+  shelf_life_hours: 16549
+  fragility: 0.0
+  rarity: 0.08
+  description: 地方日用品合约，需求平稳利润适中。
+- product_id: tymbou_(kirklar)_食品_B
+  name_zh: Tymbou (Kirklar)食品合约
+  category: 食品
+  weight_kg: 21.9
+  base_reference_price: 216.58
+  reference_currency: USD
+  shelf_life_hours: 1144
+  fragility: 0.2
+  rarity: 0.28
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: tymbou_(kirklar)_香料_B
+  name_zh: Tymbou (Kirklar)香料合约
+  category: 香料
+  weight_kg: 0.7
+  base_reference_price: 221.23
+  reference_currency: USD
+  shelf_life_hours: 7702
+  fragility: 0.0
+  rarity: 0.47
+  description: 精选干制香料，价值密度高，跨境贸易理想品。
+- product_id: tymbou_(kirklar)_咖啡_B
+  name_zh: Tymbou (Kirklar)咖啡合约
+  category: 咖啡
+  weight_kg: 10.4
+  base_reference_price: 230.35
+  reference_currency: USD
+  shelf_life_hours: 2162
+  fragility: 0.0
+  rarity: 0.36
+  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+- product_id: tymbou_(kirklar)_工艺品_B
+  name_zh: Tymbou (Kirklar)工艺品合约
+  category: 工艺品
+  weight_kg: 6.7
+  base_reference_price: 203.77
+  reference_currency: USD
+  shelf_life_hours: 81349
+  fragility: 0.5
+  rarity: 0.62
+  description: 本地手工制品合约，精工细作运输需缓冲包装。

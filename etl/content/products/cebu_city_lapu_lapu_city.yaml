@@ -1,0 +1,51 @@
+products:
+- product_id: cebu_city_lapu_lapu_city_玩具_B
+  name_zh: Cebu City/Lapu-Lapu City玩具合约
+  category: 玩具
+  weight_kg: 6.0
+  base_reference_price: 44.81
+  reference_currency: USD
+  shelf_life_hours: 26677
+  fragility: 0.1
+  rarity: 0.18
+  description: 本地特色玩具合约，适合作为伴手礼转售。
+- product_id: cebu_city_lapu_lapu_city_食品_B
+  name_zh: Cebu City/Lapu-Lapu City食品合约
+  category: 食品
+  weight_kg: 18.2
+  base_reference_price: 123.66
+  reference_currency: USD
+  shelf_life_hours: 1066
+  fragility: 0.2
+  rarity: 0.36
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: cebu_city_lapu_lapu_city_电子_B
+  name_zh: Cebu City/Lapu-Lapu City电子合约
+  category: 电子
+  weight_kg: 3.6
+  base_reference_price: 700.54
+  reference_currency: USD
+  shelf_life_hours: 32842
+  fragility: 0.3
+  rarity: 0.73
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
+- product_id: cebu_city_lapu_lapu_city_日用品_B
+  name_zh: Cebu City/Lapu-Lapu City日用品合约
+  category: 日用品
+  weight_kg: 5.3
+  base_reference_price: 42.03
+  reference_currency: USD
+  shelf_life_hours: 59242
+  fragility: 0.0
+  rarity: 0.12
+  description: 地方日用品合约，需求平稳利润适中。
+- product_id: cebu_city_lapu_lapu_city_纺织品_B
+  name_zh: Cebu City/Lapu-Lapu City纺织品合约
+  category: 纺织品
+  weight_kg: 14.3
+  base_reference_price: 267.94
+  reference_currency: USD
+  shelf_life_hours: 28885
+  fragility: 0.0
+  rarity: 0.28
+  description: 地区纺织产品合约，不易变质适合长途贸易。

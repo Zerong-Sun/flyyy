@@ -1,0 +1,51 @@
+products:
+- product_id: hualien_city_矿产_B
+  name_zh: Hualien City矿产合约
+  category: 矿产
+  weight_kg: 31.5
+  base_reference_price: 704.7
+  reference_currency: USD
+  shelf_life_hours: 46084
+  fragility: 0.0
+  rarity: 0.5
+  description: 矿产品样品合约，重量较大但价值稳定。
+- product_id: hualien_city_糖果_B
+  name_zh: Hualien City糖果合约
+  category: 糖果
+  weight_kg: 5.7
+  base_reference_price: 149.21
+  reference_currency: USD
+  shelf_life_hours: 1225
+  fragility: 0.1
+  rarity: 0.32
+  description: 地方传统糖果点心合约，便携适合礼品转售。
+- product_id: hualien_city_食品_B
+  name_zh: Hualien City食品合约
+  category: 食品
+  weight_kg: 18.0
+  base_reference_price: 236.89
+  reference_currency: USD
+  shelf_life_hours: 1135
+  fragility: 0.2
+  rarity: 0.28
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: hualien_city_咖啡_B
+  name_zh: Hualien City咖啡合约
+  category: 咖啡
+  weight_kg: 12.1
+  base_reference_price: 276.89
+  reference_currency: USD
+  shelf_life_hours: 1534
+  fragility: 0.0
+  rarity: 0.47
+  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+- product_id: hualien_city_日用品_B
+  name_zh: Hualien City日用品合约
+  category: 日用品
+  weight_kg: 7.6
+  base_reference_price: 87.63
+  reference_currency: USD
+  shelf_life_hours: 17795
+  fragility: 0.0
+  rarity: 0.14
+  description: 地方日用品合约，需求平稳利润适中。

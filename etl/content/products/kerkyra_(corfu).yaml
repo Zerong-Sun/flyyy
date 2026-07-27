@@ -1,0 +1,51 @@
+products:
+- product_id: kerkyra_(corfu)_工艺品_B
+  name_zh: Kerkyra (Corfu)工艺品合约
+  category: 工艺品
+  weight_kg: 14.8
+  base_reference_price: 341.04
+  reference_currency: USD
+  shelf_life_hours: 62102
+  fragility: 0.5
+  rarity: 0.57
+  description: 本地手工制品合约，精工细作运输需缓冲包装。
+- product_id: kerkyra_(corfu)_香料_B
+  name_zh: Kerkyra (Corfu)香料合约
+  category: 香料
+  weight_kg: 0.4
+  base_reference_price: 300.95
+  reference_currency: USD
+  shelf_life_hours: 7280
+  fragility: 0.0
+  rarity: 0.48
+  description: 精选干制香料，价值密度高，跨境贸易理想品。
+- product_id: kerkyra_(corfu)_茶叶_B
+  name_zh: Kerkyra (Corfu)茶叶合约
+  category: 茶叶
+  weight_kg: 6.6
+  base_reference_price: 134.98
+  reference_currency: USD
+  shelf_life_hours: 5681
+  fragility: 0.1
+  rarity: 0.39
+  description: 产区直供茶叶合约，密封可保持风味一年以上。
+- product_id: kerkyra_(corfu)_食品_B
+  name_zh: Kerkyra (Corfu)食品合约
+  category: 食品
+  weight_kg: 15.6
+  base_reference_price: 99.58
+  reference_currency: USD
+  shelf_life_hours: 1370
+  fragility: 0.2
+  rarity: 0.25
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: kerkyra_(corfu)_陶瓷_B
+  name_zh: Kerkyra (Corfu)陶瓷合约
+  category: 陶瓷
+  weight_kg: 27.2
+  base_reference_price: 253.16
+  reference_currency: USD
+  shelf_life_hours: 19098
+  fragility: 0.7
+  rarity: 0.57
+  description: 本地陶瓷器具合约，运输需严密包装防破损。

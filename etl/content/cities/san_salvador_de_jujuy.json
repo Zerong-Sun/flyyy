@@ -1,0 +1,20 @@
+{
+  "city_id": "san_salvador_de_jujuy",
+  "name_zh": "San Salvador de Jujuy",
+  "name_en": "San Salvador de Jujuy",
+  "country_id": "AR",
+  "country_zh": "阿根廷",
+  "timezone": "America/Argentina/Buenos_Aires",
+  "short_description": "San Salvador de Jujuy是阿根廷农产品出口枢纽，牛肉与粮食合约体量可观，食品合约与矿产品流转。城市作为全球航线节点，适合体验地方特产贸易与跨区",
+  "overview": "San Salvador de Jujuy位于巴塔哥尼亚，是潘帕斯粮仓的门户。机场连接南美与北美。旅客可在此采购特色商品，再搭乘航班前往其他枢纽出售，形成可持续的旅行贸易循环。旅客可在此采购特色商品，再搭乘航班前往其他枢纽出售，形成可持续的旅行贸易循环。旅客可在此采购特色商品，再搭乘航班前往其他枢纽",
+  "history_summary": "19世纪移民潮与铁路建设催生城市，农产品出口长期主导经济。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细",
+  "geography_summary": "温带为主，安第斯西麓干旱，东麓湿润。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。",
+  "economy_summary": "农业、食品加工与制造。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后",
+  "food_summary": "牛肉加工品、葡萄酒衍生糖果与焦糖酱。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。",
+  "travel_note": "机场南美航线网络节点；货币波动对本地价格影响明显。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后",
+  "content_confidence": "B",
+  "source_ids": [
+    "ourairports:iata:JUJ",
+    "openflights:routes"
+  ]
+}

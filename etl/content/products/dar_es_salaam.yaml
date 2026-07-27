@@ -1,0 +1,51 @@
+products:
+- product_id: dar_es_salaam_矿产_B
+  name_zh: Dar es Salaam矿产合约
+  category: 矿产
+  weight_kg: 36.5
+  base_reference_price: 319.82
+  reference_currency: USD
+  shelf_life_hours: 87177
+  fragility: 0.0
+  rarity: 0.43
+  description: 矿产品样品合约，重量较大但价值稳定。
+- product_id: dar_es_salaam_日用品_B
+  name_zh: Dar es Salaam日用品合约
+  category: 日用品
+  weight_kg: 14.4
+  base_reference_price: 42.15
+  reference_currency: USD
+  shelf_life_hours: 19589
+  fragility: 0.0
+  rarity: 0.12
+  description: 地方日用品合约，需求平稳利润适中。
+- product_id: dar_es_salaam_食品_B
+  name_zh: Dar es Salaam食品合约
+  category: 食品
+  weight_kg: 21.6
+  base_reference_price: 74.79
+  reference_currency: USD
+  shelf_life_hours: 2001
+  fragility: 0.2
+  rarity: 0.33
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: dar_es_salaam_香料_B
+  name_zh: Dar es Salaam香料合约
+  category: 香料
+  weight_kg: 0.8
+  base_reference_price: 175.34
+  reference_currency: USD
+  shelf_life_hours: 7198
+  fragility: 0.0
+  rarity: 0.48
+  description: 精选干制香料，价值密度高，跨境贸易理想品。
+- product_id: dar_es_salaam_咖啡_B
+  name_zh: Dar es Salaam咖啡合约
+  category: 咖啡
+  weight_kg: 14.9
+  base_reference_price: 65.75
+  reference_currency: USD
+  shelf_life_hours: 2239
+  fragility: 0.0
+  rarity: 0.32
+  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。

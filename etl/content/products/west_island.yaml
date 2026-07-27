@@ -1,0 +1,51 @@
+products:
+- product_id: west_island_矿产_B
+  name_zh: West Island矿产合约
+  category: 矿产
+  weight_kg: 39.2
+  base_reference_price: 682.41
+  reference_currency: USD
+  shelf_life_hours: 57263
+  fragility: 0.0
+  rarity: 0.5
+  description: 矿产品样品合约，重量较大但价值稳定。
+- product_id: west_island_食品_B
+  name_zh: West Island食品合约
+  category: 食品
+  weight_kg: 29.9
+  base_reference_price: 221.35
+  reference_currency: USD
+  shelf_life_hours: 1393
+  fragility: 0.2
+  rarity: 0.32
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: west_island_糖果_B
+  name_zh: West Island糖果合约
+  category: 糖果
+  weight_kg: 4.0
+  base_reference_price: 62.35
+  reference_currency: USD
+  shelf_life_hours: 2028
+  fragility: 0.1
+  rarity: 0.34
+  description: 地方传统糖果点心合约，便携适合礼品转售。
+- product_id: west_island_纺织品_B
+  name_zh: West Island纺织品合约
+  category: 纺织品
+  weight_kg: 10.9
+  base_reference_price: 357.96
+  reference_currency: USD
+  shelf_life_hours: 16914
+  fragility: 0.0
+  rarity: 0.35
+  description: 地区纺织产品合约，不易变质适合长途贸易。
+- product_id: west_island_咖啡_B
+  name_zh: West Island咖啡合约
+  category: 咖啡
+  weight_kg: 9.5
+  base_reference_price: 212.83
+  reference_currency: USD
+  shelf_life_hours: 4110
+  fragility: 0.0
+  rarity: 0.41
+  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。

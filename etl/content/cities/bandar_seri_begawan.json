@@ -1,0 +1,20 @@
+{
+  "city_id": "bandar_seri_begawan",
+  "name_zh": "Bandar Seri Begawan",
+  "name_en": "Bandar Seri Begawan",
+  "country_id": "BN",
+  "country_zh": "未知",
+  "timezone": "UTC",
+  "short_description": "Bandar Seri Begawan是文莱油气富国城市，油气合约与食品流转，能源合约与进口贸易。城市作为全球航线节点，适合体验地方特产贸易与跨区价差。城市作为",
+  "overview": "Bandar Seri Begawan位于婆罗洲北部，以石油财富与伊斯兰文化闻名。航空连接东盟。旅客可在此采购特色商品，再搭乘航班前往其他枢纽出售，形成可持续的旅行贸易循环。旅客可在此采购特色商品，再搭乘航班前往其他枢纽出售，形成可持续的旅行贸易循环。旅客可在此采购特色商品，再搭乘航班前往其他枢纽出",
+  "history_summary": "古苏丹国到英国保护到独立富国。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细",
+  "geography_summary": "热带雨林海岸。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中",
+  "economy_summary": "油气为主。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展",
+  "food_summary": "清真糕点、海鲜与热带水果。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将",
+  "travel_note": "机场通达东盟与中东；斋月日间公共饮食受限。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中",
+  "content_confidence": "B",
+  "source_ids": [
+    "ourairports:iata:BWN",
+    "openflights:routes"
+  ]
+}

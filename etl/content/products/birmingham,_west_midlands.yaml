@@ -1,0 +1,51 @@
+products:
+- product_id: birmingham,_west_midlands_电子_B
+  name_zh: Birmingham, West Midlands电子合约
+  category: 电子
+  weight_kg: 3.8
+  base_reference_price: 3108.42
+  reference_currency: USD
+  shelf_life_hours: 69162
+  fragility: 0.3
+  rarity: 0.56
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
+- product_id: birmingham,_west_midlands_机械_B
+  name_zh: Birmingham, West Midlands机械合约
+  category: 机械
+  weight_kg: 30.5
+  base_reference_price: 1166.21
+  reference_currency: USD
+  shelf_life_hours: 17256
+  fragility: 0.2
+  rarity: 0.48
+  description: 工业机械配件合约，重量大但单位价值极高。
+- product_id: birmingham,_west_midlands_纺织品_B
+  name_zh: Birmingham, West Midlands纺织品合约
+  category: 纺织品
+  weight_kg: 16.3
+  base_reference_price: 316.8
+  reference_currency: USD
+  shelf_life_hours: 50728
+  fragility: 0.0
+  rarity: 0.4
+  description: 地区纺织产品合约，不易变质适合长途贸易。
+- product_id: birmingham,_west_midlands_茶叶_B
+  name_zh: Birmingham, West Midlands茶叶合约
+  category: 茶叶
+  weight_kg: 9.7
+  base_reference_price: 293.53
+  reference_currency: USD
+  shelf_life_hours: 4685
+  fragility: 0.1
+  rarity: 0.47
+  description: 产区直供茶叶合约，密封可保持风味一年以上。
+- product_id: birmingham,_west_midlands_食品_B
+  name_zh: Birmingham, West Midlands食品合约
+  category: 食品
+  weight_kg: 17.6
+  base_reference_price: 199.57
+  reference_currency: USD
+  shelf_life_hours: 498
+  fragility: 0.2
+  rarity: 0.33
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。

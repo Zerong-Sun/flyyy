@@ -1,0 +1,51 @@
+products:
+- product_id: cap_haitien_工艺品_B
+  name_zh: Cap Haitien工艺品合约
+  category: 工艺品
+  weight_kg: 9.4
+  base_reference_price: 419.77
+  reference_currency: USD
+  shelf_life_hours: 45712
+  fragility: 0.5
+  rarity: 0.53
+  description: 本地手工制品合约，精工细作运输需缓冲包装。
+- product_id: cap_haitien_香料_B
+  name_zh: Cap Haitien香料合约
+  category: 香料
+  weight_kg: 0.4
+  base_reference_price: 171.88
+  reference_currency: USD
+  shelf_life_hours: 5752
+  fragility: 0.0
+  rarity: 0.47
+  description: 精选干制香料，价值密度高，跨境贸易理想品。
+- product_id: cap_haitien_矿产_B
+  name_zh: Cap Haitien矿产合约
+  category: 矿产
+  weight_kg: 33.7
+  base_reference_price: 459.18
+  reference_currency: USD
+  shelf_life_hours: 95089
+  fragility: 0.0
+  rarity: 0.43
+  description: 矿产品样品合约，重量较大但价值稳定。
+- product_id: cap_haitien_糖果_B
+  name_zh: Cap Haitien糖果合约
+  category: 糖果
+  weight_kg: 4.3
+  base_reference_price: 116.33
+  reference_currency: USD
+  shelf_life_hours: 2666
+  fragility: 0.1
+  rarity: 0.19
+  description: 地方传统糖果点心合约，便携适合礼品转售。
+- product_id: cap_haitien_咖啡_B
+  name_zh: Cap Haitien咖啡合约
+  category: 咖啡
+  weight_kg: 8.0
+  base_reference_price: 210.3
+  reference_currency: USD
+  shelf_life_hours: 2969
+  fragility: 0.0
+  rarity: 0.41
+  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。

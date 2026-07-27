@@ -1,0 +1,51 @@
+products:
+- product_id: san_bartolomé_陶瓷_B
+  name_zh: San Bartolomé陶瓷合约
+  category: 陶瓷
+  weight_kg: 27.9
+  base_reference_price: 423.73
+  reference_currency: USD
+  shelf_life_hours: 85641
+  fragility: 0.7
+  rarity: 0.58
+  description: 本地陶瓷器具合约，运输需严密包装防破损。
+- product_id: san_bartolomé_食品_B
+  name_zh: San Bartolomé食品合约
+  category: 食品
+  weight_kg: 23.1
+  base_reference_price: 133.49
+  reference_currency: USD
+  shelf_life_hours: 514
+  fragility: 0.2
+  rarity: 0.36
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: san_bartolomé_日用品_B
+  name_zh: San Bartolomé日用品合约
+  category: 日用品
+  weight_kg: 7.6
+  base_reference_price: 119.67
+  reference_currency: USD
+  shelf_life_hours: 42600
+  fragility: 0.0
+  rarity: 0.14
+  description: 地方日用品合约，需求平稳利润适中。
+- product_id: san_bartolomé_纺织品_B
+  name_zh: San Bartolomé纺织品合约
+  category: 纺织品
+  weight_kg: 13.1
+  base_reference_price: 476.89
+  reference_currency: USD
+  shelf_life_hours: 9733
+  fragility: 0.0
+  rarity: 0.37
+  description: 地区纺织产品合约，不易变质适合长途贸易。
+- product_id: san_bartolomé_糖果_B
+  name_zh: San Bartolomé糖果合约
+  category: 糖果
+  weight_kg: 5.1
+  base_reference_price: 53.51
+  reference_currency: USD
+  shelf_life_hours: 958
+  fragility: 0.1
+  rarity: 0.33
+  description: 地方传统糖果点心合约，便携适合礼品转售。

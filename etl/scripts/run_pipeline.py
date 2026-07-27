@@ -626,6 +626,33 @@ COUNTRY_ZH = {
     "IS": "冰岛", "HR": "克罗地亚", "RS": "塞尔维亚",
     "LT": "立陶宛", "LV": "拉脱维亚", "EE": "爱沙尼亚",
     "IR": "伊朗", "CI": "科特迪瓦", "YE": "也门", "PY": "巴拉圭",
+    "CD": "刚果（金）", "BW": "博茨瓦纳", "SO": "索马里", "TJ": "塔吉克斯坦",
+    "MV": "马尔代夫", "TM": "土库曼斯坦", "LY": "利比亚", "CF": "中非",
+    "BB": "巴巴多斯", "GM": "冈比亚", "BI": "布隆迪", "ML": "马里",
+    "MW": "马拉维", "BA": "波黑", "BF": "布基纳法索", "GQ": "赤道几内亚",
+    "CV": "佛得角", "BN": "文莱", "BZ": "伯利兹", "CG": "刚果（布）",
+    "HT": "海地", "GN": "几内亚", "BJ": "贝宁", "KI": "基里巴斯",
+    "TL": "东帝汶", "SL": "塞拉利昂", "KP": "朝鲜",
+    "GY": "圭亚那", "GD": "格林纳达", "GT": "危地马拉",
+    "KM": "科摩罗", "SB": "所罗门群岛", "DJ": "吉布提",
+    "SS": "南苏丹", "RW": "卢旺达",
+    "TD": "乍得", "GA": "加蓬", "GW": "几内亚比绍",
+    "NE": "尼日尔", "MR": "毛里塔尼亚", "MG": "马达加斯加",
+    "CM": "喀麦隆", "SN": "塞内加尔", "AO": "安哥拉",
+    "MZ": "莫桑比克", "UG": "乌干达", "NA": "纳米比亚",
+    "ZW": "津巴布韦", "ZM": "赞比亚", "UZ": "乌兹别克斯坦",
+    "GE": "格鲁吉亚", "AM": "亚美尼亚", "AZ": "阿塞拜疆",
+    "CU": "古巴", "CR": "哥斯达黎加", "PA": "巴拿马",
+    "DO": "多米尼加", "EC": "厄瓜多尔", "UY": "乌拉圭",
+    "BO": "玻利维亚", "JM": "牙买加", "BY": "白俄罗斯",
+    "AL": "阿尔巴尼亚", "SV": "萨尔瓦多", "HN": "洪都拉斯",
+    "NI": "尼加拉瓜", "MK": "北马其顿", "MD": "摩尔多瓦",
+    "TT": "特立尼达和多巴哥", "AG": "安提瓜和巴布达",
+    "WS": "萨摩亚", "BT": "不丹", "VU": "瓦努阿图",
+    "FJ": "斐济", "PG": "巴布亚新几内亚",
+    "BS": "巴哈马", "LC": "圣卢西亚", "VC": "圣文森特和格林纳丁斯",
+    "SR": "苏里南", "LR": "利比里亚",
+    "SD": "苏丹", "MU": "毛里求斯", "SL": "塞拉利昂",
 }
 
 # Country code → region mapping (single-pass O(1) lookup)
@@ -1350,7 +1377,7 @@ def main() -> int:
     flights = synth_flights(routes, by_iata, eco)
     cities, products, markets = build_cities_products(hubs_cfg_expanded, eco)
 
-    # Build product_market_tags: optimized computation
+    # Build product_market_tags: only origin-city products (O(n*m) vs O(n*n*m))
     product_market_tags: dict[str, dict] = {}
     market_index: dict[tuple, dict] = {}
     for m in markets:
@@ -1360,26 +1387,28 @@ def main() -> int:
         }
 
     city_ids = [c["city_id"] for c in cities]
-    # Precompute per-product city lookups
+    # Only build tags for (origin_city, product_id) where the product originates
+    # from origin_city — this is what matters for gameplay (buy here, sell there).
     for product in products:
         product_id = product["product_id"]
-        for origin_city in city_ids:
-            key = f"{origin_city}|{product_id}"
-            product_market_tags[key] = {"hot": [], "normal": [], "cold": []}
-            buy_origin = market_index[(origin_city, product_id)]["buy"]
+        origin_city = product["origin_city_id"]
+        key = f"{origin_city}|{product_id}"
+        product_market_tags[key] = {"hot": [], "normal": [], "cold": []}
+        buy_origin = market_index[(origin_city, product_id)]["buy"]
 
-            for dest_city in city_ids:
-                sell_remote = market_index[(dest_city, product_id)]["sell"]
-                sell_buy_ratio = sell_remote / buy_origin if buy_origin > 0 else 1.0
+        for dest_city in city_ids:
+            sell_remote = market_index[(dest_city, product_id)]["sell"]
+            sell_buy_ratio = sell_remote / buy_origin if buy_origin > 0 else 1.0
 
-                if sell_buy_ratio >= 1.15:
-                    tag = "hot"
-                elif sell_buy_ratio >= 1.0:
-                    tag = "normal"
-                else:
-                    tag = "cold"
+            if sell_buy_ratio >= 1.15:
+                tag = "hot"
+            elif sell_buy_ratio >= 1.0:
+                tag = "normal"
+            else:
+                tag = "cold"
 
-                product_market_tags[key][tag].append(dest_city)
+            product_market_tags[key][tag].append(dest_city)
+    print(f"Built {len(product_market_tags)} product-market tag entries")
 
     transfer_edges = build_transfer_edges(routes, by_iata, iatas)
 

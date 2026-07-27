@@ -1,0 +1,20 @@
+{
+  "city_id": "freetown_(lungi_town)",
+  "name_zh": "Freetown (Lungi-Town)",
+  "name_en": "Freetown (Lungi-Town)",
+  "country_id": "SL",
+  "country_zh": "未知",
+  "timezone": "UTC",
+  "short_description": "Freetown (Lungi-Town)是塞拉利昂钻石与海滩城市，钻石合约与可可流转，钻石合约与食品贸易。城市作为全球航线节点，适合体验地方特产贸易与跨区价差",
+  "overview": "Freetown (Lungi-Town)位于西非海岸，以血钻历史与美丽海滩著称。航空连接西非。旅客可在此采购特色商品，再搭乘航班前往其他枢纽出售，形成可持续的旅行贸易循环。旅客可在此采购特色商品，再搭乘航班前往其他枢纽出售，形成可持续的旅行贸易循环。旅客可在此采购特色商品，再搭乘航班前往其他枢纽出",
+  "history_summary": "英殖民到内战和平重建。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后",
+  "geography_summary": "热带海岸与内陆高原。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续",
+  "economy_summary": "矿业、渔业与农业。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更",
+  "food_summary": "木薯叶酱、鱼与米饭。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续",
+  "travel_note": "机场西非航线较少；安全与经济形势密切关注。更多细节将在后续更新中扩展。更多细节将在后续更新中扩展。更多细节将在后续更新中",
+  "content_confidence": "B",
+  "source_ids": [
+    "ourairports:iata:FNA",
+    "openflights:routes"
+  ]
+}

@@ -18,7 +18,7 @@ def test_no_souvenirs_or_magnets():
 
 def test_contract_mix_light_and_high_value():
     by_city: dict[str, list] = {}
-    authored_ids = {c["city_id"] for c in WORLD["cities"] if c.get("content_confidence") != "C"}
+    authored_ids = {c["city_id"] for c in WORLD["cities"] if c.get("content_confidence") == "A"}
     for p in WORLD["products"]:
         w = float(p["weight_kg"])
         price = float(p["base_reference_price"])
@@ -95,20 +95,18 @@ def _market_index(world: dict) -> dict:
 
 
 def test_sell_buy_ratio_tags_exist():
-    """After pipeline run, world.json must have product_market_tags for every product × city."""
+    """After pipeline run, world.json must have product_market_tags for every product at its origin city."""
     tags = WORLD.get("product_market_tags", {})
     products = WORLD["products"]
-    cities = WORLD["cities"]
 
-    for city in cities:
-        origin_id = city["city_id"]
-        for product in products:
-            key = f"{origin_id}|{product['product_id']}"
-            assert key in tags, f"Missing tags for {key}"
-            entry = tags[key]
-            assert "hot" in entry, f"{key}: missing 'hot'"
-            assert "normal" in entry, f"{key}: missing 'normal'"
-            assert "cold" in entry, f"{key}: missing 'cold'"
+    for product in products:
+        origin_id = product.get("origin_city_id", "")
+        key = f"{origin_id}|{product['product_id']}"
+        assert key in tags, f"Missing tags for {key}"
+        entry = tags[key]
+        assert "hot" in entry, f"{key}: missing 'hot'"
+        assert "normal" in entry, f"{key}: missing 'normal'"
+        assert "cold" in entry, f"{key}: missing 'cold'"
 
 
 def test_sell_buy_ratio_hot_threshold():

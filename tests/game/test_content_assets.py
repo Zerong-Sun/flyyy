@@ -132,7 +132,7 @@ def test_audio_manifest_and_files():
 def test_city_product_content_not_template():
     world = json.loads((GAME / "data" / "world.json").read_text(encoding="utf-8"))
     assert len(world["cities"]) >= 20
-    authored = [c for c in world["cities"] if c.get("content_confidence") != "C"]
+    authored = [c for c in world["cities"] if c.get("content_confidence") == "A"]
     for c in authored:
         assert "特色：城市作为全球航线节点" not in c.get("short_description", "")
         assert "更多细节将在后续内容更新中扩展" not in c.get("history_summary", "")

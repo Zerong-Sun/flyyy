@@ -1,0 +1,51 @@
+products:
+- product_id: el_matorral_糖果_B
+  name_zh: El Matorral糖果合约
+  category: 糖果
+  weight_kg: 4.3
+  base_reference_price: 71.9
+  reference_currency: USD
+  shelf_life_hours: 908
+  fragility: 0.1
+  rarity: 0.24
+  description: 地方传统糖果点心合约，便携适合礼品转售。
+- product_id: el_matorral_纺织品_B
+  name_zh: El Matorral纺织品合约
+  category: 纺织品
+  weight_kg: 13.8
+  base_reference_price: 284.68
+  reference_currency: USD
+  shelf_life_hours: 71082
+  fragility: 0.0
+  rarity: 0.43
+  description: 地区纺织产品合约，不易变质适合长途贸易。
+- product_id: el_matorral_日用品_B
+  name_zh: El Matorral日用品合约
+  category: 日用品
+  weight_kg: 9.9
+  base_reference_price: 71.19
+  reference_currency: USD
+  shelf_life_hours: 24941
+  fragility: 0.0
+  rarity: 0.2
+  description: 地方日用品合约，需求平稳利润适中。
+- product_id: el_matorral_陶瓷_B
+  name_zh: El Matorral陶瓷合约
+  category: 陶瓷
+  weight_kg: 28.6
+  base_reference_price: 379.9
+  reference_currency: USD
+  shelf_life_hours: 44458
+  fragility: 0.7
+  rarity: 0.42
+  description: 本地陶瓷器具合约，运输需严密包装防破损。
+- product_id: el_matorral_食品_B
+  name_zh: El Matorral食品合约
+  category: 食品
+  weight_kg: 24.1
+  base_reference_price: 227.63
+  reference_currency: USD
+  shelf_life_hours: 1599
+  fragility: 0.2
+  rarity: 0.35
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
