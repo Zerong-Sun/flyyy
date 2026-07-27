@@ -52,7 +52,7 @@ func _build_earth() -> void:
 	mat.metallic = 0.0
 	var tex_path := "res://assets/earth/earth_albedo_placeholder.png"
 	if ResourceLoader.exists(tex_path):
-		var tex: ImageTexture = load(tex_path)
+		var tex: Texture2D = load(tex_path) as Texture2D
 		if tex:
 			mat.albedo_texture = tex
 			earth.material_override = mat

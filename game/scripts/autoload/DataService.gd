@@ -80,7 +80,7 @@ func _load_all() -> void:
 	# ── flights/ (per-origin, lazy-loaded) ──
 	var manifest = _load_json("res://data/flights/_manifest.json")
 	if manifest != null and manifest is Dictionary:
-		var mf: Dictionary = manifest
+		var mf: Dictionary = manifest as Dictionary
 		print("Flights manifest: %d origins, %d total flights" % [
 			mf.size() - 1,  # minus _total key
 			mf.get("_total", 0)

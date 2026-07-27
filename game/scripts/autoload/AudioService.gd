@@ -93,7 +93,7 @@ func _stream_for(id: String) -> AudioStream:
 	if path.ends_with(".ogg") and FileAccess.file_exists(path):
 		stream = AudioStreamOggVorbis.load_from_file(path)
 	elif ResourceLoader.exists(path):
-		stream = load(path)
+		stream = load(path) as AudioStream
 	if stream == null:
 		push_warning("AudioService: missing stream %s" % path)
 		return null
