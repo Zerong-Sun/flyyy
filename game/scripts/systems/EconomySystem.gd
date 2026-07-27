@@ -84,7 +84,7 @@ static func day_delta(prev_date: String, new_date: String) -> int:
 		return 1
 	var ua: int = Time.get_unix_time_from_datetime_dict(a)
 	var ub: int = Time.get_unix_time_from_datetime_dict(b)
-	return max(0, int((ub - ua) / 86400))
+	return max(0, int((ub - ua) / 86400.0))
 
 
 static func recover_demand_for_new_day(prev_date: String, new_date: String) -> void:
@@ -97,7 +97,7 @@ static func recover_demand_for_new_day(prev_date: String, new_date: String) -> v
 		AppState.demand_pressure[k] = max(0.0, float(AppState.demand_pressure[k]) - rec * float(days))
 
 
-static func age_inventory(hours: float) -> void:
+static func age_inventory(_hours: float) -> void:
 	## Kept for flight/FF paths; also bumps purchased_unix baseline via quality sync.
 	for item_v in AppState.inventory:
 		var item: Dictionary = item_v
@@ -133,7 +133,7 @@ static func sell_price_estimate(product_id: String, dest_city: String) -> float:
 	## Static approximate sell price — for UI preview, not actual transaction.
 	## Returns the sell_base_usd from world data (no runtime modifiers applied).
 	var row: Dictionary = DataService.market_row(dest_city, product_id)
-	return row.get("sell_base_usd", 0.0)
+	return float(row.get("sell_base_usd", 0.0))
 
 
 static func sell_price_with_quality(city_id: String, product_id: String, quality: float, qty: int) -> Dictionary:

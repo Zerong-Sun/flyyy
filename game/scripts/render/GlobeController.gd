@@ -297,8 +297,8 @@ func _on_selected(airport_id: String) -> void:
 	draw_routes_from(airport_id)
 
 
-func set_routes_visible(visible: bool) -> void:
-	if visible:
+func set_routes_visible(show_routes: bool) -> void:
+	if show_routes:
 		if _selected_id != "":
 			draw_routes_from(_selected_id)
 	else:

@@ -60,6 +60,11 @@ func format_local(tz_name: String) -> String:
 	return Time.get_datetime_string_from_unix_time(int(local_unix), true)
 
 
+func local_hour_for(tz_name: String) -> int:
+	var off: float = offset_hours_for(tz_name)
+	return int(fposmod((unix_time + off * 3600.0) / 3600.0, 24.0))
+
+
 func offset_hours_for(tz_name: String) -> float:
 	var table: Dictionary = DataService.tz_offsets.get(tz_name, {})
 	var d: String = game_date_string()

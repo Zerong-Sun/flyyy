@@ -176,15 +176,15 @@ static func make(icon_id: String, size_px: float = 24.0) -> Control:
 	## Prefer art TextureRect; else procedural PanelContainer glyph.
 	var tex := get_ui_icon(icon_id)
 	if tex != null:
-		var tr := TextureRect.new()
-		tr.texture = tex
-		tr.custom_minimum_size = Vector2(size_px, size_px)
-		tr.size = Vector2(size_px, size_px)
-		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		tr.name = icon_id
-		return tr
+		var tex_rect := TextureRect.new()
+		tex_rect.texture = tex
+		tex_rect.custom_minimum_size = Vector2(size_px, size_px)
+		tex_rect.size = Vector2(size_px, size_px)
+		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		tex_rect.name = icon_id
+		return tex_rect
 	var def: Dictionary = _DEFS.get(icon_id, {"glyph": "?", "bg": _Colors.BG_PANEL, "fg": _Colors.TEXT_SECONDARY})
 	var root := PanelContainer.new()
 	root.custom_minimum_size = Vector2(size_px, size_px)
@@ -237,7 +237,7 @@ static func make_texture(icon_id: String, size_px: int = 24) -> ImageTexture:
 	var def: Dictionary = _DEFS.get(icon_id, {"glyph": "?", "bg": Color(0.2, 0.25, 0.3), "fg": Color(0.9, 0.9, 0.9)})
 	var img2 := Image.create(size_px, size_px, false, Image.FORMAT_RGBA8)
 	var bg: Color = def["bg"]
-	var margin := maxi(1, size_px / 8)
+	var margin := maxi(1, int(size_px / 8.0))
 	for y in size_px:
 		for x in size_px:
 			var on_edge := x < margin or y < margin or x >= size_px - margin or y >= size_px - margin
@@ -351,8 +351,8 @@ static func get_brand(kind: String) -> Texture2D:
 
 
 static func _stamp_glyph(img: Image, glyph: String, fg: Color, size_px: int) -> void:
-	var c := int(size_px / 2)
-	var r := maxi(2, size_px / 5)
+	var c := int(size_px / 2.0)
+	var r := maxi(2, int(size_px / 5.0))
 	match glyph:
 		"$", "资", "钱":
 			_hline(img, c - r, c + r, c - 1, fg)

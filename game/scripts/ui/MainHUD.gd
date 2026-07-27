@@ -774,10 +774,6 @@ func _require_started() -> bool:
 
 func _load_market_tags() -> void:
 	_product_market_tags = DataService.product_market_tags
-	if _product_market_tags.is_empty():
-		_product_market_tags = DataService.product_market_tags
-		if _product_market_tags.is_empty():
-			_product_market_tags = DataService.world.get("product_market_tags", {})
 
 
 func _get_ticket_dest_city_id() -> String:
@@ -1104,7 +1100,7 @@ func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
 	AppState.log_stat("intel_purchases", 1.0)
 	_refresh_top()
 
-	var buy_price_val: float = DataService.market_row(AppState.current_city_id(), product_id).get("buy_base_usd", 0.0)
+	var buy_price_val: float = float(DataService.market_row(AppState.current_city_id(), product_id).get("buy_base_usd", 0.0))
 	var sell_price_est: float = EconomySystem.sell_price_estimate(product_id, ticket_dest_city)
 
 	var daily_amp := 0.06
@@ -1404,7 +1400,7 @@ func _reload_flights(_q: String = "") -> void:
 	var q: String = _flight_query.text if _flight_query else ""
 	if _show_connections:
 		var origin_iata := str(AppState.current_airport().get("iata", ""))
-		var all_cnx: Array = _FlightSearch.search_connections(origin_iata, q, 0)
+		var all_cnx: Array = _FlightSearch.search_connections(origin_iata, q, 200)
 		if _filter_unvisited:
 			var filtered: Array = []
 			for c_v in all_cnx:
@@ -1418,7 +1414,7 @@ func _reload_flights(_q: String = "") -> void:
 			all_cnx = all_cnx.filter(func(c): return int(c.get("duration_minutes", 0)) <= _max_duration)
 		var start_c: int = _flight_page * FLIGHTS_PER_PAGE
 		if start_c >= all_cnx.size() and _flight_page > 0:
-			_flight_page = maxi(0, (all_cnx.size() - 1) / FLIGHTS_PER_PAGE)
+			_flight_page = maxi(0, int((all_cnx.size() - 1) / float(FLIGHTS_PER_PAGE)))
 			start_c = _flight_page * FLIGHTS_PER_PAGE
 		_connection_cache = all_cnx.slice(start_c, mini(all_cnx.size(), start_c + FLIGHTS_PER_PAGE))
 		_flights_cache = []
@@ -1428,12 +1424,12 @@ func _reload_flights(_q: String = "") -> void:
 		])
 		return
 	var all: Array = _FlightSearch.search(
-		AppState.current_airport_id, q, 0, _filter_unvisited, _sort_by,
+		AppState.current_airport_id, q, 500, _filter_unvisited, _sort_by,
 		_max_price, _max_duration, _biz_only
 	)
 	if _flight_auto_focus and all.size() > 0:
 		var focus_idx: int = _FlightSearch.first_focus_index(all)
-		_flight_page = focus_idx / FLIGHTS_PER_PAGE
+		_flight_page = int(focus_idx / float(FLIGHTS_PER_PAGE))
 		_flight_auto_focus = false
 		var start_f: int = _flight_page * FLIGHTS_PER_PAGE
 		_flights_cache = all.slice(start_f, mini(all.size(), start_f + FLIGHTS_PER_PAGE))
@@ -1449,7 +1445,7 @@ func _reload_flights(_q: String = "") -> void:
 		return
 	var start: int = _flight_page * FLIGHTS_PER_PAGE
 	if start >= all.size() and _flight_page > 0:
-		_flight_page = maxi(0, (all.size() - 1) / FLIGHTS_PER_PAGE)
+		_flight_page = maxi(0, int((all.size() - 1) / float(FLIGHTS_PER_PAGE)))
 		start = _flight_page * FLIGHTS_PER_PAGE
 	_flights_cache = all.slice(start, mini(all.size(), start + FLIGHTS_PER_PAGE))
 	_fill_flight_rows()
@@ -2104,7 +2100,7 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 			body += "\n" + _celebration_w2[randi() % _celebration_w2.size()]
 
 	# Wealth milestone toast
-	var start_cash: float = DataService.economy.get("starting_cash_usd", 50000.0)
+	var start_cash: float = float(DataService.economy.get("starting_cash_usd", 50000.0))
 	if AppState.cash_usd >= 100000 or AppState.cash_usd >= start_cash * 2.0:
 		_show_toast("财富里程碑！")
 
@@ -2271,10 +2267,9 @@ func _set_panel_bgm(mode: String) -> void:
 	var a := AppState.current_airport()
 	var local_hour := -1
 	if not a.is_empty() and AppState.night_bgm_enabled:
-		# Approximate local hour from UTC + tz offset if available
 		var tz := str(a.get("timezone", ""))
-		var off := float(DataService.tz_offsets.get(tz, 0.0))
-		local_hour = int(fposmod((GameClock.unix_time + off * 3600.0) / 3600.0, 24.0))
+		if tz != "":
+			local_hour = GameClock.local_hour_for(tz)
 	var use_night := AppState.night_bgm_enabled and local_hour >= 0 and (local_hour >= 22 or local_hour < 5)
 	match mode:
 		"market":

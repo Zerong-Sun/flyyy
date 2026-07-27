@@ -10,6 +10,7 @@ var airports_by_iata: Dictionary = {}
 var cities_by_id: Dictionary = {}
 var products_by_id: Dictionary = {}
 var markets_by_city: Dictionary = {}  # city_id → [{p, b, s}, ...]
+var _market_index: Dictionary = {}    # "city_id|product_id" → {b, s}
 var routes: Array = []
 var economy: Dictionary = {}
 var tz_offsets: Dictionary = {}
@@ -28,12 +29,26 @@ func _load_json(path: String) -> Variant:
 		push_error("Missing file: %s" % path)
 		return null
 	var f := FileAccess.open(path, FileAccess.READ)
+	if f == null:
+		push_error("Failed to open: %s" % path)
+		return null
 	var text := f.get_as_text()
 	f.close()
 	var result = JSON.parse_string(text)
 	if result == null:
 		push_error("Failed to parse JSON: %s" % path)
 	return result
+
+
+func _build_market_index() -> void:
+	_market_index.clear()
+	for city_id in markets_by_city.keys():
+		var entries: Array = markets_by_city[city_id]
+		for e in entries:
+			var pid := str(e.get("p", ""))
+			if pid == "":
+				continue
+			_market_index["%s|%s" % [str(city_id), pid]] = e
 
 
 func _load_all() -> void:
@@ -66,6 +81,7 @@ func _load_all() -> void:
 	var m = _load_json("res://data/markets.json")
 	if m != null and m is Dictionary:
 		markets_by_city = m as Dictionary
+		_build_market_index()
 
 	# ── product_market_tags.json ──
 	var t = _load_json("res://data/product_market_tags.json")
@@ -83,13 +99,8 @@ func _load_all() -> void:
 		var mf: Dictionary = manifest as Dictionary
 		print("Flights manifest: %d origins, %d total flights" % [
 			mf.size() - 1,  # minus _total key
-			mf.get("_total", 0)
+			int(mf.get("_total", 0))
 		])
-	else:
-		# Fallback to old monolithic flights.json
-		var fdata = _load_json("res://data/flights.json")
-		if fdata != null and fdata is Dictionary:
-			flights_by_origin = (fdata as Dictionary).get("by_origin", {})
 
 	loaded = true
 	print("DataService loaded: %d airports, %d products, %d market-cities, %d tags, %d transfers" % [
@@ -149,13 +160,16 @@ func destinations_from(origin_iata: String) -> Array:
 
 
 func market_row(city_id: String, product_id: String) -> Dictionary:
-	var entries: Array = markets_by_city.get(city_id, [])
-	for e in entries:
-		if e.get("p", "") == product_id:
-			var v: Dictionary = e
-			return {"city_id": city_id, "product_id": product_id,
-					"buy_base_usd": v.get("b", 0.0), "sell_base_usd": v.get("s", 0.0)}
-	return {}
+	var key := "%s|%s" % [city_id, product_id]
+	if not _market_index.has(key):
+		return {}
+	var v: Dictionary = _market_index[key]
+	return {
+		"city_id": city_id,
+		"product_id": product_id,
+		"buy_base_usd": float(v.get("b", 0.0)),
+		"sell_base_usd": float(v.get("s", 0.0)),
+	}
 
 
 func market_product_ids(city_id: String) -> Array:
