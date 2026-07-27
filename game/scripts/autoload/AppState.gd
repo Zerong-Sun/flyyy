@@ -42,6 +42,7 @@ var stats: Dictionary = {
 	"discovery_triggered": 0,
 	"big_loss_count": 0,
 	"single_profit_max": 0.0,
+	"consecutive_on_time": 0,
 }
 
 
@@ -61,6 +62,7 @@ func _default_stats() -> Dictionary:
 		"discovery_triggered": 0,
 		"big_loss_count": 0,
 		"single_profit_max": 0.0,
+		"consecutive_on_time": 0,
 	}
 
 

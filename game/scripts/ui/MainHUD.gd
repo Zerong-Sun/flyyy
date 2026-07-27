@@ -1143,7 +1143,7 @@ func _buy_selected(as_cargo: bool) -> void:
 	else:
 		AudioService.play_sfx("sfx_buy")
 		_show_hint("购买成功")
-	_active_arrival_discount = {}
+		_active_arrival_discount = {}
 	_refresh_bags()
 
 
@@ -1567,6 +1567,7 @@ func _purchase(cabin: String) -> void:
 		_show_hint("免费货运额度已使用！")
 	if err == "":
 		_check_free_cargo(AppState.current_city_id())
+		AchievementSystem.check_all()
 
 
 func _do_replace_purchase() -> void:
@@ -1707,6 +1708,17 @@ func _on_premium_accepted(index: int, qty: int, bonus_pct: int, original_revenue
 	result["revenue"] = premium_revenue
 	result["margin"] = premium_revenue - result["total_unit_cost"]
 	result["margin_rate"] = result["margin"] / result["total_unit_cost"] if result["total_unit_cost"] > 0 else 0.0
+
+	# Correct the logged sell transaction to reflect premium revenue
+	var last_tx: Dictionary = AppState.sell_transactions.back()
+	if not last_tx.is_empty():
+		last_tx["total_revenue"] = premium_revenue
+		last_tx["margin"] = result["margin"]
+	AppState.log_stat("single_profit_max", 0.0)  # trigger re-eval
+	if result["margin"] > float(AppState.stats.get("single_profit_max", 0.0)):
+		AppState.stats["single_profit_max"] = result["margin"]
+	if result["margin"] < 0.0 and result["total_unit_cost"] > 0.0 and result["margin"] / result["total_unit_cost"] < -0.20:
+		AppState.log_stat("big_loss_count", 1.0)
 
 	_show_sell_result_card(result)
 	_show_inventory()

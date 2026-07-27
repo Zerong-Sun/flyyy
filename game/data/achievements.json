@@ -28,7 +28,7 @@
     {"id": "ach_flight_cargo", "category": "flight", "name": "货舱商人", "desc": "使用货运额度完成 1 段到达", "stat_key": "cargo_flights", "target": 1, "icon": "icon_ach_flight_cargo_64"},
     {"id": "ach_flight_connection", "category": "flight", "name": "转机达人", "desc": "完成 1 次联程行程", "stat_key": "connection_flights", "target": 1, "icon": "icon_ach_flight_connection_64"},
     {"id": "ach_flight_ff", "category": "flight", "name": "时间旅行者", "desc": "使用「加速至起飞」≥20 次", "stat_key": "fast_forwards", "target": 20, "icon": "icon_ach_flight_ff_64"},
-    {"id": "ach_flight_on_time", "category": "flight", "name": "从不误机", "desc": "完成至少 10 次航班段（Demo 准点代理）", "stat_key": "total_flight_segments", "target": 10, "icon": "icon_ach_flight_on_time_64"},
+    {"id": "ach_flight_on_time", "category": "flight", "name": "从不误机", "desc": "连续完成 ≥10 次航班段（Demo 无错过机制）", "stat_key": "consecutive_on_time", "target": 10, "icon": "icon_ach_flight_on_time_64"},
 
     {"id": "ach_collect_products_50", "category": "collect", "name": "货册初成", "desc": "图鉴发现商品种类 ≥50", "stat_key": "products_discovered", "target": 50, "icon": "icon_ach_collect_products_50_64"},
     {"id": "ach_collect_products_200", "category": "collect", "name": "货册丰盈", "desc": "图鉴发现商品种类 ≥200", "stat_key": "products_discovered", "target": 200, "icon": "icon_ach_collect_products_200_64"},

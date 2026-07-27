@@ -113,10 +113,13 @@ func _arrive(ticket: Dictionary) -> void:
 	# Achievement / stats tracking
 	AppState.log_stat("total_flight_segments", 1.0)
 	AppState.log_stat("total_distance_km", float(ticket.get("distance_km", 0)))
-	if str(ticket.get("cabin", "")) == "business":
+	# Only count business/cargo once per trip (connection leg 1 carries the real flags)
+	var is_cnx_leg2 := bool(ticket.get("is_connection_leg", false)) and int(ticket.get("connection_leg", 0)) != 1
+	if str(ticket.get("cabin", "")) == "business" and not is_cnx_leg2:
 		AppState.log_stat("business_flights", 1.0)
-	if float(ticket.get("cargo_kg", 0)) > 0.0 or AppState.cargo_kg_capacity > 0.0:
+	if float(ticket.get("cargo_kg", 0)) > 0.0 and not is_cnx_leg2:
 		AppState.log_stat("cargo_flights", 1.0)
+	AppState.log_stat("consecutive_on_time", 1.0)
 	AppState.update_extreme_airport(dest)
 	AppState.last_market_date = GameClock.game_date_string()
 	SaveSystem.save_game()

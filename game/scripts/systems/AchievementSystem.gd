@@ -112,6 +112,8 @@ func _current_value(stat_key: String) -> float:
 		"extreme_ew":
 			var ex2: Dictionary = AppState.stats.get("extreme_airports", {})
 			return 1.0 if str(ex2.get("east", "")) != "" and str(ex2.get("west", "")) != "" else 0.0
+		"consecutive_on_time":
+			return float(AppState.stats.get("consecutive_on_time", 0))
 		_:
 			return float(AppState.stats.get(stat_key, 0.0))
 

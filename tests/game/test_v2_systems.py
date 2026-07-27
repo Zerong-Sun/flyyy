@@ -42,6 +42,16 @@ def test_achievements_minimum_set():
         assert a.get("target") is not None
         assert a.get("name")
         assert a.get("desc")
+    # Guard against duplicate achievements: no two defs within the same category
+    # share the same (stat_key, target) — cross-category overlaps are intentional
+    seen: dict[str, set[tuple[str, float]]] = {}
+    for a in defs:
+        cat = a["category"]
+        if cat not in seen:
+            seen[cat] = set()
+        pair = (a["stat_key"], float(a["target"]))
+        assert pair not in seen[cat], f"Duplicate ({cat}) stat_key+target pair: {pair}"
+        seen[cat].add(pair)
 
 
 def test_inherited_products_have_flag():
