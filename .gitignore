@@ -3,6 +3,7 @@ etl/.venv/
 etl/raw/
 *.pyc
 __pycache__/
+.venv/
 .godot/
 game/.godot/
 *.translation
@@ -16,3 +17,4 @@ tools/audio-gen-kit/_cc0_cache/
 game/assets/art/_sheets/
 game/assets/art/_archive/
 game/assets/art/orchestrate_req_status.json
+assets/art/

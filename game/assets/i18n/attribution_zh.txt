@@ -36,6 +36,11 @@ ODbL 主要义务摘要：
 - JetBrains Mono Regular：SIL Open Font License 1.1，https://github.com/JetBrains/JetBrainsMono
 完整说明见 game/assets/fonts/LICENSE.txt。
 
+
+美术（A2）
+- UI 图标、商品图标、成就图标、城市头图、飞行过场帧、品牌标：原创 AI 辅助插画（Airborne Trader / tools/art-gen-kit），许可 original。无航司 Logo、无商标包装复刻。
+- 路径：game/assets/icons/、products/、cities/、brand/、anim/flight_transition/。
+
 重要声明
 本游戏中的航班网络、票价和航班时刻均为模拟或模型估算，不代表任何航空公司的真实运营信息或实时购票建议。所有商品价格为固定快照，不反映实时市场价格。本游戏内容仅供娱乐目的。
 航班网络基于公开航空数据重建，不代表真实购票信息。
