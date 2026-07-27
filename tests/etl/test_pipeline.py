@@ -55,10 +55,13 @@ def test_products_per_city_ge_5():
 
 
 def test_flights_indexed_by_origin():
-    data = json.loads((GAME / "flights.json").read_text(encoding="utf-8"))
-    assert data["flight_count"] > 1000
-    assert "atl" in data["by_origin"]
-    assert data["by_origin"]["atl"][0]["scheduled_departure_utc"] <= data["by_origin"]["atl"][-1]["scheduled_departure_utc"]
+    manifest = json.loads((GAME / "flights" / "_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["_total"] > 1000
+    assert "atl" in manifest
+
+    atl = json.loads((GAME / "flights" / "atl.json").read_text(encoding="utf-8"))
+    assert len(atl) > 100
+    assert atl[0]["scheduled_departure_utc"] <= atl[-1]["scheduled_departure_utc"]
 
 
 def test_godot_disclaimer_present():

@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 WORLD = json.loads((ROOT / "game" / "data" / "world.json").read_text(encoding="utf-8"))
-FLIGHTS = json.loads((ROOT / "game" / "data" / "flights.json").read_text(encoding="utf-8"))
+PVG_FLIGHTS = json.loads((ROOT / "game" / "data" / "flights" / "pvg.json").read_text(encoding="utf-8"))
 
 
 def test_s27_1_twenty_hubs_searchable():
@@ -28,7 +28,7 @@ def test_s27_5_tz_offsets_dst():
 
 
 def test_s27_8_business_10x():
-    sample = FLIGHTS["by_origin"]["pvg"][0]
+    sample = PVG_FLIGHTS[0]
     assert abs(sample["ticket_base_price_business"] - sample["ticket_base_price_economy"] * 10) < 0.05
 
 

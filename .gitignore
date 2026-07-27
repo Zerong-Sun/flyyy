@@ -18,3 +18,18 @@ game/assets/art/_sheets/
 game/assets/art/_archive/
 game/assets/art/orchestrate_req_status.json
 assets/art/
+
+# Generated game data (run pipeline to regenerate)
+game/data/world.json
+game/data/markets.json
+game/data/flights/
+game/data/product_market_tags.json
+game/data/transfer_edges.json
+game/data/world.sqlite
+game/data/flights_2025_03.sqlite
+
+# Pipeline intermediate artifacts
+etl/out/world.sqlite
+etl/out/flights_2025_03.sqlite
+etl/out/coverage_report.json
+etl/scripts/city_list.json

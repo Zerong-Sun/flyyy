@@ -8,15 +8,24 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WORLD = json.loads((ROOT / "game" / "data" / "world.json").read_text(encoding="utf-8"))
-FLIGHTS = json.loads((ROOT / "game" / "data" / "flights.json").read_text(encoding="utf-8"))
+MARKETS_BY_CITY = json.loads((ROOT / "game" / "data" / "markets.json").read_text(encoding="utf-8"))
 ECONOMY = WORLD["economy"]
 
 
 def market_row(city_id: str, product_id: str) -> dict:
-    for m in WORLD["markets"]:
-        if m["city_id"] == city_id and m["product_id"] == product_id:
-            return m
+    entries = MARKETS_BY_CITY.get(city_id, [])
+    for e in entries:
+        if e["p"] == product_id:
+            return {"city_id": city_id, "product_id": product_id,
+                    "buy_base_usd": e["b"], "sell_base_usd": e["s"]}
     raise KeyError(product_id)
+
+
+def flights_from(origin_airport_id: str) -> list:
+    fp = ROOT / "game" / "data" / "flights" / f"{origin_airport_id}.json"
+    if fp.exists():
+        return json.loads(fp.read_text(encoding="utf-8"))
+    return []
 
 
 def quality_from_hours(shelf_life_hours: float, hours_elapsed: float) -> float:
@@ -51,7 +60,7 @@ def main() -> int:
         }
     ]
 
-    flights = FLIGHTS["by_origin"][airport["airport_id"]]
+    flights = flights_from(airport["airport_id"])
     future = [f for f in flights if f["scheduled_departure_utc"] >= "2025-03-01T00:00:00Z"]
     assert future
     fl = future[0]

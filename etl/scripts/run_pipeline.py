@@ -1144,7 +1144,11 @@ def write_sqlite(airports, routes, flights, cities, products, markets, eco, meta
 def export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta,
                          tz_offsets, product_market_tags, transfer_edges,
                          coverage_report):
+    import shutil
+
     GAME_DATA.mkdir(parents=True, exist_ok=True)
+
+    # ── world.json (lightweight core) ──
     payload = {
         "meta": meta,
         "economy": {
@@ -1159,11 +1163,7 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
         "routes": [{"origin": o, "destination": d} for o, d in sorted(routes)],
         "cities": cities,
         "products": products,
-        "markets": markets,
-        "product_market_tags": product_market_tags,
-        "transfer_edges": transfer_edges,
         "tz_offsets": tz_offsets,
-        "coverage_report": coverage_report,
         "airlines": [{"id": a, "name": n} for a, n in AIRLINES],
         "attributions": [
             {"name": "OurAirports", "license": "Unlicense", "note": "Airport coordinates"},
@@ -1171,20 +1171,56 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
             {"name": "Game content", "license": "original", "note": "City and product texts"},
         ],
         "disclaimer": "航班网络基于公开航空数据重建，不代表真实购票信息。",
+        "coverage_report": coverage_report,
     }
     (GAME_DATA / "world.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # ── markets.json (indexed by city_id for O(1) lookup, compact keys) ──
+    markets_by_city: dict[str, list] = {}
+    for m in markets:
+        cid = m["city_id"]
+        entry = {"p": m["product_id"], "b": m["buy_base_usd"], "s": m["sell_base_usd"]}
+        markets_by_city.setdefault(cid, []).append(entry)
+    (GAME_DATA / "markets.json").write_text(
+        json.dumps(markets_by_city, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
+    )
+
+    # ── product_market_tags.json ──
+    (GAME_DATA / "product_market_tags.json").write_text(
+        json.dumps(product_market_tags, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
+    )
+
+    # ── transfer_edges.json ──
+    (GAME_DATA / "transfer_edges.json").write_text(
+        json.dumps(transfer_edges, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
+    )
+
+    # ── flights/ (per-origin files, lazy-loadable) ──
+    flights_dir = GAME_DATA / "flights"
+    flights_dir.mkdir(parents=True, exist_ok=True)
     by_origin: dict[str, list] = {}
     for fl in flights:
         by_origin.setdefault(fl["origin_airport_id"], []).append(fl)
     for lst in by_origin.values():
         lst.sort(key=lambda x: x["scheduled_departure_utc"])
-    (GAME_DATA / "flights.json").write_text(
-        json.dumps({"by_origin": by_origin, "flight_count": len(flights)}, ensure_ascii=False),
-        encoding="utf-8",
+    for origin_id, fl_list in by_origin.items():
+        (flights_dir / f"{origin_id}.json").write_text(
+            json.dumps(fl_list, ensure_ascii=False, separators=(",", ":")),
+            encoding="utf-8",
+        )
+    # Write index manifest
+    manifest = {k: len(v) for k, v in by_origin.items()}
+    manifest["_total"] = len(flights)
+    (flights_dir / "_manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
     )
-    # also copy sqlite
-    import shutil
+    print(f"Exported {len(by_origin)} flight files ({len(flights)} total)")
+    # Also remove old monolithic flights.json if it exists
+    old_flights = GAME_DATA / "flights.json"
+    if old_flights.exists():
+        old_flights.unlink()
 
+    # also copy sqlite
     shutil.copy2(OUT / "world.sqlite", GAME_DATA / "world.sqlite")
     shutil.copy2(OUT / "flights_2025_03.sqlite", GAME_DATA / "flights_2025_03.sqlite")
 

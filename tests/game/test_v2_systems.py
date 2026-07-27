@@ -4,13 +4,17 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from tests.helpers import load_transfer_edges, load_product_market_tags
+
 ROOT = Path(__file__).resolve().parents[2]
 WORLD = json.loads((ROOT / "game/data/world.json").read_text(encoding="utf-8"))
 ACH = json.loads((ROOT / "game/data/achievements.json").read_text(encoding="utf-8"))
+TRANSFER_EDGES = load_transfer_edges()
+PRODUCT_MARKET_TAGS = load_product_market_tags()
 
 
 def test_transfer_edges_loaded_in_world():
-    edges = WORLD.get("transfer_edges", {})
+    edges = TRANSFER_EDGES
     assert isinstance(edges, dict)
     assert len(edges) > 0
     sample_key = next(iter(edges))
@@ -22,7 +26,7 @@ def test_transfer_edges_loaded_in_world():
 
 
 def test_product_market_tags_present():
-    tags = WORLD.get("product_market_tags", {})
+    tags = PRODUCT_MARKET_TAGS
     assert len(tags) > 0
     sample = next(iter(tags.values()))
     assert set(sample.keys()) >= {"hot", "normal", "cold"}

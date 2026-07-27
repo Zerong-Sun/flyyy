@@ -4,8 +4,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from tests.helpers import load_markets_flat, load_product_market_tags
+
 ROOT = Path(__file__).resolve().parents[2]
 WORLD = json.loads((ROOT / "game" / "data" / "world.json").read_text(encoding="utf-8"))
+MARKETS = load_markets_flat()
+PRODUCT_MARKET_TAGS = load_product_market_tags()
 
 FOCUS_LEAD_SEC = 7200.0
 
@@ -83,10 +87,10 @@ def test_flight_focus_lead_index_logic():
 # ---------------------------------------------------------------------------
 
 
-def _market_index(world: dict) -> dict:
+def _market_index(markets: list) -> dict:
     """Build {(city_id, product_id): {"buy": ..., "sell": ...}} lookup."""
     idx = {}
-    for m in world["markets"]:
+    for m in markets:
         idx[(m["city_id"], m["product_id"])] = {
             "buy": float(m["buy_base_usd"]),
             "sell": float(m["sell_base_usd"]),
@@ -95,8 +99,8 @@ def _market_index(world: dict) -> dict:
 
 
 def test_sell_buy_ratio_tags_exist():
-    """After pipeline run, world.json must have product_market_tags for every product at its origin city."""
-    tags = WORLD.get("product_market_tags", {})
+    """After pipeline run, product_market_tags must have entries for every product at its origin city."""
+    tags = PRODUCT_MARKET_TAGS
     products = WORLD["products"]
 
     for product in products:
@@ -111,8 +115,8 @@ def test_sell_buy_ratio_tags_exist():
 
 def test_sell_buy_ratio_hot_threshold():
     """Hot cities must have sell_buy_ratio >= 1.15."""
-    tags = WORLD["product_market_tags"]
-    mi = _market_index(WORLD)
+    tags = PRODUCT_MARKET_TAGS
+    mi = _market_index(MARKETS)
 
     for key, entry in tags.items():
         origin_id, product_id = key.split("|")
@@ -128,8 +132,8 @@ def test_sell_buy_ratio_hot_threshold():
 
 def test_sell_buy_ratio_cold_threshold():
     """Cold cities must have sell_buy_ratio < 1.0."""
-    tags = WORLD["product_market_tags"]
-    mi = _market_index(WORLD)
+    tags = PRODUCT_MARKET_TAGS
+    mi = _market_index(MARKETS)
 
     for key, entry in tags.items():
         origin_id, product_id = key.split("|")
@@ -145,7 +149,7 @@ def test_sell_buy_ratio_cold_threshold():
 
 def test_sell_buy_ratio_no_city_duplicates():
     """Each city must appear in exactly one of hot/normal/cold per product."""
-    tags = WORLD["product_market_tags"]
+    tags = PRODUCT_MARKET_TAGS
     all_city_ids = {c["city_id"] for c in WORLD["cities"]}
 
     for key, entry in tags.items():

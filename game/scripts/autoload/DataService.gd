@@ -1,14 +1,15 @@
 extends Node
-## Loads world.json + flights.json (exported from SQLite ETL).
+## Loads world.json + split data files (exported from SQLite ETL).
 
 var world: Dictionary = {}
-var flights_by_origin: Dictionary = {}
+var flights_by_origin: Dictionary = {}         # lazy-loaded cache: origin_airport_id → Array
+var _flights_loaded: Dictionary = {}               # tracks which origins have been loaded
 var airports: Array = []
 var airports_by_id: Dictionary = {}
 var airports_by_iata: Dictionary = {}
 var cities_by_id: Dictionary = {}
 var products_by_id: Dictionary = {}
-var markets: Array = []
+var markets_by_city: Dictionary = {}  # city_id → [{p, b, s}, ...]
 var routes: Array = []
 var economy: Dictionary = {}
 var tz_offsets: Dictionary = {}
@@ -22,20 +23,32 @@ func _ready() -> void:
 	_load_all()
 
 
+func _load_json(path: String) -> Variant:
+	if not FileAccess.file_exists(path):
+		push_error("Missing file: %s" % path)
+		return null
+	var f := FileAccess.open(path, FileAccess.READ)
+	var text := f.get_as_text()
+	f.close()
+	var result = JSON.parse_string(text)
+	if result == null:
+		push_error("Failed to parse JSON: %s" % path)
+	return result
+
+
 func _load_all() -> void:
-	var world_path := "res://data/world.json"
-	var flights_path := "res://data/flights.json"
-	if not FileAccess.file_exists(world_path):
+	# ── world.json (lightweight core) ──
+	var w := _load_json("res://data/world.json")
+	if w == null:
 		push_error("Missing world.json — run etl/scripts/run_pipeline.py")
 		return
-	var wf := FileAccess.open(world_path, FileAccess.READ)
-	world = JSON.parse_string(wf.get_as_text())
-	wf.close()
+	world = w
 	airports = world.get("airports", [])
 	routes = world.get("routes", [])
 	economy = world.get("economy", {})
 	tz_offsets = world.get("tz_offsets", {})
 	disclaimer = str(world.get("disclaimer", ""))
+
 	airports_by_id.clear()
 	airports_by_iata.clear()
 	for a in airports:
@@ -43,21 +56,44 @@ func _load_all() -> void:
 		var iata := str(a.get("iata", "")).to_upper()
 		if iata != "":
 			airports_by_iata[iata] = a
+
 	for c in world.get("cities", []):
 		cities_by_id[c["city_id"]] = c
 	for p in world.get("products", []):
 		products_by_id[p["product_id"]] = p
-	markets = world.get("markets", [])
-	product_market_tags = world.get("product_market_tags", {})
-	transfer_edges = world.get("transfer_edges", {})
-	if FileAccess.file_exists(flights_path):
-		var ff := FileAccess.open(flights_path, FileAccess.READ)
-		var fdata = JSON.parse_string(ff.get_as_text())
-		ff.close()
-		flights_by_origin = fdata.get("by_origin", {})
+
+	# ── markets.json (indexed by city_id, compact keys) ──
+	var m := _load_json("res://data/markets.json")
+	if m != null:
+		markets_by_city = m
+
+	# ── product_market_tags.json ──
+	var t := _load_json("res://data/product_market_tags.json")
+	if t != null:
+		product_market_tags = t
+
+	# ── transfer_edges.json ──
+	var e := _load_json("res://data/transfer_edges.json")
+	if e != null:
+		transfer_edges = e
+
+	# ── flights/ (per-origin, lazy-loaded) ──
+	var manifest := _load_json("res://data/flights/_manifest.json")
+	if manifest != null:
+		print("Flights manifest: %d origins, %d total flights" % [
+			manifest.size() - 1,  # minus _total key
+			manifest.get("_total", 0)
+		])
+	else:
+		# Fallback to old monolithic flights.json
+		var fdata := _load_json("res://data/flights.json")
+		if fdata != null:
+			flights_by_origin = fdata.get("by_origin", {})
+
 	loaded = true
-	print("DataService loaded: %d airports, %d products, %d tags, %d transfers" % [
-		airports.size(), products_by_id.size(), product_market_tags.size(), transfer_edges.size()
+	print("DataService loaded: %d airports, %d products, %d market-cities, %d tags, %d transfers" % [
+		airports.size(), products_by_id.size(), markets_by_city.size(),
+		product_market_tags.size(), transfer_edges.size()
 	])
 
 
@@ -85,7 +121,6 @@ func search_airports(query: String) -> Array:
 	for a in airports:
 		var iata := str(a.get("iata", "")).to_lower()
 		var icao := str(a.get("icao", "")).to_lower()
-		# Exact code match first (IATA / ICAO), then name / city substring.
 		if iata == q or icao == q:
 			out.append(a)
 			continue
@@ -113,10 +148,21 @@ func destinations_from(origin_iata: String) -> Array:
 
 
 func market_row(city_id: String, product_id: String) -> Dictionary:
-	for m in markets:
-		if m.get("city_id") == city_id and m.get("product_id") == product_id:
-			return m
+	var entries: Array = markets_by_city.get(city_id, [])
+	for e in entries:
+		if e.get("p", "") == product_id:
+			var v: Dictionary = e
+			return {"city_id": city_id, "product_id": product_id,
+					"buy_base_usd": v.get("b", 0.0), "sell_base_usd": v.get("s", 0.0)}
 	return {}
+
+
+func market_product_ids(city_id: String) -> Array:
+	var entries: Array = markets_by_city.get(city_id, [])
+	var out: Array = []
+	for e in entries:
+		out.append(e.get("p", ""))
+	return out
 
 
 func products_for_city(city_id: String) -> Array:
@@ -128,7 +174,16 @@ func products_for_city(city_id: String) -> Array:
 
 
 func flights_from(origin_airport_id: String) -> Array:
-	return flights_by_origin.get(origin_airport_id, [])
+	if _flights_loaded.has(origin_airport_id):
+		return flights_by_origin.get(origin_airport_id, [])
+	var path := "res://data/flights/%s.json" % origin_airport_id
+	var data := _load_json(path)
+	if data != null and data is Array:
+		flights_by_origin[origin_airport_id] = data
+		_flights_loaded[origin_airport_id] = true
+		return data
+	_flights_loaded[origin_airport_id] = true
+	return []
 
 
 func transfer_options(from_iata: String, to_iata: String = "") -> Array:

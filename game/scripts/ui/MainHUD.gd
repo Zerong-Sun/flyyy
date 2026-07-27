@@ -685,11 +685,7 @@ func _show_hint(text: String) -> void:
 
 
 func _get_market_products(city_id: String) -> Array:
-	var out: Array = []
-	for m in DataService.markets:
-		if str(m.get("city_id", "")) == city_id:
-			out.append(str(m.get("product_id", "")))
-	return out
+	return DataService.market_product_ids(city_id)
 
 
 func _check_arrival_encounter(city_id: String) -> void:
@@ -779,7 +775,9 @@ func _require_started() -> bool:
 func _load_market_tags() -> void:
 	_product_market_tags = DataService.product_market_tags
 	if _product_market_tags.is_empty():
-		_product_market_tags = DataService.world.get("product_market_tags", {})
+		_product_market_tags = DataService.product_market_tags
+		if _product_market_tags.is_empty():
+			_product_market_tags = DataService.world.get("product_market_tags", {})
 
 
 func _get_ticket_dest_city_id() -> String:
