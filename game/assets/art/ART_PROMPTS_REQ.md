@@ -1,13 +1,29 @@
 # 环球航商 (Airborne Trader) — Art Generation Prompts
 
 > **Project:** flyyy / Airborne Trader — global travel-trade simulation
-> **Style:** aeronautical chart clarity · daylight port cities · travel-journal warmth · clean information design
-> **Color system:**
+> **Style:** dark aeronautical HUD · chart-instrument clarity · matte globe navigation · cold navy information design
+> **Palette anchors:**
 >   bg-deep `#0B1C2C` · bg-panel `#122A3D@88%` · ocean `#1A4A6E` · land `#3D6B4F` · ice `#D9E6F0`
 >   text-primary `#F2F6FA` · text-secondary `#A8B8C8` · accent-amber `#E89A3C` · accent-teal `#3CB8A4`
 >   warn-red `#E05555` · economy-blue `#7EB6D9` · business-gold `#C9A45C` · border `#2A455A`
+>   pin-visited `#FFD933` · pin-unvisited `#8C939E`
 >
-> **Forbidden styles:** cyberpunk neon HUD · sci-fi holograms · newspaper-column layout · cartoony mascots · photorealistic gore · political symbols · trademarked airline logos
+> **Forbidden styles (reject hard):**
+>   golden-hour travel documentary · magazine warm photography · parchment / cream paper · light-grey still-life product stands
+>   cyberpunk neon HUD · sci-fi holograms · newspaper-column layout · cartoony mascots
+>   photorealistic gore · political symbols · trademarked airline logos
+>
+> **City hero images:** night / twilight port-city silhouette, aviation-chart line-art or dark-toned illustration. Must feel like a navigator's reference plate viewed on a dim flight-deck screen. No golden-hour sunshine, no warm film grain, no cottage-core tourism.
+>
+> **Product icons:** deep transparent or `#122A3D`-panel background. Flat line-art with teal/amber fills. Light-box / white-to-grey product stands are forbidden.
+>
+> **Earth texture:** real coastlines, subtle country borders, matte ocean `#1A4A6E`, land `#3D6B4F`. Generators: use Natural Earth or equivalent public-domain cartographic data. No atmosphere glow, no cloud layer.
+>
+> **Pins / markers:** visited = yellow `#FFD933` (warm, stands out against ocean), unvisited = grey `#8C939E` (low-contrast reference). Current/selected use green `#33FF73` and orange `#FF7333` respectively. See `GlobeController._update_markers`.
+>
+> **Market / sell UI:** dark semi-transparent labels on `#122A3D` panels. Hot-tag labels in accent-teal, cold-tag in warn-red `@60%`. Best-destination hints in accent-amber.
+>
+> **BGM / SFX:** see CONTENT_ASSET_SPEC §2.  No casino chimes, no jackpot rolls.  Sell feedback uses travel-log undertones.
 
 ---
 
@@ -40,11 +56,11 @@ Negative: 3D, gradients, glow, emoji-style, photorealistic, text, letters.
 
 ---
 
-## Batch I2 · Icons · Transport & Actions (sheet 2×3, Cell: 256×256, Output: 256×256, Grid: 2×3)
+## Batch I2 · Icons · Transport & Actions (sheet 3×2, Cell: 256×256, Output: 256×256, Grid: 3×2)
 
 - **Window**: Icons
-- **Mode**: sheet · **Grid**: 2×3 · **Cell**: 256×256 · **Output per file**: 256×256 · **Background**: transparent
-- **Output dir**: art
+- **Mode**: sheet · **Grid**: 3×2 · **Cell**: 256×256 · **Output per file**: 256×256 · **Background**: transparent
+- **Output dir**: icons
 - **Files**:
   1. `icon_economy_32.webp` — single seat outline, economy class
   2. `icon_business_32.webp` — wide seat with extra space, premium class
@@ -55,7 +71,7 @@ Negative: 3D, gradients, glow, emoji-style, photorealistic, text, letters.
 
 **Prompt**
 
-Generate exactly ONE 2×3 contact sheet of 6 flat UI icons on transparent background. Thin dark gutters (2px). Clean line-art with subtle filled accents, 1.5–2px stroke weight, rounded caps and joins. Travel booking theme using the color palette: economy-blue `#7EB6D9`, business-gold `#C9A45C`, accent-teal `#3CB8A4`, text-primary `#F2F6FA`. Each icon 256×256, readable at 32px. NO text, NO letters.
+Generate exactly ONE 3×2 contact sheet of 6 flat UI icons on transparent background. Thin dark gutters (2px). Clean line-art with subtle filled accents, 1.5–2px stroke weight, rounded caps and joins. Travel booking theme using the color palette: economy-blue `#7EB6D9`, business-gold `#C9A45C`, accent-teal `#3CB8A4`, text-primary `#F2F6FA`. Each icon 256×256, readable at 32px. NO text, NO letters.
 
 Order row by row:
 Row 1: economy seat / business seat / luggage with "+"
@@ -65,11 +81,11 @@ Negative: 3D, gradients, glow, emoji-style, photorealistic, text, letters.
 
 ---
 
-## Batch I3 · Icons · Status & Info (sheet 2×3, Cell: 256×256, Output: 256×256, Grid: 2×3)
+## Batch I3 · Icons · Status & Info (sheet 3×2, Cell: 256×256, Output: 256×256, Grid: 3×2)
 
 - **Window**: Icons
-- **Mode**: sheet · **Grid**: 2×3 · **Cell**: 256×256 · **Output per file**: 256×256 · **Background**: transparent
-- **Output dir**: art
+- **Mode**: sheet · **Grid**: 3×2 · **Cell**: 256×256 · **Output per file**: 256×256 · **Background**: transparent
+- **Output dir**: icons
 - **Files**:
   1. `icon_money_32.webp` — coin stack or dollar-circle symbol
   2. `icon_weight_32.webp` — balance scale or weight barbell
@@ -80,7 +96,7 @@ Negative: 3D, gradients, glow, emoji-style, photorealistic, text, letters.
 
 **Prompt**
 
-Generate exactly ONE 2×3 contact sheet of 6 flat UI icons on transparent background. Thin dark gutters (2px). Clean line-art with subtle filled accents, 1.5–2px stroke weight, rounded caps and joins. Status/info theme using the color palette: accent-amber `#E89A3C`, warn-red `#E05555`, text-primary `#F2F6FA`, border `#2A455A`. Each icon 256×256, readable at 32px. NO text, NO letters.
+Generate exactly ONE 3×2 contact sheet of 6 flat UI icons on transparent background. Thin dark gutters (2px). Clean line-art with subtle filled accents, 1.5–2px stroke weight, rounded caps and joins. Status/info theme using the color palette: accent-amber `#E89A3C`, warn-red `#E05555`, text-primary `#F2F6FA`, border `#2A455A`. Each icon 256×256, readable at 32px. NO text, NO letters.
 
 Order row by row:
 Row 1: coin stack / balance scale / clock face
@@ -90,11 +106,11 @@ Negative: 3D, gradients, glow, emoji-style, photorealistic, text, letters.
 
 ---
 
-## Batch I4 · Icons · v0.2 Intel & Feedback (sheet 2×3, Cell: 256×256, Output: 256×256, Grid: 2×3)
+## Batch I4 · Icons · v0.2 Intel & Feedback (sheet 3×2, Cell: 256×256, Output: 256×256, Grid: 3×2)
 
 - **Window**: Icons
-- **Mode**: sheet · **Grid**: 2×3 · **Cell**: 256×256 · **Output per file**: 256×256 · **Background**: transparent
-- **Output dir**: art
+- **Mode**: sheet · **Grid**: 3×2 · **Cell**: 256×256 · **Output per file**: 256×256 · **Background**: transparent
+- **Output dir**: icons
 - **Files**:
   1. `icon_notes_tab_32.webp` — notebook with pen, journal style
   2. `icon_intel_upgrade_32.webp` — magnifying glass with sparkle or star badge
@@ -104,7 +120,7 @@ Negative: 3D, gradients, glow, emoji-style, photorealistic, text, letters.
 
 **Prompt**
 
-Generate exactly ONE 2×3 contact sheet of 5 UI icons on transparent background (6th cell empty). Thin dark gutters (2px). Clean line-art with subtle filled accents, 1.5–2px stroke weight, rounded caps and joins. Trade-intelligence theme using the color palette: accent-amber `#E89A3C`, accent-teal `#3CB8A4`, warn-red `#E05555`, ice `#D9E6F0`, text-primary `#F2F6FA`. Each icon 256×256, readable at 32px. NO text, NO letters.
+Generate exactly ONE 3×2 contact sheet of 5 UI icons on transparent background (6th cell empty). Thin dark gutters (2px). Clean line-art with subtle filled accents, 1.5–2px stroke weight, rounded caps and joins. Trade-intelligence theme using the color palette: accent-amber `#E89A3C`, accent-teal `#3CB8A4`, warn-red `#E05555`, ice `#D9E6F0`, text-primary `#F2F6FA`. Each icon 256×256, readable at 32px. NO text, NO letters.
 
 Order row by row:
 Row 1: notebook with pen / magnifying-sparkle / flame badge
@@ -312,11 +328,11 @@ Negative: 3D renders, text, brand logos, weapons, alcohol bottles, medicine pack
 
 ---
 
-## Batch C1 · City Heroes · Asia-Pacific #1 (sheet 2×3, Cell: 640×360, Output: 640×360, Grid: 2×3)
+## Batch C1 · City Heroes · Asia-Pacific #1 (sheet 3×2, Cell: 640×360, Output: 640×360, Grid: 3×2)
 
 - **Window**: CityHeroes
-- **Mode**: sheet · **Grid**: 2×3 · **Cell**: 640×360 · **Output per file**: 640×360 · **Background**: opaque
-- **Output dir**: art
+- **Mode**: sheet · **Grid**: 3×2 · **Cell**: 640×360 · **Output per file**: 640×360 · **Background**: opaque
+- **Output dir**: cities
 - **Files**:
   1. `city_tokyo_hero_720.webp` — Tokyo skyline at dusk, Mt Fuji silhouette, warm urban glow
   2. `city_shanghai_hero_720.webp` — Pudong skyline across Huangpu River, modern towers
@@ -327,7 +343,7 @@ Negative: 3D renders, text, brand logos, weapons, alcohol bottles, medicine pack
 
 **Prompt**
 
-Generate exactly ONE 2×3 contact sheet of 6 city hero images for a travel-trade simulation game. Each cell 640×360. Thin dark gutters. Travel-documentary illustration style — warm, inviting, clear city silhouette recognizability. Muted natural palette with golden-hour warmth. Color accents: accent-amber `#E89A3C`, accent-teal `#3CB8A4`, ocean `#1A4A6E`. Cinematic wide composition, slight grain texture. NO watermark, NO text, NO people faces, NO airport terminal buildings.
+Generate exactly ONE 3×2 contact sheet of 6 city hero images for a travel-trade simulation game. Each cell 640×360. Thin dark gutters. Travel-documentary illustration style — warm, inviting, clear city silhouette recognizability. Muted natural palette with golden-hour warmth. Color accents: accent-amber `#E89A3C`, accent-teal `#3CB8A4`, ocean `#1A4A6E`. Cinematic wide composition, slight grain texture. NO watermark, NO text, NO people faces, NO airport terminal buildings.
 
 Order row by row:
 Row 1: Tokyo (Mt Fuji + skyline dusk) / Shanghai (Pudong towers river) / Seoul (N Tower + hanok)
@@ -454,11 +470,11 @@ Negative: photorealistic, 3D renders, clip-art, gradients, emojis, airplane clip
 
 ---
 
-## Batch A1 · Achievements · Exploration (sheet 2×4, Cell: 128×128, Output: 128×128, Grid: 2×4)
+## Batch A1 · Achievements · Exploration (sheet 4×2, Cell: 128×128, Output: 128×128, Grid: 4×2)
 
 - **Window**: Achievements
-- **Mode**: sheet · **Grid**: 2×4 · **Cell**: 128×128 · **Output per file**: 128×128 · **Background**: transparent
-- **Output dir**: art
+- **Mode**: sheet · **Grid**: 4×2 · **Cell**: 128×128 · **Output per file**: 128×128 · **Background**: transparent
+- **Output dir**: icons/achievements
 - **Files**:
   1. `icon_ach_explore_first_city_64.webp` — compass rose, single star at top
   2. `icon_ach_explore_cities_10_64.webp` — map pin cluster
@@ -471,7 +487,7 @@ Negative: photorealistic, 3D renders, clip-art, gradients, emojis, airplane clip
 
 **Prompt**
 
-Generate exactly ONE 2×4 contact sheet of 8 geometric emblem achievement icons on transparent background. Thin dark gutters (2px). Each icon 128×128. "Locked" state: desaturated silhouette in border `#2A455A` with subtle bg-panel `#122A3D` fill. Clean circular medal-like compositions. NO text, NO numbers. Color accent: accent-teal `#3CB8A4`.
+Generate exactly ONE 4×2 contact sheet of 8 geometric emblem achievement icons on transparent background. Thin dark gutters (2px). Each icon 128×128. "Locked" state: desaturated silhouette in border `#2A455A` with subtle bg-panel `#122A3D` fill. Clean circular medal-like compositions. NO text, NO numbers. Color accent: accent-teal `#3CB8A4`.
 
 Order row by row:
 Row 1: compass-star / map-pin cluster / world dot-map / flag silhouettes
@@ -481,11 +497,11 @@ Negative: 3D, gradients, photorealistic, text, numbers, ribbon banners.
 
 ---
 
-## Batch A2 · Achievements · Trade & Finance (sheet 2×4, Cell: 128×128, Output: 128×128, Grid: 2×4)
+## Batch A2 · Achievements · Trade & Finance (sheet 4×2, Cell: 128×128, Output: 128×128, Grid: 4×2)
 
 - **Window**: Achievements
-- **Mode**: sheet · **Grid**: 2×4 · **Cell**: 128×128 · **Output per file**: 128×128 · **Background**: transparent
-- **Output dir**: art
+- **Mode**: sheet · **Grid**: 4×2 · **Cell**: 128×128 · **Output per file**: 128×128 · **Background**: transparent
+- **Output dir**: icons/achievements
 - **Files**:
   1. `icon_ach_trade_first_profit_64.webp` — upward arrow with coin
   2. `icon_ach_trade_total_profit_100k_64.webp` — coin stack with milestone
@@ -498,7 +514,7 @@ Negative: 3D, gradients, photorealistic, text, numbers, ribbon banners.
 
 **Prompt**
 
-Generate exactly ONE 2×4 contact sheet of 8 geometric emblem achievement icons on transparent background. Thin dark gutters (2px). Each icon 128×128. "Locked" state: desaturated silhouette in border `#2A455A` with subtle fill. Circular or shield compositions. NO text, NO numbers. Color accents: accent-amber `#E89A3C`, accent-teal `#3CB8A4`, warn-red `#E05555`.
+Generate exactly ONE 4×2 contact sheet of 8 geometric emblem achievement icons on transparent background. Thin dark gutters (2px). Each icon 128×128. "Locked" state: desaturated silhouette in border `#2A455A` with subtle fill. Circular or shield compositions. NO text, NO numbers. Color accents: accent-amber `#E89A3C`, accent-teal `#3CB8A4`, warn-red `#E05555`.
 
 Order row by row:
 Row 1: up-arrow coin / coin-stack milestone / trophy cup / flame-streak
@@ -508,11 +524,11 @@ Negative: 3D, gradients, photorealistic, text, numbers, clip-art.
 
 ---
 
-## Batch A3 · Achievements · Flight & Specialist (sheet 2×4, Cell: 128×128, Output: 128×128, Grid: 2×4)
+## Batch A3 · Achievements · Flight & Specialist (sheet 4×2, Cell: 128×128, Output: 128×128, Grid: 4×2)
 
 - **Window**: Achievements
-- **Mode**: sheet · **Grid**: 2×4 · **Cell**: 128×128 · **Output per file**: 128×128 · **Background**: transparent
-- **Output dir**: art
+- **Mode**: sheet · **Grid**: 4×2 · **Cell**: 128×128 · **Output per file**: 128×128 · **Background**: transparent
+- **Output dir**: icons/achievements
 - **Files**:
   1. `icon_ach_flight_first_64.webp` — takeoff arrow from runway
   2. `icon_ach_flight_segments_100_64.webp` — flight path with waypoints
@@ -525,7 +541,7 @@ Negative: 3D, gradients, photorealistic, text, numbers, clip-art.
 
 **Prompt**
 
-Generate exactly ONE 2×4 contact sheet of 8 geometric emblem achievement icons on transparent background. Thin dark gutters (2px). Each icon 128×128. "Locked" state: desaturated silhouette in border `#2A455A` with subtle fill. Circular or diamond compositions. NO text, NO numbers. Color accents: accent-teal `#3CB8A4`, economy-blue `#7EB6D9`, business-gold `#C9A45C`.
+Generate exactly ONE 4×2 contact sheet of 8 geometric emblem achievement icons on transparent background. Thin dark gutters (2px). Each icon 128×128. "Locked" state: desaturated silhouette in border `#2A455A` with subtle fill. Circular or diamond compositions. NO text, NO numbers. Color accents: accent-teal `#3CB8A4`, economy-blue `#7EB6D9`, business-gold `#C9A45C`.
 
 Order row by row:
 Row 1: takeoff / waypoints / great-circle / premium-crown
@@ -535,11 +551,11 @@ Negative: 3D, gradients, photorealistic, text, numbers.
 
 ---
 
-## Batch A4 · Achievements · Wealth & Badges (sheet 2×3, Cell: 128×128, Output: 128×128, Grid: 2×3)
+## Batch A4 · Achievements · Wealth & Badges (sheet 3×2, Cell: 128×128, Output: 128×128, Grid: 3×2)
 
 - **Window**: Achievements
-- **Mode**: sheet · **Grid**: 2×3 · **Cell**: 128×128 · **Output per file**: 128×128 · **Background**: transparent
-- **Output dir**: art
+- **Mode**: sheet · **Grid**: 3×2 · **Cell**: 128×128 · **Output per file**: 128×128 · **Background**: transparent
+- **Output dir**: icons/achievements
 - **Files**:
   1. `icon_ach_wealth_100k_64.webp` — money bag with milestone mark
   2. `icon_ach_wealth_multibagger_64.webp` — doubling arrow on chart
@@ -550,7 +566,7 @@ Negative: 3D, gradients, photorealistic, text, numbers.
 
 **Prompt**
 
-Generate exactly ONE 2×3 contact sheet of 6 geometric emblem achievement icons on transparent background. Thin dark gutters (2px). Each icon 128×128. "Locked" state: desaturated silhouette in border `#2A455A` with subtle fill. Diamond or shield compositions, wealth milestone theme. NO text, NO numbers. Color accents: business-gold `#C9A45C`, accent-amber `#E89A3C`, warn-red `#E05555`, accent-teal `#3CB8A4`.
+Generate exactly ONE 3×2 contact sheet of 6 geometric emblem achievement icons on transparent background. Thin dark gutters (2px). Each icon 128×128. "Locked" state: desaturated silhouette in border `#2A455A` with subtle fill. Diamond or shield compositions, wealth milestone theme. NO text, NO numbers. Color accents: business-gold `#C9A45C`, accent-amber `#E89A3C`, warn-red `#E05555`, accent-teal `#3CB8A4`.
 
 Order:
 Row 1: money-bag / doubling-chart / empty-wallet

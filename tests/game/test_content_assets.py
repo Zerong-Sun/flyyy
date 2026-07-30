@@ -278,3 +278,13 @@ def test_a2_art_assets_wired():
     attr = (GAME / "assets" / "i18n" / "attribution_zh.txt").read_text(encoding="utf-8")
     assert "美术（A2）" in attr
     assert "game/assets/icons/" in attr
+
+
+def test_hud_status_icons_are_size_clamped():
+    icon_src = (GAME / "themes" / "IconFactory.gd").read_text(encoding="utf-8")
+    expand_idx = icon_src.index("tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE")
+    texture_idx = icon_src.index("tex_rect.texture = tex")
+    assert expand_idx < texture_idx
+
+    main = (GAME / "scripts" / "ui" / "MainHUD.gd").read_text(encoding="utf-8")
+    assert "top.clip_contents = true" in main
