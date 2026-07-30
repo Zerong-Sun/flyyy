@@ -1,6 +1,6 @@
 products:
 - product_id: chandigarh_电子_B
-  name_zh: Chandigarh电子合约
+  name_zh: 昌迪加尔电子合约
   category: 电子
   weight_kg: 3.9
   base_reference_price: 1412.97
@@ -10,7 +10,7 @@ products:
   rarity: 0.74
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: chandigarh_茶叶_B
-  name_zh: Chandigarh茶叶合约
+  name_zh: 昌迪加尔茶叶合约
   category: 茶叶
   weight_kg: 9.5
   base_reference_price: 206.65
@@ -20,7 +20,7 @@ products:
   rarity: 0.52
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: chandigarh_香料_B
-  name_zh: Chandigarh香料合约
+  name_zh: 昌迪加尔香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 247.01
@@ -30,7 +30,7 @@ products:
   rarity: 0.58
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: chandigarh_纺织品_B
-  name_zh: Chandigarh纺织品合约
+  name_zh: 昌迪加尔纺织品合约
   category: 纺织品
   weight_kg: 9.3
   base_reference_price: 172.15
@@ -40,7 +40,7 @@ products:
   rarity: 0.29
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: chandigarh_矿产_B
-  name_zh: Chandigarh矿产合约
+  name_zh: 昌迪加尔矿产合约
   category: 矿产
   weight_kg: 24.8
   base_reference_price: 430.14

@@ -1,6 +1,6 @@
 products:
 - product_id: chita_日用品_B
-  name_zh: Chita日用品合约
+  name_zh: 赤塔日用品合约
   category: 日用品
   weight_kg: 9.1
   base_reference_price: 80.43
@@ -10,7 +10,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: chita_能源_B
-  name_zh: Chita能源合约
+  name_zh: 赤塔能源合约
   category: 能源
   weight_kg: 7.4
   base_reference_price: 439.8
@@ -20,7 +20,7 @@ products:
   rarity: 0.58
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: chita_机械_B
-  name_zh: Chita机械合约
+  name_zh: 赤塔机械合约
   category: 机械
   weight_kg: 21.0
   base_reference_price: 650.47
@@ -30,7 +30,7 @@ products:
   rarity: 0.47
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: chita_食品_B
-  name_zh: Chita食品合约
+  name_zh: 赤塔食品合约
   category: 食品
   weight_kg: 19.2
   base_reference_price: 81.44
@@ -40,7 +40,7 @@ products:
   rarity: 0.28
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: chita_矿产_B
-  name_zh: Chita矿产合约
+  name_zh: 赤塔矿产合约
   category: 矿产
   weight_kg: 26.1
   base_reference_price: 595.99

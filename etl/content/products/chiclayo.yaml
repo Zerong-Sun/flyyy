@@ -1,6 +1,6 @@
 products:
 - product_id: chiclayo_纺织品_B
-  name_zh: Chiclayo纺织品合约
+  name_zh: 奇克拉约纺织品合约
   category: 纺织品
   weight_kg: 9.0
   base_reference_price: 248.21
@@ -10,7 +10,7 @@ products:
   rarity: 0.37
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: chiclayo_矿产_B
-  name_zh: Chiclayo矿产合约
+  name_zh: 奇克拉约矿产合约
   category: 矿产
   weight_kg: 37.1
   base_reference_price: 463.29
@@ -20,7 +20,7 @@ products:
   rarity: 0.39
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: chiclayo_日用品_B
-  name_zh: Chiclayo日用品合约
+  name_zh: 奇克拉约日用品合约
   category: 日用品
   weight_kg: 6.0
   base_reference_price: 52.5
@@ -30,7 +30,7 @@ products:
   rarity: 0.18
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: chiclayo_咖啡_B
-  name_zh: Chiclayo咖啡合约
+  name_zh: 奇克拉约咖啡合约
   category: 咖啡
   weight_kg: 7.3
   base_reference_price: 163.65
@@ -40,7 +40,7 @@ products:
   rarity: 0.45
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: chiclayo_食品_B
-  name_zh: Chiclayo食品合约
+  name_zh: 奇克拉约食品合约
   category: 食品
   weight_kg: 22.7
   base_reference_price: 63.07

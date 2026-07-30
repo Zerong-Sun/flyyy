@@ -1,6 +1,6 @@
 products:
 - product_id: orio_al_serio_(bg)_陶瓷_B
-  name_zh: Orio al Serio (BG)陶瓷合约
+  name_zh: 贝加莫陶瓷合约
   category: 陶瓷
   weight_kg: 19.1
   base_reference_price: 355.56
@@ -10,7 +10,7 @@ products:
   rarity: 0.44
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: orio_al_serio_(bg)_工艺品_B
-  name_zh: Orio al Serio (BG)工艺品合约
+  name_zh: 贝加莫工艺品合约
   category: 工艺品
   weight_kg: 5.6
   base_reference_price: 321.12
@@ -20,7 +20,7 @@ products:
   rarity: 0.56
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: orio_al_serio_(bg)_纺织品_B
-  name_zh: Orio al Serio (BG)纺织品合约
+  name_zh: 贝加莫纺织品合约
   category: 纺织品
   weight_kg: 12.7
   base_reference_price: 538.31
@@ -30,7 +30,7 @@ products:
   rarity: 0.25
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: orio_al_serio_(bg)_机械_B
-  name_zh: Orio al Serio (BG)机械合约
+  name_zh: 贝加莫机械合约
   category: 机械
   weight_kg: 49.3
   base_reference_price: 1420.57
@@ -40,7 +40,7 @@ products:
   rarity: 0.47
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: orio_al_serio_(bg)_食品_B
-  name_zh: Orio al Serio (BG)食品合约
+  name_zh: 贝加莫食品合约
   category: 食品
   weight_kg: 29.7
   base_reference_price: 268.23

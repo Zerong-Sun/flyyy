@@ -1,6 +1,6 @@
 products:
 - product_id: abha_香料_B
-  name_zh: Abha香料合约
+  name_zh: 艾卜哈香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 292.51
@@ -10,7 +10,7 @@ products:
   rarity: 0.51
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: abha_食品_B
-  name_zh: Abha食品合约
+  name_zh: 艾卜哈食品合约
   category: 食品
   weight_kg: 17.5
   base_reference_price: 180.99
@@ -20,7 +20,7 @@ products:
   rarity: 0.33
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: abha_能源_B
-  name_zh: Abha能源合约
+  name_zh: 艾卜哈能源合约
   category: 能源
   weight_kg: 5.1
   base_reference_price: 534.85
@@ -30,7 +30,7 @@ products:
   rarity: 0.53
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: abha_日用品_B
-  name_zh: Abha日用品合约
+  name_zh: 艾卜哈日用品合约
   category: 日用品
   weight_kg: 7.2
   base_reference_price: 54.3
@@ -40,7 +40,7 @@ products:
   rarity: 0.2
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: abha_矿产_B
-  name_zh: Abha矿产合约
+  name_zh: 艾卜哈矿产合约
   category: 矿产
   weight_kg: 38.9
   base_reference_price: 500.9

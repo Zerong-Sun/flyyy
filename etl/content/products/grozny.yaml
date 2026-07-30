@@ -1,6 +1,6 @@
 products:
 - product_id: grozny_食品_B
-  name_zh: Grozny食品合约
+  name_zh: 格罗兹尼食品合约
   category: 食品
   weight_kg: 24.2
   base_reference_price: 159.62
@@ -10,7 +10,7 @@ products:
   rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: grozny_日用品_B
-  name_zh: Grozny日用品合约
+  name_zh: 格罗兹尼日用品合约
   category: 日用品
   weight_kg: 8.0
   base_reference_price: 43.21
@@ -20,7 +20,7 @@ products:
   rarity: 0.15
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: grozny_能源_B
-  name_zh: Grozny能源合约
+  name_zh: 格罗兹尼能源合约
   category: 能源
   weight_kg: 6.2
   base_reference_price: 335.34
@@ -30,7 +30,7 @@ products:
   rarity: 0.69
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: grozny_矿产_B
-  name_zh: Grozny矿产合约
+  name_zh: 格罗兹尼矿产合约
   category: 矿产
   weight_kg: 24.8
   base_reference_price: 300.44
@@ -40,7 +40,7 @@ products:
   rarity: 0.42
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: grozny_机械_B
-  name_zh: Grozny机械合约
+  name_zh: 格罗兹尼机械合约
   category: 机械
   weight_kg: 29.2
   base_reference_price: 742.59

@@ -79,7 +79,7 @@ func _run() -> void:
 		if tags.size() < 1:
 			ok = false
 			errors.append("product_market_tags empty")
-		var transfers: Dictionary = data.get("transfer_edges")
+		var transfers: Array = data.get("_transfer_keys")
 		if transfers.size() < 1:
 			ok = false
 			errors.append("transfer_edges empty")

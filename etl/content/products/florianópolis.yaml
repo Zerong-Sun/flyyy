@@ -1,6 +1,6 @@
 products:
 - product_id: florianópolis_食品_B
-  name_zh: Florianópolis食品合约
+  name_zh: 弗洛里亚诺波利斯食品合约
   category: 食品
   weight_kg: 23.8
   base_reference_price: 117.52
@@ -10,7 +10,7 @@ products:
   rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: florianópolis_能源_B
-  name_zh: Florianópolis能源合约
+  name_zh: 弗洛里亚诺波利斯能源合约
   category: 能源
   weight_kg: 4.4
   base_reference_price: 773.79
@@ -20,7 +20,7 @@ products:
   rarity: 0.69
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: florianópolis_咖啡_B
-  name_zh: Florianópolis咖啡合约
+  name_zh: 弗洛里亚诺波利斯咖啡合约
   category: 咖啡
   weight_kg: 7.3
   base_reference_price: 205.2
@@ -30,7 +30,7 @@ products:
   rarity: 0.46
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: florianópolis_日用品_B
-  name_zh: Florianópolis日用品合约
+  name_zh: 弗洛里亚诺波利斯日用品合约
   category: 日用品
   weight_kg: 14.1
   base_reference_price: 73.98
@@ -40,7 +40,7 @@ products:
   rarity: 0.11
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: florianópolis_矿产_B
-  name_zh: Florianópolis矿产合约
+  name_zh: 弗洛里亚诺波利斯矿产合约
   category: 矿产
   weight_kg: 23.0
   base_reference_price: 402.06

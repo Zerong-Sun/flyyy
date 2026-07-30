@@ -1,6 +1,6 @@
 products:
 - product_id: hiroshima_食品_B
-  name_zh: Hiroshima食品合约
+  name_zh: 广岛食品合约
   category: 食品
   weight_kg: 26.7
   base_reference_price: 222.57
@@ -10,7 +10,7 @@ products:
   rarity: 0.32
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: hiroshima_电子_B
-  name_zh: Hiroshima电子合约
+  name_zh: 广岛电子合约
   category: 电子
   weight_kg: 4.8
   base_reference_price: 1817.68
@@ -20,7 +20,7 @@ products:
   rarity: 0.58
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: hiroshima_玩具_B
-  name_zh: Hiroshima玩具合约
+  name_zh: 广岛玩具合约
   category: 玩具
   weight_kg: 3.3
   base_reference_price: 167.26
@@ -30,7 +30,7 @@ products:
   rarity: 0.23
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: hiroshima_文具_B
-  name_zh: Hiroshima文具合约
+  name_zh: 广岛文具合约
   category: 文具
   weight_kg: 2.1
   base_reference_price: 71.55
@@ -40,7 +40,7 @@ products:
   rarity: 0.18
   description: 当地特色文具纸品合约，轻便易携带。
 - product_id: hiroshima_工艺品_B
-  name_zh: Hiroshima工艺品合约
+  name_zh: 广岛工艺品合约
   category: 工艺品
   weight_kg: 14.6
   base_reference_price: 188.08

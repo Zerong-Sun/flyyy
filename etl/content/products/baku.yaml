@@ -1,6 +1,6 @@
 products:
 - product_id: baku_矿产_B
-  name_zh: Baku矿产合约
+  name_zh: 巴库矿产合约
   category: 矿产
   weight_kg: 28.5
   base_reference_price: 675.54
@@ -10,7 +10,7 @@ products:
   rarity: 0.57
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: baku_工艺品_B
-  name_zh: Baku工艺品合约
+  name_zh: 巴库工艺品合约
   category: 工艺品
   weight_kg: 9.9
   base_reference_price: 204.29
@@ -20,7 +20,7 @@ products:
   rarity: 0.63
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: baku_日用品_B
-  name_zh: Baku日用品合约
+  name_zh: 巴库日用品合约
   category: 日用品
   weight_kg: 7.3
   base_reference_price: 53.19
@@ -30,7 +30,7 @@ products:
   rarity: 0.19
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: baku_香料_B
-  name_zh: Baku香料合约
+  name_zh: 巴库香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 377.15
@@ -40,7 +40,7 @@ products:
   rarity: 0.59
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: baku_咖啡_B
-  name_zh: Baku咖啡合约
+  name_zh: 巴库咖啡合约
   category: 咖啡
   weight_kg: 12.0
   base_reference_price: 273.5

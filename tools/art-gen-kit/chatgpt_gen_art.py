@@ -55,34 +55,32 @@ SECTION_MARKERS = {
     "ALL": (r"# 一、P0", r"# 附录"),
 }
 
-STYLE_LOCK = (
-    "Cloud-ridge Twilight style: medieval manuscript illumination crossed with dusk mountain wilderness. "
-    "Muted low-saturation palette — forest ink #0D1411, parchment cream #F0E4D0, antique gold #BDA476, "
-    "rubric crimson #B3402E as rare accent only, mist blue #7FA3BD, cloud-peach #E8B28A. "
-    "Flat mineral-paint look, thick gold contours where needed, subtle paper grain and gold-leaf flecks; "
-    "candlelight or dusk glow only — never neon. No photorealism, no 3D render, no glossy AI highlights, "
-    "no anthropomorphic deity figures."
-)
-
-IMAGE_PREFIX = (
-    "Generate exactly one image. Do not write an explanation. "
-    "Follow the style and technical constraints in the prompt strictly. "
-    "If the prompt asks for a transparent background, keep the subject on a "
-    "clean transparent (or pure checker-ready flat) field.\n\n"
-)
+# --- Project global style (Airborne Trader — referenced but NOT injected into per-batch prompts) ---
+# Each batch in ART_PROMPTS_REQ.md already carries its own complete style spec.
+# Global anchors (from ART_PROMPTS_REQ.md §1):
+#   Style: dark aeronautical HUD · chart-instrument clarity · matte globe navigation · cold navy
+#   Palette: bg-deep #0B1C2C · ocean #1A4A6E · land #3D6B4F · accent-amber #E89A3C · accent-teal #3CB8A4
+#   Forbidden: golden-hour travel doc · parchment/cream · cyberpunk neon · photorealistic
 
 BATCH_PREFIX = (
-    "Generate exactly ONE contact-sheet image. Do not write an explanation. "
-    "Follow the grid layout and style strictly. Use thin dark gutters between cells. "
+    "Do not write an explanation. Output ONLY the contact-sheet image requested below. "
+    "Use thin dark gutters (2px) between cells. "
     "Do not add text labels, filenames, or watermarks on the sheet.\n\n"
 )
 
 SEPARATE_PREFIX = (
-    "Generate exactly the requested number of SEPARATE images in ONE response. "
-    "Do not write an explanation. Each image must be its own standalone output "
+    "Do not write an explanation. Output ONLY the images requested below. "
+    "Each image must be its own standalone output "
     "(NOT a contact sheet, NOT a grid collage). "
-    "Output images in numbered order matching the list below. "
+    "Output images in numbered order. "
     "Do not add text labels, filenames, or watermarks on the images.\n\n"
+)
+
+IMAGE_PREFIX = (
+    "Do not write an explanation. "
+    "Follow the style and technical constraints in the prompt strictly. "
+    "If the prompt asks for a transparent background, keep the subject on a "
+    "clean transparent (or pure checker-ready flat) field.\n\n"
 )
 
 _CJK_RE = re.compile(r"[\u4e00-\u9fff]")
@@ -94,28 +92,16 @@ def build_batch_message(job: BatchJob) -> str:
         for i, bf in enumerate(job.files)
     )
     if job.mode == "separate":
-        n = len(job.files)
-        alpha = "Transparent background." if job.transparent else "Opaque full-bleed background."
         message = (
             SEPARATE_PREFIX
-            + STYLE_LOCK
-            + f" Produce exactly {n} separate images. Each roughly {job.files[0].out_w}×{job.files[0].out_h} logical pixels, vertical 2:3 where applicable. {alpha}\n\n"
-            + f"Image order 1→{n}:\n{listing}\n\n"
+            + f"Image order 1→{len(job.files)}:\n{listing}\n\n"
             + job.prompt
-            + "\n\nNegative: photorealistic, 3D render, neon glow, anime, cluttered, watermark, "
-            "signature, text labels, filenames on image, contact sheet, grid collage."
         )
     else:
-        alpha = "Transparent background cells." if job.transparent else "Opaque cells."
         message = (
             BATCH_PREFIX
-            + STYLE_LOCK
-            + f" Grid: {job.cols} columns × {job.rows} rows. "
-            f"Each cell roughly {job.cell_w}×{job.cell_h} logical pixels. {alpha}\n\n"
             + f"Cell order left-to-right, top-to-bottom:\n{listing}\n\n"
             + job.prompt
-            + "\n\nNegative: photorealistic, 3D render, neon glow, anime, cluttered, watermark, "
-            "signature, text labels, filenames on image."
         )
     if _CJK_RE.search(message):
         raise RuntimeError(f"Chinese characters found in batch {job.name}; refusing to submit.")

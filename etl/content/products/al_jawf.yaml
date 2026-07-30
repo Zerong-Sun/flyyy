@@ -1,6 +1,6 @@
 products:
 - product_id: al_jawf_日用品_B
-  name_zh: Al-Jawf日用品合约
+  name_zh: 焦夫日用品合约
   category: 日用品
   weight_kg: 8.2
   base_reference_price: 44.15
@@ -10,7 +10,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: al_jawf_食品_B
-  name_zh: Al-Jawf食品合约
+  name_zh: 焦夫食品合约
   category: 食品
   weight_kg: 15.9
   base_reference_price: 90.47
@@ -20,7 +20,7 @@ products:
   rarity: 0.37
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: al_jawf_香料_B
-  name_zh: Al-Jawf香料合约
+  name_zh: 焦夫香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 205.12
@@ -30,7 +30,7 @@ products:
   rarity: 0.57
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: al_jawf_矿产_B
-  name_zh: Al-Jawf矿产合约
+  name_zh: 焦夫矿产合约
   category: 矿产
   weight_kg: 21.2
   base_reference_price: 497.1
@@ -40,7 +40,7 @@ products:
   rarity: 0.38
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: al_jawf_能源_B
-  name_zh: Al-Jawf能源合约
+  name_zh: 焦夫能源合约
   category: 能源
   weight_kg: 3.3
   base_reference_price: 443.05

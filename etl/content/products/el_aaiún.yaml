@@ -1,6 +1,6 @@
 products:
 - product_id: el_aaiún_糖果_B
-  name_zh: El Aaiún糖果合约
+  name_zh: 阿尤恩糖果合约
   category: 糖果
   weight_kg: 4.6
   base_reference_price: 100.03
@@ -10,7 +10,7 @@ products:
   rarity: 0.3
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: el_aaiún_香料_B
-  name_zh: El Aaiún香料合约
+  name_zh: 阿尤恩香料合约
   category: 香料
   weight_kg: 0.7
   base_reference_price: 274.78
@@ -20,7 +20,7 @@ products:
   rarity: 0.6
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: el_aaiún_纺织品_B
-  name_zh: El Aaiún纺织品合约
+  name_zh: 阿尤恩纺织品合约
   category: 纺织品
   weight_kg: 14.2
   base_reference_price: 378.41
@@ -30,7 +30,7 @@ products:
   rarity: 0.32
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: el_aaiún_日用品_B
-  name_zh: El Aaiún日用品合约
+  name_zh: 阿尤恩日用品合约
   category: 日用品
   weight_kg: 10.9
   base_reference_price: 92.52
@@ -40,7 +40,7 @@ products:
   rarity: 0.15
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: el_aaiún_工艺品_B
-  name_zh: El Aaiún工艺品合约
+  name_zh: 阿尤恩工艺品合约
   category: 工艺品
   weight_kg: 5.6
   base_reference_price: 373.05

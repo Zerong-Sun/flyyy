@@ -1,6 +1,6 @@
 products:
 - product_id: kaduna_矿产_B
-  name_zh: Kaduna矿产合约
+  name_zh: 卡杜纳矿产合约
   category: 矿产
   weight_kg: 34.4
   base_reference_price: 191.96
@@ -10,7 +10,7 @@ products:
   rarity: 0.37
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: kaduna_能源_B
-  name_zh: Kaduna能源合约
+  name_zh: 卡杜纳能源合约
   category: 能源
   weight_kg: 7.8
   base_reference_price: 367.84
@@ -20,7 +20,7 @@ products:
   rarity: 0.51
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: kaduna_日用品_B
-  name_zh: Kaduna日用品合约
+  name_zh: 卡杜纳日用品合约
   category: 日用品
   weight_kg: 10.7
   base_reference_price: 23.98
@@ -30,7 +30,7 @@ products:
   rarity: 0.19
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: kaduna_食品_B
-  name_zh: Kaduna食品合约
+  name_zh: 卡杜纳食品合约
   category: 食品
   weight_kg: 26.8
   base_reference_price: 121.48
@@ -40,7 +40,7 @@ products:
   rarity: 0.39
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kaduna_纺织品_B
-  name_zh: Kaduna纺织品合约
+  name_zh: 卡杜纳纺织品合约
   category: 纺织品
   weight_kg: 9.8
   base_reference_price: 202.5

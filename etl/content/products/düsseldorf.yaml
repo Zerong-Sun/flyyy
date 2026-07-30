@@ -1,6 +1,6 @@
 products:
 - product_id: düsseldorf_食品_B
-  name_zh: Düsseldorf食品合约
+  name_zh: 杜塞尔多夫食品合约
   category: 食品
   weight_kg: 21.5
   base_reference_price: 243.01
@@ -10,7 +10,7 @@ products:
   rarity: 0.33
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: düsseldorf_电子_B
-  name_zh: Düsseldorf电子合约
+  name_zh: 杜塞尔多夫电子合约
   category: 电子
   weight_kg: 1.5
   base_reference_price: 2181.87
@@ -20,7 +20,7 @@ products:
   rarity: 0.61
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: düsseldorf_机械_B
-  name_zh: Düsseldorf机械合约
+  name_zh: 杜塞尔多夫机械合约
   category: 机械
   weight_kg: 43.4
   base_reference_price: 1436.17
@@ -30,7 +30,7 @@ products:
   rarity: 0.49
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: düsseldorf_能源_B
-  name_zh: Düsseldorf能源合约
+  name_zh: 杜塞尔多夫能源合约
   category: 能源
   weight_kg: 6.8
   base_reference_price: 1077.14
@@ -40,7 +40,7 @@ products:
   rarity: 0.54
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: düsseldorf_日用品_B
-  name_zh: Düsseldorf日用品合约
+  name_zh: 杜塞尔多夫日用品合约
   category: 日用品
   weight_kg: 10.4
   base_reference_price: 49.98

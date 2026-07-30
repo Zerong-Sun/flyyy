@@ -1,6 +1,6 @@
 products:
 - product_id: blantyre_糖果_B
-  name_zh: Blantyre糖果合约
+  name_zh: 布兰太尔糖果合约
   category: 糖果
   weight_kg: 5.6
   base_reference_price: 148.01
@@ -10,7 +10,7 @@ products:
   rarity: 0.29
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: blantyre_日用品_B
-  name_zh: Blantyre日用品合约
+  name_zh: 布兰太尔日用品合约
   category: 日用品
   weight_kg: 6.9
   base_reference_price: 72.51
@@ -20,7 +20,7 @@ products:
   rarity: 0.12
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: blantyre_食品_B
-  name_zh: Blantyre食品合约
+  name_zh: 布兰太尔食品合约
   category: 食品
   weight_kg: 17.3
   base_reference_price: 210.49
@@ -30,7 +30,7 @@ products:
   rarity: 0.32
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: blantyre_工艺品_B
-  name_zh: Blantyre工艺品合约
+  name_zh: 布兰太尔工艺品合约
   category: 工艺品
   weight_kg: 9.7
   base_reference_price: 437.51
@@ -40,7 +40,7 @@ products:
   rarity: 0.51
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: blantyre_矿产_B
-  name_zh: Blantyre矿产合约
+  name_zh: 布兰太尔矿产合约
   category: 矿产
   weight_kg: 28.2
   base_reference_price: 672.68

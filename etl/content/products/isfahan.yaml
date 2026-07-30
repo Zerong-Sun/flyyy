@@ -1,6 +1,6 @@
 products:
 - product_id: isfahan_香料_B
-  name_zh: Isfahan香料合约
+  name_zh: 伊斯法罕香料合约
   category: 香料
   weight_kg: 0.3
   base_reference_price: 327.77
@@ -10,7 +10,7 @@ products:
   rarity: 0.41
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: isfahan_日用品_B
-  name_zh: Isfahan日用品合约
+  name_zh: 伊斯法罕日用品合约
   category: 日用品
   weight_kg: 11.4
   base_reference_price: 49.84
@@ -20,7 +20,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: isfahan_矿产_B
-  name_zh: Isfahan矿产合约
+  name_zh: 伊斯法罕矿产合约
   category: 矿产
   weight_kg: 37.9
   base_reference_price: 700.32
@@ -30,7 +30,7 @@ products:
   rarity: 0.36
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: isfahan_食品_B
-  name_zh: Isfahan食品合约
+  name_zh: 伊斯法罕食品合约
   category: 食品
   weight_kg: 29.6
   base_reference_price: 85.17
@@ -40,7 +40,7 @@ products:
   rarity: 0.27
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: isfahan_咖啡_B
-  name_zh: Isfahan咖啡合约
+  name_zh: 伊斯法罕咖啡合约
   category: 咖啡
   weight_kg: 12.9
   base_reference_price: 181.15

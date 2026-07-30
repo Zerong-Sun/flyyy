@@ -1,6 +1,6 @@
 products:
 - product_id: eskişehir_纺织品_B
-  name_zh: Eskişehir纺织品合约
+  name_zh: 埃斯基谢希尔纺织品合约
   category: 纺织品
   weight_kg: 12.5
   base_reference_price: 187.75
@@ -10,7 +10,7 @@ products:
   rarity: 0.32
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: eskişehir_机械_B
-  name_zh: Eskişehir机械合约
+  name_zh: 埃斯基谢希尔机械合约
   category: 机械
   weight_kg: 46.2
   base_reference_price: 602.0
@@ -20,7 +20,7 @@ products:
   rarity: 0.53
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: eskişehir_矿产_B
-  name_zh: Eskişehir矿产合约
+  name_zh: 埃斯基谢希尔矿产合约
   category: 矿产
   weight_kg: 29.8
   base_reference_price: 249.69
@@ -30,7 +30,7 @@ products:
   rarity: 0.52
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: eskişehir_食品_B
-  name_zh: Eskişehir食品合约
+  name_zh: 埃斯基谢希尔食品合约
   category: 食品
   weight_kg: 17.9
   base_reference_price: 114.16
@@ -40,7 +40,7 @@ products:
   rarity: 0.24
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: eskişehir_陶瓷_B
-  name_zh: Eskişehir陶瓷合约
+  name_zh: 埃斯基谢希尔陶瓷合约
   category: 陶瓷
   weight_kg: 28.5
   base_reference_price: 291.31

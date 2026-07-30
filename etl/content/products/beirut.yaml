@@ -1,6 +1,6 @@
 products:
 - product_id: beirut_香料_B
-  name_zh: Beirut香料合约
+  name_zh: 贝鲁特香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 328.1
@@ -10,7 +10,7 @@ products:
   rarity: 0.45
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: beirut_纺织品_B
-  name_zh: Beirut纺织品合约
+  name_zh: 贝鲁特纺织品合约
   category: 纺织品
   weight_kg: 8.1
   base_reference_price: 206.95
@@ -20,7 +20,7 @@ products:
   rarity: 0.33
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: beirut_食品_B
-  name_zh: Beirut食品合约
+  name_zh: 贝鲁特食品合约
   category: 食品
   weight_kg: 15.5
   base_reference_price: 232.12
@@ -30,7 +30,7 @@ products:
   rarity: 0.3
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: beirut_工艺品_B
-  name_zh: Beirut工艺品合约
+  name_zh: 贝鲁特工艺品合约
   category: 工艺品
   weight_kg: 10.3
   base_reference_price: 291.68
@@ -40,7 +40,7 @@ products:
   rarity: 0.46
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: beirut_糖果_B
-  name_zh: Beirut糖果合约
+  name_zh: 贝鲁特糖果合约
   category: 糖果
   weight_kg: 6.3
   base_reference_price: 65.44

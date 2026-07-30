@@ -1,6 +1,6 @@
 products:
 - product_id: willemstad_日用品_B
-  name_zh: Willemstad日用品合约
+  name_zh: 威廉斯塔德日用品合约
   category: 日用品
   weight_kg: 8.7
   base_reference_price: 118.59
@@ -10,7 +10,7 @@ products:
   rarity: 0.06
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: willemstad_糖果_B
-  name_zh: Willemstad糖果合约
+  name_zh: 威廉斯塔德糖果合约
   category: 糖果
   weight_kg: 7.2
   base_reference_price: 77.16
@@ -20,7 +20,7 @@ products:
   rarity: 0.3
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: willemstad_咖啡_B
-  name_zh: Willemstad咖啡合约
+  name_zh: 威廉斯塔德咖啡合约
   category: 咖啡
   weight_kg: 8.4
   base_reference_price: 148.32
@@ -30,7 +30,7 @@ products:
   rarity: 0.43
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: willemstad_食品_B
-  name_zh: Willemstad食品合约
+  name_zh: 威廉斯塔德食品合约
   category: 食品
   weight_kg: 27.3
   base_reference_price: 199.35
@@ -40,7 +40,7 @@ products:
   rarity: 0.2
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: willemstad_工艺品_B
-  name_zh: Willemstad工艺品合约
+  name_zh: 威廉斯塔德工艺品合约
   category: 工艺品
   weight_kg: 8.8
   base_reference_price: 361.11

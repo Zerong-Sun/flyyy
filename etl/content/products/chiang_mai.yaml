@@ -1,6 +1,6 @@
 products:
 - product_id: chiang_mai_日用品_B
-  name_zh: Chiang Mai日用品合约
+  name_zh: 清迈日用品合约
   category: 日用品
   weight_kg: 8.7
   base_reference_price: 74.15
@@ -10,7 +10,7 @@ products:
   rarity: 0.08
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: chiang_mai_纺织品_B
-  name_zh: Chiang Mai纺织品合约
+  name_zh: 清迈纺织品合约
   category: 纺织品
   weight_kg: 17.7
   base_reference_price: 166.56
@@ -20,7 +20,7 @@ products:
   rarity: 0.31
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: chiang_mai_香料_B
-  name_zh: Chiang Mai香料合约
+  name_zh: 清迈香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 117.98
@@ -30,7 +30,7 @@ products:
   rarity: 0.59
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: chiang_mai_玩具_B
-  name_zh: Chiang Mai玩具合约
+  name_zh: 清迈玩具合约
   category: 玩具
   weight_kg: 7.3
   base_reference_price: 105.34
@@ -40,7 +40,7 @@ products:
   rarity: 0.16
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: chiang_mai_食品_B
-  name_zh: Chiang Mai食品合约
+  name_zh: 清迈食品合约
   category: 食品
   weight_kg: 21.7
   base_reference_price: 158.15

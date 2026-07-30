@@ -1,6 +1,6 @@
 products:
 - product_id: dili_日用品_B
-  name_zh: Dili日用品合约
+  name_zh: 帝力日用品合约
   category: 日用品
   weight_kg: 9.9
   base_reference_price: 116.66
@@ -10,7 +10,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: dili_工艺品_B
-  name_zh: Dili工艺品合约
+  name_zh: 帝力工艺品合约
   category: 工艺品
   weight_kg: 11.4
   base_reference_price: 383.61
@@ -20,7 +20,7 @@ products:
   rarity: 0.49
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: dili_纺织品_B
-  name_zh: Dili纺织品合约
+  name_zh: 帝力纺织品合约
   category: 纺织品
   weight_kg: 16.7
   base_reference_price: 497.51
@@ -30,7 +30,7 @@ products:
   rarity: 0.37
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: dili_香料_B
-  name_zh: Dili香料合约
+  name_zh: 帝力香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 257.81
@@ -40,7 +40,7 @@ products:
   rarity: 0.59
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: dili_咖啡_B
-  name_zh: Dili咖啡合约
+  name_zh: 帝力咖啡合约
   category: 咖啡
   weight_kg: 14.8
   base_reference_price: 147.68

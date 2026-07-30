@@ -1,6 +1,6 @@
 products:
 - product_id: durban_食品_B
-  name_zh: Durban食品合约
+  name_zh: 德班食品合约
   category: 食品
   weight_kg: 22.7
   base_reference_price: 100.27
@@ -10,7 +10,7 @@ products:
   rarity: 0.31
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: durban_矿产_B
-  name_zh: Durban矿产合约
+  name_zh: 德班矿产合约
   category: 矿产
   weight_kg: 28.5
   base_reference_price: 217.14
@@ -20,7 +20,7 @@ products:
   rarity: 0.59
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: durban_纺织品_B
-  name_zh: Durban纺织品合约
+  name_zh: 德班纺织品合约
   category: 纺织品
   weight_kg: 15.7
   base_reference_price: 319.41
@@ -30,7 +30,7 @@ products:
   rarity: 0.25
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: durban_机械_B
-  name_zh: Durban机械合约
+  name_zh: 德班机械合约
   category: 机械
   weight_kg: 46.8
   base_reference_price: 593.86
@@ -40,7 +40,7 @@ products:
   rarity: 0.6
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: durban_日用品_B
-  name_zh: Durban日用品合约
+  name_zh: 德班日用品合约
   category: 日用品
   weight_kg: 9.0
   base_reference_price: 55.69

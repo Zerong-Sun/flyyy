@@ -1,6 +1,6 @@
 products:
 - product_id: cochabamba_工艺品_B
-  name_zh: Cochabamba工艺品合约
+  name_zh: 科恰班巴工艺品合约
   category: 工艺品
   weight_kg: 14.9
   base_reference_price: 172.51
@@ -10,7 +10,7 @@ products:
   rarity: 0.6
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: cochabamba_香料_B
-  name_zh: Cochabamba香料合约
+  name_zh: 科恰班巴香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 210.95
@@ -20,7 +20,7 @@ products:
   rarity: 0.48
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: cochabamba_矿产_B
-  name_zh: Cochabamba矿产合约
+  name_zh: 科恰班巴矿产合约
   category: 矿产
   weight_kg: 39.4
   base_reference_price: 263.29
@@ -30,7 +30,7 @@ products:
   rarity: 0.43
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: cochabamba_纺织品_B
-  name_zh: Cochabamba纺织品合约
+  name_zh: 科恰班巴纺织品合约
   category: 纺织品
   weight_kg: 16.9
   base_reference_price: 381.0
@@ -40,7 +40,7 @@ products:
   rarity: 0.38
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: cochabamba_糖果_B
-  name_zh: Cochabamba糖果合约
+  name_zh: 科恰班巴糖果合约
   category: 糖果
   weight_kg: 7.3
   base_reference_price: 63.27

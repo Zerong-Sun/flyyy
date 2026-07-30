@@ -1,6 +1,6 @@
 products:
 - product_id: belgrade_咖啡_B
-  name_zh: Belgrade咖啡合约
+  name_zh: 贝尔格莱德咖啡合约
   category: 咖啡
   weight_kg: 13.6
   base_reference_price: 130.35
@@ -10,7 +10,7 @@ products:
   rarity: 0.37
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: belgrade_日用品_B
-  name_zh: Belgrade日用品合约
+  name_zh: 贝尔格莱德日用品合约
   category: 日用品
   weight_kg: 10.4
   base_reference_price: 104.84
@@ -20,7 +20,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: belgrade_食品_B
-  name_zh: Belgrade食品合约
+  name_zh: 贝尔格莱德食品合约
   category: 食品
   weight_kg: 25.8
   base_reference_price: 135.13
@@ -30,7 +30,7 @@ products:
   rarity: 0.29
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: belgrade_矿产_B
-  name_zh: Belgrade矿产合约
+  name_zh: 贝尔格莱德矿产合约
   category: 矿产
   weight_kg: 15.4
   base_reference_price: 344.8
@@ -40,7 +40,7 @@ products:
   rarity: 0.38
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: belgrade_工艺品_B
-  name_zh: Belgrade工艺品合约
+  name_zh: 贝尔格莱德工艺品合约
   category: 工艺品
   weight_kg: 13.4
   base_reference_price: 411.05

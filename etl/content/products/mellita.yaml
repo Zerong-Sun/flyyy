@@ -1,6 +1,6 @@
 products:
 - product_id: mellita_矿产_B
-  name_zh: Mellita矿产合约
+  name_zh: 梅利塔矿产合约
   category: 矿产
   weight_kg: 35.5
   base_reference_price: 292.56
@@ -10,7 +10,7 @@ products:
   rarity: 0.54
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: mellita_咖啡_B
-  name_zh: Mellita咖啡合约
+  name_zh: 梅利塔咖啡合约
   category: 咖啡
   weight_kg: 13.0
   base_reference_price: 202.05
@@ -20,7 +20,7 @@ products:
   rarity: 0.42
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: mellita_香料_B
-  name_zh: Mellita香料合约
+  name_zh: 梅利塔香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 285.83
@@ -30,7 +30,7 @@ products:
   rarity: 0.57
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: mellita_工艺品_B
-  name_zh: Mellita工艺品合约
+  name_zh: 梅利塔工艺品合约
   category: 工艺品
   weight_kg: 5.8
   base_reference_price: 203.5
@@ -40,7 +40,7 @@ products:
   rarity: 0.55
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: mellita_糖果_B
-  name_zh: Mellita糖果合约
+  name_zh: 梅利塔糖果合约
   category: 糖果
   weight_kg: 6.0
   base_reference_price: 116.25

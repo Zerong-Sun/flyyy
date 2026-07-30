@@ -1,6 +1,6 @@
 products:
 - product_id: chlef_食品_B
-  name_zh: Chlef食品合约
+  name_zh: 谢利夫食品合约
   category: 食品
   weight_kg: 17.7
   base_reference_price: 57.63
@@ -10,7 +10,7 @@ products:
   rarity: 0.3
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: chlef_日用品_B
-  name_zh: Chlef日用品合约
+  name_zh: 谢利夫日用品合约
   category: 日用品
   weight_kg: 6.6
   base_reference_price: 48.82
@@ -20,7 +20,7 @@ products:
   rarity: 0.18
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: chlef_能源_B
-  name_zh: Chlef能源合约
+  name_zh: 谢利夫能源合约
   category: 能源
   weight_kg: 6.6
   base_reference_price: 271.71
@@ -30,7 +30,7 @@ products:
   rarity: 0.53
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: chlef_纺织品_B
-  name_zh: Chlef纺织品合约
+  name_zh: 谢利夫纺织品合约
   category: 纺织品
   weight_kg: 18.2
   base_reference_price: 184.89
@@ -40,7 +40,7 @@ products:
   rarity: 0.32
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: chlef_矿产_B
-  name_zh: Chlef矿产合约
+  name_zh: 谢利夫矿产合约
   category: 矿产
   weight_kg: 17.1
   base_reference_price: 296.68

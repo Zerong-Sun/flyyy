@@ -1,6 +1,6 @@
 products:
 - product_id: kuching_日用品_B
-  name_zh: Kuching日用品合约
+  name_zh: 古晋日用品合约
   category: 日用品
   weight_kg: 12.9
   base_reference_price: 65.24
@@ -10,7 +10,7 @@ products:
   rarity: 0.19
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: kuching_香料_B
-  name_zh: Kuching香料合约
+  name_zh: 古晋香料合约
   category: 香料
   weight_kg: 0.5
   base_reference_price: 271.09
@@ -20,7 +20,7 @@ products:
   rarity: 0.48
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: kuching_电子_B
-  name_zh: Kuching电子合约
+  name_zh: 古晋电子合约
   category: 电子
   weight_kg: 4.6
   base_reference_price: 1431.53
@@ -30,7 +30,7 @@ products:
   rarity: 0.74
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: kuching_能源_B
-  name_zh: Kuching能源合约
+  name_zh: 古晋能源合约
   category: 能源
   weight_kg: 7.2
   base_reference_price: 395.33
@@ -40,7 +40,7 @@ products:
   rarity: 0.69
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: kuching_食品_B
-  name_zh: Kuching食品合约
+  name_zh: 古晋食品合约
   category: 食品
   weight_kg: 27.7
   base_reference_price: 181.75

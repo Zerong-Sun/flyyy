@@ -1,6 +1,6 @@
 products:
 - product_id: bandar_abbas_食品_B
-  name_zh: Bandar Abbas食品合约
+  name_zh: 阿巴斯港食品合约
   category: 食品
   weight_kg: 27.9
   base_reference_price: 155.32
@@ -10,7 +10,7 @@ products:
   rarity: 0.35
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: bandar_abbas_咖啡_B
-  name_zh: Bandar Abbas咖啡合约
+  name_zh: 阿巴斯港咖啡合约
   category: 咖啡
   weight_kg: 5.5
   base_reference_price: 241.71
@@ -20,7 +20,7 @@ products:
   rarity: 0.45
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: bandar_abbas_纺织品_B
-  name_zh: Bandar Abbas纺织品合约
+  name_zh: 阿巴斯港纺织品合约
   category: 纺织品
   weight_kg: 19.4
   base_reference_price: 392.34
@@ -30,7 +30,7 @@ products:
   rarity: 0.33
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: bandar_abbas_糖果_B
-  name_zh: Bandar Abbas糖果合约
+  name_zh: 阿巴斯港糖果合约
   category: 糖果
   weight_kg: 4.8
   base_reference_price: 102.83
@@ -40,7 +40,7 @@ products:
   rarity: 0.26
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: bandar_abbas_香料_B
-  name_zh: Bandar Abbas香料合约
+  name_zh: 阿巴斯港香料合约
   category: 香料
   weight_kg: 0.7
   base_reference_price: 197.65

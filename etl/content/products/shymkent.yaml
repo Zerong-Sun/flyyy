@@ -1,6 +1,6 @@
 products:
 - product_id: shymkent_日用品_B
-  name_zh: Shymkent日用品合约
+  name_zh: 奇姆肯特日用品合约
   category: 日用品
   weight_kg: 7.4
   base_reference_price: 57.49
@@ -10,7 +10,7 @@ products:
   rarity: 0.06
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: shymkent_咖啡_B
-  name_zh: Shymkent咖啡合约
+  name_zh: 奇姆肯特咖啡合约
   category: 咖啡
   weight_kg: 5.3
   base_reference_price: 106.18
@@ -20,7 +20,7 @@ products:
   rarity: 0.48
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: shymkent_香料_B
-  name_zh: Shymkent香料合约
+  name_zh: 奇姆肯特香料合约
   category: 香料
   weight_kg: 0.5
   base_reference_price: 303.23
@@ -30,7 +30,7 @@ products:
   rarity: 0.5
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: shymkent_糖果_B
-  name_zh: Shymkent糖果合约
+  name_zh: 奇姆肯特糖果合约
   category: 糖果
   weight_kg: 4.3
   base_reference_price: 135.95
@@ -40,7 +40,7 @@ products:
   rarity: 0.19
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: shymkent_纺织品_B
-  name_zh: Shymkent纺织品合约
+  name_zh: 奇姆肯特纺织品合约
   category: 纺织品
   weight_kg: 19.1
   base_reference_price: 333.88

@@ -1,6 +1,6 @@
 products:
 - product_id: harbin_纺织品_B
-  name_zh: Harbin纺织品合约
+  name_zh: 哈尔滨纺织品合约
   category: 纺织品
   weight_kg: 16.9
   base_reference_price: 265.18
@@ -10,7 +10,7 @@ products:
   rarity: 0.32
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: harbin_电子_B
-  name_zh: Harbin电子合约
+  name_zh: 哈尔滨电子合约
   category: 电子
   weight_kg: 1.7
   base_reference_price: 953.51
@@ -20,7 +20,7 @@ products:
   rarity: 0.69
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: harbin_陶瓷_B
-  name_zh: Harbin陶瓷合约
+  name_zh: 哈尔滨陶瓷合约
   category: 陶瓷
   weight_kg: 20.1
   base_reference_price: 282.3
@@ -30,7 +30,7 @@ products:
   rarity: 0.5
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: harbin_茶叶_B
-  name_zh: Harbin茶叶合约
+  name_zh: 哈尔滨茶叶合约
   category: 茶叶
   weight_kg: 5.9
   base_reference_price: 148.51
@@ -40,7 +40,7 @@ products:
   rarity: 0.44
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: harbin_机械_B
-  name_zh: Harbin机械合约
+  name_zh: 哈尔滨机械合约
   category: 机械
   weight_kg: 38.5
   base_reference_price: 553.99

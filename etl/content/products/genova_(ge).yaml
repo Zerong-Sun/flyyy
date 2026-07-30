@@ -1,6 +1,6 @@
 products:
 - product_id: genova_(ge)_机械_B
-  name_zh: Genova (GE)机械合约
+  name_zh: 热那亚机械合约
   category: 机械
   weight_kg: 46.2
   base_reference_price: 1176.9
@@ -10,7 +10,7 @@ products:
   rarity: 0.52
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: genova_(ge)_陶瓷_B
-  name_zh: Genova (GE)陶瓷合约
+  name_zh: 热那亚陶瓷合约
   category: 陶瓷
   weight_kg: 18.6
   base_reference_price: 282.33
@@ -20,7 +20,7 @@ products:
   rarity: 0.47
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: genova_(ge)_纺织品_B
-  name_zh: Genova (GE)纺织品合约
+  name_zh: 热那亚纺织品合约
   category: 纺织品
   weight_kg: 13.5
   base_reference_price: 397.06
@@ -30,7 +30,7 @@ products:
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: genova_(ge)_食品_B
-  name_zh: Genova (GE)食品合约
+  name_zh: 热那亚食品合约
   category: 食品
   weight_kg: 17.1
   base_reference_price: 141.53
@@ -40,7 +40,7 @@ products:
   rarity: 0.26
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: genova_(ge)_工艺品_B
-  name_zh: Genova (GE)工艺品合约
+  name_zh: 热那亚工艺品合约
   category: 工艺品
   weight_kg: 6.6
   base_reference_price: 473.64

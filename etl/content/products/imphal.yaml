@@ -1,6 +1,6 @@
 products:
 - product_id: imphal_矿产_B
-  name_zh: Imphal矿产合约
+  name_zh: 因帕尔矿产合约
   category: 矿产
   weight_kg: 26.3
   base_reference_price: 239.12
@@ -10,7 +10,7 @@ products:
   rarity: 0.58
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: imphal_电子_B
-  name_zh: Imphal电子合约
+  name_zh: 因帕尔电子合约
   category: 电子
   weight_kg: 1.6
   base_reference_price: 1398.27
@@ -20,7 +20,7 @@ products:
   rarity: 0.7
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: imphal_纺织品_B
-  name_zh: Imphal纺织品合约
+  name_zh: 因帕尔纺织品合约
   category: 纺织品
   weight_kg: 9.9
   base_reference_price: 242.98
@@ -30,7 +30,7 @@ products:
   rarity: 0.3
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: imphal_茶叶_B
-  name_zh: Imphal茶叶合约
+  name_zh: 因帕尔茶叶合约
   category: 茶叶
   weight_kg: 7.7
   base_reference_price: 89.58
@@ -40,7 +40,7 @@ products:
   rarity: 0.53
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: imphal_香料_B
-  name_zh: Imphal香料合约
+  name_zh: 因帕尔香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 162.54

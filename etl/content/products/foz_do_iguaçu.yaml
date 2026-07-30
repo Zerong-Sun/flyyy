@@ -1,6 +1,6 @@
 products:
 - product_id: foz_do_iguaçu_能源_B
-  name_zh: Foz do Iguaçu能源合约
+  name_zh: 伊瓜苏能源合约
   category: 能源
   weight_kg: 5.2
   base_reference_price: 726.38
@@ -10,7 +10,7 @@ products:
   rarity: 0.63
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: foz_do_iguaçu_咖啡_B
-  name_zh: Foz do Iguaçu咖啡合约
+  name_zh: 伊瓜苏咖啡合约
   category: 咖啡
   weight_kg: 8.1
   base_reference_price: 184.5
@@ -20,7 +20,7 @@ products:
   rarity: 0.43
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: foz_do_iguaçu_矿产_B
-  name_zh: Foz do Iguaçu矿产合约
+  name_zh: 伊瓜苏矿产合约
   category: 矿产
   weight_kg: 37.8
   base_reference_price: 612.74
@@ -30,7 +30,7 @@ products:
   rarity: 0.5
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: foz_do_iguaçu_食品_B
-  name_zh: Foz do Iguaçu食品合约
+  name_zh: 伊瓜苏食品合约
   category: 食品
   weight_kg: 22.6
   base_reference_price: 124.36
@@ -40,7 +40,7 @@ products:
   rarity: 0.4
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: foz_do_iguaçu_日用品_B
-  name_zh: Foz do Iguaçu日用品合约
+  name_zh: 伊瓜苏日用品合约
   category: 日用品
   weight_kg: 8.6
   base_reference_price: 48.66

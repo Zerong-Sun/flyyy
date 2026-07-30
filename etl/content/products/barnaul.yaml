@@ -1,6 +1,6 @@
 products:
 - product_id: barnaul_食品_B
-  name_zh: Barnaul食品合约
+  name_zh: 巴尔瑙尔食品合约
   category: 食品
   weight_kg: 25.4
   base_reference_price: 161.98
@@ -10,7 +10,7 @@ products:
   rarity: 0.26
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: barnaul_机械_B
-  name_zh: Barnaul机械合约
+  name_zh: 巴尔瑙尔机械合约
   category: 机械
   weight_kg: 31.7
   base_reference_price: 1113.08
@@ -20,7 +20,7 @@ products:
   rarity: 0.59
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: barnaul_矿产_B
-  name_zh: Barnaul矿产合约
+  name_zh: 巴尔瑙尔矿产合约
   category: 矿产
   weight_kg: 23.4
   base_reference_price: 465.65
@@ -30,7 +30,7 @@ products:
   rarity: 0.58
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: barnaul_能源_B
-  name_zh: Barnaul能源合约
+  name_zh: 巴尔瑙尔能源合约
   category: 能源
   weight_kg: 9.3
   base_reference_price: 562.14
@@ -40,7 +40,7 @@ products:
   rarity: 0.51
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: barnaul_日用品_B
-  name_zh: Barnaul日用品合约
+  name_zh: 巴尔瑙尔日用品合约
   category: 日用品
   weight_kg: 11.2
   base_reference_price: 87.56

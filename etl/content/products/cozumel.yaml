@@ -1,6 +1,6 @@
 products:
 - product_id: cozumel_日用品_B
-  name_zh: Cozumel日用品合约
+  name_zh: 科苏梅尔日用品合约
   category: 日用品
   weight_kg: 7.7
   base_reference_price: 68.82
@@ -10,7 +10,7 @@ products:
   rarity: 0.16
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: cozumel_矿产_B
-  name_zh: Cozumel矿产合约
+  name_zh: 科苏梅尔矿产合约
   category: 矿产
   weight_kg: 18.7
   base_reference_price: 638.26
@@ -20,7 +20,7 @@ products:
   rarity: 0.51
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: cozumel_电子_B
-  name_zh: Cozumel电子合约
+  name_zh: 科苏梅尔电子合约
   category: 电子
   weight_kg: 2.0
   base_reference_price: 1903.94
@@ -30,7 +30,7 @@ products:
   rarity: 0.61
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: cozumel_食品_B
-  name_zh: Cozumel食品合约
+  name_zh: 科苏梅尔食品合约
   category: 食品
   weight_kg: 29.0
   base_reference_price: 193.7
@@ -40,7 +40,7 @@ products:
   rarity: 0.4
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: cozumel_玩具_B
-  name_zh: Cozumel玩具合约
+  name_zh: 科苏梅尔玩具合约
   category: 玩具
   weight_kg: 7.1
   base_reference_price: 111.52

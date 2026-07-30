@@ -1,6 +1,6 @@
 products:
 - product_id: batam_食品_B
-  name_zh: Batam食品合约
+  name_zh: 巴淡岛食品合约
   category: 食品
   weight_kg: 20.2
   base_reference_price: 109.95
@@ -10,7 +10,7 @@ products:
   rarity: 0.27
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: batam_矿产_B
-  name_zh: Batam矿产合约
+  name_zh: 巴淡岛矿产合约
   category: 矿产
   weight_kg: 34.8
   base_reference_price: 197.42
@@ -20,7 +20,7 @@ products:
   rarity: 0.5
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: batam_咖啡_B
-  name_zh: Batam咖啡合约
+  name_zh: 巴淡岛咖啡合约
   category: 咖啡
   weight_kg: 14.8
   base_reference_price: 139.73
@@ -30,7 +30,7 @@ products:
   rarity: 0.47
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: batam_纺织品_B
-  name_zh: Batam纺织品合约
+  name_zh: 巴淡岛纺织品合约
   category: 纺织品
   weight_kg: 15.8
   base_reference_price: 145.32
@@ -40,7 +40,7 @@ products:
   rarity: 0.39
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: batam_香料_B
-  name_zh: Batam香料合约
+  name_zh: 巴淡岛香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 208.77

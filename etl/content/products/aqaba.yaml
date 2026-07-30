@@ -1,6 +1,6 @@
 products:
 - product_id: aqaba_工艺品_B
-  name_zh: Aqaba工艺品合约
+  name_zh: 亚喀巴工艺品合约
   category: 工艺品
   weight_kg: 9.0
   base_reference_price: 402.88
@@ -10,7 +10,7 @@ products:
   rarity: 0.41
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: aqaba_食品_B
-  name_zh: Aqaba食品合约
+  name_zh: 亚喀巴食品合约
   category: 食品
   weight_kg: 16.4
   base_reference_price: 163.45
@@ -20,7 +20,7 @@ products:
   rarity: 0.21
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: aqaba_糖果_B
-  name_zh: Aqaba糖果合约
+  name_zh: 亚喀巴糖果合约
   category: 糖果
   weight_kg: 6.9
   base_reference_price: 72.08
@@ -30,7 +30,7 @@ products:
   rarity: 0.16
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: aqaba_香料_B
-  name_zh: Aqaba香料合约
+  name_zh: 亚喀巴香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 189.58
@@ -40,7 +40,7 @@ products:
   rarity: 0.4
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: aqaba_日用品_B
-  name_zh: Aqaba日用品合约
+  name_zh: 亚喀巴日用品合约
   category: 日用品
   weight_kg: 5.3
   base_reference_price: 90.82

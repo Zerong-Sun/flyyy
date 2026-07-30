@@ -1,6 +1,6 @@
 products:
 - product_id: el_paso_食品_B
-  name_zh: El Paso食品合约
+  name_zh: 埃尔帕索食品合约
   category: 食品
   weight_kg: 23.3
   base_reference_price: 239.64
@@ -10,7 +10,7 @@ products:
   rarity: 0.37
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: el_paso_机械_B
-  name_zh: El Paso机械合约
+  name_zh: 埃尔帕索机械合约
   category: 机械
   weight_kg: 26.6
   base_reference_price: 1678.02
@@ -20,7 +20,7 @@ products:
   rarity: 0.53
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: el_paso_电子_B
-  name_zh: El Paso电子合约
+  name_zh: 埃尔帕索电子合约
   category: 电子
   weight_kg: 3.9
   base_reference_price: 1141.35
@@ -30,7 +30,7 @@ products:
   rarity: 0.58
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: el_paso_日用品_B
-  name_zh: El Paso日用品合约
+  name_zh: 埃尔帕索日用品合约
   category: 日用品
   weight_kg: 6.1
   base_reference_price: 116.54
@@ -40,7 +40,7 @@ products:
   rarity: 0.14
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: el_paso_能源_B
-  name_zh: El Paso能源合约
+  name_zh: 埃尔帕索能源合约
   category: 能源
   weight_kg: 3.2
   base_reference_price: 1035.36

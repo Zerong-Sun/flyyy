@@ -1,6 +1,6 @@
 products:
 - product_id: ankara_矿产_B
-  name_zh: Ankara矿产合约
+  name_zh: 安卡拉矿产合约
   category: 矿产
   weight_kg: 36.2
   base_reference_price: 287.3
@@ -10,7 +10,7 @@ products:
   rarity: 0.36
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: ankara_陶瓷_B
-  name_zh: Ankara陶瓷合约
+  name_zh: 安卡拉陶瓷合约
   category: 陶瓷
   weight_kg: 18.7
   base_reference_price: 295.43
@@ -20,7 +20,7 @@ products:
   rarity: 0.44
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: ankara_纺织品_B
-  name_zh: Ankara纺织品合约
+  name_zh: 安卡拉纺织品合约
   category: 纺织品
   weight_kg: 11.5
   base_reference_price: 342.23
@@ -30,7 +30,7 @@ products:
   rarity: 0.31
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: ankara_机械_B
-  name_zh: Ankara机械合约
+  name_zh: 安卡拉机械合约
   category: 机械
   weight_kg: 23.1
   base_reference_price: 781.98
@@ -40,7 +40,7 @@ products:
   rarity: 0.59
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: ankara_食品_B
-  name_zh: Ankara食品合约
+  name_zh: 安卡拉食品合约
   category: 食品
   weight_kg: 24.1
   base_reference_price: 139.92

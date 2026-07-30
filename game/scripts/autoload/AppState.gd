@@ -26,6 +26,7 @@ var last_flight_price: float = 0.0
 var last_baggage_cost: float = 0.0
 var reduced_animations: bool = false
 var night_bgm_enabled: bool = true
+var place_locale: String = "zh"  # "zh" or "en" — display language for place names only
 var unlocked_achievements: Dictionary = {}  # id -> true
 var stats: Dictionary = {
 	"total_flight_segments": 0,
@@ -257,6 +258,7 @@ func to_dict() -> Dictionary:
 		"last_baggage_cost": last_baggage_cost,
 		"reduced_animations": reduced_animations,
 		"night_bgm_enabled": night_bgm_enabled,
+		"place_locale": place_locale,
 		"unlocked_achievements": unlocked_achievements,
 		"stats": stats,
 	}
@@ -280,16 +282,22 @@ func from_dict(d: Dictionary) -> void:
 	trip_cabin = str(d.get("trip_cabin", "economy"))
 	last_market_date = str(d.get("last_market_date", GameClock.game_date_string()))
 	game_started = bool(d.get("game_started", false))
-	sell_transactions = d.get("sell_transactions", [])
+	sell_transactions = []
+	for tx_v in d.get("sell_transactions", []):
+		if typeof(tx_v) == TYPE_DICTIONARY:
+			sell_transactions.append(tx_v)
 	last_flight_price = float(d.get("last_flight_price", 0.0))
 	last_baggage_cost = float(d.get("last_baggage_cost", 0.0))
 	reduced_animations = bool(d.get("reduced_animations", false))
 	night_bgm_enabled = bool(d.get("night_bgm_enabled", true))
+	place_locale = str(d.get("place_locale", "zh"))
 	unlocked_achievements = d.get("unlocked_achievements", {})
 	stats = _default_stats()
 	var loaded_stats: Dictionary = d.get("stats", {})
 	for k in loaded_stats.keys():
 		stats[k] = loaded_stats[k]
+	if current_airport_id != "":
+		_mark_visit(current_airport_id)
 	if game_started:
 		GameClock.start_clock()
 	EventBus.cash_changed.emit()

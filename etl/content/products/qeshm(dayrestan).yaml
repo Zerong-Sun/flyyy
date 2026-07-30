@@ -1,6 +1,6 @@
 products:
 - product_id: qeshm(dayrestan)_矿产_B
-  name_zh: Qeshm(Dayrestan)矿产合约
+  name_zh: 格什姆岛矿产合约
   category: 矿产
   weight_kg: 28.3
   base_reference_price: 343.96
@@ -10,7 +10,7 @@ products:
   rarity: 0.44
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: qeshm(dayrestan)_日用品_B
-  name_zh: Qeshm(Dayrestan)日用品合约
+  name_zh: 格什姆岛日用品合约
   category: 日用品
   weight_kg: 11.0
   base_reference_price: 118.0
@@ -20,7 +20,7 @@ products:
   rarity: 0.15
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: qeshm(dayrestan)_纺织品_B
-  name_zh: Qeshm(Dayrestan)纺织品合约
+  name_zh: 格什姆岛纺织品合约
   category: 纺织品
   weight_kg: 13.4
   base_reference_price: 338.0
@@ -30,7 +30,7 @@ products:
   rarity: 0.38
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: qeshm(dayrestan)_工艺品_B
-  name_zh: Qeshm(Dayrestan)工艺品合约
+  name_zh: 格什姆岛工艺品合约
   category: 工艺品
   weight_kg: 9.5
   base_reference_price: 341.28
@@ -40,7 +40,7 @@ products:
   rarity: 0.52
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: qeshm(dayrestan)_香料_B
-  name_zh: Qeshm(Dayrestan)香料合约
+  name_zh: 格什姆岛香料合约
   category: 香料
   weight_kg: 0.7
   base_reference_price: 261.66

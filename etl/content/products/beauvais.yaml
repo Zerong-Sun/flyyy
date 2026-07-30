@@ -1,6 +1,6 @@
 products:
 - product_id: beauvais_日用品_B
-  name_zh: Beauvais日用品合约
+  name_zh: 博韦日用品合约
   category: 日用品
   weight_kg: 14.1
   base_reference_price: 139.41
@@ -10,7 +10,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: beauvais_香料_B
-  name_zh: Beauvais香料合约
+  name_zh: 博韦香料合约
   category: 香料
   weight_kg: 0.5
   base_reference_price: 445.95
@@ -20,7 +20,7 @@ products:
   rarity: 0.47
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: beauvais_工艺品_B
-  name_zh: Beauvais工艺品合约
+  name_zh: 博韦工艺品合约
   category: 工艺品
   weight_kg: 13.4
   base_reference_price: 494.75
@@ -30,7 +30,7 @@ products:
   rarity: 0.5
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: beauvais_机械_B
-  name_zh: Beauvais机械合约
+  name_zh: 博韦机械合约
   category: 机械
   weight_kg: 39.7
   base_reference_price: 800.76
@@ -40,7 +40,7 @@ products:
   rarity: 0.5
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: beauvais_食品_B
-  name_zh: Beauvais食品合约
+  name_zh: 博韦食品合约
   category: 食品
   weight_kg: 15.4
   base_reference_price: 216.59

@@ -1,6 +1,6 @@
 products:
 - product_id: silao_日用品_B
-  name_zh: Silao日用品合约
+  name_zh: 锡劳日用品合约
   category: 日用品
   weight_kg: 13.7
   base_reference_price: 92.49
@@ -10,7 +10,7 @@ products:
   rarity: 0.12
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: silao_电子_B
-  name_zh: Silao电子合约
+  name_zh: 锡劳电子合约
   category: 电子
   weight_kg: 2.5
   base_reference_price: 1634.1
@@ -20,7 +20,7 @@ products:
   rarity: 0.62
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: silao_矿产_B
-  name_zh: Silao矿产合约
+  name_zh: 锡劳矿产合约
   category: 矿产
   weight_kg: 23.5
   base_reference_price: 469.53
@@ -30,7 +30,7 @@ products:
   rarity: 0.57
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: silao_食品_B
-  name_zh: Silao食品合约
+  name_zh: 锡劳食品合约
   category: 食品
   weight_kg: 28.4
   base_reference_price: 92.13
@@ -40,7 +40,7 @@ products:
   rarity: 0.22
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: silao_玩具_B
-  name_zh: Silao玩具合约
+  name_zh: 锡劳玩具合约
   category: 玩具
   weight_kg: 7.0
   base_reference_price: 100.21

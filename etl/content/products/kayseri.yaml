@@ -1,6 +1,6 @@
 products:
 - product_id: kayseri_机械_B
-  name_zh: Kayseri机械合约
+  name_zh: 开塞利机械合约
   category: 机械
   weight_kg: 23.8
   base_reference_price: 624.86
@@ -10,7 +10,7 @@ products:
   rarity: 0.48
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: kayseri_食品_B
-  name_zh: Kayseri食品合约
+  name_zh: 开塞利食品合约
   category: 食品
   weight_kg: 17.0
   base_reference_price: 122.81
@@ -20,7 +20,7 @@ products:
   rarity: 0.31
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kayseri_陶瓷_B
-  name_zh: Kayseri陶瓷合约
+  name_zh: 开塞利陶瓷合约
   category: 陶瓷
   weight_kg: 18.8
   base_reference_price: 307.36
@@ -30,7 +30,7 @@ products:
   rarity: 0.45
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: kayseri_纺织品_B
-  name_zh: Kayseri纺织品合约
+  name_zh: 开塞利纺织品合约
   category: 纺织品
   weight_kg: 17.1
   base_reference_price: 218.05
@@ -40,7 +40,7 @@ products:
   rarity: 0.41
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: kayseri_矿产_B
-  name_zh: Kayseri矿产合约
+  name_zh: 开塞利矿产合约
   category: 矿产
   weight_kg: 21.6
   base_reference_price: 583.33

@@ -1,6 +1,6 @@
 products:
 - product_id: dakar_纺织品_B
-  name_zh: Dakar纺织品合约
+  name_zh: 达喀尔纺织品合约
   category: 纺织品
   weight_kg: 11.6
   base_reference_price: 292.1
@@ -10,7 +10,7 @@ products:
   rarity: 0.42
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: dakar_日用品_B
-  name_zh: Dakar日用品合约
+  name_zh: 达喀尔日用品合约
   category: 日用品
   weight_kg: 10.3
   base_reference_price: 47.4
@@ -20,7 +20,7 @@ products:
   rarity: 0.12
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: dakar_糖果_B
-  name_zh: Dakar糖果合约
+  name_zh: 达喀尔糖果合约
   category: 糖果
   weight_kg: 7.6
   base_reference_price: 139.06
@@ -30,7 +30,7 @@ products:
   rarity: 0.35
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: dakar_矿产_B
-  name_zh: Dakar矿产合约
+  name_zh: 达喀尔矿产合约
   category: 矿产
   weight_kg: 16.2
   base_reference_price: 261.66
@@ -40,7 +40,7 @@ products:
   rarity: 0.39
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: dakar_咖啡_B
-  name_zh: Dakar咖啡合约
+  name_zh: 达喀尔咖啡合约
   category: 咖啡
   weight_kg: 13.1
   base_reference_price: 105.78

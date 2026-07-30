@@ -1,6 +1,6 @@
 products:
 - product_id: karlovy_vary_日用品_B
-  name_zh: Karlovy Vary日用品合约
+  name_zh: 卡罗维发利日用品合约
   category: 日用品
   weight_kg: 8.4
   base_reference_price: 91.52
@@ -10,7 +10,7 @@ products:
   rarity: 0.08
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: karlovy_vary_食品_B
-  name_zh: Karlovy Vary食品合约
+  name_zh: 卡罗维发利食品合约
   category: 食品
   weight_kg: 21.9
   base_reference_price: 244.75
@@ -20,7 +20,7 @@ products:
   rarity: 0.37
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: karlovy_vary_咖啡_B
-  name_zh: Karlovy Vary咖啡合约
+  name_zh: 卡罗维发利咖啡合约
   category: 咖啡
   weight_kg: 8.8
   base_reference_price: 117.44
@@ -30,7 +30,7 @@ products:
   rarity: 0.33
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: karlovy_vary_工艺品_B
-  name_zh: Karlovy Vary工艺品合约
+  name_zh: 卡罗维发利工艺品合约
   category: 工艺品
   weight_kg: 13.5
   base_reference_price: 370.29
@@ -40,7 +40,7 @@ products:
   rarity: 0.56
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: karlovy_vary_香料_B
-  name_zh: Karlovy Vary香料合约
+  name_zh: 卡罗维发利香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 283.98

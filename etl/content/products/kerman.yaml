@@ -1,6 +1,6 @@
 products:
 - product_id: kerman_咖啡_B
-  name_zh: Kerman咖啡合约
+  name_zh: 克尔曼咖啡合约
   category: 咖啡
   weight_kg: 8.3
   base_reference_price: 122.91
@@ -10,7 +10,7 @@ products:
   rarity: 0.45
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: kerman_日用品_B
-  name_zh: Kerman日用品合约
+  name_zh: 克尔曼日用品合约
   category: 日用品
   weight_kg: 7.7
   base_reference_price: 84.01
@@ -20,7 +20,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: kerman_香料_B
-  name_zh: Kerman香料合约
+  name_zh: 克尔曼香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 341.35
@@ -30,7 +30,7 @@ products:
   rarity: 0.58
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: kerman_工艺品_B
-  name_zh: Kerman工艺品合约
+  name_zh: 克尔曼工艺品合约
   category: 工艺品
   weight_kg: 14.7
   base_reference_price: 488.25
@@ -40,7 +40,7 @@ products:
   rarity: 0.53
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: kerman_食品_B
-  name_zh: Kerman食品合约
+  name_zh: 克尔曼食品合约
   category: 食品
   weight_kg: 23.1
   base_reference_price: 183.05

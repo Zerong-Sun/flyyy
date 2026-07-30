@@ -1,6 +1,6 @@
 products:
 - product_id: nankoku_食品_B
-  name_zh: Nankoku食品合约
+  name_zh: 高知食品合约
   category: 食品
   weight_kg: 24.0
   base_reference_price: 150.62
@@ -10,7 +10,7 @@ products:
   rarity: 0.35
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: nankoku_玩具_B
-  name_zh: Nankoku玩具合约
+  name_zh: 高知玩具合约
   category: 玩具
   weight_kg: 7.5
   base_reference_price: 169.13
@@ -20,7 +20,7 @@ products:
   rarity: 0.18
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: nankoku_电子_B
-  name_zh: Nankoku电子合约
+  name_zh: 高知电子合约
   category: 电子
   weight_kg: 2.7
   base_reference_price: 1178.9
@@ -30,7 +30,7 @@ products:
   rarity: 0.66
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: nankoku_工艺品_B
-  name_zh: Nankoku工艺品合约
+  name_zh: 高知工艺品合约
   category: 工艺品
   weight_kg: 9.5
   base_reference_price: 290.82
@@ -40,7 +40,7 @@ products:
   rarity: 0.41
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: nankoku_文具_B
-  name_zh: Nankoku文具合约
+  name_zh: 高知文具合约
   category: 文具
   weight_kg: 4.3
   base_reference_price: 55.96

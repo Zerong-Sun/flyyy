@@ -177,11 +177,11 @@ static func make(icon_id: String, size_px: float = 24.0) -> Control:
 	var tex := get_ui_icon(icon_id)
 	if tex != null:
 		var tex_rect := TextureRect.new()
-		tex_rect.texture = tex
-		tex_rect.custom_minimum_size = Vector2(size_px, size_px)
-		tex_rect.size = Vector2(size_px, size_px)
 		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_rect.custom_minimum_size = Vector2(size_px, size_px)
+		tex_rect.size = Vector2(size_px, size_px)
+		tex_rect.texture = tex
 		tex_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		tex_rect.name = icon_id
 		return tex_rect

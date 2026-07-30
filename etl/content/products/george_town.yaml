@@ -1,6 +1,6 @@
 products:
 - product_id: george_town_香料_B
-  name_zh: George Town香料合约
+  name_zh: 乔治敦香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 195.34
@@ -10,7 +10,7 @@ products:
   rarity: 0.58
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: george_town_咖啡_B
-  name_zh: George Town咖啡合约
+  name_zh: 乔治敦咖啡合约
   category: 咖啡
   weight_kg: 15.0
   base_reference_price: 278.18
@@ -20,7 +20,7 @@ products:
   rarity: 0.31
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: george_town_矿产_B
-  name_zh: George Town矿产合约
+  name_zh: 乔治敦矿产合约
   category: 矿产
   weight_kg: 38.0
   base_reference_price: 327.25
@@ -30,7 +30,7 @@ products:
   rarity: 0.56
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: george_town_食品_B
-  name_zh: George Town食品合约
+  name_zh: 乔治敦食品合约
   category: 食品
   weight_kg: 27.4
   base_reference_price: 155.03
@@ -40,7 +40,7 @@ products:
   rarity: 0.37
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: george_town_日用品_B
-  name_zh: George Town日用品合约
+  name_zh: 乔治敦日用品合约
   category: 日用品
   weight_kg: 14.7
   base_reference_price: 106.71

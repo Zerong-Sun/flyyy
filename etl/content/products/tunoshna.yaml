@@ -1,6 +1,6 @@
 products:
 - product_id: tunoshna_食品_B
-  name_zh: Tunoshna食品合约
+  name_zh: 图诺什纳食品合约
   category: 食品
   weight_kg: 20.1
   base_reference_price: 129.18
@@ -10,7 +10,7 @@ products:
   rarity: 0.4
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: tunoshna_矿产_B
-  name_zh: Tunoshna矿产合约
+  name_zh: 图诺什纳矿产合约
   category: 矿产
   weight_kg: 39.7
   base_reference_price: 192.92
@@ -20,7 +20,7 @@ products:
   rarity: 0.51
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: tunoshna_机械_B
-  name_zh: Tunoshna机械合约
+  name_zh: 图诺什纳机械合约
   category: 机械
   weight_kg: 32.3
   base_reference_price: 1119.56
@@ -30,7 +30,7 @@ products:
   rarity: 0.65
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: tunoshna_日用品_B
-  name_zh: Tunoshna日用品合约
+  name_zh: 图诺什纳日用品合约
   category: 日用品
   weight_kg: 11.6
   base_reference_price: 73.34
@@ -40,7 +40,7 @@ products:
   rarity: 0.06
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: tunoshna_能源_B
-  name_zh: Tunoshna能源合约
+  name_zh: 图诺什纳能源合约
   category: 能源
   weight_kg: 4.7
   base_reference_price: 728.05

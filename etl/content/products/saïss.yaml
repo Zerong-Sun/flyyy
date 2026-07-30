@@ -1,6 +1,6 @@
 products:
 - product_id: saïss_食品_B
-  name_zh: Saïss食品合约
+  name_zh: 萨伊斯食品合约
   category: 食品
   weight_kg: 15.2
   base_reference_price: 135.37
@@ -10,7 +10,7 @@ products:
   rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: saïss_香料_B
-  name_zh: Saïss香料合约
+  name_zh: 萨伊斯香料合约
   category: 香料
   weight_kg: 0.7
   base_reference_price: 194.54
@@ -20,7 +20,7 @@ products:
   rarity: 0.42
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: saïss_陶瓷_B
-  name_zh: Saïss陶瓷合约
+  name_zh: 萨伊斯陶瓷合约
   category: 陶瓷
   weight_kg: 20.1
   base_reference_price: 97.7
@@ -30,7 +30,7 @@ products:
   rarity: 0.47
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: saïss_纺织品_B
-  name_zh: Saïss纺织品合约
+  name_zh: 萨伊斯纺织品合约
   category: 纺织品
   weight_kg: 16.7
   base_reference_price: 145.9
@@ -40,7 +40,7 @@ products:
   rarity: 0.38
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: saïss_矿产_B
-  name_zh: Saïss矿产合约
+  name_zh: 萨伊斯矿产合约
   category: 矿产
   weight_kg: 26.0
   base_reference_price: 345.46

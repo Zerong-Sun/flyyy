@@ -1,6 +1,6 @@
 products:
 - product_id: siliguri_纺织品_B
-  name_zh: Siliguri纺织品合约
+  name_zh: 西里古里纺织品合约
   category: 纺织品
   weight_kg: 15.1
   base_reference_price: 159.63
@@ -10,7 +10,7 @@ products:
   rarity: 0.42
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: siliguri_矿产_B
-  name_zh: Siliguri矿产合约
+  name_zh: 西里古里矿产合约
   category: 矿产
   weight_kg: 27.0
   base_reference_price: 175.04
@@ -20,7 +20,7 @@ products:
   rarity: 0.37
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: siliguri_电子_B
-  name_zh: Siliguri电子合约
+  name_zh: 西里古里电子合约
   category: 电子
   weight_kg: 3.0
   base_reference_price: 1522.12
@@ -30,7 +30,7 @@ products:
   rarity: 0.69
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: siliguri_香料_B
-  name_zh: Siliguri香料合约
+  name_zh: 西里古里香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 204.55
@@ -40,7 +40,7 @@ products:
   rarity: 0.41
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: siliguri_茶叶_B
-  name_zh: Siliguri茶叶合约
+  name_zh: 西里古里茶叶合约
   category: 茶叶
   weight_kg: 7.0
   base_reference_price: 153.32

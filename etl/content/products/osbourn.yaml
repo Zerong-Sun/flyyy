@@ -1,6 +1,6 @@
 products:
 - product_id: osbourn_香料_B
-  name_zh: Osbourn香料合约
+  name_zh: 奥斯本香料合约
   category: 香料
   weight_kg: 0.5
   base_reference_price: 399.44
@@ -10,7 +10,7 @@ products:
   rarity: 0.5
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: osbourn_食品_B
-  name_zh: Osbourn食品合约
+  name_zh: 奥斯本食品合约
   category: 食品
   weight_kg: 27.1
   base_reference_price: 109.59
@@ -20,7 +20,7 @@ products:
   rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: osbourn_咖啡_B
-  name_zh: Osbourn咖啡合约
+  name_zh: 奥斯本咖啡合约
   category: 咖啡
   weight_kg: 7.8
   base_reference_price: 201.96
@@ -30,7 +30,7 @@ products:
   rarity: 0.4
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: osbourn_纺织品_B
-  name_zh: Osbourn纺织品合约
+  name_zh: 奥斯本纺织品合约
   category: 纺织品
   weight_kg: 16.2
   base_reference_price: 499.64
@@ -40,7 +40,7 @@ products:
   rarity: 0.39
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: osbourn_工艺品_B
-  name_zh: Osbourn工艺品合约
+  name_zh: 奥斯本工艺品合约
   category: 工艺品
   weight_kg: 7.9
   base_reference_price: 204.56

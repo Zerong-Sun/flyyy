@@ -1,6 +1,6 @@
 products:
 - product_id: kasane_糖果_B
-  name_zh: Kasane糖果合约
+  name_zh: 卡萨内糖果合约
   category: 糖果
   weight_kg: 3.5
   base_reference_price: 64.38
@@ -10,7 +10,7 @@ products:
   rarity: 0.32
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: kasane_咖啡_B
-  name_zh: Kasane咖啡合约
+  name_zh: 卡萨内咖啡合约
   category: 咖啡
   weight_kg: 7.7
   base_reference_price: 161.28
@@ -20,7 +20,7 @@ products:
   rarity: 0.35
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: kasane_香料_B
-  name_zh: Kasane香料合约
+  name_zh: 卡萨内香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 304.81
@@ -30,7 +30,7 @@ products:
   rarity: 0.4
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: kasane_工艺品_B
-  name_zh: Kasane工艺品合约
+  name_zh: 卡萨内工艺品合约
   category: 工艺品
   weight_kg: 14.9
   base_reference_price: 375.93
@@ -40,7 +40,7 @@ products:
   rarity: 0.6
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: kasane_日用品_B
-  name_zh: Kasane日用品合约
+  name_zh: 卡萨内日用品合约
   category: 日用品
   weight_kg: 12.3
   base_reference_price: 106.24

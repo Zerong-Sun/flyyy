@@ -1,6 +1,6 @@
 products:
 - product_id: krasnoyarsk_机械_B
-  name_zh: Krasnoyarsk机械合约
+  name_zh: 克拉斯诺亚尔斯克机械合约
   category: 机械
   weight_kg: 25.4
   base_reference_price: 804.2
@@ -10,7 +10,7 @@ products:
   rarity: 0.46
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: krasnoyarsk_矿产_B
-  name_zh: Krasnoyarsk矿产合约
+  name_zh: 克拉斯诺亚尔斯克矿产合约
   category: 矿产
   weight_kg: 16.9
   base_reference_price: 515.98
@@ -20,7 +20,7 @@ products:
   rarity: 0.42
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: krasnoyarsk_食品_B
-  name_zh: Krasnoyarsk食品合约
+  name_zh: 克拉斯诺亚尔斯克食品合约
   category: 食品
   weight_kg: 24.3
   base_reference_price: 115.49
@@ -30,7 +30,7 @@ products:
   rarity: 0.32
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: krasnoyarsk_能源_B
-  name_zh: Krasnoyarsk能源合约
+  name_zh: 克拉斯诺亚尔斯克能源合约
   category: 能源
   weight_kg: 6.3
   base_reference_price: 676.99
@@ -40,7 +40,7 @@ products:
   rarity: 0.59
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: krasnoyarsk_日用品_B
-  name_zh: Krasnoyarsk日用品合约
+  name_zh: 克拉斯诺亚尔斯克日用品合约
   category: 日用品
   weight_kg: 7.1
   base_reference_price: 43.31

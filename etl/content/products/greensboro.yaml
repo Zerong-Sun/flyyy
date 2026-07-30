@@ -1,6 +1,6 @@
 products:
 - product_id: greensboro_机械_B
-  name_zh: Greensboro机械合约
+  name_zh: 格林斯伯勒机械合约
   category: 机械
   weight_kg: 24.4
   base_reference_price: 1698.01
@@ -10,7 +10,7 @@ products:
   rarity: 0.62
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: greensboro_电子_B
-  name_zh: Greensboro电子合约
+  name_zh: 格林斯伯勒电子合约
   category: 电子
   weight_kg: 1.9
   base_reference_price: 1498.48
@@ -20,7 +20,7 @@ products:
   rarity: 0.67
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: greensboro_日用品_B
-  name_zh: Greensboro日用品合约
+  name_zh: 格林斯伯勒日用品合约
   category: 日用品
   weight_kg: 9.8
   base_reference_price: 100.42
@@ -30,7 +30,7 @@ products:
   rarity: 0.05
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: greensboro_食品_B
-  name_zh: Greensboro食品合约
+  name_zh: 格林斯伯勒食品合约
   category: 食品
   weight_kg: 21.3
   base_reference_price: 247.77
@@ -40,7 +40,7 @@ products:
   rarity: 0.26
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: greensboro_能源_B
-  name_zh: Greensboro能源合约
+  name_zh: 格林斯伯勒能源合约
   category: 能源
   weight_kg: 8.3
   base_reference_price: 759.52

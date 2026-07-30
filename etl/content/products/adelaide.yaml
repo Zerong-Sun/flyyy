@@ -1,6 +1,6 @@
 products:
 - product_id: adelaide_咖啡_B
-  name_zh: Adelaide咖啡合约
+  name_zh: 阿德莱德咖啡合约
   category: 咖啡
   weight_kg: 14.7
   base_reference_price: 111.62
@@ -10,7 +10,7 @@ products:
   rarity: 0.34
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: adelaide_能源_B
-  name_zh: Adelaide能源合约
+  name_zh: 阿德莱德能源合约
   category: 能源
   weight_kg: 7.8
   base_reference_price: 1036.03
@@ -20,7 +20,7 @@ products:
   rarity: 0.54
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: adelaide_矿产_B
-  name_zh: Adelaide矿产合约
+  name_zh: 阿德莱德矿产合约
   category: 矿产
   weight_kg: 30.7
   base_reference_price: 400.47
@@ -30,7 +30,7 @@ products:
   rarity: 0.44
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: adelaide_日用品_B
-  name_zh: Adelaide日用品合约
+  name_zh: 阿德莱德日用品合约
   category: 日用品
   weight_kg: 10.3
   base_reference_price: 112.59
@@ -40,7 +40,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: adelaide_食品_B
-  name_zh: Adelaide食品合约
+  name_zh: 阿德莱德食品合约
   category: 食品
   weight_kg: 22.5
   base_reference_price: 158.64

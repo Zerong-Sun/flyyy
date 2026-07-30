@@ -1,6 +1,6 @@
 products:
 - product_id: figari_机械_B
-  name_zh: Figari机械合约
+  name_zh: 菲加里机械合约
   category: 机械
   weight_kg: 42.3
   base_reference_price: 1643.37
@@ -10,7 +10,7 @@ products:
   rarity: 0.6
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: figari_工艺品_B
-  name_zh: Figari工艺品合约
+  name_zh: 菲加里工艺品合约
   category: 工艺品
   weight_kg: 9.1
   base_reference_price: 559.02
@@ -20,7 +20,7 @@ products:
   rarity: 0.42
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: figari_食品_B
-  name_zh: Figari食品合约
+  name_zh: 菲加里食品合约
   category: 食品
   weight_kg: 22.6
   base_reference_price: 120.71
@@ -30,7 +30,7 @@ products:
   rarity: 0.39
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: figari_日用品_B
-  name_zh: Figari日用品合约
+  name_zh: 菲加里日用品合约
   category: 日用品
   weight_kg: 11.9
   base_reference_price: 74.0
@@ -40,7 +40,7 @@ products:
   rarity: 0.08
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: figari_香料_B
-  name_zh: Figari香料合约
+  name_zh: 菲加里香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 295.85

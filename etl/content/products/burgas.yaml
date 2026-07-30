@@ -1,6 +1,6 @@
 products:
 - product_id: burgas_纺织品_B
-  name_zh: Burgas纺织品合约
+  name_zh: 布尔加斯纺织品合约
   category: 纺织品
   weight_kg: 13.5
   base_reference_price: 383.55
@@ -10,7 +10,7 @@ products:
   rarity: 0.41
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: burgas_食品_B
-  name_zh: Burgas食品合约
+  name_zh: 布尔加斯食品合约
   category: 食品
   weight_kg: 20.4
   base_reference_price: 163.09
@@ -20,7 +20,7 @@ products:
   rarity: 0.25
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: burgas_工艺品_B
-  name_zh: Burgas工艺品合约
+  name_zh: 布尔加斯工艺品合约
   category: 工艺品
   weight_kg: 12.2
   base_reference_price: 313.26
@@ -30,7 +30,7 @@ products:
   rarity: 0.49
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: burgas_糖果_B
-  name_zh: Burgas糖果合约
+  name_zh: 布尔加斯糖果合约
   category: 糖果
   weight_kg: 6.4
   base_reference_price: 142.38
@@ -40,7 +40,7 @@ products:
   rarity: 0.23
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: burgas_矿产_B
-  name_zh: Burgas矿产合约
+  name_zh: 布尔加斯矿产合约
   category: 矿产
   weight_kg: 35.8
   base_reference_price: 588.35

@@ -1,6 +1,6 @@
 products:
 - product_id: craiova_工艺品_B
-  name_zh: Craiova工艺品合约
+  name_zh: 克拉约瓦工艺品合约
   category: 工艺品
   weight_kg: 8.1
   base_reference_price: 248.02
@@ -10,7 +10,7 @@ products:
   rarity: 0.48
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: craiova_日用品_B
-  name_zh: Craiova日用品合约
+  name_zh: 克拉约瓦日用品合约
   category: 日用品
   weight_kg: 6.5
   base_reference_price: 102.3
@@ -20,7 +20,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: craiova_纺织品_B
-  name_zh: Craiova纺织品合约
+  name_zh: 克拉约瓦纺织品合约
   category: 纺织品
   weight_kg: 8.2
   base_reference_price: 289.44
@@ -30,7 +30,7 @@ products:
   rarity: 0.41
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: craiova_食品_B
-  name_zh: Craiova食品合约
+  name_zh: 克拉约瓦食品合约
   category: 食品
   weight_kg: 22.7
   base_reference_price: 101.07
@@ -40,7 +40,7 @@ products:
   rarity: 0.25
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: craiova_糖果_B
-  name_zh: Craiova糖果合约
+  name_zh: 克拉约瓦糖果合约
   category: 糖果
   weight_kg: 4.0
   base_reference_price: 138.19

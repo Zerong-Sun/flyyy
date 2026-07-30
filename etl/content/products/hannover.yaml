@@ -1,6 +1,6 @@
 products:
 - product_id: hannover_日用品_B
-  name_zh: Hannover日用品合约
+  name_zh: 汉诺威日用品合约
   category: 日用品
   weight_kg: 6.3
   base_reference_price: 45.99
@@ -10,7 +10,7 @@ products:
   rarity: 0.13
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: hannover_食品_B
-  name_zh: Hannover食品合约
+  name_zh: 汉诺威食品合约
   category: 食品
   weight_kg: 18.6
   base_reference_price: 101.26
@@ -20,7 +20,7 @@ products:
   rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: hannover_机械_B
-  name_zh: Hannover机械合约
+  name_zh: 汉诺威机械合约
   category: 机械
   weight_kg: 35.4
   base_reference_price: 935.24
@@ -30,7 +30,7 @@ products:
   rarity: 0.55
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: hannover_能源_B
-  name_zh: Hannover能源合约
+  name_zh: 汉诺威能源合约
   category: 能源
   weight_kg: 9.5
   base_reference_price: 973.27
@@ -40,7 +40,7 @@ products:
   rarity: 0.58
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: hannover_电子_B
-  name_zh: Hannover电子合约
+  name_zh: 汉诺威电子合约
   category: 电子
   weight_kg: 3.7
   base_reference_price: 3035.79

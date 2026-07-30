@@ -1,6 +1,6 @@
 products:
 - product_id: amman_食品_B
-  name_zh: Amman食品合约
+  name_zh: 安曼食品合约
   category: 食品
   weight_kg: 24.8
   base_reference_price: 171.34
@@ -10,7 +10,7 @@ products:
   rarity: 0.24
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: amman_工艺品_B
-  name_zh: Amman工艺品合约
+  name_zh: 安曼工艺品合约
   category: 工艺品
   weight_kg: 9.4
   base_reference_price: 491.18
@@ -20,7 +20,7 @@ products:
   rarity: 0.57
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: amman_咖啡_B
-  name_zh: Amman咖啡合约
+  name_zh: 安曼咖啡合约
   category: 咖啡
   weight_kg: 9.0
   base_reference_price: 263.39
@@ -30,7 +30,7 @@ products:
   rarity: 0.3
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: amman_糖果_B
-  name_zh: Amman糖果合约
+  name_zh: 安曼糖果合约
   category: 糖果
   weight_kg: 6.4
   base_reference_price: 141.21
@@ -40,7 +40,7 @@ products:
   rarity: 0.32
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: amman_香料_B
-  name_zh: Amman香料合约
+  name_zh: 安曼香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 192.97

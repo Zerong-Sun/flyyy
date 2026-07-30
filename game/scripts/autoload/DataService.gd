@@ -11,12 +11,15 @@ var cities_by_id: Dictionary = {}
 var products_by_id: Dictionary = {}
 var markets_by_city: Dictionary = {}  # city_id → [{p, b, s}, ...]
 var _market_index: Dictionary = {}    # "city_id|product_id" → {b, s}
+var _market_loaded: Dictionary = {}   # tracks which cities' markets are lazy-loaded
 var routes: Array = []
 var economy: Dictionary = {}
 var tz_offsets: Dictionary = {}
 var disclaimer: String = ""
 var product_market_tags: Dictionary = {}
 var transfer_edges: Dictionary = {}
+var _transfer_keys: Array = []        # available transfer origin keys
+var _transfer_loaded: bool = false
 var loaded: bool = false
 
 
@@ -51,6 +54,22 @@ func _build_market_index() -> void:
 			_market_index["%s|%s" % [str(city_id), pid]] = e
 
 
+func _load_market_for_city(city_id: String) -> void:
+	## Lazy-load market data for a city from per-city JSON file.
+	if _market_loaded.has(city_id):
+		return
+	var path := "res://data/markets/%s.json" % city_id
+	var data = _load_json(path)
+	if data != null and data is Array:
+		markets_by_city[city_id] = data
+		# Feed entries into _market_index
+		for e in data:
+			var pid := str(e.get("p", ""))
+			if pid != "":
+				_market_index["%s|%s" % [city_id, pid]] = e
+	_market_loaded[city_id] = true
+
+
 func _load_all() -> void:
 	# ── world.json (lightweight core) ──
 	var w = _load_json("res://data/world.json")
@@ -77,21 +96,19 @@ func _load_all() -> void:
 	for p in world.get("products", []):
 		products_by_id[p["product_id"]] = p
 
-	# ── markets.json (indexed by city_id, compact keys) ──
-	var m = _load_json("res://data/markets.json")
-	if m != null and m is Dictionary:
-		markets_by_city = m as Dictionary
-		_build_market_index()
-
+	# ── markets/ (per-city files, loaded on demand) ──
 	# ── product_market_tags.json ──
 	var t = _load_json("res://data/product_market_tags.json")
 	if t != null and t is Dictionary:
 		product_market_tags = t as Dictionary
 
-	# ── transfer_edges.json ──
-	var e = _load_json("res://data/transfer_edges.json")
-	if e != null and e is Dictionary:
-		transfer_edges = e as Dictionary
+	# ── transfers/ (per-origin files, loaded on demand by transfer_options) ──
+	if DirAccess.dir_exists_absolute("res://data/transfers"):
+		var tx_files := DirAccess.get_files_at("res://data/transfers")
+		for fname in tx_files:
+			if fname.ends_with(".json"):
+				_transfer_keys.append(fname.replace(".json", ""))
+	print("DataService: %d transfer origins available" % _transfer_keys.size())
 
 	# ── flights/ (per-origin, lazy-loaded) ──
 	var manifest = _load_json("res://data/flights/_manifest.json")
@@ -103,9 +120,9 @@ func _load_all() -> void:
 		])
 
 	loaded = true
-	print("DataService loaded: %d airports, %d products, %d market-cities, %d tags, %d transfers" % [
-		airports.size(), products_by_id.size(), markets_by_city.size(),
-		product_market_tags.size(), transfer_edges.size()
+	print("DataService loaded: %d airports, %d products, %d tags, %d transfer-origins" % [
+		airports.size(), products_by_id.size(),
+		product_market_tags.size(), _transfer_keys.size()
 	])
 
 
@@ -119,6 +136,32 @@ func get_airport_by_iata(iata: String) -> Dictionary:
 
 func get_city(city_id: String) -> Dictionary:
 	return cities_by_id.get(city_id, {})
+
+
+func place_name(dict: Dictionary, field: String = "name") -> String:
+	## Returns locale-aware display name for cities, airports, or countries.
+	## AppState.place_locale: "zh" → field_zh, "en" → field_en.
+	var locale := "zh"
+	if AppState:
+		var pl = AppState.get("place_locale")
+		if pl != null:
+			locale = str(pl)
+	var suffix := "_zh" if locale == "zh" else "_en"
+	var key := field + suffix
+	var fallback_suffix := "_en" if locale == "zh" else "_zh"
+	var fallback_key := field + fallback_suffix
+	var raw = dict.get(key)
+	if raw != null:
+		var s := str(raw)
+		if not s.is_empty():
+			return s
+	raw = dict.get(fallback_key)
+	if raw != null:
+		return str(raw)
+	raw = dict.get(field)
+	if raw != null:
+		return str(raw)
+	return ""
 
 
 func get_product(product_id: String) -> Dictionary:
@@ -162,7 +205,10 @@ func destinations_from(origin_iata: String) -> Array:
 func market_row(city_id: String, product_id: String) -> Dictionary:
 	var key := "%s|%s" % [city_id, product_id]
 	if not _market_index.has(key):
-		return {}
+		# Try lazy-loading first
+		_load_market_for_city(city_id)
+		if not _market_index.has(key):
+			return {}
 	var v: Dictionary = _market_index[key]
 	return {
 		"city_id": city_id,
@@ -173,6 +219,7 @@ func market_row(city_id: String, product_id: String) -> Dictionary:
 
 
 func market_product_ids(city_id: String) -> Array:
+	_load_market_for_city(city_id)
 	var entries: Array = markets_by_city.get(city_id, [])
 	var out: Array = []
 	for e in entries:
@@ -206,16 +253,20 @@ func transfer_options(from_iata: String, to_iata: String = "") -> Array:
 	var origin := from_iata.strip_edges().to_upper()
 	if origin == "":
 		return []
+	var data = _load_json("res://data/transfers/%s.json" % origin)
+	if data == null or not (data is Dictionary):
+		return []
+	var edges_map: Dictionary = data as Dictionary
 	if to_iata != "":
-		var key := "%s|%s" % [origin, to_iata.strip_edges().to_upper()]
-		return transfer_edges.get(key, [])
+		var edges = edges_map.get(to_iata.strip_edges().to_upper(), [])
+		if edges is Array:
+			return edges as Array
+		return []
 	var out: Array = []
-	var prefix := origin + "|"
-	for key in transfer_edges.keys():
-		var k := str(key)
-		if k.begins_with(prefix):
-			var dest := k.substr(prefix.length())
-			for edge_v in transfer_edges[key]:
+	for dest in edges_map.keys():
+		var edges = edges_map[dest]
+		if edges is Array:
+			for edge_v in edges:
 				var edge: Dictionary = edge_v.duplicate(true)
 				edge["origin_iata"] = origin
 				edge["dest_iata"] = dest

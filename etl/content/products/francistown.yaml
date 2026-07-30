@@ -1,6 +1,6 @@
 products:
 - product_id: francistown_糖果_B
-  name_zh: Francistown糖果合约
+  name_zh: 弗朗西斯敦糖果合约
   category: 糖果
   weight_kg: 7.9
   base_reference_price: 127.95
@@ -10,7 +10,7 @@ products:
   rarity: 0.3
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: francistown_咖啡_B
-  name_zh: Francistown咖啡合约
+  name_zh: 弗朗西斯敦咖啡合约
   category: 咖啡
   weight_kg: 14.8
   base_reference_price: 152.21
@@ -20,7 +20,7 @@ products:
   rarity: 0.44
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: francistown_香料_B
-  name_zh: Francistown香料合约
+  name_zh: 弗朗西斯敦香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 360.87
@@ -30,7 +30,7 @@ products:
   rarity: 0.55
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: francistown_日用品_B
-  name_zh: Francistown日用品合约
+  name_zh: 弗朗西斯敦日用品合约
   category: 日用品
   weight_kg: 6.5
   base_reference_price: 116.22
@@ -40,7 +40,7 @@ products:
   rarity: 0.15
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: francistown_工艺品_B
-  name_zh: Francistown工艺品合约
+  name_zh: 弗朗西斯敦工艺品合约
   category: 工艺品
   weight_kg: 6.1
   base_reference_price: 315.12

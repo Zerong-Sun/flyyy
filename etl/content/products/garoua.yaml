@@ -1,6 +1,6 @@
 products:
 - product_id: garoua_糖果_B
-  name_zh: Garoua糖果合约
+  name_zh: 加鲁阿糖果合约
   category: 糖果
   weight_kg: 7.8
   base_reference_price: 101.65
@@ -10,7 +10,7 @@ products:
   rarity: 0.23
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: garoua_日用品_B
-  name_zh: Garoua日用品合约
+  name_zh: 加鲁阿日用品合约
   category: 日用品
   weight_kg: 13.6
   base_reference_price: 46.8
@@ -20,7 +20,7 @@ products:
   rarity: 0.2
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: garoua_咖啡_B
-  name_zh: Garoua咖啡合约
+  name_zh: 加鲁阿咖啡合约
   category: 咖啡
   weight_kg: 6.7
   base_reference_price: 204.15
@@ -30,7 +30,7 @@ products:
   rarity: 0.41
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: garoua_香料_B
-  name_zh: Garoua香料合约
+  name_zh: 加鲁阿香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 305.98
@@ -40,7 +40,7 @@ products:
   rarity: 0.46
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: garoua_食品_B
-  name_zh: Garoua食品合约
+  name_zh: 加鲁阿食品合约
   category: 食品
   weight_kg: 20.9
   base_reference_price: 239.04

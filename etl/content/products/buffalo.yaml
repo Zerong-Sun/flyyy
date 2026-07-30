@@ -1,6 +1,6 @@
 products:
 - product_id: buffalo_日用品_B
-  name_zh: Buffalo日用品合约
+  name_zh: 布法罗日用品合约
   category: 日用品
   weight_kg: 6.9
   base_reference_price: 78.03
@@ -10,7 +10,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: buffalo_食品_B
-  name_zh: Buffalo食品合约
+  name_zh: 布法罗食品合约
   category: 食品
   weight_kg: 22.6
   base_reference_price: 287.2
@@ -20,7 +20,7 @@ products:
   rarity: 0.28
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: buffalo_能源_B
-  name_zh: Buffalo能源合约
+  name_zh: 布法罗能源合约
   category: 能源
   weight_kg: 5.0
   base_reference_price: 661.81
@@ -30,7 +30,7 @@ products:
   rarity: 0.54
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: buffalo_机械_B
-  name_zh: Buffalo机械合约
+  name_zh: 布法罗机械合约
   category: 机械
   weight_kg: 29.9
   base_reference_price: 637.42
@@ -40,7 +40,7 @@ products:
   rarity: 0.61
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: buffalo_电子_B
-  name_zh: Buffalo电子合约
+  name_zh: 布法罗电子合约
   category: 电子
   weight_kg: 3.0
   base_reference_price: 3413.0

@@ -1,6 +1,6 @@
 products:
 - product_id: brest_机械_B
-  name_zh: Brest机械合约
+  name_zh: 布雷斯特机械合约
   category: 机械
   weight_kg: 42.1
   base_reference_price: 1010.98
@@ -10,7 +10,7 @@ products:
   rarity: 0.62
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: brest_食品_B
-  name_zh: Brest食品合约
+  name_zh: 布雷斯特食品合约
   category: 食品
   weight_kg: 24.8
   base_reference_price: 141.77
@@ -20,7 +20,7 @@ products:
   rarity: 0.34
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: brest_日用品_B
-  name_zh: Brest日用品合约
+  name_zh: 布雷斯特日用品合约
   category: 日用品
   weight_kg: 12.2
   base_reference_price: 52.9
@@ -30,7 +30,7 @@ products:
   rarity: 0.15
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: brest_香料_B
-  name_zh: Brest香料合约
+  name_zh: 布雷斯特香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 310.54
@@ -40,7 +40,7 @@ products:
   rarity: 0.41
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: brest_工艺品_B
-  name_zh: Brest工艺品合约
+  name_zh: 布雷斯特工艺品合约
   category: 工艺品
   weight_kg: 6.2
   base_reference_price: 373.4

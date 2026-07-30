@@ -1,6 +1,6 @@
 products:
 - product_id: cairns_能源_B
-  name_zh: Cairns能源合约
+  name_zh: 凯恩斯能源合约
   category: 能源
   weight_kg: 6.1
   base_reference_price: 499.98
@@ -10,7 +10,7 @@ products:
   rarity: 0.63
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: cairns_咖啡_B
-  name_zh: Cairns咖啡合约
+  name_zh: 凯恩斯咖啡合约
   category: 咖啡
   weight_kg: 13.7
   base_reference_price: 194.66
@@ -20,7 +20,7 @@ products:
   rarity: 0.33
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: cairns_日用品_B
-  name_zh: Cairns日用品合约
+  name_zh: 凯恩斯日用品合约
   category: 日用品
   weight_kg: 11.2
   base_reference_price: 125.29
@@ -30,7 +30,7 @@ products:
   rarity: 0.13
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: cairns_食品_B
-  name_zh: Cairns食品合约
+  name_zh: 凯恩斯食品合约
   category: 食品
   weight_kg: 20.1
   base_reference_price: 93.68
@@ -40,7 +40,7 @@ products:
   rarity: 0.29
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: cairns_矿产_B
-  name_zh: Cairns矿产合约
+  name_zh: 凯恩斯矿产合约
   category: 矿产
   weight_kg: 31.5
   base_reference_price: 851.48

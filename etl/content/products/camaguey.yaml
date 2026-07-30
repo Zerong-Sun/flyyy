@@ -1,6 +1,6 @@
 products:
 - product_id: camaguey_香料_B
-  name_zh: Camaguey香料合约
+  name_zh: 卡马圭香料合约
   category: 香料
   weight_kg: 0.3
   base_reference_price: 340.51
@@ -10,7 +10,7 @@ products:
   rarity: 0.58
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: camaguey_纺织品_B
-  name_zh: Camaguey纺织品合约
+  name_zh: 卡马圭纺织品合约
   category: 纺织品
   weight_kg: 13.9
   base_reference_price: 216.42
@@ -20,7 +20,7 @@ products:
   rarity: 0.45
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: camaguey_矿产_B
-  name_zh: Camaguey矿产合约
+  name_zh: 卡马圭矿产合约
   category: 矿产
   weight_kg: 34.4
   base_reference_price: 394.89
@@ -30,7 +30,7 @@ products:
   rarity: 0.52
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: camaguey_糖果_B
-  name_zh: Camaguey糖果合约
+  name_zh: 卡马圭糖果合约
   category: 糖果
   weight_kg: 4.9
   base_reference_price: 131.57
@@ -40,7 +40,7 @@ products:
   rarity: 0.33
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: camaguey_工艺品_B
-  name_zh: Camaguey工艺品合约
+  name_zh: 卡马圭工艺品合约
   category: 工艺品
   weight_kg: 6.9
   base_reference_price: 230.88

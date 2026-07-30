@@ -1,6 +1,6 @@
 products:
 - product_id: erfurt_能源_B
-  name_zh: Erfurt能源合约
+  name_zh: 埃尔福特能源合约
   category: 能源
   weight_kg: 6.7
   base_reference_price: 756.15
@@ -10,7 +10,7 @@ products:
   rarity: 0.66
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: erfurt_日用品_B
-  name_zh: Erfurt日用品合约
+  name_zh: 埃尔福特日用品合约
   category: 日用品
   weight_kg: 10.5
   base_reference_price: 87.23
@@ -20,7 +20,7 @@ products:
   rarity: 0.06
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: erfurt_电子_B
-  name_zh: Erfurt电子合约
+  name_zh: 埃尔福特电子合约
   category: 电子
   weight_kg: 4.7
   base_reference_price: 2802.57
@@ -30,7 +30,7 @@ products:
   rarity: 0.75
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: erfurt_机械_B
-  name_zh: Erfurt机械合约
+  name_zh: 埃尔福特机械合约
   category: 机械
   weight_kg: 35.5
   base_reference_price: 1110.44
@@ -40,7 +40,7 @@ products:
   rarity: 0.61
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: erfurt_食品_B
-  name_zh: Erfurt食品合约
+  name_zh: 埃尔福特食品合约
   category: 食品
   weight_kg: 21.2
   base_reference_price: 164.35

@@ -1,6 +1,6 @@
 products:
 - product_id: boa_vista_食品_B
-  name_zh: Boa Vista食品合约
+  name_zh: 博阿维斯塔食品合约
   category: 食品
   weight_kg: 15.6
   base_reference_price: 76.47
@@ -10,7 +10,7 @@ products:
   rarity: 0.29
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: boa_vista_日用品_B
-  name_zh: Boa Vista日用品合约
+  name_zh: 博阿维斯塔日用品合约
   category: 日用品
   weight_kg: 10.4
   base_reference_price: 87.24
@@ -20,7 +20,7 @@ products:
   rarity: 0.13
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: boa_vista_矿产_B
-  name_zh: Boa Vista矿产合约
+  name_zh: 博阿维斯塔矿产合约
   category: 矿产
   weight_kg: 18.2
   base_reference_price: 297.52
@@ -30,7 +30,7 @@ products:
   rarity: 0.39
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: boa_vista_能源_B
-  name_zh: Boa Vista能源合约
+  name_zh: 博阿维斯塔能源合约
   category: 能源
   weight_kg: 8.0
   base_reference_price: 704.1
@@ -40,7 +40,7 @@ products:
   rarity: 0.56
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: boa_vista_咖啡_B
-  name_zh: Boa Vista咖啡合约
+  name_zh: 博阿维斯塔咖啡合约
   category: 咖啡
   weight_kg: 9.6
   base_reference_price: 105.23

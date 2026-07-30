@@ -1,6 +1,6 @@
 products:
 - product_id: kochi_矿产_B
-  name_zh: Kochi矿产合约
+  name_zh: 科钦矿产合约
   category: 矿产
   weight_kg: 29.1
   base_reference_price: 508.06
@@ -10,7 +10,7 @@ products:
   rarity: 0.49
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: kochi_纺织品_B
-  name_zh: Kochi纺织品合约
+  name_zh: 科钦纺织品合约
   category: 纺织品
   weight_kg: 14.7
   base_reference_price: 214.79
@@ -20,7 +20,7 @@ products:
   rarity: 0.4
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: kochi_电子_B
-  name_zh: Kochi电子合约
+  name_zh: 科钦电子合约
   category: 电子
   weight_kg: 2.1
   base_reference_price: 798.36
@@ -30,7 +30,7 @@ products:
   rarity: 0.6
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: kochi_茶叶_B
-  name_zh: Kochi茶叶合约
+  name_zh: 科钦茶叶合约
   category: 茶叶
   weight_kg: 7.2
   base_reference_price: 111.83
@@ -40,7 +40,7 @@ products:
   rarity: 0.44
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: kochi_香料_B
-  name_zh: Kochi香料合约
+  name_zh: 科钦香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 103.47

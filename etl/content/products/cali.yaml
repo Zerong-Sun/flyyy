@@ -1,6 +1,6 @@
 products:
 - product_id: cali_能源_B
-  name_zh: Cali能源合约
+  name_zh: 卡利能源合约
   category: 能源
   weight_kg: 3.1
   base_reference_price: 304.39
@@ -10,7 +10,7 @@ products:
   rarity: 0.59
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: cali_日用品_B
-  name_zh: Cali日用品合约
+  name_zh: 卡利日用品合约
   category: 日用品
   weight_kg: 6.6
   base_reference_price: 37.82
@@ -20,7 +20,7 @@ products:
   rarity: 0.15
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: cali_咖啡_B
-  name_zh: Cali咖啡合约
+  name_zh: 卡利咖啡合约
   category: 咖啡
   weight_kg: 6.9
   base_reference_price: 130.67
@@ -30,7 +30,7 @@ products:
   rarity: 0.46
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: cali_食品_B
-  name_zh: Cali食品合约
+  name_zh: 卡利食品合约
   category: 食品
   weight_kg: 28.4
   base_reference_price: 147.72
@@ -40,7 +40,7 @@ products:
   rarity: 0.25
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: cali_矿产_B
-  name_zh: Cali矿产合约
+  name_zh: 卡利矿产合约
   category: 矿产
   weight_kg: 36.3
   base_reference_price: 184.3

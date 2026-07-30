@@ -1,6 +1,6 @@
 products:
 - product_id: georgetown_矿产_B
-  name_zh: Georgetown矿产合约
+  name_zh: 乔治敦矿产合约
   category: 矿产
   weight_kg: 25.4
   base_reference_price: 387.25
@@ -10,7 +10,7 @@ products:
   rarity: 0.44
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: georgetown_日用品_B
-  name_zh: Georgetown日用品合约
+  name_zh: 乔治敦日用品合约
   category: 日用品
   weight_kg: 12.0
   base_reference_price: 84.43
@@ -20,7 +20,7 @@ products:
   rarity: 0.19
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: georgetown_香料_B
-  name_zh: Georgetown香料合约
+  name_zh: 乔治敦香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 253.33
@@ -30,7 +30,7 @@ products:
   rarity: 0.45
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: georgetown_糖果_B
-  name_zh: Georgetown糖果合约
+  name_zh: 乔治敦糖果合约
   category: 糖果
   weight_kg: 4.6
   base_reference_price: 102.13
@@ -40,7 +40,7 @@ products:
   rarity: 0.25
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: georgetown_食品_B
-  name_zh: Georgetown食品合约
+  name_zh: 乔治敦食品合约
   category: 食品
   weight_kg: 23.0
   base_reference_price: 204.21

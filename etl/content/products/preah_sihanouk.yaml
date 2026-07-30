@@ -1,6 +1,6 @@
 products:
 - product_id: preah_sihanouk_咖啡_B
-  name_zh: Preah Sihanouk咖啡合约
+  name_zh: 西哈努克咖啡合约
   category: 咖啡
   weight_kg: 5.0
   base_reference_price: 156.02
@@ -10,7 +10,7 @@ products:
   rarity: 0.36
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: preah_sihanouk_纺织品_B
-  name_zh: Preah Sihanouk纺织品合约
+  name_zh: 西哈努克纺织品合约
   category: 纺织品
   weight_kg: 18.5
   base_reference_price: 300.69
@@ -20,7 +20,7 @@ products:
   rarity: 0.41
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: preah_sihanouk_工艺品_B
-  name_zh: Preah Sihanouk工艺品合约
+  name_zh: 西哈努克工艺品合约
   category: 工艺品
   weight_kg: 10.5
   base_reference_price: 409.4
@@ -30,7 +30,7 @@ products:
   rarity: 0.41
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: preah_sihanouk_香料_B
-  name_zh: Preah Sihanouk香料合约
+  name_zh: 西哈努克香料合约
   category: 香料
   weight_kg: 0.3
   base_reference_price: 287.05
@@ -40,7 +40,7 @@ products:
   rarity: 0.54
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: preah_sihanouk_矿产_B
-  name_zh: Preah Sihanouk矿产合约
+  name_zh: 西哈努克矿产合约
   category: 矿产
   weight_kg: 34.1
   base_reference_price: 670.94

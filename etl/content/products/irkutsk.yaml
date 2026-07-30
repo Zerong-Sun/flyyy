@@ -1,6 +1,6 @@
 products:
 - product_id: irkutsk_矿产_B
-  name_zh: Irkutsk矿产合约
+  name_zh: 伊尔库茨克矿产合约
   category: 矿产
   weight_kg: 22.3
   base_reference_price: 228.6
@@ -10,7 +10,7 @@ products:
   rarity: 0.53
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: irkutsk_能源_B
-  name_zh: Irkutsk能源合约
+  name_zh: 伊尔库茨克能源合约
   category: 能源
   weight_kg: 6.2
   base_reference_price: 321.11
@@ -20,7 +20,7 @@ products:
   rarity: 0.57
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: irkutsk_食品_B
-  name_zh: Irkutsk食品合约
+  name_zh: 伊尔库茨克食品合约
   category: 食品
   weight_kg: 24.9
   base_reference_price: 117.44
@@ -30,7 +30,7 @@ products:
   rarity: 0.37
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: irkutsk_日用品_B
-  name_zh: Irkutsk日用品合约
+  name_zh: 伊尔库茨克日用品合约
   category: 日用品
   weight_kg: 13.3
   base_reference_price: 46.09
@@ -40,7 +40,7 @@ products:
   rarity: 0.16
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: irkutsk_机械_B
-  name_zh: Irkutsk机械合约
+  name_zh: 伊尔库茨克机械合约
   category: 机械
   weight_kg: 32.6
   base_reference_price: 436.6

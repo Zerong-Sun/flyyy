@@ -1,6 +1,6 @@
 products:
 - product_id: algiers_食品_B
-  name_zh: Algiers食品合约
+  name_zh: 阿尔及尔食品合约
   category: 食品
   weight_kg: 26.5
   base_reference_price: 63.61
@@ -10,7 +10,7 @@ products:
   rarity: 0.21
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: algiers_能源_B
-  name_zh: Algiers能源合约
+  name_zh: 阿尔及尔能源合约
   category: 能源
   weight_kg: 5.8
   base_reference_price: 310.21
@@ -20,7 +20,7 @@ products:
   rarity: 0.67
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: algiers_纺织品_B
-  name_zh: Algiers纺织品合约
+  name_zh: 阿尔及尔纺织品合约
   category: 纺织品
   weight_kg: 16.9
   base_reference_price: 249.75
@@ -30,7 +30,7 @@ products:
   rarity: 0.26
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: algiers_矿产_B
-  name_zh: Algiers矿产合约
+  name_zh: 阿尔及尔矿产合约
   category: 矿产
   weight_kg: 26.7
   base_reference_price: 430.56
@@ -40,7 +40,7 @@ products:
   rarity: 0.44
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: algiers_日用品_B
-  name_zh: Algiers日用品合约
+  name_zh: 阿尔及尔日用品合约
   category: 日用品
   weight_kg: 11.6
   base_reference_price: 31.54

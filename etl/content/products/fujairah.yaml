@@ -1,6 +1,6 @@
 products:
 - product_id: fujairah_电子_B
-  name_zh: Fujairah电子合约
+  name_zh: 富查伊拉电子合约
   category: 电子
   weight_kg: 4.7
   base_reference_price: 1342.94
@@ -10,7 +10,7 @@ products:
   rarity: 0.64
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: fujairah_能源_B
-  name_zh: Fujairah能源合约
+  name_zh: 富查伊拉能源合约
   category: 能源
   weight_kg: 7.5
   base_reference_price: 669.89
@@ -20,7 +20,7 @@ products:
   rarity: 0.53
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: fujairah_日用品_B
-  name_zh: Fujairah日用品合约
+  name_zh: 富查伊拉日用品合约
   category: 日用品
   weight_kg: 6.8
   base_reference_price: 85.51
@@ -30,7 +30,7 @@ products:
   rarity: 0.05
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: fujairah_香料_B
-  name_zh: Fujairah香料合约
+  name_zh: 富查伊拉香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 417.39
@@ -40,7 +40,7 @@ products:
   rarity: 0.48
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: fujairah_食品_B
-  name_zh: Fujairah食品合约
+  name_zh: 富查伊拉食品合约
   category: 食品
   weight_kg: 16.3
   base_reference_price: 180.99

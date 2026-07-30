@@ -1,6 +1,6 @@
 products:
 - product_id: seiyun_工艺品_B
-  name_zh: Seiyun工艺品合约
+  name_zh: 赛永工艺品合约
   category: 工艺品
   weight_kg: 5.8
   base_reference_price: 210.86
@@ -10,7 +10,7 @@ products:
   rarity: 0.48
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: seiyun_矿产_B
-  name_zh: Seiyun矿产合约
+  name_zh: 赛永矿产合约
   category: 矿产
   weight_kg: 22.8
   base_reference_price: 668.6
@@ -20,7 +20,7 @@ products:
   rarity: 0.35
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: seiyun_香料_B
-  name_zh: Seiyun香料合约
+  name_zh: 赛永香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 399.26
@@ -30,7 +30,7 @@ products:
   rarity: 0.48
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: seiyun_咖啡_B
-  name_zh: Seiyun咖啡合约
+  name_zh: 赛永咖啡合约
   category: 咖啡
   weight_kg: 6.1
   base_reference_price: 116.03
@@ -40,7 +40,7 @@ products:
   rarity: 0.46
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: seiyun_食品_B
-  name_zh: Seiyun食品合约
+  name_zh: 赛永食品合约
   category: 食品
   weight_kg: 23.6
   base_reference_price: 129.57

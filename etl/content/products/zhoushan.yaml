@@ -1,6 +1,6 @@
 products:
 - product_id: zhoushan_机械_B
-  name_zh: Zhoushan机械合约
+  name_zh: 舟山机械合约
   category: 机械
   weight_kg: 23.5
   base_reference_price: 847.0
@@ -10,7 +10,7 @@ products:
   rarity: 0.49
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: zhoushan_电子_B
-  name_zh: Zhoushan电子合约
+  name_zh: 舟山电子合约
   category: 电子
   weight_kg: 3.1
   base_reference_price: 2235.42
@@ -20,7 +20,7 @@ products:
   rarity: 0.56
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: zhoushan_茶叶_B
-  name_zh: Zhoushan茶叶合约
+  name_zh: 舟山茶叶合约
   category: 茶叶
   weight_kg: 7.1
   base_reference_price: 126.82
@@ -30,7 +30,7 @@ products:
   rarity: 0.39
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: zhoushan_纺织品_B
-  name_zh: Zhoushan纺织品合约
+  name_zh: 舟山纺织品合约
   category: 纺织品
   weight_kg: 8.8
   base_reference_price: 242.38
@@ -40,7 +40,7 @@ products:
   rarity: 0.28
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: zhoushan_陶瓷_B
-  name_zh: Zhoushan陶瓷合约
+  name_zh: 舟山陶瓷合约
   category: 陶瓷
   weight_kg: 18.5
   base_reference_price: 368.7

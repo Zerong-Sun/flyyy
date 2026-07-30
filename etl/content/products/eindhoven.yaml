@@ -1,6 +1,6 @@
 products:
 - product_id: eindhoven_能源_B
-  name_zh: Eindhoven能源合约
+  name_zh: 埃因霍温能源合约
   category: 能源
   weight_kg: 3.5
   base_reference_price: 510.53
@@ -10,7 +10,7 @@ products:
   rarity: 0.56
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: eindhoven_电子_B
-  name_zh: Eindhoven电子合约
+  name_zh: 埃因霍温电子合约
   category: 电子
   weight_kg: 1.2
   base_reference_price: 989.38
@@ -20,7 +20,7 @@ products:
   rarity: 0.65
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: eindhoven_日用品_B
-  name_zh: Eindhoven日用品合约
+  name_zh: 埃因霍温日用品合约
   category: 日用品
   weight_kg: 13.3
   base_reference_price: 118.46
@@ -30,7 +30,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: eindhoven_矿产_B
-  name_zh: Eindhoven矿产合约
+  name_zh: 埃因霍温矿产合约
   category: 矿产
   weight_kg: 39.8
   base_reference_price: 471.64
@@ -40,7 +40,7 @@ products:
   rarity: 0.44
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: eindhoven_食品_B
-  name_zh: Eindhoven食品合约
+  name_zh: 埃因霍温食品合约
   category: 食品
   weight_kg: 26.3
   base_reference_price: 264.43

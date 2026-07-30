@@ -1,6 +1,6 @@
 products:
 - product_id: rome_食品_B
-  name_zh: Rome食品合约
+  name_zh: 罗马食品合约
   category: 食品
   weight_kg: 16.7
   base_reference_price: 94.89
@@ -10,7 +10,7 @@ products:
   rarity: 0.26
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: rome_纺织品_B
-  name_zh: Rome纺织品合约
+  name_zh: 罗马纺织品合约
   category: 纺织品
   weight_kg: 15.0
   base_reference_price: 428.11
@@ -20,7 +20,7 @@ products:
   rarity: 0.31
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: rome_陶瓷_B
-  name_zh: Rome陶瓷合约
+  name_zh: 罗马陶瓷合约
   category: 陶瓷
   weight_kg: 22.7
   base_reference_price: 205.04
@@ -30,7 +30,7 @@ products:
   rarity: 0.51
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: rome_工艺品_B
-  name_zh: Rome工艺品合约
+  name_zh: 罗马工艺品合约
   category: 工艺品
   weight_kg: 5.8
   base_reference_price: 182.72
@@ -40,7 +40,7 @@ products:
   rarity: 0.54
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: rome_机械_B
-  name_zh: Rome机械合约
+  name_zh: 罗马机械合约
   category: 机械
   weight_kg: 29.3
   base_reference_price: 1103.44

@@ -1,6 +1,6 @@
 products:
 - product_id: reykjavík_工艺品_B
-  name_zh: Reykjavík工艺品合约
+  name_zh: 雷克雅未克工艺品合约
   category: 工艺品
   weight_kg: 13.9
   base_reference_price: 272.94
@@ -10,7 +10,7 @@ products:
   rarity: 0.51
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: reykjavík_咖啡_B
-  name_zh: Reykjavík咖啡合约
+  name_zh: 雷克雅未克咖啡合约
   category: 咖啡
   weight_kg: 8.5
   base_reference_price: 143.68
@@ -20,7 +20,7 @@ products:
   rarity: 0.43
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: reykjavík_香料_B
-  name_zh: Reykjavík香料合约
+  name_zh: 雷克雅未克香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 274.77
@@ -30,7 +30,7 @@ products:
   rarity: 0.51
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: reykjavík_纺织品_B
-  name_zh: Reykjavík纺织品合约
+  name_zh: 雷克雅未克纺织品合约
   category: 纺织品
   weight_kg: 14.8
   base_reference_price: 488.2
@@ -40,7 +40,7 @@ products:
   rarity: 0.26
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: reykjavík_糖果_B
-  name_zh: Reykjavík糖果合约
+  name_zh: 雷克雅未克糖果合约
   category: 糖果
   weight_kg: 6.9
   base_reference_price: 102.5

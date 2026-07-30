@@ -1,6 +1,6 @@
 products:
 - product_id: honolulu,_oahu_食品_B
-  name_zh: Honolulu, Oahu食品合约
+  name_zh: 檀香山食品合约
   category: 食品
   weight_kg: 21.3
   base_reference_price: 270.38
@@ -10,7 +10,7 @@ products:
   rarity: 0.3
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: honolulu,_oahu_电子_B
-  name_zh: Honolulu, Oahu电子合约
+  name_zh: 檀香山电子合约
   category: 电子
   weight_kg: 2.8
   base_reference_price: 1158.96
@@ -20,7 +20,7 @@ products:
   rarity: 0.65
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: honolulu,_oahu_能源_B
-  name_zh: Honolulu, Oahu能源合约
+  name_zh: 檀香山能源合约
   category: 能源
   weight_kg: 6.7
   base_reference_price: 652.35
@@ -30,7 +30,7 @@ products:
   rarity: 0.57
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: honolulu,_oahu_日用品_B
-  name_zh: Honolulu, Oahu日用品合约
+  name_zh: 檀香山日用品合约
   category: 日用品
   weight_kg: 8.9
   base_reference_price: 133.02
@@ -40,7 +40,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: honolulu,_oahu_机械_B
-  name_zh: Honolulu, Oahu机械合约
+  name_zh: 檀香山机械合约
   category: 机械
   weight_kg: 43.5
   base_reference_price: 1387.62

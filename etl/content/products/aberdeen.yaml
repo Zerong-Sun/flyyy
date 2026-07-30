@@ -1,6 +1,6 @@
 products:
 - product_id: aberdeen_机械_B
-  name_zh: Aberdeen机械合约
+  name_zh: 阿伯丁机械合约
   category: 机械
   weight_kg: 40.8
   base_reference_price: 1263.94
@@ -10,7 +10,7 @@ products:
   rarity: 0.47
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: aberdeen_茶叶_B
-  name_zh: Aberdeen茶叶合约
+  name_zh: 阿伯丁茶叶合约
   category: 茶叶
   weight_kg: 4.4
   base_reference_price: 178.26
@@ -20,7 +20,7 @@ products:
   rarity: 0.37
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: aberdeen_电子_B
-  name_zh: Aberdeen电子合约
+  name_zh: 阿伯丁电子合约
   category: 电子
   weight_kg: 1.0
   base_reference_price: 1811.8
@@ -30,7 +30,7 @@ products:
   rarity: 0.62
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: aberdeen_纺织品_B
-  name_zh: Aberdeen纺织品合约
+  name_zh: 阿伯丁纺织品合约
   category: 纺织品
   weight_kg: 11.4
   base_reference_price: 596.52
@@ -40,7 +40,7 @@ products:
   rarity: 0.45
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: aberdeen_食品_B
-  name_zh: Aberdeen食品合约
+  name_zh: 阿伯丁食品合约
   category: 食品
   weight_kg: 21.8
   base_reference_price: 138.05

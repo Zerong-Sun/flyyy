@@ -1,6 +1,6 @@
 products:
 - product_id: new_delhi_茶叶_B
-  name_zh: New Delhi茶叶合约
+  name_zh: 新德里茶叶合约
   category: 茶叶
   weight_kg: 7.5
   base_reference_price: 134.42
@@ -10,7 +10,7 @@ products:
   rarity: 0.38
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: new_delhi_香料_B
-  name_zh: New Delhi香料合约
+  name_zh: 新德里香料合约
   category: 香料
   weight_kg: 0.5
   base_reference_price: 150.74
@@ -20,7 +20,7 @@ products:
   rarity: 0.46
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: new_delhi_矿产_B
-  name_zh: New Delhi矿产合约
+  name_zh: 新德里矿产合约
   category: 矿产
   weight_kg: 19.4
   base_reference_price: 374.96
@@ -30,7 +30,7 @@ products:
   rarity: 0.44
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: new_delhi_电子_B
-  name_zh: New Delhi电子合约
+  name_zh: 新德里电子合约
   category: 电子
   weight_kg: 3.2
   base_reference_price: 586.81
@@ -40,7 +40,7 @@ products:
   rarity: 0.57
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: new_delhi_纺织品_B
-  name_zh: New Delhi纺织品合约
+  name_zh: 新德里纺织品合约
   category: 纺织品
   weight_kg: 15.8
   base_reference_price: 211.51

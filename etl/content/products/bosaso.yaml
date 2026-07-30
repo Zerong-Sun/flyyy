@@ -1,6 +1,6 @@
 products:
 - product_id: bosaso_纺织品_B
-  name_zh: Bosaso纺织品合约
+  name_zh: 博萨索纺织品合约
   category: 纺织品
   weight_kg: 13.4
   base_reference_price: 484.44
@@ -10,7 +10,7 @@ products:
   rarity: 0.4
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: bosaso_糖果_B
-  name_zh: Bosaso糖果合约
+  name_zh: 博萨索糖果合约
   category: 糖果
   weight_kg: 6.4
   base_reference_price: 115.55
@@ -20,7 +20,7 @@ products:
   rarity: 0.2
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: bosaso_咖啡_B
-  name_zh: Bosaso咖啡合约
+  name_zh: 博萨索咖啡合约
   category: 咖啡
   weight_kg: 11.5
   base_reference_price: 135.65
@@ -30,7 +30,7 @@ products:
   rarity: 0.48
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: bosaso_日用品_B
-  name_zh: Bosaso日用品合约
+  name_zh: 博萨索日用品合约
   category: 日用品
   weight_kg: 11.3
   base_reference_price: 105.21
@@ -40,7 +40,7 @@ products:
   rarity: 0.13
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: bosaso_香料_B
-  name_zh: Bosaso香料合约
+  name_zh: 博萨索香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 226.73

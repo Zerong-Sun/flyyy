@@ -1,6 +1,6 @@
 products:
 - product_id: hailar_陶瓷_B
-  name_zh: Hailar陶瓷合约
+  name_zh: 海拉尔陶瓷合约
   category: 陶瓷
   weight_kg: 29.7
   base_reference_price: 320.28
@@ -10,7 +10,7 @@ products:
   rarity: 0.5
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: hailar_纺织品_B
-  name_zh: Hailar纺织品合约
+  name_zh: 海拉尔纺织品合约
   category: 纺织品
   weight_kg: 17.0
   base_reference_price: 382.83
@@ -20,7 +20,7 @@ products:
   rarity: 0.41
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: hailar_电子_B
-  name_zh: Hailar电子合约
+  name_zh: 海拉尔电子合约
   category: 电子
   weight_kg: 2.8
   base_reference_price: 1239.16
@@ -30,7 +30,7 @@ products:
   rarity: 0.63
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: hailar_机械_B
-  name_zh: Hailar机械合约
+  name_zh: 海拉尔机械合约
   category: 机械
   weight_kg: 20.7
   base_reference_price: 1097.74
@@ -40,7 +40,7 @@ products:
   rarity: 0.58
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: hailar_茶叶_B
-  name_zh: Hailar茶叶合约
+  name_zh: 海拉尔茶叶合约
   category: 茶叶
   weight_kg: 4.0
   base_reference_price: 274.49

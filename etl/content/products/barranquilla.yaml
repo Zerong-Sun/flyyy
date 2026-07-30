@@ -1,6 +1,6 @@
 products:
 - product_id: barranquilla_日用品_B
-  name_zh: Barranquilla日用品合约
+  name_zh: 巴兰基亚日用品合约
   category: 日用品
   weight_kg: 7.8
   base_reference_price: 35.44
@@ -10,7 +10,7 @@ products:
   rarity: 0.06
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: barranquilla_咖啡_B
-  name_zh: Barranquilla咖啡合约
+  name_zh: 巴兰基亚咖啡合约
   category: 咖啡
   weight_kg: 13.9
   base_reference_price: 101.69
@@ -20,7 +20,7 @@ products:
   rarity: 0.44
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: barranquilla_食品_B
-  name_zh: Barranquilla食品合约
+  name_zh: 巴兰基亚食品合约
   category: 食品
   weight_kg: 22.8
   base_reference_price: 59.74
@@ -30,7 +30,7 @@ products:
   rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: barranquilla_矿产_B
-  name_zh: Barranquilla矿产合约
+  name_zh: 巴兰基亚矿产合约
   category: 矿产
   weight_kg: 31.7
   base_reference_price: 324.76
@@ -40,7 +40,7 @@ products:
   rarity: 0.5
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: barranquilla_能源_B
-  name_zh: Barranquilla能源合约
+  name_zh: 巴兰基亚能源合约
   category: 能源
   weight_kg: 8.5
   base_reference_price: 625.24

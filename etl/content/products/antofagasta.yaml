@@ -1,6 +1,6 @@
 products:
 - product_id: antofagasta_日用品_B
-  name_zh: Antofagasta日用品合约
+  name_zh: 安托法加斯塔日用品合约
   category: 日用品
   weight_kg: 7.4
   base_reference_price: 50.37
@@ -10,7 +10,7 @@ products:
   rarity: 0.11
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: antofagasta_能源_B
-  name_zh: Antofagasta能源合约
+  name_zh: 安托法加斯塔能源合约
   category: 能源
   weight_kg: 7.3
   base_reference_price: 748.78
@@ -20,7 +20,7 @@ products:
   rarity: 0.67
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: antofagasta_食品_B
-  name_zh: Antofagasta食品合约
+  name_zh: 安托法加斯塔食品合约
   category: 食品
   weight_kg: 16.3
   base_reference_price: 156.65
@@ -30,7 +30,7 @@ products:
   rarity: 0.26
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: antofagasta_矿产_B
-  name_zh: Antofagasta矿产合约
+  name_zh: 安托法加斯塔矿产合约
   category: 矿产
   weight_kg: 23.2
   base_reference_price: 627.12
@@ -40,7 +40,7 @@ products:
   rarity: 0.43
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: antofagasta_咖啡_B
-  name_zh: Antofagasta咖啡合约
+  name_zh: 安托法加斯塔咖啡合约
   category: 咖啡
   weight_kg: 13.2
   base_reference_price: 144.35

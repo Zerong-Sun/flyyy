@@ -1,6 +1,6 @@
 products:
 - product_id: kralendijk_纺织品_B
-  name_zh: Kralendijk纺织品合约
+  name_zh: 克拉伦代克纺织品合约
   category: 纺织品
   weight_kg: 17.8
   base_reference_price: 317.32
@@ -10,7 +10,7 @@ products:
   rarity: 0.25
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: kralendijk_日用品_B
-  name_zh: Kralendijk日用品合约
+  name_zh: 克拉伦代克日用品合约
   category: 日用品
   weight_kg: 12.5
   base_reference_price: 55.32
@@ -20,7 +20,7 @@ products:
   rarity: 0.16
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: kralendijk_工艺品_B
-  name_zh: Kralendijk工艺品合约
+  name_zh: 克拉伦代克工艺品合约
   category: 工艺品
   weight_kg: 11.8
   base_reference_price: 227.46
@@ -30,7 +30,7 @@ products:
   rarity: 0.58
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: kralendijk_咖啡_B
-  name_zh: Kralendijk咖啡合约
+  name_zh: 克拉伦代克咖啡合约
   category: 咖啡
   weight_kg: 12.3
   base_reference_price: 195.07
@@ -40,7 +40,7 @@ products:
   rarity: 0.44
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: kralendijk_糖果_B
-  name_zh: Kralendijk糖果合约
+  name_zh: 克拉伦代克糖果合约
   category: 糖果
   weight_kg: 4.0
   base_reference_price: 68.4

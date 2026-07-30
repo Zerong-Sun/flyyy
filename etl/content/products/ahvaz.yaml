@@ -1,6 +1,6 @@
 products:
 - product_id: ahvaz_工艺品_B
-  name_zh: Ahvaz工艺品合约
+  name_zh: 阿瓦士工艺品合约
   category: 工艺品
   weight_kg: 6.2
   base_reference_price: 461.98
@@ -10,7 +10,7 @@ products:
   rarity: 0.59
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: ahvaz_日用品_B
-  name_zh: Ahvaz日用品合约
+  name_zh: 阿瓦士日用品合约
   category: 日用品
   weight_kg: 6.0
   base_reference_price: 109.56
@@ -20,7 +20,7 @@ products:
   rarity: 0.13
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: ahvaz_糖果_B
-  name_zh: Ahvaz糖果合约
+  name_zh: 阿瓦士糖果合约
   category: 糖果
   weight_kg: 5.9
   base_reference_price: 78.09
@@ -30,7 +30,7 @@ products:
   rarity: 0.17
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: ahvaz_咖啡_B
-  name_zh: Ahvaz咖啡合约
+  name_zh: 阿瓦士咖啡合约
   category: 咖啡
   weight_kg: 9.0
   base_reference_price: 134.33
@@ -40,7 +40,7 @@ products:
   rarity: 0.32
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: ahvaz_香料_B
-  name_zh: Ahvaz香料合约
+  name_zh: 阿瓦士香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 302.93

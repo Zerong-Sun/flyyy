@@ -1,6 +1,6 @@
 products:
 - product_id: ålesund_日用品_B
-  name_zh: Ålesund日用品合约
+  name_zh: 奥勒松日用品合约
   category: 日用品
   weight_kg: 11.4
   base_reference_price: 99.36
@@ -10,7 +10,7 @@ products:
   rarity: 0.16
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: ålesund_咖啡_B
-  name_zh: Ålesund咖啡合约
+  name_zh: 奥勒松咖啡合约
   category: 咖啡
   weight_kg: 14.1
   base_reference_price: 109.77
@@ -20,7 +20,7 @@ products:
   rarity: 0.35
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: ålesund_食品_B
-  name_zh: Ålesund食品合约
+  name_zh: 奥勒松食品合约
   category: 食品
   weight_kg: 24.6
   base_reference_price: 192.43
@@ -30,7 +30,7 @@ products:
   rarity: 0.39
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: ålesund_矿产_B
-  name_zh: Ålesund矿产合约
+  name_zh: 奥勒松矿产合约
   category: 矿产
   weight_kg: 27.7
   base_reference_price: 425.3
@@ -40,7 +40,7 @@ products:
   rarity: 0.43
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: ålesund_香料_B
-  name_zh: Ålesund香料合约
+  name_zh: 奥勒松香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 202.13

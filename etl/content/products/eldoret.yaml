@@ -1,6 +1,6 @@
 products:
 - product_id: eldoret_咖啡_B
-  name_zh: Eldoret咖啡合约
+  name_zh: 埃尔多雷特咖啡合约
   category: 咖啡
   weight_kg: 12.6
   base_reference_price: 97.61
@@ -10,7 +10,7 @@ products:
   rarity: 0.33
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: eldoret_食品_B
-  name_zh: Eldoret食品合约
+  name_zh: 埃尔多雷特食品合约
   category: 食品
   weight_kg: 26.5
   base_reference_price: 49.64
@@ -20,7 +20,7 @@ products:
   rarity: 0.22
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: eldoret_纺织品_B
-  name_zh: Eldoret纺织品合约
+  name_zh: 埃尔多雷特纺织品合约
   category: 纺织品
   weight_kg: 9.5
   base_reference_price: 283.16
@@ -30,7 +30,7 @@ products:
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: eldoret_茶叶_B
-  name_zh: Eldoret茶叶合约
+  name_zh: 埃尔多雷特茶叶合约
   category: 茶叶
   weight_kg: 4.8
   base_reference_price: 89.12
@@ -40,7 +40,7 @@ products:
   rarity: 0.45
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: eldoret_日用品_B
-  name_zh: Eldoret日用品合约
+  name_zh: 埃尔多雷特日用品合约
   category: 日用品
   weight_kg: 6.6
   base_reference_price: 63.27

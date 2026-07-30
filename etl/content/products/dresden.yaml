@@ -1,6 +1,6 @@
 products:
 - product_id: dresden_电子_B
-  name_zh: Dresden电子合约
+  name_zh: 德累斯顿电子合约
   category: 电子
   weight_kg: 3.9
   base_reference_price: 1341.35
@@ -10,7 +10,7 @@ products:
   rarity: 0.68
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: dresden_日用品_B
-  name_zh: Dresden日用品合约
+  name_zh: 德累斯顿日用品合约
   category: 日用品
   weight_kg: 5.9
   base_reference_price: 101.88
@@ -20,7 +20,7 @@ products:
   rarity: 0.13
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: dresden_机械_B
-  name_zh: Dresden机械合约
+  name_zh: 德累斯顿机械合约
   category: 机械
   weight_kg: 37.8
   base_reference_price: 1450.74
@@ -30,7 +30,7 @@ products:
   rarity: 0.52
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: dresden_食品_B
-  name_zh: Dresden食品合约
+  name_zh: 德累斯顿食品合约
   category: 食品
   weight_kg: 19.1
   base_reference_price: 97.16
@@ -40,7 +40,7 @@ products:
   rarity: 0.39
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: dresden_能源_B
-  name_zh: Dresden能源合约
+  name_zh: 德累斯顿能源合约
   category: 能源
   weight_kg: 9.3
   base_reference_price: 694.58

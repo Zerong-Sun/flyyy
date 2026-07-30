@@ -1,6 +1,6 @@
 products:
 - product_id: taraz_糖果_B
-  name_zh: Taraz糖果合约
+  name_zh: 塔拉兹糖果合约
   category: 糖果
   weight_kg: 4.9
   base_reference_price: 136.49
@@ -10,7 +10,7 @@ products:
   rarity: 0.23
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: taraz_咖啡_B
-  name_zh: Taraz咖啡合约
+  name_zh: 塔拉兹咖啡合约
   category: 咖啡
   weight_kg: 13.5
   base_reference_price: 160.65
@@ -20,7 +20,7 @@ products:
   rarity: 0.33
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: taraz_日用品_B
-  name_zh: Taraz日用品合约
+  name_zh: 塔拉兹日用品合约
   category: 日用品
   weight_kg: 14.0
   base_reference_price: 57.75
@@ -30,7 +30,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: taraz_工艺品_B
-  name_zh: Taraz工艺品合约
+  name_zh: 塔拉兹工艺品合约
   category: 工艺品
   weight_kg: 12.2
   base_reference_price: 314.21
@@ -40,7 +40,7 @@ products:
   rarity: 0.51
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: taraz_香料_B
-  name_zh: Taraz香料合约
+  name_zh: 塔拉兹香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 157.24

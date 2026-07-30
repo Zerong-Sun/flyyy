@@ -1,6 +1,6 @@
 products:
 - product_id: joão_pessoa_日用品_B
-  name_zh: João Pessoa日用品合约
+  name_zh: 若昂佩索阿日用品合约
   category: 日用品
   weight_kg: 5.6
   base_reference_price: 85.11
@@ -10,7 +10,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: joão_pessoa_咖啡_B
-  name_zh: João Pessoa咖啡合约
+  name_zh: 若昂佩索阿咖啡合约
   category: 咖啡
   weight_kg: 8.3
   base_reference_price: 83.06
@@ -20,7 +20,7 @@ products:
   rarity: 0.46
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: joão_pessoa_矿产_B
-  name_zh: João Pessoa矿产合约
+  name_zh: 若昂佩索阿矿产合约
   category: 矿产
   weight_kg: 31.3
   base_reference_price: 372.75
@@ -30,7 +30,7 @@ products:
   rarity: 0.57
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: joão_pessoa_能源_B
-  name_zh: João Pessoa能源合约
+  name_zh: 若昂佩索阿能源合约
   category: 能源
   weight_kg: 4.6
   base_reference_price: 336.73
@@ -40,7 +40,7 @@ products:
   rarity: 0.64
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: joão_pessoa_食品_B
-  name_zh: João Pessoa食品合约
+  name_zh: 若昂佩索阿食品合约
   category: 食品
   weight_kg: 29.7
   base_reference_price: 184.11

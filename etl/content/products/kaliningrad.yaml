@@ -1,6 +1,6 @@
 products:
 - product_id: kaliningrad_能源_B
-  name_zh: Kaliningrad能源合约
+  name_zh: 加里宁格勒能源合约
   category: 能源
   weight_kg: 8.9
   base_reference_price: 636.25
@@ -10,7 +10,7 @@ products:
   rarity: 0.53
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: kaliningrad_日用品_B
-  name_zh: Kaliningrad日用品合约
+  name_zh: 加里宁格勒日用品合约
   category: 日用品
   weight_kg: 7.0
   base_reference_price: 56.78
@@ -20,7 +20,7 @@ products:
   rarity: 0.11
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: kaliningrad_矿产_B
-  name_zh: Kaliningrad矿产合约
+  name_zh: 加里宁格勒矿产合约
   category: 矿产
   weight_kg: 38.1
   base_reference_price: 445.39
@@ -30,7 +30,7 @@ products:
   rarity: 0.4
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: kaliningrad_食品_B
-  name_zh: Kaliningrad食品合约
+  name_zh: 加里宁格勒食品合约
   category: 食品
   weight_kg: 16.7
   base_reference_price: 110.9
@@ -40,7 +40,7 @@ products:
   rarity: 0.35
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kaliningrad_机械_B
-  name_zh: Kaliningrad机械合约
+  name_zh: 加里宁格勒机械合约
   category: 机械
   weight_kg: 34.1
   base_reference_price: 389.83

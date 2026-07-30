@@ -1,6 +1,6 @@
 products:
 - product_id: darwin_咖啡_B
-  name_zh: Darwin咖啡合约
+  name_zh: 达尔文咖啡合约
   category: 咖啡
   weight_kg: 12.4
   base_reference_price: 142.5
@@ -10,7 +10,7 @@ products:
   rarity: 0.34
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: darwin_矿产_B
-  name_zh: Darwin矿产合约
+  name_zh: 达尔文矿产合约
   category: 矿产
   weight_kg: 25.2
   base_reference_price: 364.27
@@ -20,7 +20,7 @@ products:
   rarity: 0.36
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: darwin_食品_B
-  name_zh: Darwin食品合约
+  name_zh: 达尔文食品合约
   category: 食品
   weight_kg: 22.3
   base_reference_price: 126.71
@@ -30,7 +30,7 @@ products:
   rarity: 0.34
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: darwin_能源_B
-  name_zh: Darwin能源合约
+  name_zh: 达尔文能源合约
   category: 能源
   weight_kg: 9.3
   base_reference_price: 489.84
@@ -40,7 +40,7 @@ products:
   rarity: 0.59
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: darwin_日用品_B
-  name_zh: Darwin日用品合约
+  name_zh: 达尔文日用品合约
   category: 日用品
   weight_kg: 11.9
   base_reference_price: 111.4

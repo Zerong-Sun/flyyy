@@ -1,6 +1,6 @@
 products:
 - product_id: calicut_矿产_B
-  name_zh: Calicut矿产合约
+  name_zh: 科泽科德矿产合约
   category: 矿产
   weight_kg: 32.3
   base_reference_price: 190.54
@@ -10,7 +10,7 @@ products:
   rarity: 0.4
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: calicut_纺织品_B
-  name_zh: Calicut纺织品合约
+  name_zh: 科泽科德纺织品合约
   category: 纺织品
   weight_kg: 11.6
   base_reference_price: 287.55
@@ -20,7 +20,7 @@ products:
   rarity: 0.42
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: calicut_茶叶_B
-  name_zh: Calicut茶叶合约
+  name_zh: 科泽科德茶叶合约
   category: 茶叶
   weight_kg: 5.0
   base_reference_price: 130.66
@@ -30,7 +30,7 @@ products:
   rarity: 0.43
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: calicut_香料_B
-  name_zh: Calicut香料合约
+  name_zh: 科泽科德香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 201.95
@@ -40,7 +40,7 @@ products:
   rarity: 0.57
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: calicut_电子_B
-  name_zh: Calicut电子合约
+  name_zh: 科泽科德电子合约
   category: 电子
   weight_kg: 4.1
   base_reference_price: 936.0

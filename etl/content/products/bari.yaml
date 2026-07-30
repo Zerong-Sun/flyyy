@@ -1,6 +1,6 @@
 products:
 - product_id: bari_陶瓷_B
-  name_zh: Bari陶瓷合约
+  name_zh: 巴里陶瓷合约
   category: 陶瓷
   weight_kg: 26.1
   base_reference_price: 364.6
@@ -10,7 +10,7 @@ products:
   rarity: 0.58
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: bari_工艺品_B
-  name_zh: Bari工艺品合约
+  name_zh: 巴里工艺品合约
   category: 工艺品
   weight_kg: 8.9
   base_reference_price: 237.35
@@ -20,7 +20,7 @@ products:
   rarity: 0.51
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: bari_纺织品_B
-  name_zh: Bari纺织品合约
+  name_zh: 巴里纺织品合约
   category: 纺织品
   weight_kg: 14.6
   base_reference_price: 395.98
@@ -30,7 +30,7 @@ products:
   rarity: 0.36
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: bari_机械_B
-  name_zh: Bari机械合约
+  name_zh: 巴里机械合约
   category: 机械
   weight_kg: 30.3
   base_reference_price: 1256.51
@@ -40,7 +40,7 @@ products:
   rarity: 0.55
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: bari_食品_B
-  name_zh: Bari食品合约
+  name_zh: 巴里食品合约
   category: 食品
   weight_kg: 25.6
   base_reference_price: 198.21

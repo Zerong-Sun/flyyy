@@ -1,6 +1,6 @@
 products:
 - product_id: qaisumah_日用品_B
-  name_zh: Qaisumah日用品合约
+  name_zh: 盖苏迈日用品合约
   category: 日用品
   weight_kg: 9.4
   base_reference_price: 66.78
@@ -10,7 +10,7 @@ products:
   rarity: 0.12
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: qaisumah_食品_B
-  name_zh: Qaisumah食品合约
+  name_zh: 盖苏迈食品合约
   category: 食品
   weight_kg: 27.4
   base_reference_price: 127.36
@@ -20,7 +20,7 @@ products:
   rarity: 0.22
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: qaisumah_香料_B
-  name_zh: Qaisumah香料合约
+  name_zh: 盖苏迈香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 159.49
@@ -30,7 +30,7 @@ products:
   rarity: 0.48
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: qaisumah_能源_B
-  name_zh: Qaisumah能源合约
+  name_zh: 盖苏迈能源合约
   category: 能源
   weight_kg: 6.2
   base_reference_price: 350.74
@@ -40,7 +40,7 @@ products:
   rarity: 0.6
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: qaisumah_矿产_B
-  name_zh: Qaisumah矿产合约
+  name_zh: 盖苏迈矿产合约
   category: 矿产
   weight_kg: 15.3
   base_reference_price: 650.17

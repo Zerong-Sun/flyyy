@@ -1,6 +1,6 @@
 products:
 - product_id: ciudad_juárez_食品_B
-  name_zh: Ciudad Juárez食品合约
+  name_zh: 华雷斯城食品合约
   category: 食品
   weight_kg: 16.3
   base_reference_price: 64.48
@@ -10,7 +10,7 @@ products:
   rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: ciudad_juárez_矿产_B
-  name_zh: Ciudad Juárez矿产合约
+  name_zh: 华雷斯城矿产合约
   category: 矿产
   weight_kg: 31.9
   base_reference_price: 473.6
@@ -20,7 +20,7 @@ products:
   rarity: 0.6
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: ciudad_juárez_玩具_B
-  name_zh: Ciudad Juárez玩具合约
+  name_zh: 华雷斯城玩具合约
   category: 玩具
   weight_kg: 4.6
   base_reference_price: 70.52
@@ -30,7 +30,7 @@ products:
   rarity: 0.17
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: ciudad_juárez_电子_B
-  name_zh: Ciudad Juárez电子合约
+  name_zh: 华雷斯城电子合约
   category: 电子
   weight_kg: 4.3
   base_reference_price: 2284.95
@@ -40,7 +40,7 @@ products:
   rarity: 0.65
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: ciudad_juárez_日用品_B
-  name_zh: Ciudad Juárez日用品合约
+  name_zh: 华雷斯城日用品合约
   category: 日用品
   weight_kg: 13.2
   base_reference_price: 77.37

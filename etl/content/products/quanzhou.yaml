@@ -1,6 +1,6 @@
 products:
 - product_id: quanzhou_电子_B
-  name_zh: Quanzhou电子合约
+  name_zh: 泉州电子合约
   category: 电子
   weight_kg: 1.9
   base_reference_price: 995.72
@@ -10,7 +10,7 @@ products:
   rarity: 0.72
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: quanzhou_纺织品_B
-  name_zh: Quanzhou纺织品合约
+  name_zh: 泉州纺织品合约
   category: 纺织品
   weight_kg: 12.6
   base_reference_price: 410.69
@@ -20,7 +20,7 @@ products:
   rarity: 0.34
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: quanzhou_陶瓷_B
-  name_zh: Quanzhou陶瓷合约
+  name_zh: 泉州陶瓷合约
   category: 陶瓷
   weight_kg: 20.2
   base_reference_price: 200.94
@@ -30,7 +30,7 @@ products:
   rarity: 0.45
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: quanzhou_机械_B
-  name_zh: Quanzhou机械合约
+  name_zh: 泉州机械合约
   category: 机械
   weight_kg: 26.0
   base_reference_price: 1195.79
@@ -40,7 +40,7 @@ products:
   rarity: 0.6
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: quanzhou_茶叶_B
-  name_zh: Quanzhou茶叶合约
+  name_zh: 泉州茶叶合约
   category: 茶叶
   weight_kg: 7.4
   base_reference_price: 192.67

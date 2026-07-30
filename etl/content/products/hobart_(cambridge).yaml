@@ -1,6 +1,6 @@
 products:
 - product_id: hobart_(cambridge)_食品_B
-  name_zh: Hobart (Cambridge)食品合约
+  name_zh: 霍巴特食品合约
   category: 食品
   weight_kg: 15.2
   base_reference_price: 230.27
@@ -10,7 +10,7 @@ products:
   rarity: 0.23
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: hobart_(cambridge)_咖啡_B
-  name_zh: Hobart (Cambridge)咖啡合约
+  name_zh: 霍巴特咖啡合约
   category: 咖啡
   weight_kg: 11.5
   base_reference_price: 211.52
@@ -20,7 +20,7 @@ products:
   rarity: 0.38
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: hobart_(cambridge)_能源_B
-  name_zh: Hobart (Cambridge)能源合约
+  name_zh: 霍巴特能源合约
   category: 能源
   weight_kg: 8.5
   base_reference_price: 1018.88
@@ -30,7 +30,7 @@ products:
   rarity: 0.51
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: hobart_(cambridge)_矿产_B
-  name_zh: Hobart (Cambridge)矿产合约
+  name_zh: 霍巴特矿产合约
   category: 矿产
   weight_kg: 17.3
   base_reference_price: 837.82
@@ -40,7 +40,7 @@ products:
   rarity: 0.5
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: hobart_(cambridge)_日用品_B
-  name_zh: Hobart (Cambridge)日用品合约
+  name_zh: 霍巴特日用品合约
   category: 日用品
   weight_kg: 7.2
   base_reference_price: 96.51

@@ -1,6 +1,6 @@
 products:
 - product_id: ciudad_del_este_香料_B
-  name_zh: Ciudad del Este香料合约
+  name_zh: 东方市香料合约
   category: 香料
   weight_kg: 0.7
   base_reference_price: 215.3
@@ -10,7 +10,7 @@ products:
   rarity: 0.59
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: ciudad_del_este_糖果_B
-  name_zh: Ciudad del Este糖果合约
+  name_zh: 东方市糖果合约
   category: 糖果
   weight_kg: 4.1
   base_reference_price: 76.77
@@ -20,7 +20,7 @@ products:
   rarity: 0.16
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: ciudad_del_este_矿产_B
-  name_zh: Ciudad del Este矿产合约
+  name_zh: 东方市矿产合约
   category: 矿产
   weight_kg: 32.9
   base_reference_price: 769.69
@@ -30,7 +30,7 @@ products:
   rarity: 0.53
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: ciudad_del_este_食品_B
-  name_zh: Ciudad del Este食品合约
+  name_zh: 东方市食品合约
   category: 食品
   weight_kg: 15.6
   base_reference_price: 186.88
@@ -40,7 +40,7 @@ products:
   rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: ciudad_del_este_咖啡_B
-  name_zh: Ciudad del Este咖啡合约
+  name_zh: 东方市咖啡合约
   category: 咖啡
   weight_kg: 12.6
   base_reference_price: 100.04

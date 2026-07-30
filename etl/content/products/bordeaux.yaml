@@ -1,6 +1,6 @@
 products:
 - product_id: bordeaux_食品_B
-  name_zh: Bordeaux食品合约
+  name_zh: 波尔多食品合约
   category: 食品
   weight_kg: 15.5
   base_reference_price: 125.45
@@ -10,7 +10,7 @@ products:
   rarity: 0.26
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: bordeaux_香料_B
-  name_zh: Bordeaux香料合约
+  name_zh: 波尔多香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 290.86
@@ -20,7 +20,7 @@ products:
   rarity: 0.58
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: bordeaux_工艺品_B
-  name_zh: Bordeaux工艺品合约
+  name_zh: 波尔多工艺品合约
   category: 工艺品
   weight_kg: 6.6
   base_reference_price: 212.99
@@ -30,7 +30,7 @@ products:
   rarity: 0.41
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: bordeaux_日用品_B
-  name_zh: Bordeaux日用品合约
+  name_zh: 波尔多日用品合约
   category: 日用品
   weight_kg: 12.1
   base_reference_price: 66.1
@@ -40,7 +40,7 @@ products:
   rarity: 0.19
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: bordeaux_机械_B
-  name_zh: Bordeaux机械合约
+  name_zh: 波尔多机械合约
   category: 机械
   weight_kg: 40.4
   base_reference_price: 1098.88

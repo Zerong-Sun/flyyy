@@ -14,11 +14,28 @@ import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+CFG = ROOT / "config"
 CONTENT = ROOT / "content"
 CITIES_DIR = CONTENT / "cities"
 PRODUCTS_DIR = CONTENT / "products"
 
 CITY_LIST_PATH = Path(__file__).parent / "city_list.json"
+
+# ── Load Chinese city name mapping ───────────────────────────────────
+_CITY_NAME_ZH: dict[str, str] = {}
+_NAME_PATH = CFG / "city_name_zh.json"
+if _NAME_PATH.exists():
+    _CITY_NAME_ZH = json.loads(_NAME_PATH.read_text(encoding="utf-8"))
+
+
+def _get_city_zh(municipality: str, country_zh: str = "") -> str:
+    """Get Chinese city name from mapping, fall back to country-qualified English."""
+    name = _CITY_NAME_ZH.get(municipality, "")
+    if name:
+        return name
+    if country_zh and country_zh != "未知":
+        return f"{municipality}（{country_zh}）"
+    return municipality
 
 
 def city_rng(city_id: str, purpose: str = "content") -> random.Random:
@@ -2397,18 +2414,21 @@ def generate_city_content(city_info: dict) -> dict:
     """Generate a full city JSON document for one city."""
     city_id = city_info["city_id"]
     iata = city_info["iata"]
-    city_name = city_info["municipality"]
+    municipality = city_info["municipality"]
     country_id = city_info["country_id"]
     country_zh = city_info["country_zh"]
     timezone = city_info["timezone"]
+
+    city_name_zh = _get_city_zh(municipality, country_zh)
+    city_name_en = municipality
 
     rng = city_rng(city_id)
 
     elements = _get_elements(country_id)
 
-    # Format each field
-    short = _format_field(elements.get("short_tpl", "{city}是{country}城市。"), elements, city_name, country_zh, rng)
-    overview = _format_field(elements.get("overview_tpl", "{city}位于{country}，是航线网络中的一站。"), elements, city_name, country_zh, rng)
+    # Format each field using Chinese city name in templates
+    short = _format_field(elements.get("short_tpl", "{city}是{country}城市。"), elements, city_name_zh, country_zh, rng)
+    overview = _format_field(elements.get("overview_tpl", "{city}位于{country}，是航线网络中的一站。"), elements, city_name_zh, country_zh, rng)
 
     # History: pick from list if present, then format
     hist_src = elements.get("hist", elements.get("history_desc", "古代商贸起源，当代持续发展。"))
@@ -2416,39 +2436,39 @@ def generate_city_content(city_info: dict) -> dict:
         hist_src = rng.choice(hist_src)
     elif isinstance(hist_src, list):
         hist_src = "古代商贸起源，当代持续发展。"
-    hist = _format_field(str(hist_src), elements, city_name, country_zh, rng)
+    hist = _format_field(str(hist_src), elements, city_name_zh, country_zh, rng)
 
     geo_src = elements.get("geo", elements.get("geo_desc", "气候因地理位置而异。"))
     if isinstance(geo_src, list) and geo_src:
         geo_src = rng.choice(geo_src)
     elif isinstance(geo_src, list):
         geo_src = "气候因地理位置而异。"
-    geo = _format_field(str(geo_src), elements, city_name, country_zh, rng)
+    geo = _format_field(str(geo_src), elements, city_name_zh, country_zh, rng)
 
     econ_src = elements.get("econ", elements.get("econ_desc", "地方产业与商贸为主。"))
     if isinstance(econ_src, list) and econ_src:
         econ_src = rng.choice(econ_src)
     elif isinstance(econ_src, list):
         econ_src = "地方产业与商贸为主。"
-    econ = _format_field(str(econ_src), elements, city_name, country_zh, rng)
+    econ = _format_field(str(econ_src), elements, city_name_zh, country_zh, rng)
 
     food_src = elements.get("food", elements.get("food_desc", "本地特色食品丰富。"))
     if isinstance(food_src, list) and food_src:
         food_src = rng.choice(food_src)
     elif isinstance(food_src, list):
         food_src = "本地特色食品丰富。"
-    food = _format_field(str(food_src), elements, city_name, country_zh, rng)
+    food = _format_field(str(food_src), elements, city_name_zh, country_zh, rng)
 
-    travel = _format_field("机场{airport}；{tip}。", elements, city_name, country_zh, rng)
+    travel = _format_field("机场{airport}；{tip}。", elements, city_name_zh, country_zh, rng)
 
     # Ensure minimum lengths (pad at most once)
     short = _pad_zh(short, 80, "城市作为全球航线节点，适合体验地方特产贸易与跨区价差。")
     overview = _pad_zh(overview, 150, "旅客可在此采购特色商品，再搭乘航班前往其他枢纽出售，形成可持续的旅行贸易循环。")
-    hist = _pad_zh(hist, 60, "更多细节将在后续更新中扩展。")
-    geo = _pad_zh(geo, 60, "更多细节将在后续更新中扩展。")
-    econ = _pad_zh(econ, 60, "更多细节将在后续更新中扩展。")
-    food = _pad_zh(food, 60, "更多细节将在后续更新中扩展。")
-    travel = _pad_zh(travel, 60, "更多细节将在后续更新中扩展。")
+    hist = _pad_zh(hist, 80, "更多细节将在后续更新中扩展。")
+    geo = _pad_zh(geo, 80, "更多细节将在后续更新中扩展。")
+    econ = _pad_zh(econ, 80, "更多细节将在后续更新中扩展。")
+    food = _pad_zh(food, 80, "更多细节将在后续更新中扩展。")
+    travel = _pad_zh(travel, 80, "更多细节将在后续更新中扩展。")
 
     # Generate source_ids based on real-world data
     source_ids = [f"ourairports:iata:{iata}"]
@@ -2457,8 +2477,8 @@ def generate_city_content(city_info: dict) -> dict:
 
     return {
         "city_id": city_id,
-        "name_zh": city_name,
-        "name_en": city_name,
+        "name_zh": city_name_zh,
+        "name_en": city_name_en,
         "country_id": country_id,
         "country_zh": country_zh,
         "timezone": timezone,
@@ -2567,8 +2587,10 @@ PRODUCT_PARAMS = {
 def generate_city_products(city_info: dict) -> dict:
     """Generate product YAML content for one city."""
     city_id = city_info["city_id"]
-    city_name = city_info["municipality"]
+    municipality = city_info["municipality"]
     country_id = city_info["country_id"]
+    country_zh = city_info.get("country_zh", "")
+    city_zh = _get_city_zh(municipality, country_zh)
     rng = city_rng(city_id, "products")
 
     theme = COUNTRY_PRODUCT_THEMES.get(country_id, COUNTRY_PRODUCT_THEMES["default"])
@@ -2594,7 +2616,7 @@ def generate_city_products(city_info: dict) -> dict:
         price_mul = theme.get("price_mul", 1.0)
         base_price = round(base_price * price_mul, 2)
 
-        name_zh = f"{city_name}{cat}合约"
+        name_zh = f"{city_zh}{cat}合约"
 
         products.append({
             "product_id": product_id,

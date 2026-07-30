@@ -1,6 +1,6 @@
 products:
 - product_id: cleveland_能源_B
-  name_zh: Cleveland能源合约
+  name_zh: 克利夫兰能源合约
   category: 能源
   weight_kg: 9.7
   base_reference_price: 930.04
@@ -10,7 +10,7 @@ products:
   rarity: 0.51
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: cleveland_电子_B
-  name_zh: Cleveland电子合约
+  name_zh: 克利夫兰电子合约
   category: 电子
   weight_kg: 2.8
   base_reference_price: 1769.3
@@ -20,7 +20,7 @@ products:
   rarity: 0.56
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: cleveland_日用品_B
-  name_zh: Cleveland日用品合约
+  name_zh: 克利夫兰日用品合约
   category: 日用品
   weight_kg: 5.5
   base_reference_price: 75.82
@@ -30,7 +30,7 @@ products:
   rarity: 0.11
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: cleveland_食品_B
-  name_zh: Cleveland食品合约
+  name_zh: 克利夫兰食品合约
   category: 食品
   weight_kg: 23.3
   base_reference_price: 207.48
@@ -40,7 +40,7 @@ products:
   rarity: 0.34
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: cleveland_机械_B
-  name_zh: Cleveland机械合约
+  name_zh: 克利夫兰机械合约
   category: 机械
   weight_kg: 48.7
   base_reference_price: 1644.95

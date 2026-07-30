@@ -1,6 +1,6 @@
 products:
 - product_id: belo_horizonte_食品_B
-  name_zh: Belo Horizonte食品合约
+  name_zh: 贝洛奥里藏特食品合约
   category: 食品
   weight_kg: 28.0
   base_reference_price: 107.3
@@ -10,7 +10,7 @@ products:
   rarity: 0.31
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: belo_horizonte_咖啡_B
-  name_zh: Belo Horizonte咖啡合约
+  name_zh: 贝洛奥里藏特咖啡合约
   category: 咖啡
   weight_kg: 11.7
   base_reference_price: 114.39
@@ -20,7 +20,7 @@ products:
   rarity: 0.36
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: belo_horizonte_能源_B
-  name_zh: Belo Horizonte能源合约
+  name_zh: 贝洛奥里藏特能源合约
   category: 能源
   weight_kg: 9.0
   base_reference_price: 340.33
@@ -30,7 +30,7 @@ products:
   rarity: 0.59
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: belo_horizonte_矿产_B
-  name_zh: Belo Horizonte矿产合约
+  name_zh: 贝洛奥里藏特矿产合约
   category: 矿产
   weight_kg: 16.1
   base_reference_price: 234.02
@@ -40,7 +40,7 @@ products:
   rarity: 0.35
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: belo_horizonte_日用品_B
-  name_zh: Belo Horizonte日用品合约
+  name_zh: 贝洛奥里藏特日用品合约
   category: 日用品
   weight_kg: 13.4
   base_reference_price: 65.57

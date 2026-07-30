@@ -1,6 +1,6 @@
 products:
 - product_id: vágar_矿产_B
-  name_zh: Vágar矿产合约
+  name_zh: 沃格矿产合约
   category: 矿产
   weight_kg: 18.1
   base_reference_price: 484.68
@@ -10,7 +10,7 @@ products:
   rarity: 0.43
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: vágar_食品_B
-  name_zh: Vágar食品合约
+  name_zh: 沃格食品合约
   category: 食品
   weight_kg: 27.4
   base_reference_price: 239.34
@@ -20,7 +20,7 @@ products:
   rarity: 0.3
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: vágar_香料_B
-  name_zh: Vágar香料合约
+  name_zh: 沃格香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 239.06
@@ -30,7 +30,7 @@ products:
   rarity: 0.41
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: vágar_工艺品_B
-  name_zh: Vágar工艺品合约
+  name_zh: 沃格工艺品合约
   category: 工艺品
   weight_kg: 11.5
   base_reference_price: 244.32
@@ -40,7 +40,7 @@ products:
   rarity: 0.5
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: vágar_日用品_B
-  name_zh: Vágar日用品合约
+  name_zh: 沃格日用品合约
   category: 日用品
   weight_kg: 9.0
   base_reference_price: 99.62

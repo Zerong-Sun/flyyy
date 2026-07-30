@@ -1,6 +1,6 @@
 products:
 - product_id: clermont_ferrand_食品_B
-  name_zh: Clermont-Ferrand食品合约
+  name_zh: 克莱蒙费朗食品合约
   category: 食品
   weight_kg: 28.5
   base_reference_price: 114.15
@@ -10,7 +10,7 @@ products:
   rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: clermont_ferrand_香料_B
-  name_zh: Clermont-Ferrand香料合约
+  name_zh: 克莱蒙费朗香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 209.7
@@ -20,7 +20,7 @@ products:
   rarity: 0.41
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: clermont_ferrand_机械_B
-  name_zh: Clermont-Ferrand机械合约
+  name_zh: 克莱蒙费朗机械合约
   category: 机械
   weight_kg: 24.5
   base_reference_price: 678.97
@@ -30,7 +30,7 @@ products:
   rarity: 0.6
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: clermont_ferrand_工艺品_B
-  name_zh: Clermont-Ferrand工艺品合约
+  name_zh: 克莱蒙费朗工艺品合约
   category: 工艺品
   weight_kg: 5.2
   base_reference_price: 416.62
@@ -40,7 +40,7 @@ products:
   rarity: 0.54
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: clermont_ferrand_日用品_B
-  name_zh: Clermont-Ferrand日用品合约
+  name_zh: 克莱蒙费朗日用品合约
   category: 日用品
   weight_kg: 13.1
   base_reference_price: 55.22

@@ -27,6 +27,7 @@ from pathlib import Path
 from batch_art_utils import ART_DIR, BatchJob, parse_batch_prompts_md
 from kit_paths import PROMPTS_DIR
 from chatgpt_gen_art import (
+    build_batch_message,
     connect_browser,
     ensure_logged_in,
     get_chatgpt_page,
@@ -34,8 +35,6 @@ from chatgpt_gen_art import (
 )
 from resume_dual_decks import dismiss_rate_limit, ensure_chat, generation_busy
 from submit_map_windows import (
-    MAP_STYLE,
-    build_map_message,
     missing_files,
     save_batch,
 )
@@ -104,38 +103,16 @@ P1_WINDOW_ORDER = [
     "Contract",
 ]
 
-SCENE_STYLE = (
-    "13th-century manuscript miniature × dusk travel light. Vellum #E9DBB8, iron-gall ink "
-    "#4A3A1C, ochre #8A6234, rubric #B3402E, sea-teal #3F5F6B. Flat mineral washes, parchment "
-    "grain. COMPOSITION: lower-left ~1/3 empty for dialog+portrait; landmarks center-right / "
-    "upper half. No photorealism, no neon, no readable text."
-)
+# --- Project global style (Airborne Trader) ---
+# Each batch in ART_PROMPTS_REQ.md carries its own complete style spec.
+# No global style is injected — the per-batch prompt is used as-is via build_batch_message().
 
-NPC_STYLE = (
-    "13th-century manuscript illumination figure style. Iron-gall #4A3A1C contours, mineral "
-    "flats, antique gold #BDA476 accents sparingly, parchment grain, candle/dusk light only. "
-    "COMPOSITION: half-body facing RIGHT, transparent field, bottom ~15% dialog-safe, "
-    "face/shoulders/props in upper 85%. No photorealism, no neon, no readable text, no deities."
-)
-
-DESK_STYLE = (
-    "Cloud-ridge Twilight manuscript miniature — forest ink #0D1411, parchment #F0E4D0, "
-    "antique gold #BDA476, mist blue #7FA3BD, cloud-peach #E8B28A. Flat mineral paint, "
-    "paper grain, candle/dusk glow only. No photorealism, no neon, no readable text."
-)
-
-UI_STYLE = (
-    "Cloud-ridge Twilight UI — parchment #F0E4D0, forest ink #0D1411, antique gold #BDA476, "
-    "rubric #B3402E accent only. Flat mineral paint, paper grain. No photorealism, no neon, "
-    "no readable text."
-)
 
 
 @dataclass
 class Lane:
     name: str
     batches: list[BatchJob]
-    style: str
     prompts_stem: str = "ART_PROMPTS_REQ"
     page: object | None = None
     chat_url: str = ""
@@ -144,39 +121,6 @@ class Lane:
     pending_batch: BatchJob | None = None
     baseline_srcs: set[str] = field(default_factory=set)
     submitted_at: float = 0.0
-
-
-def style_for_window(window: str) -> str:
-    w = window.lower()
-    if w.startswith("npc") or w.startswith("venue") or w.startswith("retainer"):
-        return NPC_STYLE
-    if w in ("desk",):
-        return DESK_STYLE
-    if w.startswith("book") or w in (
-        "ui",
-        "lot",
-        "rank",
-        "cargo",
-        "rose",
-        "fateui",
-        "culture",
-        "faitha",
-        "faithb",
-        "contract",
-    ):
-        return UI_STYLE
-    if (
-        w.startswith("cities")
-        or w.startswith("band")
-        or w.startswith("city")
-        or w.startswith("site")
-        or w.startswith("load")
-        or w in ("region",)
-    ):
-        return SCENE_STYLE
-    if w in ("temple", "market", "inn"):
-        return UI_STYLE
-    return MAP_STYLE
 
 
 def load_pending(
@@ -227,7 +171,7 @@ def load_pending(
         if w not in by:
             continue
         lanes.append(
-            Lane(name=w, batches=by[w], style=style_for_window(w), prompts_stem=stem)
+            Lane(name=w, batches=by[w], prompts_stem=stem)
         )
         used.add(w)
     if not strict_windows:
@@ -235,7 +179,7 @@ def load_pending(
             if w in used:
                 continue
             lanes.append(
-                Lane(name=w, batches=by[w], style=style_for_window(w), prompts_stem=stem)
+                Lane(name=w, batches=by[w], prompts_stem=stem)
             )
     return lanes
 
@@ -305,7 +249,7 @@ async def submit_lane(browser, lane: Lane, rate_limit_ms: int) -> bool:
             continue
         try:
             await wait_out_rate_limit(page, pause_ms=rate_limit_ms)
-            message = build_map_message(batch, lane.style)
+            message = build_batch_message(batch)
             lane.baseline_srcs = await collect_image_srcs(page)
             print(
                 f"  [{lane.name}] SUBMIT {batch.name} "

@@ -50,7 +50,9 @@ func _build_earth() -> void:
 	var mat := StandardMaterial3D.new()
 	mat.roughness = 0.9
 	mat.metallic = 0.0
-	var tex_path := "res://assets/earth/earth_albedo_placeholder.png"
+	var tex_path := "res://assets/earth/earth_albedo_day_2k.png"
+	if not ResourceLoader.exists(tex_path):
+		tex_path = "res://assets/earth/earth_albedo_placeholder.png"
 	if ResourceLoader.exists(tex_path):
 		var tex: Texture2D = load(tex_path) as Texture2D
 		if tex:
@@ -110,12 +112,14 @@ func _update_grid_fade() -> void:
 		mat.albedo_color = Color(0.85, 0.92, 0.98, alpha)
 
 
+const LON_OFFSET_DEG := 180.0  # align texture lon=-180 (U=0) with SphereMesh seam at +Z
+
 func latlon_to_vec(lat: float, lon: float, radius: float = EARTH_RADIUS) -> Vector3:
 	var la := deg_to_rad(lat)
-	var lo := deg_to_rad(lon)
-	var x := radius * cos(la) * cos(lo)
+	var lo := deg_to_rad(lon + LON_OFFSET_DEG)
+	var x := radius * cos(la) * sin(lo)
 	var y := radius * sin(la)
-	var z := radius * cos(la) * sin(lo)
+	var z := radius * cos(la) * cos(lo)
 	return Vector3(x, y, z)
 
 
@@ -200,9 +204,9 @@ func _spawn_airports() -> void:
 		var mi := MeshInstance3D.new()
 		mi.mesh = pin_mesh
 		var mat := StandardMaterial3D.new()
-		mat.albedo_color = Color(1.0, 0.85, 0.2)
+		mat.albedo_color = Color(0.55, 0.58, 0.62)
 		mat.emission_enabled = true
-		mat.emission = Color(0.6, 0.4, 0.05)
+		mat.emission = Color(0.1, 0.1, 0.12)
 		mat.emission_energy_multiplier = 0.6
 		mi.material_override = mat
 		var pos := latlon_to_vec(float(a.latitude), float(a.longitude), EARTH_RADIUS + 0.02)
@@ -341,11 +345,11 @@ func _update_markers() -> void:
 			mat.albedo_color = Color(1.0, 0.45, 0.2)
 			mat.emission = Color(0.6, 0.2, 0.05)
 		elif AppState.visited_airports.has(id):
-			mat.albedo_color = Color(0.6, 0.85, 1.0)
-			mat.emission = Color(0.2, 0.35, 0.5)
-		else:
 			mat.albedo_color = Color(1.0, 0.85, 0.2)
 			mat.emission = Color(0.6, 0.4, 0.05)
+		else:
+			mat.albedo_color = Color(0.55, 0.58, 0.62)
+			mat.emission = Color(0.1, 0.1, 0.12)
 
 
 func clear_routes() -> void:

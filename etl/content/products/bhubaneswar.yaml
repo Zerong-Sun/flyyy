@@ -1,6 +1,6 @@
 products:
 - product_id: bhubaneswar_纺织品_B
-  name_zh: Bhubaneswar纺织品合约
+  name_zh: 布巴内什瓦尔纺织品合约
   category: 纺织品
   weight_kg: 16.3
   base_reference_price: 156.97
@@ -10,7 +10,7 @@ products:
   rarity: 0.32
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: bhubaneswar_茶叶_B
-  name_zh: Bhubaneswar茶叶合约
+  name_zh: 布巴内什瓦尔茶叶合约
   category: 茶叶
   weight_kg: 3.5
   base_reference_price: 113.63
@@ -20,7 +20,7 @@ products:
   rarity: 0.41
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: bhubaneswar_香料_B
-  name_zh: Bhubaneswar香料合约
+  name_zh: 布巴内什瓦尔香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 140.63
@@ -30,7 +30,7 @@ products:
   rarity: 0.52
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: bhubaneswar_矿产_B
-  name_zh: Bhubaneswar矿产合约
+  name_zh: 布巴内什瓦尔矿产合约
   category: 矿产
   weight_kg: 39.6
   base_reference_price: 366.5
@@ -40,7 +40,7 @@ products:
   rarity: 0.58
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: bhubaneswar_电子_B
-  name_zh: Bhubaneswar电子合约
+  name_zh: 布巴内什瓦尔电子合约
   category: 电子
   weight_kg: 4.5
   base_reference_price: 1340.98

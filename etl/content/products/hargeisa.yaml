@@ -1,6 +1,6 @@
 products:
 - product_id: hargeisa_工艺品_B
-  name_zh: Hargeisa工艺品合约
+  name_zh: 哈尔格萨工艺品合约
   category: 工艺品
   weight_kg: 9.2
   base_reference_price: 212.47
@@ -10,7 +10,7 @@ products:
   rarity: 0.55
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: hargeisa_食品_B
-  name_zh: Hargeisa食品合约
+  name_zh: 哈尔格萨食品合约
   category: 食品
   weight_kg: 17.0
   base_reference_price: 140.71
@@ -20,7 +20,7 @@ products:
   rarity: 0.35
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: hargeisa_糖果_B
-  name_zh: Hargeisa糖果合约
+  name_zh: 哈尔格萨糖果合约
   category: 糖果
   weight_kg: 4.2
   base_reference_price: 90.76
@@ -30,7 +30,7 @@ products:
   rarity: 0.35
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: hargeisa_日用品_B
-  name_zh: Hargeisa日用品合约
+  name_zh: 哈尔格萨日用品合约
   category: 日用品
   weight_kg: 13.2
   base_reference_price: 99.53
@@ -40,7 +40,7 @@ products:
   rarity: 0.18
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: hargeisa_咖啡_B
-  name_zh: Hargeisa咖啡合约
+  name_zh: 哈尔格萨咖啡合约
   category: 咖啡
   weight_kg: 10.1
   base_reference_price: 154.63

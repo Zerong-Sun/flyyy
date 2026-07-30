@@ -1,6 +1,6 @@
 products:
 - product_id: ad_dammam_食品_B
-  name_zh: Ad Dammam食品合约
+  name_zh: 达曼食品合约
   category: 食品
   weight_kg: 24.9
   base_reference_price: 120.23
@@ -10,7 +10,7 @@ products:
   rarity: 0.35
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: ad_dammam_日用品_B
-  name_zh: Ad Dammam日用品合约
+  name_zh: 达曼日用品合约
   category: 日用品
   weight_kg: 5.1
   base_reference_price: 49.98
@@ -20,7 +20,7 @@ products:
   rarity: 0.14
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: ad_dammam_矿产_B
-  name_zh: Ad Dammam矿产合约
+  name_zh: 达曼矿产合约
   category: 矿产
   weight_kg: 31.5
   base_reference_price: 462.01
@@ -30,7 +30,7 @@ products:
   rarity: 0.53
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: ad_dammam_能源_B
-  name_zh: Ad Dammam能源合约
+  name_zh: 达曼能源合约
   category: 能源
   weight_kg: 5.3
   base_reference_price: 828.63
@@ -40,7 +40,7 @@ products:
   rarity: 0.66
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: ad_dammam_香料_B
-  name_zh: Ad Dammam香料合约
+  name_zh: 达曼香料合约
   category: 香料
   weight_kg: 0.5
   base_reference_price: 285.39

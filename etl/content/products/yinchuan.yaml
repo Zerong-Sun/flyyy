@@ -1,6 +1,6 @@
 products:
 - product_id: yinchuan_机械_B
-  name_zh: Yinchuan机械合约
+  name_zh: 银川机械合约
   category: 机械
   weight_kg: 20.2
   base_reference_price: 1238.9
@@ -10,7 +10,7 @@ products:
   rarity: 0.63
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: yinchuan_陶瓷_B
-  name_zh: Yinchuan陶瓷合约
+  name_zh: 银川陶瓷合约
   category: 陶瓷
   weight_kg: 22.4
   base_reference_price: 281.15
@@ -20,7 +20,7 @@ products:
   rarity: 0.46
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: yinchuan_纺织品_B
-  name_zh: Yinchuan纺织品合约
+  name_zh: 银川纺织品合约
   category: 纺织品
   weight_kg: 16.7
   base_reference_price: 344.99
@@ -30,7 +30,7 @@ products:
   rarity: 0.29
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: yinchuan_电子_B
-  name_zh: Yinchuan电子合约
+  name_zh: 银川电子合约
   category: 电子
   weight_kg: 3.8
   base_reference_price: 1346.37
@@ -40,7 +40,7 @@ products:
   rarity: 0.58
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: yinchuan_茶叶_B
-  name_zh: Yinchuan茶叶合约
+  name_zh: 银川茶叶合约
   category: 茶叶
   weight_kg: 9.5
   base_reference_price: 138.81

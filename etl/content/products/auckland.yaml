@@ -1,6 +1,6 @@
 products:
 - product_id: auckland_食品_B
-  name_zh: Auckland食品合约
+  name_zh: 奥克兰食品合约
   category: 食品
   weight_kg: 21.2
   base_reference_price: 156.9
@@ -10,7 +10,7 @@ products:
   rarity: 0.34
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: auckland_茶叶_B
-  name_zh: Auckland茶叶合约
+  name_zh: 奥克兰茶叶合约
   category: 茶叶
   weight_kg: 7.5
   base_reference_price: 264.4
@@ -20,7 +20,7 @@ products:
   rarity: 0.43
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: auckland_矿产_B
-  name_zh: Auckland矿产合约
+  name_zh: 奥克兰矿产合约
   category: 矿产
   weight_kg: 29.5
   base_reference_price: 701.04
@@ -30,7 +30,7 @@ products:
   rarity: 0.47
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: auckland_日用品_B
-  name_zh: Auckland日用品合约
+  name_zh: 奥克兰日用品合约
   category: 日用品
   weight_kg: 11.8
   base_reference_price: 102.52
@@ -40,7 +40,7 @@ products:
   rarity: 0.08
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: auckland_能源_B
-  name_zh: Auckland能源合约
+  name_zh: 奥克兰能源合约
   category: 能源
   weight_kg: 6.4
   base_reference_price: 955.46

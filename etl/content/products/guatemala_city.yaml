@@ -1,6 +1,6 @@
 products:
 - product_id: guatemala_city_食品_B
-  name_zh: Guatemala City食品合约
+  name_zh: 危地马拉城食品合约
   category: 食品
   weight_kg: 22.4
   base_reference_price: 85.3
@@ -10,7 +10,7 @@ products:
   rarity: 0.28
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: guatemala_city_工艺品_B
-  name_zh: Guatemala City工艺品合约
+  name_zh: 危地马拉城工艺品合约
   category: 工艺品
   weight_kg: 5.7
   base_reference_price: 486.31
@@ -20,7 +20,7 @@ products:
   rarity: 0.59
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: guatemala_city_糖果_B
-  name_zh: Guatemala City糖果合约
+  name_zh: 危地马拉城糖果合约
   category: 糖果
   weight_kg: 7.1
   base_reference_price: 133.61
@@ -30,7 +30,7 @@ products:
   rarity: 0.3
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: guatemala_city_香料_B
-  name_zh: Guatemala City香料合约
+  name_zh: 危地马拉城香料合约
   category: 香料
   weight_kg: 0.3
   base_reference_price: 171.38
@@ -40,7 +40,7 @@ products:
   rarity: 0.58
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: guatemala_city_咖啡_B
-  name_zh: Guatemala City咖啡合约
+  name_zh: 危地马拉城咖啡合约
   category: 咖啡
   weight_kg: 10.9
   base_reference_price: 268.35

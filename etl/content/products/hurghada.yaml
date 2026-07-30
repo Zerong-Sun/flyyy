@@ -1,6 +1,6 @@
 products:
 - product_id: hurghada_食品_B
-  name_zh: Hurghada食品合约
+  name_zh: 赫尔格达食品合约
   category: 食品
   weight_kg: 23.6
   base_reference_price: 126.93
@@ -10,7 +10,7 @@ products:
   rarity: 0.35
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: hurghada_矿产_B
-  name_zh: Hurghada矿产合约
+  name_zh: 赫尔格达矿产合约
   category: 矿产
   weight_kg: 38.2
   base_reference_price: 234.9
@@ -20,7 +20,7 @@ products:
   rarity: 0.57
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: hurghada_香料_B
-  name_zh: Hurghada香料合约
+  name_zh: 赫尔格达香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 96.81
@@ -30,7 +30,7 @@ products:
   rarity: 0.5
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: hurghada_纺织品_B
-  name_zh: Hurghada纺织品合约
+  name_zh: 赫尔格达纺织品合约
   category: 纺织品
   weight_kg: 17.8
   base_reference_price: 161.82
@@ -40,7 +40,7 @@ products:
   rarity: 0.3
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: hurghada_日用品_B
-  name_zh: Hurghada日用品合约
+  name_zh: 赫尔格达日用品合约
   category: 日用品
   weight_kg: 5.1
   base_reference_price: 65.96

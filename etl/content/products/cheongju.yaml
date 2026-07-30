@@ -1,6 +1,6 @@
 products:
 - product_id: cheongju_纺织品_B
-  name_zh: Cheongju纺织品合约
+  name_zh: 清州纺织品合约
   category: 纺织品
   weight_kg: 9.7
   base_reference_price: 445.84
@@ -10,7 +10,7 @@ products:
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: cheongju_化妆品_B
-  name_zh: Cheongju化妆品合约
+  name_zh: 清州化妆品合约
   category: 化妆品
   weight_kg: 1.5
   base_reference_price: 235.62
@@ -20,7 +20,7 @@ products:
   rarity: 0.46
   description: 化妆品样品合约，轻便高价值跨境贸易品。
 - product_id: cheongju_文具_B
-  name_zh: Cheongju文具合约
+  name_zh: 清州文具合约
   category: 文具
   weight_kg: 3.5
   base_reference_price: 49.59
@@ -30,7 +30,7 @@ products:
   rarity: 0.12
   description: 当地特色文具纸品合约，轻便易携带。
 - product_id: cheongju_食品_B
-  name_zh: Cheongju食品合约
+  name_zh: 清州食品合约
   category: 食品
   weight_kg: 28.7
   base_reference_price: 103.22
@@ -40,7 +40,7 @@ products:
   rarity: 0.32
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: cheongju_电子_B
-  name_zh: Cheongju电子合约
+  name_zh: 清州电子合约
   category: 电子
   weight_kg: 4.5
   base_reference_price: 2779.9

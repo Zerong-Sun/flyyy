@@ -1,6 +1,6 @@
 products:
 - product_id: evenes_香料_B
-  name_zh: Evenes香料合约
+  name_zh: 埃沃内斯香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 165.55
@@ -10,7 +10,7 @@ products:
   rarity: 0.56
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: evenes_糖果_B
-  name_zh: Evenes糖果合约
+  name_zh: 埃沃内斯糖果合约
   category: 糖果
   weight_kg: 4.8
   base_reference_price: 84.07
@@ -20,7 +20,7 @@ products:
   rarity: 0.16
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: evenes_咖啡_B
-  name_zh: Evenes咖啡合约
+  name_zh: 埃沃内斯咖啡合约
   category: 咖啡
   weight_kg: 14.2
   base_reference_price: 107.1
@@ -30,7 +30,7 @@ products:
   rarity: 0.45
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: evenes_食品_B
-  name_zh: Evenes食品合约
+  name_zh: 埃沃内斯食品合约
   category: 食品
   weight_kg: 27.9
   base_reference_price: 141.52
@@ -40,7 +40,7 @@ products:
   rarity: 0.34
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: evenes_矿产_B
-  name_zh: Evenes矿产合约
+  name_zh: 埃沃内斯矿产合约
   category: 矿产
   weight_kg: 38.1
   base_reference_price: 796.08

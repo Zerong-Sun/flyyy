@@ -1,6 +1,6 @@
 products:
 - product_id: kabul_糖果_B
-  name_zh: Kabul糖果合约
+  name_zh: 喀布尔糖果合约
   category: 糖果
   weight_kg: 6.7
   base_reference_price: 114.58
@@ -10,7 +10,7 @@ products:
   rarity: 0.18
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: kabul_日用品_B
-  name_zh: Kabul日用品合约
+  name_zh: 喀布尔日用品合约
   category: 日用品
   weight_kg: 6.0
   base_reference_price: 58.38
@@ -20,7 +20,7 @@ products:
   rarity: 0.06
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: kabul_食品_B
-  name_zh: Kabul食品合约
+  name_zh: 喀布尔食品合约
   category: 食品
   weight_kg: 25.5
   base_reference_price: 115.99
@@ -30,7 +30,7 @@ products:
   rarity: 0.3
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kabul_纺织品_B
-  name_zh: Kabul纺织品合约
+  name_zh: 喀布尔纺织品合约
   category: 纺织品
   weight_kg: 19.1
   base_reference_price: 218.15
@@ -40,7 +40,7 @@ products:
   rarity: 0.42
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: kabul_矿产_B
-  name_zh: Kabul矿产合约
+  name_zh: 喀布尔矿产合约
   category: 矿产
   weight_kg: 23.9
   base_reference_price: 482.21

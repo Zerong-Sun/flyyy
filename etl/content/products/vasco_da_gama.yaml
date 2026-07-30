@@ -1,6 +1,6 @@
 products:
 - product_id: vasco_da_gama_矿产_B
-  name_zh: Vasco da Gama矿产合约
+  name_zh: 瓦斯科达伽马矿产合约
   category: 矿产
   weight_kg: 17.9
   base_reference_price: 235.94
@@ -10,7 +10,7 @@ products:
   rarity: 0.56
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: vasco_da_gama_电子_B
-  name_zh: Vasco da Gama电子合约
+  name_zh: 瓦斯科达伽马电子合约
   category: 电子
   weight_kg: 4.5
   base_reference_price: 616.46
@@ -20,7 +20,7 @@ products:
   rarity: 0.73
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: vasco_da_gama_香料_B
-  name_zh: Vasco da Gama香料合约
+  name_zh: 瓦斯科达伽马香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 108.21
@@ -30,7 +30,7 @@ products:
   rarity: 0.6
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: vasco_da_gama_纺织品_B
-  name_zh: Vasco da Gama纺织品合约
+  name_zh: 瓦斯科达伽马纺织品合约
   category: 纺织品
   weight_kg: 12.4
   base_reference_price: 256.89
@@ -40,7 +40,7 @@ products:
   rarity: 0.39
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: vasco_da_gama_茶叶_B
-  name_zh: Vasco da Gama茶叶合约
+  name_zh: 瓦斯科达伽马茶叶合约
   category: 茶叶
   weight_kg: 4.1
   base_reference_price: 214.41

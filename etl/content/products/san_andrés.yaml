@@ -1,6 +1,6 @@
 products:
 - product_id: san_andrés_咖啡_B
-  name_zh: San Andrés咖啡合约
+  name_zh: 圣安德烈斯咖啡合约
   category: 咖啡
   weight_kg: 11.2
   base_reference_price: 115.05
@@ -10,7 +10,7 @@ products:
   rarity: 0.49
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: san_andrés_能源_B
-  name_zh: San Andrés能源合约
+  name_zh: 圣安德烈斯能源合约
   category: 能源
   weight_kg: 4.9
   base_reference_price: 381.07
@@ -20,7 +20,7 @@ products:
   rarity: 0.52
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: san_andrés_日用品_B
-  name_zh: San Andrés日用品合约
+  name_zh: 圣安德烈斯日用品合约
   category: 日用品
   weight_kg: 9.6
   base_reference_price: 64.7
@@ -30,7 +30,7 @@ products:
   rarity: 0.19
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: san_andrés_食品_B
-  name_zh: San Andrés食品合约
+  name_zh: 圣安德烈斯食品合约
   category: 食品
   weight_kg: 25.8
   base_reference_price: 60.94
@@ -40,7 +40,7 @@ products:
   rarity: 0.37
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: san_andrés_矿产_B
-  name_zh: San Andrés矿产合约
+  name_zh: 圣安德烈斯矿产合约
   category: 矿产
   weight_kg: 38.0
   base_reference_price: 228.4

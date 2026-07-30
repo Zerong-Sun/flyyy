@@ -1,6 +1,6 @@
 products:
 - product_id: dzaoudzi_咖啡_B
-  name_zh: Dzaoudzi咖啡合约
+  name_zh: 藻德济咖啡合约
   category: 咖啡
   weight_kg: 12.4
   base_reference_price: 182.16
@@ -10,7 +10,7 @@ products:
   rarity: 0.46
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: dzaoudzi_香料_B
-  name_zh: Dzaoudzi香料合约
+  name_zh: 藻德济香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 357.15
@@ -20,7 +20,7 @@ products:
   rarity: 0.42
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: dzaoudzi_日用品_B
-  name_zh: Dzaoudzi日用品合约
+  name_zh: 藻德济日用品合约
   category: 日用品
   weight_kg: 8.4
   base_reference_price: 50.63
@@ -30,7 +30,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: dzaoudzi_纺织品_B
-  name_zh: Dzaoudzi纺织品合约
+  name_zh: 藻德济纺织品合约
   category: 纺织品
   weight_kg: 15.5
   base_reference_price: 308.87
@@ -40,7 +40,7 @@ products:
   rarity: 0.4
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: dzaoudzi_食品_B
-  name_zh: Dzaoudzi食品合约
+  name_zh: 藻德济食品合约
   category: 食品
   weight_kg: 29.8
   base_reference_price: 246.81

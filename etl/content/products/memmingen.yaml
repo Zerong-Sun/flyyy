@@ -1,6 +1,6 @@
 products:
 - product_id: memmingen_机械_B
-  name_zh: Memmingen机械合约
+  name_zh: 梅明根机械合约
   category: 机械
   weight_kg: 20.9
   base_reference_price: 566.05
@@ -10,7 +10,7 @@ products:
   rarity: 0.47
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: memmingen_能源_B
-  name_zh: Memmingen能源合约
+  name_zh: 梅明根能源合约
   category: 能源
   weight_kg: 6.3
   base_reference_price: 1029.57
@@ -20,7 +20,7 @@ products:
   rarity: 0.57
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: memmingen_电子_B
-  name_zh: Memmingen电子合约
+  name_zh: 梅明根电子合约
   category: 电子
   weight_kg: 4.0
   base_reference_price: 1350.09
@@ -30,7 +30,7 @@ products:
   rarity: 0.67
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: memmingen_食品_B
-  name_zh: Memmingen食品合约
+  name_zh: 梅明根食品合约
   category: 食品
   weight_kg: 20.2
   base_reference_price: 212.07
@@ -40,7 +40,7 @@ products:
   rarity: 0.23
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: memmingen_日用品_B
-  name_zh: Memmingen日用品合约
+  name_zh: 梅明根日用品合约
   category: 日用品
   weight_kg: 12.6
   base_reference_price: 115.52

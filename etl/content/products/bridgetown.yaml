@@ -1,6 +1,6 @@
 products:
 - product_id: bridgetown_矿产_B
-  name_zh: Bridgetown矿产合约
+  name_zh: 布里奇敦矿产合约
   category: 矿产
   weight_kg: 22.4
   base_reference_price: 520.83
@@ -10,7 +10,7 @@ products:
   rarity: 0.53
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: bridgetown_食品_B
-  name_zh: Bridgetown食品合约
+  name_zh: 布里奇敦食品合约
   category: 食品
   weight_kg: 22.8
   base_reference_price: 168.51
@@ -20,7 +20,7 @@ products:
   rarity: 0.34
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: bridgetown_糖果_B
-  name_zh: Bridgetown糖果合约
+  name_zh: 布里奇敦糖果合约
   category: 糖果
   weight_kg: 7.9
   base_reference_price: 65.98
@@ -30,7 +30,7 @@ products:
   rarity: 0.31
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: bridgetown_咖啡_B
-  name_zh: Bridgetown咖啡合约
+  name_zh: 布里奇敦咖啡合约
   category: 咖啡
   weight_kg: 11.8
   base_reference_price: 272.67
@@ -40,7 +40,7 @@ products:
   rarity: 0.44
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: bridgetown_工艺品_B
-  name_zh: Bridgetown工艺品合约
+  name_zh: 布里奇敦工艺品合约
   category: 工艺品
   weight_kg: 12.4
   base_reference_price: 236.48

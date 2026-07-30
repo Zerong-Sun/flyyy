@@ -1,6 +1,6 @@
 products:
 - product_id: mahovljani_日用品_B
-  name_zh: Mahovljani日用品合约
+  name_zh: 马霍夫利亚尼日用品合约
   category: 日用品
   weight_kg: 10.0
   base_reference_price: 86.43
@@ -10,7 +10,7 @@ products:
   rarity: 0.17
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: mahovljani_纺织品_B
-  name_zh: Mahovljani纺织品合约
+  name_zh: 马霍夫利亚尼纺织品合约
   category: 纺织品
   weight_kg: 15.9
   base_reference_price: 444.93
@@ -20,7 +20,7 @@ products:
   rarity: 0.31
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: mahovljani_工艺品_B
-  name_zh: Mahovljani工艺品合约
+  name_zh: 马霍夫利亚尼工艺品合约
   category: 工艺品
   weight_kg: 7.2
   base_reference_price: 380.51
@@ -30,7 +30,7 @@ products:
   rarity: 0.63
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: mahovljani_矿产_B
-  name_zh: Mahovljani矿产合约
+  name_zh: 马霍夫利亚尼矿产合约
   category: 矿产
   weight_kg: 32.4
   base_reference_price: 604.66
@@ -40,7 +40,7 @@ products:
   rarity: 0.58
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: mahovljani_食品_B
-  name_zh: Mahovljani食品合约
+  name_zh: 马霍夫利亚尼食品合约
   category: 食品
   weight_kg: 17.9
   base_reference_price: 195.09

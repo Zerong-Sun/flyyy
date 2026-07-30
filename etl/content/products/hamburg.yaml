@@ -1,6 +1,6 @@
 products:
 - product_id: hamburg_日用品_B
-  name_zh: Hamburg日用品合约
+  name_zh: 汉堡日用品合约
   category: 日用品
   weight_kg: 11.6
   base_reference_price: 130.52
@@ -10,7 +10,7 @@ products:
   rarity: 0.15
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: hamburg_机械_B
-  name_zh: Hamburg机械合约
+  name_zh: 汉堡机械合约
   category: 机械
   weight_kg: 31.8
   base_reference_price: 1472.0
@@ -20,7 +20,7 @@ products:
   rarity: 0.51
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: hamburg_电子_B
-  name_zh: Hamburg电子合约
+  name_zh: 汉堡电子合约
   category: 电子
   weight_kg: 4.2
   base_reference_price: 928.31
@@ -30,7 +30,7 @@ products:
   rarity: 0.65
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: hamburg_能源_B
-  name_zh: Hamburg能源合约
+  name_zh: 汉堡能源合约
   category: 能源
   weight_kg: 9.8
   base_reference_price: 732.26
@@ -40,7 +40,7 @@ products:
   rarity: 0.57
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: hamburg_食品_B
-  name_zh: Hamburg食品合约
+  name_zh: 汉堡食品合约
   category: 食品
   weight_kg: 25.2
   base_reference_price: 188.14

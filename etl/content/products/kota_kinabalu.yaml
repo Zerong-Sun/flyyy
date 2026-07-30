@@ -1,6 +1,6 @@
 products:
 - product_id: kota_kinabalu_香料_B
-  name_zh: Kota Kinabalu香料合约
+  name_zh: 哥打基纳巴卢香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 212.55
@@ -10,7 +10,7 @@ products:
   rarity: 0.57
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: kota_kinabalu_电子_B
-  name_zh: Kota Kinabalu电子合约
+  name_zh: 哥打基纳巴卢电子合约
   category: 电子
   weight_kg: 4.6
   base_reference_price: 737.09
@@ -20,7 +20,7 @@ products:
   rarity: 0.67
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: kota_kinabalu_食品_B
-  name_zh: Kota Kinabalu食品合约
+  name_zh: 哥打基纳巴卢食品合约
   category: 食品
   weight_kg: 28.0
   base_reference_price: 150.1
@@ -30,7 +30,7 @@ products:
   rarity: 0.35
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kota_kinabalu_日用品_B
-  name_zh: Kota Kinabalu日用品合约
+  name_zh: 哥打基纳巴卢日用品合约
   category: 日用品
   weight_kg: 8.6
   base_reference_price: 87.7
@@ -40,7 +40,7 @@ products:
   rarity: 0.17
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: kota_kinabalu_能源_B
-  name_zh: Kota Kinabalu能源合约
+  name_zh: 哥打基纳巴卢能源合约
   category: 能源
   weight_kg: 5.7
   base_reference_price: 372.38

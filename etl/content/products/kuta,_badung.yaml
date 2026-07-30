@@ -1,6 +1,6 @@
 products:
 - product_id: kuta,_badung_咖啡_B
-  name_zh: Kuta, Badung咖啡合约
+  name_zh: 登巴萨咖啡合约
   category: 咖啡
   weight_kg: 8.2
   base_reference_price: 141.22
@@ -10,7 +10,7 @@ products:
   rarity: 0.45
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: kuta,_badung_矿产_B
-  name_zh: Kuta, Badung矿产合约
+  name_zh: 登巴萨矿产合约
   category: 矿产
   weight_kg: 23.7
   base_reference_price: 299.73
@@ -20,7 +20,7 @@ products:
   rarity: 0.55
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: kuta,_badung_食品_B
-  name_zh: Kuta, Badung食品合约
+  name_zh: 登巴萨食品合约
   category: 食品
   weight_kg: 24.8
   base_reference_price: 64.29
@@ -30,7 +30,7 @@ products:
   rarity: 0.31
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kuta,_badung_香料_B
-  name_zh: Kuta, Badung香料合约
+  name_zh: 登巴萨香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 137.87
@@ -40,7 +40,7 @@ products:
   rarity: 0.41
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: kuta,_badung_纺织品_B
-  name_zh: Kuta, Badung纺织品合约
+  name_zh: 登巴萨纺织品合约
   category: 纺织品
   weight_kg: 19.9
   base_reference_price: 219.0

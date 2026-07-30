@@ -1,6 +1,6 @@
 products:
 - product_id: omitama_电子_B
-  name_zh: Omitama电子合约
+  name_zh: 茨城电子合约
   category: 电子
   weight_kg: 3.2
   base_reference_price: 1852.08
@@ -10,7 +10,7 @@ products:
   rarity: 0.75
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: omitama_玩具_B
-  name_zh: Omitama玩具合约
+  name_zh: 茨城玩具合约
   category: 玩具
   weight_kg: 8.8
   base_reference_price: 70.92
@@ -20,7 +20,7 @@ products:
   rarity: 0.28
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: omitama_工艺品_B
-  name_zh: Omitama工艺品合约
+  name_zh: 茨城工艺品合约
   category: 工艺品
   weight_kg: 11.5
   base_reference_price: 387.34
@@ -30,7 +30,7 @@ products:
   rarity: 0.64
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: omitama_文具_B
-  name_zh: Omitama文具合约
+  name_zh: 茨城文具合约
   category: 文具
   weight_kg: 1.1
   base_reference_price: 85.2
@@ -40,7 +40,7 @@ products:
   rarity: 0.15
   description: 当地特色文具纸品合约，轻便易携带。
 - product_id: omitama_食品_B
-  name_zh: Omitama食品合约
+  name_zh: 茨城食品合约
   category: 食品
   weight_kg: 21.1
   base_reference_price: 162.72

@@ -1,6 +1,6 @@
 products:
 - product_id: george_机械_B
-  name_zh: George机械合约
+  name_zh: 乔治机械合约
   category: 机械
   weight_kg: 40.2
   base_reference_price: 974.74
@@ -10,7 +10,7 @@ products:
   rarity: 0.51
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: george_矿产_B
-  name_zh: George矿产合约
+  name_zh: 乔治矿产合约
   category: 矿产
   weight_kg: 16.3
   base_reference_price: 407.63
@@ -20,7 +20,7 @@ products:
   rarity: 0.38
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: george_日用品_B
-  name_zh: George日用品合约
+  name_zh: 乔治日用品合约
   category: 日用品
   weight_kg: 7.7
   base_reference_price: 40.11
@@ -30,7 +30,7 @@ products:
   rarity: 0.17
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: george_纺织品_B
-  name_zh: George纺织品合约
+  name_zh: 乔治纺织品合约
   category: 纺织品
   weight_kg: 14.3
   base_reference_price: 171.84
@@ -40,7 +40,7 @@ products:
   rarity: 0.38
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: george_食品_B
-  name_zh: George食品合约
+  name_zh: 乔治食品合约
   category: 食品
   weight_kg: 26.5
   base_reference_price: 131.46

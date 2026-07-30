@@ -1,6 +1,6 @@
 products:
 - product_id: atyrau_香料_B
-  name_zh: Atyrau香料合约
+  name_zh: 阿特劳香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 347.8
@@ -10,7 +10,7 @@ products:
   rarity: 0.53
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: atyrau_日用品_B
-  name_zh: Atyrau日用品合约
+  name_zh: 阿特劳日用品合约
   category: 日用品
   weight_kg: 15.0
   base_reference_price: 111.78
@@ -20,7 +20,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: atyrau_咖啡_B
-  name_zh: Atyrau咖啡合约
+  name_zh: 阿特劳咖啡合约
   category: 咖啡
   weight_kg: 11.6
   base_reference_price: 219.53
@@ -30,7 +30,7 @@ products:
   rarity: 0.42
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: atyrau_工艺品_B
-  name_zh: Atyrau工艺品合约
+  name_zh: 阿特劳工艺品合约
   category: 工艺品
   weight_kg: 10.8
   base_reference_price: 221.22
@@ -40,7 +40,7 @@ products:
   rarity: 0.58
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: atyrau_糖果_B
-  name_zh: Atyrau糖果合约
+  name_zh: 阿特劳糖果合约
   category: 糖果
   weight_kg: 3.4
   base_reference_price: 94.96

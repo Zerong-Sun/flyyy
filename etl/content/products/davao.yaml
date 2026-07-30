@@ -1,6 +1,6 @@
 products:
 - product_id: davao_电子_B
-  name_zh: Davao电子合约
+  name_zh: 达沃电子合约
   category: 电子
   weight_kg: 4.6
   base_reference_price: 1205.16
@@ -10,7 +10,7 @@ products:
   rarity: 0.72
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: davao_玩具_B
-  name_zh: Davao玩具合约
+  name_zh: 达沃玩具合约
   category: 玩具
   weight_kg: 6.1
   base_reference_price: 109.68
@@ -20,7 +20,7 @@ products:
   rarity: 0.15
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: davao_日用品_B
-  name_zh: Davao日用品合约
+  name_zh: 达沃日用品合约
   category: 日用品
   weight_kg: 13.1
   base_reference_price: 46.79
@@ -30,7 +30,7 @@ products:
   rarity: 0.15
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: davao_食品_B
-  name_zh: Davao食品合约
+  name_zh: 达沃食品合约
   category: 食品
   weight_kg: 15.4
   base_reference_price: 66.1
@@ -40,7 +40,7 @@ products:
   rarity: 0.3
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: davao_纺织品_B
-  name_zh: Davao纺织品合约
+  name_zh: 达沃纺织品合约
   category: 纺织品
   weight_kg: 16.5
   base_reference_price: 280.8

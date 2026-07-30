@@ -1,6 +1,6 @@
 products:
 - product_id: funchal_糖果_B
-  name_zh: Funchal糖果合约
+  name_zh: 丰沙尔糖果合约
   category: 糖果
   weight_kg: 7.7
   base_reference_price: 50.27
@@ -10,7 +10,7 @@ products:
   rarity: 0.21
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: funchal_陶瓷_B
-  name_zh: Funchal陶瓷合约
+  name_zh: 丰沙尔陶瓷合约
   category: 陶瓷
   weight_kg: 24.7
   base_reference_price: 380.2
@@ -20,7 +20,7 @@ products:
   rarity: 0.59
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: funchal_日用品_B
-  name_zh: Funchal日用品合约
+  name_zh: 丰沙尔日用品合约
   category: 日用品
   weight_kg: 5.5
   base_reference_price: 83.12
@@ -30,7 +30,7 @@ products:
   rarity: 0.14
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: funchal_纺织品_B
-  name_zh: Funchal纺织品合约
+  name_zh: 丰沙尔纺织品合约
   category: 纺织品
   weight_kg: 12.9
   base_reference_price: 214.42
@@ -40,7 +40,7 @@ products:
   rarity: 0.45
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: funchal_食品_B
-  name_zh: Funchal食品合约
+  name_zh: 丰沙尔食品合约
   category: 食品
   weight_kg: 17.4
   base_reference_price: 86.59

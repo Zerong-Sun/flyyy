@@ -1,6 +1,6 @@
 products:
 - product_id: conakry_工艺品_B
-  name_zh: Conakry工艺品合约
+  name_zh: 科纳克里工艺品合约
   category: 工艺品
   weight_kg: 10.4
   base_reference_price: 404.62
@@ -10,7 +10,7 @@ products:
   rarity: 0.53
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: conakry_糖果_B
-  name_zh: Conakry糖果合约
+  name_zh: 科纳克里糖果合约
   category: 糖果
   weight_kg: 5.7
   base_reference_price: 115.61
@@ -20,7 +20,7 @@ products:
   rarity: 0.18
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: conakry_纺织品_B
-  name_zh: Conakry纺织品合约
+  name_zh: 科纳克里纺织品合约
   category: 纺织品
   weight_kg: 19.0
   base_reference_price: 497.02
@@ -30,7 +30,7 @@ products:
   rarity: 0.4
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: conakry_食品_B
-  name_zh: Conakry食品合约
+  name_zh: 科纳克里食品合约
   category: 食品
   weight_kg: 29.4
   base_reference_price: 215.36
@@ -40,7 +40,7 @@ products:
   rarity: 0.21
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: conakry_香料_B
-  name_zh: Conakry香料合约
+  name_zh: 科纳克里香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 377.86

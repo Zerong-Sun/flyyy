@@ -1,6 +1,6 @@
 products:
 - product_id: kisangani_糖果_B
-  name_zh: Kisangani糖果合约
+  name_zh: 基桑加尼糖果合约
   category: 糖果
   weight_kg: 5.6
   base_reference_price: 76.12
@@ -10,7 +10,7 @@ products:
   rarity: 0.28
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: kisangani_食品_B
-  name_zh: Kisangani食品合约
+  name_zh: 基桑加尼食品合约
   category: 食品
   weight_kg: 25.9
   base_reference_price: 167.68
@@ -20,7 +20,7 @@ products:
   rarity: 0.24
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kisangani_香料_B
-  name_zh: Kisangani香料合约
+  name_zh: 基桑加尼香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 207.51
@@ -30,7 +30,7 @@ products:
   rarity: 0.46
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: kisangani_工艺品_B
-  name_zh: Kisangani工艺品合约
+  name_zh: 基桑加尼工艺品合约
   category: 工艺品
   weight_kg: 11.1
   base_reference_price: 467.72
@@ -40,7 +40,7 @@ products:
   rarity: 0.64
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: kisangani_纺织品_B
-  name_zh: Kisangani纺织品合约
+  name_zh: 基桑加尼纺织品合约
   category: 纺织品
   weight_kg: 8.2
   base_reference_price: 498.03

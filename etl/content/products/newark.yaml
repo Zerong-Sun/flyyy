@@ -1,6 +1,6 @@
 products:
 - product_id: newark_食品_B
-  name_zh: Newark食品合约
+  name_zh: 纽瓦克食品合约
   category: 食品
   weight_kg: 19.4
   base_reference_price: 237.38
@@ -10,7 +10,7 @@ products:
   rarity: 0.32
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: newark_日用品_B
-  name_zh: Newark日用品合约
+  name_zh: 纽瓦克日用品合约
   category: 日用品
   weight_kg: 7.7
   base_reference_price: 136.1
@@ -20,7 +20,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: newark_机械_B
-  name_zh: Newark机械合约
+  name_zh: 纽瓦克机械合约
   category: 机械
   weight_kg: 37.1
   base_reference_price: 1336.29
@@ -30,7 +30,7 @@ products:
   rarity: 0.63
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: newark_电子_B
-  name_zh: Newark电子合约
+  name_zh: 纽瓦克电子合约
   category: 电子
   weight_kg: 1.5
   base_reference_price: 2105.57
@@ -40,7 +40,7 @@ products:
   rarity: 0.57
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: newark_能源_B
-  name_zh: Newark能源合约
+  name_zh: 纽瓦克能源合约
   category: 能源
   weight_kg: 5.1
   base_reference_price: 1027.48

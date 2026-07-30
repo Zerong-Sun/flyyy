@@ -1,6 +1,6 @@
 products:
 - product_id: east_london_食品_B
-  name_zh: East London食品合约
+  name_zh: 东伦敦食品合约
   category: 食品
   weight_kg: 26.2
   base_reference_price: 124.78
@@ -10,7 +10,7 @@ products:
   rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: east_london_纺织品_B
-  name_zh: East London纺织品合约
+  name_zh: 东伦敦纺织品合约
   category: 纺织品
   weight_kg: 15.1
   base_reference_price: 354.14
@@ -20,7 +20,7 @@ products:
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: east_london_机械_B
-  name_zh: East London机械合约
+  name_zh: 东伦敦机械合约
   category: 机械
   weight_kg: 31.1
   base_reference_price: 800.37
@@ -30,7 +30,7 @@ products:
   rarity: 0.51
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: east_london_矿产_B
-  name_zh: East London矿产合约
+  name_zh: 东伦敦矿产合约
   category: 矿产
   weight_kg: 34.9
   base_reference_price: 242.34
@@ -40,7 +40,7 @@ products:
   rarity: 0.42
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: east_london_日用品_B
-  name_zh: East London日用品合约
+  name_zh: 东伦敦日用品合约
   category: 日用品
   weight_kg: 14.7
   base_reference_price: 29.2

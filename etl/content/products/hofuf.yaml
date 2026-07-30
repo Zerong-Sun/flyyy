@@ -1,6 +1,6 @@
 products:
 - product_id: hofuf_食品_B
-  name_zh: Hofuf食品合约
+  name_zh: 胡富夫食品合约
   category: 食品
   weight_kg: 25.7
   base_reference_price: 111.25
@@ -10,7 +10,7 @@ products:
   rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: hofuf_矿产_B
-  name_zh: Hofuf矿产合约
+  name_zh: 胡富夫矿产合约
   category: 矿产
   weight_kg: 15.9
   base_reference_price: 556.45
@@ -20,7 +20,7 @@ products:
   rarity: 0.37
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: hofuf_能源_B
-  name_zh: Hofuf能源合约
+  name_zh: 胡富夫能源合约
   category: 能源
   weight_kg: 5.0
   base_reference_price: 600.11
@@ -30,7 +30,7 @@ products:
   rarity: 0.59
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: hofuf_日用品_B
-  name_zh: Hofuf日用品合约
+  name_zh: 胡富夫日用品合约
   category: 日用品
   weight_kg: 10.2
   base_reference_price: 50.87
@@ -40,7 +40,7 @@ products:
   rarity: 0.14
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: hofuf_香料_B
-  name_zh: Hofuf香料合约
+  name_zh: 胡富夫香料合约
   category: 香料
   weight_kg: 0.7
   base_reference_price: 322.43

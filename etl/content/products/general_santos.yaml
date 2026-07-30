@@ -1,6 +1,6 @@
 products:
 - product_id: general_santos_纺织品_B
-  name_zh: General Santos纺织品合约
+  name_zh: 桑托斯将军城纺织品合约
   category: 纺织品
   weight_kg: 14.6
   base_reference_price: 264.55
@@ -10,7 +10,7 @@ products:
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: general_santos_玩具_B
-  name_zh: General Santos玩具合约
+  name_zh: 桑托斯将军城玩具合约
   category: 玩具
   weight_kg: 3.1
   base_reference_price: 60.04
@@ -20,7 +20,7 @@ products:
   rarity: 0.29
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: general_santos_日用品_B
-  name_zh: General Santos日用品合约
+  name_zh: 桑托斯将军城日用品合约
   category: 日用品
   weight_kg: 9.1
   base_reference_price: 66.02
@@ -30,7 +30,7 @@ products:
   rarity: 0.16
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: general_santos_食品_B
-  name_zh: General Santos食品合约
+  name_zh: 桑托斯将军城食品合约
   category: 食品
   weight_kg: 29.3
   base_reference_price: 176.4
@@ -40,7 +40,7 @@ products:
   rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: general_santos_电子_B
-  name_zh: General Santos电子合约
+  name_zh: 桑托斯将军城电子合约
   category: 电子
   weight_kg: 2.8
   base_reference_price: 1465.22

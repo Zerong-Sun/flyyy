@@ -1,6 +1,6 @@
 products:
 - product_id: siddharthanagar_(bhairahawa)_工艺品_B
-  name_zh: Siddharthanagar (Bhairahawa)工艺品合约
+  name_zh: 锡陀塔那迦工艺品合约
   category: 工艺品
   weight_kg: 8.6
   base_reference_price: 219.24
@@ -10,7 +10,7 @@ products:
   rarity: 0.42
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: siddharthanagar_(bhairahawa)_咖啡_B
-  name_zh: Siddharthanagar (Bhairahawa)咖啡合约
+  name_zh: 锡陀塔那迦咖啡合约
   category: 咖啡
   weight_kg: 13.1
   base_reference_price: 129.66
@@ -20,7 +20,7 @@ products:
   rarity: 0.39
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: siddharthanagar_(bhairahawa)_纺织品_B
-  name_zh: Siddharthanagar (Bhairahawa)纺织品合约
+  name_zh: 锡陀塔那迦纺织品合约
   category: 纺织品
   weight_kg: 13.3
   base_reference_price: 397.88
@@ -30,7 +30,7 @@ products:
   rarity: 0.26
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: siddharthanagar_(bhairahawa)_香料_B
-  name_zh: Siddharthanagar (Bhairahawa)香料合约
+  name_zh: 锡陀塔那迦香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 341.26
@@ -40,7 +40,7 @@ products:
   rarity: 0.5
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: siddharthanagar_(bhairahawa)_矿产_B
-  name_zh: Siddharthanagar (Bhairahawa)矿产合约
+  name_zh: 锡陀塔那迦矿产合约
   category: 矿产
   weight_kg: 27.8
   base_reference_price: 486.3

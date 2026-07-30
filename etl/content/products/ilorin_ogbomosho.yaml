@@ -1,6 +1,6 @@
 products:
 - product_id: ilorin_ogbomosho_食品_B
-  name_zh: Ilorin/Ogbomosho食品合约
+  name_zh: 伊洛林食品合约
   category: 食品
   weight_kg: 20.2
   base_reference_price: 45.55
@@ -10,7 +10,7 @@ products:
   rarity: 0.37
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: ilorin_ogbomosho_能源_B
-  name_zh: Ilorin/Ogbomosho能源合约
+  name_zh: 伊洛林能源合约
   category: 能源
   weight_kg: 10.0
   base_reference_price: 266.7
@@ -20,7 +20,7 @@ products:
   rarity: 0.59
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: ilorin_ogbomosho_日用品_B
-  name_zh: Ilorin/Ogbomosho日用品合约
+  name_zh: 伊洛林日用品合约
   category: 日用品
   weight_kg: 13.7
   base_reference_price: 49.7
@@ -30,7 +30,7 @@ products:
   rarity: 0.18
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: ilorin_ogbomosho_矿产_B
-  name_zh: Ilorin/Ogbomosho矿产合约
+  name_zh: 伊洛林矿产合约
   category: 矿产
   weight_kg: 27.2
   base_reference_price: 415.44
@@ -40,7 +40,7 @@ products:
   rarity: 0.5
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: ilorin_ogbomosho_纺织品_B
-  name_zh: Ilorin/Ogbomosho纺织品合约
+  name_zh: 伊洛林纺织品合约
   category: 纺织品
   weight_kg: 12.3
   base_reference_price: 141.7

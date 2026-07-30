@@ -1,6 +1,6 @@
 products:
 - product_id: fukuoka_工艺品_B
-  name_zh: Fukuoka工艺品合约
+  name_zh: 福冈工艺品合约
   category: 工艺品
   weight_kg: 8.5
   base_reference_price: 276.27
@@ -10,7 +10,7 @@ products:
   rarity: 0.47
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: fukuoka_电子_B
-  name_zh: Fukuoka电子合约
+  name_zh: 福冈电子合约
   category: 电子
   weight_kg: 2.0
   base_reference_price: 2497.22
@@ -20,7 +20,7 @@ products:
   rarity: 0.66
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: fukuoka_玩具_B
-  name_zh: Fukuoka玩具合约
+  name_zh: 福冈玩具合约
   category: 玩具
   weight_kg: 8.9
   base_reference_price: 85.18
@@ -30,7 +30,7 @@ products:
   rarity: 0.28
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: fukuoka_食品_B
-  name_zh: Fukuoka食品合约
+  name_zh: 福冈食品合约
   category: 食品
   weight_kg: 26.7
   base_reference_price: 155.42
@@ -40,7 +40,7 @@ products:
   rarity: 0.39
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: fukuoka_文具_B
-  name_zh: Fukuoka文具合约
+  name_zh: 福冈文具合约
   category: 文具
   weight_kg: 4.6
   base_reference_price: 84.37

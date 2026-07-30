@@ -1,6 +1,6 @@
 products:
 - product_id: hamilton_食品_B
-  name_zh: Hamilton食品合约
+  name_zh: 汉密尔顿食品合约
   category: 食品
   weight_kg: 21.5
   base_reference_price: 142.27
@@ -10,7 +10,7 @@ products:
   rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: hamilton_咖啡_B
-  name_zh: Hamilton咖啡合约
+  name_zh: 汉密尔顿咖啡合约
   category: 咖啡
   weight_kg: 12.5
   base_reference_price: 156.11
@@ -20,7 +20,7 @@ products:
   rarity: 0.35
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: hamilton_香料_B
-  name_zh: Hamilton香料合约
+  name_zh: 汉密尔顿香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 322.9
@@ -30,7 +30,7 @@ products:
   rarity: 0.42
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: hamilton_矿产_B
-  name_zh: Hamilton矿产合约
+  name_zh: 汉密尔顿矿产合约
   category: 矿产
   weight_kg: 38.2
   base_reference_price: 460.93
@@ -40,7 +40,7 @@ products:
   rarity: 0.55
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: hamilton_糖果_B
-  name_zh: Hamilton糖果合约
+  name_zh: 汉密尔顿糖果合约
   category: 糖果
   weight_kg: 3.8
   base_reference_price: 146.8

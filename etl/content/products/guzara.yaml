@@ -1,6 +1,6 @@
 products:
 - product_id: guzara_工艺品_B
-  name_zh: Guzara工艺品合约
+  name_zh: 古扎拉工艺品合约
   category: 工艺品
   weight_kg: 13.1
   base_reference_price: 293.0
@@ -10,7 +10,7 @@ products:
   rarity: 0.47
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: guzara_食品_B
-  name_zh: Guzara食品合约
+  name_zh: 古扎拉食品合约
   category: 食品
   weight_kg: 20.7
   base_reference_price: 239.17
@@ -20,7 +20,7 @@ products:
   rarity: 0.35
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: guzara_咖啡_B
-  name_zh: Guzara咖啡合约
+  name_zh: 古扎拉咖啡合约
   category: 咖啡
   weight_kg: 11.0
   base_reference_price: 130.31
@@ -30,7 +30,7 @@ products:
   rarity: 0.37
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: guzara_日用品_B
-  name_zh: Guzara日用品合约
+  name_zh: 古扎拉日用品合约
   category: 日用品
   weight_kg: 13.3
   base_reference_price: 82.48
@@ -40,7 +40,7 @@ products:
   rarity: 0.07
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: guzara_矿产_B
-  name_zh: Guzara矿产合约
+  name_zh: 古扎拉矿产合约
   category: 矿产
   weight_kg: 30.4
   base_reference_price: 648.27

@@ -1,6 +1,6 @@
 products:
 - product_id: juliaca_矿产_B
-  name_zh: Juliaca矿产合约
+  name_zh: 胡利亚卡矿产合约
   category: 矿产
   weight_kg: 37.7
   base_reference_price: 319.42
@@ -10,7 +10,7 @@ products:
   rarity: 0.56
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: juliaca_咖啡_B
-  name_zh: Juliaca咖啡合约
+  name_zh: 胡利亚卡咖啡合约
   category: 咖啡
   weight_kg: 6.3
   base_reference_price: 128.65
@@ -20,7 +20,7 @@ products:
   rarity: 0.33
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: juliaca_食品_B
-  name_zh: Juliaca食品合约
+  name_zh: 胡利亚卡食品合约
   category: 食品
   weight_kg: 20.9
   base_reference_price: 99.9
@@ -30,7 +30,7 @@ products:
   rarity: 0.21
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: juliaca_纺织品_B
-  name_zh: Juliaca纺织品合约
+  name_zh: 胡利亚卡纺织品合约
   category: 纺织品
   weight_kg: 19.4
   base_reference_price: 235.77
@@ -40,7 +40,7 @@ products:
   rarity: 0.31
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: juliaca_日用品_B
-  name_zh: Juliaca日用品合约
+  name_zh: 胡利亚卡日用品合约
   category: 日用品
   weight_kg: 9.1
   base_reference_price: 62.36

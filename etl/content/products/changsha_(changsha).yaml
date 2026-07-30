@@ -1,6 +1,6 @@
 products:
 - product_id: changsha_(changsha)_机械_B
-  name_zh: Changsha (Changsha)机械合约
+  name_zh: 长沙机械合约
   category: 机械
   weight_kg: 31.3
   base_reference_price: 771.15
@@ -10,7 +10,7 @@ products:
   rarity: 0.55
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: changsha_(changsha)_纺织品_B
-  name_zh: Changsha (Changsha)纺织品合约
+  name_zh: 长沙纺织品合约
   category: 纺织品
   weight_kg: 15.8
   base_reference_price: 307.09
@@ -20,7 +20,7 @@ products:
   rarity: 0.44
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: changsha_(changsha)_茶叶_B
-  name_zh: Changsha (Changsha)茶叶合约
+  name_zh: 长沙茶叶合约
   category: 茶叶
   weight_kg: 5.4
   base_reference_price: 140.69
@@ -30,7 +30,7 @@ products:
   rarity: 0.45
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: changsha_(changsha)_电子_B
-  name_zh: Changsha (Changsha)电子合约
+  name_zh: 长沙电子合约
   category: 电子
   weight_kg: 4.5
   base_reference_price: 866.76
@@ -40,7 +40,7 @@ products:
   rarity: 0.65
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: changsha_(changsha)_陶瓷_B
-  name_zh: Changsha (Changsha)陶瓷合约
+  name_zh: 长沙陶瓷合约
   category: 陶瓷
   weight_kg: 19.9
   base_reference_price: 230.54

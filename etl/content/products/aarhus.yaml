@@ -1,6 +1,6 @@
 products:
 - product_id: aarhus_日用品_B
-  name_zh: Aarhus日用品合约
+  name_zh: 奥胡斯日用品合约
   category: 日用品
   weight_kg: 10.5
   base_reference_price: 98.58
@@ -10,7 +10,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: aarhus_糖果_B
-  name_zh: Aarhus糖果合约
+  name_zh: 奥胡斯糖果合约
   category: 糖果
   weight_kg: 7.2
   base_reference_price: 86.82
@@ -20,7 +20,7 @@ products:
   rarity: 0.22
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: aarhus_矿产_B
-  name_zh: Aarhus矿产合约
+  name_zh: 奥胡斯矿产合约
   category: 矿产
   weight_kg: 31.9
   base_reference_price: 323.82
@@ -30,7 +30,7 @@ products:
   rarity: 0.58
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: aarhus_咖啡_B
-  name_zh: Aarhus咖啡合约
+  name_zh: 奥胡斯咖啡合约
   category: 咖啡
   weight_kg: 11.9
   base_reference_price: 171.63
@@ -40,7 +40,7 @@ products:
   rarity: 0.46
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: aarhus_香料_B
-  name_zh: Aarhus香料合约
+  name_zh: 奥胡斯香料合约
   category: 香料
   weight_kg: 0.7
   base_reference_price: 247.8

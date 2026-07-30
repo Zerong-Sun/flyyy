@@ -1,6 +1,6 @@
 products:
 - product_id: nizhny_novgorod_食品_B
-  name_zh: Nizhny Novgorod食品合约
+  name_zh: 下诺夫哥罗德食品合约
   category: 食品
   weight_kg: 25.3
   base_reference_price: 64.52
@@ -10,7 +10,7 @@ products:
   rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: nizhny_novgorod_能源_B
-  name_zh: Nizhny Novgorod能源合约
+  name_zh: 下诺夫哥罗德能源合约
   category: 能源
   weight_kg: 3.3
   base_reference_price: 465.08
@@ -20,7 +20,7 @@ products:
   rarity: 0.69
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: nizhny_novgorod_日用品_B
-  name_zh: Nizhny Novgorod日用品合约
+  name_zh: 下诺夫哥罗德日用品合约
   category: 日用品
   weight_kg: 14.3
   base_reference_price: 66.96
@@ -30,7 +30,7 @@ products:
   rarity: 0.18
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: nizhny_novgorod_矿产_B
-  name_zh: Nizhny Novgorod矿产合约
+  name_zh: 下诺夫哥罗德矿产合约
   category: 矿产
   weight_kg: 15.3
   base_reference_price: 431.72
@@ -40,7 +40,7 @@ products:
   rarity: 0.51
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: nizhny_novgorod_机械_B
-  name_zh: Nizhny Novgorod机械合约
+  name_zh: 下诺夫哥罗德机械合约
   category: 机械
   weight_kg: 44.3
   base_reference_price: 390.31

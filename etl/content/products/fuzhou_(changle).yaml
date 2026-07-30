@@ -1,6 +1,6 @@
 products:
 - product_id: fuzhou_(changle)_陶瓷_B
-  name_zh: Fuzhou (Changle)陶瓷合约
+  name_zh: 福州陶瓷合约
   category: 陶瓷
   weight_kg: 14.6
   base_reference_price: 332.23
@@ -10,7 +10,7 @@ products:
   rarity: 0.45
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: fuzhou_(changle)_机械_B
-  name_zh: Fuzhou (Changle)机械合约
+  name_zh: 福州机械合约
   category: 机械
   weight_kg: 22.8
   base_reference_price: 546.56
@@ -20,7 +20,7 @@ products:
   rarity: 0.64
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: fuzhou_(changle)_电子_B
-  name_zh: Fuzhou (Changle)电子合约
+  name_zh: 福州电子合约
   category: 电子
   weight_kg: 3.7
   base_reference_price: 1770.63
@@ -30,7 +30,7 @@ products:
   rarity: 0.56
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: fuzhou_(changle)_茶叶_B
-  name_zh: Fuzhou (Changle)茶叶合约
+  name_zh: 福州茶叶合约
   category: 茶叶
   weight_kg: 4.0
   base_reference_price: 270.35
@@ -40,7 +40,7 @@ products:
   rarity: 0.42
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: fuzhou_(changle)_纺织品_B
-  name_zh: Fuzhou (Changle)纺织品合约
+  name_zh: 福州纺织品合约
   category: 纺织品
   weight_kg: 13.4
   base_reference_price: 211.08

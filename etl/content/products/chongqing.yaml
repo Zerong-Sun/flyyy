@@ -1,6 +1,6 @@
 products:
 - product_id: chongqing_机械_B
-  name_zh: Chongqing机械合约
+  name_zh: 重庆机械合约
   category: 机械
   weight_kg: 43.6
   base_reference_price: 602.14
@@ -10,7 +10,7 @@ products:
   rarity: 0.54
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: chongqing_电子_B
-  name_zh: Chongqing电子合约
+  name_zh: 重庆电子合约
   category: 电子
   weight_kg: 1.7
   base_reference_price: 1846.13
@@ -20,7 +20,7 @@ products:
   rarity: 0.57
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: chongqing_茶叶_B
-  name_zh: Chongqing茶叶合约
+  name_zh: 重庆茶叶合约
   category: 茶叶
   weight_kg: 3.9
   base_reference_price: 287.34
@@ -30,7 +30,7 @@ products:
   rarity: 0.4
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: chongqing_陶瓷_B
-  name_zh: Chongqing陶瓷合约
+  name_zh: 重庆陶瓷合约
   category: 陶瓷
   weight_kg: 18.5
   base_reference_price: 354.11
@@ -40,7 +40,7 @@ products:
   rarity: 0.42
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: chongqing_纺织品_B
-  name_zh: Chongqing纺织品合约
+  name_zh: 重庆纺织品合约
   category: 纺织品
   weight_kg: 13.3
   base_reference_price: 274.25

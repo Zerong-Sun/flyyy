@@ -1,6 +1,6 @@
 products:
 - product_id: douala_咖啡_B
-  name_zh: Douala咖啡合约
+  name_zh: 杜阿拉咖啡合约
   category: 咖啡
   weight_kg: 9.1
   base_reference_price: 172.41
@@ -10,7 +10,7 @@ products:
   rarity: 0.45
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: douala_日用品_B
-  name_zh: Douala日用品合约
+  name_zh: 杜阿拉日用品合约
   category: 日用品
   weight_kg: 13.3
   base_reference_price: 90.62
@@ -20,7 +20,7 @@ products:
   rarity: 0.11
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: douala_工艺品_B
-  name_zh: Douala工艺品合约
+  name_zh: 杜阿拉工艺品合约
   category: 工艺品
   weight_kg: 5.0
   base_reference_price: 382.0
@@ -30,7 +30,7 @@ products:
   rarity: 0.5
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: douala_香料_B
-  name_zh: Douala香料合约
+  name_zh: 杜阿拉香料合约
   category: 香料
   weight_kg: 0.4
   base_reference_price: 256.81
@@ -40,7 +40,7 @@ products:
   rarity: 0.52
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: douala_矿产_B
-  name_zh: Douala矿产合约
+  name_zh: 杜阿拉矿产合约
   category: 矿产
   weight_kg: 17.2
   base_reference_price: 509.93

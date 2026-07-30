@@ -1,6 +1,6 @@
 products:
 - product_id: bologna_食品_B
-  name_zh: Bologna食品合约
+  name_zh: 博洛尼亚食品合约
   category: 食品
   weight_kg: 23.4
   base_reference_price: 275.52
@@ -10,7 +10,7 @@ products:
   rarity: 0.31
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: bologna_纺织品_B
-  name_zh: Bologna纺织品合约
+  name_zh: 博洛尼亚纺织品合约
   category: 纺织品
   weight_kg: 11.8
   base_reference_price: 396.35
@@ -20,7 +20,7 @@ products:
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: bologna_机械_B
-  name_zh: Bologna机械合约
+  name_zh: 博洛尼亚机械合约
   category: 机械
   weight_kg: 34.2
   base_reference_price: 616.06
@@ -30,7 +30,7 @@ products:
   rarity: 0.61
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: bologna_工艺品_B
-  name_zh: Bologna工艺品合约
+  name_zh: 博洛尼亚工艺品合约
   category: 工艺品
   weight_kg: 5.1
   base_reference_price: 369.14
@@ -40,7 +40,7 @@ products:
   rarity: 0.54
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: bologna_陶瓷_B
-  name_zh: Bologna陶瓷合约
+  name_zh: 博洛尼亚陶瓷合约
   category: 陶瓷
   weight_kg: 21.5
   base_reference_price: 425.71

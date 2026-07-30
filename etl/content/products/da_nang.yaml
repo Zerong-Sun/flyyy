@@ -1,6 +1,6 @@
 products:
 - product_id: da_nang_纺织品_B
-  name_zh: Da Nang纺织品合约
+  name_zh: 岘港纺织品合约
   category: 纺织品
   weight_kg: 9.9
   base_reference_price: 162.36
@@ -10,7 +10,7 @@ products:
   rarity: 0.42
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: da_nang_食品_B
-  name_zh: Da Nang食品合约
+  name_zh: 岘港食品合约
   category: 食品
   weight_kg: 20.0
   base_reference_price: 110.3
@@ -20,7 +20,7 @@ products:
   rarity: 0.33
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: da_nang_玩具_B
-  name_zh: Da Nang玩具合约
+  name_zh: 岘港玩具合约
   category: 玩具
   weight_kg: 6.2
   base_reference_price: 61.86
@@ -30,7 +30,7 @@ products:
   rarity: 0.3
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: da_nang_咖啡_B
-  name_zh: Da Nang咖啡合约
+  name_zh: 岘港咖啡合约
   category: 咖啡
   weight_kg: 7.9
   base_reference_price: 125.58
@@ -40,7 +40,7 @@ products:
   rarity: 0.43
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: da_nang_电子_B
-  name_zh: Da Nang电子合约
+  name_zh: 岘港电子合约
   category: 电子
   weight_kg: 1.5
   base_reference_price: 1005.27

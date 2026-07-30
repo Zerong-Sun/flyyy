@@ -44,9 +44,11 @@ def find_job(jobs, batch_filter: str):
 def crop_job(job, sheet: Path, art_dir: Path, quality: int, force: bool) -> int:
     raw = sheet.read_bytes()
     cells = split_contact_sheet(raw, job)
+    target_dir = job.output_dir if job.output_dir else art_dir
+    target_dir.mkdir(parents=True, exist_ok=True)
     saved = 0
     for bf, cell in zip(job.files, cells):
-        target = art_dir / bf.filename
+        target = target_dir / bf.filename
         if target.exists() and not force:
             print(f"  skip existing {target.name}")
             continue
@@ -96,7 +98,7 @@ def main() -> int:
                 print(f"[skip] {sheet.name}: unexpected name", file=sys.stderr)
                 continue
             pstem, bslug = parts
-            if pstem != stem:
+            if pstem.lower() != stem.lower():
                 continue
             job = next((j for j in jobs if slug_batch(j.name) == bslug), None)
             if not job:

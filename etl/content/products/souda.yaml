@@ -1,6 +1,6 @@
 products:
 - product_id: souda_陶瓷_B
-  name_zh: Souda陶瓷合约
+  name_zh: 苏达陶瓷合约
   category: 陶瓷
   weight_kg: 25.7
   base_reference_price: 148.34
@@ -10,7 +10,7 @@ products:
   rarity: 0.44
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: souda_工艺品_B
-  name_zh: Souda工艺品合约
+  name_zh: 苏达工艺品合约
   category: 工艺品
   weight_kg: 5.2
   base_reference_price: 321.6
@@ -20,7 +20,7 @@ products:
   rarity: 0.59
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: souda_茶叶_B
-  name_zh: Souda茶叶合约
+  name_zh: 苏达茶叶合约
   category: 茶叶
   weight_kg: 5.0
   base_reference_price: 197.08
@@ -30,7 +30,7 @@ products:
   rarity: 0.51
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: souda_食品_B
-  name_zh: Souda食品合约
+  name_zh: 苏达食品合约
   category: 食品
   weight_kg: 30.0
   base_reference_price: 229.07
@@ -40,7 +40,7 @@ products:
   rarity: 0.22
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: souda_香料_B
-  name_zh: Souda香料合约
+  name_zh: 苏达香料合约
   category: 香料
   weight_kg: 0.7
   base_reference_price: 276.57

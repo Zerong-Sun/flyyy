@@ -1,6 +1,6 @@
 products:
 - product_id: zaventem_机械_B
-  name_zh: Zaventem机械合约
+  name_zh: 扎芬特姆机械合约
   category: 机械
   weight_kg: 39.9
   base_reference_price: 589.56
@@ -10,7 +10,7 @@ products:
   rarity: 0.47
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: zaventem_矿产_B
-  name_zh: Zaventem矿产合约
+  name_zh: 扎芬特姆矿产合约
   category: 矿产
   weight_kg: 18.4
   base_reference_price: 520.29
@@ -20,7 +20,7 @@ products:
   rarity: 0.53
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: zaventem_电子_B
-  name_zh: Zaventem电子合约
+  name_zh: 扎芬特姆电子合约
   category: 电子
   weight_kg: 4.9
   base_reference_price: 3077.61
@@ -30,7 +30,7 @@ products:
   rarity: 0.69
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: zaventem_日用品_B
-  name_zh: Zaventem日用品合约
+  name_zh: 扎芬特姆日用品合约
   category: 日用品
   weight_kg: 7.8
   base_reference_price: 132.23
@@ -40,7 +40,7 @@ products:
   rarity: 0.11
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: zaventem_食品_B
-  name_zh: Zaventem食品合约
+  name_zh: 扎芬特姆食品合约
   category: 食品
   weight_kg: 27.2
   base_reference_price: 128.52

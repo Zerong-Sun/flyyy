@@ -1,6 +1,6 @@
 products:
 - product_id: budapest_日用品_B
-  name_zh: Budapest日用品合约
+  name_zh: 布达佩斯日用品合约
   category: 日用品
   weight_kg: 13.1
   base_reference_price: 43.53
@@ -10,7 +10,7 @@ products:
   rarity: 0.09
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: budapest_咖啡_B
-  name_zh: Budapest咖啡合约
+  name_zh: 布达佩斯咖啡合约
   category: 咖啡
   weight_kg: 10.8
   base_reference_price: 175.81
@@ -20,7 +20,7 @@ products:
   rarity: 0.45
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: budapest_食品_B
-  name_zh: Budapest食品合约
+  name_zh: 布达佩斯食品合约
   category: 食品
   weight_kg: 26.7
   base_reference_price: 178.89
@@ -30,7 +30,7 @@ products:
   rarity: 0.25
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: budapest_糖果_B
-  name_zh: Budapest糖果合约
+  name_zh: 布达佩斯糖果合约
   category: 糖果
   weight_kg: 4.3
   base_reference_price: 102.12
@@ -40,7 +40,7 @@ products:
   rarity: 0.34
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: budapest_矿产_B
-  name_zh: Budapest矿产合约
+  name_zh: 布达佩斯矿产合约
   category: 矿产
   weight_kg: 17.6
   base_reference_price: 418.6

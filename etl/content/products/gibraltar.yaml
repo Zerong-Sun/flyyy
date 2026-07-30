@@ -1,6 +1,6 @@
 products:
 - product_id: gibraltar_纺织品_B
-  name_zh: Gibraltar纺织品合约
+  name_zh: 直布罗陀纺织品合约
   category: 纺织品
   weight_kg: 17.1
   base_reference_price: 424.69
@@ -10,7 +10,7 @@ products:
   rarity: 0.41
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: gibraltar_咖啡_B
-  name_zh: Gibraltar咖啡合约
+  name_zh: 直布罗陀咖啡合约
   category: 咖啡
   weight_kg: 15.0
   base_reference_price: 191.76
@@ -20,7 +20,7 @@ products:
   rarity: 0.38
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: gibraltar_糖果_B
-  name_zh: Gibraltar糖果合约
+  name_zh: 直布罗陀糖果合约
   category: 糖果
   weight_kg: 4.4
   base_reference_price: 106.64
@@ -30,7 +30,7 @@ products:
   rarity: 0.27
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: gibraltar_食品_B
-  name_zh: Gibraltar食品合约
+  name_zh: 直布罗陀食品合约
   category: 食品
   weight_kg: 25.6
   base_reference_price: 197.46
@@ -40,7 +40,7 @@ products:
   rarity: 0.23
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: gibraltar_日用品_B
-  name_zh: Gibraltar日用品合约
+  name_zh: 直布罗陀日用品合约
   category: 日用品
   weight_kg: 6.0
   base_reference_price: 105.33

@@ -1,6 +1,6 @@
 products:
 - product_id: jiayuguan_机械_B
-  name_zh: Jiayuguan机械合约
+  name_zh: 嘉峪关机械合约
   category: 机械
   weight_kg: 33.1
   base_reference_price: 510.63
@@ -10,7 +10,7 @@ products:
   rarity: 0.64
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: jiayuguan_茶叶_B
-  name_zh: Jiayuguan茶叶合约
+  name_zh: 嘉峪关茶叶合约
   category: 茶叶
   weight_kg: 7.6
   base_reference_price: 223.96
@@ -20,7 +20,7 @@ products:
   rarity: 0.51
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: jiayuguan_陶瓷_B
-  name_zh: Jiayuguan陶瓷合约
+  name_zh: 嘉峪关陶瓷合约
   category: 陶瓷
   weight_kg: 15.0
   base_reference_price: 330.96
@@ -30,7 +30,7 @@ products:
   rarity: 0.46
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: jiayuguan_电子_B
-  name_zh: Jiayuguan电子合约
+  name_zh: 嘉峪关电子合约
   category: 电子
   weight_kg: 4.9
   base_reference_price: 973.0
@@ -40,7 +40,7 @@ products:
   rarity: 0.68
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: jiayuguan_纺织品_B
-  name_zh: Jiayuguan纺织品合约
+  name_zh: 嘉峪关纺织品合约
   category: 纺织品
   weight_kg: 12.9
   base_reference_price: 424.03

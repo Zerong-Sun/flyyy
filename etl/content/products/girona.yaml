@@ -1,6 +1,6 @@
 products:
 - product_id: girona_日用品_B
-  name_zh: Girona日用品合约
+  name_zh: 赫罗纳日用品合约
   category: 日用品
   weight_kg: 10.7
   base_reference_price: 46.32
@@ -10,7 +10,7 @@ products:
   rarity: 0.17
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: girona_糖果_B
-  name_zh: Girona糖果合约
+  name_zh: 赫罗纳糖果合约
   category: 糖果
   weight_kg: 5.7
   base_reference_price: 81.25
@@ -20,7 +20,7 @@ products:
   rarity: 0.2
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: girona_陶瓷_B
-  name_zh: Girona陶瓷合约
+  name_zh: 赫罗纳陶瓷合约
   category: 陶瓷
   weight_kg: 27.9
   base_reference_price: 177.03
@@ -30,7 +30,7 @@ products:
   rarity: 0.44
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: girona_纺织品_B
-  name_zh: Girona纺织品合约
+  name_zh: 赫罗纳纺织品合约
   category: 纺织品
   weight_kg: 12.1
   base_reference_price: 289.2
@@ -40,7 +40,7 @@ products:
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: girona_食品_B
-  name_zh: Girona食品合约
+  name_zh: 赫罗纳食品合约
   category: 食品
   weight_kg: 21.0
   base_reference_price: 175.92

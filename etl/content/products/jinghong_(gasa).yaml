@@ -1,6 +1,6 @@
 products:
 - product_id: jinghong_(gasa)_纺织品_B
-  name_zh: Jinghong (Gasa)纺织品合约
+  name_zh: 景洪纺织品合约
   category: 纺织品
   weight_kg: 17.1
   base_reference_price: 281.18
@@ -10,7 +10,7 @@ products:
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: jinghong_(gasa)_陶瓷_B
-  name_zh: Jinghong (Gasa)陶瓷合约
+  name_zh: 景洪陶瓷合约
   category: 陶瓷
   weight_kg: 12.2
   base_reference_price: 356.69
@@ -20,7 +20,7 @@ products:
   rarity: 0.54
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: jinghong_(gasa)_机械_B
-  name_zh: Jinghong (Gasa)机械合约
+  name_zh: 景洪机械合约
   category: 机械
   weight_kg: 34.5
   base_reference_price: 623.25
@@ -30,7 +30,7 @@ products:
   rarity: 0.54
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: jinghong_(gasa)_电子_B
-  name_zh: Jinghong (Gasa)电子合约
+  name_zh: 景洪电子合约
   category: 电子
   weight_kg: 1.4
   base_reference_price: 1662.34
@@ -40,7 +40,7 @@ products:
   rarity: 0.72
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: jinghong_(gasa)_茶叶_B
-  name_zh: Jinghong (Gasa)茶叶合约
+  name_zh: 景洪茶叶合约
   category: 茶叶
   weight_kg: 7.4
   base_reference_price: 104.78

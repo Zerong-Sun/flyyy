@@ -1,6 +1,6 @@
 products:
 - product_id: groningen_矿产_B
-  name_zh: Groningen矿产合约
+  name_zh: 格罗宁根矿产合约
   category: 矿产
   weight_kg: 16.9
   base_reference_price: 716.98
@@ -10,7 +10,7 @@ products:
   rarity: 0.47
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: groningen_能源_B
-  name_zh: Groningen能源合约
+  name_zh: 格罗宁根能源合约
   category: 能源
   weight_kg: 7.1
   base_reference_price: 960.26
@@ -20,7 +20,7 @@ products:
   rarity: 0.62
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: groningen_电子_B
-  name_zh: Groningen电子合约
+  name_zh: 格罗宁根电子合约
   category: 电子
   weight_kg: 1.6
   base_reference_price: 2354.57
@@ -30,7 +30,7 @@ products:
   rarity: 0.66
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: groningen_日用品_B
-  name_zh: Groningen日用品合约
+  name_zh: 格罗宁根日用品合约
   category: 日用品
   weight_kg: 13.6
   base_reference_price: 82.65
@@ -40,7 +40,7 @@ products:
   rarity: 0.18
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: groningen_食品_B
-  name_zh: Groningen食品合约
+  name_zh: 格罗宁根食品合约
   category: 食品
   weight_kg: 15.2
   base_reference_price: 247.49

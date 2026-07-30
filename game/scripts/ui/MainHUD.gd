@@ -26,6 +26,7 @@ var _btn_ff: Button
 var _panel_host: Control
 var _flight_list: ItemList
 var _flight_query: LineEdit
+var _dest_code_query: LineEdit
 var _flight_detail: RichTextLabel
 const INTEL_UPGRADE_COST := 200.0
 var _market_container: VBoxContainer
@@ -46,6 +47,7 @@ var _market_cache: Array = []
 var _product_market_tags: Dictionary = {}
 var _selected_market_product_id: String = ""
 var _market_row_panels: Dictionary = {}
+var _best_dest_sample: Array = []  # product_ids that show best-destination when no ticket
 var _last_hint_time := 0.0
 var _last_clock_s := 0.0
 var _last_countdown_s := 0.0
@@ -124,6 +126,7 @@ func _build_ui() -> void:
 	var top := _bar(_Colors.BG_DEEP)
 	top.position = Vector2(0, 0)
 	top.size = Vector2(1280, 52)
+	top.clip_contents = true
 	add_child(top)
 	_clock_label = _label(top, Vector2(36, 8), "时间")
 	_cash_label = _label(top, Vector2(544, 8), "资金")
@@ -415,11 +418,28 @@ func _selected_or_first() -> String:
 
 func _on_game_started() -> void:
 	_new_game_panel.visible = false
+	_dismiss_open_panel()
+	_refresh_airport_list("")
 	_refresh_top()
 	_refresh_bags()
+	_refresh_countdown()
 	globe.focus_airport(AppState.current_airport_id)
 	_set_panel_bgm("globe")
 	AudioService.play_sfx("sfx_ui_click")
+
+
+func _dismiss_open_panel() -> void:
+	for c in _panel_host.get_children():
+		c.queue_free()
+	_panel_host.visible = false
+	_market_built_city = ""
+	_market_container = null
+	_selected_market_product_id = ""
+	_flight_list = null
+	_flight_query = null
+	_dest_code_query = null
+	_flight_detail = null
+	_recommend_box = null
 
 
 func _on_random() -> void:
@@ -432,7 +452,9 @@ func _on_random() -> void:
 func _refresh_airport_list(q: String) -> void:
 	_airport_list.clear()
 	for a in DataService.search_airports(q):
-		_airport_list.add_item("%s  %s（%s）" % [a.iata, a.name_zh, a.city_zh])
+		var airport_name := DataService.place_name(a, "name")
+		var city_name := DataService.place_name(a, "city")
+		_airport_list.add_item("%s  %s（%s）" % [a.iata, airport_name, city_name])
 		_airport_list.set_item_metadata(_airport_list.item_count - 1, a.airport_id)
 
 
@@ -450,8 +472,11 @@ func _on_airport_selected(airport_id: String) -> void:
 	_airport_card.set_meta("aid", airport_id)
 	var local := GameClock.format_local(str(a.timezone))
 	var dests := DataService.destinations_from(str(a.iata)).size()
+	var airport_name := DataService.place_name(a, "name")
+	var airport_city := DataService.place_name(a, "city")
+	var airport_country := DataService.place_name(a, "country")
 	_airport_card.text = "[b]%s[/b]\n%s / %s\n城市：%s（%s）\n国家：%s\n当地时间：%s\n海拔：%.0f ft\n直飞目的地：%d\n类型：%s\n可信：%s" % [
-		a.name_zh, a.iata, a.icao, a.city_zh, a.city_en, a.country_zh, local,
+		airport_name, a.iata, a.icao, airport_city, a.city_en, airport_country, local,
 		float(a.elevation_ft), dests, a.type, a.data_confidence
 	]
 	# Routes are drawn by GlobeController on selection; card only refreshes info.
@@ -551,7 +576,7 @@ func _run_transition_sequence(ticket: Dictionary) -> void:
 	if not dest.is_empty():
 		var cid := str(dest.get("city_id", ""))
 		if cid != "" and DataService.cities_by_id.has(cid):
-			dest_city = str(DataService.cities_by_id[cid].get("name_zh", dest_city))
+			dest_city = DataService.place_name(DataService.cities_by_id[cid], "name")
 		elif str(dest.get("city_name_zh", "")) != "":
 			dest_city = str(dest.get("city_name_zh"))
 	var base: String = "%s  %s → %s\n距离 %.0f km · %s舱\n" % [
@@ -790,18 +815,20 @@ func _get_intelligence_tag(p: Dictionary, ticket_dest_city: String) -> String:
 	var tag_key := "%s|%s" % [origin_city, product_id]
 	var tags: Dictionary = _product_market_tags.get(tag_key, {})
 	if ticket_dest_city != "":
+		var city := DataService.get_city(ticket_dest_city)
+		var city_name := DataService.place_name(city, "name")
 		if ticket_dest_city in tags.get("hot", []):
-			return "📍" + ticket_dest_city + "热卖"
+			return "📍" + city_name + "热卖"
 		elif ticket_dest_city in tags.get("normal", []):
-			return "📍" + ticket_dest_city + "可售"
+			return "📍" + city_name + "可售"
 		elif ticket_dest_city in tags.get("cold", []):
 			return "⚠️不建议"
 		return ""
 	else:
 		var hot_cities: Array = tags.get("hot", [])
-		if hot_cities.size() > 0:
+		if hot_cities.size() > 0 and str(p.get("product_id", "")) in _best_dest_sample:
 			var city := DataService.get_city(hot_cities[0])
-			var city_name := str(city.get("name_zh", hot_cities[0]))
+			var city_name := DataService.place_name(city, "name")
 			return "⭐最佳目的地：" + city_name
 		return ""
 
@@ -835,7 +862,7 @@ func _show_city() -> void:
 		_city_text.text = "无城市数据"
 		return
 	_city_text.text = "[b]%s[/b]\n\n%s\n\n[b]历史[/b]\n%s\n\n[b]地理[/b]\n%s\n\n[b]经济[/b]\n%s\n\n[b]饮食[/b]\n%s\n\n[b]旅行提示[/b]\n%s" % [
-		c.name_zh, c.overview, c.history_summary, c.geography_summary, c.economy_summary, c.food_summary, c.travel_note
+		DataService.place_name(c, "name"), c.overview, c.history_summary, c.geography_summary, c.economy_summary, c.food_summary, c.travel_note
 	]
 
 
@@ -866,7 +893,25 @@ func _show_market() -> void:
 	_market_container = VBoxContainer.new()
 	scroll.add_child(_market_container)
 	var ticket_dest_city := _get_ticket_dest_city_id()
+
 	var locals := DataService.products_for_city(city)
+
+	# When no ticket, randomly pick 3 products to show best-destination tips
+	_best_dest_sample.clear()
+	if ticket_dest_city == "":
+		var candidates: Array = []
+		for p in locals:
+			if _get_intelligence_tag(p, "") != "":
+				candidates.append(str(p.get("product_id", "")))
+		if candidates.size() > 0:
+			var seed_val := hash("market_tips|" + city + "|" + GameClock.game_date_string())
+			var rng := RandomNumberGenerator.new()
+			rng.seed = seed_val
+			candidates.shuffle()  # deterministic shuffle
+			var limit := mini(3, candidates.size())
+			for i in limit:
+				_best_dest_sample.append(candidates[i])
+
 	for p in locals:
 		_add_market_row(city, p, true, ticket_dest_city)
 	var count := 0
@@ -1172,9 +1217,13 @@ func _show_flights() -> void:
 	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	v.add_child(tip)
 	_flight_query = LineEdit.new()
-	_flight_query.placeholder_text = "目的地 / IATA / 航空公司"
+	_flight_query.placeholder_text = "航班号 / 航空公司 / 城市名"
 	_flight_query.text_changed.connect(func (_t): _flight_page = 0; _reload_flights())
 	v.add_child(_flight_query)
+	_dest_code_query = LineEdit.new()
+	_dest_code_query.placeholder_text = "目的地 IATA 代码 (如 JFK, LHR)"
+	_dest_code_query.text_changed.connect(func (_t): _flight_page = 0; _reload_flights())
+	v.add_child(_dest_code_query)
 	var mode_row := HBoxContainer.new()
 	v.add_child(mode_row)
 	var b_direct := Button.new()
@@ -1332,7 +1381,7 @@ func _get_recommended_destinations(limit: int = 5) -> Array:
 		var is_direct := city_iata != "" and direct_dests.has(city_iata)
 		out.append({
 			"city_id": city_id,
-			"name_zh": city.get("name_zh", city_id),
+			"name_zh": DataService.place_name(city, "name"),
 			"iata": city_iata,
 			"hot_count": scores[city_id],
 			"direct": is_direct,
@@ -1366,7 +1415,7 @@ func _rebuild_recommendations() -> void:
 		var rec: Dictionary = rec_v
 		var btn := Button.new()
 		var mode := "直飞" if rec.get("direct", false) else "联程"
-		btn.text = "%s · %s件 · %s" % [rec.get("name_zh", ""), rec.get("hot_count", 0), mode]
+		btn.text = "%s · %s件 · %s" % [rec.get("name_zh", rec.get("city_id", "")), rec.get("hot_count", 0), mode]
 		var dest_iata := str(rec.get("iata", ""))
 		var want_cnx := not bool(rec.get("direct", false))
 		btn.pressed.connect(func ():
@@ -1398,9 +1447,10 @@ func _reload_flights(_q: String = "") -> void:
 	_selected_flight = {}
 	_selected_connection = {}
 	var q: String = _flight_query.text if _flight_query else ""
+	var dest_code: String = _dest_code_query.text.strip_edges() if _dest_code_query else ""
 	if _show_connections:
 		var origin_iata := str(AppState.current_airport().get("iata", ""))
-		var all_cnx: Array = _FlightSearch.search_connections(origin_iata, q, 200)
+		var all_cnx: Array = _FlightSearch.search_connections(origin_iata, q, 200, dest_code)
 		if _filter_unvisited:
 			var filtered: Array = []
 			for c_v in all_cnx:
@@ -1425,7 +1475,7 @@ func _reload_flights(_q: String = "") -> void:
 		return
 	var all: Array = _FlightSearch.search(
 		AppState.current_airport_id, q, 500, _filter_unvisited, _sort_by,
-		_max_price, _max_duration, _biz_only
+		_max_price, _max_duration, _biz_only, dest_code
 	)
 	if _flight_auto_focus and all.size() > 0:
 		var focus_idx: int = _FlightSearch.first_focus_index(all)
@@ -1603,9 +1653,15 @@ func _show_inventory() -> void:
 		var pid := str(item.get("product_id", ""))
 		var p: Dictionary = DataService.get_product(pid)
 		var q: float = _Economy.current_quality(item)
-		var idx := _inv_list.add_item("%s ×%d  品质%.0f%%  成本%s  %s" % [
+		var unit_cost: float = float(item.get("unit_cost", 0))
+		var current_sell: float = _Economy.sell_price(AppState.current_city_id(), pid, q)
+		var spread: float = current_sell - unit_cost
+		var spread_sign := "+" if spread >= 0 else ""
+		var idx := _inv_list.add_item("%s ×%d  品质%.0f%%  成本%s  售价%s  %s%s  %s" % [
 			p.get("name_zh", pid), int(item.get("qty", 0)), q * 100.0,
-			_Economy.format_money(float(item.get("unit_cost", 0))),
+			_Economy.format_money(unit_cost),
+			_Economy.format_money(current_sell),
+			spread_sign, _Economy.format_money(spread),
 			"货运" if item.get("in_cargo", false) else "行李"
 		])
 		var ptex: Texture2D = _IconFactory.get_product_icon(pid)
@@ -1854,7 +1910,7 @@ func _show_notes() -> void:
 
 	for city_id in by_city:
 		var city := DataService.get_city(city_id)
-		var city_name := str(city.get("name_zh", city_id))
+		var city_name := DataService.place_name(city, "name")
 
 		var header := Label.new()
 		header.text = "📒 %s" % city_name
@@ -2070,6 +2126,15 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 	var body := ""
 	body += "售出数量：" + str(sell_result["qty"]) + "\n"
 	body += "售出收入：$" + str(int(sell_result["revenue"])) + "\n"
+	var unit_buy: float = float(sell_result.get("unit_cost", 0))
+	var unit_sell: float = float(sell_result.get("unit_price", 0))
+	if unit_buy > 0 or unit_sell > 0:
+		body += "买入单价：$" + str(int(unit_buy)) + "  →  卖出单价：$" + str(int(unit_sell))
+		if unit_sell > 0:
+			var unit_spread := unit_sell - unit_buy
+			var unit_sign := "+" if unit_spread >= 0 else ""
+			body += "  (%s$%d)" % [unit_sign, int(unit_spread)]
+		body += "\n"
 
 	var margin: float = sell_result["margin"]
 	var sign := "+" if margin >= 0 else ""
@@ -2172,12 +2237,8 @@ func _load() -> void:
 	GameClock.set_paused(true)
 	if SaveSystem.load_game():
 		_show_hint("已读档")
-		_new_game_panel.visible = false
-		globe.focus_airport(AppState.current_airport_id)
-		_refresh_top()
-		_refresh_bags()
 	else:
-		_show_hint("无存档")
+		_show_hint("无存档或存档损坏")
 	GameClock.set_paused(not AppState.game_started)
 
 
@@ -2215,6 +2276,14 @@ func _toggle_pause() -> void:
 		_set_panel_bgm("menu")
 	)
 	v.add_child(night)
+	var locale_btn := Button.new()
+	locale_btn.text = "地名语言：English" if AppState.place_locale == "zh" else "地名语言：中文"
+	locale_btn.pressed.connect(func ():
+		AppState.place_locale = "en" if AppState.place_locale == "zh" else "zh"
+		locale_btn.text = "地名语言：English" if AppState.place_locale == "zh" else "地名语言：中文"
+		_show_hint("地名语言已切换")
+	)
+	v.add_child(locale_btn)
 	var mute := CheckButton.new()
 	mute.text = "静音"
 	mute.button_pressed = AudioService.is_muted()

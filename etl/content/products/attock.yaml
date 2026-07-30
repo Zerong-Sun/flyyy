@@ -1,6 +1,6 @@
 products:
 - product_id: attock_日用品_B
-  name_zh: Attock日用品合约
+  name_zh: 阿托克日用品合约
   category: 日用品
   weight_kg: 12.2
   base_reference_price: 35.33
@@ -10,7 +10,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: attock_玩具_B
-  name_zh: Attock玩具合约
+  name_zh: 阿托克玩具合约
   category: 玩具
   weight_kg: 8.2
   base_reference_price: 87.72
@@ -20,7 +20,7 @@ products:
   rarity: 0.25
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: attock_茶叶_B
-  name_zh: Attock茶叶合约
+  name_zh: 阿托克茶叶合约
   category: 茶叶
   weight_kg: 8.2
   base_reference_price: 103.08
@@ -30,7 +30,7 @@ products:
   rarity: 0.43
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: attock_纺织品_B
-  name_zh: Attock纺织品合约
+  name_zh: 阿托克纺织品合约
   category: 纺织品
   weight_kg: 13.4
   base_reference_price: 226.68
@@ -40,7 +40,7 @@ products:
   rarity: 0.32
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: attock_食品_B
-  name_zh: Attock食品合约
+  name_zh: 阿托克食品合约
   category: 食品
   weight_kg: 16.2
   base_reference_price: 52.12

@@ -1,6 +1,6 @@
 products:
 - product_id: abu_dhabi_食品_B
-  name_zh: Abu Dhabi食品合约
+  name_zh: 阿布扎比食品合约
   category: 食品
   weight_kg: 19.9
   base_reference_price: 258.94
@@ -10,7 +10,7 @@ products:
   rarity: 0.4
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: abu_dhabi_能源_B
-  name_zh: Abu Dhabi能源合约
+  name_zh: 阿布扎比能源合约
   category: 能源
   weight_kg: 4.2
   base_reference_price: 506.04
@@ -20,7 +20,7 @@ products:
   rarity: 0.58
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: abu_dhabi_日用品_B
-  name_zh: Abu Dhabi日用品合约
+  name_zh: 阿布扎比日用品合约
   category: 日用品
   weight_kg: 13.1
   base_reference_price: 81.01
@@ -30,7 +30,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: abu_dhabi_香料_B
-  name_zh: Abu Dhabi香料合约
+  name_zh: 阿布扎比香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 330.63
@@ -40,7 +40,7 @@ products:
   rarity: 0.42
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: abu_dhabi_电子_B
-  name_zh: Abu Dhabi电子合约
+  name_zh: 阿布扎比电子合约
   category: 电子
   weight_kg: 3.5
   base_reference_price: 2927.61

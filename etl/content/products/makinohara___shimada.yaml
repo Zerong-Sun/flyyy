@@ -1,6 +1,6 @@
 products:
 - product_id: makinohara___shimada_食品_B
-  name_zh: Makinohara / Shimada食品合约
+  name_zh: 静冈食品合约
   category: 食品
   weight_kg: 25.0
   base_reference_price: 244.47
@@ -10,7 +10,7 @@ products:
   rarity: 0.37
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: makinohara___shimada_玩具_B
-  name_zh: Makinohara / Shimada玩具合约
+  name_zh: 静冈玩具合约
   category: 玩具
   weight_kg: 3.1
   base_reference_price: 95.17
@@ -20,7 +20,7 @@ products:
   rarity: 0.23
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: makinohara___shimada_工艺品_B
-  name_zh: Makinohara / Shimada工艺品合约
+  name_zh: 静冈工艺品合约
   category: 工艺品
   weight_kg: 9.6
   base_reference_price: 374.24
@@ -30,7 +30,7 @@ products:
   rarity: 0.62
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: makinohara___shimada_电子_B
-  name_zh: Makinohara / Shimada电子合约
+  name_zh: 静冈电子合约
   category: 电子
   weight_kg: 4.8
   base_reference_price: 2944.41
@@ -40,7 +40,7 @@ products:
   rarity: 0.57
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: makinohara___shimada_文具_B
-  name_zh: Makinohara / Shimada文具合约
+  name_zh: 静冈文具合约
   category: 文具
   weight_kg: 2.2
   base_reference_price: 88.18

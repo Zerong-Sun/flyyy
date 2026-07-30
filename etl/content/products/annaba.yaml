@@ -1,6 +1,6 @@
 products:
 - product_id: annaba_矿产_B
-  name_zh: Annaba矿产合约
+  name_zh: 安纳巴矿产合约
   category: 矿产
   weight_kg: 37.1
   base_reference_price: 340.08
@@ -10,7 +10,7 @@ products:
   rarity: 0.52
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: annaba_能源_B
-  name_zh: Annaba能源合约
+  name_zh: 安纳巴能源合约
   category: 能源
   weight_kg: 9.8
   base_reference_price: 262.61
@@ -20,7 +20,7 @@ products:
   rarity: 0.65
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: annaba_日用品_B
-  name_zh: Annaba日用品合约
+  name_zh: 安纳巴日用品合约
   category: 日用品
   weight_kg: 8.8
   base_reference_price: 42.29
@@ -30,7 +30,7 @@ products:
   rarity: 0.12
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: annaba_食品_B
-  name_zh: Annaba食品合约
+  name_zh: 安纳巴食品合约
   category: 食品
   weight_kg: 28.9
   base_reference_price: 61.85
@@ -40,7 +40,7 @@ products:
   rarity: 0.3
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: annaba_纺织品_B
-  name_zh: Annaba纺织品合约
+  name_zh: 安纳巴纺织品合约
   category: 纺织品
   weight_kg: 17.3
   base_reference_price: 218.03

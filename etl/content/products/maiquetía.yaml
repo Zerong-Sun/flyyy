@@ -1,6 +1,6 @@
 products:
 - product_id: maiquetía_纺织品_B
-  name_zh: Maiquetía纺织品合约
+  name_zh: 迈克蒂亚纺织品合约
   category: 纺织品
   weight_kg: 15.7
   base_reference_price: 464.97
@@ -10,7 +10,7 @@ products:
   rarity: 0.41
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: maiquetía_食品_B
-  name_zh: Maiquetía食品合约
+  name_zh: 迈克蒂亚食品合约
   category: 食品
   weight_kg: 27.6
   base_reference_price: 181.01
@@ -20,7 +20,7 @@ products:
   rarity: 0.39
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: maiquetía_咖啡_B
-  name_zh: Maiquetía咖啡合约
+  name_zh: 迈克蒂亚咖啡合约
   category: 咖啡
   weight_kg: 9.8
   base_reference_price: 169.45
@@ -30,7 +30,7 @@ products:
   rarity: 0.37
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: maiquetía_工艺品_B
-  name_zh: Maiquetía工艺品合约
+  name_zh: 迈克蒂亚工艺品合约
   category: 工艺品
   weight_kg: 11.0
   base_reference_price: 229.02
@@ -40,7 +40,7 @@ products:
   rarity: 0.63
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: maiquetía_矿产_B
-  name_zh: Maiquetía矿产合约
+  name_zh: 迈克蒂亚矿产合约
   category: 矿产
   weight_kg: 24.1
   base_reference_price: 469.33

@@ -1,6 +1,6 @@
 products:
 - product_id: djibouti_city_糖果_B
-  name_zh: Djibouti City糖果合约
+  name_zh: 吉布提市糖果合约
   category: 糖果
   weight_kg: 7.9
   base_reference_price: 78.0
@@ -10,7 +10,7 @@ products:
   rarity: 0.23
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: djibouti_city_香料_B
-  name_zh: Djibouti City香料合约
+  name_zh: 吉布提市香料合约
   category: 香料
   weight_kg: 0.3
   base_reference_price: 367.4
@@ -20,7 +20,7 @@ products:
   rarity: 0.42
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: djibouti_city_工艺品_B
-  name_zh: Djibouti City工艺品合约
+  name_zh: 吉布提市工艺品合约
   category: 工艺品
   weight_kg: 11.7
   base_reference_price: 207.36
@@ -30,7 +30,7 @@ products:
   rarity: 0.64
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: djibouti_city_矿产_B
-  name_zh: Djibouti City矿产合约
+  name_zh: 吉布提市矿产合约
   category: 矿产
   weight_kg: 39.7
   base_reference_price: 273.14
@@ -40,7 +40,7 @@ products:
   rarity: 0.56
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: djibouti_city_食品_B
-  name_zh: Djibouti City食品合约
+  name_zh: 吉布提市食品合约
   category: 食品
   weight_kg: 20.9
   base_reference_price: 176.3

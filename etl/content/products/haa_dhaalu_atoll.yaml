@@ -1,6 +1,6 @@
 products:
 - product_id: haa_dhaalu_atoll_工艺品_B
-  name_zh: Haa Dhaalu Atoll工艺品合约
+  name_zh: 哈达卢环礁工艺品合约
   category: 工艺品
   weight_kg: 13.0
   base_reference_price: 471.23
@@ -10,7 +10,7 @@ products:
   rarity: 0.42
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: haa_dhaalu_atoll_纺织品_B
-  name_zh: Haa Dhaalu Atoll纺织品合约
+  name_zh: 哈达卢环礁纺织品合约
   category: 纺织品
   weight_kg: 9.6
   base_reference_price: 384.3
@@ -20,7 +20,7 @@ products:
   rarity: 0.4
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: haa_dhaalu_atoll_矿产_B
-  name_zh: Haa Dhaalu Atoll矿产合约
+  name_zh: 哈达卢环礁矿产合约
   category: 矿产
   weight_kg: 16.8
   base_reference_price: 285.18
@@ -30,7 +30,7 @@ products:
   rarity: 0.49
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: haa_dhaalu_atoll_日用品_B
-  name_zh: Haa Dhaalu Atoll日用品合约
+  name_zh: 哈达卢环礁日用品合约
   category: 日用品
   weight_kg: 13.3
   base_reference_price: 85.47
@@ -40,7 +40,7 @@ products:
   rarity: 0.08
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: haa_dhaalu_atoll_糖果_B
-  name_zh: Haa Dhaalu Atoll糖果合约
+  name_zh: 哈达卢环礁糖果合约
   category: 糖果
   weight_kg: 5.8
   base_reference_price: 75.63

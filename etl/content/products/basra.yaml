@@ -1,6 +1,6 @@
 products:
 - product_id: basra_日用品_B
-  name_zh: Basra日用品合约
+  name_zh: 巴士拉日用品合约
   category: 日用品
   weight_kg: 12.0
   base_reference_price: 64.05
@@ -10,7 +10,7 @@ products:
   rarity: 0.06
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: basra_工艺品_B
-  name_zh: Basra工艺品合约
+  name_zh: 巴士拉工艺品合约
   category: 工艺品
   weight_kg: 8.0
   base_reference_price: 266.02
@@ -20,7 +20,7 @@ products:
   rarity: 0.56
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: basra_纺织品_B
-  name_zh: Basra纺织品合约
+  name_zh: 巴士拉纺织品合约
   category: 纺织品
   weight_kg: 9.0
   base_reference_price: 474.71
@@ -30,7 +30,7 @@ products:
   rarity: 0.34
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: basra_咖啡_B
-  name_zh: Basra咖啡合约
+  name_zh: 巴士拉咖啡合约
   category: 咖啡
   weight_kg: 13.8
   base_reference_price: 208.81
@@ -40,7 +40,7 @@ products:
   rarity: 0.46
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: basra_糖果_B
-  name_zh: Basra糖果合约
+  name_zh: 巴士拉糖果合约
   category: 糖果
   weight_kg: 5.0
   base_reference_price: 77.57

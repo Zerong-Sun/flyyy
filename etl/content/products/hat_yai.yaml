@@ -1,6 +1,6 @@
 products:
 - product_id: hat_yai_纺织品_B
-  name_zh: Hat Yai纺织品合约
+  name_zh: 合艾纺织品合约
   category: 纺织品
   weight_kg: 9.3
   base_reference_price: 312.07
@@ -10,7 +10,7 @@ products:
   rarity: 0.41
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: hat_yai_香料_B
-  name_zh: Hat Yai香料合约
+  name_zh: 合艾香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 250.15
@@ -20,7 +20,7 @@ products:
   rarity: 0.58
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: hat_yai_玩具_B
-  name_zh: Hat Yai玩具合约
+  name_zh: 合艾玩具合约
   category: 玩具
   weight_kg: 7.3
   base_reference_price: 116.24
@@ -30,7 +30,7 @@ products:
   rarity: 0.28
   description: 本地特色玩具合约，适合作为伴手礼转售。
 - product_id: hat_yai_食品_B
-  name_zh: Hat Yai食品合约
+  name_zh: 合艾食品合约
   category: 食品
   weight_kg: 23.4
   base_reference_price: 101.11
@@ -40,7 +40,7 @@ products:
   rarity: 0.29
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: hat_yai_日用品_B
-  name_zh: Hat Yai日用品合约
+  name_zh: 合艾日用品合约
   category: 日用品
   weight_kg: 11.7
   base_reference_price: 35.8

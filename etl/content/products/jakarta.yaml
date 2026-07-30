@@ -1,6 +1,6 @@
 products:
 - product_id: jakarta_香料_B
-  name_zh: Jakarta香料合约
+  name_zh: 雅加达香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 119.5
@@ -10,7 +10,7 @@ products:
   rarity: 0.49
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: jakarta_纺织品_B
-  name_zh: Jakarta纺织品合约
+  name_zh: 雅加达纺织品合约
   category: 纺织品
   weight_kg: 12.7
   base_reference_price: 177.43
@@ -20,7 +20,7 @@ products:
   rarity: 0.32
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: jakarta_矿产_B
-  name_zh: Jakarta矿产合约
+  name_zh: 雅加达矿产合约
   category: 矿产
   weight_kg: 25.2
   base_reference_price: 538.08
@@ -30,7 +30,7 @@ products:
   rarity: 0.59
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: jakarta_咖啡_B
-  name_zh: Jakarta咖啡合约
+  name_zh: 雅加达咖啡合约
   category: 咖啡
   weight_kg: 11.9
   base_reference_price: 132.23
@@ -40,7 +40,7 @@ products:
   rarity: 0.38
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: jakarta_食品_B
-  name_zh: Jakarta食品合约
+  name_zh: 雅加达食品合约
   category: 食品
   weight_kg: 16.4
   base_reference_price: 65.84

@@ -1,6 +1,6 @@
 products:
 - product_id: sentani_香料_B
-  name_zh: Sentani香料合约
+  name_zh: 查亚普拉香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 260.01
@@ -10,7 +10,7 @@ products:
   rarity: 0.42
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: sentani_食品_B
-  name_zh: Sentani食品合约
+  name_zh: 查亚普拉食品合约
   category: 食品
   weight_kg: 23.1
   base_reference_price: 126.38
@@ -20,7 +20,7 @@ products:
   rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: sentani_纺织品_B
-  name_zh: Sentani纺织品合约
+  name_zh: 查亚普拉纺织品合约
   category: 纺织品
   weight_kg: 19.0
   base_reference_price: 328.98
@@ -30,7 +30,7 @@ products:
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: sentani_矿产_B
-  name_zh: Sentani矿产合约
+  name_zh: 查亚普拉矿产合约
   category: 矿产
   weight_kg: 15.3
   base_reference_price: 376.68
@@ -40,7 +40,7 @@ products:
   rarity: 0.55
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: sentani_咖啡_B
-  name_zh: Sentani咖啡合约
+  name_zh: 查亚普拉咖啡合约
   category: 咖啡
   weight_kg: 9.3
   base_reference_price: 147.95

@@ -1,6 +1,6 @@
 products:
 - product_id: bristol_纺织品_B
-  name_zh: Bristol纺织品合约
+  name_zh: 布里斯托尔纺织品合约
   category: 纺织品
   weight_kg: 18.0
   base_reference_price: 261.72
@@ -10,7 +10,7 @@ products:
   rarity: 0.26
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: bristol_电子_B
-  name_zh: Bristol电子合约
+  name_zh: 布里斯托尔电子合约
   category: 电子
   weight_kg: 2.3
   base_reference_price: 2834.83
@@ -20,7 +20,7 @@ products:
   rarity: 0.68
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: bristol_机械_B
-  name_zh: Bristol机械合约
+  name_zh: 布里斯托尔机械合约
   category: 机械
   weight_kg: 31.6
   base_reference_price: 613.68
@@ -30,7 +30,7 @@ products:
   rarity: 0.59
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: bristol_食品_B
-  name_zh: Bristol食品合约
+  name_zh: 布里斯托尔食品合约
   category: 食品
   weight_kg: 23.6
   base_reference_price: 140.4
@@ -40,7 +40,7 @@ products:
   rarity: 0.33
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: bristol_茶叶_B
-  name_zh: Bristol茶叶合约
+  name_zh: 布里斯托尔茶叶合约
   category: 茶叶
   weight_kg: 10.0
   base_reference_price: 382.58

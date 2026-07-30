@@ -1,6 +1,6 @@
 products:
 - product_id: kish_island_咖啡_B
-  name_zh: Kish Island咖啡合约
+  name_zh: 基什岛咖啡合约
   category: 咖啡
   weight_kg: 9.4
   base_reference_price: 101.62
@@ -10,7 +10,7 @@ products:
   rarity: 0.36
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: kish_island_工艺品_B
-  name_zh: Kish Island工艺品合约
+  name_zh: 基什岛工艺品合约
   category: 工艺品
   weight_kg: 5.8
   base_reference_price: 300.11
@@ -20,7 +20,7 @@ products:
   rarity: 0.47
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: kish_island_日用品_B
-  name_zh: Kish Island日用品合约
+  name_zh: 基什岛日用品合约
   category: 日用品
   weight_kg: 11.9
   base_reference_price: 61.73
@@ -30,7 +30,7 @@ products:
   rarity: 0.18
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: kish_island_糖果_B
-  name_zh: Kish Island糖果合约
+  name_zh: 基什岛糖果合约
   category: 糖果
   weight_kg: 4.9
   base_reference_price: 62.88
@@ -40,7 +40,7 @@ products:
   rarity: 0.18
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: kish_island_纺织品_B
-  name_zh: Kish Island纺织品合约
+  name_zh: 基什岛纺织品合约
   category: 纺织品
   weight_kg: 15.1
   base_reference_price: 320.4

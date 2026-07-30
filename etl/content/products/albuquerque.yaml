@@ -1,6 +1,6 @@
 products:
 - product_id: albuquerque_机械_B
-  name_zh: Albuquerque机械合约
+  name_zh: 阿尔伯克基机械合约
   category: 机械
   weight_kg: 44.0
   base_reference_price: 1518.85
@@ -10,7 +10,7 @@ products:
   rarity: 0.56
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: albuquerque_食品_B
-  name_zh: Albuquerque食品合约
+  name_zh: 阿尔伯克基食品合约
   category: 食品
   weight_kg: 26.8
   base_reference_price: 108.09
@@ -20,7 +20,7 @@ products:
   rarity: 0.24
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: albuquerque_电子_B
-  name_zh: Albuquerque电子合约
+  name_zh: 阿尔伯克基电子合约
   category: 电子
   weight_kg: 4.9
   base_reference_price: 1955.97
@@ -30,7 +30,7 @@ products:
   rarity: 0.62
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: albuquerque_日用品_B
-  name_zh: Albuquerque日用品合约
+  name_zh: 阿尔伯克基日用品合约
   category: 日用品
   weight_kg: 5.3
   base_reference_price: 79.91
@@ -40,7 +40,7 @@ products:
   rarity: 0.14
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: albuquerque_能源_B
-  name_zh: Albuquerque能源合约
+  name_zh: 阿尔伯克基能源合约
   category: 能源
   weight_kg: 3.2
   base_reference_price: 777.0

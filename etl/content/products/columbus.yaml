@@ -1,6 +1,6 @@
 products:
 - product_id: columbus_电子_B
-  name_zh: Columbus电子合约
+  name_zh: 哥伦布电子合约
   category: 电子
   weight_kg: 2.8
   base_reference_price: 1271.82
@@ -10,7 +10,7 @@ products:
   rarity: 0.68
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: columbus_机械_B
-  name_zh: Columbus机械合约
+  name_zh: 哥伦布机械合约
   category: 机械
   weight_kg: 32.1
   base_reference_price: 972.72
@@ -20,7 +20,7 @@ products:
   rarity: 0.57
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: columbus_日用品_B
-  name_zh: Columbus日用品合约
+  name_zh: 哥伦布日用品合约
   category: 日用品
   weight_kg: 14.8
   base_reference_price: 79.13
@@ -30,7 +30,7 @@ products:
   rarity: 0.12
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: columbus_食品_B
-  name_zh: Columbus食品合约
+  name_zh: 哥伦布食品合约
   category: 食品
   weight_kg: 16.4
   base_reference_price: 101.34
@@ -40,7 +40,7 @@ products:
   rarity: 0.29
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: columbus_能源_B
-  name_zh: Columbus能源合约
+  name_zh: 哥伦布能源合约
   category: 能源
   weight_kg: 8.9
   base_reference_price: 1113.35

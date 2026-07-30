@@ -1,6 +1,6 @@
 products:
 - product_id: rabil_纺织品_B
-  name_zh: Rabil纺织品合约
+  name_zh: 拉比尔纺织品合约
   category: 纺织品
   weight_kg: 9.5
   base_reference_price: 332.08
@@ -10,7 +10,7 @@ products:
   rarity: 0.29
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: rabil_香料_B
-  name_zh: Rabil香料合约
+  name_zh: 拉比尔香料合约
   category: 香料
   weight_kg: 0.7
   base_reference_price: 187.76
@@ -20,7 +20,7 @@ products:
   rarity: 0.49
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: rabil_矿产_B
-  name_zh: Rabil矿产合约
+  name_zh: 拉比尔矿产合约
   category: 矿产
   weight_kg: 18.7
   base_reference_price: 395.36
@@ -30,7 +30,7 @@ products:
   rarity: 0.53
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: rabil_工艺品_B
-  name_zh: Rabil工艺品合约
+  name_zh: 拉比尔工艺品合约
   category: 工艺品
   weight_kg: 9.4
   base_reference_price: 159.1
@@ -40,7 +40,7 @@ products:
   rarity: 0.58
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: rabil_糖果_B
-  name_zh: Rabil糖果合约
+  name_zh: 拉比尔糖果合约
   category: 糖果
   weight_kg: 5.4
   base_reference_price: 149.5

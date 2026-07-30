@@ -28,16 +28,22 @@ static func search(
 	sort_by: String = "departure",
 	max_price_economy: float = 0.0,
 	max_duration_min: int = 0,
-	business_available_only: bool = false
+	business_available_only: bool = false,
+	dest_code: String = ""
 ) -> Array:
 	var now_iso: String = GameClock.now_iso()
 	var all: Array = DataService.flights_from(origin_id)
 	var q: String = query.strip_edges().to_lower()
+	var dest_q: String = dest_code.strip_edges().to_upper()
 	var out: Array = []
 	for fl_v in all:
 		var fl: Dictionary = fl_v
 		if str(fl.get("scheduled_departure_utc", "")) <= now_iso:
 			continue
+		if dest_q != "":
+			var dest_iata: String = str(fl.get("destination_iata", "")).to_upper()
+			if not dest_iata.begins_with(dest_q):
+				continue
 		if only_unvisited:
 			var dest_id: String = str(fl.get("destination_airport_id", ""))
 			if AppState.visited_airports.has(dest_id):
@@ -76,12 +82,13 @@ static func _cmp(a: Dictionary, b: Dictionary, sort_by: String) -> bool:
 			return str(a.get("scheduled_departure_utc", "")) < str(b.get("scheduled_departure_utc", ""))
 
 
-static func search_connections(origin_iata: String, query: String = "", max_results: int = 80) -> Array:
+static func search_connections(origin_iata: String, query: String = "", max_results: int = 80, dest_code: String = "") -> Array:
 	## Build synthetic connection itineraries from DataService.transfer_edges.
 	var origin := origin_iata.strip_edges().to_upper()
 	if origin == "":
 		return []
 	var q := query.strip_edges().to_upper()
+	var dest_q := dest_code.strip_edges().to_upper()
 	var edges: Array = DataService.transfer_options(origin, "")
 	var results: Array = []
 	var econ: Dictionary = DataService.economy.get("ticket", {})
@@ -92,6 +99,8 @@ static func search_connections(origin_iata: String, query: String = "", max_resu
 		var dest: String = str(edge.get("dest_iata", "")).to_upper()
 		var hub: String = str(edge.get("hub", "")).to_upper()
 		if dest == "" or hub == "":
+			continue
+		if dest_q != "" and not dest.begins_with(dest_q):
 			continue
 		if q != "" and q not in dest and q not in hub:
 			var dest_a: Dictionary = DataService.get_airport_by_iata(dest)

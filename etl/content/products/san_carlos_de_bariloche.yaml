@@ -1,6 +1,6 @@
 products:
 - product_id: san_carlos_de_bariloche_咖啡_B
-  name_zh: San Carlos de Bariloche咖啡合约
+  name_zh: 圣卡洛斯-德巴里洛切咖啡合约
   category: 咖啡
   weight_kg: 13.0
   base_reference_price: 129.58
@@ -10,7 +10,7 @@ products:
   rarity: 0.33
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: san_carlos_de_bariloche_茶叶_B
-  name_zh: San Carlos de Bariloche茶叶合约
+  name_zh: 圣卡洛斯-德巴里洛切茶叶合约
   category: 茶叶
   weight_kg: 5.9
   base_reference_price: 81.89
@@ -20,7 +20,7 @@ products:
   rarity: 0.4
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: san_carlos_de_bariloche_食品_B
-  name_zh: San Carlos de Bariloche食品合约
+  name_zh: 圣卡洛斯-德巴里洛切食品合约
   category: 食品
   weight_kg: 15.2
   base_reference_price: 74.77
@@ -30,7 +30,7 @@ products:
   rarity: 0.23
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: san_carlos_de_bariloche_日用品_B
-  name_zh: San Carlos de Bariloche日用品合约
+  name_zh: 圣卡洛斯-德巴里洛切日用品合约
   category: 日用品
   weight_kg: 12.5
   base_reference_price: 48.02
@@ -40,7 +40,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: san_carlos_de_bariloche_矿产_B
-  name_zh: San Carlos de Bariloche矿产合约
+  name_zh: 圣卡洛斯-德巴里洛切矿产合约
   category: 矿产
   weight_kg: 36.5
   base_reference_price: 284.46

@@ -1,6 +1,6 @@
 products:
 - product_id: kos_island_食品_B
-  name_zh: Kos Island食品合约
+  name_zh: 科斯岛食品合约
   category: 食品
   weight_kg: 26.1
   base_reference_price: 113.86
@@ -10,7 +10,7 @@ products:
   rarity: 0.33
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kos_island_陶瓷_B
-  name_zh: Kos Island陶瓷合约
+  name_zh: 科斯岛陶瓷合约
   category: 陶瓷
   weight_kg: 24.6
   base_reference_price: 237.74
@@ -20,7 +20,7 @@ products:
   rarity: 0.51
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: kos_island_工艺品_B
-  name_zh: Kos Island工艺品合约
+  name_zh: 科斯岛工艺品合约
   category: 工艺品
   weight_kg: 9.4
   base_reference_price: 269.76
@@ -30,7 +30,7 @@ products:
   rarity: 0.4
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: kos_island_茶叶_B
-  name_zh: Kos Island茶叶合约
+  name_zh: 科斯岛茶叶合约
   category: 茶叶
   weight_kg: 9.8
   base_reference_price: 240.8
@@ -40,7 +40,7 @@ products:
   rarity: 0.45
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: kos_island_香料_B
-  name_zh: Kos Island香料合约
+  name_zh: 科斯岛香料合约
   category: 香料
   weight_kg: 0.5
   base_reference_price: 319.3

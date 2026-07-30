@@ -1,6 +1,6 @@
 products:
 - product_id: belfast_机械_B
-  name_zh: Belfast机械合约
+  name_zh: 贝尔法斯特机械合约
   category: 机械
   weight_kg: 37.5
   base_reference_price: 1138.93
@@ -10,7 +10,7 @@ products:
   rarity: 0.49
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: belfast_纺织品_B
-  name_zh: Belfast纺织品合约
+  name_zh: 贝尔法斯特纺织品合约
   category: 纺织品
   weight_kg: 18.6
   base_reference_price: 446.68
@@ -20,7 +20,7 @@ products:
   rarity: 0.32
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: belfast_电子_B
-  name_zh: Belfast电子合约
+  name_zh: 贝尔法斯特电子合约
   category: 电子
   weight_kg: 2.7
   base_reference_price: 2630.58
@@ -30,7 +30,7 @@ products:
   rarity: 0.66
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: belfast_茶叶_B
-  name_zh: Belfast茶叶合约
+  name_zh: 贝尔法斯特茶叶合约
   category: 茶叶
   weight_kg: 8.2
   base_reference_price: 241.81
@@ -40,7 +40,7 @@ products:
   rarity: 0.42
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: belfast_食品_B
-  name_zh: Belfast食品合约
+  name_zh: 贝尔法斯特食品合约
   category: 食品
   weight_kg: 26.4
   base_reference_price: 103.96

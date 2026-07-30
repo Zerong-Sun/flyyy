@@ -1,6 +1,6 @@
 products:
 - product_id: jeddah_日用品_B
-  name_zh: Jeddah日用品合约
+  name_zh: 吉达日用品合约
   category: 日用品
   weight_kg: 11.0
   base_reference_price: 83.7
@@ -10,7 +10,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: jeddah_食品_B
-  name_zh: Jeddah食品合约
+  name_zh: 吉达食品合约
   category: 食品
   weight_kg: 24.1
   base_reference_price: 108.65
@@ -20,7 +20,7 @@ products:
   rarity: 0.26
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: jeddah_香料_B
-  name_zh: Jeddah香料合约
+  name_zh: 吉达香料合约
   category: 香料
   weight_kg: 1.0
   base_reference_price: 275.04
@@ -30,7 +30,7 @@ products:
   rarity: 0.46
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: jeddah_矿产_B
-  name_zh: Jeddah矿产合约
+  name_zh: 吉达矿产合约
   category: 矿产
   weight_kg: 23.7
   base_reference_price: 336.84
@@ -40,7 +40,7 @@ products:
   rarity: 0.44
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: jeddah_能源_B
-  name_zh: Jeddah能源合约
+  name_zh: 吉达能源合约
   category: 能源
   weight_kg: 6.6
   base_reference_price: 541.24

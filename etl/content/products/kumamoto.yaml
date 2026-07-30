@@ -1,6 +1,6 @@
 products:
 - product_id: kumamoto_食品_B
-  name_zh: Kumamoto食品合约
+  name_zh: 熊本食品合约
   category: 食品
   weight_kg: 20.2
   base_reference_price: 98.16
@@ -10,7 +10,7 @@ products:
   rarity: 0.35
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kumamoto_电子_B
-  name_zh: Kumamoto电子合约
+  name_zh: 熊本电子合约
   category: 电子
   weight_kg: 2.5
   base_reference_price: 1770.78
@@ -20,7 +20,7 @@ products:
   rarity: 0.74
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: kumamoto_工艺品_B
-  name_zh: Kumamoto工艺品合约
+  name_zh: 熊本工艺品合约
   category: 工艺品
   weight_kg: 6.5
   base_reference_price: 380.79
@@ -30,7 +30,7 @@ products:
   rarity: 0.56
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: kumamoto_文具_B
-  name_zh: Kumamoto文具合约
+  name_zh: 熊本文具合约
   category: 文具
   weight_kg: 2.1
   base_reference_price: 92.38
@@ -40,7 +40,7 @@ products:
   rarity: 0.19
   description: 当地特色文具纸品合约，轻便易携带。
 - product_id: kumamoto_玩具_B
-  name_zh: Kumamoto玩具合约
+  name_zh: 熊本玩具合约
   category: 玩具
   weight_kg: 5.2
   base_reference_price: 173.55

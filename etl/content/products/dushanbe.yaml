@@ -1,6 +1,6 @@
 products:
 - product_id: dushanbe_日用品_B
-  name_zh: Dushanbe日用品合约
+  name_zh: 杜尚别日用品合约
   category: 日用品
   weight_kg: 11.2
   base_reference_price: 43.58
@@ -10,7 +10,7 @@ products:
   rarity: 0.19
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: dushanbe_食品_B
-  name_zh: Dushanbe食品合约
+  name_zh: 杜尚别食品合约
   category: 食品
   weight_kg: 21.6
   base_reference_price: 235.71
@@ -20,7 +20,7 @@ products:
   rarity: 0.3
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: dushanbe_咖啡_B
-  name_zh: Dushanbe咖啡合约
+  name_zh: 杜尚别咖啡合约
   category: 咖啡
   weight_kg: 6.1
   base_reference_price: 125.08
@@ -30,7 +30,7 @@ products:
   rarity: 0.34
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: dushanbe_纺织品_B
-  name_zh: Dushanbe纺织品合约
+  name_zh: 杜尚别纺织品合约
   category: 纺织品
   weight_kg: 18.0
   base_reference_price: 384.06
@@ -40,7 +40,7 @@ products:
   rarity: 0.3
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: dushanbe_香料_B
-  name_zh: Dushanbe香料合约
+  name_zh: 杜尚别香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 177.92

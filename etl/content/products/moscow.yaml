@@ -1,6 +1,6 @@
 products:
 - product_id: moscow_机械_B
-  name_zh: Moscow机械合约
+  name_zh: 莫斯科机械合约
   category: 机械
   weight_kg: 44.9
   base_reference_price: 1060.08
@@ -10,7 +10,7 @@ products:
   rarity: 0.61
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: moscow_日用品_B
-  name_zh: Moscow日用品合约
+  name_zh: 莫斯科日用品合约
   category: 日用品
   weight_kg: 10.6
   base_reference_price: 66.28
@@ -20,7 +20,7 @@ products:
   rarity: 0.18
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: moscow_矿产_B
-  name_zh: Moscow矿产合约
+  name_zh: 莫斯科矿产合约
   category: 矿产
   weight_kg: 33.6
   base_reference_price: 196.12
@@ -30,7 +30,7 @@ products:
   rarity: 0.36
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: moscow_能源_B
-  name_zh: Moscow能源合约
+  name_zh: 莫斯科能源合约
   category: 能源
   weight_kg: 6.4
   base_reference_price: 678.88
@@ -40,7 +40,7 @@ products:
   rarity: 0.55
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: moscow_食品_B
-  name_zh: Moscow食品合约
+  name_zh: 莫斯科食品合约
   category: 食品
   weight_kg: 15.3
   base_reference_price: 171.12

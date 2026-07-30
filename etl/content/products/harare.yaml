@@ -1,6 +1,6 @@
 products:
 - product_id: harare_咖啡_B
-  name_zh: Harare咖啡合约
+  name_zh: 哈拉雷咖啡合约
   category: 咖啡
   weight_kg: 13.7
   base_reference_price: 191.18
@@ -10,7 +10,7 @@ products:
   rarity: 0.49
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: harare_香料_B
-  name_zh: Harare香料合约
+  name_zh: 哈拉雷香料合约
   category: 香料
   weight_kg: 0.9
   base_reference_price: 171.05
@@ -20,7 +20,7 @@ products:
   rarity: 0.42
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: harare_食品_B
-  name_zh: Harare食品合约
+  name_zh: 哈拉雷食品合约
   category: 食品
   weight_kg: 23.0
   base_reference_price: 157.92
@@ -30,7 +30,7 @@ products:
   rarity: 0.29
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: harare_纺织品_B
-  name_zh: Harare纺织品合约
+  name_zh: 哈拉雷纺织品合约
   category: 纺织品
   weight_kg: 17.2
   base_reference_price: 272.75
@@ -40,7 +40,7 @@ products:
   rarity: 0.35
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: harare_工艺品_B
-  name_zh: Harare工艺品合约
+  name_zh: 哈拉雷工艺品合约
   category: 工艺品
   weight_kg: 5.2
   base_reference_price: 265.21

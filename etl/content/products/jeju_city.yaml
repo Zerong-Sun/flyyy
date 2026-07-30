@@ -1,6 +1,6 @@
 products:
 - product_id: jeju_city_化妆品_B
-  name_zh: Jeju City化妆品合约
+  name_zh: 济州化妆品合约
   category: 化妆品
   weight_kg: 1.2
   base_reference_price: 353.63
@@ -10,7 +10,7 @@ products:
   rarity: 0.44
   description: 化妆品样品合约，轻便高价值跨境贸易品。
 - product_id: jeju_city_食品_B
-  name_zh: Jeju City食品合约
+  name_zh: 济州食品合约
   category: 食品
   weight_kg: 18.3
   base_reference_price: 91.25
@@ -20,7 +20,7 @@ products:
   rarity: 0.22
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: jeju_city_文具_B
-  name_zh: Jeju City文具合约
+  name_zh: 济州文具合约
   category: 文具
   weight_kg: 4.3
   base_reference_price: 75.69
@@ -30,7 +30,7 @@ products:
   rarity: 0.11
   description: 当地特色文具纸品合约，轻便易携带。
 - product_id: jeju_city_电子_B
-  name_zh: Jeju City电子合约
+  name_zh: 济州电子合约
   category: 电子
   weight_kg: 1.8
   base_reference_price: 2178.18
@@ -40,7 +40,7 @@ products:
   rarity: 0.58
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: jeju_city_纺织品_B
-  name_zh: Jeju City纺织品合约
+  name_zh: 济州纺织品合约
   category: 纺织品
   weight_kg: 19.9
   base_reference_price: 351.61

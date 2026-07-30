@@ -1,6 +1,6 @@
 products:
 - product_id: dire_dawa_食品_B
-  name_zh: Dire Dawa食品合约
+  name_zh: 德雷达瓦食品合约
   category: 食品
   weight_kg: 29.0
   base_reference_price: 54.03
@@ -10,7 +10,7 @@ products:
   rarity: 0.39
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: dire_dawa_咖啡_B
-  name_zh: Dire Dawa咖啡合约
+  name_zh: 德雷达瓦咖啡合约
   category: 咖啡
   weight_kg: 14.9
   base_reference_price: 55.29
@@ -20,7 +20,7 @@ products:
   rarity: 0.38
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: dire_dawa_日用品_B
-  name_zh: Dire Dawa日用品合约
+  name_zh: 德雷达瓦日用品合约
   category: 日用品
   weight_kg: 10.4
   base_reference_price: 43.89
@@ -30,7 +30,7 @@ products:
   rarity: 0.16
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: dire_dawa_香料_B
-  name_zh: Dire Dawa香料合约
+  name_zh: 德雷达瓦香料合约
   category: 香料
   weight_kg: 0.8
   base_reference_price: 168.11
@@ -40,7 +40,7 @@ products:
   rarity: 0.59
   description: 精选干制香料，价值密度高，跨境贸易理想品。
 - product_id: dire_dawa_纺织品_B
-  name_zh: Dire Dawa纺织品合约
+  name_zh: 德雷达瓦纺织品合约
   category: 纺织品
   weight_kg: 13.3
   base_reference_price: 180.41

@@ -1,6 +1,6 @@
 products:
 - product_id: bogota_能源_B
-  name_zh: Bogota能源合约
+  name_zh: 波哥大能源合约
   category: 能源
   weight_kg: 10.0
   base_reference_price: 343.27
@@ -10,7 +10,7 @@ products:
   rarity: 0.57
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: bogota_日用品_B
-  name_zh: Bogota日用品合约
+  name_zh: 波哥大日用品合约
   category: 日用品
   weight_kg: 6.5
   base_reference_price: 73.56
@@ -20,7 +20,7 @@ products:
   rarity: 0.06
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: bogota_咖啡_B
-  name_zh: Bogota咖啡合约
+  name_zh: 波哥大咖啡合约
   category: 咖啡
   weight_kg: 9.7
   base_reference_price: 127.89
@@ -30,7 +30,7 @@ products:
   rarity: 0.45
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: bogota_食品_B
-  name_zh: Bogota食品合约
+  name_zh: 波哥大食品合约
   category: 食品
   weight_kg: 22.9
   base_reference_price: 67.9
@@ -40,7 +40,7 @@ products:
   rarity: 0.39
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: bogota_矿产_B
-  name_zh: Bogota矿产合约
+  name_zh: 波哥大矿产合约
   category: 矿产
   weight_kg: 35.2
   base_reference_price: 507.02

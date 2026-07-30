@@ -1,6 +1,6 @@
 products:
 - product_id: datong_电子_B
-  name_zh: Datong电子合约
+  name_zh: 大同电子合约
   category: 电子
   weight_kg: 4.4
   base_reference_price: 1829.99
@@ -10,7 +10,7 @@ products:
   rarity: 0.66
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: datong_茶叶_B
-  name_zh: Datong茶叶合约
+  name_zh: 大同茶叶合约
   category: 茶叶
   weight_kg: 6.4
   base_reference_price: 106.72
@@ -20,7 +20,7 @@ products:
   rarity: 0.53
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: datong_纺织品_B
-  name_zh: Datong纺织品合约
+  name_zh: 大同纺织品合约
   category: 纺织品
   weight_kg: 12.9
   base_reference_price: 238.64
@@ -30,7 +30,7 @@ products:
   rarity: 0.29
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: datong_机械_B
-  name_zh: Datong机械合约
+  name_zh: 大同机械合约
   category: 机械
   weight_kg: 24.1
   base_reference_price: 658.56
@@ -40,7 +40,7 @@ products:
   rarity: 0.59
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: datong_陶瓷_B
-  name_zh: Datong陶瓷合约
+  name_zh: 大同陶瓷合约
   category: 陶瓷
   weight_kg: 18.6
   base_reference_price: 299.51

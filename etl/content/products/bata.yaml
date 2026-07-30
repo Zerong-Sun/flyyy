@@ -1,6 +1,6 @@
 products:
 - product_id: bata_工艺品_B
-  name_zh: Bata工艺品合约
+  name_zh: 巴塔工艺品合约
   category: 工艺品
   weight_kg: 9.5
   base_reference_price: 204.12
@@ -10,7 +10,7 @@ products:
   rarity: 0.4
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: bata_糖果_B
-  name_zh: Bata糖果合约
+  name_zh: 巴塔糖果合约
   category: 糖果
   weight_kg: 4.3
   base_reference_price: 136.11
@@ -20,7 +20,7 @@ products:
   rarity: 0.19
   description: 地方传统糖果点心合约，便携适合礼品转售。
 - product_id: bata_食品_B
-  name_zh: Bata食品合约
+  name_zh: 巴塔食品合约
   category: 食品
   weight_kg: 19.9
   base_reference_price: 237.41
@@ -30,7 +30,7 @@ products:
   rarity: 0.33
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: bata_咖啡_B
-  name_zh: Bata咖啡合约
+  name_zh: 巴塔咖啡合约
   category: 咖啡
   weight_kg: 13.2
   base_reference_price: 154.77
@@ -40,7 +40,7 @@ products:
   rarity: 0.41
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
 - product_id: bata_香料_B
-  name_zh: Bata香料合约
+  name_zh: 巴塔香料合约
   category: 香料
   weight_kg: 0.6
   base_reference_price: 258.81

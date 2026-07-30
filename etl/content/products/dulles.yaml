@@ -1,6 +1,6 @@
 products:
 - product_id: dulles_电子_B
-  name_zh: Dulles电子合约
+  name_zh: 杜勒斯电子合约
   category: 电子
   weight_kg: 1.9
   base_reference_price: 1562.84
@@ -10,7 +10,7 @@ products:
   rarity: 0.66
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: dulles_机械_B
-  name_zh: Dulles机械合约
+  name_zh: 杜勒斯机械合约
   category: 机械
   weight_kg: 33.2
   base_reference_price: 934.02
@@ -20,7 +20,7 @@ products:
   rarity: 0.5
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: dulles_日用品_B
-  name_zh: Dulles日用品合约
+  name_zh: 杜勒斯日用品合约
   category: 日用品
   weight_kg: 8.1
   base_reference_price: 51.92
@@ -30,7 +30,7 @@ products:
   rarity: 0.19
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: dulles_能源_B
-  name_zh: Dulles能源合约
+  name_zh: 杜勒斯能源合约
   category: 能源
   weight_kg: 8.9
   base_reference_price: 648.14
@@ -40,7 +40,7 @@ products:
   rarity: 0.68
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: dulles_食品_B
-  name_zh: Dulles食品合约
+  name_zh: 杜勒斯食品合约
   category: 食品
   weight_kg: 15.5
   base_reference_price: 261.67

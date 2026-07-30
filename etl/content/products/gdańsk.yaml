@@ -1,6 +1,6 @@
 products:
 - product_id: gdańsk_食品_B
-  name_zh: Gdańsk食品合约
+  name_zh: 格但斯克食品合约
   category: 食品
   weight_kg: 21.2
   base_reference_price: 168.86
@@ -10,7 +10,7 @@ products:
   rarity: 0.28
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: gdańsk_机械_B
-  name_zh: Gdańsk机械合约
+  name_zh: 格但斯克机械合约
   category: 机械
   weight_kg: 31.7
   base_reference_price: 1189.07
@@ -20,7 +20,7 @@ products:
   rarity: 0.48
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: gdańsk_纺织品_B
-  name_zh: Gdańsk纺织品合约
+  name_zh: 格但斯克纺织品合约
   category: 纺织品
   weight_kg: 16.1
   base_reference_price: 305.47
@@ -30,7 +30,7 @@ products:
   rarity: 0.28
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: gdańsk_日用品_B
-  name_zh: Gdańsk日用品合约
+  name_zh: 格但斯克日用品合约
   category: 日用品
   weight_kg: 13.4
   base_reference_price: 91.16
@@ -40,7 +40,7 @@ products:
   rarity: 0.13
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: gdańsk_电子_B
-  name_zh: Gdańsk电子合约
+  name_zh: 格但斯克电子合约
   category: 电子
   weight_kg: 4.4
   base_reference_price: 2226.81

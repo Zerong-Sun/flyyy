@@ -1,6 +1,6 @@
 products:
 - product_id: catania_纺织品_B
-  name_zh: Catania纺织品合约
+  name_zh: 卡塔尼亚纺织品合约
   category: 纺织品
   weight_kg: 16.2
   base_reference_price: 480.58
@@ -10,7 +10,7 @@ products:
   rarity: 0.3
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: catania_食品_B
-  name_zh: Catania食品合约
+  name_zh: 卡塔尼亚食品合约
   category: 食品
   weight_kg: 26.1
   base_reference_price: 114.45
@@ -20,7 +20,7 @@ products:
   rarity: 0.31
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: catania_工艺品_B
-  name_zh: Catania工艺品合约
+  name_zh: 卡塔尼亚工艺品合约
   category: 工艺品
   weight_kg: 14.7
   base_reference_price: 182.73
@@ -30,7 +30,7 @@ products:
   rarity: 0.48
   description: 本地手工制品合约，精工细作运输需缓冲包装。
 - product_id: catania_陶瓷_B
-  name_zh: Catania陶瓷合约
+  name_zh: 卡塔尼亚陶瓷合约
   category: 陶瓷
   weight_kg: 24.7
   base_reference_price: 386.37
@@ -40,7 +40,7 @@ products:
   rarity: 0.55
   description: 本地陶瓷器具合约，运输需严密包装防破损。
 - product_id: catania_机械_B
-  name_zh: Catania机械合约
+  name_zh: 卡塔尼亚机械合约
   category: 机械
   weight_kg: 33.9
   base_reference_price: 944.5

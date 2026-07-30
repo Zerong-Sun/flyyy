@@ -1,6 +1,6 @@
 products:
 - product_id: kailua_kona_食品_B
-  name_zh: Kailua-Kona食品合约
+  name_zh: 凯卢阿科纳食品合约
   category: 食品
   weight_kg: 15.2
   base_reference_price: 106.87
@@ -10,7 +10,7 @@ products:
   rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: kailua_kona_电子_B
-  name_zh: Kailua-Kona电子合约
+  name_zh: 凯卢阿科纳电子合约
   category: 电子
   weight_kg: 4.8
   base_reference_price: 1424.45
@@ -20,7 +20,7 @@ products:
   rarity: 0.66
   description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: kailua_kona_机械_B
-  name_zh: Kailua-Kona机械合约
+  name_zh: 凯卢阿科纳机械合约
   category: 机械
   weight_kg: 48.4
   base_reference_price: 1375.07
@@ -30,7 +30,7 @@ products:
   rarity: 0.45
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: kailua_kona_能源_B
-  name_zh: Kailua-Kona能源合约
+  name_zh: 凯卢阿科纳能源合约
   category: 能源
   weight_kg: 5.7
   base_reference_price: 876.37
@@ -40,7 +40,7 @@ products:
   rarity: 0.67
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: kailua_kona_日用品_B
-  name_zh: Kailua-Kona日用品合约
+  name_zh: 凯卢阿科纳日用品合约
   category: 日用品
   weight_kg: 9.1
   base_reference_price: 113.01

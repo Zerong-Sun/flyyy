@@ -1,6 +1,6 @@
 products:
 - product_id: christchurch_茶叶_B
-  name_zh: Christchurch茶叶合约
+  name_zh: 基督城茶叶合约
   category: 茶叶
   weight_kg: 4.4
   base_reference_price: 140.67
@@ -10,7 +10,7 @@ products:
   rarity: 0.41
   description: 产区直供茶叶合约，密封可保持风味一年以上。
 - product_id: christchurch_食品_B
-  name_zh: Christchurch食品合约
+  name_zh: 基督城食品合约
   category: 食品
   weight_kg: 17.3
   base_reference_price: 248.57
@@ -20,7 +20,7 @@ products:
   rarity: 0.28
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: christchurch_矿产_B
-  name_zh: Christchurch矿产合约
+  name_zh: 基督城矿产合约
   category: 矿产
   weight_kg: 20.5
   base_reference_price: 369.38
@@ -30,7 +30,7 @@ products:
   rarity: 0.53
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: christchurch_日用品_B
-  name_zh: Christchurch日用品合约
+  name_zh: 基督城日用品合约
   category: 日用品
   weight_kg: 6.7
   base_reference_price: 80.01
@@ -40,7 +40,7 @@ products:
   rarity: 0.17
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: christchurch_能源_B
-  name_zh: Christchurch能源合约
+  name_zh: 基督城能源合约
   category: 能源
   weight_kg: 8.2
   base_reference_price: 507.11

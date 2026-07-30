@@ -1,6 +1,6 @@
 products:
 - product_id: astrakhan_能源_B
-  name_zh: Astrakhan能源合约
+  name_zh: 阿斯特拉罕能源合约
   category: 能源
   weight_kg: 4.7
   base_reference_price: 487.23
@@ -10,7 +10,7 @@ products:
   rarity: 0.68
   description: 能源产品合约代理，轻量高价值适合跨境。
 - product_id: astrakhan_日用品_B
-  name_zh: Astrakhan日用品合约
+  name_zh: 阿斯特拉罕日用品合约
   category: 日用品
   weight_kg: 7.4
   base_reference_price: 45.22
@@ -20,7 +20,7 @@ products:
   rarity: 0.1
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: astrakhan_机械_B
-  name_zh: Astrakhan机械合约
+  name_zh: 阿斯特拉罕机械合约
   category: 机械
   weight_kg: 33.1
   base_reference_price: 842.68
@@ -30,7 +30,7 @@ products:
   rarity: 0.47
   description: 工业机械配件合约，重量大但单位价值极高。
 - product_id: astrakhan_食品_B
-  name_zh: Astrakhan食品合约
+  name_zh: 阿斯特拉罕食品合约
   category: 食品
   weight_kg: 23.1
   base_reference_price: 135.44
@@ -40,7 +40,7 @@ products:
   rarity: 0.34
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: astrakhan_矿产_B
-  name_zh: Astrakhan矿产合约
+  name_zh: 阿斯特拉罕矿产合约
   category: 矿产
   weight_kg: 36.6
   base_reference_price: 389.29

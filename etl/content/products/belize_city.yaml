@@ -1,6 +1,6 @@
 products:
 - product_id: belize_city_日用品_B
-  name_zh: Belize City日用品合约
+  name_zh: 伯利兹城日用品合约
   category: 日用品
   weight_kg: 13.4
   base_reference_price: 109.51
@@ -10,7 +10,7 @@ products:
   rarity: 0.12
   description: 地方日用品合约，需求平稳利润适中。
 - product_id: belize_city_纺织品_B
-  name_zh: Belize City纺织品合约
+  name_zh: 伯利兹城纺织品合约
   category: 纺织品
   weight_kg: 11.7
   base_reference_price: 270.39
@@ -20,7 +20,7 @@ products:
   rarity: 0.26
   description: 地区纺织产品合约，不易变质适合长途贸易。
 - product_id: belize_city_矿产_B
-  name_zh: Belize City矿产合约
+  name_zh: 伯利兹城矿产合约
   category: 矿产
   weight_kg: 15.9
   base_reference_price: 658.72
@@ -30,7 +30,7 @@ products:
   rarity: 0.4
   description: 矿产品样品合约，重量较大但价值稳定。
 - product_id: belize_city_食品_B
-  name_zh: Belize City食品合约
+  name_zh: 伯利兹城食品合约
   category: 食品
   weight_kg: 16.7
   base_reference_price: 153.16
@@ -40,7 +40,7 @@ products:
   rarity: 0.24
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
 - product_id: belize_city_香料_B
-  name_zh: Belize City香料合约
+  name_zh: 伯利兹城香料合约
   category: 香料
   weight_kg: 0.5
   base_reference_price: 259.53
