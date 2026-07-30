@@ -37,6 +37,13 @@ FEEDBACK_SFX = [
     "sfx_loss_light",
     "sfx_big_win",
     "sfx_grand_slam",
+    "sfx_coin_roll",
+]
+
+V02_BGM = [
+    "bgm_market",
+    "bgm_menu",
+    "bgm_night",
 ]
 
 TUTORIAL_TRIGGERS = [
@@ -116,12 +123,16 @@ def test_audio_manifest_and_files():
         rel = by_id[aid]["filename"]
         path = AUDIO / rel
         assert path.is_file(), f"Missing audio file for {aid}: {path}"
+    for aid in V02_BGM:
+        assert aid in by_id, f"Missing v0.2 BGM in manifest: {aid}"
+        path = AUDIO / by_id[aid]["filename"]
+        assert path.is_file() and path.stat().st_size > 200, path
 
 
 def test_city_product_content_not_template():
     world = json.loads((GAME / "data" / "world.json").read_text(encoding="utf-8"))
     assert len(world["cities"]) >= 20
-    authored = [c for c in world["cities"] if c.get("content_confidence") != "C"]
+    authored = [c for c in world["cities"] if c.get("content_confidence") == "A"]
     for c in authored:
         assert "特色：城市作为全球航线节点" not in c.get("short_description", "")
         assert "更多细节将在后续内容更新中扩展" not in c.get("history_summary", "")
@@ -143,6 +154,9 @@ def test_godot_autoload_and_wiring_markers():
     assert "I18nService.disclaimer()" in main
     assert "AudioService.set_bgm" in main
     assert "AudioService.play_sfx" in main
+    assert "sfx_coin_roll" in main
+    assert "sfx_search_type" in main
+    assert "get_bgm_volume" in main
     assert "_play_transition_fx" in main
     assert "IconFactory" in main
 
@@ -196,3 +210,81 @@ def test_icon_factory_and_globe_placeholders():
     assert (GAME / "themes" / "DemoColors.gd").is_file()
     assert (GAME / "assets" / "fonts" / "NotoSansSC-Regular.otf").is_file()
     assert (GAME / "assets" / "fonts" / "JetBrainsMono-Regular.ttf").is_file()
+
+
+def test_a2_art_assets_wired():
+    """A2 generated art lives in typed dirs and IconFactory/MainHUD load them."""
+    brand = GAME / "assets" / "brand"
+    icons = GAME / "assets" / "icons"
+    ach = icons / "achievements"
+    products = GAME / "assets" / "products"
+    cities = GAME / "assets" / "cities"
+    anim = GAME / "assets" / "anim" / "flight_transition"
+
+    for path in (
+        brand / "app_icon.webp",
+        brand / "logo_mark.webp",
+        brand / "logo_wordmark_zh.webp",
+        brand / "splash.webp",
+        icons / "icon_market_32.webp",
+        icons / "icon_hot_tag_32.webp",
+        icons / "icon_cold_tag_32.webp",
+        icons / "icon_intel_upgrade_32.webp",
+        icons / "icon_settings_32.webp",
+        ach / "icon_ach_flight_first_64.webp",
+        products / "product_generic_placeholder_64.webp",
+        cities / "city_shanghai_hero_720.webp",
+        anim / "anim_flight_takeoff.webp",
+        anim / "anim_flight_cruise.webp",
+        anim / "anim_flight_land.webp",
+    ):
+        assert path.is_file(), path
+
+    assert len(list(icons.glob("icon_*.webp"))) >= 20
+    assert len(list(ach.glob("icon_ach_*.webp"))) >= 25
+    assert len(list(products.glob("product_*.webp"))) >= 40
+    assert len(list(cities.glob("city_*_hero_720.webp"))) >= 20
+
+    icon_src = (GAME / "themes" / "IconFactory.gd").read_text(encoding="utf-8")
+    for marker in (
+        "get_product_icon",
+        "get_achievement_icon",
+        "get_city_hero",
+        "get_transition_art",
+        "get_brand",
+        "assets/icons/",
+        "assets/products/",
+        "assets/cities/",
+        "assets/brand/",
+    ):
+        assert marker in icon_src, marker
+
+    main = (GAME / "scripts" / "ui" / "MainHUD.gd").read_text(encoding="utf-8")
+    for marker in (
+        "get_city_hero",
+        "get_product_icon",
+        "get_achievement_icon",
+        "get_transition_art",
+        "get_brand",
+        "ic_settings",
+        "ic_intel",
+        "ic_hot",
+    ):
+        assert marker in main, marker
+
+    project = (GAME / "project.godot").read_text(encoding="utf-8")
+    assert 'config/icon="res://assets/brand/app_icon.webp"' in project
+
+    attr = (GAME / "assets" / "i18n" / "attribution_zh.txt").read_text(encoding="utf-8")
+    assert "美术（A2）" in attr
+    assert "game/assets/icons/" in attr
+
+
+def test_hud_status_icons_are_size_clamped():
+    icon_src = (GAME / "themes" / "IconFactory.gd").read_text(encoding="utf-8")
+    expand_idx = icon_src.index("tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE")
+    texture_idx = icon_src.index("tex_rect.texture = tex")
+    assert expand_idx < texture_idx
+
+    main = (GAME / "scripts" / "ui" / "MainHUD.gd").read_text(encoding="utf-8")
+    assert "top.clip_contents = true" in main

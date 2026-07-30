@@ -4,9 +4,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from tests.helpers import load_markets_flat
+
 ROOT = Path(__file__).resolve().parents[2]
 WORLD = json.loads((ROOT / "game" / "data" / "world.json").read_text(encoding="utf-8"))
-FLIGHTS = json.loads((ROOT / "game" / "data" / "flights.json").read_text(encoding="utf-8"))
+PVG_FLIGHTS = json.loads((ROOT / "game" / "data" / "flights" / "pvg.json").read_text(encoding="utf-8"))
+MARKETS = load_markets_flat()
 
 
 def test_starting_cash_and_baggage_constants():
@@ -24,13 +27,13 @@ def test_origin_buy_cheaper_than_remote_sell_for_specialty():
     products = [p for p in WORLD["products"] if p["origin_city_id"] == "shanghai"]
     assert products
     pid = products[0]["product_id"]
-    buy_origin = next(m for m in WORLD["markets"] if m["city_id"] == "shanghai" and m["product_id"] == pid)
-    sell_remote = next(m for m in WORLD["markets"] if m["city_id"] == "london" and m["product_id"] == pid)
+    buy_origin = next(m for m in MARKETS if m["city_id"] == "shanghai" and m["product_id"] == pid)
+    sell_remote = next(m for m in MARKETS if m["city_id"] == "london" and m["product_id"] == pid)
     assert sell_remote["sell_base_usd"] > buy_origin["buy_base_usd"] * 0.9
 
 
 def test_can_find_future_flight_from_pvg():
-    lst = FLIGHTS["by_origin"]["pvg"]
+    lst = PVG_FLIGHTS
     assert len(lst) > 50
     assert lst[0]["scheduled_departure_utc"] < lst[-1]["scheduled_departure_utc"]
     sample = lst[10]

@@ -130,14 +130,20 @@ def build_cities_500_from_ourairports(
         country_zh = COUNTRY_ZH.get(country_id, "未知")
         timezone = _guess_timezone(info.get("continent", ""), country_id)
 
+        # Get Chinese city name and airport name
+        city_zh = _get_city_zh(municipality, country_id)
+        city_en = municipality
+        name_zh = f"{city_zh}国际机场"
+        name_en = f"{municipality} International Airport" if "International" not in municipality else municipality
+
         additional.append({
             "iata": iata,
             "icao": "",
-            "name_zh": municipality,
-            "name_en": municipality,
+            "name_zh": name_zh,
+            "name_en": name_en,
             "city_id": city_id,
-            "city_zh": municipality,
-            "city_en": municipality,
+            "city_zh": city_zh,
+            "city_en": city_en,
             "country_id": country_id,
             "country_zh": country_zh,
             "timezone": timezone,
@@ -604,6 +610,29 @@ COUNTRY_PRICE_LEVEL = {
 }
 
 # Country code → Chinese name lookup (ISO 3166-1 alpha-2)
+# ── City Chinese name lookup ─────────────────────────────────────────
+_CITY_NAME_ZH: dict[str, str] = {}
+
+
+def _load_city_names() -> dict[str, str]:
+    """Load Chinese city name mapping from config file."""
+    path = CFG / "city_name_zh.json"
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    return {}
+
+
+def _get_city_zh(municipality: str, country_id: str = "") -> str:
+    """Get Chinese city name from mapping, fall back to country-qualified name."""
+    name = _CITY_NAME_ZH.get(municipality, "")
+    if name:
+        return name
+    country = COUNTRY_ZH.get(country_id, "")
+    if country:
+        return f"{municipality}（{country}）"
+    return municipality
+
+
 COUNTRY_ZH = {
     "US": "美国", "GB": "英国", "FR": "法国", "DE": "德国", "NL": "荷兰",
     "JP": "日本", "CN": "中国", "KR": "韩国", "SG": "新加坡", "TH": "泰国",
@@ -626,6 +655,33 @@ COUNTRY_ZH = {
     "IS": "冰岛", "HR": "克罗地亚", "RS": "塞尔维亚",
     "LT": "立陶宛", "LV": "拉脱维亚", "EE": "爱沙尼亚",
     "IR": "伊朗", "CI": "科特迪瓦", "YE": "也门", "PY": "巴拉圭",
+    "CD": "刚果（金）", "BW": "博茨瓦纳", "SO": "索马里", "TJ": "塔吉克斯坦",
+    "MV": "马尔代夫", "TM": "土库曼斯坦", "LY": "利比亚", "CF": "中非",
+    "BB": "巴巴多斯", "GM": "冈比亚", "BI": "布隆迪", "ML": "马里",
+    "MW": "马拉维", "BA": "波黑", "BF": "布基纳法索", "GQ": "赤道几内亚",
+    "CV": "佛得角", "BN": "文莱", "BZ": "伯利兹", "CG": "刚果（布）",
+    "HT": "海地", "GN": "几内亚", "BJ": "贝宁", "KI": "基里巴斯",
+    "TL": "东帝汶", "SL": "塞拉利昂", "KP": "朝鲜",
+    "GY": "圭亚那", "GD": "格林纳达", "GT": "危地马拉",
+    "KM": "科摩罗", "SB": "所罗门群岛", "DJ": "吉布提",
+    "SS": "南苏丹", "RW": "卢旺达",
+    "TD": "乍得", "GA": "加蓬", "GW": "几内亚比绍",
+    "NE": "尼日尔", "MR": "毛里塔尼亚", "MG": "马达加斯加",
+    "CM": "喀麦隆", "SN": "塞内加尔", "AO": "安哥拉",
+    "MZ": "莫桑比克", "UG": "乌干达", "NA": "纳米比亚",
+    "ZW": "津巴布韦", "ZM": "赞比亚", "UZ": "乌兹别克斯坦",
+    "GE": "格鲁吉亚", "AM": "亚美尼亚", "AZ": "阿塞拜疆",
+    "CU": "古巴", "CR": "哥斯达黎加", "PA": "巴拿马",
+    "DO": "多米尼加", "EC": "厄瓜多尔", "UY": "乌拉圭",
+    "BO": "玻利维亚", "JM": "牙买加", "BY": "白俄罗斯",
+    "AL": "阿尔巴尼亚", "SV": "萨尔瓦多", "HN": "洪都拉斯",
+    "NI": "尼加拉瓜", "MK": "北马其顿", "MD": "摩尔多瓦",
+    "TT": "特立尼达和多巴哥", "AG": "安提瓜和巴布达",
+    "WS": "萨摩亚", "BT": "不丹", "VU": "瓦努阿图",
+    "FJ": "斐济", "PG": "巴布亚新几内亚",
+    "BS": "巴哈马", "LC": "圣卢西亚", "VC": "圣文森特和格林纳丁斯",
+    "SR": "苏里南", "LR": "利比里亚",
+    "SD": "苏丹", "MU": "毛里求斯", "SL": "塞拉利昂",
 }
 
 # Country code → region mapping (single-pass O(1) lookup)
@@ -1117,7 +1173,11 @@ def write_sqlite(airports, routes, flights, cities, products, markets, eco, meta
 def export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta,
                          tz_offsets, product_market_tags, transfer_edges,
                          coverage_report):
+    import shutil
+
     GAME_DATA.mkdir(parents=True, exist_ok=True)
+
+    # ── world.json (lightweight core) ──
     payload = {
         "meta": meta,
         "economy": {
@@ -1132,11 +1192,7 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
         "routes": [{"origin": o, "destination": d} for o, d in sorted(routes)],
         "cities": cities,
         "products": products,
-        "markets": markets,
-        "product_market_tags": product_market_tags,
-        "transfer_edges": transfer_edges,
         "tz_offsets": tz_offsets,
-        "coverage_report": coverage_report,
         "airlines": [{"id": a, "name": n} for a, n in AIRLINES],
         "attributions": [
             {"name": "OurAirports", "license": "Unlicense", "note": "Airport coordinates"},
@@ -1144,20 +1200,86 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
             {"name": "Game content", "license": "original", "note": "City and product texts"},
         ],
         "disclaimer": "航班网络基于公开航空数据重建，不代表真实购票信息。",
+        "coverage_report": coverage_report,
     }
     (GAME_DATA / "world.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # ── markets/ (per-city files, O(1) lazy load) ──
+    markets_dir = GAME_DATA / "markets"
+    markets_dir.mkdir(parents=True, exist_ok=True)
+    # Clear stale files
+    for old in markets_dir.glob("*.json"):
+        old.unlink()
+    markets_by_city: dict[str, list] = {}
+    for m in markets:
+        cid = m["city_id"]
+        entry = {"p": m["product_id"], "b": m["buy_base_usd"], "s": m["sell_base_usd"]}
+        markets_by_city.setdefault(cid, []).append(entry)
+    for cid, entries in markets_by_city.items():
+        (markets_dir / f"{cid}.json").write_text(
+            json.dumps(entries, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
+        )
+    # Clean up old monolithic file if present
+    old_mk = GAME_DATA / "markets.json"
+    if old_mk.exists():
+        old_mk.unlink()
+    print(f"Exported {len(markets_by_city)} market files to {markets_dir}")
+
+    # ── product_market_tags.json ──
+    (GAME_DATA / "product_market_tags.json").write_text(
+        json.dumps(product_market_tags, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
+    )
+
+    # ── transfers/ (per-origin files, lazy load on flight search) ──
+    transfers_dir = GAME_DATA / "transfers"
+    transfers_dir.mkdir(parents=True, exist_ok=True)
+    for old in transfers_dir.glob("*.json"):
+        old.unlink()
+    # Batch by origin IATA: {dest_iata: [edges, ...], ...}
+    by_origin_xfer: dict[str, dict] = {}
+    for key, edges in transfer_edges.items():
+        # key format: "origin_iata|dest_iata"
+        parts = key.split("|", 1)
+        if len(parts) != 2:
+            continue
+        origin, dest = parts
+        by_origin_xfer.setdefault(origin, {})[dest] = edges
+    for origin, edges_map in by_origin_xfer.items():
+        (transfers_dir / f"{origin}.json").write_text(
+            json.dumps(edges_map, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
+        )
+    # Clean up old monolithic file
+    old_te = GAME_DATA / "transfer_edges.json"
+    if old_te.exists():
+        old_te.unlink()
+    print(f"Exported {len(by_origin_xfer)} transfer files to {transfers_dir}")
+
+    # ── flights/ (per-origin files, lazy-loadable) ──
+    flights_dir = GAME_DATA / "flights"
+    flights_dir.mkdir(parents=True, exist_ok=True)
     by_origin: dict[str, list] = {}
     for fl in flights:
         by_origin.setdefault(fl["origin_airport_id"], []).append(fl)
     for lst in by_origin.values():
         lst.sort(key=lambda x: x["scheduled_departure_utc"])
-    (GAME_DATA / "flights.json").write_text(
-        json.dumps({"by_origin": by_origin, "flight_count": len(flights)}, ensure_ascii=False),
-        encoding="utf-8",
+    for origin_id, fl_list in by_origin.items():
+        (flights_dir / f"{origin_id}.json").write_text(
+            json.dumps(fl_list, ensure_ascii=False, separators=(",", ":")),
+            encoding="utf-8",
+        )
+    # Write index manifest
+    manifest = {k: len(v) for k, v in by_origin.items()}
+    manifest["_total"] = len(flights)
+    (flights_dir / "_manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
     )
-    # also copy sqlite
-    import shutil
+    print(f"Exported {len(by_origin)} flight files ({len(flights)} total)")
+    # Also remove old monolithic flights.json if it exists
+    old_flights = GAME_DATA / "flights.json"
+    if old_flights.exists():
+        old_flights.unlink()
 
+    # also copy sqlite
     shutil.copy2(OUT / "world.sqlite", GAME_DATA / "world.sqlite")
     shutil.copy2(OUT / "flights_2025_03.sqlite", GAME_DATA / "flights_2025_03.sqlite")
 
@@ -1260,6 +1382,64 @@ def build_coverage_report(cities, airports, products, product_market_tags, trans
     return report
 
 
+def _check_hot_win_rate(product_market_tags: dict, market_index: dict, samples: int = 200) -> None:
+    """Sample hot-tag pairs and estimate win rate under runtime noise.
+
+    Simulates ±6% daily noise on buy and sell prices independently (uniform).
+    Reports the percentage of hot pairs that remain profitable (sell > buy).
+    Target: ≥85% at quality=1.0, ≥70% at quality=0.8.
+    """
+    import random as _rnd
+
+    hot_pairs = []
+    for key, tags in product_market_tags.items():
+        origin_city, product_id = key.split("|")
+        hot_cities = tags.get("hot", [])
+        for dest_city in hot_cities:
+            hot_pairs.append((origin_city, dest_city, product_id))
+
+    if not hot_pairs:
+        print("HOT-WIN: No hot pairs to sample")
+        return
+
+    n = min(samples, len(hot_pairs))
+    sampled = _rnd.sample(hot_pairs, n)
+
+    # Test at quality=1.0 (no quality penalty)
+    wins_q10 = 0
+    wins_q08 = 0
+    for origin_city, dest_city, product_id in sampled:
+        buy_base = market_index[(origin_city, product_id)]["buy"]
+        sell_base = market_index[(dest_city, product_id)]["sell"]
+
+        # Simulate 10 random noise scenarios and check if all are profitable
+        all_profitable_q10 = True
+        all_profitable_q08 = True
+        for _ in range(10):
+            noise_buy = 1.0 + _rnd.uniform(-0.06, 0.06)
+            noise_sell = 1.0 + _rnd.uniform(-0.06, 0.06)
+            buy = buy_base * noise_buy
+            sell_q10 = sell_base * noise_sell * 1.0  # quality=1.0
+            sell_q08 = sell_base * noise_sell * 0.75  # quality=0.8
+            if sell_q10 <= buy:
+                all_profitable_q10 = False
+            if sell_q08 <= buy:
+                all_profitable_q08 = False
+
+        if all_profitable_q10:
+            wins_q10 += 1
+        if all_profitable_q08:
+            wins_q08 += 1
+
+    rate_q10 = 100.0 * wins_q10 / n
+    rate_q08 = 100.0 * wins_q08 / n
+    status_q10 = "PASS" if rate_q10 >= 85 else "FAIL"
+    status_q08 = "PASS" if rate_q08 >= 70 else "FAIL"
+    print(f"HOT-WIN rate (q=1.0): {rate_q10:.1f}% [{status_q10}] (target ≥85%)")
+    print(f"HOT-WIN rate (q=0.8): {rate_q08:.1f}% [{status_q08}] (target ≥70%)")
+    print(f"HOT-WIN sampled {n}/{len(hot_pairs)} hot pairs, {len(hot_pairs)} total hot dests")
+
+
 def validate(airports, routes, flights, cities, products) -> None:
     iatas = {a["iata"] for a in airports}
     assert len(iatas) >= 20, f"Expected >=20 airports, got {len(iatas)}"
@@ -1300,6 +1480,8 @@ def validate(airports, routes, flights, cities, products) -> None:
 
 
 def main() -> int:
+    global _CITY_NAME_ZH
+    _CITY_NAME_ZH = _load_city_names()
     hubs_cfg = load_yaml(CFG / "hubs_20.yaml")
     eco = load_yaml(CFG / "economy.yaml")
     oa = read_ourairports_by_iata(RAW / "airports.csv")
@@ -1350,7 +1532,7 @@ def main() -> int:
     flights = synth_flights(routes, by_iata, eco)
     cities, products, markets = build_cities_products(hubs_cfg_expanded, eco)
 
-    # Build product_market_tags: optimized computation
+    # Build product_market_tags: only origin-city products (O(n*m) vs O(n*n*m))
     product_market_tags: dict[str, dict] = {}
     market_index: dict[tuple, dict] = {}
     for m in markets:
@@ -1360,26 +1542,38 @@ def main() -> int:
         }
 
     city_ids = [c["city_id"] for c in cities]
-    # Precompute per-product city lookups
+    # Only build tags for (origin_city, product_id) where the product originates
+    # from origin_city — this is what matters for gameplay (buy here, sell there).
+    # v0.2: raised thresholds so hot Tag means ≥85% win rate under reasonable noise
     for product in products:
         product_id = product["product_id"]
-        for origin_city in city_ids:
-            key = f"{origin_city}|{product_id}"
-            product_market_tags[key] = {"hot": [], "normal": [], "cold": []}
-            buy_origin = market_index[(origin_city, product_id)]["buy"]
+        origin_city = product["origin_city_id"]
+        key = f"{origin_city}|{product_id}"
+        product_market_tags[key] = {"hot": [], "normal": [], "cold": []}
+        buy_origin = market_index[(origin_city, product_id)]["buy"]
 
-            for dest_city in city_ids:
-                sell_remote = market_index[(dest_city, product_id)]["sell"]
-                sell_buy_ratio = sell_remote / buy_origin if buy_origin > 0 else 1.0
+        dest_ratios = []
+        for dest_city in city_ids:
+            sell_remote = market_index[(dest_city, product_id)]["sell"]
+            sell_buy_ratio = sell_remote / buy_origin if buy_origin > 0 else 1.0
+            dest_ratios.append((sell_buy_ratio, dest_city))
 
-                if sell_buy_ratio >= 1.15:
-                    tag = "hot"
-                elif sell_buy_ratio >= 1.0:
-                    tag = "normal"
-                else:
-                    tag = "cold"
+        # Sort by ratio descending so hot[0] is best destination
+        dest_ratios.sort(key=lambda x: -x[0])
 
-                product_market_tags[key][tag].append(dest_city)
+        for sell_buy_ratio, dest_city in dest_ratios:
+            if sell_buy_ratio >= 1.40:
+                tag = "hot"
+            elif sell_buy_ratio >= 1.10:
+                tag = "normal"
+            else:
+                tag = "cold"
+
+            product_market_tags[key][tag].append(dest_city)
+    print(f"Built {len(product_market_tags)} product-market tag entries")
+
+    # Hot-tag profit-rate sampling
+    _check_hot_win_rate(product_market_tags, market_index)
 
     transfer_edges = build_transfer_edges(routes, by_iata, iatas)
 

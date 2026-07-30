@@ -1,5 +1,6 @@
 extends Node
 ## Global signal bus
+## Signals are emitted/connected from other autoloads & systems (not within this file).
 
 signal airport_selected(airport_id: String)
 signal game_started

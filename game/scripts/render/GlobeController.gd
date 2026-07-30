@@ -27,44 +27,7 @@ var _grid_mi: MeshInstance3D
 var _plane_mi: MeshInstance3D
 var _plane_visible_for_trip: bool = false
 
-# Ellipse blobs in degrees: [lat_c, lon_c, lat_r, lon_r] — Demo silhouette only.
-const _CONTINENT_BLOBS: Array = [
-	# North America
-	[45.0, -100.0, 28.0, 38.0],
-	[60.0, -120.0, 18.0, 28.0],
-	[30.0, -85.0, 14.0, 18.0],
-	# Greenland
-	[72.0, -40.0, 12.0, 18.0],
-	# South America
-	[-15.0, -60.0, 32.0, 18.0],
-	[-5.0, -75.0, 12.0, 10.0],
-	# Europe
-	[50.0, 15.0, 16.0, 28.0],
-	[60.0, 25.0, 10.0, 20.0],
-	# Africa
-	[5.0, 20.0, 32.0, 22.0],
-	[25.0, 5.0, 12.0, 16.0],
-	# Asia (large)
-	[45.0, 90.0, 28.0, 55.0],
-	[30.0, 70.0, 18.0, 30.0],
-	[55.0, 60.0, 14.0, 35.0],
-	[20.0, 105.0, 16.0, 22.0],
-	[65.0, 100.0, 12.0, 40.0],
-	# India / SE Asia tips
-	[20.0, 78.0, 12.0, 12.0],
-	[5.0, 115.0, 10.0, 18.0],
-	# Australia
-	[-25.0, 135.0, 16.0, 22.0],
-	# New Zealand
-	[-42.0, 172.0, 8.0, 6.0],
-	# Japan / Korea island chain (rough)
-	[38.0, 138.0, 10.0, 8.0],
-	# UK / Iceland
-	[54.0, -4.0, 6.0, 8.0],
-	[65.0, -18.0, 5.0, 8.0],
-	# Madagascar
-	[-20.0, 47.0, 8.0, 4.0],
-]
+# Earth texture is pre-rendered by tools/generate_earth_placeholder.py and loaded from disk.
 
 
 func _ready() -> void:
@@ -84,60 +47,26 @@ func _build_earth() -> void:
 	mesh.radial_segments = 64
 	mesh.rings = 32
 	earth.mesh = mesh
-	var img := Image.create(1024, 512, false, Image.FORMAT_RGB8)
-	for y in 512:
-		for x in 1024:
-			var u := float(x) / 1023.0
-			var v := float(y) / 511.0
-			var lat_rad := (0.5 - v) * PI
-			var lon_rad := (u - 0.5) * TAU
-			var lat_deg := rad_to_deg(lat_rad)
-			var lon_deg := rad_to_deg(lon_rad)
-			var land := _land_strength(lat_deg, lon_deg)
-			var polar := absf(lat_deg) > 72.0
-			var col: Color
-			if polar:
-				col = Color(0.85, 0.90, 0.95).lerp(Color(0.75, 0.82, 0.90), clampf((absf(lat_deg) - 72.0) / 18.0, 0.0, 1.0))
-			elif land > 0.45:
-				var shade := clampf(land, 0.0, 1.0)
-				col = Color(0.24, 0.42, 0.31).lerp(Color(0.38, 0.36, 0.24), shade * 0.45)
-				# Mild latitude green→brown tint
-				col = col.lerp(Color(0.32, 0.48, 0.28), clampf(1.0 - absf(lat_deg) / 60.0, 0.0, 0.35))
-			else:
-				var deep := Color(0.08, 0.26, 0.45)
-				var shallow := Color(0.12, 0.40, 0.55)
-				col = deep.lerp(shallow, 0.45 + 0.35 * sin(lat_rad))
-			img.set_pixel(x, y, col)
-	var tex := ImageTexture.create_from_image(img)
 	var mat := StandardMaterial3D.new()
-	mat.albedo_texture = tex
 	mat.roughness = 0.9
 	mat.metallic = 0.0
+	var tex_path := "res://assets/earth/earth_albedo_day_2k.png"
+	if not ResourceLoader.exists(tex_path):
+		tex_path = "res://assets/earth/earth_albedo_placeholder.png"
+	if ResourceLoader.exists(tex_path):
+		var tex: Texture2D = load(tex_path) as Texture2D
+		if tex:
+			mat.albedo_texture = tex
+			earth.material_override = mat
+			return
+	# Fallback: minimal-gradient sphere (no procedural generation at runtime)
+	push_warning("GlobeController: earth texture missing at %s, using fallback gradient" % tex_path)
+	var img := Image.create(2, 1, false, Image.FORMAT_RGB8)
+	img.set_pixel(0, 0, Color(0.12, 0.42, 0.55))
+	img.set_pixel(1, 0, Color(0.38, 0.36, 0.24))
+	var fallback := ImageTexture.create_from_image(img)
+	mat.albedo_texture = fallback
 	earth.material_override = mat
-
-
-func _land_strength(lat_deg: float, lon_deg: float) -> float:
-	var best := 0.0
-	for blob in _CONTINENT_BLOBS:
-		var dlat := (lat_deg - float(blob[0])) / float(blob[2])
-		var dlon := _lon_delta(lon_deg, float(blob[1])) / float(blob[3])
-		var d2 := dlat * dlat + dlon * dlon
-		if d2 < 1.0:
-			best = maxf(best, 1.0 - d2)
-	# Soft coastline noise so blobs are not perfect ellipses
-	if best > 0.0:
-		var n := 0.08 * sin(lat_deg * 0.35 + lon_deg * 0.22) * cos(lon_deg * 0.18)
-		best = clampf(best + n, 0.0, 1.0)
-	return best
-
-
-func _lon_delta(a: float, b: float) -> float:
-	var d := a - b
-	while d > 180.0:
-		d -= 360.0
-	while d < -180.0:
-		d += 360.0
-	return d
 
 
 func _build_grid_overlay() -> void:
@@ -183,12 +112,14 @@ func _update_grid_fade() -> void:
 		mat.albedo_color = Color(0.85, 0.92, 0.98, alpha)
 
 
+const LON_OFFSET_DEG := 180.0  # align texture lon=-180 (U=0) with SphereMesh seam at +Z
+
 func latlon_to_vec(lat: float, lon: float, radius: float = EARTH_RADIUS) -> Vector3:
 	var la := deg_to_rad(lat)
-	var lo := deg_to_rad(lon)
-	var x := radius * cos(la) * cos(lo)
+	var lo := deg_to_rad(lon + LON_OFFSET_DEG)
+	var x := radius * cos(la) * sin(lo)
 	var y := radius * sin(la)
-	var z := radius * cos(la) * sin(lo)
+	var z := radius * cos(la) * cos(lo)
 	return Vector3(x, y, z)
 
 
@@ -273,9 +204,9 @@ func _spawn_airports() -> void:
 		var mi := MeshInstance3D.new()
 		mi.mesh = pin_mesh
 		var mat := StandardMaterial3D.new()
-		mat.albedo_color = Color(1.0, 0.85, 0.2)
+		mat.albedo_color = Color(0.55, 0.58, 0.62)
 		mat.emission_enabled = true
-		mat.emission = Color(0.6, 0.4, 0.05)
+		mat.emission = Color(0.1, 0.1, 0.12)
 		mat.emission_energy_multiplier = 0.6
 		mi.material_override = mat
 		var pos := latlon_to_vec(float(a.latitude), float(a.longitude), EARTH_RADIUS + 0.02)
@@ -370,8 +301,8 @@ func _on_selected(airport_id: String) -> void:
 	draw_routes_from(airport_id)
 
 
-func set_routes_visible(visible: bool) -> void:
-	if visible:
+func set_routes_visible(show_routes: bool) -> void:
+	if show_routes:
 		if _selected_id != "":
 			draw_routes_from(_selected_id)
 	else:
@@ -414,11 +345,11 @@ func _update_markers() -> void:
 			mat.albedo_color = Color(1.0, 0.45, 0.2)
 			mat.emission = Color(0.6, 0.2, 0.05)
 		elif AppState.visited_airports.has(id):
-			mat.albedo_color = Color(0.6, 0.85, 1.0)
-			mat.emission = Color(0.2, 0.35, 0.5)
-		else:
 			mat.albedo_color = Color(1.0, 0.85, 0.2)
 			mat.emission = Color(0.6, 0.4, 0.05)
+		else:
+			mat.albedo_color = Color(0.55, 0.58, 0.62)
+			mat.emission = Color(0.1, 0.1, 0.12)
 
 
 func clear_routes() -> void:

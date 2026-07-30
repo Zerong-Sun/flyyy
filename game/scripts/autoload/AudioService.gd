@@ -18,6 +18,7 @@ var _bgm_linear: float = BGM_DEFAULT_LINEAR
 var _sfx_linear: float = SFX_DEFAULT_LINEAR
 var _bgm_base_db: float = -3.0
 var _ducked: bool = false
+var _loop_player: AudioStreamPlayer
 
 
 func _ready() -> void:
@@ -25,6 +26,9 @@ func _ready() -> void:
 	_bgm_player = AudioStreamPlayer.new()
 	_bgm_player.bus = "BGM"
 	add_child(_bgm_player)
+	_loop_player = AudioStreamPlayer.new()
+	_loop_player.bus = "SFX"
+	add_child(_loop_player)
 	for i in SFX_POOL_SIZE:
 		var p := AudioStreamPlayer.new()
 		p.bus = "SFX"
@@ -89,7 +93,7 @@ func _stream_for(id: String) -> AudioStream:
 	if path.ends_with(".ogg") and FileAccess.file_exists(path):
 		stream = AudioStreamOggVorbis.load_from_file(path)
 	elif ResourceLoader.exists(path):
-		stream = load(path)
+		stream = load(path) as AudioStream
 	if stream == null:
 		push_warning("AudioService: missing stream %s" % path)
 		return null
@@ -117,6 +121,24 @@ func play_sfx(id: String) -> void:
 		_set_bgm_ducked(true)
 
 
+func play_loop_sfx(id: String) -> void:
+	if _muted:
+		return
+	var stream := _stream_for(id)
+	if stream == null:
+		return
+	var bus := "SFX"
+	if _by_id.has(id):
+		bus = str(_by_id[id].get("bus", "SFX"))
+	_loop_player.bus = bus
+	_loop_player.stream = stream
+	_loop_player.play()
+
+
+func stop_loop_sfx() -> void:
+	_loop_player.stop()
+
+
 func set_bgm(id: String) -> void:
 	var stream := _stream_for(id)
 	if stream == null:
@@ -141,6 +163,14 @@ func set_muted(on: bool) -> void:
 
 func is_muted() -> bool:
 	return _muted
+
+
+func get_bgm_volume() -> float:
+	return _bgm_linear
+
+
+func get_sfx_volume() -> float:
+	return _sfx_linear
 
 
 func set_bus_volume(bus: String, linear: float) -> void:

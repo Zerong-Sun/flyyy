@@ -3,12 +3,12 @@
 | 字段 | 内容 |
 |------|------|
 | 文档编号 | CAS-01 |
-| 版本 | v1.4 |
+| 版本 | v1.5 |
 | 产品 | 《环球航商》/ Airborne Trader |
 | 关联 | [PRD_01.md](../PRD_01.md) §10 / §13–14 / §18 / §24 / §26.1 / §27 |
 | 引擎 | Godot 4.x |
 | 语言 | 简体中文（Demo）；英文键名与资源 ID 使用 ASCII |
-| 状态 | 可玩 Demo（§27）+ 基础 UI Theme + 美术代码占位符；正式地球/过场/图标仍属美术包 D1 |
+| 状态 | 可玩 Demo（§27）+ A2 美术光栅包已入库；地球高清 albedo / SVG 源仍属 D1 |
 
 本文档供美术、音频、文案与程序导入共同遵守。与 PRD 冲突时以 PRD 玩法/法律约束为准，表现层以本文档为准。
 
@@ -52,31 +52,31 @@ Demo **不要求**城市摄影图、航司 Logo、完整飞机驾驶舱模拟（
 
 | CAS ID / 类别 | 状态 | 现状说明 |
 |---------------|------|----------|
-| `EARTH_ALBEDO` | **占位（代码生成）** | 无正式 PNG/WebP；[`GlobeController._build_earth`](../game/scripts/render/GlobeController.gd) 运行时生成 1024×512 大洲椭圆近似贴图（亚欧/北美/南美/非洲/澳洲可辨） |
+| `EARTH_ALBEDO` | **已交付（D1）** | 2048×1024 PNG；[`tools/generate_earth_albedo.py`](../tools/generate_earth_albedo.py) 用简化大陆多边形渲染；[`GlobeController._build_earth`](../game/scripts/render/GlobeController.gd) 加载 [`earth_albedo_day_2k.png`](../game/assets/earth/earth_albedo_day_2k.png)；回退 `earth_albedo_placeholder.png` |
 | `EARTH_NORMAL` / `EARTH_SPEC` / `EARTH_NIGHT` | **缺（可选）** | Demo 可省略 |
 | `GRID_OVERLAY` | **占位（代码生成）** | [`_build_grid_overlay`](../game/scripts/render/GlobeController.gd)：每 15° 经纬线，`ImmediateMesh`，远淡近显 |
-| `MESH_AIRPORT_PIN` | **占位（代码生成）** | 低模 Pin（圆柱+球头 ArrayMesh）；四色由程序驱动；无独立 glTF |
+| `MESH_AIRPORT_PIN` | **占位（代码生成）** | 低模 Pin（圆柱+球头 ArrayMesh）；四色：当前=绿 `#33FF73`、选中=橙 `#FF7333`、已访=黄 `#FFD933`、未访=灰 `#8C939E`；见 [`GlobeController._update_markers`](../game/scripts/render/GlobeController.gd) |
 | `FX_ROUTE_LINE` | **占位** | `ImmediateMesh` 大圆弧 + Unshaded 材质 |
 | `ICON_PLANE_TINY` | **占位（代码生成）** | 三角飞机标记；行程航线时显示并沿弧推进 |
-| 过场三段视觉 `anim_flight_*` | **占位（几何动效）** | SFX 三段已齐；[`MainHUD._play_transition_fx`](../game/scripts/ui/MainHUD.gd) 起飞灯条 / 巡航弧线 / 降落条+城名；正式插画仍属 D1 |
+| 过场三段视觉 `anim_flight_*` | **已齐（A2）** | [`game/assets/anim/flight_transition/`](../game/assets/anim/flight_transition/) 起飞/巡航/降落 + alt；[`MainHUD._play_transition_fx`](../game/scripts/ui/MainHUD.gd) 叠加几何动效 |
 | UI Theme（色板 + StyleBox） | **已齐（基础）** | [`ThemeFactory.gd`](../game/themes/ThemeFactory.gd) + [`DemoColors.gd`](../game/themes/DemoColors.gd)；挂载于 MainHUD |
-| 图标图集 | **占位（代码生成）** | [`IconFactory.gd`](../game/themes/IconFactory.gd)：§1.2.E 全套 + 笔记/情报扩展；光栅 ImageTexture 挂按钮 |
+| 图标图集 | **已齐（A2）** | [`game/assets/icons/`](../game/assets/icons/) §1.2.E + 情报/笔记/冷热标签；[`IconFactory.gd`](../game/themes/IconFactory.gd) 优先加载光栅，缺失回退程序图标 |
 | 字体（Noto Sans SC / JetBrains Mono） | **已齐（基础）** | [`game/assets/fonts/`](../game/assets/fonts/) OFL；见 LICENSE.txt |
 | `bgm_globe_day` + §2.3 P0 SFX（17 项） | **已齐** | [`AUDIO_MANIFEST.csv`](../game/assets/audio/AUDIO_MANIFEST.csv) 与文件一一对应 |
 | `bgm_market` / `bgm_menu` / `bgm_night` | **缺（P1）** | 规格预留 |
 | 文本包：UI CSV + 20 城 + 100 商品 + 来源页 | **已齐** | 含字体署名 |
-| 城市插画 / 商品图鉴图标 | **缺（P1）** | |
+| 城市插画 / 商品图鉴图标 | **已齐（A2 · Demo 20 城）** | [`game/assets/cities/`](../game/assets/cities/) 20 城头图；[`game/assets/products/`](../game/assets/products/) 品类+特色图标；成就 [`icons/achievements/`](../game/assets/icons/achievements/) 30 枚 |
+| 品牌 `logo_*` / `app_icon` / `splash` | **已齐（A2）** | [`game/assets/brand/`](../game/assets/brand/) |
 
 **运行时数据：** Godot 只读 [`game/data/world.json`](../game/data/world.json)（及 `flights.json`）；SQLite 为 ETL 校验产物。
 
-**与美术包 D1 关系：** Theme/字体/代码占位符已满足可玩 Demo；正式 `EARTH_ALBEDO` PNG、过场插画三帧、SVG 图标图集仍属 D1 交付。
+**与美术包 D1 / A2 关系：** Theme/字体已满足可玩 Demo；A2 已入库 UI 图标 WebP、过场三帧、品牌标、20 城头图、商品/成就图标。正式 `EARTH_ALBEDO` 高清贴图与 SVG 矢量源仍属 D1 收口。
 
-**美术包 D1 待交付清单（需求写入本文档，Demo 用占位符）：**
+**美术包 D1 待交付清单（剩余）：**
 
 1. `earth_albedo_day_2k.png`（等距柱状 ≥2048×1024）  
-2. `anim_flight_takeoff` / `cruise` / `land` 序列帧或 Motion 片  
-3. `icon_*.svg` × §1.2.E 全套（24/32）+ `icon_plane_tiny`  
-4. 可选：`MESH_AIRPORT_PIN.glb`、品牌字标 `logo_*`
+2. 可选：`icon_*.svg` 矢量源（光栅 WebP 已齐）  
+3. 可选：`MESH_AIRPORT_PIN.glb`
 ---
 
 ## 1. 美术需求
@@ -1068,6 +1068,7 @@ ATL 亚特兰大 · DXB 迪拜 · DFW 达拉斯 · DEN 丹佛 · LHR 伦敦 · O
 | v1.2 | 2026-07-26 | 新增 §0.5 仓库现状盘点；标明阶段一不依赖美术包 D1 |
 | v1.3 | 2026-07-26 | §0.5：基础 Theme + 字体标为已齐；对齐可玩 Demo §27 |
 | v1.4 | 2026-07-27 | §0.5：地球/网格/Pin/飞机/过场几何/IconFactory 代码占位符已齐；明确 D1 待交付清单 |
+| v1.5 | 2026-07-27 | §0.5：A2 美术入库（图标/过场/城头图/商品/成就/品牌）；IconFactory 优先加载光栅 |
 
 ---
 

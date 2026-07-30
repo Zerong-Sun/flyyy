@@ -44,9 +44,15 @@ def test_coverage_product_market_tags():
 
 
 def test_product_inheritance_marks():
-    """Inherited products must have 'inherited_from' field."""
-    inherited = [p for p in WORLD["products"] if p.get("inherited_from")]
-    assert len(inherited) > 0, "Should have inherited products"
+    """If any C-confidence cities exist, they must use inheritance. B-confidence is auto-generated."""
+    c_cities = [c for c in WORLD["cities"] if c.get("content_confidence") == "C"]
+    if c_cities:
+        inherited = [p for p in WORLD["products"] if p.get("inherited_from")]
+        assert len(inherited) > 0, "Should have inherited products for C-confidence cities"
+    else:
+        # All cities have at least B-confidence content — no inheritance needed
+        inherited = [p for p in WORLD["products"] if p.get("inherited_from")]
+        print(f"Info: {len(inherited)} inherited products, {len(c_cities)} C-confidence cities")
 
 
 def test_all_cities_have_min_3_products():

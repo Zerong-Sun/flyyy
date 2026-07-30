@@ -14,10 +14,10 @@ var _config: Dictionary = {}
 var _elapsed: float = 0.0
 
 func _start() -> void:
-	var count: int = _config.get("count", 20)
-	var palette: String = _config.get("palette", "gold")
-	var duration: float = _config.get("duration", 2.0)
-	var direction: String = _config.get("direction", "right_arc")
+	var count: int = int(_config.get("count", 20))
+	var palette: String = str(_config.get("palette", "gold"))
+	var duration: float = float(_config.get("duration", 2.0))
+	var direction: String = str(_config.get("direction", "right_arc"))
 
 	for i in range(count):
 		var dot := ColorRect.new()

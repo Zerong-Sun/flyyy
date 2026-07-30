@@ -47,6 +47,12 @@ def _parse_size_pair(text: str) -> tuple[int | None, int | None]:
     return int(m.group(1)), int(m.group(2))
 
 
+def _asset_root_for_source(source: str) -> Path:
+    if source.upper().startswith("ART_PROMPTS_REQ"):
+        return ROOT / "game" / "assets"
+    return ROOT / "assets"
+
+
 def parse_batch_prompts_md(text: str, source: str = "") -> list[BatchJob]:
     jobs: list[BatchJob] = []
     sections = re.split(r"\n## Batch ", text)
@@ -120,7 +126,7 @@ def parse_batch_prompts_md(text: str, source: str = "") -> list[BatchJob]:
         output_dir = None
         if out_dir_m:
             rel = out_dir_m.group(1).strip().strip("/")
-            output_dir = ROOT / "assets" / rel
+            output_dir = _asset_root_for_source(source) / rel
 
         win_m = re.search(r"\*\*Window\*\*:\s*([A-Za-z0-9]+)", block, re.I)
         window = win_m.group(1).strip() if win_m else ""
@@ -144,13 +150,134 @@ def parse_batch_prompts_md(text: str, source: str = "") -> list[BatchJob]:
     return jobs
 
 
-def detect_gutter_inset(w: int, h: int, cols: int, rows: int) -> tuple[int, int]:
-    """Estimate gutter pixels to trim from each cell edge (dark dividers)."""
-    # ~1.2% of cell dimension, clamped 2–12 px
+def detect_cell_grid(
+    im: Image.Image,
+    w: int,
+    h: int,
+    cols: int,
+    rows: int,
+    DARK: int = 70,
+) -> tuple[list[tuple[int, int]], list[tuple[int, int]]]:
+    """Find actual dark-band extents for each grid line.
+
+    Returns (col_bands, row_bands) where each list contains (start, end) pixel
+    positions of the dark band at each boundary (cols+1 vertical, rows+1 horizontal).
+    The start/end are the full band extent — the inner edge for cropping is:
+      - for a cell's left boundary: band's end
+      - for a cell's right boundary: band's start
+    """
+    gray = im.convert("L")
+    px = gray.load()
+
+    # ---- Vertical lines ----
+    col_brightness: list[float] = []
+    for x in range(w):
+        total = 0
+        for y in range(0, h, 2):
+            total += px[x, y]
+        col_brightness.append(total / (h // 2))
+    v_bands = _find_dark_bands(col_brightness, DARK, cols + 1, w)
+
+    # ---- Horizontal lines ----
+    row_brightness: list[float] = []
+    for y in range(h):
+        total = 0
+        for x in range(0, w, 2):
+            total += px[x, y]
+        row_brightness.append(total / (w // 2))
+    h_bands = _find_dark_bands(row_brightness, DARK, rows + 1, h)
+
+    return v_bands, h_bands
+
+
+def _find_dark_bands(
+    brightness: list[float],
+    dark_threshold: int,
+    expected_count: int,
+    dim: int,
+) -> list[tuple[int, int]]:
+    """Find expected_count dark bands, each returned as (start, end) pixel range."""
+    # Find all dark runs
+    runs: list[list[int]] = []
+    in_run = False
+    run_start = 0
+    for i, b in enumerate(brightness):
+        if b < dark_threshold and not in_run:
+            run_start = i
+            in_run = True
+        elif b >= dark_threshold and in_run:
+            runs.append([run_start, i - 1])
+            in_run = False
+    if in_run:
+        runs.append([run_start, dim - 1])
+
+    if len(runs) < expected_count:
+        # Fallback: evenly spaced, each 2px wide
+        print(f"[warn] detect_cell_grid: found {len(runs)} dark runs, expected {expected_count}; using fallback")
+        return [(int(dim * i / (expected_count - 1)) - 1, int(dim * i / (expected_count - 1)) + 1)
+                for i in range(expected_count)]
+
+    # Pick the expected_count bands that best cover the image
+    # Strategy: keep first and last, then pick inner bands closest to ideal spacing
+    if len(runs) > expected_count:
+        step = float(runs[-1][1] - runs[0][0]) / (expected_count - 1)
+        ideal_centers = [runs[0][0] + step * i for i in range(expected_count)]
+        picked: list[list[int]] = [runs[0]]
+        remaining = runs[1:]
+        for ic in ideal_centers[1:-1]:
+            best_idx = min(range(len(remaining)), key=lambda i: abs((remaining[i][0]+remaining[i][1])/2 - ic))
+            picked.append(remaining.pop(best_idx))
+        picked.append(runs[-1])
+        runs = picked
+
+    assert len(runs) >= expected_count
+    return [(s, e) for s, e in runs[:expected_count]]
+
+
+def detect_gutter_inset(
+    im: Image.Image,
+    w: int,
+    h: int,
+    cols: int,
+    rows: int,
+) -> tuple[int, int]:
+    """Estimate gutter inset — kept for backwards compat but DEPRECATED.
+    
+    Use detect_cell_grid + the new split_contact_sheet instead.
+    """
     cw, ch = w // cols, h // rows
-    gx = max(2, min(12, int(cw * 0.012)))
-    gy = max(2, min(12, int(ch * 0.012)))
-    return gx, gy
+    return max(1, min(10, int(cw * 0.015))), max(1, min(10, int(ch * 0.015)))
+
+
+def resolve_sheet_grid(
+    w: int,
+    h: int,
+    cols: int,
+    rows: int,
+    cell_w: int,
+    cell_h: int,
+    n_files: int,
+) -> tuple[int, int]:
+    """Pick the grid orientation that best matches sheet and cell aspect."""
+    candidates = [(cols, rows)]
+    if cols != rows:
+        candidates.append((rows, cols))
+
+    target_aspect = cell_w / cell_h if cell_w and cell_h else 1.0
+    best = candidates[0]
+    best_score: tuple[float, int, int] | None = None
+    for cand_cols, cand_rows in candidates:
+        if cand_cols <= 0 or cand_rows <= 0:
+            continue
+        cell_aspect = (w / cand_cols) / (h / cand_rows)
+        aspect_error = abs(cell_aspect - target_aspect)
+        slot_penalty = 0 if cand_cols * cand_rows == n_files else abs(cand_cols * cand_rows - n_files) + 10
+        declared_penalty = 0 if (cand_cols, cand_rows) == (cols, rows) else 1
+        score = (aspect_error, slot_penalty, declared_penalty)
+        if best_score is None or score < best_score:
+            best_score = score
+            best = (cand_cols, cand_rows)
+    return best
 
 
 def split_contact_sheet(
@@ -159,22 +286,42 @@ def split_contact_sheet(
     gutter_trim: bool = True,
 ) -> list[Image.Image]:
     im = raw if isinstance(raw, Image.Image) else Image.open(BytesIO(raw))
+    # Keep RGBA for transparent jobs — never flatten to RGB before cropping
     im = im.convert("RGBA" if job.transparent else "RGB")
     w, h = im.size
-    cw, ch = w // job.cols, h // job.rows
-    gx, gy = detect_gutter_inset(w, h, job.cols, job.rows) if gutter_trim else (0, 0)
+    cols, rows = resolve_sheet_grid(w, h, job.cols, job.rows, job.cell_w, job.cell_h, len(job.files))
+    if (cols, rows) != (job.cols, job.rows):
+        print(f"[info] {job.name}: grid {job.cols}x{job.rows} -> {cols}x{rows} for sheet {w}x{h}")
+
+    if gutter_trim:
+        v_bands, h_bands = detect_cell_grid(im, w, h, cols, rows)
+        # Crop at inner edges of dark bands:
+        #   - For a cell's left boundary: use the band's END (right side of band)
+        #   - For a cell's right boundary: use the band's START (left side of band)
+        #   - For a cell's top boundary: use the band's END (bottom side of band)
+        #   - For a cell's bottom boundary: use the band's START (top side of band)
+        v_lefts  = [be for (_bs, be) in v_bands[:-1]]
+        v_rights = [bs for (bs, _be) in v_bands[1:]]
+        h_tops   = [be for (_bs, be) in h_bands[:-1]]
+        h_bots   = [bs for (bs, _be) in h_bands[1:]]
+    else:
+        cw, ch = w // cols, h // rows
+        v_lefts  = [int(cw * c) for c in range(cols)]
+        v_rights = [int(cw * (c + 1)) for c in range(cols)]
+        h_tops   = [int(ch * r) for r in range(rows)]
+        h_bots   = [int(ch * (r + 1)) for r in range(rows)]
 
     cells: list[Image.Image] = []
-    for r in range(job.rows):
-        for c in range(job.cols):
-            idx = r * job.cols + c
+    for r in range(rows):
+        for c in range(cols):
+            idx = r * cols + c
             bf = job.files[idx] if idx < len(job.files) else None
             out_w = bf.out_w if bf else job.cell_w
             out_h = bf.out_h if bf else job.cell_h
-            x0 = c * cw + gx
-            y0 = r * ch + gy
-            x1 = (c + 1) * cw - gx
-            y1 = (r + 1) * ch - gy
+            x0 = v_lefts[c]
+            y0 = h_tops[r]
+            x1 = v_rights[c]
+            y1 = h_bots[r]
             cell = im.crop((x0, y0, x1, y1))
             if out_w and out_h and (cell.width != out_w or cell.height != out_h):
                 cell = cell.resize((out_w, out_h), Image.Resampling.LANCZOS)
@@ -391,7 +538,7 @@ def collect_catalog(art_dir: Path | None = None) -> dict[str, Any]:
 
     return {
         "version": 1,
-        "style": "Cloud-ridge Twilight / 云岭暮光",
+        "style": "Airborne Trader — dark aeronautical HUD / chart-instrument clarity",
         "count": len(assets),
         "assets": assets,
     }

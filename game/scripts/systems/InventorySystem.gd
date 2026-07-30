@@ -74,6 +74,12 @@ static func sell(index: int, qty: int) -> Dictionary:
 	if int(item.get("qty", 0)) <= 0:
 		AppState.inventory.remove_at(index)
 	AppState.log_sell_transaction(city_id, product_id, qty, revenue, total_unit_cost, GameClock.unix_time)
+	# Hot-streak: selling product at a destination tagged hot relative to its origin.
+	var origin_city := str(DataService.get_product(product_id).get("origin_city_id", ""))
+	var tag_key := "%s|%s" % [origin_city, product_id]
+	var tags: Dictionary = DataService.product_market_tags.get(tag_key, {})
+	if city_id in tags.get("hot", []):
+		AppState.log_stat("hot_streak_sells", 1.0)
 	var msg: String = "售出收入 %s，账面毛利 %s" % [_Economy.format_money(revenue), _Economy.format_money(margin)]
 	var result := {
 		"success": true,

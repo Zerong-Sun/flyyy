@@ -22,6 +22,49 @@ var sell_transactions: Array[Dictionary] = []
 var trip_baggage_extra_kg: float = 0.0
 var trip_cabin: String = "economy"  # economy|business
 var last_market_date: String = ""
+var last_flight_price: float = 0.0
+var last_baggage_cost: float = 0.0
+var reduced_animations: bool = false
+var night_bgm_enabled: bool = true
+var place_locale: String = "zh"  # "zh" or "en" — display language for place names only
+var unlocked_achievements: Dictionary = {}  # id -> true
+var stats: Dictionary = {
+	"total_flight_segments": 0,
+	"total_distance_km": 0.0,
+	"business_flights": 0,
+	"cargo_flights": 0,
+	"connection_flights": 0,
+	"fast_forwards": 0,
+	"intel_purchases": 0,
+	"hot_streak_sells": 0,
+	"categories_sold": {},
+	"products_discovered": {},
+	"extreme_airports": {"north": "", "south": "", "east": "", "west": ""},
+	"discovery_triggered": 0,
+	"big_loss_count": 0,
+	"single_profit_max": 0.0,
+	"consecutive_on_time": 0,
+}
+
+
+func _default_stats() -> Dictionary:
+	return {
+		"total_flight_segments": 0,
+		"total_distance_km": 0.0,
+		"business_flights": 0,
+		"cargo_flights": 0,
+		"connection_flights": 0,
+		"fast_forwards": 0,
+		"intel_purchases": 0,
+		"hot_streak_sells": 0,
+		"categories_sold": {},
+		"products_discovered": {},
+		"extreme_airports": {"north": "", "south": "", "east": "", "west": ""},
+		"discovery_triggered": 0,
+		"big_loss_count": 0,
+		"single_profit_max": 0.0,
+		"consecutive_on_time": 0,
+	}
 
 
 func reset_new_game(airport_id: String) -> void:
@@ -41,6 +84,10 @@ func reset_new_game(airport_id: String) -> void:
 	trip_baggage_extra_kg = 0.0
 	trip_cabin = "economy"
 	last_market_date = "2025-03-01"
+	last_flight_price = 0.0
+	last_baggage_cost = 0.0
+	unlocked_achievements = {}
+	stats = _default_stats()
 	_mark_visit(airport_id)
 	game_started = true
 	GameClock.unix_time = GameClock.BASELINE_UNIX
@@ -102,6 +149,68 @@ func add_cash(delta: float) -> void:
 	EventBus.cash_changed.emit()
 
 
+func log_stat(key: String, delta: float = 1.0) -> void:
+	if not stats.has(key):
+		stats[key] = 0
+	var cur = stats[key]
+	if typeof(cur) == TYPE_FLOAT or typeof(cur) == TYPE_INT:
+		stats[key] = float(cur) + delta
+	elif typeof(cur) == TYPE_DICTIONARY and typeof(delta) == TYPE_STRING:
+		(stats[key] as Dictionary)[str(delta)] = true
+
+
+func mark_category_sold(category: String) -> void:
+	if category == "":
+		return
+	var cats: Dictionary = stats.get("categories_sold", {})
+	cats[category] = true
+	stats["categories_sold"] = cats
+
+
+func mark_product_discovered(product_id: String) -> void:
+	if product_id == "":
+		return
+	var found: Dictionary = stats.get("products_discovered", {})
+	found[product_id] = true
+	stats["products_discovered"] = found
+
+
+func update_extreme_airport(airport_id: String) -> void:
+	var a: Dictionary = DataService.get_airport(airport_id)
+	if a.is_empty():
+		return
+	var lat := float(a.get("latitude", a.get("lat", 0.0)))
+	var lon := float(a.get("longitude", a.get("lon", 0.0)))
+	var extremes: Dictionary = stats.get("extreme_airports", {"north": "", "south": "", "east": "", "west": ""})
+	for pair in [["north", true], ["south", false]]:
+		var key: String = pair[0]
+		var want_max: bool = pair[1]
+		var cur_id := str(extremes.get(key, ""))
+		if cur_id == "":
+			extremes[key] = airport_id
+			continue
+		var cur_a: Dictionary = DataService.get_airport(cur_id)
+		var cur_lat := float(cur_a.get("latitude", cur_a.get("lat", 0.0)))
+		if want_max and lat > cur_lat:
+			extremes[key] = airport_id
+		elif not want_max and lat < cur_lat:
+			extremes[key] = airport_id
+	for pair2 in [["east", true], ["west", false]]:
+		var key2: String = pair2[0]
+		var want_max2: bool = pair2[1]
+		var cur_id2 := str(extremes.get(key2, ""))
+		if cur_id2 == "":
+			extremes[key2] = airport_id
+			continue
+		var cur_a2: Dictionary = DataService.get_airport(cur_id2)
+		var cur_lon := float(cur_a2.get("longitude", cur_a2.get("lon", 0.0)))
+		if want_max2 and lon > cur_lon:
+			extremes[key2] = airport_id
+		elif not want_max2 and lon < cur_lon:
+			extremes[key2] = airport_id
+	stats["extreme_airports"] = extremes
+
+
 ## Log a completed sell transaction. Persists to save file via to_dict/from_dict.
 func log_sell_transaction(sell_city: String, product_id: String, qty: int,
 		total_revenue: float, total_unit_cost: float, game_timestamp: float) -> void:
@@ -114,6 +223,14 @@ func log_sell_transaction(sell_city: String, product_id: String, qty: int,
 		"margin": total_revenue - total_unit_cost,
 		"timestamp": game_timestamp
 	})
+	mark_product_discovered(product_id)
+	var p: Dictionary = DataService.get_product(product_id)
+	mark_category_sold(str(p.get("category", "")))
+	var margin: float = total_revenue - total_unit_cost
+	if margin > float(stats.get("single_profit_max", 0.0)):
+		stats["single_profit_max"] = margin
+	if margin < 0.0 and total_unit_cost > 0.0 and margin / total_unit_cost < -0.20:
+		log_stat("big_loss_count", 1.0)
 
 
 func to_dict() -> Dictionary:
@@ -137,6 +254,13 @@ func to_dict() -> Dictionary:
 		"last_market_date": last_market_date,
 		"game_started": game_started,
 		"sell_transactions": sell_transactions,
+		"last_flight_price": last_flight_price,
+		"last_baggage_cost": last_baggage_cost,
+		"reduced_animations": reduced_animations,
+		"night_bgm_enabled": night_bgm_enabled,
+		"place_locale": place_locale,
+		"unlocked_achievements": unlocked_achievements,
+		"stats": stats,
 	}
 
 
@@ -158,7 +282,22 @@ func from_dict(d: Dictionary) -> void:
 	trip_cabin = str(d.get("trip_cabin", "economy"))
 	last_market_date = str(d.get("last_market_date", GameClock.game_date_string()))
 	game_started = bool(d.get("game_started", false))
-	sell_transactions = d.get("sell_transactions", [])
+	sell_transactions = []
+	for tx_v in d.get("sell_transactions", []):
+		if typeof(tx_v) == TYPE_DICTIONARY:
+			sell_transactions.append(tx_v)
+	last_flight_price = float(d.get("last_flight_price", 0.0))
+	last_baggage_cost = float(d.get("last_baggage_cost", 0.0))
+	reduced_animations = bool(d.get("reduced_animations", false))
+	night_bgm_enabled = bool(d.get("night_bgm_enabled", true))
+	place_locale = str(d.get("place_locale", "zh"))
+	unlocked_achievements = d.get("unlocked_achievements", {})
+	stats = _default_stats()
+	var loaded_stats: Dictionary = d.get("stats", {})
+	for k in loaded_stats.keys():
+		stats[k] = loaded_stats[k]
+	if current_airport_id != "":
+		_mark_visit(current_airport_id)
 	if game_started:
 		GameClock.start_clock()
 	EventBus.cash_changed.emit()

@@ -75,10 +75,13 @@ static func purchase(flight: Dictionary, cabin: String, extra_tier: String, carg
 		"extra_tier": extra_tier,
 		"cargo_blocks": cargo_blocks,
 		"total_paid": total,
+		"is_connection_leg": false,
 	}]
 	AppState.trip_cabin = cabin
 	AppState.trip_baggage_extra_kg = float(bag.extra_kg)
 	AppState.cargo_kg_capacity = float(bag.cargo_kg)
+	AppState.last_flight_price = price
+	AppState.last_baggage_cost = float(bag.extra_cost) + float(bag.cargo_cost)
 	EventBus.ticket_purchased.emit()
 	if not bool(AppState.tutorial_flags.get("ticket", false)):
 		AppState.tutorial_flags["ticket"] = true
@@ -87,6 +90,105 @@ static func purchase(flight: Dictionary, cabin: String, extra_tier: String, carg
 			tip = "购票成功。可点击「加速至起飞」，或等待时间流逝后强制登机。"
 		EventBus.tutorial_hint.emit(tip)
 	return ""
+
+
+static func purchase_connection(conn: Dictionary, cabin: String, extra_tier: String, cargo_blocks: int, replace_existing: bool = false) -> String:
+	## Purchase a two-leg connection itinerary built from transfer_edges.
+	if not AppState.game_started:
+		return "请先开始游戏"
+	if str(conn.get("origin_airport_id", "")) != AppState.current_airport_id:
+		return "只能购买当前机场出发航班"
+	if not AppState.held_tickets.is_empty():
+		if not replace_existing:
+			return "已有机票。请先退票，或确认以手续费替换。"
+		var refund_msg: String = refund_current()
+		if refund_msg.begins_with("没有") or refund_msg.begins_with("已到"):
+			return refund_msg
+	var hub_id := str(conn.get("hub_airport_id", ""))
+	var dest_id := str(conn.get("destination_airport_id", ""))
+	if hub_id == "" or dest_id == "":
+		return "联程数据不完整"
+	var price: float = float(conn.get("ticket_base_price_economy", 0))
+	if cabin == "business":
+		price = float(conn.get("ticket_base_price_business", 0))
+	var bag: Dictionary = _extra_cost(extra_tier, cargo_blocks)
+	var total: float = price + float(bag.extra_cost) + float(bag.cargo_cost)
+	if total > AppState.cash_usd:
+		return "资金不足（需 %s）" % _Economy.format_money(total)
+	# Schedule: depart in 3h, arrive hub after seg1; second leg after MCT 90min.
+	var now := GameClock.unix_time
+	var dep1 := now + 3.0 * 3600.0
+	var seg1_min := int(conn.get("seg1_duration_avg", 120))
+	var seg2_min := int(conn.get("seg2_duration_avg", 120))
+	var arr1 := dep1 + float(seg1_min) * 60.0
+	var dep2 := arr1 + 90.0 * 60.0
+	var arr2 := dep2 + float(seg2_min) * 60.0
+	var dist_total := float(conn.get("total_distance_km", 0))
+	var dist1 := dist_total * 0.55
+	var dist2 := dist_total * 0.45
+	AppState.add_cash(-total)
+	var ticket1 := {
+		"flight_instance_id": "cnx1_%s_%s" % [conn.get("origin_iata", ""), conn.get("hub_iata", "")],
+		"marketing_flight_number": "CN1 %s-%s" % [conn.get("origin_iata", ""), conn.get("hub_iata", "")],
+		"airline_name": "联程拼装（重建网络）",
+		"origin_airport_id": conn.get("origin_airport_id", ""),
+		"destination_airport_id": hub_id,
+		"origin_iata": conn.get("origin_iata", ""),
+		"destination_iata": conn.get("hub_iata", ""),
+		"scheduled_departure_utc": _unix_to_iso(dep1),
+		"scheduled_arrival_utc": _unix_to_iso(arr1),
+		"distance_km": dist1,
+		"duration_minutes": seg1_min,
+		"cabin": cabin,
+		"ticket_price": price * 0.55,
+		"extra_kg": bag.extra_kg,
+		"cargo_kg": bag.cargo_kg,
+		"extra_tier": extra_tier,
+		"cargo_blocks": cargo_blocks,
+		"total_paid": total * 0.55,
+		"is_connection_leg": true,
+		"connection_leg": 1,
+		"connection_final_dest": conn.get("destination_iata", ""),
+	}
+	var ticket2 := {
+		"flight_instance_id": "cnx2_%s_%s" % [conn.get("hub_iata", ""), conn.get("destination_iata", "")],
+		"marketing_flight_number": "CN2 %s-%s" % [conn.get("hub_iata", ""), conn.get("destination_iata", "")],
+		"airline_name": "联程拼装（重建网络）",
+		"origin_airport_id": hub_id,
+		"destination_airport_id": dest_id,
+		"origin_iata": conn.get("hub_iata", ""),
+		"destination_iata": conn.get("destination_iata", ""),
+		"scheduled_departure_utc": _unix_to_iso(dep2),
+		"scheduled_arrival_utc": _unix_to_iso(arr2),
+		"distance_km": dist2,
+		"duration_minutes": seg2_min,
+		"cabin": cabin,
+		"ticket_price": price * 0.45,
+		"extra_kg": 0.0,
+		"cargo_kg": bag.cargo_kg,
+		"extra_tier": "",
+		"cargo_blocks": cargo_blocks,
+		"total_paid": total * 0.45,
+		"is_connection_leg": true,
+		"connection_leg": 2,
+		"connection_final_dest": conn.get("destination_iata", ""),
+	}
+	AppState.held_tickets = [ticket1, ticket2]
+	AppState.trip_cabin = cabin
+	AppState.trip_baggage_extra_kg = float(bag.extra_kg)
+	AppState.cargo_kg_capacity = float(bag.cargo_kg)
+	AppState.last_flight_price = price
+	AppState.last_baggage_cost = float(bag.extra_cost) + float(bag.cargo_cost)
+	AppState.log_stat("connection_flights", 1.0)
+	EventBus.ticket_purchased.emit()
+	return ""
+
+
+static func _unix_to_iso(unix_t: float) -> String:
+	var dt := Time.get_datetime_dict_from_unix_time(int(unix_t))
+	return "%04d-%02d-%02dT%02d:%02d:%02dZ" % [
+		dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second
+	]
 
 
 static func refund_current() -> String:
