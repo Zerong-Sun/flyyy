@@ -1,4 +1,5 @@
 .DS_Store
+**/.thumbnail
 etl/.venv/
 etl/raw/
 *.pyc

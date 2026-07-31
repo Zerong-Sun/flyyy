@@ -37,7 +37,7 @@
   <sc-if value="{{ hasTicket }}" hint-placeholder-val="{{ true }}">
     <div style="margin:6px 16px 0;padding:10px 12px;border-radius:14px;background:rgba(232,154,60,.12);border:.5px solid rgba(232,154,60,.35);display:flex;align-items:center;gap:10px;position:relative;z-index:20">
       <div style="width:26px;height:26px;border-radius:13px;background:rgba(232,154,60,.2);display:flex;align-items:center;justify-content:center;flex:none">
-        <div style="width:17px;height:17px;background:center/150% no-repeat url(assets/ic_fast_forward.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
+        <div style="width:17px;height:17px;background:center/150% no-repeat url(assets/icons/ic_fast_forward.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
       </div>
       <div style="flex:1;min-width:0">
         <div style="font-size:13px;font-weight:590;letter-spacing:-.08px">{{ ticketLine }}</div>
@@ -53,7 +53,7 @@
       <div>
         <div style="padding:14px 16px 0">
           <div style="display:flex;align-items:center;gap:8px;background:#152C3E;border-radius:11px;padding:8px 10px">
-            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
+            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/icons/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
             <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Airport, IATA or city" style="flex:1;background:transparent;border:0;outline:0;font-family:inherit;font-size:16px;color:#F2F6FA;letter-spacing:-.2px" />
           </div>
         </div>
@@ -75,27 +75,24 @@
 
         <sc-if value="{{ notSearching }}" hint-placeholder-val="{{ true }}">
           <div>
-            <div style="height:318px;position:relative;display:flex;align-items:center;justify-content:center;margin-top:4px">
-              <div style="position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 50% 45%,rgba(60,184,164,.14),rgba(11,28,44,0) 62%)"></div>
-              <div style="width:268px;height:268px;border-radius:50%;position:relative;background:radial-gradient(circle at 34% 30%,#2E6E97 0%,#1A4A6E 42%,#0E2C44 78%,#081D2E 100%);box-shadow:inset -18px -22px 46px rgba(4,14,24,.85),0 0 0 .5px rgba(217,230,240,.18),0 22px 60px rgba(0,0,0,.5)">
-                <div style="position:absolute;inset:0;border-radius:50%;overflow:hidden;opacity:.8">
-                  <div style="position:absolute;left:-8%;top:26%;width:46%;height:26%;border-radius:50% 40% 55% 45%;background:#3D6B4F;filter:blur(3px)"></div>
-                  <div style="position:absolute;left:36%;top:18%;width:40%;height:22%;border-radius:45% 55% 40% 50%;background:#3D6B4F;filter:blur(3px)"></div>
-                  <div style="position:absolute;left:44%;top:44%;width:26%;height:30%;border-radius:50% 42% 55% 48%;background:#35624A;filter:blur(3px)"></div>
-                  <div style="position:absolute;left:8%;top:58%;width:22%;height:26%;border-radius:48%;background:#35624A;filter:blur(2px)"></div>
-                  <div style="position:absolute;left:0;top:0;right:0;height:9%;background:#D9E6F0;filter:blur(6px);opacity:.55"></div>
-                </div>
-                <div style="position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(0deg,rgba(217,230,240,.13) 0 .5px,transparent .5px 26px);opacity:.7"></div>
-                <div style="position:absolute;inset:0;border-radius:50%;overflow:hidden"><div style="position:absolute;inset:-2px;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,transparent 0 20px,rgba(217,230,240,.09) 20px 20.5px);opacity:.8"></div></div>
-                <div style="position:absolute;left:52%;top:34%;width:9px;height:9px;margin:-4.5px;border-radius:50%;background:#E89A3C;box-shadow:0 0 12px 3px rgba(232,154,60,.55)"></div>
-                <div style="position:absolute;left:52%;top:34%;width:22px;height:22px;margin:-11px;border-radius:50%;border:1px solid rgba(232,154,60,.5);animation:atPulse 2.4s ease-in-out infinite"></div>
-                <div style="position:absolute;left:62%;top:44%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#3CB8A4;opacity:.85"></div>
-                <div style="position:absolute;left:44%;top:28%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#7EB6D9;opacity:.7"></div>
-                <div style="position:absolute;left:70%;top:36%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#7EB6D9;opacity:.55"></div>
-                <div style="position:absolute;left:34%;top:52%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#7EB6D9;opacity:.45"></div>
-                <div style="position:absolute;left:26%;top:36%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#7EB6D9;opacity:.5"></div>
+            <div style="height:330px;position:relative;display:flex;align-items:center;justify-content:center;margin-top:2px;touch-action:none" onPointerDown="{{ onGlobeDown }}" onPointerMove="{{ onGlobeMove }}" onPointerUp="{{ onGlobeUp }}" onPointerLeave="{{ onGlobeUp }}">
+              <div style="position:absolute;width:430px;height:430px;border-radius:50%;background:radial-gradient(circle at 50% 46%,rgba(96,168,214,.2),rgba(11,28,44,0) 60%)"></div>
+              <div style="width:276px;height:276px;border-radius:50%;position:relative;overflow:hidden;box-shadow:0 0 0 .5px rgba(217,230,240,.2),0 24px 64px rgba(0,0,0,.55)">
+                <div style="position:absolute;inset:0;background-image:url(assets/world/earth.png);background-repeat:repeat-x;background-size:{{ earthSize }};background-position:{{ earthPos }}"></div>
+                <div style="position:absolute;inset:0;background:radial-gradient(circle at 33% 29%,rgba(255,255,255,.24),rgba(255,255,255,0) 42%),radial-gradient(circle at 50% 50%,rgba(4,14,24,0) 48%,rgba(4,14,24,.6) 82%,rgba(4,14,24,.95) 100%)"></div>
+                <div style="position:absolute;inset:0;box-shadow:inset -20px -24px 50px rgba(4,14,24,.8)"></div>
               </div>
-              <div style="position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:11px;color:#5E7488;letter-spacing:.2px">Pinch to zoom · drag to spin</div>
+              <div style="position:absolute;width:276px;height:276px;pointer-events:none">
+                <sc-for list="{{ pins }}" as="pin" hint-placeholder-count="6">
+                  <div style="position:absolute;left:{{ pin.x }};top:{{ pin.y }};transform:translate(-50%,-50%);opacity:{{ pin.opacity }}">
+                    <div style="width:{{ pin.size }};height:{{ pin.size }};border-radius:50%;background:{{ pin.color }};box-shadow:{{ pin.glow }}"></div>
+                    <sc-if value="{{ pin.showLabel }}" hint-placeholder-val="{{ false }}">
+                      <div style="position:absolute;left:50%;top:12px;transform:translateX(-50%);white-space:nowrap;font-family:ui-monospace,'SF Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.3px;color:{{ pin.color }};text-shadow:0 1px 3px rgba(4,14,24,.9)">{{ pin.iata }}</div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="position:absolute;bottom:2px;left:0;right:0;text-align:center;font-size:11px;color:#5E7488;letter-spacing:.2px">{{ globeHint }}</div>
             </div>
 
             <div style="padding:0 16px">
@@ -178,7 +175,7 @@
         <div style="padding:0 16px"><div style="font-size:32px;font-weight:700;letter-spacing:-.8px;line-height:1.05">Flights</div><div style="font-size:13px;color:#A8B8C8;margin-top:3px">{{ flightsSub }}</div></div>
         <div style="padding:14px 16px 0">
           <div style="display:flex;align-items:center;gap:8px;background:#152C3E;border-radius:11px;padding:8px 10px">
-            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
+            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/icons/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
             <span style="flex:1;font-size:16px;color:#5E7488;letter-spacing:-.2px">Flight no., airline or city</span>
           </div>
         </div>
@@ -266,7 +263,8 @@
 
         <div style="margin:16px 16px 0;border-radius:16px;overflow:hidden;background:#122A3D;border:.5px solid #1E3A4F">
           <sc-for list="{{ moreRows }}" as="r" hint-placeholder-count="6">
-            <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:.5px solid #16303F">
+            <div onClick="{{ r.onTap }}" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:.5px solid #16303F" style-active="background:#1B3A51">
+              <div style="width:22px;height:22px;flex:none;background:center/150% no-repeat;background-image:url({{ r.icon }});filter:invert(.86) brightness(1.3)"></div>
               <span style="flex:1;font-size:16px;letter-spacing:-.3px">{{ r.label }}</span>
               <span style="font-size:14px;color:#5E7488;font-variant-numeric:tabular-nums">{{ r.value }}</span>
               <svg width="7" height="12" viewBox="0 0 7 12"><path d="M1 1l5 5-5 5" stroke="#4E657A" stroke-width="1.7" fill="none" stroke-linecap="round"></path></svg>
@@ -277,12 +275,12 @@
         <div style="padding:22px 16px 4px;font-size:12px;font-weight:590;color:#5E7488;letter-spacing:.4px;text-transform:uppercase">On the lock screen</div>
         <div style="margin:0 16px;padding:16px;border-radius:20px;background:linear-gradient(160deg,#123047,#0B1C2C 70%);border:.5px solid #1E3A4F">
           <div style="text-align:center;padding-bottom:12px">
-            <div style="font-size:13px;color:#A8B8C8">Thursday, 12 March</div>
-            <div style="font-size:44px;font-weight:250;letter-spacing:-1px;line-height:1.05;font-variant-numeric:tabular-nums">09:40</div>
+            <div style="font-size:13px;color:#A8B8C8">{{ lockDate }}</div>
+            <div style="font-size:44px;font-weight:250;letter-spacing:-1px;line-height:1.05;font-variant-numeric:tabular-nums">{{ localTime }}</div>
           </div>
           <div style="display:flex;gap:10px">
             <div style="flex:1;border-radius:16px;padding:11px;background:rgba(255,255,255,.09);backdrop-filter:blur(12px)">
-              <div style="display:flex;align-items:center;gap:6px"><img src="assets/logo_mark.webp" alt="" style="width:14px;height:14px;border-radius:4px" /><span style="font-size:10px;font-weight:640;color:#A8B8C8;letter-spacing:.2px">BOARDING</span></div>
+              <div style="display:flex;align-items:center;gap:6px"><div style="width:14px;height:14px;border-radius:4px;background:center/cover no-repeat url(assets/achievements/ach_europe.webp)"></div><span style="font-size:10px;font-weight:640;color:#A8B8C8;letter-spacing:.2px">BOARDING</span></div>
               <div style="font-size:24px;font-weight:640;font-variant-numeric:tabular-nums;letter-spacing:-.6px;margin-top:6px;color:#E89A3C">{{ widgetCountdown }}</div>
               <div style="font-size:11px;color:#A8B8C8;margin-top:1px">{{ widgetRoute }}</div>
             </div>
@@ -296,6 +294,142 @@
 
         <div style="padding:14px 16px 0"><div onClick="{{ onPreviewNotif }}" style="padding:13px;border-radius:14px;background:#152C3E;border:.5px solid #2A455A;text-align:center;font-size:15px;font-weight:590;letter-spacing:-.2px" style-active="transform:scale(.98)">Preview boarding notification</div></div>
         <div style="padding:12px 16px 0;font-size:11px;line-height:1.45;color:#4E657A">1 real second = 6 in-game minutes. A full trade run — buy, board, land, sell — fits in about a minute, so a session survives one subway stop.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isAchievements }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 0 0">
+        <div style="padding:0 16px;display:flex;align-items:center;gap:10px">
+          <div onClick="{{ backToMore }}" style="width:34px;height:34px;border-radius:17px;background:#152C3E;display:flex;align-items:center;justify-content:center;flex:none" style-active="background:#1B3A51"><svg width="8" height="14" viewBox="0 0 8 14"><path d="M7 1 1 7l6 6" stroke="#C6D3DF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <div style="flex:1"><div style="font-size:28px;font-weight:700;letter-spacing:-.7px;line-height:1.05">Achievements</div></div>
+        </div>
+        <div style="margin:14px 16px 0;padding:14px 16px;border-radius:16px;background:#122A3D;border:.5px solid #1E3A4F">
+          <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:15px;font-weight:590;flex:1">Unlocked</span><span style="font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;color:#E89A3C;white-space:nowrap;flex:none">{{ achScore }}</span></div>
+          <div style="margin-top:10px;height:6px;border-radius:3px;background:#0F2536;overflow:hidden"><div style="height:100%;border-radius:3px;background:linear-gradient(90deg,#3CB8A4,#E89A3C);width:{{ achPct }}"></div></div>
+        </div>
+        <div style="padding:12px 16px 0;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ achievements }}" as="ac" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 13px;background:#122A3D;border:.5px solid {{ ac.bd }};border-radius:15px;opacity:{{ ac.opacity }}">
+              <div style="width:44px;height:44px;border-radius:11px;flex:none;background:#0B1C2C center/cover no-repeat;background-image:url({{ ac.icon }});filter:{{ ac.filter }}"></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:590;letter-spacing:-.24px">{{ ac.name }}</div>
+                <div style="font-size:12px;color:#A8B8C8;margin-top:2px;line-height:1.35">{{ ac.desc }}</div>
+                <sc-if value="{{ ac.showBar }}" hint-placeholder-val="{{ true }}">
+                  <div style="margin-top:6px;height:4px;border-radius:2px;background:#0F2536;overflow:hidden"><div style="height:100%;border-radius:2px;background:#3CB8A4;width:{{ ac.pct }}"></div></div>
+                </sc-if>
+              </div>
+              <div style="font-size:11px;font-weight:640;padding:3px 8px;border-radius:7px;background:{{ ac.chipBg }};color:{{ ac.chipFg }};flex:none">{{ ac.chip }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isNotes }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 0 0">
+        <div style="padding:0 16px;display:flex;align-items:center;gap:10px">
+          <div onClick="{{ backToMore }}" style="width:34px;height:34px;border-radius:17px;background:#152C3E;display:flex;align-items:center;justify-content:center;flex:none" style-active="background:#1B3A51"><svg width="8" height="14" viewBox="0 0 8 14"><path d="M7 1 1 7l6 6" stroke="#C6D3DF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <div style="flex:1"><div style="font-size:28px;font-weight:700;letter-spacing:-.7px;line-height:1.05">Trader notes</div><div style="font-size:12px;color:#A8B8C8;margin-top:2px">{{ notesSub }}</div></div>
+        </div>
+        <div style="padding:14px 16px 0;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ notes }}" as="n" hint-placeholder-count="4">
+            <div style="border-radius:16px;overflow:hidden;background:#122A3D;border:.5px solid #1E3A4F;opacity:{{ n.opacity }}">
+              <div style="position:relative;height:96px">
+                <div style="position:absolute;inset:0;background:#0F2536 center/cover no-repeat;background-image:url({{ n.hero }});filter:{{ n.filter }}"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(rgba(11,28,44,.15) 40%,rgba(18,42,61,.95))"></div>
+                <div style="position:absolute;left:13px;bottom:8px;right:13px;display:flex;align-items:flex-end;gap:8px">
+                  <div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:700;letter-spacing:-.4px">{{ n.name }}</div><div style="font-size:11px;color:#A8B8C8;font-family:ui-monospace,monospace;margin-top:1px">{{ n.code }}</div></div>
+                  <div style="font-size:10px;font-weight:640;padding:3px 7px;border-radius:6px;background:{{ n.chipBg }};color:{{ n.chipFg }};flex:none">{{ n.chip }}</div>
+                </div>
+              </div>
+              <div style="padding:10px 13px;font-size:12px;color:#C6D3DF;line-height:1.45">{{ n.note }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isLog }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 0 0">
+        <div style="padding:0 16px;display:flex;align-items:center;gap:10px">
+          <div onClick="{{ backToMore }}" style="width:34px;height:34px;border-radius:17px;background:#152C3E;display:flex;align-items:center;justify-content:center;flex:none" style-active="background:#1B3A51"><svg width="8" height="14" viewBox="0 0 8 14"><path d="M7 1 1 7l6 6" stroke="#C6D3DF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <div style="flex:1"><div style="font-size:28px;font-weight:700;letter-spacing:-.7px;line-height:1.05">Trade log</div><div style="font-size:12px;color:#A8B8C8;margin-top:2px">{{ logSub }}</div></div>
+        </div>
+        <div style="margin:14px 16px 0;padding:14px 16px;border-radius:16px;background:#122A3D;border:.5px solid #1E3A4F;display:flex">
+          <div style="flex:1"><div style="font-size:11px;color:#A8B8C8">Net profit</div><div style="font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px;color:{{ logNetColor }}">{{ logNet }}</div></div>
+          <div style="width:.5px;background:#24394B;margin:0 12px"></div>
+          <div style="flex:1"><div style="font-size:11px;color:#A8B8C8">Distance</div><div style="font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px">{{ logKm }}</div></div>
+          <div style="width:.5px;background:#24394B;margin:0 12px"></div>
+          <div style="flex:1"><div style="font-size:11px;color:#A8B8C8">Legs</div><div style="font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px">{{ logLegs }}</div></div>
+        </div>
+        <sc-if value="{{ logEmpty }}" hint-placeholder-val="{{ true }}">
+          <div style="margin:14px 16px 0;padding:30px 16px;text-align:center;background:#122A3D;border-radius:16px;border:.5px solid #1E3A4F">
+            <div style="font-size:15px;font-weight:590">No entries yet</div>
+            <div style="font-size:13px;color:#A8B8C8;margin-top:4px;line-height:1.4">Buy something, fly it somewhere, sell it. Every leg lands here.</div>
+          </div>
+        </sc-if>
+        <div style="padding:12px 16px 0;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ logRows }}" as="l" hint-placeholder-count="0">
+            <div style="display:flex;align-items:center;gap:11px;padding:11px 13px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:15px">
+              <div style="width:34px;height:34px;border-radius:9px;flex:none;background:#0B1C2C center/150% no-repeat;background-image:url({{ l.icon }});filter:invert(.62) sepia(.06) saturate(.5) brightness(1.05)"></div>
+              <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:590;letter-spacing:-.2px">{{ l.title }}</div><div style="font-size:12px;color:#A8B8C8;margin-top:2px;font-variant-numeric:tabular-nums">{{ l.sub }}</div></div>
+              <div style="font-size:15px;font-weight:640;font-variant-numeric:tabular-nums;color:{{ l.color }}">{{ l.amount }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSources }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 0 0">
+        <div style="padding:0 16px;display:flex;align-items:center;gap:10px">
+          <div onClick="{{ backToMore }}" style="width:34px;height:34px;border-radius:17px;background:#152C3E;display:flex;align-items:center;justify-content:center;flex:none" style-active="background:#1B3A51"><svg width="8" height="14" viewBox="0 0 8 14"><path d="M7 1 1 7l6 6" stroke="#C6D3DF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <div style="flex:1"><div style="font-size:28px;font-weight:700;letter-spacing:-.7px;line-height:1.05">Data sources</div></div>
+        </div>
+        <div style="margin:14px 16px 0;padding:13px 15px;border-radius:14px;background:rgba(232,154,60,.1);border:.5px solid rgba(232,154,60,.28);font-size:12px;line-height:1.5;color:#E3C08A">The flight network is rebuilt from public aviation data. Schedules, fares and prices are simulated for play — this is not real ticketing information.</div>
+        <div style="margin:12px 16px 0;border-radius:16px;overflow:hidden;background:#122A3D;border:.5px solid #1E3A4F">
+          <sc-for list="{{ sources }}" as="src" hint-placeholder-count="4">
+            <div style="padding:12px 14px;border-bottom:.5px solid #16303F">
+              <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:15px;font-weight:590;letter-spacing:-.2px;flex:1">{{ src.name }}</span><span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:6px;background:rgba(126,182,217,.14);color:#7EB6D9">{{ src.license }}</span></div>
+              <div style="font-size:12px;color:#A8B8C8;margin-top:3px;line-height:1.4">{{ src.use }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:14px 16px 0;font-size:11px;color:#4E657A;line-height:1.5">Fonts: JetBrains Mono (OFL) for numerals, Noto Sans SC (OFL) for Chinese. Audio and art generated for this project.</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 0 0">
+        <div style="padding:0 16px;display:flex;align-items:center;gap:10px">
+          <div onClick="{{ backToMore }}" style="width:34px;height:34px;border-radius:17px;background:#152C3E;display:flex;align-items:center;justify-content:center;flex:none" style-active="background:#1B3A51"><svg width="8" height="14" viewBox="0 0 8 14"><path d="M7 1 1 7l6 6" stroke="#C6D3DF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <div style="flex:1"><div style="font-size:28px;font-weight:700;letter-spacing:-.7px;line-height:1.05">Settings</div></div>
+        </div>
+        <div style="margin:16px 16px 0;border-radius:16px;overflow:hidden;background:#122A3D;border:.5px solid #1E3A4F">
+          <sc-for list="{{ toggles }}" as="t" hint-placeholder-count="5">
+            <div onClick="{{ t.onTap }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:.5px solid #16303F">
+              <div style="flex:1;min-width:0"><div style="font-size:16px;letter-spacing:-.3px">{{ t.label }}</div><div style="font-size:12px;color:#5E7488;margin-top:2px;line-height:1.35">{{ t.sub }}</div></div>
+              <div style="width:51px;height:31px;border-radius:16px;flex:none;background:{{ t.track }};position:relative;transition:background .2s">
+                <div style="position:absolute;top:2px;left:{{ t.knob }};width:27px;height:27px;border-radius:14px;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.3);transition:left .2s"></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:20px 16px 4px;font-size:12px;font-weight:590;color:#5E7488;letter-spacing:.4px;text-transform:uppercase">Save</div>
+        <div style="margin:0 16px;padding:14px 16px;border-radius:16px;background:#122A3D;border:.5px solid #1E3A4F">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:22px;height:22px;flex:none;background:center/150% no-repeat url(assets/icons/ic_save.webp);filter:invert(.86) brightness(1.3)"></div>
+            <div style="flex:1"><div style="font-size:15px;font-weight:590">Autosave</div><div style="font-size:12px;color:#A8B8C8;margin-top:1px;font-variant-numeric:tabular-nums">{{ saveSub }}</div></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <div onClick="{{ onSaveNow }}" style="flex:1;text-align:center;padding:11px 0;border-radius:12px;background:#152C3E;border:.5px solid #2A455A;font-size:14px;font-weight:590" style-active="background:#1B3A51">Save now</div>
+            <div onClick="{{ onRestart }}" style="flex:1;text-align:center;padding:11px 0;border-radius:12px;background:rgba(224,85,85,.12);border:.5px solid rgba(224,85,85,.35);font-size:14px;font-weight:590;color:#E05555" style-active="background:rgba(224,85,85,.2)">New run</div>
+          </div>
+        </div>
+        <div style="padding:18px 16px 0;text-align:center">
+          <div style="width:38px;height:38px;border-radius:10px;margin:0 auto;background:#0F2536 center/86% no-repeat url(assets/achievements/ach_europe.webp);opacity:.7"></div>
+          <div style="font-size:12px;color:#4E657A;margin-top:6px">Airborne Trader · Demo build 0.2</div>
+        </div>
       </div>
     </sc-if>
   </div>
@@ -320,11 +454,33 @@
 
   <sc-if value="{{ showNotif }}" hint-placeholder-val="{{ false }}">
     <div style="position:absolute;left:10px;right:10px;top:14px;z-index:80;padding:12px 14px;border-radius:22px;background:rgba(28,44,58,.82);backdrop-filter:blur(24px);border:.5px solid rgba(217,230,240,.14);box-shadow:0 16px 40px rgba(0,0,0,.5);animation:atBanner .38s cubic-bezier(.2,.9,.25,1);display:flex;gap:11px" onClick="{{ onDismissNotif }}">
-      <img src="assets/logo_mark.webp" alt="" style="width:38px;height:38px;border-radius:9px;flex:none" />
+      <div style="width:38px;height:38px;border-radius:9px;flex:none;background:#0F2536 center/86% no-repeat url(assets/achievements/ach_europe.webp)"></div>
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:baseline;gap:6px"><span style="font-size:13px;font-weight:640;letter-spacing:-.08px">AIRBORNE TRADER</span><span style="font-size:12px;color:#A8B8C8;margin-left:auto">now</span></div>
         <div style="font-size:14px;font-weight:590;margin-top:2px;letter-spacing:-.2px">{{ notifTitle }}</div>
         <div style="font-size:13px;color:#C6D3DF;margin-top:1px">{{ notifBody }}</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showIntro }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;inset:0;z-index:90;background:#07161F;display:flex;flex-direction:column">
+      <div style="position:absolute;inset:0;background:#07161F center/cover no-repeat;background-image:url(assets/cities/city_istanbul.webp);opacity:.5"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(rgba(7,22,31,.55) 20%,rgba(7,22,31,.9) 62%,#07161F)"></div>
+      <div style="position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:0 26px 30px">
+        <div style="width:76px;height:76px;border-radius:18px;background:#0F2536 center/86% no-repeat;background-image:url(assets/achievements/ach_europe.webp);box-shadow:0 12px 34px rgba(0,0,0,.5)"></div>
+        <div style="font-size:38px;font-weight:700;letter-spacing:-1px;line-height:1.05;margin-top:18px">Airborne Trader</div>
+        <div style="font-size:15px;color:#C6D3DF;margin-top:8px;line-height:1.45;text-wrap:pretty">Twelve hub airports. Buy low where a thing is made, fly it somewhere it is scarce, sell high. Weight is the whole game.</div>
+        <div style="display:flex;flex-direction:column;gap:11px;margin-top:22px">
+          <sc-for list="{{ introSteps }}" as="st" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:34px;height:34px;border-radius:10px;flex:none;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center"><div style="width:20px;height:20px;background:center/150% no-repeat;background-image:url({{ st.icon }});filter:invert(.86) brightness(1.3)"></div></div>
+              <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:590;letter-spacing:-.2px">{{ st.title }}</div><div style="font-size:12px;color:#A8B8C8;margin-top:1px">{{ st.sub }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+        <div onClick="{{ onStart }}" style="margin-top:26px;padding:17px;border-radius:16px;background:#E89A3C;color:#0B1C2C;text-align:center;font-size:17px;font-weight:700;letter-spacing:-.3px" style-active="transform:scale(.97);filter:brightness(.92)">Start in Istanbul</div>
+        <div style="margin-top:12px;font-size:11px;color:#4E657A;text-align:center;line-height:1.45">Flight network rebuilt from public aviation data. Not real ticketing information.</div>
       </div>
     </div>
   </sc-if>
@@ -496,7 +652,7 @@
     <div style="padding:8px 12px;border-radius:14px;background:rgba(18,42,61,.72);backdrop-filter:blur(18px);border:.5px solid rgba(217,230,240,.12);font-size:13px;font-weight:590;font-variant-numeric:tabular-nums;color:#A8B8C8">12.4 / 23 kg</div>
     <span style="flex:1"></span>
     <div style="width:36px;height:36px;border-radius:18px;background:rgba(18,42,61,.72);backdrop-filter:blur(18px);border:.5px solid rgba(217,230,240,.12);display:flex;align-items:center;justify-content:center">
-      <div style="width:19px;height:19px;background:center/145% no-repeat url(assets/ic_search.webp);filter:invert(.88) brightness(1.3)"></div>
+      <div style="width:19px;height:19px;background:center/145% no-repeat url(assets/icons/ic_search.webp);filter:invert(.88) brightness(1.3)"></div>
     </div>
   </div>
   <div style="position:absolute;left:0;right:0;bottom:0;top:420px;background:rgba(19,45,64,.94);backdrop-filter:blur(26px);border-radius:26px 26px 0 0;border-top:.5px solid rgba(217,230,240,.14);box-shadow:0 -18px 50px rgba(0,0,0,.45)">
@@ -512,17 +668,17 @@
     </div>
     <div style="padding:12px 18px 0;display:flex;flex-direction:column;gap:8px">
       <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;background:#0F2536;border-radius:14px">
-        <img src="assets/p_ist_lokum.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
+        <img src="assets/products/p_ist_lokum.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
         <div style="flex:1"><div style="font-size:15px;font-weight:590">Turkish Delight</div><div style="font-size:12px;color:#3CB8A4;margin-top:2px">Hot in Dubai · 2.4 kg</div></div>
         <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$64</div>
       </div>
       <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;background:#0F2536;border-radius:14px">
-        <img src="assets/p_ist_ceramic.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
+        <img src="assets/products/p_ist_ceramic.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
         <div style="flex:1"><div style="font-size:15px;font-weight:590">İznik Ceramics</div><div style="font-size:12px;color:#3CB8A4;margin-top:2px">Hot in Dubai · 5.8 kg</div></div>
         <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$310</div>
       </div>
       <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;background:#0F2536;border-radius:14px">
-        <img src="assets/p_ist_textile.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
+        <img src="assets/products/p_ist_textile.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
         <div style="flex:1"><div style="font-size:15px;font-weight:590">Bursa Textiles</div><div style="font-size:12px;color:#E05555;margin-top:2px">Avoid — soft market</div></div>
         <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$242</div>
       </div>
@@ -530,7 +686,7 @@
     <div style="position:absolute;left:18px;right:18px;bottom:44px;display:flex;gap:10px">
       <div style="flex:1;padding:15px;border-radius:16px;background:#E89A3C;color:#0B1C2C;text-align:center;font-size:16px;font-weight:700">Buy selected</div>
       <div style="width:54px;border-radius:16px;background:#0F2536;border:.5px solid #2A455A;display:flex;align-items:center;justify-content:center">
-        <div style="width:24px;height:24px;background:center/145% no-repeat url(assets/ic_flight.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
+        <div style="width:24px;height:24px;background:center/145% no-repeat url(assets/icons/ic_flight.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
       </div>
     </div>
   </div>
@@ -550,12 +706,12 @@
         <span style="font-size:11px;color:rgba(5,43,38,.7);font-variant-numeric:tabular-nums">−$64</span>
       </div>
       <div style="margin-left:88px;display:flex;align-items:center;gap:11px;padding:11px 12px;background:#122A3D;border-radius:15px;box-shadow:-10px 0 20px rgba(0,0,0,.35)">
-        <img src="assets/p_ist_lokum.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
+        <img src="assets/products/p_ist_lokum.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
         <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:590">Turkish Delight</div><div style="font-size:12px;color:#A8B8C8;margin-top:2px;font-variant-numeric:tabular-nums">2.4 kg · $64</div></div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:15px">
-      <img src="assets/p_ist_ceramic.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
+      <img src="assets/products/p_ist_ceramic.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
       <div style="flex:1;min-width:0">
         <div style="font-size:15px;font-weight:590">İznik Ceramics</div>
         <div style="display:flex;align-items:center;gap:5px;margin-top:5px">
@@ -568,7 +724,7 @@
       <div style="text-align:right"><div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$310</div><div style="font-size:11px;color:#5E7488">5.8 kg</div></div>
     </div>
     <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:15px;opacity:.55">
-      <img src="assets/p_ist_textile.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
+      <img src="assets/products/p_ist_textile.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
       <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:590">Bursa Textiles</div><div style="font-size:12px;color:#E05555;margin-top:2px">Too heavy — 12.5 kg won't fit</div></div>
       <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$242</div>
     </div>
@@ -626,17 +782,17 @@
   <div style="padding:22px 18px 6px;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#9A8F7C">MANIFEST</div>
   <div style="margin:0 18px;background:#FFFDF8;border-radius:16px;box-shadow:0 2px 0 rgba(20,36,47,.06),0 10px 22px rgba(20,36,47,.07);padding:6px 16px">
     <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed #EDE6D6">
-      <img src="assets/p_ist_lokum.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
+      <img src="assets/products/p_ist_lokum.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
       <div style="flex:1"><div style="font-size:15px;font-weight:590">Turkish Delight</div><div style="font-size:12px;color:#8A8272">×3 · 7.2 kg</div></div>
       <div style="font-family:ui-monospace,monospace;font-size:15px;font-weight:600">$192</div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:11px 0">
-      <img src="assets/p_ist_ceramic.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
+      <img src="assets/products/p_ist_ceramic.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
       <div style="flex:1"><div style="font-size:15px;font-weight:590">İznik Ceramics</div><div style="font-size:12px;color:#8A8272">×1 · 5.8 kg</div></div>
       <div style="font-family:ui-monospace,monospace;font-size:15px;font-weight:600">$310</div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px dashed #EDE6D6">
-      <div style="width:34px;height:34px;border-radius:8px;background:center/cover no-repeat url(assets/p_ist_copper.webp)"></div>
+      <div style="width:34px;height:34px;border-radius:8px;background:center/cover no-repeat url(assets/products/p_ist_copper.webp)"></div>
       <div style="flex:1"><div style="font-size:15px;font-weight:590">Hand-beaten Copper</div><div style="font-size:12px;color:#8A8272">×1 · 9.2 kg</div></div>
       <div style="font-family:ui-monospace,monospace;font-size:15px;font-weight:600">$186</div>
     </div>
@@ -651,7 +807,7 @@
   </div>
   <div style="margin:14px 18px 0;display:flex;gap:10px">
     <div style="flex:1;padding:14px;border-radius:14px;background:#14242F;color:#FFFDF8;text-align:center;font-size:15px;font-weight:640;letter-spacing:-.2px">Add to manifest</div>
-    <div style="flex:none;width:56px;border-radius:14px;background:#FFFDF8;border:1px solid #E3DCCC;display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;background:center/145% no-repeat url(assets/ic_inventory.webp);opacity:.75"></div></div>
+    <div style="flex:none;width:56px;border-radius:14px;background:#FFFDF8;border:1px solid #E3DCCC;display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;background:center/145% no-repeat url(assets/icons/ic_inventory.webp);opacity:.75"></div></div>
   </div>
   <div style="position:absolute;left:0;right:0;bottom:0;padding:10px 8px 26px;background:rgba(241,237,228,.92);backdrop-filter:blur(16px);border-top:1px solid #E3DCCC;display:flex">
     <div style="flex:1;text-align:center"><div style="font-size:11px;font-weight:640;color:#14242F">Globe</div></div>
@@ -669,410 +825,443 @@
 </section>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1800&quot;,&quot;height&quot;:&quot;1050&quot;}}">
+const C=(id,name,airport,iata,icao,country,cont,hero,lat,lon,elev,tz)=>({id,name,airport,iata,icao,country,cont,hero,lat,lon,elev,tz});
+const CITIES={
+ istanbul:C('istanbul','Istanbul','Istanbul Airport','IST','LTFM','Türkiye','Europe','assets/cities/city_istanbul.webp',41.28,28.75,325,3),
+ dubai:C('dubai','Dubai','Dubai International','DXB','OMDB','United Arab Emirates','Asia','assets/cities/city_dubai.webp',25.25,55.37,62,4),
+ london:C('london','London','London Heathrow','LHR','EGLL','United Kingdom','Europe','assets/cities/city_london.webp',51.47,-0.45,83,1),
+ paris:C('paris','Paris','Paris Charles de Gaulle','CDG','LFPG','France','Europe','assets/cities/city_paris.webp',49.01,2.55,392,2),
+ amsterdam:C('amsterdam','Amsterdam','Amsterdam Schiphol','AMS','EHAM','Netherlands','Europe','assets/cities/city_amsterdam.webp',52.31,4.77,-11,2),
+ frankfurt:C('frankfurt','Frankfurt','Frankfurt Airport','FRA','EDDF','Germany','Europe','assets/cities/city_frankfurt.webp',50.04,8.56,364,2),
+ beijing:C('beijing','Beijing','Beijing Capital International','PEK','ZBAA','China','Asia','assets/cities/city_beijing.webp',40.08,116.60,116,8),
+ shanghai:C('shanghai','Shanghai','Shanghai Pudong International','PVG','ZSPD','China','Asia','assets/cities/city_shanghai.webp',31.14,121.81,13,8),
+ hong_kong:C('hong_kong','Hong Kong','Hong Kong International','HKG','VHHH','Hong Kong','Asia','assets/cities/city_hongkong.webp',22.31,113.92,28,8),
+ tokyo:C('tokyo','Tokyo','Tokyo Haneda','HND','RJTT','Japan','Asia','assets/cities/city_tokyo.webp',35.55,139.78,21,9),
+ singapore:C('singapore','Singapore','Singapore Changi','SIN','WSSS','Singapore','Asia','assets/cities/city_singapore.webp',1.36,103.99,22,8),
+ bangkok:C('bangkok','Bangkok','Bangkok Suvarnabhumi','BKK','VTBS','Thailand','Asia','assets/cities/city_bangkok.webp',13.69,100.75,5,7)};
+const CIDS=Object.keys(CITIES);
+const PR=(id,home,name,category,icon,w,base)=>({id,home,name,category,icon,w,base});
+const P={
+ ist_lokum:PR('ist_lokum','istanbul','Turkish Delight','Confectionery','assets/products/p_ist_lokum.webp',2.4,64),
+ ist_ceramic:PR('ist_ceramic','istanbul','İznik Ceramics','Crafts','assets/products/p_ist_ceramic.webp',5.8,310),
+ ist_copper:PR('ist_copper','istanbul','Hand-beaten Copper','Crafts','assets/products/p_ist_copper.webp',9.2,186),
+ ist_textile:PR('ist_textile','istanbul','Bursa Textiles','Textiles','assets/products/p_ist_textile.webp',12.5,242),
+ dxb_gold:PR('dxb_gold','dubai','Gold Jewellery Proxy','Crafts','assets/products/p_dxb_gold.webp',0.28,5800),
+ dxb_spice:PR('dxb_spice','dubai','Souk Saffron Lot','Spices','assets/products/p_dxb_spice.webp',0.4,920),
+ dxb_fabric:PR('dxb_fabric','dubai','Re-export Fabric Lot','Textiles','assets/products/p_dxb_fabric.webp',6.5,500),
+ dxb_oil:PR('dxb_oil','dubai','Refined Oil Contract','Energy','assets/products/p_cat_energy.webp',1.0,1100),
+ dxb_avionics:PR('dxb_avionics','dubai','Avionics Modules','Electronics','assets/products/p_cat_electronics.webp',0.75,5000),
+ lhr_tea:PR('lhr_tea','london','Blended Tea Chest','Tea','assets/products/p_lhr_tea.webp',3.1,128),
+ lhr_wool:PR('lhr_wool','london','Highland Wool Bolt','Textiles','assets/products/p_lhr_wool.webp',7.8,210),
+ cdg_perfume:PR('cdg_perfume','paris','Grasse Perfume','Cosmetics','assets/products/p_cdg_perfume.webp',1.1,410),
+ cdg_chocolate:PR('cdg_chocolate','paris','Maison Chocolates','Confectionery','assets/products/p_cdg_chocolate.webp',2.2,185),
+ cdg_cosmetics:PR('cdg_cosmetics','paris','Atelier Skincare','Cosmetics','assets/products/p_cdg_cosmetics.webp',1.6,340),
+ ams_cheese:PR('ams_cheese','amsterdam','Aged Gouda Wheel','Food','assets/products/p_ams_cheese.webp',8.4,96),
+ ams_flower:PR('ams_flower','amsterdam','Cut Tulip Crate','Daily goods','assets/products/p_ams_flower.webp',4.6,74),
+ fra_machinery:PR('fra_machinery','frankfurt','Precision Machinery','Machinery','assets/products/p_fra_machinery.webp',14.0,880),
+ fra_leather:PR('fra_leather','frankfurt','Tanned Leather Roll','Crafts','assets/products/p_fra_leather.webp',5.4,265),
+ pek_bronze:PR('pek_bronze','beijing','Bronze Censer','Crafts','assets/products/p_pek_bronze.webp',6.2,465),
+ pek_herb:PR('pek_herb','beijing','Medicinal Herb Bundle','Food','assets/products/p_pek_herb.webp',2.8,158),
+ pvg_silk:PR('pvg_silk','shanghai','Suzhou Silk Bolt','Textiles','assets/products/p_pvg_silk.webp',4.2,355),
+ pvg_tea:PR('pvg_tea','shanghai','Longjing Tea Tin','Tea','assets/products/p_pvg_tea.webp',1.4,196),
+ pvg_embroid:PR('pvg_embroid','shanghai','Su Embroidery Panel','Crafts','assets/products/p_pvg_embroidery.webp',2.0,520),
+ hkg_jewelry:PR('hkg_jewelry','hong_kong','Bonded Jewellery Lot','Crafts','assets/products/p_hkg_jewelry.webp',0.35,4200),
+ hkg_toys:PR('hkg_toys','hong_kong','Licensed Toy Pallet','Toys','assets/products/p_cat_toys.webp',9.5,340),
+ hnd_elec:PR('hnd_elec','tokyo','Precision Sensors','Electronics','assets/products/p_hnd_electronics.webp',0.9,780),
+ hnd_sake:PR('hnd_sake','tokyo','Junmai Sake Case','Food','assets/products/p_hnd_sake.webp',11.2,290),
+ sin_orchid:PR('sin_orchid','singapore','Orchid Extract','Cosmetics','assets/products/p_sin_orchid.webp',1.3,430),
+ sin_perfume:PR('sin_perfume','singapore','Duty-free Perfume','Cosmetics','assets/products/p_sin_perfume.webp',0.9,395),
+ bkk_spice:PR('bkk_spice','bangkok','Thai Spice Crate','Spices','assets/products/p_bkk_spice.webp',3.6,142),
+ bkk_lacquer:PR('bkk_lacquer','bangkok','Lacquerware Set','Crafts','assets/products/p_bkk_lacquer.webp',4.8,228),
+ bkk_silk:PR('bkk_silk','bangkok','Thai Silk Bolt','Textiles','assets/products/p_bkk_silk.webp',3.4,268)};
+const AIRLINE={istanbul:['TK','Turkish Airlines'],dubai:['EK','Emirates'],london:['BA','British Airways'],paris:['AF','Air France'],amsterdam:['KL','KLM'],frankfurt:['LH','Lufthansa'],beijing:['CA','Air China'],shanghai:['MU','China Eastern'],hong_kong:['CX','Cathay Pacific'],tokyo:['NH','All Nippon'],singapore:['SQ','Singapore Airlines'],bangkok:['TG','Thai Airways']};
+function hsh(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=(h*16777619)>>>0;}return h;}
+function gcKm(a,b){const R=6371,r=Math.PI/180;const dLa=(b.lat-a.lat)*r,dLo=(b.lon-a.lon)*r;
+ const x=Math.sin(dLa/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLo/2)**2;
+ return Math.round(2*R*Math.asin(Math.min(1,Math.sqrt(x))));}
+const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+const pad=n=>String(n).padStart(2,'0');
+const hhmm=m=>{m=((m%1440)+1440)%1440;return pad(Math.floor(m/60))+':'+pad(m%60);};
+const ADDONS=[{k:'',label:'None',price:0},{k:'light',label:'+10kg',price:40},{k:'standard',label:'+20kg',price:70},{k:'heavy',label:'+50kg',price:150}];
+const FACTORS=[1.58,1.41,1.24,1.08,0.95,0.82];
+function factorFor(pid,city){const p=P[pid];if(p.home===city)return 0.92;
+ const A=CITIES[p.home],B=CITIES[city];const far=Math.min(1,gcKm(A,B)/9000);
+ const base=FACTORS[hsh(pid+'|'+city)%FACTORS.length];
+ return Math.round((base+far*0.22)*100)/100;}
+const priceAt=(pid,city)=>P[pid].home===city?P[pid].base:Math.round(P[pid].base*factorFor(pid,city));
 
-const CITIES = {
-  istanbul:  {id:'istanbul',  name:'Istanbul',  airport:'Istanbul Airport',           iata:'IST', icao:'LTFM', country:'Türkiye',              hero:'assets/city_istanbul.webp',  elev:'325 ft'},
-  dubai:     {id:'dubai',     name:'Dubai',     airport:'Dubai International',        iata:'DXB', icao:'OMDB', country:'United Arab Emirates', hero:'assets/city_dubai.webp',     elev:'62 ft'},
-  london:    {id:'london',    name:'London',    airport:'London Heathrow',            iata:'LHR', icao:'EGLL', country:'United Kingdom',       hero:'assets/city_london.webp',    elev:'83 ft'},
-  paris:     {id:'paris',     name:'Paris',     airport:'Paris Charles de Gaulle',    iata:'CDG', icao:'LFPG', country:'France',               hero:'assets/city_paris.webp',     elev:'392 ft'},
-  beijing:   {id:'beijing',   name:'Beijing',   airport:'Beijing Capital International', iata:'PEK', icao:'ZBAA', country:'China',            hero:'assets/city_beijing.webp',   elev:'116 ft'},
-  amsterdam: {id:'amsterdam', name:'Amsterdam', airport:'Amsterdam Schiphol',         iata:'AMS', icao:'EHAM', country:'Netherlands',          hero:'assets/city_amsterdam.webp', elev:'-11 ft'},
-};
-
-const P = {
-  ist_lokum:    {id:'ist_lokum',    home:'istanbul',  name:'Turkish Delight',       category:'Confectionery', icon:'assets/p_ist_lokum.webp',       w:2.4,  base:64},
-  ist_ceramic:  {id:'ist_ceramic',  home:'istanbul',  name:'İznik Ceramics',        category:'Crafts',        icon:'assets/p_ist_ceramic.webp',     w:5.8,  base:310},
-  ist_copper:   {id:'ist_copper',   home:'istanbul',  name:'Hand-beaten Copper',    category:'Crafts',        icon:'assets/p_ist_copper.webp',      w:9.2,  base:186},
-  ist_textile:  {id:'ist_textile',  home:'istanbul',  name:'Bursa Textiles',        category:'Textiles',      icon:'assets/p_ist_textile.webp',     w:12.5, base:242},
-  dxb_gold:     {id:'dxb_gold',     home:'dubai',     name:'Gold Jewellery Proxy',  category:'Crafts',        icon:'assets/p_dxb_gold.webp',        w:0.28, base:5800},
-  dxb_spice:    {id:'dxb_spice',    home:'dubai',     name:'Souk Saffron Lot',      category:'Spices',        icon:'assets/p_dxb_spice.webp',       w:0.4,  base:920},
-  dxb_fabric:   {id:'dxb_fabric',   home:'dubai',     name:'Re-export Fabric Lot',  category:'Textiles',      icon:'assets/p_dxb_fabric.webp',      w:6.5,  base:500},
-  dxb_oil:      {id:'dxb_oil',      home:'dubai',     name:'Refined Oil Contract',  category:'Energy',        icon:'assets/p_cat_energy.webp',      w:1.0,  base:1100},
-  dxb_avionics: {id:'dxb_avionics', home:'dubai',     name:'Avionics Modules',      category:'Electronics',   icon:'assets/p_cat_electronics.webp', w:0.75, base:5000},
-  cdg_perfume:  {id:'cdg_perfume',  home:'paris',     name:'Grasse Perfume',        category:'Cosmetics',     icon:'assets/p_cdg_perfume.webp',     w:1.1,  base:410},
-  cdg_chocolate:{id:'cdg_chocolate',home:'paris',     name:'Maison Chocolates',     category:'Confectionery', icon:'assets/p_cdg_chocolate.webp',   w:2.2,  base:185},
-  cdg_cosmetics:{id:'cdg_cosmetics',home:'paris',     name:'Atelier Skincare',      category:'Cosmetics',     icon:'assets/p_cdg_cosmetics.webp',   w:1.6,  base:340},
-  lhr_tea:      {id:'lhr_tea',      home:'london',    name:'Blended Tea Chest',     category:'Tea',           icon:'assets/p_lhr_tea.webp',         w:3.1,  base:128},
-  lhr_wool:     {id:'lhr_wool',     home:'london',    name:'Highland Wool Bolt',    category:'Textiles',      icon:'assets/p_lhr_wool.webp',        w:7.8,  base:210},
-  ams_cheese:   {id:'ams_cheese',   home:'amsterdam', name:'Aged Gouda Wheel',      category:'Food',          icon:'assets/p_ams_cheese.webp',      w:8.4,  base:96},
-  ams_flower:   {id:'ams_flower',   home:'amsterdam', name:'Cut Tulip Crate',       category:'Daily goods',   icon:'assets/p_ams_flower.webp',      w:4.6,  base:74},
-  pek_bronze:   {id:'pek_bronze',   home:'beijing',   name:'Bronze Censer',         category:'Crafts',        icon:'assets/p_pek_bronze.webp',      w:6.2,  base:465},
-  pek_herb:     {id:'pek_herb',     home:'beijing',   name:'Medicinal Herb Bundle', category:'Food',          icon:'assets/p_pek_herb.webp',        w:2.8,  base:158},
-  pvg_silk:     {id:'pvg_silk',     home:'shanghai',  name:'Suzhou Silk Bolt',      category:'Textiles',      icon:'assets/p_pvg_silk.webp',        w:4.2,  base:355},
-  pvg_tea:      {id:'pvg_tea',      home:'shanghai',  name:'Longjing Tea Tin',      category:'Tea',           icon:'assets/p_pvg_tea.webp',         w:1.4,  base:196},
-};
-
-const FL = (no, airline, to, dep, arr, dur, km, econ, biz, mins) =>
-  ({no:no, airline:airline, toId:to, dep:dep, arr:arr, dur:dur, km:km.toLocaleString('en-US') + ' km', econ:econ, biz:biz, stops:'Nonstop', mins:mins});
-
-const FLIGHTS = {
-  istanbul: [
-    FL('TK 1979','Turkish Airlines','dubai','12:50','18:15','4h 25m',3010,412,1180,190),
-    FL('EK 122','Emirates','dubai','15:05','20:20','4h 15m',3010,498,1640,325),
-    FL('TK 1993','Turkish Airlines','london','09:40','11:45','3h 55m',2504,366,1090,60),
-    FL('AF 1391','Air France','paris','11:20','13:55','3h 35m',2254,298,940,160),
-    FL('CA 748','Air China','beijing','20:10','11:05','9h 55m',7159,712,2280,640),
-  ],
-  dubai: [
-    FL('TK 763','Turkish Airlines','istanbul','09:45','13:35','4h 50m',3010,388,1120,140),
-    FL('EK 1','Emirates','london','07:30','12:05','7h 35m',5490,690,2450,95),
-    FL('EK 73','Emirates','paris','08:35','13:40','6h 55m',5250,655,2310,210),
-    FL('EK 149','Emirates','amsterdam','09:10','14:15','7h 25m',5170,640,2280,190),
-    FL('EK 306','Emirates','beijing','10:20','21:40','7h 50m',5850,720,2390,275),
-  ],
-  london: [
-    FL('BA 676','British Airways','istanbul','10:15','16:05','3h 50m',2504,352,1060,120),
-    FL('BA 105','British Airways','dubai','12:40','23:20','6h 40m',5490,705,2380,235),
-    FL('AF 1081','Air France','paris','08:50','11:05','1h 15m',344,148,520,70),
-  ],
-  paris: [
-    FL('TK 1828','Turkish Airlines','istanbul','13:10','18:35','3h 25m',2254,306,960,175),
-    FL('EK 76','Emirates','dubai','15:35','01:10','6h 35m',5250,668,2290,290),
-    FL('KL 1234','KLM','amsterdam','09:20','10:35','1h 15m',398,132,470,60),
-  ],
-  amsterdam: [
-    FL('KL 1613','KLM','istanbul','11:05','15:50','3h 45m',2210,318,980,150),
-    FL('EK 148','Emirates','dubai','14:25','23:35','6h 10m',5170,652,2260,255),
-    FL('AF 1341','Air France','paris','08:15','09:30','1h 15m',398,138,480,55),
-  ],
-  beijing: [
-    FL('CA 747','Air China','istanbul','01:35','07:20','10h 45m',7159,735,2320,320),
-    FL('EK 307','Emirates','dubai','23:55','04:05','8h 10m',5850,742,2410,205),
-    FL('KL 898','KLM','amsterdam','16:40','20:55','10h 15m',7822,780,2560,395),
-  ],
-};
-
-const FACTORS = [1.52, 1.34, 1.16, 0.98, 0.84];
-function factorFor(pid, city) {
-  if (P[pid].home === city) return 0.92;
-  let h = 0;
-  const key = pid + '|' + city;
-  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) % 100003;
-  return FACTORS[h % FACTORS.length];
+function routesFrom(cid){
+ const A=CITIES[cid];
+ return CIDS.filter(k=>k!==cid).map(k=>{
+  const B=CITIES[k],km=gcKm(A,B),h=hsh(cid+'>'+k);
+  const mins=Math.round(km/13.5+35);
+  const depMin=(6*60)+(h%15)*54;
+  const code=AIRLINE[cid],flt=100+(h%899);
+  const econ=Math.round((80+km*0.098)/2)*2;
+  return {toId:k,km:km,mins:mins,depMin:depMin,no:code[0]+' '+flt,airline:code[1],
+   econ:econ,biz:Math.round(econ*3.1/10)*10,
+   dur:Math.floor(mins/60)+'h '+pad(mins%60)+'m',stops:'Nonstop'};
+ }).sort((a,b)=>a.depMin-b.depMin);
 }
-function priceAt(pid, city) {
-  const p = P[pid];
-  return p.home === city ? p.base : Math.round(p.base * factorFor(pid, city));
-}
-const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
-const ADDONS = [{k:'', label:'None', price:0},{k:'light', label:'+10kg', price:40},{k:'standard', label:'+20kg', price:70},{k:'heavy', label:'+50kg', price:150}];
 
-class Component extends DCLogic {
-  state = {
-    tab:'globe', seg:'local', query:'', sheet:null, selId:null, selFlight:null,
-    qty:1, slot:'bag', cabin:'economy', addon:'', filter:'departure',
-    cash:6944, bagLimit:23, cargoCap:50, inv:[], ticket:null, minsToDep:0,
-    gameMin:0, toast:null, toastKind:'ok', notif:false, cut:null,
-    city:'istanbul', visited:['istanbul'], lastSale:null,
-  };
+const ACH=[
+ {id:'first_city',icon:'assets/achievements/ach_first_city.webp',name:'Wheels Down',desc:'Reach a second city.',goal:2,stat:'cities'},
+ {id:'first_flight',icon:'assets/achievements/ach_first_flight.webp',name:'First Boarding Pass',desc:'Complete one flight.',goal:1,stat:'legs'},
+ {id:'first_profit',icon:'assets/achievements/ach_first_profit.webp',name:'In The Black',desc:'Turn a profit on one sale.',goal:1,stat:'profitable'},
+ {id:'hot_streak',icon:'assets/achievements/ach_hot_streak.webp',name:'Hot Streak',desc:'Five profitable sales in a run.',goal:5,stat:'profitable'},
+ {id:'europe',icon:'assets/achievements/ach_europe.webp',name:'Old Continent',desc:'Visit five European hubs.',goal:5,stat:'europe'},
+ {id:'asia',icon:'assets/achievements/ach_asia.webp',name:'Eastbound',desc:'Visit five Asian hubs.',goal:5,stat:'asia'},
+ {id:'cities_10',icon:'assets/achievements/ach_cities_10.webp',name:'Frequent Flyer',desc:'Visit ten hub cities.',goal:10,stat:'cities'},
+ {id:'countries_5',icon:'assets/icons/ic_city.webp',name:'Passport Stamps',desc:'Trade in five countries.',goal:5,stat:'countries'},
+ {id:'business_10',icon:'assets/achievements/ach_business_10.webp',name:'Up Front',desc:'Fly ten business legs.',goal:10,stat:'bizLegs'},
+ {id:'cargo_20',icon:'assets/achievements/ach_cargo_20.webp',name:'Heavy Lifter',desc:'Move 20 cargo shipments.',goal:20,stat:'cargoLots'},
+ {id:'wealth_100k',icon:'assets/achievements/ach_wealth_100k.webp',name:'Six Figures',desc:'Hold $100,000 in cash.',goal:100000,stat:'cash'},
+ {id:'legendary',icon:'assets/achievements/ach_legendary.webp',name:'Legendary Trader',desc:'Bank $1,000,000 in profit.',goal:1000000,stat:'profit'}];
 
-  componentDidMount() {
-    this._t = setInterval(() => {
-      this.setState(s => ({gameMin: s.gameMin + 6, minsToDep: s.ticket ? Math.max(0, s.minsToDep - 6) : 0}));
-    }, 1000);
-  }
-  componentWillUnmount() { clearInterval(this._t); if (this._c) clearTimeout(this._c); if (this._toastT) clearTimeout(this._toastT); }
+const SOURCES=[
+ {name:'OurAirports',license:'Public domain',use:'Airport identifiers, ICAO/IATA codes, coordinates and elevation for the 12 playable hubs.'},
+ {name:'OpenFlights',license:'ODbL',use:'Airline names and route adjacency used to seed the departure boards.'},
+ {name:'Natural Earth',license:'Public domain',use:'Coastlines and landmass raster behind the globe.'},
+ {name:'IANA Time Zone Database',license:'Public domain',use:'UTC offsets driving each city local clock.'}];
 
-  buzz(msg, kind) {
-    if (this._toastT) clearTimeout(this._toastT);
-    this.setState({toast: msg, toastKind: kind || 'ok'});
-    this._toastT = setTimeout(() => this.setState({toast:null}), 2400);
-  }
+const NOTE_TEXT={
+ istanbul:'Straddles two continents and prices like it. Crafts leave cheap; anything electronic arrives dear.',
+ dubai:'A re-export machine. Gold and saffron move at volume, and the souk pays up for finished crafts.',
+ london:'Tea and wool are the honest trades. Fares out are steep — earn the margin before you book.',
+ paris:'Perfume and cosmetics carry almost no weight, which makes them the ideal carry-on cargo.',
+ amsterdam:'Flowers and cheese are cheap and heavy. Only worth it on a short hop with cargo space.',
+ frankfurt:'Machinery is the heaviest thing you can profitably carry. Buy the cargo block first.',
+ beijing:'Bronze and herbs price low locally and travel well westward.',
+ shanghai:'Silk and embroidery out of Suzhou — light, valuable, and in demand almost everywhere.',
+ hong_kong:'Bonded jewellery at near-zero weight. The single best value-per-kilo in the network.',
+ tokyo:'Sensors are tiny and precious; sake is bulky and sentimental. Pick one.',
+ singapore:'Duty-free by design. Buy scent here, sell it where duty is not free.',
+ bangkok:'Spice, silk and lacquer at low entry prices — the best place to start a thin wallet.'};
 
-  bagUsed() { return this.state.inv.filter(i => i.slot==='bag').reduce((a,i)=>a+i.w*i.n,0); }
-  cargoUsed() { return this.state.inv.filter(i => i.slot==='cargo').reduce((a,i)=>a+i.w*i.n,0); }
-  city() { return CITIES[this.state.city]; }
-  localsHere() { return Object.keys(P).filter(id => P[id].home === this.state.city); }
-  importsHere() { return Object.keys(P).filter(id => P[id].home !== this.state.city).slice(0, 5); }
-  destCityId() { return this.state.ticket ? this.state.ticket.toId : ''; }
+class Component extends DCLogic{
+ state={tab:'globe',page:null,seg:'local',query:'',sheet:null,selId:null,selFlight:null,
+  qty:1,slot:'bag',cabin:'economy',addon:'',filter:'departure',
+  cash:6944,bagLimit:23,cargoCap:50,inv:[],ticket:null,minsToDep:0,
+  gameMin:0,toast:null,toastKind:'ok',notif:false,cut:null,cutLine:'',
+  city:'istanbul',visited:['istanbul'],log:[],lastSale:null,intro:true,
+  legs:0,bizLegs:0,cargoLots:0,profitable:0,profit:0,km:0,savedAt:0,
+  optHaptics:true,optPush:true,optReduce:false,opt24h:true,optSound:true};
 
-  clock() {
-    const base = 9*60 + 40 + this.state.gameMin;
-    const day = 12 + Math.floor(base / 1440);
-    const m = base % 1440;
-    return {label: 'Mar ' + day + ' · ' + String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0'),
-            hhmm: String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0')};
-  }
+ componentDidMount(){this._t=setInterval(()=>{
+  if(this.state.intro)return;
+  this.setState(s=>({gameMin:s.gameMin+6,minsToDep:s.ticket?Math.max(0,s.minsToDep-6):0}));},1000);}
+ componentWillUnmount(){clearInterval(this._t);clearTimeout(this._c);clearTimeout(this._toastT);}
 
-  hm(mins) {
-    const h = Math.floor(mins/60), m = Math.round(mins%60);
-    return h > 0 ? h + 'h ' + String(m).padStart(2,'0') + 'm' : m + 'm';
-  }
+ buzz(m,k){clearTimeout(this._toastT);this.setState({toast:m,toastKind:k||'ok'});
+  this._toastT=setTimeout(()=>this.setState({toast:null}),2400);}
 
-  intel(pid) {
-    const dest = this.destCityId();
-    const here = priceAt(pid, this.state.city);
-    if (dest) {
-      const there = priceAt(pid, dest), pct = Math.round((there / here - 1) * 100);
-      const cn = CITIES[dest].name;
-      if (pct >= 25) return {text: '+' + pct + '% in ' + cn, kind:'hot'};
-      if (pct >= 5)  return {text: cn + ': +' + pct + '%', kind:'ok'};
-      return {text: 'Avoid — ' + pct + '% in ' + cn, kind:'cold'};
-    }
-    let best = null;
-    (FLIGHTS[this.state.city] || []).forEach(fl => {
-      const there = priceAt(pid, fl.toId);
-      if (!best || there > best.price) best = {price: there, city: CITIES[fl.toId].name};
-    });
-    if (best && best.price > here * 1.2) return {text: 'Best: ' + best.city + ' ' + money(best.price), kind:'best'};
-    return {text:'', kind:''};
-  }
+ bagUsed(){return this.state.inv.filter(i=>i.slot==='bag').reduce((a,i)=>a+i.w*i.n,0);}
+ cargoUsed(){return this.state.inv.filter(i=>i.slot==='cargo').reduce((a,i)=>a+i.w*i.n,0);}
+ city(){return CITIES[this.state.city];}
+ locals(){return Object.keys(P).filter(id=>P[id].home===this.state.city);}
+ imports(){const c=this.state.city;
+  return Object.keys(P).filter(id=>P[id].home!==c)
+   .sort((a,b)=>hsh(a+c)-hsh(b+c)).slice(0,6);}
+ dest(){return this.state.ticket?this.state.ticket.toId:'';}
 
-  buy() {
-    const p = P[this.state.selId], n = this.state.qty, slot = this.state.slot;
-    const unit = priceAt(p.id, this.state.city), cost = unit * n, wt = p.w * n;
-    if (cost > this.state.cash) { this.buzz('Not enough cash — short ' + money(cost - this.state.cash), 'bad'); return; }
-    const cap = slot === 'bag' ? this.state.bagLimit : this.state.cargoCap;
-    const used = slot === 'bag' ? this.bagUsed() : this.cargoUsed();
-    if (used + wt > cap) { this.buzz('Over the ' + (slot==='bag'?'carry-on':'cargo') + ' limit by ' + (used+wt-cap).toFixed(1) + ' kg', 'bad'); return; }
-    this.setState(s => {
-      const inv = s.inv.slice();
-      const at = inv.findIndex(i => i.id === p.id && i.slot === slot);
-      if (at >= 0) inv[at] = Object.assign({}, inv[at], {n: inv[at].n + n});
-      else inv.push({id:p.id, name:p.name, icon:p.icon, w:p.w, n:n, slot:slot, cost:unit});
-      return {inv: inv, cash: s.cash - cost, sheet: null, qty: 1};
-    });
-    this.buzz('Bought ' + n + ' × ' + p.name + ' · ' + money(cost), 'ok');
-  }
+ utc(){return 9*60+40+this.state.gameMin;}
+ cityMin(cid){return this.utc()+(CITIES[cid].tz-3)*60;}
+ clock(){const m=this.utc();return{label:'Mar '+(12+Math.floor(m/1440))+' · '+hhmm(m)};}
+ hm(m){const h=Math.floor(m/60);return h>0?h+'h '+pad(Math.round(m%60))+'m':Math.round(m)+'m';}
 
-  buyTicket() {
-    const fl = this.state.selFlight;
-    const add = ADDONS.find(a => a.k === this.state.addon) || ADDONS[0];
-    const total = (this.state.cabin === 'economy' ? fl.econ : fl.biz) + add.price;
-    if (total > this.state.cash) { this.buzz('Not enough cash for this fare', 'bad'); return; }
-    const from = this.city();
-    this.setState(s => ({
-      cash: s.cash - total, sheet: null, tab: 'globe',
-      bagLimit: s.bagLimit + (add.k === 'light' ? 10 : add.k === 'standard' ? 20 : add.k === 'heavy' ? 50 : 0),
-      ticket: {no:fl.no, from:from.iata, to:CITIES[fl.toId].iata, toId:fl.toId, cabin:s.cabin, km:fl.km, dur:fl.dur, mins:fl.mins},
-      minsToDep: fl.mins,
-    }));
-    this.buzz('Ticket booked · ' + fl.no + ' to ' + CITIES[fl.toId].name, 'ok');
-  }
+ intel(pid){const d=this.dest(),here=priceAt(pid,this.state.city);
+  if(d){const t=priceAt(pid,d),pct=Math.round((t/here-1)*100),cn=CITIES[d].name;
+   if(pct>=25)return{text:'+'+pct+'% in '+cn,kind:'hot'};
+   if(pct>=5)return{text:cn+': +'+pct+'%',kind:'ok'};
+   return{text:'Avoid — '+pct+'% in '+cn,kind:'cold'};}
+  let best=null;routesFrom(this.state.city).forEach(r=>{const t=priceAt(pid,r.toId);
+   if(!best||t>best.p)best={p:t,c:CITIES[r.toId].name};});
+  if(best&&best.p>here*1.2)return{text:'Best: '+best.c+' '+money(best.p),kind:'best'};
+  return{text:'',kind:''};}
 
-  runCutscene() {
-    const t = this.state.ticket;
-    if (!t) return;
-    const dest = CITIES[t.toId];
-    const legMins = t.mins + 265;
-    const steps = [
-      {phase:'Gate closed', title:'Boarding · Takeoff', art:'assets/anim_flight_takeoff.webp', pct:'22%'},
-      {phase:'Cruising',    title:'34,000 ft',          art:'assets/anim_flight_cruise.webp',  pct:'62%'},
-      {phase:'Approach',    title:dest.name,            art:'assets/anim_flight_land.webp',    pct:'100%'},
-    ];
-    let i = 0;
-    this.setState({sheet:null, cut: steps[0], cutLine: t.no + ' · ' + t.from + ' → ' + t.to + ' · ' + t.km});
-    const tick = () => {
-      i += 1;
-      if (i < steps.length) { this.setState({cut: steps[i]}); this._c = setTimeout(tick, 1700); }
-      else {
-        this.setState(s => ({
-          cut:null, ticket:null, minsToDep:0, city: t.toId, tab:'globe', seg:'local',
-          visited: s.visited.indexOf(t.toId) < 0 ? s.visited.concat([t.toId]) : s.visited,
-          gameMin: s.gameMin + legMins, sheet: s.inv.length ? 'sell' : null,
-        }));
-        if (!this.state.inv.length) this.buzz('Landed in ' + dest.name + ' · nothing to sell', 'ok');
-      }
-    };
-    this._c = setTimeout(tick, 1700);
-  }
+ logAdd(icon,title,sub,amount,color){this.setState(s=>({log:[{icon,title,sub,amount,color,t:s.gameMin}].concat(s.log).slice(0,40)}));}
 
-  sellData() {
-    let gross = 0, cost = 0;
-    const city = this.state.city;
-    const rows = this.state.inv.map(i => {
-      const unit = priceAt(i.id, city), g = unit * i.n, c = i.cost * i.n;
-      gross += g; cost += c;
-      return {icon:i.icon, name:i.name, meta: i.n + ' × ' + money(unit) + ' · ' + (i.w*i.n).toFixed(1) + ' kg',
-        gross: money(g), delta: (g-c >= 0 ? '+' : '−') + money(Math.abs(g-c)), color: g-c >= 0 ? '#3CB8A4' : '#E05555'};
-    });
-    return {rows: rows, gross: gross, net: gross - cost};
-  }
+ buy(){const s=this.state,p=P[s.selId],n=s.qty,slot=s.slot;
+  const unit=priceAt(p.id,s.city),cost=unit*n,wt=p.w*n;
+  if(cost>s.cash){this.buzz('Not enough cash — short '+money(cost-s.cash),'bad');return;}
+  const cap=slot==='bag'?s.bagLimit:s.cargoCap,used=slot==='bag'?this.bagUsed():this.cargoUsed();
+  if(used+wt>cap){this.buzz('Over the '+(slot==='bag'?'carry-on':'cargo')+' limit by '+(used+wt-cap).toFixed(1)+' kg','bad');return;}
+  this.setState(st=>{const inv=st.inv.slice();
+   const at=inv.findIndex(i=>i.id===p.id&&i.slot===slot);
+   if(at>=0)inv[at]=Object.assign({},inv[at],{n:inv[at].n+n});
+   else inv.push({id:p.id,name:p.name,icon:p.icon,w:p.w,n:n,slot:slot,cost:unit});
+   return{inv,cash:st.cash-cost,sheet:null,qty:1,cargoLots:st.cargoLots+(slot==='cargo'?1:0)};});
+  this.logAdd(p.icon,'Bought '+n+' × '+p.name,CITIES[s.city].name+' · '+hhmm(this.cityMin(s.city)),'−'+money(cost),'#E05555');
+  this.buzz('Bought '+n+' × '+p.name+' · '+money(cost),'ok');}
 
-  sellAll() {
-    const d = this.sellData();
-    this.setState(s => ({cash: s.cash + d.gross, inv: [], sheet: null, lastSale: d.net}));
-    this.buzz(d.net >= 0 ? 'Nice trade! ' + money(d.net) + ' profit' : 'Rough run — ' + money(-d.net) + ' down. Next leg pays it back.', d.net >= 0 ? 'ok' : 'bad');
-  }
+ buyTicket(){const s=this.state,fl=s.selFlight;
+  const add=ADDONS.find(a=>a.k===s.addon)||ADDONS[0];
+  const total=(s.cabin==='economy'?fl.econ:fl.biz)+add.price;
+  if(total>s.cash){this.buzz('Not enough cash for this fare','bad');return;}
+  const from=this.city(),to=CITIES[fl.toId];
+  const kg=add.k==='light'?10:add.k==='standard'?20:add.k==='heavy'?50:0;
+  this.setState(st=>({cash:st.cash-total,sheet:null,tab:'globe',page:null,bagLimit:st.bagLimit+kg,
+   ticket:{no:fl.no,from:from.iata,to:to.iata,toId:fl.toId,cabin:st.cabin,km:fl.km,dur:fl.dur,mins:fl.mins},
+   minsToDep:Math.max(30,fl.mins)}));
+  this.logAdd('assets/icons/ic_flight.webp','Booked '+fl.no,from.iata+' → '+to.iata+' · '+(s.cabin==='economy'?'Economy':'Business'),'−'+money(total),'#E05555');
+  this.buzz('Ticket booked · '+fl.no+' to '+to.name,'ok');}
 
-  renderVals() {
-    const s = this.state, city = this.city(), clock = this.clock();
-    const setTab = (t) => () => this.setState({tab:t, query:''});
-    const bagUsed = this.bagUsed(), cargoUsed = this.cargoUsed();
-    const bagRatio = Math.min(1, bagUsed / s.bagLimit);
-    const p = s.selId ? P[s.selId] : null;
-    const tagColor = (k) => k === 'hot' ? '#3CB8A4' : k === 'best' ? '#E89A3C' : k === 'cold' ? '#E05555' : '#A8B8C8';
-    const ids = s.seg === 'local' ? this.localsHere() : this.importsHere();
-    const flights = (FLIGHTS[s.city] || []);
-    const tabDefs = [
-      {k:'globe', label:'Globe', src:'assets/ic_city.webp'},
-      {k:'market', label:'Market', src:'assets/ic_market.webp'},
-      {k:'flights', label:'Flights', src:'assets/ic_flight.webp'},
-      {k:'bags', label:'Bags', src:'assets/ic_inventory.webp'},
-      {k:'more', label:'More', src:'assets/ic_log.webp'},
-    ];
-    const TAB_DIM = 'invert(.62) sepia(.06) saturate(.5) brightness(1.05)';
-    const TAB_ON = 'invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)';
-    const cabinRow = (k, label, sub, price, color) => ({
-      label:label, sub:sub, price: money(price), onTap: () => this.setState({cabin:k}),
-      icon: k === 'economy' ? 'assets/ic_economy.webp' : 'assets/ic_business.webp',
-      bg: s.cabin === k ? 'rgba(232,154,60,.12)' : '#0F2536', bd: s.cabin === k ? 'rgba(232,154,60,.5)' : '#24394B',
-      dotBd: s.cabin === k ? '#E89A3C' : '#3A566D', dotBg: s.cabin === k ? '#E89A3C' : 'transparent', fg: color,
-    });
-    const sell = this.sellData();
-    const add = ADDONS.find(a => a.k === s.addon) || ADDONS[0];
-    const fareTotal = s.selFlight ? (s.cabin === 'economy' ? s.selFlight.econ : s.selFlight.biz) + add.price : 0;
-    const unitHere = p ? priceAt(p.id, s.city) : 0;
-    const costTotal = unitHere * s.qty, wtTotal = p ? p.w * s.qty : 0;
-    const slotUsed = s.slot === 'bag' ? bagUsed : cargoUsed;
-    const slotCap = s.slot === 'bag' ? s.bagLimit : s.cargoCap;
-    const over = slotUsed + wtTotal > slotCap;
-    const selIntel = p ? this.intel(p.id) : {text:'', kind:''};
-    const dest = this.destCityId();
+ runCutscene(){const t=this.state.ticket;if(!t)return;const to=CITIES[t.toId];
+  const steps=[{phase:'Gate closed',title:'Boarding · Takeoff',art:'assets/animations/anim_flight_takeoff.webp',pct:'22%'},
+   {phase:'Cruising',title:'34,000 ft',art:'assets/animations/anim_flight_cruise.webp',pct:'62%'},
+   {phase:'Approach',title:to.name,art:'assets/animations/anim_flight_land.webp',pct:'100%'}];
+  let i=0;const dur=this.state.optReduce?600:1700;
+  this.setState({sheet:null,cut:steps[0],cutLine:t.no+' · '+t.from+' → '+t.to+' · '+t.km.toLocaleString('en-US')+' km'});
+  const tick=()=>{i++;
+   if(i<steps.length){this.setState({cut:steps[i]});this._c=setTimeout(tick,dur);}
+   else{this.setState(s=>({cut:null,ticket:null,minsToDep:0,city:t.toId,tab:'globe',page:null,seg:'local',rot:-CITIES[t.toId].lon,
+     visited:s.visited.indexOf(t.toId)<0?s.visited.concat([t.toId]):s.visited,
+     gameMin:s.gameMin+s.minsToDep+t.mins,legs:s.legs+1,km:s.km+t.km,
+     bizLegs:s.bizLegs+(t.cabin==='business'?1:0),
+     sheet:s.inv.length?'sell':null}));
+    this.logAdd('assets/icons/ic_flight.webp','Landed in '+to.name,t.no+' · '+t.km.toLocaleString('en-US')+' km','','#A8B8C8');
+    if(!this.state.inv.length)this.buzz('Landed in '+to.name+' · nothing to sell','ok');}};
+  this._c=setTimeout(tick,dur);}
 
-    return {
-      clockText: clock.label, clockState: 'running', localTime: clock.hhmm, cashText: money(s.cash),
-      bagText: bagUsed.toFixed(1) + ' / ' + s.bagLimit + ' kg',
-      cargoText: cargoUsed.toFixed(1) + ' / ' + s.cargoCap + ' kg',
-      bagColor: bagRatio > 0.9 ? '#E05555' : bagRatio > 0.7 ? '#E89A3C' : '#F2F6FA',
-      bagPct: Math.round(bagRatio * 100) + '%',
-      ringGradient: 'conic-gradient(' + (bagRatio > 0.9 ? '#E05555' : '#3CB8A4') + ' ' + (bagRatio*360) + 'deg, #16303F 0deg)',
-      cityName: city.name, cityHero: city.hero, cityElev: city.elev,
-      cityAirportLine: city.airport + ' · ' + city.iata + ' / ' + city.icao + ' · ' + city.country,
-      routeCount: flights.length + ' cities',
-      marketSub: city.name + ' · ' + this.localsHere().length + ' local, ' + this.importsHere().length + ' imported',
-      flightsSub: 'Departing ' + city.iata + ' · next 24 h',
-      isGlobe: s.tab==='globe', isMarket: s.tab==='market', isFlights: s.tab==='flights', isBags: s.tab==='bags', isMore: s.tab==='more',
-      searching: s.query.length > 0, notSearching: s.query.length === 0, query: s.query,
-      onQuery: (e) => this.setState({query: e.target.value}),
-      results: Object.keys(CITIES).filter(k => k !== s.city).map(k => CITIES[k])
-        .filter(c => (c.iata + ' ' + c.airport + ' ' + c.name + ' ' + c.country).toLowerCase().includes(s.query.toLowerCase()))
-        .map(c => ({iata:c.iata, name:c.airport, sub: c.name + ' · ' + c.country, onTap: () => this.setState({query:'', tab:'flights'})})),
-      goMarket: setTab('market'), goFlights: setTab('flights'),
-      tabs: tabDefs.map(t => ({label:t.label, onTap:setTab(t.k), color: s.tab === t.k ? '#E89A3C' : '#6C8298',
-        iconSrc: t.src, iconFilter: s.tab === t.k ? TAB_ON : TAB_DIM})),
-      marketSegs: ['local','imported'].map(k => ({
-        label: k === 'local' ? 'Local specialties' : 'Imported goods', onTap: () => this.setState({seg:k}),
-        bg: s.seg === k ? '#2A455A' : 'transparent', fg: s.seg === k ? '#F2F6FA' : '#A8B8C8'})),
-      products: ids.map(id => {
-        const q = P[id], unit = priceAt(id, s.city), tag = this.intel(id);
-        return {
-          name:q.name, icon:q.icon, buy: money(unit), weight: q.w.toFixed(1) + ' kg',
-          meta: q.category + ' · sells here ' + money(Math.round(unit * 0.92)),
-          origin: q.home === s.city ? 'Local' : 'Import',
-          originBg: q.home === s.city ? 'rgba(60,184,164,.15)' : 'rgba(126,182,217,.14)',
-          originFg: q.home === s.city ? '#3CB8A4' : '#7EB6D9',
-          showTag: !!tag.text, tag: tag.text, tagFg: tagColor(tag.kind), tagBg: 'rgba(255,255,255,.06)',
-          onTap: () => this.setState({sheet:'product', selId:id, qty:1, slot:'bag'}),
-        };
-      }),
-      filters: [
-        {k:'departure', label:'Departure'}, {k:'price', label:'Cheapest'},
-        {k:'duration', label:'Shortest'}, {k:'unvisited', label:'New cities'}, {k:'biz', label:'Business'},
-      ].map(fl => ({label:fl.label, onTap: () => this.setState({filter:fl.k}),
-        bg: s.filter === fl.k ? '#E89A3C' : '#152C3E', fg: s.filter === fl.k ? '#0B1C2C' : '#C6D3DF',
-        bd: s.filter === fl.k ? '#E89A3C' : '#2A455A'})),
-      flights: flights.slice().sort((a,b) =>
-          s.filter === 'price' ? a.econ - b.econ :
-          s.filter === 'duration' ? a.mins - b.mins :
-          s.filter === 'unvisited' ? ((s.visited.indexOf(a.toId) < 0 ? 0 : 1) - (s.visited.indexOf(b.toId) < 0 ? 0 : 1)) :
-          s.filter === 'biz' ? a.biz - b.biz : a.mins - b.mins)
-        .map(fl => ({
-          no:fl.no, airline:fl.airline, dep:fl.dep, arr:fl.arr, dur:fl.dur, km:fl.km, stops:fl.stops,
-          from: city.iata, to: CITIES[fl.toId].iata, fromCity: city.name, toCity: CITIES[fl.toId].name,
-          econ: money(fl.econ), biz: money(fl.biz), unvisited: s.visited.indexOf(fl.toId) < 0,
-          onTap: () => this.setState({sheet:'flight', selFlight:fl, cabin:'economy', addon:''}),
-        })),
-      inventory: s.inv.map(i => ({
-        icon:i.icon, name:i.name, meta: i.n + ' × ' + money(i.cost) + ' · ' + (i.w*i.n).toFixed(1) + ' kg',
-        slot: i.slot === 'bag' ? 'Carry-on' : 'Cargo',
-        slotIcon: i.slot === 'bag' ? 'assets/ic_baggage.webp' : 'assets/ic_cargo.webp',
-        slotBg: i.slot === 'bag' ? 'rgba(126,182,217,.14)' : 'rgba(201,164,92,.16)',
-        slotFg: i.slot === 'bag' ? '#7EB6D9' : '#C9A45C',
-      })),
-      bagsEmpty: s.inv.length === 0,
-      moreRows: [
-        {label:'Trader notes', value: s.visited.length + (s.visited.length === 1 ? ' city' : ' cities')},
-        {label:'Achievements', value:'3 / 24'},
-        {label:'Trade log', value:''},
-        {label:'Data sources', value:''},
-        {label:'Notifications', value:'On'},
-        {label:'Settings', value:''},
-      ],
-      hasTicket: !!s.ticket,
-      ticketLine: s.ticket ? s.ticket.no + ' · ' + s.ticket.from + ' → ' + s.ticket.to : '',
-      ticketSub: s.ticket ? (s.minsToDep > 0 ? 'Departs in ' + this.hm(s.minsToDep) + ' · ' + (s.ticket.cabin === 'economy' ? 'Economy' : 'Business') : 'Boarding now') : '',
-      onFastForward: () => this.setState({sheet:'ff'}),
-      ffText: s.ticket ? 'This skips ' + this.hm(s.minsToDep) + ' of world time. Anything still on the shelf stays behind.' : '',
-      onConfirmFF: () => this.runCutscene(),
-      sheetProduct: s.sheet === 'product', sheetFlight: s.sheet === 'flight', sheetFF: s.sheet === 'ff', sheetSell: s.sheet === 'sell',
-      closeSheet: () => this.setState({sheet:null}),
-      stop: (e) => e.stopPropagation(),
-      sel: p ? {name:p.name, icon:p.icon, category:p.category, weight: p.w.toFixed(1) + ' kg',
-        buy: money(unitHere), sell: money(Math.round(unitHere * 0.92)),
-        forecast: dest ? money(priceAt(p.id, dest)) : '— book first', tagFg: tagColor(selIntel.kind)} : {},
-      qty: s.qty,
-      onMinus: () => this.setState(st => ({qty: Math.max(1, st.qty - 1)})),
-      onPlus: () => this.setState(st => ({qty: st.qty + 1})),
-      qtyPresets: [1, 5, 'Max'].map(v => ({label: v === 'Max' ? 'Max' : '×' + v,
-        onTap: () => this.setState(st => ({qty: v === 'Max'
-          ? Math.max(1, Math.floor(((st.slot==='bag' ? st.bagLimit - bagUsed : st.cargoCap - cargoUsed)) / P[st.selId].w))
-          : v}))})),
-      slotSegs: ['bag','cargo'].map(k => ({label: k === 'bag' ? 'Carry-on' : 'Cargo hold', onTap: () => this.setState({slot:k}),
-        bg: s.slot === k ? '#2A455A' : 'transparent', fg: s.slot === k ? '#F2F6FA' : '#A8B8C8'})),
-      costLabel: p ? money(costTotal) + ' · ' + wtTotal.toFixed(1) + ' kg' : '',
-      afterLabel: p ? (slotUsed + wtTotal).toFixed(1) + ' / ' + slotCap + ' kg after' : '',
-      afterColor: over ? '#E05555' : '#A8B8C8',
-      buyLabel: p ? (over ? 'Over the limit' : 'Buy for ' + money(costTotal)) : 'Buy',
-      onBuy: () => this.buy(),
-      upgrades: [{l:'+10 kg $40', t:'light'},{l:'+20 kg $70', t:'standard'},{l:'+50 kg $150', t:'heavy'},{l:'Forecast $200', t:'intel'}]
-        .map(u => ({label:u.l, onTap: () => {
-          if (u.t === 'intel') {
-            if (s.cash < 200) { this.buzz('Not enough cash', 'bad'); return; }
-            if (!dest) { this.buzz('Book a flight first — a forecast needs a destination', 'bad'); return; }
-            const margin = priceAt(s.selId, dest) - unitHere;
-            this.setState(st => ({cash: st.cash - 200}));
-            this.buzz('Forecast: ' + money(margin * 0.94) + '–' + money(margin * 1.06) + ' per unit in ' + CITIES[dest].name, 'ok');
-            return;
-          }
-          const kg = u.t === 'light' ? 10 : u.t === 'standard' ? 20 : 50;
-          const cost = u.t === 'light' ? 40 : u.t === 'standard' ? 70 : 150;
-          if (s.cash < cost) { this.buzz('Not enough cash', 'bad'); return; }
-          this.setState(st => ({bagLimit: st.bagLimit + kg, cash: st.cash - cost}));
-          this.buzz('Carry-on now ' + (s.bagLimit + kg) + ' kg', 'ok');
-        }})),
-      selF: s.selFlight ? {no:s.selFlight.no, airline:s.selFlight.airline, dep:s.selFlight.dep, arr:s.selFlight.arr,
-        dur:s.selFlight.dur, km:s.selFlight.km, fromCity: city.name, toCity: CITIES[s.selFlight.toId].name} : {},
-      cabins: s.selFlight ? [
-        cabinRow('economy', 'Economy', '23 kg carry-on', s.selFlight.econ, '#7EB6D9'),
-        cabinRow('business', 'Business', '40 kg carry-on · lounge', s.selFlight.biz, '#C9A45C'),
-      ] : [],
-      addons: ADDONS.map(a => ({label:a.label, price: a.price ? money(a.price) : 'included',
-        onTap: () => this.setState({addon:a.k}),
-        bg: s.addon === a.k ? 'rgba(60,184,164,.14)' : '#0F2536',
-        bd: s.addon === a.k ? 'rgba(60,184,164,.45)' : '#24394B',
-        fg: s.addon === a.k ? '#3CB8A4' : '#F2F6FA'})),
-      flightTotal: money(fareTotal),
-      onBuyTicket: () => this.buyTicket(),
-      cutscene: !!s.cut, cutArt: s.cut ? s.cut.art : '', cutPhase: s.cut ? s.cut.phase : '',
-      cutTitle: s.cut ? s.cut.title : '', cutPct: s.cut ? s.cut.pct : '0%', cutSub: s.cutLine || '',
-      sellRows: sell.rows, sellNet: (sell.net >= 0 ? '+' : '−') + money(Math.abs(sell.net)),
-      sellNetColor: sell.net >= 0 ? '#3CB8A4' : '#E05555',
-      sellHeadline: sell.net >= 0
-        ? 'Buyers in ' + city.name + ' are paying up today. Sell now or hold for the next hop.'
-        : 'Soft market in ' + city.name + '. Selling here cuts the loss; holding costs you weight.',
-      onSellAll: () => this.sellAll(),
-      hasToast: !!s.toast, toast: s.toast, toastColor: s.toastKind === 'bad' ? '#E05555' : '#3CB8A4',
-      showNotif: s.notif,
-      onPreviewNotif: () => { this.setState({notif:true}); setTimeout(() => this.setState({notif:false}), 4200); },
-      onDismissNotif: () => this.setState({notif:false}),
-      widgetCountdown: s.ticket ? this.hm(s.minsToDep) : '—',
-      widgetRoute: s.ticket ? s.ticket.no + ' · ' + s.ticket.from + ' → ' + s.ticket.to : 'no flight booked',
-      notifTitle: s.ticket ? 'Boarding now — ' + s.ticket.no + ' to ' + CITIES[s.ticket.toId].name : 'Market opens in ' + city.name,
-      notifBody: s.ticket ? 'Gate closes in ' + this.hm(Math.max(6, s.minsToDep)) + '. Tap to board.' : 'Fresh prices on the board. Tap to trade.',
-      widgetDelta: s.lastSale != null ? (s.lastSale >= 0 ? '+' : '−') + money(Math.abs(s.lastSale)) + ' last run' : 'no trades yet',
-    };
-  }
+ sellData(){let gross=0,cost=0;const city=this.state.city;
+  const rows=this.state.inv.map(i=>{const u=priceAt(i.id,city),g=u*i.n,c=i.cost*i.n;gross+=g;cost+=c;
+   return{icon:i.icon,name:i.name,meta:i.n+' × '+money(u)+' · '+(i.w*i.n).toFixed(1)+' kg',
+    gross:money(g),delta:(g-c>=0?'+':'−')+money(Math.abs(g-c)),color:g-c>=0?'#3CB8A4':'#E05555'};});
+  return{rows,gross,net:gross-cost};}
+
+ sellAll(){const d=this.sellData(),city=this.city();
+  this.setState(s=>({cash:s.cash+d.gross,inv:[],sheet:null,lastSale:d.net,
+   profit:s.profit+Math.max(0,d.net),profitable:s.profitable+(d.net>0?1:0)}));
+  this.logAdd('assets/icons/ic_market.webp','Sold '+d.rows.length+(d.rows.length===1?' lot':' lots'),city.name+' · '+hhmm(this.cityMin(city.id)),
+   (d.net>=0?'+':'−')+money(Math.abs(d.net)),d.net>=0?'#3CB8A4':'#E05555');
+  this.buzz(d.net>=0?'Nice trade! '+money(d.net)+' profit':'Rough run — '+money(-d.net)+' down. Next leg pays it back.',d.net>=0?'ok':'bad');}
+
+ stats(){const s=this.state;
+  const countries={},europe=[],asia=[];
+  s.visited.forEach(v=>{const c=CITIES[v];countries[c.country]=1;
+   if(c.cont==='Europe')europe.push(v);else asia.push(v);});
+  return{cities:s.visited.length,legs:s.legs,profitable:s.profitable,europe:europe.length,
+   asia:asia.length,countries:Object.keys(countries).length,bizLegs:s.bizLegs,
+   cargoLots:s.cargoLots,cash:s.cash,profit:s.profit};}
+
+ renderVals(){
+  const s=this.state,city=this.city(),clock=this.clock(),st=this.stats();
+  const go=t=>()=>this.setState({tab:t,page:null,query:''});
+  const bagUsed=this.bagUsed(),cargoUsed=this.cargoUsed();
+  const bagRatio=Math.min(1,bagUsed/s.bagLimit);
+  const p=s.selId?P[s.selId]:null;
+  const tagColor=k=>k==='hot'?'#3CB8A4':k==='best'?'#E89A3C':k==='cold'?'#E05555':'#A8B8C8';
+  const ids=s.seg==='local'?this.locals():this.imports();
+  const routes=routesFrom(s.city);
+  const d=this.dest();
+  const TD='invert(.62) sepia(.06) saturate(.5) brightness(1.05)';
+  const TO='invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)';
+  const localNow=this.cityMin(s.city);
+  const R=Math.PI/180,rot=s.rot===undefined?-city.lon:s.rot;
+  const cabinRow=(k,label,sub,price,color)=>({label,sub,price:money(price),
+   onTap:()=>this.setState({cabin:k}),icon:k==='economy'?'assets/icons/ic_economy.webp':'assets/icons/ic_business.webp',
+   bg:s.cabin===k?'rgba(232,154,60,.12)':'#0F2536',bd:s.cabin===k?'rgba(232,154,60,.5)':'#24394B',
+   dotBd:s.cabin===k?'#E89A3C':'#3A566D',dotBg:s.cabin===k?'#E89A3C':'transparent',fg:color});
+  const sell=this.sellData();
+  const add=ADDONS.find(a=>a.k===s.addon)||ADDONS[0];
+  const fareTotal=s.selFlight?(s.cabin==='economy'?s.selFlight.econ:s.selFlight.biz)+add.price:0;
+  const unitHere=p?priceAt(p.id,s.city):0;
+  const costTotal=unitHere*s.qty,wtTotal=p?p.w*s.qty:0;
+  const slotUsed=s.slot==='bag'?bagUsed:cargoUsed,slotCap=s.slot==='bag'?s.bagLimit:s.cargoCap;
+  const over=slotUsed+wtTotal>slotCap;
+  const selIntel=p?this.intel(p.id):{text:'',kind:''};
+  const toggle=(key,label,sub)=>({label,sub,onTap:()=>this.setState(o=>{const n={};n[key]=!o[key];return n;}),
+   track:s[key]?'#3CB8A4':'#2A455A',knob:s[key]?'22px':'2px'});
+  const fmtMoney=n=>(n>=0?'+':'−')+money(Math.abs(n));
+
+  return{
+   showIntro:s.intro,
+   introSteps:[{icon:'assets/icons/ic_market.webp',title:'Buy where it is made',sub:'Local goods price low at their origin.'},
+    {icon:'assets/icons/ic_flight.webp',title:'Fly it somewhere scarce',sub:'Distance and rarity set the markup.'},
+    {icon:'assets/icons/ic_inventory.webp',title:'Mind the kilos',sub:'23 kg carry-on. Buy more, or use the hold.'}],
+   onStart:()=>this.setState({intro:false}),
+   clockText:clock.label,clockState:'running',localTime:hhmm(localNow),cashText:money(s.cash),
+   lockDate:'Thursday, '+(12+Math.floor(this.utc()/1440))+' March',
+   bagText:bagUsed.toFixed(1)+' / '+s.bagLimit+' kg',
+   cargoText:cargoUsed.toFixed(1)+' / '+s.cargoCap+' kg',
+   bagColor:bagRatio>0.9?'#E05555':bagRatio>0.7?'#E89A3C':'#F2F6FA',
+   bagPct:Math.round(bagRatio*100)+'%',
+   ringGradient:'conic-gradient('+(bagRatio>0.9?'#E05555':'#3CB8A4')+' '+(bagRatio*360)+'deg, #16303F 0deg)',
+   cityName:city.name,cityHero:city.hero,cityElev:city.elev+' ft',
+   cityAirportLine:city.airport+' · '+city.iata+' / '+city.icao+' · '+city.country,
+   routeCount:routes.length+' cities',
+   marketSub:city.name+' · '+this.locals().length+' local, '+this.imports().length+' imported',
+   flightsSub:'Departing '+city.iata+' · next 24 h',
+   earthSize:'552px 276px',
+   earthPos:(-((90-rot)/360*552)).toFixed(1)+'px 0px',
+   globeHint:s.dragging?city.name+' · '+Math.round(((-rot%360)+360)%360)+'° E':'Drag to spin the world',
+   pins:CIDS.map(k=>{const c=CITIES[k];
+    const rel=((c.lon+rot+540)%360)-180;
+    const vis=Math.abs(rel)<88,edge=Math.cos(rel*R);
+    const x=50+rel/90*50,y=50-c.lat/90*50;
+    const here=k===s.city;
+    return{iata:c.iata,x:x.toFixed(2)+'%',y:y.toFixed(2)+'%',
+     opacity:vis?(here?1:(0.4+edge*0.6).toFixed(2)):0,
+     size:here?'10px':'6px',
+     color:here?'#E89A3C':s.visited.indexOf(k)>=0?'#3CB8A4':'#7EB6D9',
+     glow:here?'0 0 12px 3px rgba(232,154,60,.55)':'0 0 6px rgba(4,14,24,.9)',
+     showLabel:vis&&(here||(s.visited.indexOf(k)>=0&&edge>0.5))};}),
+   onGlobeDown:e=>{this._px=e.clientX;this.setState({dragging:true});},
+   onGlobeMove:e=>{if(!this.state.dragging)return;const dx=e.clientX-this._px;this._px=e.clientX;
+    this.setState(o=>({rot:(o.rot===undefined?-CITIES[o.city].lon:o.rot)+dx*0.55}));},
+   onGlobeUp:()=>this.setState({dragging:false}),
+   isGlobe:s.tab==='globe',isMarket:s.tab==='market',isFlights:s.tab==='flights',isBags:s.tab==='bags',
+   isMore:s.tab==='more'&&!s.page,
+   isAchievements:s.page==='ach',isNotes:s.page==='notes',isLog:s.page==='log',
+   isSources:s.page==='sources',isSettings:s.page==='settings',
+   backToMore:()=>this.setState({page:null}),
+   searching:s.query.length>0,notSearching:s.query.length===0,query:s.query,
+   onQuery:e=>this.setState({query:e.target.value}),
+   results:CIDS.filter(k=>k!==s.city).map(k=>CITIES[k])
+    .filter(c=>(c.iata+' '+c.icao+' '+c.airport+' '+c.name+' '+c.country).toLowerCase().includes(s.query.toLowerCase()))
+    .slice(0,6).map(c=>({iata:c.iata,name:c.airport,sub:c.name+' · '+c.country,
+     onTap:()=>this.setState({query:'',tab:'flights'})})),
+   goMarket:go('market'),goFlights:go('flights'),
+   tabs:[{k:'globe',label:'Globe',src:'assets/icons/ic_city.webp'},{k:'market',label:'Market',src:'assets/icons/ic_market.webp'},
+    {k:'flights',label:'Flights',src:'assets/icons/ic_flight.webp'},{k:'bags',label:'Bags',src:'assets/icons/ic_inventory.webp'},
+    {k:'more',label:'More',src:'assets/icons/ic_log.webp'}]
+    .map(t=>({label:t.label,onTap:go(t.k),color:s.tab===t.k?'#E89A3C':'#6C8298',
+     iconSrc:t.src,iconFilter:s.tab===t.k?TO:TD})),
+   marketSegs:['local','imported'].map(k=>({label:k==='local'?'Local specialties':'Imported goods',
+    onTap:()=>this.setState({seg:k}),bg:s.seg===k?'#2A455A':'transparent',fg:s.seg===k?'#F2F6FA':'#A8B8C8'})),
+   products:ids.map(id=>{const q=P[id],unit=priceAt(id,s.city),tag=this.intel(id);
+    return{name:q.name,icon:q.icon,buy:money(unit),weight:q.w.toFixed(1)+' kg',
+     meta:q.category+' · sells here '+money(Math.round(unit*0.92)),
+     origin:q.home===s.city?'Local':'Import',
+     originBg:q.home===s.city?'rgba(60,184,164,.15)':'rgba(126,182,217,.14)',
+     originFg:q.home===s.city?'#3CB8A4':'#7EB6D9',
+     showTag:!!tag.text,tag:tag.text,tagFg:tagColor(tag.kind),tagBg:'rgba(255,255,255,.06)',
+     onTap:()=>this.setState({sheet:'product',selId:id,qty:1,slot:'bag'})};}),
+   filters:[{k:'departure',label:'Departure'},{k:'price',label:'Cheapest'},{k:'duration',label:'Shortest'},
+    {k:'unvisited',label:'New cities'},{k:'biz',label:'Business'}]
+    .map(fl=>({label:fl.label,onTap:()=>this.setState({filter:fl.k}),
+     bg:s.filter===fl.k?'#E89A3C':'#152C3E',fg:s.filter===fl.k?'#0B1C2C':'#C6D3DF',
+     bd:s.filter===fl.k?'#E89A3C':'#2A455A'})),
+   flights:routes.slice().sort((a,b)=>s.filter==='price'?a.econ-b.econ:s.filter==='duration'?a.mins-b.mins:
+     s.filter==='unvisited'?((s.visited.indexOf(a.toId)<0?0:1)-(s.visited.indexOf(b.toId)<0?0:1))||a.depMin-b.depMin:
+     s.filter==='biz'?a.biz-b.biz:a.depMin-b.depMin)
+    .slice(0,7).map(fl=>({no:fl.no,airline:fl.airline,dep:hhmm(fl.depMin),arr:hhmm(fl.depMin+fl.mins+(CITIES[fl.toId].tz-city.tz)*60),
+     dur:fl.dur,km:fl.km.toLocaleString('en-US')+' km',stops:fl.stops,
+     from:city.iata,to:CITIES[fl.toId].iata,econ:money(fl.econ),biz:money(fl.biz),
+     unvisited:s.visited.indexOf(fl.toId)<0,
+     onTap:()=>this.setState({sheet:'flight',selFlight:fl,cabin:'economy',addon:''})})),
+   inventory:s.inv.map(i=>({icon:i.icon,name:i.name,
+    meta:i.n+' × '+money(i.cost)+' · '+(i.w*i.n).toFixed(1)+' kg',
+    slot:i.slot==='bag'?'Carry-on':'Cargo',
+    slotIcon:i.slot==='bag'?'assets/icons/ic_baggage.webp':'assets/icons/ic_cargo.webp',
+    slotBg:i.slot==='bag'?'rgba(126,182,217,.14)':'rgba(201,164,92,.16)',
+    slotFg:i.slot==='bag'?'#7EB6D9':'#C9A45C'})),
+   bagsEmpty:s.inv.length===0,
+   moreRows:[{label:'Trader notes',value:s.visited.length+' / '+CIDS.length,icon:'assets/achievements/ach_cities_10.webp',page:'notes'},
+    {label:'Achievements',value:st.cities?ACH.filter(a=>st[a.stat]>=a.goal).length+' / '+ACH.length:'0 / '+ACH.length,icon:'assets/achievements/ach_legendary.webp',page:'ach'},
+    {label:'Trade log',value:s.log.length?String(s.log.length):'',icon:'assets/icons/ic_log.webp',page:'log'},
+    {label:'Data sources',value:'',icon:'assets/icons/ic_attr.webp',page:'sources'},
+    {label:'Settings & save',value:'',icon:'assets/icons/ic_save.webp',page:'settings'}]
+    .map(r=>({label:r.label,value:r.value,icon:r.icon,onTap:()=>this.setState({page:r.page})})),
+   achScore:ACH.filter(a=>st[a.stat]>=a.goal).length+' / '+ACH.length,
+   achPct:Math.round(ACH.filter(a=>st[a.stat]>=a.goal).length/ACH.length*100)+'%',
+   achievements:ACH.map(a=>{const cur=st[a.stat]||0,done=cur>=a.goal;
+    const pct=Math.min(100,Math.round(cur/a.goal*100));
+    return{icon:a.icon,name:a.name,desc:a.desc,
+     opacity:done?1:0.62,bd:done?'rgba(232,154,60,.4)':'#1E3A4F',
+     filter:done?'none':'grayscale(1) brightness(.75)',
+     showBar:!done&&cur>0,pct:pct+'%',
+     chip:done?'Unlocked':(a.goal>999?money(cur):cur+' / '+a.goal),
+     chipBg:done?'rgba(232,154,60,.16)':'rgba(255,255,255,.06)',
+     chipFg:done?'#E89A3C':'#7B90A4'};}),
+   notesSub:s.visited.length+' of '+CIDS.length+' hubs visited',
+   notes:CIDS.map(k=>{const c=CITIES[k],seen=s.visited.indexOf(k)>=0,here=k===s.city;
+    return{name:seen?c.name:'Unvisited hub',code:seen?c.iata+' · '+c.country:'— · —',
+     hero:c.hero,filter:seen?'none':'grayscale(1) brightness(.35) blur(2px)',
+     opacity:seen?1:0.7,
+     note:seen?NOTE_TEXT[k]:'Fly here to open the file. Prices, specialities and route notes unlock on arrival.',
+     chip:here?'Here':seen?'Visited':'Locked',
+     chipBg:here?'rgba(232,154,60,.2)':seen?'rgba(60,184,164,.16)':'rgba(255,255,255,.08)',
+     chipFg:here?'#E89A3C':seen?'#3CB8A4':'#7B90A4'};}),
+   logSub:s.legs+(s.legs===1?' leg':' legs')+' flown',
+   logNet:fmtMoney(s.cash-6944),logNetColor:s.cash-6944>=0?'#3CB8A4':'#E05555',
+   logKm:s.km.toLocaleString('en-US')+' km',logLegs:String(s.legs),
+   logEmpty:s.log.length===0,
+   logRows:s.log.map(l=>({icon:l.icon,title:l.title,sub:l.sub,amount:l.amount,color:l.color})),
+   sources:SOURCES,
+   toggles:[toggle('optHaptics','Haptic feedback','A tap on every buy, sell and boarding call.'),
+    toggle('optPush','Boarding notifications','Push you when the gate is about to close.'),
+    toggle('optSound','Sound effects','Cabin tones and market chatter.'),
+    toggle('opt24h','24-hour clock','Show all times as 00:00–23:59.'),
+    toggle('optReduce','Reduce motion','Shorten the flight cutscene.')],
+   saveSub:'Last saved '+(s.savedAt?this.hm(s.gameMin-s.savedAt)+' ago':'at takeoff')+' · slot 1',
+   onSaveNow:()=>{this.setState(o=>({savedAt:o.gameMin}));this.buzz('Progress saved to slot 1','ok');},
+   onRestart:()=>{clearTimeout(this._c);
+    this.setState({tab:'globe',page:null,city:'istanbul',visited:['istanbul'],cash:6944,inv:[],log:[],
+     ticket:null,minsToDep:0,gameMin:0,bagLimit:23,legs:0,bizLegs:0,cargoLots:0,profitable:0,profit:0,rot:undefined,
+     km:0,lastSale:null,sheet:null,cut:null,intro:true});
+    this.buzz('New run — back in Istanbul','ok');},
+   hasTicket:!!s.ticket,
+   ticketLine:s.ticket?s.ticket.no+' · '+s.ticket.from+' → '+s.ticket.to:'',
+   ticketSub:s.ticket?(s.minsToDep>0?'Departs in '+this.hm(s.minsToDep)+' · '+(s.ticket.cabin==='economy'?'Economy':'Business'):'Boarding now'):'',
+   onFastForward:()=>this.setState({sheet:'ff'}),
+   ffText:s.ticket?'This skips '+this.hm(s.minsToDep)+' of world time. Anything still on the shelf stays behind.':'',
+   onConfirmFF:()=>this.runCutscene(),
+   sheetProduct:s.sheet==='product',sheetFlight:s.sheet==='flight',sheetFF:s.sheet==='ff',sheetSell:s.sheet==='sell',
+   closeSheet:()=>this.setState({sheet:null}),stop:e=>e.stopPropagation(),
+   sel:p?{name:p.name,icon:p.icon,category:p.category,weight:p.w.toFixed(1)+' kg',
+    buy:money(unitHere),sell:money(Math.round(unitHere*0.92)),
+    forecast:d?money(priceAt(p.id,d)):'— book first',tagFg:tagColor(selIntel.kind)}:{},
+   qty:s.qty,
+   onMinus:()=>this.setState(o=>({qty:Math.max(1,o.qty-1)})),
+   onPlus:()=>this.setState(o=>({qty:o.qty+1})),
+   qtyPresets:[1,5,'Max'].map(v=>({label:v==='Max'?'Max':'×'+v,
+    onTap:()=>this.setState(o=>({qty:v==='Max'?Math.max(1,Math.floor((o.slot==='bag'?o.bagLimit-bagUsed:o.cargoCap-cargoUsed)/P[o.selId].w)):v}))})),
+   slotSegs:['bag','cargo'].map(k=>({label:k==='bag'?'Carry-on':'Cargo hold',
+    onTap:()=>this.setState({slot:k}),bg:s.slot===k?'#2A455A':'transparent',fg:s.slot===k?'#F2F6FA':'#A8B8C8'})),
+   costLabel:p?money(costTotal)+' · '+wtTotal.toFixed(1)+' kg':'',
+   afterLabel:p?(slotUsed+wtTotal).toFixed(1)+' / '+slotCap+' kg after':'',
+   afterColor:over?'#E05555':'#A8B8C8',
+   buyLabel:p?(over?'Over the limit':'Buy for '+money(costTotal)):'Buy',
+   onBuy:()=>this.buy(),
+   upgrades:[{l:'+10 kg $40',t:'light'},{l:'+20 kg $70',t:'standard'},{l:'+50 kg $150',t:'heavy'},{l:'Forecast $200',t:'intel'}]
+    .map(u=>({label:u.l,onTap:()=>{
+     if(u.t==='intel'){if(s.cash<200){this.buzz('Not enough cash','bad');return;}
+      if(!d){this.buzz('Book a flight first — a forecast needs a destination','bad');return;}
+      const m=priceAt(s.selId,d)-unitHere;this.setState(o=>({cash:o.cash-200}));
+      this.buzz('Forecast: '+money(m*0.94)+'–'+money(m*1.06)+' per unit in '+CITIES[d].name,'ok');return;}
+     const kg=u.t==='light'?10:u.t==='standard'?20:50,cost=u.t==='light'?40:u.t==='standard'?70:150;
+     if(s.cash<cost){this.buzz('Not enough cash','bad');return;}
+     this.setState(o=>({bagLimit:o.bagLimit+kg,cash:o.cash-cost}));
+     this.buzz('Carry-on now '+(s.bagLimit+kg)+' kg','ok');}})),
+   selF:s.selFlight?{no:s.selFlight.no,airline:s.selFlight.airline,dep:hhmm(s.selFlight.depMin),
+    arr:hhmm(s.selFlight.depMin+s.selFlight.mins+(CITIES[s.selFlight.toId].tz-city.tz)*60),
+    dur:s.selFlight.dur,km:s.selFlight.km.toLocaleString('en-US')+' km',
+    fromCity:city.name,toCity:CITIES[s.selFlight.toId].name}:{},
+   cabins:s.selFlight?[cabinRow('economy','Economy','23 kg carry-on',s.selFlight.econ,'#7EB6D9'),
+    cabinRow('business','Business','40 kg carry-on · lounge',s.selFlight.biz,'#C9A45C')]:[],
+   addons:ADDONS.map(a=>({label:a.label,price:a.price?money(a.price):'included',
+    onTap:()=>this.setState({addon:a.k}),
+    bg:s.addon===a.k?'rgba(60,184,164,.14)':'#0F2536',
+    bd:s.addon===a.k?'rgba(60,184,164,.45)':'#24394B',
+    fg:s.addon===a.k?'#3CB8A4':'#F2F6FA'})),
+   flightTotal:money(fareTotal),onBuyTicket:()=>this.buyTicket(),
+   cutscene:!!s.cut,cutArt:s.cut?s.cut.art:'',cutPhase:s.cut?s.cut.phase:'',
+   cutTitle:s.cut?s.cut.title:'',cutPct:s.cut?s.cut.pct:'0%',cutSub:s.cutLine,
+   sellRows:sell.rows,sellNet:fmtMoney(sell.net),sellNetColor:sell.net>=0?'#3CB8A4':'#E05555',
+   sellHeadline:sell.net>=0?'Buyers in '+city.name+' are paying up today. Sell now or hold for the next hop.'
+    :'Soft market in '+city.name+'. Selling here cuts the loss; holding costs you weight.',
+   onSellAll:()=>this.sellAll(),
+   hasToast:!!s.toast,toast:s.toast,toastColor:s.toastKind==='bad'?'#E05555':'#3CB8A4',
+   showNotif:s.notif,
+   onPreviewNotif:()=>{this.setState({notif:true});setTimeout(()=>this.setState({notif:false}),4200);},
+   onDismissNotif:()=>this.setState({notif:false}),
+   widgetCountdown:s.ticket?this.hm(s.minsToDep):'—',
+   widgetRoute:s.ticket?s.ticket.no+' · '+s.ticket.from+' → '+s.ticket.to:'no flight booked',
+   notifTitle:s.ticket?'Boarding now — '+s.ticket.no+' to '+CITIES[s.ticket.toId].name:'Market opens in '+city.name,
+   notifBody:s.ticket?'Gate closes in '+this.hm(Math.max(6,s.minsToDep))+'. Tap to board.':'Fresh prices on the board. Tap to trade.',
+   widgetDelta:s.lastSale!=null?fmtMoney(s.lastSale)+' last run':'no trades yet'};
+ }
 }
 </script>
 </body>
