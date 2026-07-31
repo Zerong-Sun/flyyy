@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><style>body{margin:0;background:#e9e6e0;font-family:-apple-system,"SF Pro Text",system-ui,sans-serif}a{color:#3CB8A4}a:hover{color:#E89A3C}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08)}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font:600 13px/1.2 system-ui;color:#1a1a1a}.dv-opts{display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 system-ui;color:rgba(0,0,0,.55)}.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}.dv-next{margin:22px 0 0;font:12px/1.5 system-ui;color:rgba(0,0,0,.5)}@keyframes atSpin{to{transform:rotate(360deg)}}@keyframes atSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}@keyframes atFade{from{opacity:0}to{opacity:1}}@keyframes atBanner{from{transform:translateY(-140%)}to{transform:translateY(0)}}@keyframes atPulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}</style></helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Airborne Trader — iOS port</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Playable port — globe home, tab bar, sheets. Tap through: pick goods → buy → book a flight → fast-forward → cutscene → sell.</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;position:relative;overflow:hidden;background:#0B1C2C;font-family:-apple-system,'SF Pro Text',system-ui,sans-serif;color:#F2F6FA;-webkit-font-smoothing:antialiased">
+
+  <div style="position:absolute;top:0;left:0;right:0;height:54px;z-index:30;background:linear-gradient(#0B1C2C,rgba(11,28,44,.75) 70%,rgba(11,28,44,0))"></div>
+
+  <div style="padding:58px 16px 6px;display:flex;align-items:center;gap:10px;position:relative;z-index:20">
+    <div style="display:flex;align-items:baseline;gap:6px;flex:1;min-width:0">
+      <span style="font-size:13px;font-weight:590;letter-spacing:-.08px;color:#F2F6FA;font-variant-numeric:tabular-nums">{{ clockText }}</span>
+      <span style="font-size:11px;color:#5E7488">{{ clockState }}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:5px">
+      <div style="width:6px;height:6px;border-radius:3px;background:#3CB8A4"></div>
+      <span style="font-size:13px;font-weight:640;font-variant-numeric:tabular-nums;letter-spacing:-.1px">{{ cashText }}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;padding-left:8px;border-left:.5px solid #24394B">
+      <span style="font-size:13px;font-weight:590;font-variant-numeric:tabular-nums;color:{{ bagColor }}">{{ bagText }}</span>
+    </div>
+  </div>
+
+  <sc-if value="{{ hasTicket }}" hint-placeholder-val="{{ true }}">
+    <div style="margin:6px 16px 0;padding:10px 12px;border-radius:14px;background:rgba(232,154,60,.12);border:.5px solid rgba(232,154,60,.35);display:flex;align-items:center;gap:10px;position:relative;z-index:20">
+      <div style="width:26px;height:26px;border-radius:13px;background:rgba(232,154,60,.2);display:flex;align-items:center;justify-content:center;flex:none">
+        <div style="width:17px;height:17px;background:center/150% no-repeat url(assets/ic_fast_forward.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:590;letter-spacing:-.08px">{{ ticketLine }}</div>
+        <div style="font-size:11px;color:#A8B8C8;margin-top:1px;font-variant-numeric:tabular-nums">{{ ticketSub }}</div>
+      </div>
+      <div onClick="{{ onFastForward }}" style="padding:7px 11px;border-radius:10px;background:#E89A3C;color:#0B1C2C;font-size:12px;font-weight:640;letter-spacing:-.06px;flex:none" style-active="transform:scale(.94)">Speed up</div>
+    </div>
+  </sc-if>
+
+  <div style="flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding-bottom:96px">
+
+    <sc-if value="{{ isGlobe }}" hint-placeholder-val="{{ true }}">
+      <div>
+        <div style="padding:14px 16px 0">
+          <div style="display:flex;align-items:center;gap:8px;background:#152C3E;border-radius:11px;padding:8px 10px">
+            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
+            <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Airport, IATA or city" style="flex:1;background:transparent;border:0;outline:0;font-family:inherit;font-size:16px;color:#F2F6FA;letter-spacing:-.2px" />
+          </div>
+        </div>
+
+        <sc-if value="{{ searching }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:10px 16px 0;display:flex;flex-direction:column;gap:1px">
+            <sc-for list="{{ results }}" as="a" hint-placeholder-count="4">
+              <div onClick="{{ a.onTap }}" style="display:flex;align-items:center;gap:12px;padding:11px 12px;background:#122A3D;border-radius:12px" style-active="background:#1B3A51">
+                <span style="font-family:ui-monospace,'SF Mono',monospace;font-size:14px;font-weight:600;color:#3CB8A4;width:34px">{{ a.iata }}</span>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:15px;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.name }}</div>
+                  <div style="font-size:12px;color:#A8B8C8;margin-top:1px">{{ a.sub }}</div>
+                </div>
+                <svg width="7" height="12" viewBox="0 0 7 12"><path d="M1 1l5 5-5 5" stroke="#4E657A" stroke-width="1.7" fill="none" stroke-linecap="round"></path></svg>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ notSearching }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="height:318px;position:relative;display:flex;align-items:center;justify-content:center;margin-top:4px">
+              <div style="position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 50% 45%,rgba(60,184,164,.14),rgba(11,28,44,0) 62%)"></div>
+              <div style="width:268px;height:268px;border-radius:50%;position:relative;background:radial-gradient(circle at 34% 30%,#2E6E97 0%,#1A4A6E 42%,#0E2C44 78%,#081D2E 100%);box-shadow:inset -18px -22px 46px rgba(4,14,24,.85),0 0 0 .5px rgba(217,230,240,.18),0 22px 60px rgba(0,0,0,.5)">
+                <div style="position:absolute;inset:0;border-radius:50%;overflow:hidden;opacity:.8">
+                  <div style="position:absolute;left:-8%;top:26%;width:46%;height:26%;border-radius:50% 40% 55% 45%;background:#3D6B4F;filter:blur(3px)"></div>
+                  <div style="position:absolute;left:36%;top:18%;width:40%;height:22%;border-radius:45% 55% 40% 50%;background:#3D6B4F;filter:blur(3px)"></div>
+                  <div style="position:absolute;left:44%;top:44%;width:26%;height:30%;border-radius:50% 42% 55% 48%;background:#35624A;filter:blur(3px)"></div>
+                  <div style="position:absolute;left:8%;top:58%;width:22%;height:26%;border-radius:48%;background:#35624A;filter:blur(2px)"></div>
+                  <div style="position:absolute;left:0;top:0;right:0;height:9%;background:#D9E6F0;filter:blur(6px);opacity:.55"></div>
+                </div>
+                <div style="position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(0deg,rgba(217,230,240,.13) 0 .5px,transparent .5px 26px);opacity:.7"></div>
+                <div style="position:absolute;inset:0;border-radius:50%;overflow:hidden"><div style="position:absolute;inset:-2px;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,transparent 0 20px,rgba(217,230,240,.09) 20px 20.5px);opacity:.8"></div></div>
+                <div style="position:absolute;left:52%;top:34%;width:9px;height:9px;margin:-4.5px;border-radius:50%;background:#E89A3C;box-shadow:0 0 12px 3px rgba(232,154,60,.55)"></div>
+                <div style="position:absolute;left:52%;top:34%;width:22px;height:22px;margin:-11px;border-radius:50%;border:1px solid rgba(232,154,60,.5);animation:atPulse 2.4s ease-in-out infinite"></div>
+                <div style="position:absolute;left:62%;top:44%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#3CB8A4;opacity:.85"></div>
+                <div style="position:absolute;left:44%;top:28%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#7EB6D9;opacity:.7"></div>
+                <div style="position:absolute;left:70%;top:36%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#7EB6D9;opacity:.55"></div>
+                <div style="position:absolute;left:34%;top:52%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#7EB6D9;opacity:.45"></div>
+                <div style="position:absolute;left:26%;top:36%;width:5px;height:5px;margin:-2.5px;border-radius:50%;background:#7EB6D9;opacity:.5"></div>
+              </div>
+              <div style="position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:11px;color:#5E7488;letter-spacing:.2px">Pinch to zoom · drag to spin</div>
+            </div>
+
+            <div style="padding:0 16px">
+              <div style="border-radius:18px;overflow:hidden;background:#122A3D;border:.5px solid #1E3A4F">
+                <div style="position:relative;height:132px">
+                  <div style="position:absolute;inset:0;background:#0F2536 center/cover no-repeat;background-image:url({{ cityHero }})"></div>
+                  <div style="position:absolute;inset:0;background:linear-gradient(rgba(11,28,44,0) 30%,rgba(11,28,44,.92))"></div>
+                  <div style="position:absolute;left:14px;bottom:10px;right:14px;display:flex;align-items:flex-end;gap:8px">
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:22px;font-weight:700;letter-spacing:-.5px;line-height:1.1">{{ cityName }}</div>
+                      <div style="font-size:12px;color:#A8B8C8;margin-top:2px">{{ cityAirportLine }}</div>
+                    </div>
+                    <div style="padding:4px 8px;border-radius:8px;background:rgba(60,184,164,.18);border:.5px solid rgba(60,184,164,.4);font-size:11px;font-weight:590;color:#3CB8A4">You are here</div>
+                  </div>
+                </div>
+                <div style="display:flex;padding:12px 14px;gap:0">
+                  <div style="flex:1"><div style="font-size:11px;color:#A8B8C8">Local time</div><div style="font-size:15px;font-weight:590;font-variant-numeric:tabular-nums;margin-top:2px">{{ localTime }}</div></div>
+                  <div style="width:.5px;background:#24394B;margin:0 12px"></div>
+                  <div style="flex:1"><div style="font-size:11px;color:#A8B8C8">Routes today</div><div style="font-size:15px;font-weight:590;margin-top:2px">{{ routeCount }}</div></div>
+                  <div style="width:.5px;background:#24394B;margin:0 12px"></div>
+                  <div style="flex:1"><div style="font-size:11px;color:#A8B8C8">Elevation</div><div style="font-size:15px;font-weight:590;margin-top:2px">{{ cityElev }}</div></div>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:10px;margin-top:12px">
+                <div onClick="{{ goMarket }}" style="flex:1;padding:14px 12px;border-radius:16px;background:#E89A3C;color:#0B1C2C;text-align:center;font-size:16px;font-weight:640;letter-spacing:-.2px" style-active="transform:scale(.97);filter:brightness(.94)">Trade here</div>
+                <div onClick="{{ goFlights }}" style="flex:1;padding:14px 12px;border-radius:16px;background:#152C3E;border:.5px solid #2A455A;text-align:center;font-size:16px;font-weight:590;letter-spacing:-.2px" style-active="transform:scale(.97)">Find a flight</div>
+              </div>
+
+              <div style="margin-top:16px;font-size:11px;line-height:1.45;color:#4E657A">Flight network rebuilt from public aviation data. Not real ticketing information.</div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMarket }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 0 0">
+        <div style="padding:0 16px;display:flex;align-items:flex-end;gap:8px">
+          <div style="flex:1"><div style="font-size:32px;font-weight:700;letter-spacing:-.8px;line-height:1.05">Market</div><div style="font-size:13px;color:#A8B8C8;margin-top:3px">{{ marketSub }}</div></div>
+        </div>
+        <div style="margin:14px 16px 0;display:flex;padding:2px;background:#152C3E;border-radius:10px">
+          <sc-for list="{{ marketSegs }}" as="s" hint-placeholder-count="2">
+            <div onClick="{{ s.onTap }}" style="flex:1;text-align:center;padding:7px 0;border-radius:8px;font-size:13px;font-weight:590;letter-spacing:-.08px;background:{{ s.bg }};color:{{ s.fg }}">{{ s.label }}</div>
+          </sc-for>
+        </div>
+        <div style="padding:12px 16px 0;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ products }}" as="p" hint-placeholder-count="5">
+            <div onClick="{{ p.onTap }}" style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:15px" style-active="background:#1B3A51;transform:scale(.99)">
+              <div style="width:42px;height:42px;border-radius:10px;background:#0B1C2C center/cover no-repeat;background-image:url({{ p.icon }});flex:none"></div>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span style="font-size:15px;font-weight:590;letter-spacing:-.24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</span>
+                  <span style="font-size:10px;font-weight:600;padding:1.5px 5px;border-radius:5px;background:{{ p.originBg }};color:{{ p.originFg }};flex:none">{{ p.origin }}</span>
+                </div>
+                <div style="font-size:12px;color:#A8B8C8;margin-top:2px;font-variant-numeric:tabular-nums">{{ p.meta }}</div>
+                <sc-if value="{{ p.showTag }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:inline-flex;align-items:center;gap:4px;margin-top:5px;padding:2px 7px;border-radius:6px;background:{{ p.tagBg }}">
+                    <div style="width:5px;height:5px;border-radius:3px;background:{{ p.tagFg }}"></div>
+                    <span style="font-size:11px;font-weight:590;color:{{ p.tagFg }}">{{ p.tag }}</span>
+                  </div>
+                </sc-if>
+              </div>
+              <div style="text-align:right;flex:none">
+                <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums;letter-spacing:-.3px">{{ p.buy }}</div>
+                <div style="font-size:11px;color:#5E7488;margin-top:1px;font-variant-numeric:tabular-nums">{{ p.weight }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin:14px 16px 0;padding:12px 14px;border-radius:14px;background:rgba(60,184,164,.08);border:.5px solid rgba(60,184,164,.22)">
+          <div style="font-size:13px;font-weight:590;color:#3CB8A4">Over the limit?</div>
+          <div style="font-size:12px;color:#A8B8C8;line-height:1.4;margin-top:3px">Buy baggage (+10 / +20 / +50 kg) or a 50 kg cargo block right in the buy sheet.</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isFlights }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 0 0">
+        <div style="padding:0 16px"><div style="font-size:32px;font-weight:700;letter-spacing:-.8px;line-height:1.05">Flights</div><div style="font-size:13px;color:#A8B8C8;margin-top:3px">{{ flightsSub }}</div></div>
+        <div style="padding:14px 16px 0">
+          <div style="display:flex;align-items:center;gap:8px;background:#152C3E;border-radius:11px;padding:8px 10px">
+            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
+            <span style="flex:1;font-size:16px;color:#5E7488;letter-spacing:-.2px">Flight no., airline or city</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:7px;overflow:auto;padding:12px 16px 2px;-ms-overflow-style:none">
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+            <div onClick="{{ f.onTap }}" style="flex:none;padding:7px 12px;border-radius:10px;font-size:13px;font-weight:590;letter-spacing:-.08px;background:{{ f.bg }};color:{{ f.fg }};border:.5px solid {{ f.bd }}">{{ f.label }}</div>
+          </sc-for>
+        </div>
+        <div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ flights }}" as="f" hint-placeholder-count="4">
+            <div onClick="{{ f.onTap }}" style="padding:12px 14px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:16px" style-active="background:#1B3A51;transform:scale(.99)">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-family:ui-monospace,'SF Mono',monospace;font-size:12px;font-weight:600;color:#3CB8A4">{{ f.no }}</span>
+                <span style="font-size:12px;color:#A8B8C8;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.airline }}</span>
+                <sc-if value="{{ f.unvisited }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size:10px;font-weight:600;padding:1.5px 5px;border-radius:5px;background:rgba(232,154,60,.15);color:#E89A3C">New city</span>
+                </sc-if>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+                <div style="text-align:left">
+                  <div style="font-size:20px;font-weight:640;font-variant-numeric:tabular-nums;letter-spacing:-.4px">{{ f.dep }}</div>
+                  <div style="font-size:11px;color:#5E7488;font-family:ui-monospace,monospace">{{ f.from }}</div>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px">
+                  <div style="font-size:10px;color:#A8B8C8;font-variant-numeric:tabular-nums">{{ f.dur }}</div>
+                  <div style="width:100%;height:1px;background:#2A455A;position:relative"><div style="position:absolute;right:-1px;top:-2.5px;width:0;height:0;border-left:5px solid #2A455A;border-top:3px solid transparent;border-bottom:3px solid transparent"></div></div>
+                  <div style="font-size:10px;color:#5E7488">{{ f.stops }}</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:20px;font-weight:640;font-variant-numeric:tabular-nums;letter-spacing:-.4px">{{ f.arr }}</div>
+                  <div style="font-size:11px;color:#5E7488;font-family:ui-monospace,monospace">{{ f.to }}</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:9px;border-top:.5px solid #1E3A4F">
+                <span style="font-size:13px;font-weight:590;color:#7EB6D9;font-variant-numeric:tabular-nums">Econ {{ f.econ }}</span>
+                <span style="font-size:13px;font-weight:590;color:#C9A45C;font-variant-numeric:tabular-nums">Biz {{ f.biz }}</span>
+                <span style="flex:1"></span>
+                <span style="font-size:12px;color:#5E7488;font-variant-numeric:tabular-nums">{{ f.km }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isBags }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 0 0">
+        <div style="padding:0 16px"><div style="font-size:32px;font-weight:700;letter-spacing:-.8px;line-height:1.05">Baggage</div><div style="font-size:13px;color:#A8B8C8;margin-top:3px">Weight decides what you can carry</div></div>
+        <div style="margin:16px 16px 0;padding:16px;border-radius:18px;background:#122A3D;border:.5px solid #1E3A4F;display:flex;align-items:center;gap:18px">
+          <div style="width:104px;height:104px;border-radius:50%;flex:none;background:{{ ringGradient }};display:flex;align-items:center;justify-content:center">
+            <div style="width:80px;height:80px;border-radius:50%;background:#122A3D;display:flex;flex-direction:column;align-items:center;justify-content:center">
+              <div style="font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.4px">{{ bagPct }}</div>
+              <div style="font-size:10px;color:#A8B8C8;margin-top:1px">carry-on</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:9px">
+            <div><div style="font-size:11px;color:#A8B8C8">Carry-on</div><div style="font-size:16px;font-weight:590;font-variant-numeric:tabular-nums">{{ bagText }}</div></div>
+            <div><div style="font-size:11px;color:#A8B8C8">Cargo hold</div><div style="font-size:16px;font-weight:590;font-variant-numeric:tabular-nums">{{ cargoText }}</div></div>
+          </div>
+        </div>
+        <div style="padding:14px 16px 0;display:flex;flex-direction:column;gap:8px">
+          <sc-if value="{{ bagsEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:28px 16px;text-align:center;background:#122A3D;border-radius:16px;border:.5px solid #1E3A4F">
+              <div style="font-size:15px;font-weight:590">Nothing on board</div>
+              <div style="font-size:13px;color:#A8B8C8;margin-top:4px">Buy goods in the market before you fly.</div>
+            </div>
+          </sc-if>
+          <sc-for list="{{ inventory }}" as="i" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:15px">
+              <div style="width:40px;height:40px;border-radius:10px;background:#0B1C2C center/cover no-repeat;background-image:url({{ i.icon }});flex:none"></div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:15px;font-weight:590;letter-spacing:-.24px">{{ i.name }}</div>
+                <div style="font-size:12px;color:#A8B8C8;margin-top:2px;font-variant-numeric:tabular-nums">{{ i.meta }}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;padding:3px 8px;border-radius:7px;background:{{ i.slotBg }}"><div style="width:16px;height:16px;background:center/150% no-repeat;background-image:url({{ i.slotIcon }});filter:invert(.9) brightness(1.35)"></div><span style="font-size:11px;font-weight:600;color:{{ i.slotFg }}">{{ i.slot }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMore }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:12px 0 0">
+        <div style="padding:0 16px"><div style="font-size:32px;font-weight:700;letter-spacing:-.8px;line-height:1.05">More</div></div>
+
+        <div style="margin:16px 16px 0;border-radius:16px;overflow:hidden;background:#122A3D;border:.5px solid #1E3A4F">
+          <sc-for list="{{ moreRows }}" as="r" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:.5px solid #16303F">
+              <span style="flex:1;font-size:16px;letter-spacing:-.3px">{{ r.label }}</span>
+              <span style="font-size:14px;color:#5E7488;font-variant-numeric:tabular-nums">{{ r.value }}</span>
+              <svg width="7" height="12" viewBox="0 0 7 12"><path d="M1 1l5 5-5 5" stroke="#4E657A" stroke-width="1.7" fill="none" stroke-linecap="round"></path></svg>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="padding:22px 16px 4px;font-size:12px;font-weight:590;color:#5E7488;letter-spacing:.4px;text-transform:uppercase">On the lock screen</div>
+        <div style="margin:0 16px;padding:16px;border-radius:20px;background:linear-gradient(160deg,#123047,#0B1C2C 70%);border:.5px solid #1E3A4F">
+          <div style="text-align:center;padding-bottom:12px">
+            <div style="font-size:13px;color:#A8B8C8">Thursday, 12 March</div>
+            <div style="font-size:44px;font-weight:250;letter-spacing:-1px;line-height:1.05;font-variant-numeric:tabular-nums">09:40</div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <div style="flex:1;border-radius:16px;padding:11px;background:rgba(255,255,255,.09);backdrop-filter:blur(12px)">
+              <div style="display:flex;align-items:center;gap:6px"><img src="assets/logo_mark.webp" alt="" style="width:14px;height:14px;border-radius:4px" /><span style="font-size:10px;font-weight:640;color:#A8B8C8;letter-spacing:.2px">BOARDING</span></div>
+              <div style="font-size:24px;font-weight:640;font-variant-numeric:tabular-nums;letter-spacing:-.6px;margin-top:6px;color:#E89A3C">{{ widgetCountdown }}</div>
+              <div style="font-size:11px;color:#A8B8C8;margin-top:1px">{{ widgetRoute }}</div>
+            </div>
+            <div style="flex:1;border-radius:16px;padding:11px;background:rgba(255,255,255,.09);backdrop-filter:blur(12px)">
+              <div style="font-size:10px;font-weight:640;color:#A8B8C8;letter-spacing:.2px">CASH</div>
+              <div style="font-size:24px;font-weight:640;font-variant-numeric:tabular-nums;letter-spacing:-.6px;margin-top:6px">{{ cashText }}</div>
+              <div style="font-size:11px;color:#3CB8A4;margin-top:1px">{{ widgetDelta }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding:14px 16px 0"><div onClick="{{ onPreviewNotif }}" style="padding:13px;border-radius:14px;background:#152C3E;border:.5px solid #2A455A;text-align:center;font-size:15px;font-weight:590;letter-spacing:-.2px" style-active="transform:scale(.98)">Preview boarding notification</div></div>
+        <div style="padding:12px 16px 0;font-size:11px;line-height:1.45;color:#4E657A">1 real second = 6 in-game minutes. A full trade run — buy, board, land, sell — fits in about a minute, so a session survives one subway stop.</div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;z-index:40;padding-bottom:22px;background:linear-gradient(rgba(11,28,44,.4),rgba(11,28,44,.96) 40%);backdrop-filter:blur(18px);border-top:.5px solid #1E3A4F">
+    <div style="display:flex;padding:8px 4px 2px">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+        <div onClick="{{ t.onTap }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0" style-active="opacity:.5">
+          <div style="width:25px;height:25px;background:center/142% no-repeat;background-image:url({{ t.iconSrc }});filter:{{ t.iconFilter }}"></div>
+          <span style="font-size:10px;font-weight:590;letter-spacing:-.04px;color:{{ t.color }}">{{ t.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:20px;right:20px;bottom:112px;z-index:70;padding:12px 14px;border-radius:14px;background:rgba(18,42,61,.96);border:.5px solid #2A455A;backdrop-filter:blur(20px);box-shadow:0 12px 34px rgba(0,0,0,.5);animation:atFade .18s ease-out;display:flex;align-items:center;gap:10px">
+      <div style="width:8px;height:8px;border-radius:4px;background:{{ toastColor }};flex:none"></div>
+      <span style="font-size:14px;letter-spacing:-.2px;line-height:1.3">{{ toast }}</span>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showNotif }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;left:10px;right:10px;top:14px;z-index:80;padding:12px 14px;border-radius:22px;background:rgba(28,44,58,.82);backdrop-filter:blur(24px);border:.5px solid rgba(217,230,240,.14);box-shadow:0 16px 40px rgba(0,0,0,.5);animation:atBanner .38s cubic-bezier(.2,.9,.25,1);display:flex;gap:11px" onClick="{{ onDismissNotif }}">
+      <img src="assets/logo_mark.webp" alt="" style="width:38px;height:38px;border-radius:9px;flex:none" />
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:baseline;gap:6px"><span style="font-size:13px;font-weight:640;letter-spacing:-.08px">AIRBORNE TRADER</span><span style="font-size:12px;color:#A8B8C8;margin-left:auto">now</span></div>
+        <div style="font-size:14px;font-weight:590;margin-top:2px;letter-spacing:-.2px">{{ notifTitle }}</div>
+        <div style="font-size:13px;color:#C6D3DF;margin-top:1px">{{ notifBody }}</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ sheetProduct }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:60;background:rgba(4,12,20,.6);animation:atFade .2s ease-out" onClick="{{ closeSheet }}">
+      <div onClick="{{ stop }}" style="position:absolute;left:0;right:0;bottom:0;background:#132D40;border-radius:26px 26px 0 0;border-top:.5px solid #2A455A;animation:atSheet .34s cubic-bezier(.2,.9,.25,1);padding-bottom:26px">
+        <div style="display:flex;justify-content:center;padding:8px 0 2px"><div style="width:38px;height:5px;border-radius:3px;background:#3A566D"></div></div>
+        <div style="padding:8px 18px 0;display:flex;align-items:center;gap:12px">
+          <div style="width:56px;height:56px;border-radius:13px;background:#0B1C2C center/cover no-repeat;background-image:url({{ sel.icon }});flex:none"></div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:19px;font-weight:640;letter-spacing:-.4px">{{ sel.name }}</div>
+            <div style="font-size:13px;color:#A8B8C8;margin-top:2px">{{ sel.category }} · {{ sel.weight }} each</div>
+          </div>
+        </div>
+        <div style="margin:14px 18px 0;padding:12px 14px;border-radius:14px;background:#0F2536;display:flex">
+          <div style="flex:1"><div style="font-size:11px;color:#A8B8C8">Buy here</div><div style="font-size:18px;font-weight:640;font-variant-numeric:tabular-nums;margin-top:2px">{{ sel.buy }}</div></div>
+          <div style="flex:1"><div style="font-size:11px;color:#A8B8C8">Sells here</div><div style="font-size:18px;font-weight:640;font-variant-numeric:tabular-nums;margin-top:2px;color:#7B90A4">{{ sel.sell }}</div></div>
+          <div style="flex:1.2"><div style="font-size:11px;color:#A8B8C8">At destination</div><div style="font-size:18px;font-weight:640;font-variant-numeric:tabular-nums;margin-top:2px;color:{{ sel.tagFg }}">{{ sel.forecast }}</div></div>
+        </div>
+        <div style="padding:14px 18px 0;display:flex;align-items:center;gap:12px">
+          <span style="font-size:15px;letter-spacing:-.2px;flex:1">Quantity</span>
+          <div style="display:flex;align-items:center;gap:2px;background:#0F2536;border-radius:12px;padding:3px">
+            <div onClick="{{ onMinus }}" style="width:44px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center" style-active="background:#1B3A51"><div style="width:15px;height:2px;border-radius:1px;background:#F2F6FA"></div></div>
+            <div style="min-width:52px;text-align:center;font-size:19px;font-weight:640;font-variant-numeric:tabular-nums">{{ qty }}</div>
+            <div onClick="{{ onPlus }}" style="width:44px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center" style-active="background:#1B3A51"><div style="width:15px;height:2px;border-radius:1px;background:#F2F6FA;position:relative"><div style="position:absolute;left:6.5px;top:-6.5px;width:2px;height:15px;border-radius:1px;background:#F2F6FA"></div></div></div>
+          </div>
+        </div>
+        <div style="padding:10px 18px 0;display:flex;gap:8px">
+          <sc-for list="{{ qtyPresets }}" as="q" hint-placeholder-count="3">
+            <div onClick="{{ q.onTap }}" style="flex:1;text-align:center;padding:9px 0;border-radius:11px;background:#0F2536;border:.5px solid #24394B;font-size:14px;font-weight:590;font-variant-numeric:tabular-nums" style-active="background:#1B3A51">{{ q.label }}</div>
+          </sc-for>
+        </div>
+        <div style="margin:14px 18px 0;display:flex;padding:2px;background:#0F2536;border-radius:11px">
+          <sc-for list="{{ slotSegs }}" as="s" hint-placeholder-count="2">
+            <div onClick="{{ s.onTap }}" style="flex:1;text-align:center;padding:8px 0;border-radius:9px;font-size:13px;font-weight:590;background:{{ s.bg }};color:{{ s.fg }}">{{ s.label }}</div>
+          </sc-for>
+        </div>
+        <div style="padding:14px 18px 0;display:flex;align-items:baseline;gap:8px">
+          <span style="font-size:13px;color:#A8B8C8;flex:1">{{ costLabel }}</span>
+          <span style="font-size:13px;color:{{ afterColor }};font-variant-numeric:tabular-nums">{{ afterLabel }}</span>
+        </div>
+        <div style="padding:10px 18px 0"><div onClick="{{ onBuy }}" style="padding:16px;border-radius:16px;background:#E89A3C;color:#0B1C2C;text-align:center;font-size:17px;font-weight:700;letter-spacing:-.3px" style-active="transform:scale(.97);filter:brightness(.92)">{{ buyLabel }}</div></div>
+        <div style="padding:9px 18px 0;display:flex;gap:8px">
+          <sc-for list="{{ upgrades }}" as="u" hint-placeholder-count="4">
+            <div onClick="{{ u.onTap }}" style="flex:1;text-align:center;padding:9px 0;border-radius:11px;background:#0F2536;border:.5px solid #24394B;font-size:12px;font-weight:590" style-active="background:#1B3A51">{{ u.label }}</div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ sheetFlight }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:60;background:rgba(4,12,20,.6);animation:atFade .2s ease-out" onClick="{{ closeSheet }}">
+      <div onClick="{{ stop }}" style="position:absolute;left:0;right:0;bottom:0;background:#132D40;border-radius:26px 26px 0 0;border-top:.5px solid #2A455A;animation:atSheet .34s cubic-bezier(.2,.9,.25,1);padding-bottom:26px">
+        <div style="display:flex;justify-content:center;padding:8px 0 2px"><div style="width:38px;height:5px;border-radius:3px;background:#3A566D"></div></div>
+        <div style="padding:8px 18px 0">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:ui-monospace,monospace;font-size:13px;font-weight:600;color:#3CB8A4">{{ selF.no }}</span><span style="font-size:13px;color:#A8B8C8">{{ selF.airline }}</span></div>
+          <div style="display:flex;align-items:flex-end;gap:12px;margin-top:10px">
+            <div><div style="font-size:26px;font-weight:700;letter-spacing:-.6px;font-variant-numeric:tabular-nums">{{ selF.dep }}</div><div style="font-size:12px;color:#A8B8C8">{{ selF.fromCity }}</div></div>
+            <div style="flex:1;text-align:center;font-size:12px;color:#5E7488;padding-bottom:6px;font-variant-numeric:tabular-nums">{{ selF.dur }} · {{ selF.km }}</div>
+            <div style="text-align:right"><div style="font-size:26px;font-weight:700;letter-spacing:-.6px;font-variant-numeric:tabular-nums">{{ selF.arr }}</div><div style="font-size:12px;color:#A8B8C8">{{ selF.toCity }}</div></div>
+          </div>
+        </div>
+        <div style="padding:16px 18px 0;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ cabins }}" as="c" hint-placeholder-count="2">
+            <div onClick="{{ c.onTap }}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:15px;background:{{ c.bg }};border:1px solid {{ c.bd }}" style-active="transform:scale(.99)">
+              <div style="width:20px;height:20px;border-radius:10px;border:1.5px solid {{ c.dotBd }};display:flex;align-items:center;justify-content:center;flex:none"><div style="width:11px;height:11px;border-radius:6px;background:{{ c.dotBg }}"></div></div>
+              <div style="width:26px;height:26px;flex:none;background:center/145% no-repeat;background-image:url({{ c.icon }});filter:invert(.9) brightness(1.35)"></div>
+              <div style="flex:1"><div style="font-size:15px;font-weight:590;letter-spacing:-.2px;color:{{ c.fg }}">{{ c.label }}</div><div style="font-size:12px;color:#A8B8C8;margin-top:1px">{{ c.sub }}</div></div>
+              <div style="font-size:17px;font-weight:640;font-variant-numeric:tabular-nums">{{ c.price }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:16px 18px 0;font-size:12px;font-weight:590;color:#5E7488;letter-spacing:.4px;text-transform:uppercase">Extra weight</div>
+        <div style="padding:8px 18px 0;display:flex;gap:8px">
+          <sc-for list="{{ addons }}" as="a" hint-placeholder-count="4">
+            <div onClick="{{ a.onTap }}" style="flex:1;text-align:center;padding:10px 0;border-radius:12px;background:{{ a.bg }};border:.5px solid {{ a.bd }}" style-active="transform:scale(.97)">
+              <div style="font-size:14px;font-weight:640;color:{{ a.fg }}">{{ a.label }}</div>
+              <div style="font-size:11px;color:#A8B8C8;margin-top:1px;font-variant-numeric:tabular-nums">{{ a.price }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:16px 18px 0;display:flex;align-items:baseline"><span style="font-size:15px;flex:1;letter-spacing:-.2px">Total</span><span style="font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.5px">{{ flightTotal }}</span></div>
+        <div style="padding:12px 18px 0"><div onClick="{{ onBuyTicket }}" style="padding:16px;border-radius:16px;background:#E89A3C;color:#0B1C2C;text-align:center;font-size:17px;font-weight:700;letter-spacing:-.3px" style-active="transform:scale(.97);filter:brightness(.92)">Buy ticket</div></div>
+        <div style="padding:9px 18px 0;font-size:11px;color:#4E657A;text-align:center;line-height:1.4">Boarding is mandatory. Once the gate closes you fly, cargo and all.</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ sheetFF }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:65;background:rgba(4,12,20,.6);display:flex;align-items:center;justify-content:center;padding:32px;animation:atFade .2s ease-out" onClick="{{ closeSheet }}">
+      <div onClick="{{ stop }}" style="width:100%;border-radius:22px;background:rgba(24,46,63,.98);backdrop-filter:blur(24px);overflow:hidden;text-align:center;border:.5px solid #2A455A">
+        <div style="padding:20px 20px 16px">
+          <div style="font-size:17px;font-weight:700;letter-spacing:-.3px">Speed up to takeoff?</div>
+          <div style="font-size:13px;color:#C6D3DF;margin-top:6px;line-height:1.4">{{ ffText }}</div>
+        </div>
+        <div style="height:.5px;background:#2A455A"></div>
+        <div style="display:flex">
+          <div onClick="{{ closeSheet }}" style="flex:1;padding:14px;font-size:17px;color:#7EB6D9" style-active="background:rgba(255,255,255,.06)">Cancel</div>
+          <div style="width:.5px;background:#2A455A"></div>
+          <div onClick="{{ onConfirmFF }}" style="flex:1;padding:14px;font-size:17px;font-weight:640;color:#E89A3C" style-active="background:rgba(255,255,255,.06)">Speed up</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ cutscene }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:75;background:#07161F;animation:atFade .3s ease-out">
+      <div style="position:absolute;inset:0;background:center/cover no-repeat;background-image:url({{ cutArt }});opacity:.85"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(rgba(7,22,31,.72),rgba(7,22,31,.35) 45%,rgba(7,22,31,.95))"></div>
+      <div style="position:absolute;left:0;right:0;bottom:78px;padding:0 26px;text-align:center">
+        <div style="font-size:11px;font-weight:640;letter-spacing:2px;color:#E89A3C;text-transform:uppercase">{{ cutPhase }}</div>
+        <div style="font-size:30px;font-weight:700;letter-spacing:-.7px;margin-top:8px;line-height:1.1">{{ cutTitle }}</div>
+        <div style="font-size:14px;color:#C6D3DF;margin-top:6px;font-variant-numeric:tabular-nums">{{ cutSub }}</div>
+        <div style="margin-top:20px;height:4px;border-radius:2px;background:rgba(217,230,240,.2);overflow:hidden"><div style="height:100%;border-radius:2px;background:#E89A3C;width:{{ cutPct }};transition:width .9s linear"></div></div>
+        <div style="font-size:11px;color:#7B90A4;margin-top:10px">Flight time is on the world clock</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ sheetSell }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:66;background:rgba(4,12,20,.66);animation:atFade .2s ease-out">
+      <div style="position:absolute;left:0;right:0;bottom:0;background:#132D40;border-radius:26px 26px 0 0;border-top:.5px solid #2A455A;animation:atSheet .38s cubic-bezier(.2,.9,.25,1);padding-bottom:26px;overflow:hidden">
+        <div style="position:relative;height:120px">
+          <div style="position:absolute;inset:0;background:#0F2536 center/cover no-repeat;background-image:url({{ cityHero }})"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(rgba(19,45,64,.1),#132D40)"></div>
+          <div style="position:absolute;left:18px;bottom:8px"><div style="font-size:11px;font-weight:640;letter-spacing:1.6px;color:#E89A3C;text-transform:uppercase">Landed</div><div style="font-size:26px;font-weight:700;letter-spacing:-.6px">{{ cityName }}</div></div>
+        </div>
+        <div style="padding:6px 18px 0;font-size:13px;color:#A8B8C8;line-height:1.4">{{ sellHeadline }}</div>
+        <div style="padding:12px 18px 0;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ sellRows }}" as="s" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:11px;padding:10px 12px;background:#0F2536;border-radius:14px">
+              <div style="width:40px;height:40px;border-radius:10px;background:#0B1C2C center/cover no-repeat;background-image:url({{ s.icon }});flex:none"></div>
+              <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:590;letter-spacing:-.24px">{{ s.name }}</div><div style="font-size:12px;color:#A8B8C8;margin-top:2px;font-variant-numeric:tabular-nums">{{ s.meta }}</div></div>
+              <div style="text-align:right"><div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums;color:{{ s.color }}">{{ s.delta }}</div><div style="font-size:11px;color:#5E7488;font-variant-numeric:tabular-nums">{{ s.gross }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:14px 18px 0;display:flex;align-items:baseline"><span style="font-size:15px;flex:1;letter-spacing:-.2px">Net profit</span><span style="font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.5px;color:{{ sellNetColor }}">{{ sellNet }}</span></div>
+        <div style="padding:12px 18px 0"><div onClick="{{ onSellAll }}" style="padding:16px;border-radius:16px;background:#3CB8A4;color:#052B26;text-align:center;font-size:17px;font-weight:700;letter-spacing:-.3px" style-active="transform:scale(.97);filter:brightness(.93)">Sell everything</div></div>
+        <div style="padding:9px 18px 0"><div onClick="{{ closeSheet }}" style="padding:12px;text-align:center;font-size:15px;color:#7EB6D9" style-active="opacity:.6">Hold and look for a better market</div></div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Nav variant — globe-first, no tab bar. Everything lives in one draggable sheet.</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+<div style="height:100%;position:relative;overflow:hidden;background:#0B1C2C;font-family:-apple-system,'SF Pro Text',system-ui,sans-serif;color:#F2F6FA">
+  <div style="position:absolute;left:0;right:0;top:0;height:470px;display:flex;align-items:center;justify-content:center">
+    <div style="position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 50% 45%,rgba(60,184,164,.16),rgba(11,28,44,0) 62%)"></div>
+    <div style="width:330px;height:330px;border-radius:50%;position:relative;background:radial-gradient(circle at 34% 30%,#2E6E97,#1A4A6E 42%,#0E2C44 78%,#081D2E);box-shadow:inset -22px -26px 52px rgba(4,14,24,.85),0 0 0 .5px rgba(217,230,240,.18)">
+      <div style="position:absolute;inset:0;border-radius:50%;overflow:hidden;opacity:.8">
+        <div style="position:absolute;left:-6%;top:24%;width:48%;height:28%;border-radius:50% 40% 55% 45%;background:#3D6B4F;filter:blur(3px)"></div>
+        <div style="position:absolute;left:38%;top:16%;width:42%;height:24%;border-radius:45% 55% 40% 50%;background:#3D6B4F;filter:blur(3px)"></div>
+        <div style="position:absolute;left:46%;top:46%;width:26%;height:30%;border-radius:50% 42% 55% 48%;background:#35624A;filter:blur(3px)"></div>
+      </div>
+      <div style="position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(0deg,rgba(217,230,240,.12) 0 .5px,transparent .5px 30px)"></div>
+      <div style="position:absolute;left:53%;top:33%;width:10px;height:10px;margin:-5px;border-radius:50%;background:#E89A3C;box-shadow:0 0 14px 4px rgba(232,154,60,.5)"></div>
+      <div style="position:absolute;left:64%;top:45%;width:6px;height:6px;margin:-3px;border-radius:50%;background:#3CB8A4"></div>
+    </div>
+  </div>
+  <div style="position:absolute;top:58px;left:14px;right:14px;display:flex;gap:8px">
+    <div style="padding:8px 12px;border-radius:14px;background:rgba(18,42,61,.72);backdrop-filter:blur(18px);border:.5px solid rgba(217,230,240,.12);font-size:13px;font-weight:590;font-variant-numeric:tabular-nums">$6,944</div>
+    <div style="padding:8px 12px;border-radius:14px;background:rgba(18,42,61,.72);backdrop-filter:blur(18px);border:.5px solid rgba(217,230,240,.12);font-size:13px;font-weight:590;font-variant-numeric:tabular-nums;color:#A8B8C8">12.4 / 23 kg</div>
+    <span style="flex:1"></span>
+    <div style="width:36px;height:36px;border-radius:18px;background:rgba(18,42,61,.72);backdrop-filter:blur(18px);border:.5px solid rgba(217,230,240,.12);display:flex;align-items:center;justify-content:center">
+      <div style="width:19px;height:19px;background:center/145% no-repeat url(assets/ic_search.webp);filter:invert(.88) brightness(1.3)"></div>
+    </div>
+  </div>
+  <div style="position:absolute;left:0;right:0;bottom:0;top:420px;background:rgba(19,45,64,.94);backdrop-filter:blur(26px);border-radius:26px 26px 0 0;border-top:.5px solid rgba(217,230,240,.14);box-shadow:0 -18px 50px rgba(0,0,0,.45)">
+    <div style="display:flex;justify-content:center;padding:9px 0 4px"><div style="width:38px;height:5px;border-radius:3px;background:#3A566D"></div></div>
+    <div style="padding:4px 18px 0;display:flex;align-items:flex-end;gap:8px">
+      <div style="flex:1"><div style="font-size:24px;font-weight:700;letter-spacing:-.6px">Istanbul</div><div style="font-size:12px;color:#A8B8C8;margin-top:2px">IST · 16:46 local · 43 nonstop</div></div>
+      <div style="padding:4px 9px;border-radius:8px;background:rgba(60,184,164,.16);font-size:11px;font-weight:600;color:#3CB8A4">Here</div>
+    </div>
+    <div style="margin:14px 18px 0;display:flex;padding:2px;background:#0F2536;border-radius:11px">
+      <div style="flex:1;text-align:center;padding:8px 0;border-radius:9px;background:#2A455A;font-size:13px;font-weight:590">Market</div>
+      <div style="flex:1;text-align:center;padding:8px 0;font-size:13px;font-weight:590;color:#A8B8C8">Flights</div>
+      <div style="flex:1;text-align:center;padding:8px 0;font-size:13px;font-weight:590;color:#A8B8C8">Bags</div>
+    </div>
+    <div style="padding:12px 18px 0;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;background:#0F2536;border-radius:14px">
+        <img src="assets/p_ist_lokum.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
+        <div style="flex:1"><div style="font-size:15px;font-weight:590">Turkish Delight</div><div style="font-size:12px;color:#3CB8A4;margin-top:2px">Hot in Dubai · 2.4 kg</div></div>
+        <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$64</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;background:#0F2536;border-radius:14px">
+        <img src="assets/p_ist_ceramic.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
+        <div style="flex:1"><div style="font-size:15px;font-weight:590">İznik Ceramics</div><div style="font-size:12px;color:#3CB8A4;margin-top:2px">Hot in Dubai · 5.8 kg</div></div>
+        <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$310</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;background:#0F2536;border-radius:14px">
+        <img src="assets/p_ist_textile.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
+        <div style="flex:1"><div style="font-size:15px;font-weight:590">Bursa Textiles</div><div style="font-size:12px;color:#E05555;margin-top:2px">Avoid — soft market</div></div>
+        <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$242</div>
+      </div>
+    </div>
+    <div style="position:absolute;left:18px;right:18px;bottom:44px;display:flex;gap:10px">
+      <div style="flex:1;padding:15px;border-radius:16px;background:#E89A3C;color:#0B1C2C;text-align:center;font-size:16px;font-weight:700">Buy selected</div>
+      <div style="width:54px;border-radius:16px;background:#0F2536;border:.5px solid #2A455A;display:flex;align-items:center;justify-content:center">
+        <div style="width:24px;height:24px;background:center/145% no-repeat url(assets/ic_flight.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Trade variant — swipe a row to buy, thumb pad pinned to the bottom third.</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+<div style="height:100%;position:relative;overflow:hidden;background:#0B1C2C;font-family:-apple-system,'SF Pro Text',system-ui,sans-serif;color:#F2F6FA">
+  <div style="padding:62px 16px 0"><div style="font-size:32px;font-weight:700;letter-spacing:-.8px">Market</div><div style="font-size:13px;color:#A8B8C8;margin-top:3px">Swipe a row right to buy one, left for intel</div></div>
+  <div style="padding:14px 16px 0;display:flex;flex-direction:column;gap:8px">
+    <div style="position:relative;border-radius:15px;overflow:hidden;background:#3CB8A4">
+      <div style="position:absolute;left:0;top:0;bottom:0;width:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+        <span style="font-size:13px;font-weight:700;color:#052B26">BUY ×1</span>
+        <span style="font-size:11px;color:rgba(5,43,38,.7);font-variant-numeric:tabular-nums">−$64</span>
+      </div>
+      <div style="margin-left:88px;display:flex;align-items:center;gap:11px;padding:11px 12px;background:#122A3D;border-radius:15px;box-shadow:-10px 0 20px rgba(0,0,0,.35)">
+        <img src="assets/p_ist_lokum.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
+        <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:590">Turkish Delight</div><div style="font-size:12px;color:#A8B8C8;margin-top:2px;font-variant-numeric:tabular-nums">2.4 kg · $64</div></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:15px">
+      <img src="assets/p_ist_ceramic.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
+      <div style="flex:1;min-width:0">
+        <div style="font-size:15px;font-weight:590">İznik Ceramics</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:5px">
+          <div style="width:34px;height:5px;border-radius:3px;background:#3CB8A4"></div>
+          <div style="width:22px;height:5px;border-radius:3px;background:rgba(60,184,164,.45)"></div>
+          <div style="width:12px;height:5px;border-radius:3px;background:rgba(217,230,240,.16)"></div>
+          <span style="font-size:11px;color:#3CB8A4;font-weight:590;margin-left:3px">+52% in Dubai</span>
+        </div>
+      </div>
+      <div style="text-align:right"><div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$310</div><div style="font-size:11px;color:#5E7488">5.8 kg</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:15px;opacity:.55">
+      <img src="assets/p_ist_textile.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
+      <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:590">Bursa Textiles</div><div style="font-size:12px;color:#E05555;margin-top:2px">Too heavy — 12.5 kg won't fit</div></div>
+      <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$242</div>
+    </div>
+  </div>
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:16px 16px 34px;background:linear-gradient(rgba(11,28,44,0),rgba(11,28,44,.97) 24%)">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span style="font-size:12px;color:#A8B8C8;flex:1">Carry-on after purchase</span>
+      <span style="font-size:12px;font-weight:590;font-variant-numeric:tabular-nums;color:#E89A3C">20.2 / 23 kg</span>
+    </div>
+    <div style="height:6px;border-radius:3px;background:#152C3E;overflow:hidden;margin-bottom:16px"><div style="width:88%;height:100%;background:linear-gradient(90deg,#3CB8A4,#E89A3C)"></div></div>
+    <div style="display:flex;gap:12px;align-items:stretch">
+      <div style="flex:none;display:flex;align-items:center;gap:2px;background:#122A3D;border-radius:18px;padding:4px;border:.5px solid #24394B">
+        <div style="width:52px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center"><div style="width:17px;height:2.5px;border-radius:2px;background:#F2F6FA"></div></div>
+        <div style="min-width:44px;text-align:center;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums">3</div>
+        <div style="width:52px;height:56px;border-radius:14px;background:#1B3A51;display:flex;align-items:center;justify-content:center"><div style="width:17px;height:2.5px;border-radius:2px;background:#F2F6FA;position:relative"><div style="position:absolute;left:7.25px;top:-7.25px;width:2.5px;height:17px;border-radius:2px;background:#F2F6FA"></div></div></div>
+      </div>
+      <div style="flex:1;border-radius:18px;background:#E89A3C;color:#0B1C2C;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px">
+        <span style="font-size:17px;font-weight:700;letter-spacing:-.3px">Buy $930</span>
+        <span style="font-size:11px;font-weight:590;opacity:.75">17.4 kg · haptic tap</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-import>
+</div>
+
+<div class="dv-opt" id="1d">
+<div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Visual variant — daylight "boarding pass": paper stock, ink, monospace numerals.</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;position:relative;overflow:hidden;background:#F1EDE4;font-family:-apple-system,'SF Pro Text',system-ui,sans-serif;color:#14242F">
+  <div style="padding:62px 18px 0;display:flex;align-items:baseline;gap:8px">
+    <div style="flex:1"><div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#9A8F7C">AIRBORNE TRADER</div><div style="font-size:30px;font-weight:700;letter-spacing:-.7px;margin-top:2px">Istanbul</div></div>
+    <div style="text-align:right"><div style="font-family:ui-monospace,'SF Mono',monospace;font-size:17px;font-weight:600">$6,944</div><div style="font-size:11px;color:#8A8272;font-variant-numeric:tabular-nums">12.4 / 23 kg</div></div>
+  </div>
+  <div style="margin:18px 18px 0;background:#FFFDF8;border-radius:18px;box-shadow:0 2px 0 rgba(20,36,47,.07),0 12px 28px rgba(20,36,47,.09);overflow:hidden">
+    <div style="padding:14px 16px;display:flex;align-items:center;gap:12px">
+      <div><div style="font-family:ui-monospace,monospace;font-size:11px;color:#9A8F7C;letter-spacing:1px">FLIGHT</div><div style="font-family:ui-monospace,monospace;font-size:17px;font-weight:600;margin-top:2px">TK 1979</div></div>
+      <span style="flex:1"></span>
+      <div style="padding:3px 8px;border-radius:6px;background:#14242F;color:#FFFDF8;font-size:10px;font-weight:700;letter-spacing:1px">ECONOMY</div>
+    </div>
+    <div style="height:0;border-top:1.5px dashed #E3DCCC;position:relative">
+      <div style="position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:9px;background:#F1EDE4"></div>
+      <div style="position:absolute;right:-9px;top:-9px;width:18px;height:18px;border-radius:9px;background:#F1EDE4"></div>
+    </div>
+    <div style="padding:16px;display:flex;align-items:flex-end;gap:10px">
+      <div><div style="font-family:ui-monospace,monospace;font-size:34px;font-weight:600;letter-spacing:-1px;line-height:1">IST</div><div style="font-size:12px;color:#8A8272;margin-top:3px;font-variant-numeric:tabular-nums">12:50 · Gate B12</div></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding-bottom:10px">
+        <span style="font-family:ui-monospace,monospace;font-size:11px;color:#9A8F7C">4h25m</span>
+        <div style="width:100%;height:1.5px;background:#E3DCCC"></div>
+      </div>
+      <div style="text-align:right"><div style="font-family:ui-monospace,monospace;font-size:34px;font-weight:600;letter-spacing:-1px;line-height:1">DXB</div><div style="font-size:12px;color:#8A8272;margin-top:3px;font-variant-numeric:tabular-nums">18:15 · 3,010 km</div></div>
+    </div>
+    <div style="padding:0 16px 16px"><div style="padding:14px;border-radius:12px;background:#E89A3C;color:#14242F;text-align:center;font-size:16px;font-weight:700;letter-spacing:-.2px">Board in 3h 10m</div></div>
+  </div>
+  <div style="padding:22px 18px 6px;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#9A8F7C">MANIFEST</div>
+  <div style="margin:0 18px;background:#FFFDF8;border-radius:16px;box-shadow:0 2px 0 rgba(20,36,47,.06),0 10px 22px rgba(20,36,47,.07);padding:6px 16px">
+    <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed #EDE6D6">
+      <img src="assets/p_ist_lokum.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
+      <div style="flex:1"><div style="font-size:15px;font-weight:590">Turkish Delight</div><div style="font-size:12px;color:#8A8272">×3 · 7.2 kg</div></div>
+      <div style="font-family:ui-monospace,monospace;font-size:15px;font-weight:600">$192</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:11px 0">
+      <img src="assets/p_ist_ceramic.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
+      <div style="flex:1"><div style="font-size:15px;font-weight:590">İznik Ceramics</div><div style="font-size:12px;color:#8A8272">×1 · 5.8 kg</div></div>
+      <div style="font-family:ui-monospace,monospace;font-size:15px;font-weight:600">$310</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px dashed #EDE6D6">
+      <div style="width:34px;height:34px;border-radius:8px;background:center/cover no-repeat url(assets/p_ist_copper.webp)"></div>
+      <div style="flex:1"><div style="font-size:15px;font-weight:590">Hand-beaten Copper</div><div style="font-size:12px;color:#8A8272">×1 · 9.2 kg</div></div>
+      <div style="font-family:ui-monospace,monospace;font-size:15px;font-weight:600">$186</div>
+    </div>
+    <div style="display:flex;align-items:baseline;gap:10px;padding:12px 0;border-top:1.5px solid #14242F">
+      <div style="flex:1;font-size:12px;font-weight:700;letter-spacing:1.4px;color:#9A8F7C">TOTAL · 22.2 KG</div>
+      <div style="font-family:ui-monospace,monospace;font-size:19px;font-weight:600">$688</div>
+    </div>
+  </div>
+  <div style="margin:16px 18px 0;padding:13px 15px;border-radius:14px;background:rgba(60,184,164,.14);border:1px solid rgba(46,140,124,.3)">
+    <div style="font-size:13px;font-weight:640;color:#1F6E61">Dubai forecast: +$396 on this load</div>
+    <div style="font-size:12px;color:#4B6F68;margin-top:2px">Gold souk demand is high through Friday.</div>
+  </div>
+  <div style="margin:14px 18px 0;display:flex;gap:10px">
+    <div style="flex:1;padding:14px;border-radius:14px;background:#14242F;color:#FFFDF8;text-align:center;font-size:15px;font-weight:640;letter-spacing:-.2px">Add to manifest</div>
+    <div style="flex:none;width:56px;border-radius:14px;background:#FFFDF8;border:1px solid #E3DCCC;display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;background:center/145% no-repeat url(assets/ic_inventory.webp);opacity:.75"></div></div>
+  </div>
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:10px 8px 26px;background:rgba(241,237,228,.92);backdrop-filter:blur(16px);border-top:1px solid #E3DCCC;display:flex">
+    <div style="flex:1;text-align:center"><div style="font-size:11px;font-weight:640;color:#14242F">Globe</div></div>
+    <div style="flex:1;text-align:center"><div style="font-size:11px;font-weight:640;color:#B4A98F">Market</div></div>
+    <div style="flex:1;text-align:center"><div style="font-size:11px;font-weight:640;color:#B4A98F">Flights</div></div>
+    <div style="flex:1;text-align:center"><div style="font-size:11px;font-weight:640;color:#B4A98F">Bags</div></div>
+    <div style="flex:1;text-align:center"><div style="font-size:11px;font-weight:640;color:#B4A98F">More</div></div>
+  </div>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">Try next: "make the market a swipe-to-buy list" · "globe-first with a draggable sheet instead of a tab bar" · "show a lighter, boarding-pass visual style"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1800&quot;,&quot;height&quot;:&quot;1050&quot;}}">
+
+const CITIES = {
+  istanbul:  {id:'istanbul',  name:'Istanbul',  airport:'Istanbul Airport',           iata:'IST', icao:'LTFM', country:'Türkiye',              hero:'assets/city_istanbul.webp',  elev:'325 ft'},
+  dubai:     {id:'dubai',     name:'Dubai',     airport:'Dubai International',        iata:'DXB', icao:'OMDB', country:'United Arab Emirates', hero:'assets/city_dubai.webp',     elev:'62 ft'},
+  london:    {id:'london',    name:'London',    airport:'London Heathrow',            iata:'LHR', icao:'EGLL', country:'United Kingdom',       hero:'assets/city_london.webp',    elev:'83 ft'},
+  paris:     {id:'paris',     name:'Paris',     airport:'Paris Charles de Gaulle',    iata:'CDG', icao:'LFPG', country:'France',               hero:'assets/city_paris.webp',     elev:'392 ft'},
+  beijing:   {id:'beijing',   name:'Beijing',   airport:'Beijing Capital International', iata:'PEK', icao:'ZBAA', country:'China',            hero:'assets/city_beijing.webp',   elev:'116 ft'},
+  amsterdam: {id:'amsterdam', name:'Amsterdam', airport:'Amsterdam Schiphol',         iata:'AMS', icao:'EHAM', country:'Netherlands',          hero:'assets/city_amsterdam.webp', elev:'-11 ft'},
+};
+
+const P = {
+  ist_lokum:    {id:'ist_lokum',    home:'istanbul',  name:'Turkish Delight',       category:'Confectionery', icon:'assets/p_ist_lokum.webp',       w:2.4,  base:64},
+  ist_ceramic:  {id:'ist_ceramic',  home:'istanbul',  name:'İznik Ceramics',        category:'Crafts',        icon:'assets/p_ist_ceramic.webp',     w:5.8,  base:310},
+  ist_copper:   {id:'ist_copper',   home:'istanbul',  name:'Hand-beaten Copper',    category:'Crafts',        icon:'assets/p_ist_copper.webp',      w:9.2,  base:186},
+  ist_textile:  {id:'ist_textile',  home:'istanbul',  name:'Bursa Textiles',        category:'Textiles',      icon:'assets/p_ist_textile.webp',     w:12.5, base:242},
+  dxb_gold:     {id:'dxb_gold',     home:'dubai',     name:'Gold Jewellery Proxy',  category:'Crafts',        icon:'assets/p_dxb_gold.webp',        w:0.28, base:5800},
+  dxb_spice:    {id:'dxb_spice',    home:'dubai',     name:'Souk Saffron Lot',      category:'Spices',        icon:'assets/p_dxb_spice.webp',       w:0.4,  base:920},
+  dxb_fabric:   {id:'dxb_fabric',   home:'dubai',     name:'Re-export Fabric Lot',  category:'Textiles',      icon:'assets/p_dxb_fabric.webp',      w:6.5,  base:500},
+  dxb_oil:      {id:'dxb_oil',      home:'dubai',     name:'Refined Oil Contract',  category:'Energy',        icon:'assets/p_cat_energy.webp',      w:1.0,  base:1100},
+  dxb_avionics: {id:'dxb_avionics', home:'dubai',     name:'Avionics Modules',      category:'Electronics',   icon:'assets/p_cat_electronics.webp', w:0.75, base:5000},
+  cdg_perfume:  {id:'cdg_perfume',  home:'paris',     name:'Grasse Perfume',        category:'Cosmetics',     icon:'assets/p_cdg_perfume.webp',     w:1.1,  base:410},
+  cdg_chocolate:{id:'cdg_chocolate',home:'paris',     name:'Maison Chocolates',     category:'Confectionery', icon:'assets/p_cdg_chocolate.webp',   w:2.2,  base:185},
+  cdg_cosmetics:{id:'cdg_cosmetics',home:'paris',     name:'Atelier Skincare',      category:'Cosmetics',     icon:'assets/p_cdg_cosmetics.webp',   w:1.6,  base:340},
+  lhr_tea:      {id:'lhr_tea',      home:'london',    name:'Blended Tea Chest',     category:'Tea',           icon:'assets/p_lhr_tea.webp',         w:3.1,  base:128},
+  lhr_wool:     {id:'lhr_wool',     home:'london',    name:'Highland Wool Bolt',    category:'Textiles',      icon:'assets/p_lhr_wool.webp',        w:7.8,  base:210},
+  ams_cheese:   {id:'ams_cheese',   home:'amsterdam', name:'Aged Gouda Wheel',      category:'Food',          icon:'assets/p_ams_cheese.webp',      w:8.4,  base:96},
+  ams_flower:   {id:'ams_flower',   home:'amsterdam', name:'Cut Tulip Crate',       category:'Daily goods',   icon:'assets/p_ams_flower.webp',      w:4.6,  base:74},
+  pek_bronze:   {id:'pek_bronze',   home:'beijing',   name:'Bronze Censer',         category:'Crafts',        icon:'assets/p_pek_bronze.webp',      w:6.2,  base:465},
+  pek_herb:     {id:'pek_herb',     home:'beijing',   name:'Medicinal Herb Bundle', category:'Food',          icon:'assets/p_pek_herb.webp',        w:2.8,  base:158},
+  pvg_silk:     {id:'pvg_silk',     home:'shanghai',  name:'Suzhou Silk Bolt',      category:'Textiles',      icon:'assets/p_pvg_silk.webp',        w:4.2,  base:355},
+  pvg_tea:      {id:'pvg_tea',      home:'shanghai',  name:'Longjing Tea Tin',      category:'Tea',           icon:'assets/p_pvg_tea.webp',         w:1.4,  base:196},
+};
+
+const FL = (no, airline, to, dep, arr, dur, km, econ, biz, mins) =>
+  ({no:no, airline:airline, toId:to, dep:dep, arr:arr, dur:dur, km:km.toLocaleString('en-US') + ' km', econ:econ, biz:biz, stops:'Nonstop', mins:mins});
+
+const FLIGHTS = {
+  istanbul: [
+    FL('TK 1979','Turkish Airlines','dubai','12:50','18:15','4h 25m',3010,412,1180,190),
+    FL('EK 122','Emirates','dubai','15:05','20:20','4h 15m',3010,498,1640,325),
+    FL('TK 1993','Turkish Airlines','london','09:40','11:45','3h 55m',2504,366,1090,60),
+    FL('AF 1391','Air France','paris','11:20','13:55','3h 35m',2254,298,940,160),
+    FL('CA 748','Air China','beijing','20:10','11:05','9h 55m',7159,712,2280,640),
+  ],
+  dubai: [
+    FL('TK 763','Turkish Airlines','istanbul','09:45','13:35','4h 50m',3010,388,1120,140),
+    FL('EK 1','Emirates','london','07:30','12:05','7h 35m',5490,690,2450,95),
+    FL('EK 73','Emirates','paris','08:35','13:40','6h 55m',5250,655,2310,210),
+    FL('EK 149','Emirates','amsterdam','09:10','14:15','7h 25m',5170,640,2280,190),
+    FL('EK 306','Emirates','beijing','10:20','21:40','7h 50m',5850,720,2390,275),
+  ],
+  london: [
+    FL('BA 676','British Airways','istanbul','10:15','16:05','3h 50m',2504,352,1060,120),
+    FL('BA 105','British Airways','dubai','12:40','23:20','6h 40m',5490,705,2380,235),
+    FL('AF 1081','Air France','paris','08:50','11:05','1h 15m',344,148,520,70),
+  ],
+  paris: [
+    FL('TK 1828','Turkish Airlines','istanbul','13:10','18:35','3h 25m',2254,306,960,175),
+    FL('EK 76','Emirates','dubai','15:35','01:10','6h 35m',5250,668,2290,290),
+    FL('KL 1234','KLM','amsterdam','09:20','10:35','1h 15m',398,132,470,60),
+  ],
+  amsterdam: [
+    FL('KL 1613','KLM','istanbul','11:05','15:50','3h 45m',2210,318,980,150),
+    FL('EK 148','Emirates','dubai','14:25','23:35','6h 10m',5170,652,2260,255),
+    FL('AF 1341','Air France','paris','08:15','09:30','1h 15m',398,138,480,55),
+  ],
+  beijing: [
+    FL('CA 747','Air China','istanbul','01:35','07:20','10h 45m',7159,735,2320,320),
+    FL('EK 307','Emirates','dubai','23:55','04:05','8h 10m',5850,742,2410,205),
+    FL('KL 898','KLM','amsterdam','16:40','20:55','10h 15m',7822,780,2560,395),
+  ],
+};
+
+const FACTORS = [1.52, 1.34, 1.16, 0.98, 0.84];
+function factorFor(pid, city) {
+  if (P[pid].home === city) return 0.92;
+  let h = 0;
+  const key = pid + '|' + city;
+  for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) % 100003;
+  return FACTORS[h % FACTORS.length];
+}
+function priceAt(pid, city) {
+  const p = P[pid];
+  return p.home === city ? p.base : Math.round(p.base * factorFor(pid, city));
+}
+const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+const ADDONS = [{k:'', label:'None', price:0},{k:'light', label:'+10kg', price:40},{k:'standard', label:'+20kg', price:70},{k:'heavy', label:'+50kg', price:150}];
+
+class Component extends DCLogic {
+  state = {
+    tab:'globe', seg:'local', query:'', sheet:null, selId:null, selFlight:null,
+    qty:1, slot:'bag', cabin:'economy', addon:'', filter:'departure',
+    cash:6944, bagLimit:23, cargoCap:50, inv:[], ticket:null, minsToDep:0,
+    gameMin:0, toast:null, toastKind:'ok', notif:false, cut:null,
+    city:'istanbul', visited:['istanbul'], lastSale:null,
+  };
+
+  componentDidMount() {
+    this._t = setInterval(() => {
+      this.setState(s => ({gameMin: s.gameMin + 6, minsToDep: s.ticket ? Math.max(0, s.minsToDep - 6) : 0}));
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this._t); if (this._c) clearTimeout(this._c); if (this._toastT) clearTimeout(this._toastT); }
+
+  buzz(msg, kind) {
+    if (this._toastT) clearTimeout(this._toastT);
+    this.setState({toast: msg, toastKind: kind || 'ok'});
+    this._toastT = setTimeout(() => this.setState({toast:null}), 2400);
+  }
+
+  bagUsed() { return this.state.inv.filter(i => i.slot==='bag').reduce((a,i)=>a+i.w*i.n,0); }
+  cargoUsed() { return this.state.inv.filter(i => i.slot==='cargo').reduce((a,i)=>a+i.w*i.n,0); }
+  city() { return CITIES[this.state.city]; }
+  localsHere() { return Object.keys(P).filter(id => P[id].home === this.state.city); }
+  importsHere() { return Object.keys(P).filter(id => P[id].home !== this.state.city).slice(0, 5); }
+  destCityId() { return this.state.ticket ? this.state.ticket.toId : ''; }
+
+  clock() {
+    const base = 9*60 + 40 + this.state.gameMin;
+    const day = 12 + Math.floor(base / 1440);
+    const m = base % 1440;
+    return {label: 'Mar ' + day + ' · ' + String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0'),
+            hhmm: String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0')};
+  }
+
+  hm(mins) {
+    const h = Math.floor(mins/60), m = Math.round(mins%60);
+    return h > 0 ? h + 'h ' + String(m).padStart(2,'0') + 'm' : m + 'm';
+  }
+
+  intel(pid) {
+    const dest = this.destCityId();
+    const here = priceAt(pid, this.state.city);
+    if (dest) {
+      const there = priceAt(pid, dest), pct = Math.round((there / here - 1) * 100);
+      const cn = CITIES[dest].name;
+      if (pct >= 25) return {text: '+' + pct + '% in ' + cn, kind:'hot'};
+      if (pct >= 5)  return {text: cn + ': +' + pct + '%', kind:'ok'};
+      return {text: 'Avoid — ' + pct + '% in ' + cn, kind:'cold'};
+    }
+    let best = null;
+    (FLIGHTS[this.state.city] || []).forEach(fl => {
+      const there = priceAt(pid, fl.toId);
+      if (!best || there > best.price) best = {price: there, city: CITIES[fl.toId].name};
+    });
+    if (best && best.price > here * 1.2) return {text: 'Best: ' + best.city + ' ' + money(best.price), kind:'best'};
+    return {text:'', kind:''};
+  }
+
+  buy() {
+    const p = P[this.state.selId], n = this.state.qty, slot = this.state.slot;
+    const unit = priceAt(p.id, this.state.city), cost = unit * n, wt = p.w * n;
+    if (cost > this.state.cash) { this.buzz('Not enough cash — short ' + money(cost - this.state.cash), 'bad'); return; }
+    const cap = slot === 'bag' ? this.state.bagLimit : this.state.cargoCap;
+    const used = slot === 'bag' ? this.bagUsed() : this.cargoUsed();
+    if (used + wt > cap) { this.buzz('Over the ' + (slot==='bag'?'carry-on':'cargo') + ' limit by ' + (used+wt-cap).toFixed(1) + ' kg', 'bad'); return; }
+    this.setState(s => {
+      const inv = s.inv.slice();
+      const at = inv.findIndex(i => i.id === p.id && i.slot === slot);
+      if (at >= 0) inv[at] = Object.assign({}, inv[at], {n: inv[at].n + n});
+      else inv.push({id:p.id, name:p.name, icon:p.icon, w:p.w, n:n, slot:slot, cost:unit});
+      return {inv: inv, cash: s.cash - cost, sheet: null, qty: 1};
+    });
+    this.buzz('Bought ' + n + ' × ' + p.name + ' · ' + money(cost), 'ok');
+  }
+
+  buyTicket() {
+    const fl = this.state.selFlight;
+    const add = ADDONS.find(a => a.k === this.state.addon) || ADDONS[0];
+    const total = (this.state.cabin === 'economy' ? fl.econ : fl.biz) + add.price;
+    if (total > this.state.cash) { this.buzz('Not enough cash for this fare', 'bad'); return; }
+    const from = this.city();
+    this.setState(s => ({
+      cash: s.cash - total, sheet: null, tab: 'globe',
+      bagLimit: s.bagLimit + (add.k === 'light' ? 10 : add.k === 'standard' ? 20 : add.k === 'heavy' ? 50 : 0),
+      ticket: {no:fl.no, from:from.iata, to:CITIES[fl.toId].iata, toId:fl.toId, cabin:s.cabin, km:fl.km, dur:fl.dur, mins:fl.mins},
+      minsToDep: fl.mins,
+    }));
+    this.buzz('Ticket booked · ' + fl.no + ' to ' + CITIES[fl.toId].name, 'ok');
+  }
+
+  runCutscene() {
+    const t = this.state.ticket;
+    if (!t) return;
+    const dest = CITIES[t.toId];
+    const legMins = t.mins + 265;
+    const steps = [
+      {phase:'Gate closed', title:'Boarding · Takeoff', art:'assets/anim_flight_takeoff.webp', pct:'22%'},
+      {phase:'Cruising',    title:'34,000 ft',          art:'assets/anim_flight_cruise.webp',  pct:'62%'},
+      {phase:'Approach',    title:dest.name,            art:'assets/anim_flight_land.webp',    pct:'100%'},
+    ];
+    let i = 0;
+    this.setState({sheet:null, cut: steps[0], cutLine: t.no + ' · ' + t.from + ' → ' + t.to + ' · ' + t.km});
+    const tick = () => {
+      i += 1;
+      if (i < steps.length) { this.setState({cut: steps[i]}); this._c = setTimeout(tick, 1700); }
+      else {
+        this.setState(s => ({
+          cut:null, ticket:null, minsToDep:0, city: t.toId, tab:'globe', seg:'local',
+          visited: s.visited.indexOf(t.toId) < 0 ? s.visited.concat([t.toId]) : s.visited,
+          gameMin: s.gameMin + legMins, sheet: s.inv.length ? 'sell' : null,
+        }));
+        if (!this.state.inv.length) this.buzz('Landed in ' + dest.name + ' · nothing to sell', 'ok');
+      }
+    };
+    this._c = setTimeout(tick, 1700);
+  }
+
+  sellData() {
+    let gross = 0, cost = 0;
+    const city = this.state.city;
+    const rows = this.state.inv.map(i => {
+      const unit = priceAt(i.id, city), g = unit * i.n, c = i.cost * i.n;
+      gross += g; cost += c;
+      return {icon:i.icon, name:i.name, meta: i.n + ' × ' + money(unit) + ' · ' + (i.w*i.n).toFixed(1) + ' kg',
+        gross: money(g), delta: (g-c >= 0 ? '+' : '−') + money(Math.abs(g-c)), color: g-c >= 0 ? '#3CB8A4' : '#E05555'};
+    });
+    return {rows: rows, gross: gross, net: gross - cost};
+  }
+
+  sellAll() {
+    const d = this.sellData();
+    this.setState(s => ({cash: s.cash + d.gross, inv: [], sheet: null, lastSale: d.net}));
+    this.buzz(d.net >= 0 ? 'Nice trade! ' + money(d.net) + ' profit' : 'Rough run — ' + money(-d.net) + ' down. Next leg pays it back.', d.net >= 0 ? 'ok' : 'bad');
+  }
+
+  renderVals() {
+    const s = this.state, city = this.city(), clock = this.clock();
+    const setTab = (t) => () => this.setState({tab:t, query:''});
+    const bagUsed = this.bagUsed(), cargoUsed = this.cargoUsed();
+    const bagRatio = Math.min(1, bagUsed / s.bagLimit);
+    const p = s.selId ? P[s.selId] : null;
+    const tagColor = (k) => k === 'hot' ? '#3CB8A4' : k === 'best' ? '#E89A3C' : k === 'cold' ? '#E05555' : '#A8B8C8';
+    const ids = s.seg === 'local' ? this.localsHere() : this.importsHere();
+    const flights = (FLIGHTS[s.city] || []);
+    const tabDefs = [
+      {k:'globe', label:'Globe', src:'assets/ic_city.webp'},
+      {k:'market', label:'Market', src:'assets/ic_market.webp'},
+      {k:'flights', label:'Flights', src:'assets/ic_flight.webp'},
+      {k:'bags', label:'Bags', src:'assets/ic_inventory.webp'},
+      {k:'more', label:'More', src:'assets/ic_log.webp'},
+    ];
+    const TAB_DIM = 'invert(.62) sepia(.06) saturate(.5) brightness(1.05)';
+    const TAB_ON = 'invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)';
+    const cabinRow = (k, label, sub, price, color) => ({
+      label:label, sub:sub, price: money(price), onTap: () => this.setState({cabin:k}),
+      icon: k === 'economy' ? 'assets/ic_economy.webp' : 'assets/ic_business.webp',
+      bg: s.cabin === k ? 'rgba(232,154,60,.12)' : '#0F2536', bd: s.cabin === k ? 'rgba(232,154,60,.5)' : '#24394B',
+      dotBd: s.cabin === k ? '#E89A3C' : '#3A566D', dotBg: s.cabin === k ? '#E89A3C' : 'transparent', fg: color,
+    });
+    const sell = this.sellData();
+    const add = ADDONS.find(a => a.k === s.addon) || ADDONS[0];
+    const fareTotal = s.selFlight ? (s.cabin === 'economy' ? s.selFlight.econ : s.selFlight.biz) + add.price : 0;
+    const unitHere = p ? priceAt(p.id, s.city) : 0;
+    const costTotal = unitHere * s.qty, wtTotal = p ? p.w * s.qty : 0;
+    const slotUsed = s.slot === 'bag' ? bagUsed : cargoUsed;
+    const slotCap = s.slot === 'bag' ? s.bagLimit : s.cargoCap;
+    const over = slotUsed + wtTotal > slotCap;
+    const selIntel = p ? this.intel(p.id) : {text:'', kind:''};
+    const dest = this.destCityId();
+
+    return {
+      clockText: clock.label, clockState: 'running', localTime: clock.hhmm, cashText: money(s.cash),
+      bagText: bagUsed.toFixed(1) + ' / ' + s.bagLimit + ' kg',
+      cargoText: cargoUsed.toFixed(1) + ' / ' + s.cargoCap + ' kg',
+      bagColor: bagRatio > 0.9 ? '#E05555' : bagRatio > 0.7 ? '#E89A3C' : '#F2F6FA',
+      bagPct: Math.round(bagRatio * 100) + '%',
+      ringGradient: 'conic-gradient(' + (bagRatio > 0.9 ? '#E05555' : '#3CB8A4') + ' ' + (bagRatio*360) + 'deg, #16303F 0deg)',
+      cityName: city.name, cityHero: city.hero, cityElev: city.elev,
+      cityAirportLine: city.airport + ' · ' + city.iata + ' / ' + city.icao + ' · ' + city.country,
+      routeCount: flights.length + ' cities',
+      marketSub: city.name + ' · ' + this.localsHere().length + ' local, ' + this.importsHere().length + ' imported',
+      flightsSub: 'Departing ' + city.iata + ' · next 24 h',
+      isGlobe: s.tab==='globe', isMarket: s.tab==='market', isFlights: s.tab==='flights', isBags: s.tab==='bags', isMore: s.tab==='more',
+      searching: s.query.length > 0, notSearching: s.query.length === 0, query: s.query,
+      onQuery: (e) => this.setState({query: e.target.value}),
+      results: Object.keys(CITIES).filter(k => k !== s.city).map(k => CITIES[k])
+        .filter(c => (c.iata + ' ' + c.airport + ' ' + c.name + ' ' + c.country).toLowerCase().includes(s.query.toLowerCase()))
+        .map(c => ({iata:c.iata, name:c.airport, sub: c.name + ' · ' + c.country, onTap: () => this.setState({query:'', tab:'flights'})})),
+      goMarket: setTab('market'), goFlights: setTab('flights'),
+      tabs: tabDefs.map(t => ({label:t.label, onTap:setTab(t.k), color: s.tab === t.k ? '#E89A3C' : '#6C8298',
+        iconSrc: t.src, iconFilter: s.tab === t.k ? TAB_ON : TAB_DIM})),
+      marketSegs: ['local','imported'].map(k => ({
+        label: k === 'local' ? 'Local specialties' : 'Imported goods', onTap: () => this.setState({seg:k}),
+        bg: s.seg === k ? '#2A455A' : 'transparent', fg: s.seg === k ? '#F2F6FA' : '#A8B8C8'})),
+      products: ids.map(id => {
+        const q = P[id], unit = priceAt(id, s.city), tag = this.intel(id);
+        return {
+          name:q.name, icon:q.icon, buy: money(unit), weight: q.w.toFixed(1) + ' kg',
+          meta: q.category + ' · sells here ' + money(Math.round(unit * 0.92)),
+          origin: q.home === s.city ? 'Local' : 'Import',
+          originBg: q.home === s.city ? 'rgba(60,184,164,.15)' : 'rgba(126,182,217,.14)',
+          originFg: q.home === s.city ? '#3CB8A4' : '#7EB6D9',
+          showTag: !!tag.text, tag: tag.text, tagFg: tagColor(tag.kind), tagBg: 'rgba(255,255,255,.06)',
+          onTap: () => this.setState({sheet:'product', selId:id, qty:1, slot:'bag'}),
+        };
+      }),
+      filters: [
+        {k:'departure', label:'Departure'}, {k:'price', label:'Cheapest'},
+        {k:'duration', label:'Shortest'}, {k:'unvisited', label:'New cities'}, {k:'biz', label:'Business'},
+      ].map(fl => ({label:fl.label, onTap: () => this.setState({filter:fl.k}),
+        bg: s.filter === fl.k ? '#E89A3C' : '#152C3E', fg: s.filter === fl.k ? '#0B1C2C' : '#C6D3DF',
+        bd: s.filter === fl.k ? '#E89A3C' : '#2A455A'})),
+      flights: flights.slice().sort((a,b) =>
+          s.filter === 'price' ? a.econ - b.econ :
+          s.filter === 'duration' ? a.mins - b.mins :
+          s.filter === 'unvisited' ? ((s.visited.indexOf(a.toId) < 0 ? 0 : 1) - (s.visited.indexOf(b.toId) < 0 ? 0 : 1)) :
+          s.filter === 'biz' ? a.biz - b.biz : a.mins - b.mins)
+        .map(fl => ({
+          no:fl.no, airline:fl.airline, dep:fl.dep, arr:fl.arr, dur:fl.dur, km:fl.km, stops:fl.stops,
+          from: city.iata, to: CITIES[fl.toId].iata, fromCity: city.name, toCity: CITIES[fl.toId].name,
+          econ: money(fl.econ), biz: money(fl.biz), unvisited: s.visited.indexOf(fl.toId) < 0,
+          onTap: () => this.setState({sheet:'flight', selFlight:fl, cabin:'economy', addon:''}),
+        })),
+      inventory: s.inv.map(i => ({
+        icon:i.icon, name:i.name, meta: i.n + ' × ' + money(i.cost) + ' · ' + (i.w*i.n).toFixed(1) + ' kg',
+        slot: i.slot === 'bag' ? 'Carry-on' : 'Cargo',
+        slotIcon: i.slot === 'bag' ? 'assets/ic_baggage.webp' : 'assets/ic_cargo.webp',
+        slotBg: i.slot === 'bag' ? 'rgba(126,182,217,.14)' : 'rgba(201,164,92,.16)',
+        slotFg: i.slot === 'bag' ? '#7EB6D9' : '#C9A45C',
+      })),
+      bagsEmpty: s.inv.length === 0,
+      moreRows: [
+        {label:'Trader notes', value: s.visited.length + (s.visited.length === 1 ? ' city' : ' cities')},
+        {label:'Achievements', value:'3 / 24'},
+        {label:'Trade log', value:''},
+        {label:'Data sources', value:''},
+        {label:'Notifications', value:'On'},
+        {label:'Settings', value:''},
+      ],
+      hasTicket: !!s.ticket,
+      ticketLine: s.ticket ? s.ticket.no + ' · ' + s.ticket.from + ' → ' + s.ticket.to : '',
+      ticketSub: s.ticket ? (s.minsToDep > 0 ? 'Departs in ' + this.hm(s.minsToDep) + ' · ' + (s.ticket.cabin === 'economy' ? 'Economy' : 'Business') : 'Boarding now') : '',
+      onFastForward: () => this.setState({sheet:'ff'}),
+      ffText: s.ticket ? 'This skips ' + this.hm(s.minsToDep) + ' of world time. Anything still on the shelf stays behind.' : '',
+      onConfirmFF: () => this.runCutscene(),
+      sheetProduct: s.sheet === 'product', sheetFlight: s.sheet === 'flight', sheetFF: s.sheet === 'ff', sheetSell: s.sheet === 'sell',
+      closeSheet: () => this.setState({sheet:null}),
+      stop: (e) => e.stopPropagation(),
+      sel: p ? {name:p.name, icon:p.icon, category:p.category, weight: p.w.toFixed(1) + ' kg',
+        buy: money(unitHere), sell: money(Math.round(unitHere * 0.92)),
+        forecast: dest ? money(priceAt(p.id, dest)) : '— book first', tagFg: tagColor(selIntel.kind)} : {},
+      qty: s.qty,
+      onMinus: () => this.setState(st => ({qty: Math.max(1, st.qty - 1)})),
+      onPlus: () => this.setState(st => ({qty: st.qty + 1})),
+      qtyPresets: [1, 5, 'Max'].map(v => ({label: v === 'Max' ? 'Max' : '×' + v,
+        onTap: () => this.setState(st => ({qty: v === 'Max'
+          ? Math.max(1, Math.floor(((st.slot==='bag' ? st.bagLimit - bagUsed : st.cargoCap - cargoUsed)) / P[st.selId].w))
+          : v}))})),
+      slotSegs: ['bag','cargo'].map(k => ({label: k === 'bag' ? 'Carry-on' : 'Cargo hold', onTap: () => this.setState({slot:k}),
+        bg: s.slot === k ? '#2A455A' : 'transparent', fg: s.slot === k ? '#F2F6FA' : '#A8B8C8'})),
+      costLabel: p ? money(costTotal) + ' · ' + wtTotal.toFixed(1) + ' kg' : '',
+      afterLabel: p ? (slotUsed + wtTotal).toFixed(1) + ' / ' + slotCap + ' kg after' : '',
+      afterColor: over ? '#E05555' : '#A8B8C8',
+      buyLabel: p ? (over ? 'Over the limit' : 'Buy for ' + money(costTotal)) : 'Buy',
+      onBuy: () => this.buy(),
+      upgrades: [{l:'+10 kg $40', t:'light'},{l:'+20 kg $70', t:'standard'},{l:'+50 kg $150', t:'heavy'},{l:'Forecast $200', t:'intel'}]
+        .map(u => ({label:u.l, onTap: () => {
+          if (u.t === 'intel') {
+            if (s.cash < 200) { this.buzz('Not enough cash', 'bad'); return; }
+            if (!dest) { this.buzz('Book a flight first — a forecast needs a destination', 'bad'); return; }
+            const margin = priceAt(s.selId, dest) - unitHere;
+            this.setState(st => ({cash: st.cash - 200}));
+            this.buzz('Forecast: ' + money(margin * 0.94) + '–' + money(margin * 1.06) + ' per unit in ' + CITIES[dest].name, 'ok');
+            return;
+          }
+          const kg = u.t === 'light' ? 10 : u.t === 'standard' ? 20 : 50;
+          const cost = u.t === 'light' ? 40 : u.t === 'standard' ? 70 : 150;
+          if (s.cash < cost) { this.buzz('Not enough cash', 'bad'); return; }
+          this.setState(st => ({bagLimit: st.bagLimit + kg, cash: st.cash - cost}));
+          this.buzz('Carry-on now ' + (s.bagLimit + kg) + ' kg', 'ok');
+        }})),
+      selF: s.selFlight ? {no:s.selFlight.no, airline:s.selFlight.airline, dep:s.selFlight.dep, arr:s.selFlight.arr,
+        dur:s.selFlight.dur, km:s.selFlight.km, fromCity: city.name, toCity: CITIES[s.selFlight.toId].name} : {},
+      cabins: s.selFlight ? [
+        cabinRow('economy', 'Economy', '23 kg carry-on', s.selFlight.econ, '#7EB6D9'),
+        cabinRow('business', 'Business', '40 kg carry-on · lounge', s.selFlight.biz, '#C9A45C'),
+      ] : [],
+      addons: ADDONS.map(a => ({label:a.label, price: a.price ? money(a.price) : 'included',
+        onTap: () => this.setState({addon:a.k}),
+        bg: s.addon === a.k ? 'rgba(60,184,164,.14)' : '#0F2536',
+        bd: s.addon === a.k ? 'rgba(60,184,164,.45)' : '#24394B',
+        fg: s.addon === a.k ? '#3CB8A4' : '#F2F6FA'})),
+      flightTotal: money(fareTotal),
+      onBuyTicket: () => this.buyTicket(),
+      cutscene: !!s.cut, cutArt: s.cut ? s.cut.art : '', cutPhase: s.cut ? s.cut.phase : '',
+      cutTitle: s.cut ? s.cut.title : '', cutPct: s.cut ? s.cut.pct : '0%', cutSub: s.cutLine || '',
+      sellRows: sell.rows, sellNet: (sell.net >= 0 ? '+' : '−') + money(Math.abs(sell.net)),
+      sellNetColor: sell.net >= 0 ? '#3CB8A4' : '#E05555',
+      sellHeadline: sell.net >= 0
+        ? 'Buyers in ' + city.name + ' are paying up today. Sell now or hold for the next hop.'
+        : 'Soft market in ' + city.name + '. Selling here cuts the loss; holding costs you weight.',
+      onSellAll: () => this.sellAll(),
+      hasToast: !!s.toast, toast: s.toast, toastColor: s.toastKind === 'bad' ? '#E05555' : '#3CB8A4',
+      showNotif: s.notif,
+      onPreviewNotif: () => { this.setState({notif:true}); setTimeout(() => this.setState({notif:false}), 4200); },
+      onDismissNotif: () => this.setState({notif:false}),
+      widgetCountdown: s.ticket ? this.hm(s.minsToDep) : '—',
+      widgetRoute: s.ticket ? s.ticket.no + ' · ' + s.ticket.from + ' → ' + s.ticket.to : 'no flight booked',
+      notifTitle: s.ticket ? 'Boarding now — ' + s.ticket.no + ' to ' + CITIES[s.ticket.toId].name : 'Market opens in ' + city.name,
+      notifBody: s.ticket ? 'Gate closes in ' + this.hm(Math.max(6, s.minsToDep)) + '. Tap to board.' : 'Fresh prices on the board. Tap to trade.',
+      widgetDelta: s.lastSale != null ? (s.lastSale >= 0 ? '+' : '−') + money(Math.abs(s.lastSale)) + ' last run' : 'no trades yet',
+    };
+  }
+}
+</script>
+</body>
+</html>
