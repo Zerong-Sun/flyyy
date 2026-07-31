@@ -21,6 +21,7 @@ var _search: LineEdit
 var _airport_list: ItemList
 var _airport_card: RichTextLabel
 var _hint: Label
+var _hint_panel: PanelContainer
 var _countdown: Label
 var _btn_ff: Button
 var _panel_host: Control
@@ -116,6 +117,9 @@ func _process(_d: float) -> void:
 	if t - _last_countdown_s >= 0.5:
 		_refresh_countdown()
 		_last_countdown_s = t
+	if _hint_panel.visible and t - _last_hint_time >= 8.0:
+		_hint_panel.visible = false
+		_countdown.visible = _countdown.text != ""
 
 
 func _build_ui() -> void:
@@ -124,27 +128,35 @@ func _build_ui() -> void:
 	theme = _ThemeFactory.build()
 
 	var top := _bar(_Colors.BG_DEEP)
-	top.position = Vector2(0, 0)
-	top.size = Vector2(1280, 52)
+	top.set_anchors_preset(PRESET_TOP_WIDE)
+	top.offset_bottom = 52
 	top.clip_contents = true
 	add_child(top)
 	_clock_label = _label(top, Vector2(36, 8), "时间")
+	_configure_top_label(_clock_label, Vector2(430, 36))
 	_cash_label = _label(top, Vector2(544, 8), "资金")
-	_bag_label = _label(top, Vector2(844, 8), "行李")
-	_airport_label = _label(top, Vector2(1000, 8), "机场")
+	_configure_top_label(_cash_label, Vector2(220, 36))
+	_bag_label = _label(top, Vector2(828, 8), "行李")
+	_configure_top_label(_bag_label, Vector2(280, 36))
+	_airport_label = _label(top, Vector2(1110, 8), "机场")
+	_configure_top_label(_airport_label, Vector2(158, 36))
+	_airport_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	top.add_child(_IconFactory.make("ic_clock", 22.0))
 	top.get_child(top.get_child_count() - 1).position = Vector2(10, 14)
 	top.add_child(_IconFactory.make("ic_money", 22.0))
 	top.get_child(top.get_child_count() - 1).position = Vector2(518, 14)
 	top.add_child(_IconFactory.make("ic_weight", 22.0))
-	top.get_child(top.get_child_count() - 1).position = Vector2(818, 14)
+	top.get_child(top.get_child_count() - 1).position = Vector2(802, 14)
 
-	_countdown = _label(self, Vector2(400, 60), "")
+	_countdown = _label(self, Vector2(350, 60), "")
+	_countdown.size = Vector2(580, 42)
+	_countdown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_countdown.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_countdown.add_theme_font_size_override("font_size", 16)
 	_countdown.add_theme_color_override("font_color", _Colors.WARN_RED)
 	_btn_ff = Button.new()
 	_btn_ff.text = I18nService.t("ui.ff.button")
-	_btn_ff.position = Vector2(720, 56)
+	_btn_ff.position = Vector2(940, 60)
 	_btn_ff.visible = false
 	_btn_ff.pressed.connect(_on_fast_forward)
 	_style_cta_button(_btn_ff)
@@ -156,9 +168,29 @@ func _build_ui() -> void:
 	_disclaimer.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 	_disclaimer.modulate = Color(1, 1, 1, 0.7)
 
-	_hint = _label(self, Vector2(200, 100), "")
-	_hint.size = Vector2(880, 40)
+	_hint_panel = PanelContainer.new()
+	_hint_panel.position = Vector2(270, 60)
+	_hint_panel.size = Vector2(740, 54)
+	_hint_panel.clip_contents = true
+	_hint_panel.visible = false
+	var hint_style := StyleBoxFlat.new()
+	hint_style.bg_color = Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.94)
+	hint_style.border_color = Color(_Colors.ACCENT_AMBER.r, _Colors.ACCENT_AMBER.g, _Colors.ACCENT_AMBER.b, 0.55)
+	hint_style.set_border_width_all(1)
+	hint_style.set_corner_radius_all(7)
+	hint_style.content_margin_left = 14
+	hint_style.content_margin_right = 14
+	hint_style.content_margin_top = 6
+	hint_style.content_margin_bottom = 6
+	_hint_panel.add_theme_stylebox_override("panel", hint_style)
+	add_child(_hint_panel)
+	_hint = Label.new()
+	_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_hint.add_theme_font_size_override("font_size", 14)
 	_hint.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+	_hint_panel.add_child(_hint)
 
 	# Left search
 	var left := PanelContainer.new()
@@ -350,6 +382,14 @@ func _label(parent: Node, pos: Vector2, text: String) -> Label:
 	l.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
 	parent.add_child(l)
 	return l
+
+
+func _configure_top_label(label: Label, label_size: Vector2) -> void:
+	label.size = label_size
+	label.clip_text = true
+	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 14)
 
 
 func _style_cta_button(btn: Button) -> void:
@@ -706,6 +746,8 @@ func _on_arrived() -> void:
 
 func _show_hint(text: String) -> void:
 	_hint.text = text
+	_hint_panel.visible = text != ""
+	_countdown.visible = false
 	_last_hint_time = Time.get_ticks_msec() / 1000.0
 
 
