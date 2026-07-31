@@ -37,7 +37,7 @@
   <sc-if value="{{ hasTicket }}" hint-placeholder-val="{{ true }}">
     <div style="margin:6px 16px 0;padding:10px 12px;border-radius:14px;background:rgba(232,154,60,.12);border:.5px solid rgba(232,154,60,.35);display:flex;align-items:center;gap:10px;position:relative;z-index:20">
       <div style="width:26px;height:26px;border-radius:13px;background:rgba(232,154,60,.2);display:flex;align-items:center;justify-content:center;flex:none">
-        <div style="width:17px;height:17px;background:center/150% no-repeat url(assets/icons/ic_fast_forward.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
+        <div style="width:17px;height:17px;background:center/150% no-repeat url(assets/ic_fast_forward.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
       </div>
       <div style="flex:1;min-width:0">
         <div style="font-size:13px;font-weight:590;letter-spacing:-.08px">{{ ticketLine }}</div>
@@ -53,7 +53,7 @@
       <div>
         <div style="padding:14px 16px 0">
           <div style="display:flex;align-items:center;gap:8px;background:#152C3E;border-radius:11px;padding:8px 10px">
-            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/icons/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
+            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
             <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Airport, IATA or city" style="flex:1;background:transparent;border:0;outline:0;font-family:inherit;font-size:16px;color:#F2F6FA;letter-spacing:-.2px" />
           </div>
         </div>
@@ -78,7 +78,7 @@
             <div style="height:330px;position:relative;display:flex;align-items:center;justify-content:center;margin-top:2px;touch-action:none" onPointerDown="{{ onGlobeDown }}" onPointerMove="{{ onGlobeMove }}" onPointerUp="{{ onGlobeUp }}" onPointerLeave="{{ onGlobeUp }}">
               <div style="position:absolute;width:430px;height:430px;border-radius:50%;background:radial-gradient(circle at 50% 46%,rgba(96,168,214,.2),rgba(11,28,44,0) 60%)"></div>
               <div style="width:276px;height:276px;border-radius:50%;position:relative;overflow:hidden;box-shadow:0 0 0 .5px rgba(217,230,240,.2),0 24px 64px rgba(0,0,0,.55)">
-                <div style="position:absolute;inset:0;background-image:url(assets/world/earth.png);background-repeat:repeat-x;background-size:{{ earthSize }};background-position:{{ earthPos }}"></div>
+                <div style="position:absolute;inset:0;background-image:url(assets/earth.png);background-repeat:repeat-x;background-size:{{ earthSize }};background-position:{{ earthPos }}"></div>
                 <div style="position:absolute;inset:0;background:radial-gradient(circle at 33% 29%,rgba(255,255,255,.24),rgba(255,255,255,0) 42%),radial-gradient(circle at 50% 50%,rgba(4,14,24,0) 48%,rgba(4,14,24,.6) 82%,rgba(4,14,24,.95) 100%)"></div>
                 <div style="position:absolute;inset:0;box-shadow:inset -20px -24px 50px rgba(4,14,24,.8)"></div>
               </div>
@@ -175,7 +175,7 @@
         <div style="padding:0 16px"><div style="font-size:32px;font-weight:700;letter-spacing:-.8px;line-height:1.05">Flights</div><div style="font-size:13px;color:#A8B8C8;margin-top:3px">{{ flightsSub }}</div></div>
         <div style="padding:14px 16px 0">
           <div style="display:flex;align-items:center;gap:8px;background:#152C3E;border-radius:11px;padding:8px 10px">
-            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/icons/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
+            <div style="width:18px;height:18px;flex:none;background:center/145% no-repeat url(assets/ic_search.webp);filter:invert(.72) sepia(.06) saturate(.5) brightness(1.1)"></div>
             <span style="flex:1;font-size:16px;color:#5E7488;letter-spacing:-.2px">Flight no., airline or city</span>
           </div>
         </div>
@@ -280,7 +280,7 @@
           </div>
           <div style="display:flex;gap:10px">
             <div style="flex:1;border-radius:16px;padding:11px;background:rgba(255,255,255,.09);backdrop-filter:blur(12px)">
-              <div style="display:flex;align-items:center;gap:6px"><div style="width:14px;height:14px;border-radius:4px;background:center/cover no-repeat url(assets/achievements/ach_europe.webp)"></div><span style="font-size:10px;font-weight:640;color:#A8B8C8;letter-spacing:.2px">BOARDING</span></div>
+              <div style="display:flex;align-items:center;gap:6px"><div style="width:14px;height:14px;border-radius:4px;background:center/cover no-repeat url(assets/ach_europe.webp)"></div><span style="font-size:10px;font-weight:640;color:#A8B8C8;letter-spacing:.2px">BOARDING</span></div>
               <div style="font-size:24px;font-weight:640;font-variant-numeric:tabular-nums;letter-spacing:-.6px;margin-top:6px;color:#E89A3C">{{ widgetCountdown }}</div>
               <div style="font-size:11px;color:#A8B8C8;margin-top:1px">{{ widgetRoute }}</div>
             </div>
@@ -418,7 +418,7 @@
         <div style="padding:20px 16px 4px;font-size:12px;font-weight:590;color:#5E7488;letter-spacing:.4px;text-transform:uppercase">Save</div>
         <div style="margin:0 16px;padding:14px 16px;border-radius:16px;background:#122A3D;border:.5px solid #1E3A4F">
           <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:22px;height:22px;flex:none;background:center/150% no-repeat url(assets/icons/ic_save.webp);filter:invert(.86) brightness(1.3)"></div>
+            <div style="width:22px;height:22px;flex:none;background:center/150% no-repeat url(assets/ic_save.webp);filter:invert(.86) brightness(1.3)"></div>
             <div style="flex:1"><div style="font-size:15px;font-weight:590">Autosave</div><div style="font-size:12px;color:#A8B8C8;margin-top:1px;font-variant-numeric:tabular-nums">{{ saveSub }}</div></div>
           </div>
           <div style="display:flex;gap:8px;margin-top:12px">
@@ -427,7 +427,7 @@
           </div>
         </div>
         <div style="padding:18px 16px 0;text-align:center">
-          <div style="width:38px;height:38px;border-radius:10px;margin:0 auto;background:#0F2536 center/86% no-repeat url(assets/achievements/ach_europe.webp);opacity:.7"></div>
+          <div style="width:38px;height:38px;border-radius:10px;margin:0 auto;background:#0F2536 center/86% no-repeat url(assets/ach_europe.webp);opacity:.7"></div>
           <div style="font-size:12px;color:#4E657A;margin-top:6px">Airborne Trader · Demo build 0.2</div>
         </div>
       </div>
@@ -454,7 +454,7 @@
 
   <sc-if value="{{ showNotif }}" hint-placeholder-val="{{ false }}">
     <div style="position:absolute;left:10px;right:10px;top:14px;z-index:80;padding:12px 14px;border-radius:22px;background:rgba(28,44,58,.82);backdrop-filter:blur(24px);border:.5px solid rgba(217,230,240,.14);box-shadow:0 16px 40px rgba(0,0,0,.5);animation:atBanner .38s cubic-bezier(.2,.9,.25,1);display:flex;gap:11px" onClick="{{ onDismissNotif }}">
-      <div style="width:38px;height:38px;border-radius:9px;flex:none;background:#0F2536 center/86% no-repeat url(assets/achievements/ach_europe.webp)"></div>
+      <div style="width:38px;height:38px;border-radius:9px;flex:none;background:#0F2536 center/86% no-repeat url(assets/ach_europe.webp)"></div>
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:baseline;gap:6px"><span style="font-size:13px;font-weight:640;letter-spacing:-.08px">AIRBORNE TRADER</span><span style="font-size:12px;color:#A8B8C8;margin-left:auto">now</span></div>
         <div style="font-size:14px;font-weight:590;margin-top:2px;letter-spacing:-.2px">{{ notifTitle }}</div>
@@ -465,10 +465,10 @@
 
   <sc-if value="{{ showIntro }}" hint-placeholder-val="{{ true }}">
     <div style="position:absolute;inset:0;z-index:90;background:#07161F;display:flex;flex-direction:column">
-      <div style="position:absolute;inset:0;background:#07161F center/cover no-repeat;background-image:url(assets/cities/city_istanbul.webp);opacity:.5"></div>
+      <div style="position:absolute;inset:0;background:#07161F center/cover no-repeat;background-image:url(assets/city_istanbul.webp);opacity:.5"></div>
       <div style="position:absolute;inset:0;background:linear-gradient(rgba(7,22,31,.55) 20%,rgba(7,22,31,.9) 62%,#07161F)"></div>
       <div style="position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:0 26px 30px">
-        <div style="width:76px;height:76px;border-radius:18px;background:#0F2536 center/86% no-repeat;background-image:url(assets/achievements/ach_europe.webp);box-shadow:0 12px 34px rgba(0,0,0,.5)"></div>
+        <div style="width:76px;height:76px;border-radius:18px;background:#0F2536 center/86% no-repeat;background-image:url(assets/ach_europe.webp);box-shadow:0 12px 34px rgba(0,0,0,.5)"></div>
         <div style="font-size:38px;font-weight:700;letter-spacing:-1px;line-height:1.05;margin-top:18px">Airborne Trader</div>
         <div style="font-size:15px;color:#C6D3DF;margin-top:8px;line-height:1.45;text-wrap:pretty">Twelve hub airports. Buy low where a thing is made, fly it somewhere it is scarce, sell high. Weight is the whole game.</div>
         <div style="display:flex;flex-direction:column;gap:11px;margin-top:22px">
@@ -652,7 +652,7 @@
     <div style="padding:8px 12px;border-radius:14px;background:rgba(18,42,61,.72);backdrop-filter:blur(18px);border:.5px solid rgba(217,230,240,.12);font-size:13px;font-weight:590;font-variant-numeric:tabular-nums;color:#A8B8C8">12.4 / 23 kg</div>
     <span style="flex:1"></span>
     <div style="width:36px;height:36px;border-radius:18px;background:rgba(18,42,61,.72);backdrop-filter:blur(18px);border:.5px solid rgba(217,230,240,.12);display:flex;align-items:center;justify-content:center">
-      <div style="width:19px;height:19px;background:center/145% no-repeat url(assets/icons/ic_search.webp);filter:invert(.88) brightness(1.3)"></div>
+      <div style="width:19px;height:19px;background:center/145% no-repeat url(assets/ic_search.webp);filter:invert(.88) brightness(1.3)"></div>
     </div>
   </div>
   <div style="position:absolute;left:0;right:0;bottom:0;top:420px;background:rgba(19,45,64,.94);backdrop-filter:blur(26px);border-radius:26px 26px 0 0;border-top:.5px solid rgba(217,230,240,.14);box-shadow:0 -18px 50px rgba(0,0,0,.45)">
@@ -668,17 +668,17 @@
     </div>
     <div style="padding:12px 18px 0;display:flex;flex-direction:column;gap:8px">
       <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;background:#0F2536;border-radius:14px">
-        <img src="assets/products/p_ist_lokum.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
+        <img src="assets/p_ist_lokum.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
         <div style="flex:1"><div style="font-size:15px;font-weight:590">Turkish Delight</div><div style="font-size:12px;color:#3CB8A4;margin-top:2px">Hot in Dubai · 2.4 kg</div></div>
         <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$64</div>
       </div>
       <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;background:#0F2536;border-radius:14px">
-        <img src="assets/products/p_ist_ceramic.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
+        <img src="assets/p_ist_ceramic.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
         <div style="flex:1"><div style="font-size:15px;font-weight:590">İznik Ceramics</div><div style="font-size:12px;color:#3CB8A4;margin-top:2px">Hot in Dubai · 5.8 kg</div></div>
         <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$310</div>
       </div>
       <div style="display:flex;align-items:center;gap:11px;padding:9px 11px;background:#0F2536;border-radius:14px">
-        <img src="assets/products/p_ist_textile.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
+        <img src="assets/p_ist_textile.webp" alt="" style="width:38px;height:38px;border-radius:9px;object-fit:cover" />
         <div style="flex:1"><div style="font-size:15px;font-weight:590">Bursa Textiles</div><div style="font-size:12px;color:#E05555;margin-top:2px">Avoid — soft market</div></div>
         <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$242</div>
       </div>
@@ -686,7 +686,7 @@
     <div style="position:absolute;left:18px;right:18px;bottom:44px;display:flex;gap:10px">
       <div style="flex:1;padding:15px;border-radius:16px;background:#E89A3C;color:#0B1C2C;text-align:center;font-size:16px;font-weight:700">Buy selected</div>
       <div style="width:54px;border-radius:16px;background:#0F2536;border:.5px solid #2A455A;display:flex;align-items:center;justify-content:center">
-        <div style="width:24px;height:24px;background:center/145% no-repeat url(assets/icons/ic_flight.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
+        <div style="width:24px;height:24px;background:center/145% no-repeat url(assets/ic_flight.webp);filter:invert(.66) sepia(.9) saturate(5) hue-rotate(-12deg) brightness(1.05)"></div>
       </div>
     </div>
   </div>
@@ -706,12 +706,12 @@
         <span style="font-size:11px;color:rgba(5,43,38,.7);font-variant-numeric:tabular-nums">−$64</span>
       </div>
       <div style="margin-left:88px;display:flex;align-items:center;gap:11px;padding:11px 12px;background:#122A3D;border-radius:15px;box-shadow:-10px 0 20px rgba(0,0,0,.35)">
-        <img src="assets/products/p_ist_lokum.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
+        <img src="assets/p_ist_lokum.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
         <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:590">Turkish Delight</div><div style="font-size:12px;color:#A8B8C8;margin-top:2px;font-variant-numeric:tabular-nums">2.4 kg · $64</div></div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:15px">
-      <img src="assets/products/p_ist_ceramic.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
+      <img src="assets/p_ist_ceramic.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
       <div style="flex:1;min-width:0">
         <div style="font-size:15px;font-weight:590">İznik Ceramics</div>
         <div style="display:flex;align-items:center;gap:5px;margin-top:5px">
@@ -724,7 +724,7 @@
       <div style="text-align:right"><div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$310</div><div style="font-size:11px;color:#5E7488">5.8 kg</div></div>
     </div>
     <div style="display:flex;align-items:center;gap:11px;padding:11px 12px;background:#122A3D;border:.5px solid #1E3A4F;border-radius:15px;opacity:.55">
-      <img src="assets/products/p_ist_textile.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
+      <img src="assets/p_ist_textile.webp" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex:none" />
       <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:590">Bursa Textiles</div><div style="font-size:12px;color:#E05555;margin-top:2px">Too heavy — 12.5 kg won't fit</div></div>
       <div style="font-size:16px;font-weight:640;font-variant-numeric:tabular-nums">$242</div>
     </div>
@@ -782,17 +782,17 @@
   <div style="padding:22px 18px 6px;font-size:11px;font-weight:700;letter-spacing:1.6px;color:#9A8F7C">MANIFEST</div>
   <div style="margin:0 18px;background:#FFFDF8;border-radius:16px;box-shadow:0 2px 0 rgba(20,36,47,.06),0 10px 22px rgba(20,36,47,.07);padding:6px 16px">
     <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed #EDE6D6">
-      <img src="assets/products/p_ist_lokum.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
+      <img src="assets/p_ist_lokum.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
       <div style="flex:1"><div style="font-size:15px;font-weight:590">Turkish Delight</div><div style="font-size:12px;color:#8A8272">×3 · 7.2 kg</div></div>
       <div style="font-family:ui-monospace,monospace;font-size:15px;font-weight:600">$192</div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:11px 0">
-      <img src="assets/products/p_ist_ceramic.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
+      <img src="assets/p_ist_ceramic.webp" alt="" style="width:34px;height:34px;border-radius:8px;object-fit:cover" />
       <div style="flex:1"><div style="font-size:15px;font-weight:590">İznik Ceramics</div><div style="font-size:12px;color:#8A8272">×1 · 5.8 kg</div></div>
       <div style="font-family:ui-monospace,monospace;font-size:15px;font-weight:600">$310</div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px dashed #EDE6D6">
-      <div style="width:34px;height:34px;border-radius:8px;background:center/cover no-repeat url(assets/products/p_ist_copper.webp)"></div>
+      <div style="width:34px;height:34px;border-radius:8px;background:center/cover no-repeat url(assets/p_ist_copper.webp)"></div>
       <div style="flex:1"><div style="font-size:15px;font-weight:590">Hand-beaten Copper</div><div style="font-size:12px;color:#8A8272">×1 · 9.2 kg</div></div>
       <div style="font-family:ui-monospace,monospace;font-size:15px;font-weight:600">$186</div>
     </div>
@@ -807,7 +807,7 @@
   </div>
   <div style="margin:14px 18px 0;display:flex;gap:10px">
     <div style="flex:1;padding:14px;border-radius:14px;background:#14242F;color:#FFFDF8;text-align:center;font-size:15px;font-weight:640;letter-spacing:-.2px">Add to manifest</div>
-    <div style="flex:none;width:56px;border-radius:14px;background:#FFFDF8;border:1px solid #E3DCCC;display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;background:center/145% no-repeat url(assets/icons/ic_inventory.webp);opacity:.75"></div></div>
+    <div style="flex:none;width:56px;border-radius:14px;background:#FFFDF8;border:1px solid #E3DCCC;display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;background:center/145% no-repeat url(assets/ic_inventory.webp);opacity:.75"></div></div>
   </div>
   <div style="position:absolute;left:0;right:0;bottom:0;padding:10px 8px 26px;background:rgba(241,237,228,.92);backdrop-filter:blur(16px);border-top:1px solid #E3DCCC;display:flex">
     <div style="flex:1;text-align:center"><div style="font-size:11px;font-weight:640;color:#14242F">Globe</div></div>
@@ -825,56 +825,163 @@
 </section>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1800&quot;,&quot;height&quot;:&quot;1050&quot;}}">
-const C=(id,name,airport,iata,icao,country,cont,hero,lat,lon,elev,tz)=>({id,name,airport,iata,icao,country,cont,hero,lat,lon,elev,tz});
-const CITIES={
- istanbul:C('istanbul','Istanbul','Istanbul Airport','IST','LTFM','Türkiye','Europe','assets/cities/city_istanbul.webp',41.28,28.75,325,3),
- dubai:C('dubai','Dubai','Dubai International','DXB','OMDB','United Arab Emirates','Asia','assets/cities/city_dubai.webp',25.25,55.37,62,4),
- london:C('london','London','London Heathrow','LHR','EGLL','United Kingdom','Europe','assets/cities/city_london.webp',51.47,-0.45,83,1),
- paris:C('paris','Paris','Paris Charles de Gaulle','CDG','LFPG','France','Europe','assets/cities/city_paris.webp',49.01,2.55,392,2),
- amsterdam:C('amsterdam','Amsterdam','Amsterdam Schiphol','AMS','EHAM','Netherlands','Europe','assets/cities/city_amsterdam.webp',52.31,4.77,-11,2),
- frankfurt:C('frankfurt','Frankfurt','Frankfurt Airport','FRA','EDDF','Germany','Europe','assets/cities/city_frankfurt.webp',50.04,8.56,364,2),
- beijing:C('beijing','Beijing','Beijing Capital International','PEK','ZBAA','China','Asia','assets/cities/city_beijing.webp',40.08,116.60,116,8),
- shanghai:C('shanghai','Shanghai','Shanghai Pudong International','PVG','ZSPD','China','Asia','assets/cities/city_shanghai.webp',31.14,121.81,13,8),
- hong_kong:C('hong_kong','Hong Kong','Hong Kong International','HKG','VHHH','Hong Kong','Asia','assets/cities/city_hongkong.webp',22.31,113.92,28,8),
- tokyo:C('tokyo','Tokyo','Tokyo Haneda','HND','RJTT','Japan','Asia','assets/cities/city_tokyo.webp',35.55,139.78,21,9),
- singapore:C('singapore','Singapore','Singapore Changi','SIN','WSSS','Singapore','Asia','assets/cities/city_singapore.webp',1.36,103.99,22,8),
- bangkok:C('bangkok','Bangkok','Bangkok Suvarnabhumi','BKK','VTBS','Thailand','Asia','assets/cities/city_bangkok.webp',13.69,100.75,5,7)};
-const CIDS=Object.keys(CITIES);
-const PR=(id,home,name,category,icon,w,base)=>({id,home,name,category,icon,w,base});
-const P={
- ist_lokum:PR('ist_lokum','istanbul','Turkish Delight','Confectionery','assets/products/p_ist_lokum.webp',2.4,64),
- ist_ceramic:PR('ist_ceramic','istanbul','İznik Ceramics','Crafts','assets/products/p_ist_ceramic.webp',5.8,310),
- ist_copper:PR('ist_copper','istanbul','Hand-beaten Copper','Crafts','assets/products/p_ist_copper.webp',9.2,186),
- ist_textile:PR('ist_textile','istanbul','Bursa Textiles','Textiles','assets/products/p_ist_textile.webp',12.5,242),
- dxb_gold:PR('dxb_gold','dubai','Gold Jewellery Proxy','Crafts','assets/products/p_dxb_gold.webp',0.28,5800),
- dxb_spice:PR('dxb_spice','dubai','Souk Saffron Lot','Spices','assets/products/p_dxb_spice.webp',0.4,920),
- dxb_fabric:PR('dxb_fabric','dubai','Re-export Fabric Lot','Textiles','assets/products/p_dxb_fabric.webp',6.5,500),
- dxb_oil:PR('dxb_oil','dubai','Refined Oil Contract','Energy','assets/products/p_cat_energy.webp',1.0,1100),
- dxb_avionics:PR('dxb_avionics','dubai','Avionics Modules','Electronics','assets/products/p_cat_electronics.webp',0.75,5000),
- lhr_tea:PR('lhr_tea','london','Blended Tea Chest','Tea','assets/products/p_lhr_tea.webp',3.1,128),
- lhr_wool:PR('lhr_wool','london','Highland Wool Bolt','Textiles','assets/products/p_lhr_wool.webp',7.8,210),
- cdg_perfume:PR('cdg_perfume','paris','Grasse Perfume','Cosmetics','assets/products/p_cdg_perfume.webp',1.1,410),
- cdg_chocolate:PR('cdg_chocolate','paris','Maison Chocolates','Confectionery','assets/products/p_cdg_chocolate.webp',2.2,185),
- cdg_cosmetics:PR('cdg_cosmetics','paris','Atelier Skincare','Cosmetics','assets/products/p_cdg_cosmetics.webp',1.6,340),
- ams_cheese:PR('ams_cheese','amsterdam','Aged Gouda Wheel','Food','assets/products/p_ams_cheese.webp',8.4,96),
- ams_flower:PR('ams_flower','amsterdam','Cut Tulip Crate','Daily goods','assets/products/p_ams_flower.webp',4.6,74),
- fra_machinery:PR('fra_machinery','frankfurt','Precision Machinery','Machinery','assets/products/p_fra_machinery.webp',14.0,880),
- fra_leather:PR('fra_leather','frankfurt','Tanned Leather Roll','Crafts','assets/products/p_fra_leather.webp',5.4,265),
- pek_bronze:PR('pek_bronze','beijing','Bronze Censer','Crafts','assets/products/p_pek_bronze.webp',6.2,465),
- pek_herb:PR('pek_herb','beijing','Medicinal Herb Bundle','Food','assets/products/p_pek_herb.webp',2.8,158),
- pvg_silk:PR('pvg_silk','shanghai','Suzhou Silk Bolt','Textiles','assets/products/p_pvg_silk.webp',4.2,355),
- pvg_tea:PR('pvg_tea','shanghai','Longjing Tea Tin','Tea','assets/products/p_pvg_tea.webp',1.4,196),
- pvg_embroid:PR('pvg_embroid','shanghai','Su Embroidery Panel','Crafts','assets/products/p_pvg_embroidery.webp',2.0,520),
- hkg_jewelry:PR('hkg_jewelry','hong_kong','Bonded Jewellery Lot','Crafts','assets/products/p_hkg_jewelry.webp',0.35,4200),
- hkg_toys:PR('hkg_toys','hong_kong','Licensed Toy Pallet','Toys','assets/products/p_cat_toys.webp',9.5,340),
- hnd_elec:PR('hnd_elec','tokyo','Precision Sensors','Electronics','assets/products/p_hnd_electronics.webp',0.9,780),
- hnd_sake:PR('hnd_sake','tokyo','Junmai Sake Case','Food','assets/products/p_hnd_sake.webp',11.2,290),
- sin_orchid:PR('sin_orchid','singapore','Orchid Extract','Cosmetics','assets/products/p_sin_orchid.webp',1.3,430),
- sin_perfume:PR('sin_perfume','singapore','Duty-free Perfume','Cosmetics','assets/products/p_sin_perfume.webp',0.9,395),
- bkk_spice:PR('bkk_spice','bangkok','Thai Spice Crate','Spices','assets/products/p_bkk_spice.webp',3.6,142),
- bkk_lacquer:PR('bkk_lacquer','bangkok','Lacquerware Set','Crafts','assets/products/p_bkk_lacquer.webp',4.8,228),
- bkk_silk:PR('bkk_silk','bangkok','Thai Silk Bolt','Textiles','assets/products/p_bkk_silk.webp',3.4,268)};
-const AIRLINE={istanbul:['TK','Turkish Airlines'],dubai:['EK','Emirates'],london:['BA','British Airways'],paris:['AF','Air France'],amsterdam:['KL','KLM'],frankfurt:['LH','Lufthansa'],beijing:['CA','Air China'],shanghai:['MU','China Eastern'],hong_kong:['CX','Cathay Pacific'],tokyo:['NH','All Nippon'],singapore:['SQ','Singapore Airlines'],bangkok:['TG','Thai Airways']};
+/* ===== Content API =================================================
+ Cities, products and flights all enter the game through three
+ registration functions. Anything registered here shows up on the
+ globe, the market, the departure boards, notes and achievements
+ with no further wiring.
+
+   defineCity({id,name,airport,iata,icao,country,cont,hero,lat,lon,
+     elev,tz, airline:['TK','Turkish Airlines'], note:'…',
+     costIndex:1.15,            // local price level, 1 = neutral
+     demand:{Textiles:1.3},     // category multipliers for imports
+     products:[{…}], flights:[{…}] })   // optional nested content
+
+   defineProduct({id,home,name,category,icon,w,base,
+     volatility:1.2,            // widens/narrows the price spread
+     demandIn:{dubai:1.4}})     // per-city premium for this good
+
+   defineFlight({from,to,dep:'07:20',no,airline,mins,econ,biz,
+     stops,aircraft, replace:true})  // extra or replacement service
+
+ Every field except the ids is optional — missing values fall back
+ to sane defaults (category icon, derived IATA, computed fare and
+ block time from great-circle distance).
+
+ The positional shorthands C(...) / PR(...) used by the seed data
+ below remain supported and register on call.
+=================================================================== */
+const CITIES={},CIDS=[],P={},PIDS=[],AIRLINE={},NOTE_TEXT={},FLIGHTS=[];
+const CAT_ICON={Electronics:'assets/p_cat_electronics.webp',Machinery:'assets/p_cat_machinery.webp',
+ Toys:'assets/p_cat_toys.webp',Energy:'assets/p_cat_energy.webp',Crafts:'assets/p_cat_crafts.webp'};
+const warn=m=>{if(typeof console!=='undefined')console.warn('[content] '+m);};
+const num=(...v)=>{for(let i=0;i<v.length;i++){const x=v[i];if(x!==undefined&&x!==null&&x!==''&&!isNaN(+x))return +x;}return 0;};
+const toMin=v=>{if(typeof v==='number')return v;const m=/^(\d{1,2}):(\d{2})$/.exec(String(v||''));return m?(+m[1]*60+ +m[2]):0;};
+
+function defineCity(s){
+ if(!s||!s.id){warn('a city needs an id');return null;}
+ const o=CITIES[s.id]||{};
+ const c=Object.assign({},o,{id:s.id,name:s.name||o.name||s.id,
+  airport:s.airport||o.airport||((s.name||s.id)+' Airport'),
+  iata:String(s.iata||o.iata||s.id.slice(0,3)).toUpperCase(),
+  icao:String(s.icao||o.icao||'----').toUpperCase(),
+  country:s.country||o.country||'—',
+  cont:s.cont||s.continent||o.cont||'Europe',
+  hero:s.hero||o.hero||'assets/p_generic.webp',
+  lat:num(s.lat,o.lat,0),lon:num(s.lon,o.lon,0),
+  elev:num(s.elev,o.elev,0),tz:num(s.tz,o.tz,0),
+  costIndex:num(s.costIndex,o.costIndex,1),
+  demand:Object.assign({},o.demand,s.demand)});
+ if(!CITIES[c.id])CIDS.push(c.id);
+ CITIES[c.id]=c;
+ if(s.airline)AIRLINE[c.id]=Array.isArray(s.airline)?s.airline:[String(s.airline).slice(0,2).toUpperCase(),String(s.airline)];
+ else if(!AIRLINE[c.id])AIRLINE[c.id]=[c.iata.slice(0,2),c.name+' Air'];
+ if(s.note)NOTE_TEXT[c.id]=s.note;
+ else if(!NOTE_TEXT[c.id])NOTE_TEXT[c.id]='No file on this hub yet. Trade here to open it.';
+ (s.products||[]).forEach(p=>defineProduct(Object.assign({home:c.id},p)));
+ (s.flights||[]).forEach(f=>defineFlight(Object.assign({from:c.id},f)));
+ return c;}
+
+function defineProduct(s){
+ if(!s||!s.id){warn('a product needs an id');return null;}
+ if(!CITIES[s.home]){warn('product '+s.id+' names an unknown home hub "'+s.home+'"');return null;}
+ const o=P[s.id]||{},cat=s.category||o.category||'Goods';
+ const p=Object.assign({},o,{id:s.id,home:s.home,name:s.name||o.name||s.id,category:cat,
+  icon:s.icon||o.icon||CAT_ICON[cat]||'assets/p_generic.webp',
+  w:num(s.w,s.weight,o.w,1),base:num(s.base,s.price,o.base,100),
+  volatility:num(s.volatility,o.volatility,1),
+  demandIn:Object.assign({},o.demandIn,s.demandIn)});
+ if(!P[p.id])PIDS.push(p.id);
+ P[p.id]=p;return p;}
+
+function defineFlight(s){
+ if(!s||!CITIES[s.from]||!CITIES[s.to]){warn('a flight needs valid from/to hub ids');return null;}
+ if(s.from===s.to){warn('flight from '+s.from+' cannot land in itself');return null;}
+ const f={from:s.from,to:s.to,depMin:toMin(s.dep)%1440,no:s.no||null,airline:s.airline||null,
+  mins:s.mins?+s.mins:null,econ:s.econ?+s.econ:null,biz:s.biz?+s.biz:null,
+  stops:s.stops||'Nonstop',aircraft:s.aircraft||null,replace:!!s.replace};
+ FLIGHTS.push(f);return f;}
+
+function removeCity(id){if(!CITIES[id])return false;delete CITIES[id];
+ CIDS.splice(CIDS.indexOf(id),1);
+ PIDS.filter(p=>P[p].home===id).forEach(p=>{delete P[p];PIDS.splice(PIDS.indexOf(p),1);});
+ for(let i=FLIGHTS.length-1;i>=0;i--)if(FLIGHTS[i].from===id||FLIGHTS[i].to===id)FLIGHTS.splice(i,1);
+ return true;}
+
+const C=(id,name,airport,iata,icao,country,cont,hero,lat,lon,elev,tz)=>
+ defineCity({id,name,airport,iata,icao,country,cont,hero,lat,lon,elev,tz});
+const CITY_SEED={
+ istanbul:C('istanbul','Istanbul','Istanbul Airport','IST','LTFM','Türkiye','Europe','assets/city_istanbul.webp',41.28,28.75,325,3),
+ dubai:C('dubai','Dubai','Dubai International','DXB','OMDB','United Arab Emirates','Asia','assets/city_dubai.webp',25.25,55.37,62,4),
+ london:C('london','London','London Heathrow','LHR','EGLL','United Kingdom','Europe','assets/city_london.webp',51.47,-0.45,83,1),
+ paris:C('paris','Paris','Paris Charles de Gaulle','CDG','LFPG','France','Europe','assets/city_paris.webp',49.01,2.55,392,2),
+ amsterdam:C('amsterdam','Amsterdam','Amsterdam Schiphol','AMS','EHAM','Netherlands','Europe','assets/city_amsterdam.webp',52.31,4.77,-11,2),
+ frankfurt:C('frankfurt','Frankfurt','Frankfurt Airport','FRA','EDDF','Germany','Europe','assets/city_frankfurt.webp',50.04,8.56,364,2),
+ beijing:C('beijing','Beijing','Beijing Capital International','PEK','ZBAA','China','Asia','assets/city_beijing.webp',40.08,116.60,116,8),
+ shanghai:C('shanghai','Shanghai','Shanghai Pudong International','PVG','ZSPD','China','Asia','assets/city_shanghai.webp',31.14,121.81,13,8),
+ hong_kong:C('hong_kong','Hong Kong','Hong Kong International','HKG','VHHH','Hong Kong','Asia','assets/city_hongkong.webp',22.31,113.92,28,8),
+ tokyo:C('tokyo','Tokyo','Tokyo Haneda','HND','RJTT','Japan','Asia','assets/city_tokyo.webp',35.55,139.78,21,9),
+ singapore:C('singapore','Singapore','Singapore Changi','SIN','WSSS','Singapore','Asia','assets/city_singapore.webp',1.36,103.99,22,8),
+ bangkok:C('bangkok','Bangkok','Bangkok Suvarnabhumi','BKK','VTBS','Thailand','Asia','assets/city_bangkok.webp',13.69,100.75,5,7)};
+Object.values(CITY_SEED).forEach(defineCity);
+
+/* Local price levels and category appetites — read by priceAt(). */
+Object.assign(CITIES.dubai,{costIndex:1.06,demand:{Crafts:1.18,Cosmetics:1.12}});
+Object.assign(CITIES.london,{costIndex:1.14,demand:{Tea:0.86,Crafts:1.1}});
+Object.assign(CITIES.paris,{costIndex:1.12,demand:{Cosmetics:0.88,Confectionery:1.16}});
+Object.assign(CITIES.tokyo,{costIndex:1.11,demand:{Electronics:0.85,Textiles:1.2}});
+Object.assign(CITIES.hong_kong,{costIndex:1.08,demand:{Toys:0.85,Crafts:1.14}});
+Object.assign(CITIES.singapore,{costIndex:1.04,demand:{Spices:1.15}});
+Object.assign(CITIES.bangkok,{costIndex:0.86,demand:{Machinery:1.24,Electronics:1.18}});
+Object.assign(CITIES.beijing,{costIndex:0.92,demand:{Cosmetics:1.22,Food:1.1}});
+Object.assign(CITIES.shanghai,{costIndex:0.95,demand:{Machinery:1.16}});
+Object.assign(CITIES.istanbul,{costIndex:0.9,demand:{Electronics:1.2,Tea:1.12}});
+Object.assign(CITIES.amsterdam,{costIndex:1.05,demand:{Spices:1.14}});
+Object.assign(CITIES.frankfurt,{costIndex:1.09,demand:{Textiles:1.12}});
+
+const PR=(id,home,name,category,icon,w,base)=>defineProduct({id,home,name,category,icon,w,base});
+const PROD_SEED={
+ ist_lokum:PR('ist_lokum','istanbul','Turkish Delight','Confectionery','assets/p_ist_lokum.webp',2.4,64),
+ ist_ceramic:PR('ist_ceramic','istanbul','İznik Ceramics','Crafts','assets/p_ist_ceramic.webp',5.8,310),
+ ist_copper:PR('ist_copper','istanbul','Hand-beaten Copper','Crafts','assets/p_ist_copper.webp',9.2,186),
+ ist_textile:PR('ist_textile','istanbul','Bursa Textiles','Textiles','assets/p_ist_textile.webp',12.5,242),
+ dxb_gold:PR('dxb_gold','dubai','Gold Jewellery Proxy','Crafts','assets/p_dxb_gold.webp',0.28,5800),
+ dxb_spice:PR('dxb_spice','dubai','Souk Saffron Lot','Spices','assets/p_dxb_spice.webp',0.4,920),
+ dxb_fabric:PR('dxb_fabric','dubai','Re-export Fabric Lot','Textiles','assets/p_dxb_fabric.webp',6.5,500),
+ dxb_oil:PR('dxb_oil','dubai','Refined Oil Contract','Energy','assets/p_cat_energy.webp',1.0,1100),
+ dxb_avionics:PR('dxb_avionics','dubai','Avionics Modules','Electronics','assets/p_cat_electronics.webp',0.75,5000),
+ lhr_tea:PR('lhr_tea','london','Blended Tea Chest','Tea','assets/p_lhr_tea.webp',3.1,128),
+ lhr_wool:PR('lhr_wool','london','Highland Wool Bolt','Textiles','assets/p_lhr_wool.webp',7.8,210),
+ cdg_perfume:PR('cdg_perfume','paris','Grasse Perfume','Cosmetics','assets/p_cdg_perfume.webp',1.1,410),
+ cdg_chocolate:PR('cdg_chocolate','paris','Maison Chocolates','Confectionery','assets/p_cdg_chocolate.webp',2.2,185),
+ cdg_cosmetics:PR('cdg_cosmetics','paris','Atelier Skincare','Cosmetics','assets/p_cdg_cosmetics.webp',1.6,340),
+ ams_cheese:PR('ams_cheese','amsterdam','Aged Gouda Wheel','Food','assets/p_ams_cheese.webp',8.4,96),
+ ams_flower:PR('ams_flower','amsterdam','Cut Tulip Crate','Daily goods','assets/p_ams_flower.webp',4.6,74),
+ fra_machinery:PR('fra_machinery','frankfurt','Precision Machinery','Machinery','assets/p_fra_machinery.webp',14.0,880),
+ fra_leather:PR('fra_leather','frankfurt','Tanned Leather Roll','Crafts','assets/p_fra_leather.webp',5.4,265),
+ pek_bronze:PR('pek_bronze','beijing','Bronze Censer','Crafts','assets/p_pek_bronze.webp',6.2,465),
+ pek_herb:PR('pek_herb','beijing','Medicinal Herb Bundle','Food','assets/p_pek_herb.webp',2.8,158),
+ pvg_silk:PR('pvg_silk','shanghai','Suzhou Silk Bolt','Textiles','assets/p_pvg_silk.webp',4.2,355),
+ pvg_tea:PR('pvg_tea','shanghai','Longjing Tea Tin','Tea','assets/p_pvg_tea.webp',1.4,196),
+ pvg_embroid:PR('pvg_embroid','shanghai','Su Embroidery Panel','Crafts','assets/p_pvg_embroidery.webp',2.0,520),
+ hkg_jewelry:PR('hkg_jewelry','hong_kong','Bonded Jewellery Lot','Crafts','assets/p_hkg_jewelry.webp',0.35,4200),
+ hkg_toys:PR('hkg_toys','hong_kong','Licensed Toy Pallet','Toys','assets/p_cat_toys.webp',9.5,340),
+ hnd_elec:PR('hnd_elec','tokyo','Precision Sensors','Electronics','assets/p_hnd_electronics.webp',0.9,780),
+ hnd_sake:PR('hnd_sake','tokyo','Junmai Sake Case','Food','assets/p_hnd_sake.webp',11.2,290),
+ sin_orchid:PR('sin_orchid','singapore','Orchid Extract','Cosmetics','assets/p_sin_orchid.webp',1.3,430),
+ sin_perfume:PR('sin_perfume','singapore','Duty-free Perfume','Cosmetics','assets/p_sin_perfume.webp',0.9,395),
+ bkk_spice:PR('bkk_spice','bangkok','Thai Spice Crate','Spices','assets/p_bkk_spice.webp',3.6,142),
+ bkk_lacquer:PR('bkk_lacquer','bangkok','Lacquerware Set','Crafts','assets/p_bkk_lacquer.webp',4.8,228),
+ bkk_silk:PR('bkk_silk','bangkok','Thai Silk Bolt','Textiles','assets/p_bkk_silk.webp',3.4,268)};
+Object.values(PROD_SEED).forEach(defineProduct);
+
+/* Volatility and standing orders — optional per-product tuning. */
+defineProduct({id:'dxb_gold',home:'dubai',volatility:1.45,demandIn:{hong_kong:1.2,tokyo:1.15}});
+defineProduct({id:'hkg_jewelry',home:'hong_kong',volatility:1.35,demandIn:{dubai:1.22}});
+defineProduct({id:'fra_machinery',home:'frankfurt',volatility:0.8,demandIn:{bangkok:1.3,shanghai:1.2}});
+defineProduct({id:'ams_flower',home:'amsterdam',volatility:1.5,demandIn:{london:1.18,paris:1.14}});
+defineProduct({id:'hnd_elec',home:'tokyo',volatility:0.9,demandIn:{istanbul:1.25,bangkok:1.2}});
+Object.assign(AIRLINE,{istanbul:['TK','Turkish Airlines'],dubai:['EK','Emirates'],london:['BA','British Airways'],paris:['AF','Air France'],amsterdam:['KL','KLM'],frankfurt:['LH','Lufthansa'],beijing:['CA','Air China'],shanghai:['MU','China Eastern'],hong_kong:['CX','Cathay Pacific'],tokyo:['NH','All Nippon'],singapore:['SQ','Singapore Airlines'],bangkok:['TG','Thai Airways']});
 function hsh(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=(h*16777619)>>>0;}return h;}
 function gcKm(a,b){const R=6371,r=Math.PI/180;const dLa=(b.lat-a.lat)*r,dLo=(b.lon-a.lon)*r;
  const x=Math.sin(dLa/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLo/2)**2;
@@ -884,39 +991,69 @@ const pad=n=>String(n).padStart(2,'0');
 const hhmm=m=>{m=((m%1440)+1440)%1440;return pad(Math.floor(m/60))+':'+pad(m%60);};
 const ADDONS=[{k:'',label:'None',price:0},{k:'light',label:'+10kg',price:40},{k:'standard',label:'+20kg',price:70},{k:'heavy',label:'+50kg',price:150}];
 const FACTORS=[1.58,1.41,1.24,1.08,0.95,0.82];
-function factorFor(pid,city){const p=P[pid];if(p.home===city)return 0.92;
- const A=CITIES[p.home],B=CITIES[city];const far=Math.min(1,gcKm(A,B)/9000);
- const base=FACTORS[hsh(pid+'|'+city)%FACTORS.length];
- return Math.round((base+far*0.22)*100)/100;}
-const priceAt=(pid,city)=>P[pid].home===city?P[pid].base:Math.round(P[pid].base*factorFor(pid,city));
+function demandFor(pid,city){const p=P[pid],B=CITIES[city];if(!p||!B)return 1;
+ return num(B.demand&&B.demand[p.category],1)*num(p.demandIn&&p.demandIn[city],1)*num(B.costIndex,1);}
+function factorFor(pid,city){const p=P[pid];const dem=demandFor(pid,city);
+ if(p.home===city)return Math.round(0.92*dem*100)/100;
+ const far=Math.min(1,gcKm(CITIES[p.home],CITIES[city])/9000);
+ const base=FACTORS[hsh(pid+'|'+city)%FACTORS.length]+far*0.22;
+ const spread=1+(base-1)*num(p.volatility,1);
+ return Math.round(Math.max(0.35,spread*dem)*100)/100;}
+const priceAt=(pid,city)=>Math.round(P[pid].base*factorFor(pid,city));
+
+function legFor(cid,k,idx){
+ const A=CITIES[cid],B=CITIES[k],km=gcKm(A,B),h=hsh(cid+'>'+k+'#'+idx);
+ const mins=Math.round(km/13.5+35);
+ const code=AIRLINE[cid]||['XX','Charter'];
+ const econ=Math.round((80+km*0.098)*(num(A.costIndex,1)+num(B.costIndex,1))/2/2)*2;
+ return{toId:k,km:km,mins:mins,depMin:((6*60)+(h%15)*54+idx*555)%1440,
+  no:code[0]+' '+(100+(h%899)),airline:code[1],
+  econ:econ,biz:Math.round(econ*3.1/10)*10,
+  dur:Math.floor(mins/60)+'h '+pad(mins%60)+'m',stops:'Nonstop',aircraft:null};}
 
 function routesFrom(cid){
- const A=CITIES[cid];
- return CIDS.filter(k=>k!==cid).map(k=>{
-  const B=CITIES[k],km=gcKm(A,B),h=hsh(cid+'>'+k);
-  const mins=Math.round(km/13.5+35);
-  const depMin=(6*60)+(h%15)*54;
-  const code=AIRLINE[cid],flt=100+(h%899);
-  const econ=Math.round((80+km*0.098)/2)*2;
-  return {toId:k,km:km,mins:mins,depMin:depMin,no:code[0]+' '+flt,airline:code[1],
-   econ:econ,biz:Math.round(econ*3.1/10)*10,
-   dur:Math.floor(mins/60)+'h '+pad(mins%60)+'m',stops:'Nonstop'};
- }).sort((a,b)=>a.depMin-b.depMin);
-}
+ if(!CITIES[cid])return [];
+ const custom=FLIGHTS.filter(f=>f.from===cid);
+ const replaced={};custom.forEach(f=>{if(f.replace)replaced[f.to]=true;});
+ const out=[];
+ CIDS.filter(k=>k!==cid&&!replaced[k]).forEach(k=>{
+  const daily=gcKm(CITIES[cid],CITIES[k])<4200?2:1;
+  for(let i=0;i<daily;i++)out.push(legFor(cid,k,i));});
+ custom.forEach(f=>{const g=legFor(cid,f.to,9);
+  const mins=f.mins||g.mins,code=AIRLINE[cid]||['XX','Charter'];
+  const econ=f.econ||g.econ;
+  out.push(Object.assign(g,{depMin:f.depMin,mins:mins,
+   no:f.no||g.no,airline:f.airline||code[1],econ:econ,
+   biz:f.biz||Math.round(econ*3.1/10)*10,
+   dur:Math.floor(mins/60)+'h '+pad(mins%60)+'m',
+   stops:f.stops,aircraft:f.aircraft}));});
+ return out.sort((a,b)=>a.depMin-b.depMin);}
+
+const destinationsFrom=cid=>routesFrom(cid).reduce((a,r)=>a.indexOf(r.toId)<0?a.concat([r.toId]):a,[]);
+
+/* Named services layered on top of the generated boards. */
+defineFlight({from:'dubai',to:'london',dep:'02:35',no:'EK 001',airline:'Emirates',aircraft:'A380-800',biz:2380});
+defineFlight({from:'istanbul',to:'tokyo',dep:'20:05',no:'TK 198',airline:'Turkish Airlines',aircraft:'787-9'});
+defineFlight({from:'singapore',to:'london',dep:'23:55',no:'SQ 322',airline:'Singapore Airlines',aircraft:'A350-900',replace:true});
+defineFlight({from:'hong_kong',to:'paris',dep:'23:40',no:'CX 279',airline:'Cathay Pacific',aircraft:'777-300ER'});
+defineFlight({from:'amsterdam',to:'istanbul',dep:'05:50',no:'KL 1613',airline:'KLM',aircraft:'737-800',econ:180});
+
+if(typeof window!=='undefined')window.TraderContent={defineCity,defineProduct,defineFlight,removeCity,
+ CITIES,CIDS,P,PIDS,FLIGHTS,AIRLINE,NOTE_TEXT,routesFrom,destinationsFrom,priceAt,factorFor};
 
 const ACH=[
- {id:'first_city',icon:'assets/achievements/ach_first_city.webp',name:'Wheels Down',desc:'Reach a second city.',goal:2,stat:'cities'},
- {id:'first_flight',icon:'assets/achievements/ach_first_flight.webp',name:'First Boarding Pass',desc:'Complete one flight.',goal:1,stat:'legs'},
- {id:'first_profit',icon:'assets/achievements/ach_first_profit.webp',name:'In The Black',desc:'Turn a profit on one sale.',goal:1,stat:'profitable'},
- {id:'hot_streak',icon:'assets/achievements/ach_hot_streak.webp',name:'Hot Streak',desc:'Five profitable sales in a run.',goal:5,stat:'profitable'},
- {id:'europe',icon:'assets/achievements/ach_europe.webp',name:'Old Continent',desc:'Visit five European hubs.',goal:5,stat:'europe'},
- {id:'asia',icon:'assets/achievements/ach_asia.webp',name:'Eastbound',desc:'Visit five Asian hubs.',goal:5,stat:'asia'},
- {id:'cities_10',icon:'assets/achievements/ach_cities_10.webp',name:'Frequent Flyer',desc:'Visit ten hub cities.',goal:10,stat:'cities'},
- {id:'countries_5',icon:'assets/icons/ic_city.webp',name:'Passport Stamps',desc:'Trade in five countries.',goal:5,stat:'countries'},
- {id:'business_10',icon:'assets/achievements/ach_business_10.webp',name:'Up Front',desc:'Fly ten business legs.',goal:10,stat:'bizLegs'},
- {id:'cargo_20',icon:'assets/achievements/ach_cargo_20.webp',name:'Heavy Lifter',desc:'Move 20 cargo shipments.',goal:20,stat:'cargoLots'},
- {id:'wealth_100k',icon:'assets/achievements/ach_wealth_100k.webp',name:'Six Figures',desc:'Hold $100,000 in cash.',goal:100000,stat:'cash'},
- {id:'legendary',icon:'assets/achievements/ach_legendary.webp',name:'Legendary Trader',desc:'Bank $1,000,000 in profit.',goal:1000000,stat:'profit'}];
+ {id:'first_city',icon:'assets/ach_first_city.webp',name:'Wheels Down',desc:'Reach a second city.',goal:2,stat:'cities'},
+ {id:'first_flight',icon:'assets/ach_first_flight.webp',name:'First Boarding Pass',desc:'Complete one flight.',goal:1,stat:'legs'},
+ {id:'first_profit',icon:'assets/ach_first_profit.webp',name:'In The Black',desc:'Turn a profit on one sale.',goal:1,stat:'profitable'},
+ {id:'hot_streak',icon:'assets/ach_hot_streak.webp',name:'Hot Streak',desc:'Five profitable sales in a run.',goal:5,stat:'profitable'},
+ {id:'europe',icon:'assets/ach_europe.webp',name:'Old Continent',desc:'Visit five European hubs.',goal:5,stat:'europe'},
+ {id:'asia',icon:'assets/ach_asia.webp',name:'Eastbound',desc:'Visit five Asian hubs.',goal:5,stat:'asia'},
+ {id:'cities_10',icon:'assets/ach_cities_10.webp',name:'Frequent Flyer',desc:'Visit ten hub cities.',goal:10,stat:'cities'},
+ {id:'countries_5',icon:'assets/ic_city.webp',name:'Passport Stamps',desc:'Trade in five countries.',goal:5,stat:'countries'},
+ {id:'business_10',icon:'assets/ach_business_10.webp',name:'Up Front',desc:'Fly ten business legs.',goal:10,stat:'bizLegs'},
+ {id:'cargo_20',icon:'assets/ach_cargo_20.webp',name:'Heavy Lifter',desc:'Move 20 cargo shipments.',goal:20,stat:'cargoLots'},
+ {id:'wealth_100k',icon:'assets/ach_wealth_100k.webp',name:'Six Figures',desc:'Hold $100,000 in cash.',goal:100000,stat:'cash'},
+ {id:'legendary',icon:'assets/ach_legendary.webp',name:'Legendary Trader',desc:'Bank $1,000,000 in profit.',goal:1000000,stat:'profit'}];
 
 const SOURCES=[
  {name:'OurAirports',license:'Public domain',use:'Airport identifiers, ICAO/IATA codes, coordinates and elevation for the 12 playable hubs.'},
@@ -924,7 +1061,7 @@ const SOURCES=[
  {name:'Natural Earth',license:'Public domain',use:'Coastlines and landmass raster behind the globe.'},
  {name:'IANA Time Zone Database',license:'Public domain',use:'UTC offsets driving each city local clock.'}];
 
-const NOTE_TEXT={
+Object.assign(NOTE_TEXT,{
  istanbul:'Straddles two continents and prices like it. Crafts leave cheap; anything electronic arrives dear.',
  dubai:'A re-export machine. Gold and saffron move at volume, and the souk pays up for finished crafts.',
  london:'Tea and wool are the honest trades. Fares out are steep — earn the margin before you book.',
@@ -936,7 +1073,7 @@ const NOTE_TEXT={
  hong_kong:'Bonded jewellery at near-zero weight. The single best value-per-kilo in the network.',
  tokyo:'Sensors are tiny and precious; sake is bulky and sentimental. Pick one.',
  singapore:'Duty-free by design. Buy scent here, sell it where duty is not free.',
- bangkok:'Spice, silk and lacquer at low entry prices — the best place to start a thin wallet.'};
+ bangkok:'Spice, silk and lacquer at low entry prices — the best place to start a thin wallet.'});
 
 class Component extends DCLogic{
  state={tab:'globe',page:null,seg:'local',query:'',sheet:null,selId:null,selFlight:null,
@@ -1003,13 +1140,13 @@ class Component extends DCLogic{
   this.setState(st=>({cash:st.cash-total,sheet:null,tab:'globe',page:null,bagLimit:st.bagLimit+kg,
    ticket:{no:fl.no,from:from.iata,to:to.iata,toId:fl.toId,cabin:st.cabin,km:fl.km,dur:fl.dur,mins:fl.mins},
    minsToDep:Math.max(30,fl.mins)}));
-  this.logAdd('assets/icons/ic_flight.webp','Booked '+fl.no,from.iata+' → '+to.iata+' · '+(s.cabin==='economy'?'Economy':'Business'),'−'+money(total),'#E05555');
+  this.logAdd('assets/ic_flight.webp','Booked '+fl.no,from.iata+' → '+to.iata+' · '+(s.cabin==='economy'?'Economy':'Business'),'−'+money(total),'#E05555');
   this.buzz('Ticket booked · '+fl.no+' to '+to.name,'ok');}
 
  runCutscene(){const t=this.state.ticket;if(!t)return;const to=CITIES[t.toId];
-  const steps=[{phase:'Gate closed',title:'Boarding · Takeoff',art:'assets/animations/anim_flight_takeoff.webp',pct:'22%'},
-   {phase:'Cruising',title:'34,000 ft',art:'assets/animations/anim_flight_cruise.webp',pct:'62%'},
-   {phase:'Approach',title:to.name,art:'assets/animations/anim_flight_land.webp',pct:'100%'}];
+  const steps=[{phase:'Gate closed',title:'Boarding · Takeoff',art:'assets/anim_flight_takeoff.webp',pct:'22%'},
+   {phase:'Cruising',title:'34,000 ft',art:'assets/anim_flight_cruise.webp',pct:'62%'},
+   {phase:'Approach',title:to.name,art:'assets/anim_flight_land.webp',pct:'100%'}];
   let i=0;const dur=this.state.optReduce?600:1700;
   this.setState({sheet:null,cut:steps[0],cutLine:t.no+' · '+t.from+' → '+t.to+' · '+t.km.toLocaleString('en-US')+' km'});
   const tick=()=>{i++;
@@ -1019,7 +1156,7 @@ class Component extends DCLogic{
      gameMin:s.gameMin+s.minsToDep+t.mins,legs:s.legs+1,km:s.km+t.km,
      bizLegs:s.bizLegs+(t.cabin==='business'?1:0),
      sheet:s.inv.length?'sell':null}));
-    this.logAdd('assets/icons/ic_flight.webp','Landed in '+to.name,t.no+' · '+t.km.toLocaleString('en-US')+' km','','#A8B8C8');
+    this.logAdd('assets/ic_flight.webp','Landed in '+to.name,t.no+' · '+t.km.toLocaleString('en-US')+' km','','#A8B8C8');
     if(!this.state.inv.length)this.buzz('Landed in '+to.name+' · nothing to sell','ok');}};
   this._c=setTimeout(tick,dur);}
 
@@ -1032,7 +1169,7 @@ class Component extends DCLogic{
  sellAll(){const d=this.sellData(),city=this.city();
   this.setState(s=>({cash:s.cash+d.gross,inv:[],sheet:null,lastSale:d.net,
    profit:s.profit+Math.max(0,d.net),profitable:s.profitable+(d.net>0?1:0)}));
-  this.logAdd('assets/icons/ic_market.webp','Sold '+d.rows.length+(d.rows.length===1?' lot':' lots'),city.name+' · '+hhmm(this.cityMin(city.id)),
+  this.logAdd('assets/ic_market.webp','Sold '+d.rows.length+(d.rows.length===1?' lot':' lots'),city.name+' · '+hhmm(this.cityMin(city.id)),
    (d.net>=0?'+':'−')+money(Math.abs(d.net)),d.net>=0?'#3CB8A4':'#E05555');
   this.buzz(d.net>=0?'Nice trade! '+money(d.net)+' profit':'Rough run — '+money(-d.net)+' down. Next leg pays it back.',d.net>=0?'ok':'bad');}
 
@@ -1059,7 +1196,7 @@ class Component extends DCLogic{
   const localNow=this.cityMin(s.city);
   const R=Math.PI/180,rot=s.rot===undefined?-city.lon:s.rot;
   const cabinRow=(k,label,sub,price,color)=>({label,sub,price:money(price),
-   onTap:()=>this.setState({cabin:k}),icon:k==='economy'?'assets/icons/ic_economy.webp':'assets/icons/ic_business.webp',
+   onTap:()=>this.setState({cabin:k}),icon:k==='economy'?'assets/ic_economy.webp':'assets/ic_business.webp',
    bg:s.cabin===k?'rgba(232,154,60,.12)':'#0F2536',bd:s.cabin===k?'rgba(232,154,60,.5)':'#24394B',
    dotBd:s.cabin===k?'#E89A3C':'#3A566D',dotBg:s.cabin===k?'#E89A3C':'transparent',fg:color});
   const sell=this.sellData();
@@ -1076,9 +1213,9 @@ class Component extends DCLogic{
 
   return{
    showIntro:s.intro,
-   introSteps:[{icon:'assets/icons/ic_market.webp',title:'Buy where it is made',sub:'Local goods price low at their origin.'},
-    {icon:'assets/icons/ic_flight.webp',title:'Fly it somewhere scarce',sub:'Distance and rarity set the markup.'},
-    {icon:'assets/icons/ic_inventory.webp',title:'Mind the kilos',sub:'23 kg carry-on. Buy more, or use the hold.'}],
+   introSteps:[{icon:'assets/ic_market.webp',title:'Buy where it is made',sub:'Local goods price low at their origin.'},
+    {icon:'assets/ic_flight.webp',title:'Fly it somewhere scarce',sub:'Distance and rarity set the markup.'},
+    {icon:'assets/ic_inventory.webp',title:'Mind the kilos',sub:'23 kg carry-on. Buy more, or use the hold.'}],
    onStart:()=>this.setState({intro:false}),
    clockText:clock.label,clockState:'running',localTime:hhmm(localNow),cashText:money(s.cash),
    lockDate:'Thursday, '+(12+Math.floor(this.utc()/1440))+' March',
@@ -1089,7 +1226,7 @@ class Component extends DCLogic{
    ringGradient:'conic-gradient('+(bagRatio>0.9?'#E05555':'#3CB8A4')+' '+(bagRatio*360)+'deg, #16303F 0deg)',
    cityName:city.name,cityHero:city.hero,cityElev:city.elev+' ft',
    cityAirportLine:city.airport+' · '+city.iata+' / '+city.icao+' · '+city.country,
-   routeCount:routes.length+' cities',
+   routeCount:destinationsFrom(s.city).length+' cities',
    marketSub:city.name+' · '+this.locals().length+' local, '+this.imports().length+' imported',
    flightsSub:'Departing '+city.iata+' · next 24 h',
    earthSize:'552px 276px',
@@ -1122,9 +1259,9 @@ class Component extends DCLogic{
     .slice(0,6).map(c=>({iata:c.iata,name:c.airport,sub:c.name+' · '+c.country,
      onTap:()=>this.setState({query:'',tab:'flights'})})),
    goMarket:go('market'),goFlights:go('flights'),
-   tabs:[{k:'globe',label:'Globe',src:'assets/icons/ic_city.webp'},{k:'market',label:'Market',src:'assets/icons/ic_market.webp'},
-    {k:'flights',label:'Flights',src:'assets/icons/ic_flight.webp'},{k:'bags',label:'Bags',src:'assets/icons/ic_inventory.webp'},
-    {k:'more',label:'More',src:'assets/icons/ic_log.webp'}]
+   tabs:[{k:'globe',label:'Globe',src:'assets/ic_city.webp'},{k:'market',label:'Market',src:'assets/ic_market.webp'},
+    {k:'flights',label:'Flights',src:'assets/ic_flight.webp'},{k:'bags',label:'Bags',src:'assets/ic_inventory.webp'},
+    {k:'more',label:'More',src:'assets/ic_log.webp'}]
     .map(t=>({label:t.label,onTap:go(t.k),color:s.tab===t.k?'#E89A3C':'#6C8298',
      iconSrc:t.src,iconFilter:s.tab===t.k?TO:TD})),
    marketSegs:['local','imported'].map(k=>({label:k==='local'?'Local specialties':'Imported goods',
@@ -1145,7 +1282,7 @@ class Component extends DCLogic{
    flights:routes.slice().sort((a,b)=>s.filter==='price'?a.econ-b.econ:s.filter==='duration'?a.mins-b.mins:
      s.filter==='unvisited'?((s.visited.indexOf(a.toId)<0?0:1)-(s.visited.indexOf(b.toId)<0?0:1))||a.depMin-b.depMin:
      s.filter==='biz'?a.biz-b.biz:a.depMin-b.depMin)
-    .slice(0,7).map(fl=>({no:fl.no,airline:fl.airline,dep:hhmm(fl.depMin),arr:hhmm(fl.depMin+fl.mins+(CITIES[fl.toId].tz-city.tz)*60),
+    .slice(0,9).map(fl=>({no:fl.no,airline:fl.airline,dep:hhmm(fl.depMin),arr:hhmm(fl.depMin+fl.mins+(CITIES[fl.toId].tz-city.tz)*60),
      dur:fl.dur,km:fl.km.toLocaleString('en-US')+' km',stops:fl.stops,
      from:city.iata,to:CITIES[fl.toId].iata,econ:money(fl.econ),biz:money(fl.biz),
      unvisited:s.visited.indexOf(fl.toId)<0,
@@ -1153,15 +1290,15 @@ class Component extends DCLogic{
    inventory:s.inv.map(i=>({icon:i.icon,name:i.name,
     meta:i.n+' × '+money(i.cost)+' · '+(i.w*i.n).toFixed(1)+' kg',
     slot:i.slot==='bag'?'Carry-on':'Cargo',
-    slotIcon:i.slot==='bag'?'assets/icons/ic_baggage.webp':'assets/icons/ic_cargo.webp',
+    slotIcon:i.slot==='bag'?'assets/ic_baggage.webp':'assets/ic_cargo.webp',
     slotBg:i.slot==='bag'?'rgba(126,182,217,.14)':'rgba(201,164,92,.16)',
     slotFg:i.slot==='bag'?'#7EB6D9':'#C9A45C'})),
    bagsEmpty:s.inv.length===0,
-   moreRows:[{label:'Trader notes',value:s.visited.length+' / '+CIDS.length,icon:'assets/achievements/ach_cities_10.webp',page:'notes'},
-    {label:'Achievements',value:st.cities?ACH.filter(a=>st[a.stat]>=a.goal).length+' / '+ACH.length:'0 / '+ACH.length,icon:'assets/achievements/ach_legendary.webp',page:'ach'},
-    {label:'Trade log',value:s.log.length?String(s.log.length):'',icon:'assets/icons/ic_log.webp',page:'log'},
-    {label:'Data sources',value:'',icon:'assets/icons/ic_attr.webp',page:'sources'},
-    {label:'Settings & save',value:'',icon:'assets/icons/ic_save.webp',page:'settings'}]
+   moreRows:[{label:'Trader notes',value:s.visited.length+' / '+CIDS.length,icon:'assets/ach_cities_10.webp',page:'notes'},
+    {label:'Achievements',value:st.cities?ACH.filter(a=>st[a.stat]>=a.goal).length+' / '+ACH.length:'0 / '+ACH.length,icon:'assets/ach_legendary.webp',page:'ach'},
+    {label:'Trade log',value:s.log.length?String(s.log.length):'',icon:'assets/ic_log.webp',page:'log'},
+    {label:'Data sources',value:'',icon:'assets/ic_attr.webp',page:'sources'},
+    {label:'Settings & save',value:'',icon:'assets/ic_save.webp',page:'settings'}]
     .map(r=>({label:r.label,value:r.value,icon:r.icon,onTap:()=>this.setState({page:r.page})})),
    achScore:ACH.filter(a=>st[a.stat]>=a.goal).length+' / '+ACH.length,
    achPct:Math.round(ACH.filter(a=>st[a.stat]>=a.goal).length/ACH.length*100)+'%',
