@@ -20,7 +20,9 @@ var sell_transactions: Array[Dictionary] = []
 
 # Per-ticket trip baggage (cleared on arrival)
 var trip_baggage_extra_kg: float = 0.0
-var trip_cabin: String = "economy"  # economy|business
+var trip_cabin: String = "economy"  # economy|business|first
+var trip_cold_chain: bool = false
+var reliability_events_enabled: bool = true
 var last_market_date: String = ""
 var last_flight_price: float = 0.0
 var last_baggage_cost: float = 0.0
@@ -32,8 +34,13 @@ var stats: Dictionary = {
 	"total_flight_segments": 0,
 	"total_distance_km": 0.0,
 	"business_flights": 0,
+	"first_flights": 0,
 	"cargo_flights": 0,
 	"connection_flights": 0,
+	"stopover_flights": 0,
+	"delayed_flights": 0,
+	"cancelled_flights": 0,
+	"alliance_flights": 0,
 	"fast_forwards": 0,
 	"intel_purchases": 0,
 	"hot_streak_sells": 0,
@@ -52,8 +59,13 @@ func _default_stats() -> Dictionary:
 		"total_flight_segments": 0,
 		"total_distance_km": 0.0,
 		"business_flights": 0,
+		"first_flights": 0,
 		"cargo_flights": 0,
 		"connection_flights": 0,
+		"stopover_flights": 0,
+		"delayed_flights": 0,
+		"cancelled_flights": 0,
+		"alliance_flights": 0,
 		"fast_forwards": 0,
 		"intel_purchases": 0,
 		"hot_streak_sells": 0,
@@ -83,6 +95,7 @@ func reset_new_game(airport_id: String) -> void:
 	sell_transactions = []
 	trip_baggage_extra_kg = 0.0
 	trip_cabin = "economy"
+	trip_cold_chain = false
 	last_market_date = "2025-03-01"
 	last_flight_price = 0.0
 	last_baggage_cost = 0.0
@@ -125,6 +138,8 @@ func personal_baggage_limit_kg() -> float:
 	var base := float(ticket.get("baggage_economy_kg", 20.0))
 	if trip_cabin == "business":
 		base = float(ticket.get("baggage_business_kg", 60.0))
+	elif trip_cabin == "first":
+		base = float(ticket.get("baggage_first_kg", 100.0))
 	var carry := float(ticket.get("carry_on_kg", 5.0))
 	return base + carry + trip_baggage_extra_kg
 
@@ -251,6 +266,8 @@ func to_dict() -> Dictionary:
 		"tutorial_flags": tutorial_flags,
 		"trip_baggage_extra_kg": trip_baggage_extra_kg,
 		"trip_cabin": trip_cabin,
+		"trip_cold_chain": trip_cold_chain,
+		"reliability_events_enabled": reliability_events_enabled,
 		"last_market_date": last_market_date,
 		"game_started": game_started,
 		"sell_transactions": sell_transactions,
@@ -280,6 +297,8 @@ func from_dict(d: Dictionary) -> void:
 	tutorial_flags = d.get("tutorial_flags", {})
 	trip_baggage_extra_kg = float(d.get("trip_baggage_extra_kg", 0))
 	trip_cabin = str(d.get("trip_cabin", "economy"))
+	trip_cold_chain = bool(d.get("trip_cold_chain", false))
+	reliability_events_enabled = bool(d.get("reliability_events_enabled", true))
 	last_market_date = str(d.get("last_market_date", GameClock.game_date_string()))
 	game_started = bool(d.get("game_started", false))
 	sell_transactions = []

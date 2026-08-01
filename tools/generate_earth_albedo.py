@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
-"""Generate a realistic Earth albedo texture at 2048×1024 for the GlobeController.
+"""Generate a realistic Earth albedo texture for the GlobeController.
 
 Uses embedded simplified continent polygons rendered in the game palette:
   ocean #1A4A6E, land #3D6B4F, ice #D9E6F0.
-Output: game/assets/earth/earth_albedo_day_2k.png
+Default output: game/assets/earth/earth_albedo_day_2k.png (2048×1024)
+4K:            game/assets/earth/earth_albedo_day_4k.png (4096×2048)
+
+  python3 tools/generate_earth_albedo.py
+  python3 tools/generate_earth_albedo.py --size 4096 --out game/assets/earth/earth_albedo_day_4k.png
 """
 
 from __future__ import annotations
 
+import argparse
 import math
 from pathlib import Path
 
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT_PATH = ROOT / "game" / "assets" / "earth" / "earth_albedo_day_2k.png"
+DEFAULT_OUT = ROOT / "game" / "assets" / "earth" / "earth_albedo_day_2k.png"
 
 WIDTH = 2048
 HEIGHT = 1024
@@ -31,10 +36,10 @@ GRATICULE = (0x40, 0x60, 0x78, 0x30)   # grid lines
 # Order: draw outlines then fill. Points in normalized [-180,180],[-90,90].
 
 
-def _px(lon: float, lat: float) -> tuple[int, int]:
+def _px(lon: float, lat: float, width: int = WIDTH, height: int = HEIGHT) -> tuple[int, int]:
     """Convert lon/lat to pixel coords."""
-    x = int((lon + 180.0) / 360.0 * WIDTH)
-    y = int((90.0 - lat) / 180.0 * HEIGHT)
+    x = int((lon + 180.0) / 360.0 * width)
+    y = int((90.0 - lat) / 180.0 * height)
     return (x, y)
 
 
@@ -160,7 +165,11 @@ def _draw_polygon(draw: ImageDraw.ImageDraw, points: list[tuple[int, int]],
     draw.polygon(points, fill=fill, outline=outline, width=outline_width)
 
 
-def generate() -> None:
+def generate(width: int = 2048, out_path: Path | None = None) -> None:
+    global WIDTH, HEIGHT
+    WIDTH = int(width)
+    HEIGHT = int(width) // 2
+    out = out_path or DEFAULT_OUT
     img = Image.new("RGBA", (WIDTH, HEIGHT), OCEAN)
     draw = ImageDraw.Draw(img)
 
@@ -175,18 +184,24 @@ def generate() -> None:
     # Draw continents
     for polygon in CONTINENTS:
         px_points = [_px(lon, lat) for lon, lat in polygon]
-        _draw_polygon(draw, px_points, fill=LAND, outline=COAST, outline_width=2)
+        _draw_polygon(draw, px_points, fill=LAND, outline=COAST, outline_width=max(1, WIDTH // 1024))
 
     # Draw country borders
     for border in BORDERS:
         px_points = [_px(lon, lat) for lon, lat in border]
         draw.line(px_points, fill=BORDER, width=1)
 
-    # Ensure directory exists
-    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    img.save(OUT_PATH, "PNG")
-    print(f"Earth albedo saved: {OUT_PATH} ({WIDTH}×{HEIGHT})")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out, "PNG")
+    print(f"Earth albedo saved: {out} ({WIDTH}×{HEIGHT})")
 
 
 if __name__ == "__main__":
-    generate()
+    ap = argparse.ArgumentParser(description="Generate Earth albedo PNG for Godot globe")
+    ap.add_argument("--size", type=int, default=2048, help="Width in pixels (height = size/2)")
+    ap.add_argument("--out", type=Path, default=None, help="Output PNG path")
+    args = ap.parse_args()
+    out = args.out
+    if out is None and args.size >= 4096:
+        out = ROOT / "game" / "assets" / "earth" / "earth_albedo_day_4k.png"
+    generate(width=args.size, out_path=out)

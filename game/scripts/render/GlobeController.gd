@@ -50,7 +50,9 @@ func _build_earth() -> void:
 	var mat := StandardMaterial3D.new()
 	mat.roughness = 0.9
 	mat.metallic = 0.0
-	var tex_path := "res://assets/earth/earth_albedo_day_2k.png"
+	var tex_path := "res://assets/earth/earth_albedo_day_4k.png"
+	if not ResourceLoader.exists(tex_path):
+		tex_path = "res://assets/earth/earth_albedo_day_2k.png"
 	if not ResourceLoader.exists(tex_path):
 		tex_path = "res://assets/earth/earth_albedo_placeholder.png"
 	if ResourceLoader.exists(tex_path):

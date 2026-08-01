@@ -56,6 +56,13 @@ static func current_quality(item: Dictionary) -> float:
 		return 1.0
 	var bought: float = float(item.get("purchased_unix", GameClock.unix_time))
 	var hours: float = max(0.0, (GameClock.unix_time - bought) / 3600.0)
+	# Cold-chain products age faster without cold baggage / hold.
+	if bool(p.get("requires_cold_chain", false)):
+		var cc: Dictionary = DataService.economy.get("cold_chain", {})
+		var mult: float = float(cc.get("unprotected_decay_mult", 2.0))
+		if AppState.trip_cold_chain:
+			mult = float(cc.get("protected_decay_mult", 0.35))
+		hours *= mult
 	return max(0.0, 1.0 - hours / life)
 
 

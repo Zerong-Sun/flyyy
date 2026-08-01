@@ -112,11 +112,17 @@ static func search_connections(origin_iata: String, query: String = "", max_resu
 		var dist: float = float(edge.get("total_distance_km", 0.0))
 		var seg1: int = int(edge.get("seg1_duration_avg", 0))
 		var seg2: int = int(edge.get("seg2_duration_avg", 0))
-		var duration: int = seg1 + 90 + seg2
-		var price_econ: float = round(dist * price_per_km * connection_factor * 100.0) / 100.0
 		var hub_a: Dictionary = DataService.get_airport_by_iata(hub)
 		var dest_ap: Dictionary = DataService.get_airport_by_iata(dest)
 		var origin_ap: Dictionary = DataService.get_airport_by_iata(origin)
+		var international: bool = str(origin_ap.get("country_id", "")) != str(dest_ap.get("country_id", ""))
+		var mct: int = int(edge.get("mct_minutes", 0))
+		if mct <= 0:
+			mct = DataService.mct_minutes_for_airport(hub, international)
+		var duration: int = seg1 + mct + seg2
+		var price_econ: float = round(dist * price_per_km * connection_factor * 100.0) / 100.0
+		var biz_mult: float = float(econ.get("business_multiplier", 10.0))
+		var first_mult: float = float(econ.get("first_multiplier", 25.0))
 		results.append({
 			"type": "connection",
 			"origin_iata": origin,
@@ -129,13 +135,16 @@ static func search_connections(origin_iata: String, query: String = "", max_resu
 			"distance_km": dist,
 			"seg1_duration_avg": seg1,
 			"seg2_duration_avg": seg2,
+			"mct_minutes": mct,
 			"duration_minutes": duration,
 			"est_total_duration_min": duration,
 			"ticket_base_price_economy": price_econ,
-			"ticket_base_price_business": price_econ * 10.0,
+			"ticket_base_price_business": price_econ * biz_mult,
+			"ticket_base_price_first": price_econ * first_mult,
 			"marketing_flight_number": "CNX %s-%s-%s" % [origin, hub, dest],
 			"airline_name": "联程拼装（重建网络）",
 			"cabin_business_available": true,
+			"cabin_first_available": true,
 			"scheduled_departure_utc": "",  # filled at purchase time
 			"scheduled_arrival_utc": "",
 		})

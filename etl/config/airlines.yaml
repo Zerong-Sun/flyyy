@@ -1,0 +1,36 @@
+# Airline catalog with alliance membership (generic alliance labels — no trademark logos).
+# alliance_id: star | oneworld | skyteam | none
+
+alliances:
+  - id: star
+    name_zh: 星空联盟
+    name_en: Star Alliance
+  - id: oneworld
+    name_zh: 寰宇一家
+    name_en: oneworld
+  - id: skyteam
+    name_zh: 天合联盟
+    name_en: SkyTeam
+  - id: none
+    name_zh: 独立承运
+    name_en: Independent
+
+airlines:
+  - {id: DL, name: Delta Air Lines, alliance_id: skyteam}
+  - {id: AA, name: American Airlines, alliance_id: oneworld}
+  - {id: UA, name: United Airlines, alliance_id: star}
+  - {id: BA, name: British Airways, alliance_id: oneworld}
+  - {id: EK, name: Emirates, alliance_id: none}
+  - {id: TK, name: Turkish Airlines, alliance_id: star}
+  - {id: AF, name: Air France, alliance_id: skyteam}
+  - {id: KL, name: KLM, alliance_id: skyteam}
+  - {id: LH, name: Lufthansa, alliance_id: star}
+  - {id: CA, name: Air China, alliance_id: star}
+  - {id: MU, name: China Eastern, alliance_id: skyteam}
+  - {id: CZ, name: China Southern, alliance_id: none}
+  - {id: NH, name: ANA, alliance_id: star}
+  - {id: SQ, name: Singapore Airlines, alliance_id: star}
+  - {id: KE, name: Korean Air, alliance_id: skyteam}
+  - {id: CX, name: Cathay Pacific, alliance_id: oneworld}
+  - {id: TG, name: Thai Airways, alliance_id: star}
+  - {id: QR, name: Qatar Airways, alliance_id: oneworld}

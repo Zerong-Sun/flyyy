@@ -8,7 +8,7 @@
 | 目标工程 | [`ios/expo/`](../ios/expo/)（Expo Go SDK 54 · 12 枢纽 Demo） |
 | 关联 | [PRD_01.md](../PRD_01.md)；[CONTENT_ASSET_SPEC.md](CONTENT_ASSET_SPEC.md)（CAS-01 · Godot 美术/音乐真源）；[v0.2_REQUIREMENTS.md](v0.2_REQUIREMENTS.md)；[ios/expo/README.md](../ios/expo/README.md)；[ios/github.md](../ios/github.md) |
 | 前置里程碑 | **M1（已交付）**：审阅优化 — 真实登机倒计时与自动起飞、行李随票失效、购买校验与加权成本、时钟隔离、AsyncStorage 存档、成就 toast、Reduce motion、safe-area |
-| 状态 | 需求起草（v0.2 增补媒体与素材专节） |
+| 状态 | M2 已交付；验收对照见 [`docs/superpowers/plans/2026-08-01-ios-expo-m2-acceptance.md`](superpowers/plans/2026-08-01-ios-expo-m2-acceptance.md) |
 
 本文档定义 **iOS Expo Demo 的 M2 里程碑**：在 M1 已可玩、可存档的闭环上，补齐「可感知的地球」、贸易深度、内容管线与可发布质量，使手机版从「设计稿可玩移植」升级为「可持续迭代的移动 Demo」。
 
@@ -394,14 +394,18 @@ flowchart LR
 
 ---
 
-## 13. 开放问题（需产品拍板）
+## 13. 开放问题 — 产品决策（已关闭 · 2026-08-01）
 
-1. **情报方案**默认 A、B 还是 A+C？（§4.3）
-2. **扩城**：M2 是否必须冲到 16–20，还是管线就绪即可？
-3. **UI 语言**：继续全英文，还是 M2 开始中英切换？（影响文案量）
-4. **与 `expo-go/`（30 城）**：保持双轨，还是 M3 合并？
-5. **超重起飞**：本版「不阻断」是否改为「必须减重才能购票」？
-6. **A2 音频**：M2 试玩包是否必须带真·SFX，还是触感 click 即可对外？（§9.3）
+| # | 问题 | 决策 | 归属 |
+|---|------|------|------|
+| 1 | 情报方案 A / B / A+C | **A 关注目的地 + 轻量 C sparkline** | B 付费快照 → M3 P2 |
+| 2 | 扩城是否冲 16–20 | **管线就绪即可**，维持 12 枢纽 | C2 扩城 → M3 |
+| 3 | UI 语言 | **保持英文** | 中英切换 → M3 |
+| 4 | 与 `expo-go/` 双轨 | **M2 维持双轨** | 合并评估 → M3 |
+| 5 | 超重起飞是否阻断 | **不阻断**（仅提示） | 与 §4.2 一致 |
+| 6 | A2 音频是否必须 | **必须带真·SFX**（5 条 AAC） | 已入库；§9.3.2 |
+
+验收对照表：[`docs/superpowers/plans/2026-08-01-ios-expo-m2-acceptance.md`](superpowers/plans/2026-08-01-ios-expo-m2-acceptance.md)。
 
 ---
 
@@ -411,3 +415,4 @@ flowchart LR
 |------|------|------|
 | 2026-08-01 | v0.1 | 基于 ios/expo M1 审阅优化完成后的下一步需求初稿 |
 | 2026-08-01 | v0.2 | 新增 §9 媒体与素材（美术·音乐）；修正 §1.1 过时现状；A2/BGM 范围消歧；关联 CAS-01 |
+| 2026-08-01 | v0.3 | 关闭 §13 六个开放问题；状态改为已交付；挂验收对照表 |

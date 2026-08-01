@@ -1,0 +1,39 @@
+# Dangerous-goods / passenger-restriction rules (game simulation — not real hazmat law).
+# Products carry hazmat_class; runtime uses this matrix for cabin vs cargo hints.
+
+classes:
+  none:
+    cabin_ok: true
+    cargo_ok: true
+    label_zh: ""
+  perishable_cold:
+    cabin_ok: true
+    cargo_ok: true
+    requires_cold_chain: true
+    label_zh: 需冷藏
+  restricted_cabin:
+    cabin_ok: false
+    cargo_ok: true
+    label_zh: 仅限货运
+  forbidden:
+    cabin_ok: false
+    cargo_ok: false
+    label_zh: 禁运（本版仅提示）
+
+# Category → default hazmat_class (overridable per product)
+category_defaults:
+  食品: perishable_cold
+  香料: none
+  茶叶: none
+  咖啡: perishable_cold
+  糖果: perishable_cold
+  工艺品: none
+  纺织品: none
+  陶瓷: none
+  文具: none
+  玩具: none
+  日用品: none
+  机械: restricted_cabin
+  能源: restricted_cabin
+  电子: none
+  矿产: restricted_cabin

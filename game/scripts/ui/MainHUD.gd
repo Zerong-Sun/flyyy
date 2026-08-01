@@ -1359,7 +1359,11 @@ func _show_flights() -> void:
 	bb.pressed.connect(func (): _purchase("business"))
 	_IconFactory.decorate_button(bb, "ic_business", 18.0)
 	row.add_child(bb)
-	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
+	var bf := Button.new()
+	bf.text = "头等舱"
+	bf.pressed.connect(func (): _purchase("first"))
+	row.add_child(bf)
+	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"], ["冷藏", "cold"]]:
 		var bx := Button.new()
 		var tier: String = pair[1]
 		bx.text = "%s $%.0f" % [pair[0], _baggage_tier_price(tier)]
@@ -1550,11 +1554,19 @@ func _fill_flight_rows() -> void:
 	var gray := Color(0.55, 0.55, 0.55)
 	for i in _flights_cache.size():
 		var fl: Dictionary = _flights_cache[i]
-		_flight_list.add_item("%s  %s→%s  %s  $%.0f  %dmin" % [
+		var stop_n := int(fl.get("stops", 0))
+		var stop_tag := "" if stop_n <= 0 else " 经停×%d" % stop_n
+		var al_id := str(fl.get("alliance_id", ""))
+		var al_tag := ""
+		if al_id != "" and al_id != "none":
+			al_tag = " ·%s" % DataService.alliance_name(al_id)
+		_flight_list.add_item("%s  %s→%s  %s  $%.0f  %dmin%s%s" % [
 			fl.marketing_flight_number, fl.origin_iata, fl.destination_iata,
 			str(fl.scheduled_departure_utc).substr(0, 16),
 			float(fl.ticket_base_price_economy),
-			int(fl.duration_minutes)
+			int(fl.duration_minutes),
+			stop_tag,
+			al_tag,
 		])
 		if _FlightSearch.is_short_lead(fl):
 			_flight_list.set_item_custom_fg_color(i, gray)
@@ -1563,9 +1575,10 @@ func _fill_flight_rows() -> void:
 func _fill_connection_rows() -> void:
 	for i in _connection_cache.size():
 		var c: Dictionary = _connection_cache[i]
-		_flight_list.add_item("%s→%s→%s  %.0fkm  ~%dmin  $%.0f  经%s中转" % [
+		_flight_list.add_item("%s→%s→%s  %.0fkm  ~%dmin(MCT%d)  $%.0f  经%s中转" % [
 			c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", ""),
 			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)),
+			int(c.get("mct_minutes", 90)),
 			float(c.get("ticket_base_price_economy", 0)), c.get("hub_iata", "")
 		])
 		_flight_list.set_item_custom_fg_color(i, _Colors.ACCENT_TEAL)
@@ -1578,10 +1591,12 @@ func _on_flight_selected(idx: int) -> void:
 		_selected_connection = _connection_cache[idx]
 		_selected_flight = {}
 		var c: Dictionary = _selected_connection
-		_flight_detail.text = "[b]联程[/b] %s → %s → %s\n总距离 %.0f km · 估计时长 %d 分钟（含转机 90 分钟）\n经济舱 $%.2f / 公务舱 $%.2f\n声明：联程为重建网络上的合理拼装，不代表真实联程票\n加购：行李档=%s  货运×%d" % [
+		var mct := int(c.get("mct_minutes", 90))
+		_flight_detail.text = "[b]联程[/b] %s → %s → %s\n总距离 %.0f km · 估计时长 %d 分钟（含转机 MCT %d 分钟）\n经济舱 $%.2f / 公务舱 $%.2f / 头等舱 $%.2f\n声明：联程为重建网络上的合理拼装，不代表真实联程票\n加购：行李档=%s  货运×%d" % [
 			c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", ""),
-			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)),
+			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)), mct,
 			float(c.get("ticket_base_price_economy", 0)), float(c.get("ticket_base_price_business", 0)),
+			float(c.get("ticket_base_price_first", 0)),
 			_extra_tier if _extra_tier != "" else "无", _cargo_blocks
 		]
 		return
@@ -1590,11 +1605,23 @@ func _on_flight_selected(idx: int) -> void:
 	_selected_flight = _flights_cache[idx]
 	_selected_connection = {}
 	var fl: Dictionary = _selected_flight
-	_flight_detail.text = "航班 %s（%s）\n%s → %s\n起飞 %s\n到达 %s\n距离 %.0f km · %d 分钟\n经济舱 $%.2f / 公务舱 $%.2f（10×）\n行李额：经济 %.0fkg / 公务 %.0fkg\n加购：行李档=%s  货运×%d" % [
-		fl.get("marketing_flight_number", ""), fl.get("airline_name", ""), fl.get("origin_iata", ""), fl.get("destination_iata", ""),
-		fl.get("scheduled_departure_utc", ""), fl.get("scheduled_arrival_utc", ""), float(fl.get("distance_km", 0)), int(fl.get("duration_minutes", 0)),
+	var stop_n := int(fl.get("stops", 0))
+	var stop_line := ""
+	if stop_n > 0:
+		stop_line = "\n经停：%s（不下机）" % ", ".join(fl.get("stop_airports", []))
+	var al_id := str(fl.get("alliance_id", ""))
+	var al_line := ""
+	if al_id != "" and al_id != "none":
+		al_line = "\n联盟：%s（通用表述，无商标）" % DataService.alliance_name(al_id)
+	_flight_detail.text = "航班 %s（%s）%s%s\n%s → %s\n起飞 %s\n到达 %s\n距离 %.0f km · %d 分钟\n经济舱 $%.2f / 公务舱 $%.2f / 头等舱 $%.2f\n行李额：经济 %.0fkg / 公务 %.0fkg / 头等 %.0fkg\n加购：行李档=%s  货运×%d" % [
+		fl.get("marketing_flight_number", ""), fl.get("airline_name", ""), stop_line, al_line,
+		fl.get("origin_iata", ""), fl.get("destination_iata", ""),
+		fl.get("scheduled_departure_utc", ""), fl.get("scheduled_arrival_utc", ""),
+		float(fl.get("distance_km", 0)), int(fl.get("duration_minutes", 0)),
 		float(fl.get("ticket_base_price_economy", 0)), float(fl.get("ticket_base_price_business", 0)),
+		float(fl.get("ticket_base_price_first", 0)),
 		float(fl.get("baggage_allowance_economy", 20)), float(fl.get("baggage_allowance_business", 60)),
+		float(fl.get("baggage_allowance_first", 100)),
 		_extra_tier if _extra_tier != "" else "无", _cargo_blocks
 	]
 

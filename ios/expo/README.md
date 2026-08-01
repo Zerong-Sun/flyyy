@@ -81,7 +81,8 @@ node --test src/__tests__/gameLogic.test.mjs
 
 ## EAS / internal builds
 
-Requires an Expo account and Apple credentials for device builds.
+Requires an Expo account and Apple credentials for device builds.  
+M2 acceptance checklist: [`docs/superpowers/plans/2026-08-01-ios-expo-m2-acceptance.md`](../../docs/superpowers/plans/2026-08-01-ios-expo-m2-acceptance.md).
 
 ```bash
 cd ios/expo
@@ -91,7 +92,17 @@ npx eas build --profile preview --platform ios
 npx eas build --profile development --platform ios
 ```
 
-Profiles are defined in [`eas.json`](eas.json). Expo Go remains the fastest path for day-to-day play; use EAS when you need a shareable install outside Expo Go.
+Profiles ([`eas.json`](eas.json)):
+
+| Profile | Distribution | Notes |
+|---------|--------------|-------|
+| `development` | internal | Dev Client; iOS Simulator |
+| `preview` | internal | Device IPA for TestFlight-like sharing |
+| `production` | store | Auto-increment; not required for M2 |
+
+**Handoff to non-devs:** prefer Expo Go QR on the same Wi‑Fi; if LAN fails use `npx expo start --tunnel`. No in-game login. Use `preview` only when you need an install outside Expo Go.
+
+Expo Go remains the fastest path for day-to-day play.
 
 ## Adding cities, products and flights
 
