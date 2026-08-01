@@ -1,0 +1,17 @@
+export const COLORS = {
+  bg: '#0B1C2C',
+  panel: '#122A3D',
+  panel2: '#152C3E',
+  panel3: '#0F2536',
+  border: '#24394B',
+  border2: '#2A455A',
+  text: '#F2F6FA',
+  muted: '#A8B8C8',
+  muted2: '#6C8298',
+  muted3: '#7B90A4',
+  orange: '#E89A3C',
+  teal: '#3CB8A4',
+  blue: '#7EB6D9',
+  red: '#E05555',
+  gold: '#C9A45C',
+};

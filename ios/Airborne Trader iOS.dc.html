@@ -993,8 +993,8 @@ const ADDONS=[{k:'',label:'None',price:0},{k:'light',label:'+10kg',price:40},{k:
 const FACTORS=[1.58,1.41,1.24,1.08,0.95,0.82];
 function demandFor(pid,city){const p=P[pid],B=CITIES[city];if(!p||!B)return 1;
  return num(B.demand&&B.demand[p.category],1)*num(p.demandIn&&p.demandIn[city],1)*num(B.costIndex,1);}
-function factorFor(pid,city){const p=P[pid];const dem=demandFor(pid,city);
- if(p.home===city)return Math.round(0.92*dem*100)/100;
+function factorFor(pid,city){const p=P[pid],B=CITIES[city];const dem=demandFor(pid,city);
+ if(p.home===city)return Math.round(Math.min(1,0.92*num(B.costIndex,1))*100)/100;
  const far=Math.min(1,gcKm(CITIES[p.home],CITIES[city])/9000);
  const base=FACTORS[hsh(pid+'|'+city)%FACTORS.length]+far*0.22;
  const spread=1+(base-1)*num(p.volatility,1);

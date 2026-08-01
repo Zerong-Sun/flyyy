@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Airborne Trader",
+    "slug": "airborne-trader-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "scheme": "airborne-trader-mobile",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1C2C"
+      }
+    }
+  }
+}

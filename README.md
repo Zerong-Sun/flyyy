@@ -38,6 +38,28 @@ python scripts/run_pipeline.py
 /Applications/Godot.app/Contents/MacOS/Godot --path game
 ```
 
+### Expo Go 测试版
+
+两套 React Native 入口：
+
+- **12 枢纽手机 Demo**（Design Canvas 原型移植，Expo SDK 54）：[`ios/expo/`](ios/expo/)  
+  ```bash
+  cd ios/expo
+  npm install
+  npx expo start
+  ```
+- **30 城 Godot 数据快照**：[`expo-go/`](expo-go/)  
+  ```bash
+  cd expo-go
+  npm install
+  npx expo start
+  ```
+
+30 城数据同步：
+
+```bash
+python3 tools/export_ios_data.py --json-out expo-go/data/ios-data.json
+```
 ## 内容与资产规格
 
 美术 / 音乐 / 文本规格见 [`docs/CONTENT_ASSET_SPEC.md`](docs/CONTENT_ASSET_SPEC.md)（**§0.5** 仓库现状）。  
