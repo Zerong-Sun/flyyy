@@ -97,7 +97,7 @@ static func purchase(flight: Dictionary, cabin: String, extra_tier: String, carg
 	AppState.trip_cabin = cabin
 	AppState.trip_baggage_extra_kg = float(bag.extra_kg)
 	AppState.cargo_kg_capacity = float(bag.cargo_kg)
-	AppState.trip_cold_chain = bool(bag.enables_cold_chain)
+	AppState.set_cold_chain(bool(bag.enables_cold_chain))
 	AppState.last_flight_price = price
 	AppState.last_baggage_cost = float(bag.extra_cost) + float(bag.cargo_cost)
 	EventBus.ticket_purchased.emit()
@@ -202,7 +202,7 @@ static func purchase_connection(conn: Dictionary, cabin: String, extra_tier: Str
 	AppState.trip_cabin = cabin
 	AppState.trip_baggage_extra_kg = float(bag.extra_kg)
 	AppState.cargo_kg_capacity = float(bag.cargo_kg)
-	AppState.trip_cold_chain = bool(bag.enables_cold_chain)
+	AppState.set_cold_chain(bool(bag.enables_cold_chain))
 	AppState.last_flight_price = price
 	AppState.last_baggage_cost = float(bag.extra_cost) + float(bag.cargo_cost)
 	AppState.log_stat("connection_flights", 1.0)
@@ -226,13 +226,19 @@ static func refund_current() -> String:
 		return "已到起飞时间，不可退票"
 	var extras: Dictionary = DataService.economy.get("baggage_extras", {})
 	var fee_rate: float = float(extras.get("refund_fee_rate", 0.3))
-	var refund: float = float(t.get("total_paid", 0)) * (1.0 - fee_rate)
+	# Refund every held leg: a connection holds one itinerary across two legs
+	# whose total_paid is split 55/45, so clearing both must refund the full sum.
+	var paid_total: float = 0.0
+	for t_v in AppState.held_tickets:
+		var held: Dictionary = t_v
+		paid_total += float(held.get("total_paid", 0))
+	var refund: float = paid_total * (1.0 - fee_rate)
 	AppState.add_cash(refund)
 	AppState.held_tickets.clear()
 	AppState.trip_baggage_extra_kg = 0.0
 	AppState.cargo_kg_capacity = 0.0
 	AppState.trip_cabin = "economy"
-	AppState.trip_cold_chain = false
+	AppState.set_cold_chain(false)
 	EventBus.ticket_purchased.emit()
 	return "已退票，退回 %s（含 30%% 手续费）" % _Economy.format_money(refund)
 

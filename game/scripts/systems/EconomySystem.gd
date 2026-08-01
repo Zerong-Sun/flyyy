@@ -59,10 +59,20 @@ static func current_quality(item: Dictionary) -> float:
 	# Cold-chain products age faster without cold baggage / hold.
 	if bool(p.get("requires_cold_chain", false)):
 		var cc: Dictionary = DataService.economy.get("cold_chain", {})
-		var mult: float = float(cc.get("unprotected_decay_mult", 2.0))
+		var protected_mult := float(cc.get("protected_decay_mult", 0.35))
+		var unprotected_mult := float(cc.get("unprotected_decay_mult", 2.0))
+		var protected_hours := float(item.get("cold_protected_hours", 0.0))
 		if AppState.trip_cold_chain:
-			mult = float(cc.get("protected_decay_mult", 0.35))
-		hours *= mult
+			# Ongoing window: protection applies from the later of purchase time
+			# and window start. cold_chain_start_unix is -1 when the flag was set
+			# directly (e.g. tests), in which case the purchase time is the base.
+			var base: float = float(item.get("purchased_unix", GameClock.unix_time))
+			var window_start: float = float(AppState.cold_chain_start_unix)
+			if window_start > base:
+				base = window_start
+			protected_hours += max(0.0, (GameClock.unix_time - base) / 3600.0)
+		var unprotected_hours: float = max(0.0, hours - protected_hours)
+		hours = protected_hours * protected_mult + unprotected_hours * unprotected_mult
 	return max(0.0, 1.0 - hours / life)
 
 

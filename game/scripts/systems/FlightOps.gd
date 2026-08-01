@@ -105,9 +105,9 @@ func start_boarding(ticket: Dictionary) -> void:
 		if remaining.is_empty():
 			AppState.trip_baggage_extra_kg = 0.0
 			AppState.trip_cabin = "economy"
-			AppState.trip_cold_chain = false
+			AppState.set_cold_chain(false)
 			AppState.cargo_kg_capacity = 0.0
-		EventBus.tutorial_hint.emit("航班取消（模拟）— 已退回 70%% 票款。重建时刻表，不代表真实取消。")
+		EventBus.tutorial_hint.emit("航班取消（模拟）— 已退回 70% 票款。重建时刻表，不代表真实取消。")
 		EventBus.ticket_purchased.emit()
 		_boarding = false
 		GameClock.set_paused(false)
@@ -140,13 +140,13 @@ func start_boarding(ticket: Dictionary) -> void:
 		layover_prompt.emit(str(ticket.get("destination_iata", "")), mct)
 		EventBus.tutorial_hint.emit("转机中：%s · MCT %d 分钟" % [ticket.get("destination_iata", ""), mct])
 		await tree.create_timer(1.0).timeout
-	_arrive(ticket)
+	_arrive(ticket, bool(roll.get("on_time", true)))
 	_boarding = false
 	GameClock.set_paused(false)
 	transition_finished.emit()
 
 
-func _arrive(ticket: Dictionary) -> void:
+func _arrive(ticket: Dictionary, on_time: bool = true) -> void:
 	var dest: String = str(ticket.get("destination_airport_id", ""))
 	var cargo_value: float = _Economy.inventory_cargo_value_usd()
 	var cash_before_note: float = AppState.cash_usd
@@ -165,7 +165,10 @@ func _arrive(ticket: Dictionary) -> void:
 	if remaining.is_empty():
 		AppState.trip_baggage_extra_kg = 0.0
 		AppState.trip_cabin = "economy"
-		AppState.trip_cold_chain = false
+		# Close the cold-chain window before recomputing quality so the stored
+		# quality keeps the protected portion of the journey instead of aging
+		# the whole trip at the unprotected rate.
+		AppState.set_cold_chain(false)
 		for item_v in AppState.inventory:
 			var item: Dictionary = item_v
 			item["in_cargo"] = false
@@ -202,7 +205,8 @@ func _arrive(ticket: Dictionary) -> void:
 	var aid := str(ticket.get("alliance_id", ""))
 	if aid != "" and aid != "none" and not is_cnx_leg2:
 		AppState.log_stat("alliance_flights", 1.0)
-	AppState.log_stat("consecutive_on_time", 1.0)
+	if on_time:
+		AppState.log_stat("consecutive_on_time", 1.0)
 	AppState.update_extreme_airport(dest)
 	AppState.last_market_date = GameClock.game_date_string()
 	SaveSystem.save_game()

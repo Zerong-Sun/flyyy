@@ -22,6 +22,11 @@ var sell_transactions: Array[Dictionary] = []
 var trip_baggage_extra_kg: float = 0.0
 var trip_cabin: String = "economy"  # economy|business|first
 var trip_cold_chain: bool = false
+# Unix time when the cold-chain window opened (set by set_cold_chain(true)).
+# -1 means no window is currently open. When the window closes, protected
+# elapsed hours are folded into each cold-chain item as cold_protected_hours
+# so protection survives arrival / refund instead of being erased.
+var cold_chain_start_unix: float = -1.0
 var reliability_events_enabled: bool = true
 var last_market_date: String = ""
 var last_flight_price: float = 0.0
@@ -96,6 +101,7 @@ func reset_new_game(airport_id: String) -> void:
 	trip_baggage_extra_kg = 0.0
 	trip_cabin = "economy"
 	trip_cold_chain = false
+	cold_chain_start_unix = -1.0
 	last_market_date = "2025-03-01"
 	last_flight_price = 0.0
 	last_baggage_cost = 0.0
@@ -162,6 +168,37 @@ func inventory_weight_kg(cargo_only: bool = false, personal_only: bool = false) 
 func add_cash(delta: float) -> void:
 	cash_usd += delta
 	EventBus.cash_changed.emit()
+
+
+func set_cold_chain(active: bool) -> void:
+	## Open/close the cold-chain window. Opening records the start time so
+	## EconomySystem can age cold-chain goods at the protected rate for the
+	## window; closing folds the protected hours into each cold item.
+	if active:
+		if not trip_cold_chain:
+			cold_chain_start_unix = GameClock.unix_time
+		trip_cold_chain = true
+		return
+	if trip_cold_chain:
+		_fold_cold_protection()
+	trip_cold_chain = false
+	cold_chain_start_unix = -1.0
+
+
+func _fold_cold_protection() -> void:
+	## Accrue protected hours for every cold-chain item held during the window.
+	if cold_chain_start_unix <= 0.0:
+		return
+	var now: float = float(GameClock.unix_time)
+	var start: float = cold_chain_start_unix
+	for item_v in inventory:
+		var item: Dictionary = item_v
+		var p: Dictionary = DataService.get_product(str(item.get("product_id", "")))
+		if not bool(p.get("requires_cold_chain", false)):
+			continue
+		var base: float = maxf(float(item.get("purchased_unix", 0.0)), start)
+		if now > base:
+			item["cold_protected_hours"] = float(item.get("cold_protected_hours", 0.0)) + (now - base) / 3600.0
 
 
 func log_stat(key: String, delta: float = 1.0) -> void:
@@ -267,6 +304,7 @@ func to_dict() -> Dictionary:
 		"trip_baggage_extra_kg": trip_baggage_extra_kg,
 		"trip_cabin": trip_cabin,
 		"trip_cold_chain": trip_cold_chain,
+		"cold_chain_start_unix": cold_chain_start_unix,
 		"reliability_events_enabled": reliability_events_enabled,
 		"last_market_date": last_market_date,
 		"game_started": game_started,
@@ -298,6 +336,7 @@ func from_dict(d: Dictionary) -> void:
 	trip_baggage_extra_kg = float(d.get("trip_baggage_extra_kg", 0))
 	trip_cabin = str(d.get("trip_cabin", "economy"))
 	trip_cold_chain = bool(d.get("trip_cold_chain", false))
+	cold_chain_start_unix = float(d.get("cold_chain_start_unix", -1.0))
 	reliability_events_enabled = bool(d.get("reliability_events_enabled", true))
 	last_market_date = str(d.get("last_market_date", GameClock.game_date_string()))
 	game_started = bool(d.get("game_started", false))
