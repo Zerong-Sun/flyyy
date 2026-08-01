@@ -53,8 +53,10 @@ export function MarketScreen({ game }) {
             key={p.id}
             style={({ pressed }) => [styles.productRow, pressed && styles.rowPressed]}
             onPress={() => openProduct(p.id)}
+            accessibilityRole="button"
+            accessibilityLabel={`${p.name}, ${p.buy}, ${p.weight}`}
           >
-            <Image source={assetSource(p.icon)} style={styles.productIcon} />
+            <Image source={assetSource(p.icon)} style={styles.productIcon} accessible={false} />
             <View style={styles.productBody}>
               <View style={styles.productTitleRow}>
                 <Text style={styles.productName} numberOfLines={1}>{p.name}</Text>
@@ -143,6 +145,8 @@ export function FlightsScreen({ game }) {
               pressed && styles.rowPressed,
             ]}
             onPress={() => openFlight(f)}
+            accessibilityRole="button"
+            accessibilityLabel={`${f.no} to ${f.toName}, departs ${f.dep}, economy ${money(f.econ)}`}
           >
             <View style={styles.flightHeader}>
               <Text style={styles.flightNo}>{f.no}</Text>
@@ -200,6 +204,7 @@ export function MarketSheets({ game }) {
     fareTotal,
     canBuy,
     canBook,
+    bagOverKg,
     money,
     priceAt,
     closeSheet,
@@ -209,6 +214,7 @@ export function MarketSheets({ game }) {
     setAddon,
     buy,
     buyTicket,
+    add,
   } = game;
 
   const selFlight = state.selFlight;
@@ -340,6 +346,13 @@ export function MarketSheets({ game }) {
             })}
 
             <Text style={styles.sectionLabel}>Extra weight</Text>
+            {bagOverKg > 0 ? (
+              <View style={styles.warnBanner}>
+                <Text style={styles.warnBannerText}>
+                  Carry-on over by {bagOverKg.toFixed(1)} kg — you can still fly; add baggage or lighten in Bags.
+                </Text>
+              </View>
+            ) : null}
             <View style={styles.addonRow}>
               {ADDONS.map((a) => {
                 const active = state.addon === a.k;
@@ -886,6 +899,20 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: COLORS.muted2,
     marginTop: -6,
+  },
+  warnBanner: {
+    backgroundColor: 'rgba(224, 85, 85, 0.14)',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(224, 85, 85, 0.35)',
+    marginBottom: 4,
+  },
+  warnBannerText: {
+    fontSize: 13,
+    color: COLORS.red,
+    lineHeight: 18,
   },
   boardingNote: {
     fontSize: 11,

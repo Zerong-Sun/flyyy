@@ -4,6 +4,7 @@ import {
   Text,
   Image,
   PanResponder,
+  Pressable,
   StyleSheet,
 } from 'react-native';
 import { CIDS, CITIES } from '../gameData';
@@ -16,10 +17,11 @@ const R = Math.PI / 180;
 
 /** Draggable world globe with a pin per hub — the app's home screen. */
 export function Globe({ game }) {
-  const { state, city, setRot, setDragging } = game;
+  const { state, city, setRot, setDragging, setFocusDest, buzz } = game;
   const rot = state.rot === null || state.rot === undefined ? -city.lon : state.rot;
   const rotRef = useRef(rot);
   rotRef.current = rot;
+  const pinPressRef = useRef({ t: 0, x: 0, y: 0, id: null });
 
   const pan = useMemo(() => PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -46,6 +48,7 @@ export function Globe({ game }) {
     return {
       id: k,
       iata: c.iata,
+      name: c.name,
       x: (50 + (rel / 90) * 50) / 100 * SIZE,
       y: (50 - (c.lat / 90) * 50) / 100 * SIZE,
       opacity: vis ? (here ? 1 : 0.4 + edge * 0.6) : 0,
@@ -53,12 +56,36 @@ export function Globe({ game }) {
       color: here ? COLORS.orange : seen ? COLORS.teal : COLORS.blue,
       label: vis && (here || (seen && edge > 0.5)),
       here,
+      vis,
     };
   });
 
   const hint = state.dragging
     ? `${city.name} · ${Math.round(((-rot % 360) + 360) % 360)}° E`
-    : 'Drag to spin the world';
+    : 'Drag to spin · tap a pin to fly';
+
+  const onPinPressIn = (p, e) => {
+    pinPressRef.current = {
+      t: Date.now(),
+      x: e.nativeEvent.pageX,
+      y: e.nativeEvent.pageY,
+      id: p.id,
+    };
+  };
+
+  const onPinPressOut = (p, e) => {
+    const start = pinPressRef.current;
+    if (start.id !== p.id) return;
+    const dt = Date.now() - start.t;
+    const dx = Math.abs(e.nativeEvent.pageX - start.x);
+    const dy = Math.abs(e.nativeEvent.pageY - start.y);
+    if (dt >= 220 || dx > 12 || dy > 12) return;
+    if (p.here) {
+      buzz('You are here', 'ok');
+      return;
+    }
+    setFocusDest(p.id);
+  };
 
   return (
     <View style={styles.stage} pointerEvents="box-none">
@@ -68,37 +95,54 @@ export function Globe({ game }) {
           source={assetSource('assets/earth.png')}
           style={[styles.strip, { left: off }]}
           resizeMode="stretch"
+          accessible={false}
         />
         <Image
           source={assetSource('assets/earth.png')}
           style={[styles.strip, { left: off + IMG_W }]}
           resizeMode="stretch"
+          accessible={false}
         />
         <View style={styles.shade} pointerEvents="none" />
       </View>
 
-      <View style={styles.pinLayer} pointerEvents="none">
+      <View style={styles.pinLayer} pointerEvents="box-none">
         {pins.map((p) => (
-          <View key={p.id} style={[styles.pinWrap, { left: p.x, top: p.y, opacity: p.opacity }]}>
-            <View
-              style={[
-                styles.pin,
-                {
-                  width: p.size,
-                  height: p.size,
-                  borderRadius: p.size / 2,
-                  backgroundColor: p.color,
-                  marginLeft: -p.size / 2,
-                  marginTop: -p.size / 2,
-                  shadowColor: p.here ? COLORS.orange : '#040E18',
-                  shadowRadius: p.here ? 7 : 3,
-                },
-              ]}
-            />
-            {p.label ? (
-              <Text style={[styles.pinLabel, p.here && styles.pinLabelHere]}>{p.iata}</Text>
-            ) : null}
-          </View>
+          p.vis && p.opacity > 0.05 ? (
+            <Pressable
+              key={p.id}
+              style={[styles.pinWrap, { left: p.x, top: p.y, opacity: p.opacity }]}
+              onPressIn={(e) => onPinPressIn(p, e)}
+              onPressOut={(e) => onPinPressOut(p, e)}
+              hitSlop={10}
+              accessibilityRole="button"
+              accessibilityLabel={p.here ? `${p.name}, you are here` : `Fly to ${p.name}`}
+            >
+              <View
+                style={[
+                  styles.pin,
+                  {
+                    width: p.size,
+                    height: p.size,
+                    borderRadius: p.size / 2,
+                    backgroundColor: p.color,
+                    marginLeft: -p.size / 2,
+                    marginTop: -p.size / 2,
+                    shadowColor: p.here ? COLORS.orange : '#040E18',
+                    shadowRadius: p.here ? 7 : 3,
+                  },
+                ]}
+                accessible={false}
+              />
+              {p.label ? (
+                <Text style={[styles.pinLabel, p.here && styles.pinLabelHere]} accessible={false}>
+                  {p.iata}
+                </Text>
+              ) : null}
+            </Pressable>
+          ) : (
+            <View key={p.id} style={[styles.pinWrap, { left: p.x, top: p.y, opacity: 0 }]} pointerEvents="none" />
+          )
         ))}
       </View>
 
@@ -160,16 +204,14 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '700',
     color: COLORS.muted,
-    letterSpacing: 0.3,
+    letterSpacing: 0.4,
   },
   pinLabelHere: {
     color: COLORS.orange,
   },
   hint: {
-    position: 'absolute',
-    bottom: 2,
-    fontSize: 11,
-    color: '#5E7488',
-    letterSpacing: 0.2,
+    marginTop: 14,
+    fontSize: 12,
+    color: COLORS.muted2,
   },
 });

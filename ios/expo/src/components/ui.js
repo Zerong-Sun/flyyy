@@ -39,6 +39,7 @@ export function Button({
   style,
   textStyle,
   disabled,
+  accessibilityLabel,
 }) {
   const variantStyle = {
     primary: styles.btnPrimary,
@@ -52,10 +53,20 @@ export function Button({
     ghost: styles.btnGhostText,
   }[variant] || styles.btnPrimaryText;
 
+  const label = accessibilityLabel
+    || (typeof children === 'string' || typeof children === 'number'
+      ? String(children)
+      : Array.isArray(children) && children.every((c) => c == null || typeof c === 'string' || typeof c === 'number' || typeof c === 'boolean')
+        ? children.join('')
+        : undefined);
+
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !!disabled }}
+      accessibilityLabel={label}
       style={({ pressed }) => [
         styles.btn,
         variantStyle,
@@ -81,6 +92,7 @@ export function AssetIcon({ path, size = 24, tintColor, style }) {
         style,
       ]}
       resizeMode="contain"
+      accessible={false}
     />
   );
 }
@@ -110,13 +122,16 @@ export function Sheet({ visible, onClose, children, center }) {
 
 export function SegControl({ options, value, onChange, style }) {
   return (
-    <View style={[styles.segWrap, style]}>
+    <View style={[styles.segWrap, style]} accessibilityRole="tablist">
       {options.map((opt) => {
         const active = opt.value === value;
         return (
           <Pressable
             key={opt.value}
             onPress={() => onChange(opt.value)}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: active }}
+            accessibilityLabel={opt.label}
             style={[styles.segItem, active && styles.segItemActive]}
           >
             <Text style={[styles.segText, active && styles.segTextActive]}>
@@ -131,12 +146,19 @@ export function SegControl({ options, value, onChange, style }) {
 
 export function Toggle({ label, sub, value, onToggle }) {
   return (
-    <Pressable style={styles.toggleRow} onPress={onToggle}>
+    <Pressable
+      style={styles.toggleRow}
+      onPress={onToggle}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: !!value }}
+      accessibilityLabel={label}
+      accessibilityHint={sub}
+    >
       <View style={styles.toggleBody}>
         <Text style={styles.toggleLabel}>{label}</Text>
         {sub ? <Text style={styles.toggleSub}>{sub}</Text> : null}
       </View>
-      <View style={[styles.track, value && styles.trackOn]}>
+      <View style={[styles.track, value && styles.trackOn]} accessible={false}>
         <View style={[styles.knob, value && styles.knobOn]} />
       </View>
     </Pressable>

@@ -30,7 +30,7 @@ import {
 } from './ui';
 
 export function BagsScreen({ game }) {
-  const { state, bagText, cargoText, bagKg, openSell } = game;
+  const { state, bagText, cargoText, bagKg, openSell, openInvItem } = game;
   const pct = state.bagLimit > 0
     ? Math.min(100, Math.round((bagKg / state.bagLimit) * 100))
     : 0;
@@ -66,8 +66,14 @@ export function BagsScreen({ game }) {
           </View>
         ) : (
           state.inv.map((item, idx) => (
-            <View key={`${item.id}-${item.slot}-${idx}`} style={styles.invRow}>
-              <Image source={assetSource(item.icon)} style={styles.invIcon} />
+            <Pressable
+              key={`${item.id}-${item.slot}-${idx}`}
+              style={styles.invRow}
+              onPress={() => openInvItem(item)}
+              accessibilityRole="button"
+              accessibilityLabel={`${item.name}, ${item.n} units, ${(item.w * item.n).toFixed(1)} kilograms, ${item.slot === 'cargo' ? 'cargo' : 'carry-on'}`}
+            >
+              <Image source={assetSource(item.icon)} style={styles.invIcon} accessible={false} />
               <View style={styles.invBody}>
                 <Text style={styles.invName}>{item.name}</Text>
                 <Text style={styles.invMeta}>
@@ -84,7 +90,7 @@ export function BagsScreen({ game }) {
                   {item.slot}
                 </Text>
               </View>
-            </View>
+            </Pressable>
           ))
         )}
       </View>
@@ -100,8 +106,13 @@ export function BagsScreen({ game }) {
 
 function BackButton({ onPress }) {
   return (
-    <Pressable style={styles.backBtn} onPress={onPress}>
-      <Text style={styles.backArrow}>‹</Text>
+    <Pressable
+      style={styles.backBtn}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel="Back"
+    >
+      <Text style={styles.backArrow} accessible={false}>‹</Text>
     </Pressable>
   );
 }
@@ -111,7 +122,10 @@ export function MoreScreen({ game }) {
   const page = state.page;
 
   if (page === 'ach') {
-    const unlocked = ACHIEVEMENTS.filter((a) => (stats[a.stat] || 0) >= a.goal).length;
+    const unlockedList = state.unlockedAch || [];
+    const unlocked = ACHIEVEMENTS.filter(
+      (a) => unlockedList.includes(a.id) || (stats[a.stat] || 0) >= a.goal,
+    ).length;
     const achPct = `${Math.round((unlocked / ACHIEVEMENTS.length) * 100)}%`;
 
     return (
@@ -132,13 +146,14 @@ export function MoreScreen({ game }) {
         <View style={styles.list}>
           {ACHIEVEMENTS.map((ac) => {
             const val = stats[ac.stat] || 0;
-            const done = val >= ac.goal;
+            const done = unlockedList.includes(ac.id) || val >= ac.goal;
             const pct = `${Math.min(100, Math.round((val / ac.goal) * 100))}%`;
             return (
               <View key={ac.id} style={[styles.achRow, !done && styles.achRowLocked]}>
                 <Image
                   source={assetSource(ac.icon)}
                   style={[styles.achIcon, !done && styles.achIconLocked]}
+                  accessible={false}
                 />
                 <View style={styles.achBody}>
                   <Text style={styles.achName}>{ac.name}</Text>
@@ -294,6 +309,7 @@ export function MoreScreen({ game }) {
   if (page === 'settings') {
     const toggles = [
       ['optHaptics', 'Haptic feedback', 'A tap on every buy, sell and boarding call.'],
+      ['optSound', 'Sound clicks', 'Light click feel on buy, sell, and takeoff (no audio files).'],
       ['optPush', 'Boarding notifications', 'Alert you when the gate is about to close.'],
       ['opt24h', '24-hour clock', 'Show all times as 00:00–23:59.'],
       ['optReduce', 'Reduce motion', 'Shorten the flight cutscene.'],
@@ -372,7 +388,9 @@ export function MoreScreen({ game }) {
     );
   }
 
-  const unlocked = ACHIEVEMENTS.filter((a) => (stats[a.stat] || 0) >= a.goal).length;
+  const unlocked = ACHIEVEMENTS.filter(
+    (a) => (state.unlockedAch || []).includes(a.id) || (stats[a.stat] || 0) >= a.goal,
+  ).length;
   const menuRows = [
     { key: 'notes', label: 'Trader notes', icon: 'assets/ach_cities_10.webp', value: `${state.visited.length} / ${CIDS.length}` },
     { key: 'ach', label: 'Achievements', icon: 'assets/ach_legendary.webp', value: `${unlocked} / ${ACHIEVEMENTS.length}` },
@@ -421,10 +439,19 @@ export function OverlaySheets({ game }) {
     sellAll,
     startGame,
     money,
+    selInvItem,
+    invGross,
+    setInvQty,
+    sellQty,
+    discardQty,
+    moveInvSlot,
+    manageInBags,
   } = game;
 
   const ticket = state.ticket;
   const cut = state.cut;
+  const invMax = selInvItem ? selInvItem.n : 1;
+  const moveLabel = selInvItem?.slot === 'cargo' ? 'Move to carry-on' : 'Move to cargo';
 
   return (
     <>
@@ -451,7 +478,7 @@ export function OverlaySheets({ game }) {
       <Sheet visible={state.sheet === 'sell'} onClose={closeSheet}>
         <ScrollView>
           <View style={styles.sellHeroWrap}>
-            <Image source={assetSource(city.hero)} style={styles.sellHero} />
+            <Image source={assetSource(city.hero)} style={styles.sellHero} accessible={false} />
             <View style={styles.sellHeroShade} />
             <View style={styles.sellHeroLabels}>
               <Text style={styles.sellPhase}>Landed</Text>
@@ -459,6 +486,11 @@ export function OverlaySheets({ game }) {
             </View>
           </View>
           <View style={styles.sheetPad}>
+            {state.overweightNote ? (
+              <View style={styles.warnBanner}>
+                <Text style={styles.warnBannerText}>{state.overweightNote}</Text>
+              </View>
+            ) : null}
             <Text style={styles.sellHeadline}>
               {sell.net >= 0
                 ? `Market looks good — ${money(sell.net)} net if you sell now.`
@@ -466,7 +498,7 @@ export function OverlaySheets({ game }) {
             </Text>
             {sell.rows.map((row, idx) => (
               <View key={idx} style={styles.sellRow}>
-                <Image source={assetSource(row.icon)} style={styles.sellIcon} />
+                <Image source={assetSource(row.icon)} style={styles.sellIcon} accessible={false} />
                 <View style={styles.sellRowBody}>
                   <Text style={styles.sellRowName}>{row.name}</Text>
                   <Text style={styles.sellRowMeta}>{row.meta}</Text>
@@ -491,11 +523,74 @@ export function OverlaySheets({ game }) {
             >
               Sell everything
             </Button>
+            <Button
+              variant="secondary"
+              onPress={manageInBags}
+              style={styles.manageBagsBtn}
+            >
+              Manage in Bags
+            </Button>
             <Button variant="ghost" onPress={closeSheet}>
               Hold and look for a better market
             </Button>
           </View>
         </ScrollView>
+      </Sheet>
+
+      <Sheet visible={state.sheet === 'inv' && !!selInvItem} onClose={closeSheet}>
+        {selInvItem ? (
+          <ScrollView contentContainerStyle={styles.sheetPad}>
+            <View style={styles.invSheetTop}>
+              <Image source={assetSource(selInvItem.icon)} style={styles.invSheetIcon} accessible={false} />
+              <View style={styles.invSheetBody}>
+                <Text style={styles.invSheetName}>{selInvItem.name}</Text>
+                <Text style={styles.invSheetMeta}>
+                  {selInvItem.n} on hand · {selInvItem.slot === 'cargo' ? 'Cargo' : 'Carry-on'} · cost {money(selInvItem.cost)}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.qtyRow}>
+              <Text style={styles.qtyLabel}>Quantity</Text>
+              <View style={styles.qtyControl}>
+                <Pressable
+                  style={styles.qtyBtn}
+                  onPress={() => setInvQty(state.invQty - 1)}
+                  accessibilityRole="button"
+                  accessibilityLabel="Decrease quantity"
+                >
+                  <Text style={styles.qtyBtnText}>−</Text>
+                </Pressable>
+                <Text style={styles.qtyVal}>{state.invQty}</Text>
+                <Pressable
+                  style={styles.qtyBtn}
+                  onPress={() => setInvQty(state.invQty + 1)}
+                  accessibilityRole="button"
+                  accessibilityLabel="Increase quantity"
+                >
+                  <Text style={styles.qtyBtnText}>+</Text>
+                </Pressable>
+              </View>
+            </View>
+            <Pressable onPress={() => setInvQty(invMax)}>
+              <Text style={styles.qtyMaxHint}>Max {invMax}</Text>
+            </Pressable>
+
+            <Text style={styles.invSheetPrice}>
+              Local price {money(invGross)} for {state.invQty}
+            </Text>
+
+            <Button variant="primary" onPress={() => sellQty(state.invQty)} style={styles.sellAllBtn}>
+              {`Sell ${state.invQty} · ${money(invGross)}`}
+            </Button>
+            <Button variant="secondary" onPress={moveInvSlot} style={styles.manageBagsBtn}>
+              {moveLabel}
+            </Button>
+            <Button variant="ghost" onPress={() => discardQty(state.invQty)}>
+              Discard
+            </Button>
+          </ScrollView>
+        ) : null}
       </Sheet>
 
       <Modal visible={!!cut} animationType="fade" transparent={false}>
@@ -504,6 +599,7 @@ export function OverlaySheets({ game }) {
             source={assetSource(cut?.art || 'assets/anim_flight_takeoff.webp')}
             style={styles.cutArt}
             resizeMode="cover"
+            accessible={false}
           />
           <View style={styles.cutShade} />
           <View style={styles.cutContent}>
@@ -524,10 +620,11 @@ export function OverlaySheets({ game }) {
             source={assetSource('assets/city_istanbul.webp')}
             style={styles.introBg}
             resizeMode="cover"
+            accessible={false}
           />
           <View style={styles.introShade} />
           <View style={styles.introContent}>
-            <Image source={assetSource('assets/logo_mark.webp')} style={styles.introLogo} />
+            <Image source={assetSource('assets/logo_mark.webp')} style={styles.introLogo} accessible={false} />
             <Text style={styles.introTitle}>Airborne Trader</Text>
             <Text style={styles.introLead}>
               Twelve hub airports. Buy low where a thing is made, fly it somewhere it is scarce, sell high. Weight is the whole game.
@@ -1231,6 +1328,93 @@ const styles = StyleSheet.create({
   },
   sellAllBtn: {
     backgroundColor: COLORS.teal,
+  },
+  manageBagsBtn: {
+    marginTop: 0,
+  },
+  warnBanner: {
+    backgroundColor: 'rgba(224, 85, 85, 0.14)',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(224, 85, 85, 0.35)',
+  },
+  warnBannerText: {
+    fontSize: 13,
+    color: COLORS.red,
+    lineHeight: 18,
+  },
+  invSheetTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 4,
+  },
+  invSheetIcon: {
+    width: 52,
+    height: 52,
+    borderRadius: 12,
+    backgroundColor: COLORS.bg,
+  },
+  invSheetBody: {
+    flex: 1,
+    minWidth: 0,
+  },
+  invSheetName: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  invSheetMeta: {
+    fontSize: 12,
+    color: COLORS.muted,
+    marginTop: 3,
+  },
+  invSheetPrice: {
+    fontSize: 13,
+    color: COLORS.muted,
+  },
+  qtyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  qtyLabel: {
+    flex: 1,
+    fontSize: 15,
+    color: COLORS.text,
+  },
+  qtyControl: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.panel3,
+    borderRadius: 12,
+    padding: 3,
+  },
+  qtyBtn: {
+    width: 44,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  qtyBtnText: {
+    fontSize: 22,
+    fontWeight: '600',
+    color: COLORS.text,
+  },
+  qtyVal: {
+    minWidth: 52,
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  qtyMaxHint: {
+    fontSize: 12,
+    color: COLORS.teal,
+    textAlign: 'right',
   },
   cutscene: {
     flex: 1,

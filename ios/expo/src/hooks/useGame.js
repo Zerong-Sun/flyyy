@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import {
+  ACHIEVEMENTS,
   ADDONS,
   CIDS,
   CITIES,
@@ -32,12 +34,13 @@ import {
 } from '../gameLogic';
 
 const SAVE_KEY = 'airborne-trader/slot-1';
+const SAVE_VERSION = 1;
 
 /** Fields that survive a reload; transient UI state is rebuilt fresh. */
 const PERSIST = [
   'cash', 'bagLimit', 'cargoCap', 'inv', 'ticket', 'minsToDep', 'gameMin',
   'city', 'visited', 'log', 'legs', 'bizLegs', 'cargoLots', 'profitable',
-  'profit', 'km', 'savedAt', 'intro', 'focusDest',
+  'profit', 'km', 'savedAt', 'intro', 'focusDest', 'unlockedAch',
   'optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce',
 ];
 
@@ -50,6 +53,8 @@ const initialState = () => ({
   sheet: null,
   selId: null,
   selFlight: null,
+  selInv: null,
+  invQty: 1,
   qty: 1,
   slot: 'bag',
   cabin: 'economy',
@@ -81,6 +86,8 @@ const initialState = () => ({
   called: false,
   rot: null,
   dragging: false,
+  unlockedAch: [],
+  overweightNote: '',
   optHaptics: true,
   optPush: true,
   optSound: true,
@@ -93,6 +100,17 @@ function waitUntilDep(gameMin, cityId, depMin) {
   let wait = depMin - localNow;
   if (wait <= 0) wait += 1440;
   return wait;
+}
+
+function unlockedIds(stats, unlocked = []) {
+  return ACHIEVEMENTS
+    .filter((a) => unlocked.includes(a.id) || (stats[a.stat] || 0) >= a.goal)
+    .map((a) => a.id);
+}
+
+function findInv(inv, selInv) {
+  if (!selInv) return -1;
+  return inv.findIndex((i) => i.id === selInv.id && i.slot === selInv.slot);
 }
 
 export function useGame() {
@@ -115,6 +133,11 @@ export function useGame() {
     Haptics.notificationAsync(style).catch(() => {});
   }, []);
 
+  const click = useCallback(() => {
+    if (!stateRef.current.optSound) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+  }, []);
+
   const buzz = useCallback((message, kind = 'ok') => {
     clearTimeout(toastRef.current);
     setState((s) => ({ ...s, toast: message, toastKind: kind }));
@@ -123,6 +146,18 @@ export function useGame() {
     }, 2400);
     tap(kind);
   }, [tap]);
+
+  const announceAchievements = useCallback((prevUnlocked, nextStats) => {
+    const next = unlockedIds(nextStats, prevUnlocked);
+    const fresh = next.filter((id) => !prevUnlocked.includes(id));
+    if (fresh.length > 0) {
+      const first = ACHIEVEMENTS.find((a) => a.id === fresh[0]);
+      if (first) {
+        setTimeout(() => buzz(`Achievement unlocked — ${first.name}`, 'ok'), 2500);
+      }
+    }
+    return next;
+  }, [buzz]);
 
   const markInteracted = useCallback(() => {
     interactedRef.current = true;
@@ -135,8 +170,13 @@ export function useGame() {
     AsyncStorage.getItem(SAVE_KEY)
       .then((raw) => {
         if (!alive || !raw) return;
-        if (interactedRef.current) return; // player already moved — don't clobber
+        if (interactedRef.current) return;
         const saved = JSON.parse(raw);
+        const ver = saved.saveVersion == null ? 1 : Number(saved.saveVersion);
+        if (ver > SAVE_VERSION) {
+          setTimeout(() => buzz('Save is from a newer build — start a new run from Settings.', 'bad'), 400);
+          return;
+        }
         setState((s) => {
           if (interactedRef.current) return s;
           const next = { ...s };
@@ -147,6 +187,7 @@ export function useGame() {
           if (!Array.isArray(next.inv)) next.inv = [];
           if (!Array.isArray(next.visited)) next.visited = [STARTING_CITY];
           if (!Array.isArray(next.log)) next.log = [];
+          if (!Array.isArray(next.unlockedAch)) next.unlockedAch = [];
           if (next.ticket && next.ticket.extraKg == null) next.ticket.extraKg = 0;
           return next;
         });
@@ -154,13 +195,13 @@ export function useGame() {
       .catch(() => {})
       .finally(() => { if (alive) setLoaded(true); });
     return () => { alive = false; };
-  }, []);
+  }, [buzz]);
 
   useEffect(() => {
     if (!loaded) return undefined;
     clearTimeout(saveRef.current);
     saveRef.current = setTimeout(() => {
-      const slice = {};
+      const slice = { saveVersion: SAVE_VERSION };
       PERSIST.forEach((k) => { slice[k] = stateRef.current[k]; });
       AsyncStorage.setItem(SAVE_KEY, JSON.stringify(slice)).catch(() => {});
     }, 700);
@@ -170,8 +211,10 @@ export function useGame() {
   const finishLanding = useCallback((ticket) => {
     const to = CITIES[ticket.toId];
     if (!to) return;
+    const bagNow = bagUsed(stateRef.current.inv);
+    const overweightKg = Math.max(0, bagNow - DEFAULT_BAG_LIMIT);
     setState((s) => {
-      if (!s.ticket || s.ticket.toId !== ticket.toId) return s; // already landed
+      if (!s.ticket || s.ticket.toId !== ticket.toId) return s;
       const visited = s.visited.includes(ticket.toId) ? s.visited : [...s.visited, ticket.toId];
       const hasInv = s.inv.length > 0;
       const entry = {
@@ -182,7 +225,7 @@ export function useGame() {
         color: '#A8B8C8',
         t: s.gameMin + s.minsToDep + ticket.mins,
       };
-      return {
+      const next = {
         ...s,
         cut: null,
         cutLine: '',
@@ -203,18 +246,29 @@ export function useGame() {
         km: s.km + ticket.km,
         bizLegs: s.bizLegs + (ticket.cabin === 'business' ? 1 : 0),
         sheet: hasInv ? 'sell' : null,
+        overweightNote: overweightKg > 0
+          ? `Carry-on over by ${overweightKg.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`
+          : '',
       };
+      next.unlockedAch = announceAchievements(s.unlockedAch || [], computeStats(next));
+      return next;
     });
     flyingRef.current = false;
     calledEdgeRef.current = false;
     buzz(`Landed in ${to.name}`, 'ok');
-  }, [buzz]);
+    if (overweightKg > 0) {
+      setTimeout(() => {
+        buzz(`Carry-on over by ${overweightKg.toFixed(1)} kg — sell or discard in Bags.`, 'bad');
+      }, 2600);
+    }
+  }, [announceAchievements, buzz]);
 
   const runCutscene = useCallback(() => {
     const t = stateRef.current.ticket;
     if (!t || stateRef.current.cut || flyingRef.current) return;
     flyingRef.current = true;
     clearTimeout(cutRef.current);
+    click();
     const to = CITIES[t.toId];
     const steps = CUTSCENE_ART.map((step, i) => (
       i === 2 ? { ...step, title: to.name } : step
@@ -237,7 +291,7 @@ export function useGame() {
       }
     };
     cutRef.current = setTimeout(tick, dur);
-  }, [finishLanding]);
+  }, [click, finishLanding]);
 
   /* ---- world clock ---------------------------------------------- */
 
@@ -327,7 +381,9 @@ export function useGame() {
     }));
   }, [markInteracted]);
   const setFilter = useCallback((filter) => setState((s) => ({ ...s, filter })), []);
-  const closeSheet = useCallback(() => setState((s) => ({ ...s, sheet: null })), []);
+  const closeSheet = useCallback(() => setState((s) => ({
+    ...s, sheet: null, selInv: null, invQty: 1, overweightNote: s.sheet === 'sell' ? '' : s.overweightNote,
+  })), []);
   const startGame = useCallback(() => {
     markInteracted();
     setState((s) => ({ ...s, intro: false }));
@@ -353,7 +409,36 @@ export function useGame() {
   }, []);
 
   const openSell = useCallback(() => setState((s) => ({ ...s, sheet: 'sell' })), []);
+
+  const manageInBags = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      sheet: null,
+      selInv: null,
+      invQty: 1,
+      overweightNote: '',
+      tab: 'bags',
+      page: null,
+      query: '',
+    }));
+  }, []);
+
+  const openInvItem = useCallback((item) => {
+    if (!item) return;
+    setState((s) => ({
+      ...s,
+      sheet: 'inv',
+      selInv: { id: item.id, slot: item.slot },
+      invQty: 1,
+    }));
+  }, []);
+
   const setQty = useCallback((qty) => setState((s) => ({ ...s, qty: Math.max(1, qty) })), []);
+  const setInvQty = useCallback((qty) => setState((s) => {
+    const idx = findInv(s.inv, s.selInv);
+    const max = idx >= 0 ? s.inv[idx].n : 1;
+    return { ...s, invQty: Math.max(1, Math.min(max, qty)) };
+  }), []);
   const setSlot = useCallback((slot) => setState((s) => ({ ...s, slot })), []);
   const setCabin = useCallback((cabin) => setState((s) => ({ ...s, cabin })), []);
   const setAddon = useCallback((addon) => setState((s) => ({ ...s, addon })), []);
@@ -426,7 +511,7 @@ export function useGame() {
         t: st.gameMin,
       };
       result = { ok: true, msg: `Bought ${n} × ${p.name} · ${money(cost)}`, kind: 'ok' };
-      return {
+      const next = {
         ...st,
         inv,
         cash: st.cash - cost,
@@ -435,9 +520,12 @@ export function useGame() {
         cargoLots: st.cargoLots + (slot === 'cargo' ? 1 : 0),
         log: [entry].concat(st.log).slice(0, 40),
       };
+      next.unlockedAch = announceAchievements(st.unlockedAch || [], computeStats(next));
+      return next;
     });
+    if (result?.ok) click();
     if (result) setTimeout(() => buzz(result.msg, result.kind), 0);
-  }, [buzz, markInteracted]);
+  }, [announceAchievements, buzz, click, markInteracted]);
 
   const buyTicket = useCallback(() => {
     markInteracted();
@@ -494,8 +582,9 @@ export function useGame() {
         log: [entry].concat(st.log).slice(0, 40),
       };
     });
+    if (result?.ok) click();
     if (result) setTimeout(() => buzz(result.msg, result.kind), 0);
-  }, [buzz, markInteracted]);
+  }, [buzz, click, markInteracted]);
 
   const sellAll = useCallback(() => {
     markInteracted();
@@ -513,27 +602,175 @@ export function useGame() {
         t: s.gameMin,
       };
       result = d;
-      return {
+      const next = {
         ...s,
         cash: s.cash + d.gross,
         inv: [],
         sheet: null,
+        selInv: null,
         lastSale: d.net,
         profit: s.profit + Math.max(0, d.net),
         profitable: s.profitable + (d.net > 0 ? 1 : 0),
         log: [entry].concat(s.log).slice(0, 40),
+        overweightNote: '',
       };
+      next.unlockedAch = announceAchievements(s.unlockedAch || [], computeStats(next));
+      return next;
     });
     if (!result) return;
+    click();
     if (result.net >= 0) setTimeout(() => buzz(`Nice trade! ${money(result.net)} profit`, 'ok'), 0);
     else setTimeout(() => buzz(`Rough run — ${money(-result.net)} down. Next leg pays it back.`, 'bad'), 0);
+  }, [announceAchievements, buzz, click, markInteracted]);
+
+  const sellQty = useCallback((n) => {
+    markInteracted();
+    let result = null;
+    setState((s) => {
+      const idx = findInv(s.inv, s.selInv);
+      if (idx < 0) return s;
+      const item = s.inv[idx];
+      const qty = Math.min(Math.max(1, n || s.invQty), item.n);
+      const unit = priceAt(item.id, s.city);
+      const gross = unit * qty;
+      const net = gross - item.cost * qty;
+      const inv = s.inv.slice();
+      if (qty >= item.n) inv.splice(idx, 1);
+      else inv[idx] = { ...item, n: item.n - qty };
+      const here = CITIES[s.city];
+      const entry = {
+        icon: item.icon,
+        title: `Sold ${qty} × ${item.name}`,
+        sub: `${here.name} · ${fmtClock(cityMinutes(s.gameMin, s.city), s.opt24h)}`,
+        amount: `${net >= 0 ? '+' : '−'}${money(Math.abs(net))}`,
+        color: net >= 0 ? '#3CB8A4' : '#E05555',
+        t: s.gameMin,
+      };
+      result = { net, msg: `Sold ${qty} × ${item.name} · ${money(gross)}`, kind: net >= 0 ? 'ok' : 'bad' };
+      const next = {
+        ...s,
+        cash: s.cash + gross,
+        inv,
+        sheet: null,
+        selInv: null,
+        invQty: 1,
+        lastSale: net,
+        profit: s.profit + Math.max(0, net),
+        profitable: s.profitable + (net > 0 ? 1 : 0),
+        log: [entry].concat(s.log).slice(0, 40),
+      };
+      next.unlockedAch = announceAchievements(s.unlockedAch || [], computeStats(next));
+      return next;
+    });
+    if (!result) return;
+    click();
+    setTimeout(() => buzz(result.msg, result.kind), 0);
+  }, [announceAchievements, buzz, click, markInteracted]);
+
+  const discardQty = useCallback((n) => {
+    const s0 = stateRef.current;
+    const idx0 = findInv(s0.inv, s0.selInv);
+    if (idx0 < 0) return;
+    const item0 = s0.inv[idx0];
+    const qty0 = Math.min(Math.max(1, n || s0.invQty), item0.n);
+    Alert.alert(
+      'Discard goods?',
+      `Throw away ${qty0} × ${item0.name}? No refund.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Discard',
+          style: 'destructive',
+          onPress: () => {
+            markInteracted();
+            setState((s) => {
+              const idx = findInv(s.inv, s.selInv);
+              if (idx < 0) return s;
+              const item = s.inv[idx];
+              const qty = Math.min(Math.max(1, n || s.invQty), item.n);
+              const inv = s.inv.slice();
+              if (qty >= item.n) inv.splice(idx, 1);
+              else inv[idx] = { ...item, n: item.n - qty };
+              return {
+                ...s,
+                inv,
+                sheet: null,
+                selInv: null,
+                invQty: 1,
+              };
+            });
+            buzz(`Discarded ${qty0} × ${item0.name}`, 'bad');
+          },
+        },
+      ],
+    );
+  }, [buzz, markInteracted]);
+
+  const moveInvSlot = useCallback(() => {
+    markInteracted();
+    let result = null;
+    setState((s) => {
+      const idx = findInv(s.inv, s.selInv);
+      if (idx < 0) return s;
+      const item = s.inv[idx];
+      const qty = Math.min(Math.max(1, s.invQty), item.n);
+      const dest = item.slot === 'bag' ? 'cargo' : 'bag';
+      const wt = item.w * qty;
+      const destUsed = dest === 'bag' ? bagUsed(s.inv) : cargoUsed(s.inv);
+      const cap = dest === 'bag' ? s.bagLimit : s.cargoCap;
+      if (destUsed + wt > cap) {
+        result = {
+          ok: false,
+          msg: `Not enough ${dest === 'bag' ? 'carry-on' : 'cargo'} space (${(destUsed + wt - cap).toFixed(1)} kg over)`,
+          kind: 'bad',
+        };
+        return s;
+      }
+      const inv = s.inv.slice();
+      if (qty >= item.n) inv.splice(idx, 1);
+      else inv[idx] = { ...item, n: item.n - qty };
+      const at = inv.findIndex((i) => i.id === item.id && i.slot === dest);
+      if (at >= 0) {
+        const prev = inv[at];
+        const totalN = prev.n + qty;
+        inv[at] = {
+          ...prev,
+          n: totalN,
+          cost: (prev.cost * prev.n + item.cost * qty) / totalN,
+        };
+      } else {
+        inv.push({
+          id: item.id,
+          name: item.name,
+          icon: item.icon,
+          w: item.w,
+          n: qty,
+          slot: dest,
+          cost: item.cost,
+        });
+      }
+      result = {
+        ok: true,
+        msg: `Moved ${qty} × ${item.name} to ${dest === 'bag' ? 'carry-on' : 'cargo'}`,
+        kind: 'ok',
+      };
+      return {
+        ...s,
+        inv,
+        sheet: null,
+        selInv: null,
+        invQty: 1,
+        cargoLots: s.cargoLots + (dest === 'cargo' ? 1 : 0),
+      };
+    });
+    if (result) setTimeout(() => buzz(result.msg, result.kind), 0);
   }, [buzz, markInteracted]);
 
   const saveNow = useCallback(() => {
     markInteracted();
     const savedAt = stateRef.current.gameMin;
     setState((s) => ({ ...s, savedAt }));
-    const slice = {};
+    const slice = { saveVersion: SAVE_VERSION };
     PERSIST.forEach((k) => { slice[k] = stateRef.current[k]; });
     slice.savedAt = savedAt;
     AsyncStorage.setItem(SAVE_KEY, JSON.stringify(slice)).catch(() => {});
@@ -635,6 +872,13 @@ export function useGame() {
     ? (state.cabin === 'economy' ? state.selFlight.econ : state.selFlight.biz) + add.price
     : 0;
   const canBook = !!state.selFlight && !state.ticket && fareTotal <= state.cash;
+  const bagOverKg = Math.max(0, bagKg - DEFAULT_BAG_LIMIT);
+  const selInvItem = (() => {
+    const idx = findInv(state.inv, state.selInv);
+    return idx >= 0 ? state.inv[idx] : null;
+  })();
+  const invUnit = selInvItem ? priceAt(selInvItem.id, state.city) : 0;
+  const invGross = selInvItem ? invUnit * state.invQty : 0;
 
   return {
     state,
@@ -643,6 +887,7 @@ export function useGame() {
     destId,
     bagKg,
     cargoKg,
+    bagOverKg,
     stats,
     sell,
     productRows,
@@ -656,6 +901,9 @@ export function useGame() {
     cargoText: `${cargoKg.toFixed(1)} / ${state.cargoCap} kg`,
     saveSub: `Last saved ${state.savedAt ? `${hm(state.gameMin - state.savedAt)} ago` : 'at takeoff'} · slot 1`,
     selProduct,
+    selInvItem,
+    invUnit,
+    invGross,
     unitHere,
     costTotal,
     wtTotal,
@@ -685,7 +933,10 @@ export function useGame() {
     openFlight,
     openFF,
     openSell,
+    openInvItem,
+    manageInBags,
     setQty,
+    setInvQty,
     setSlot,
     setCabin,
     setAddon,
@@ -694,6 +945,9 @@ export function useGame() {
     cancelTicket,
     runCutscene,
     sellAll,
+    sellQty,
+    discardQty,
+    moveInvSlot,
     saveNow,
     restart,
     buzz,
