@@ -1,7 +1,7 @@
 # Demo §27 验收对照表（2026-07-26；Theme 收口更新）
 
 **里程碑：** 可玩 Demo（PRD §27）+ 基础 UI Theme  
-**自动化：** `pytest tests/etl tests/game -q` · `python tools/demo_smoke_logic.py` · Godot `SmokeContent.gd`  
+**自动化：** `pytest tests/etl tests/game -q` · `python tools/demo_smoke_logic.py` · Godot `SmokeContent.gd` · v0.3 全环 `SmokeV3Loop.gd`  
 **手测日：** 2026-07-26（逻辑路径经 smoke + headless 加载；完整编辑器剧本与 Profiler 见下方）
 
 | # | 标准 | 自动化 | 手工 | 状态 |
