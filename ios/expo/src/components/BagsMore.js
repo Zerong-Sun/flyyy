@@ -309,7 +309,7 @@ export function MoreScreen({ game }) {
   if (page === 'settings') {
     const toggles = [
       ['optHaptics', 'Haptic feedback', 'A tap on every buy, sell and boarding call.'],
-      ['optSound', 'Sound clicks', 'Light click feel on buy, sell, and takeoff (no audio files).'],
+      ['optSound', 'Sound', 'Short SFX on ticket, sell, takeoff, and achievements (haptic click if audio fails).'],
       ['optPush', 'Boarding notifications', 'Alert you when the gate is about to close.'],
       ['opt24h', '24-hour clock', 'Show all times as 00:00–23:59.'],
       ['optReduce', 'Reduce motion', 'Shorten the flight cutscene.'],

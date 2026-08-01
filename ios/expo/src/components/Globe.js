@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import {
   View,
   Text,
@@ -11,58 +11,127 @@ import { CIDS, CITIES } from '../gameData';
 import { assetSource } from '../assets';
 import { COLORS } from '../theme';
 
-const SIZE = 268;          // globe diameter
-const IMG_W = SIZE * 2;    // equirectangular strip: full width = 360°
+const SIZE = 268;
+const IMG_W = SIZE * 2;
 const R = Math.PI / 180;
 
-/** Draggable world globe with a pin per hub — the app's home screen. */
+function projectPin(lon, lat, rot) {
+  const rel = ((lon + rot + 540) % 360) - 180;
+  const vis = Math.abs(rel) < 88;
+  const edge = Math.cos(rel * R);
+  return {
+    x: (50 + (rel / 90) * 50) / 100 * SIZE,
+    y: (50 - (lat / 90) * 50) / 100 * SIZE,
+    vis,
+    edge,
+    opacity: vis ? 0.4 + edge * 0.6 : 0,
+  };
+}
+
+function sampleArc(x0, y0, x1, y1, n = 28) {
+  const mx = (x0 + x1) / 2;
+  const my = (y0 + y1) / 2;
+  const cx = SIZE / 2;
+  const cy = SIZE / 2;
+  const dx = mx - cx;
+  const dy = my - cy;
+  const len = Math.hypot(dx, dy) || 1;
+  const bulge = 32;
+  const qx = mx + (dx / len) * bulge;
+  const qy = my + (dy / len) * bulge;
+  const pts = [];
+  for (let i = 0; i <= n; i += 1) {
+    const t = i / n;
+    const u = 1 - t;
+    pts.push({
+      x: u * u * x0 + 2 * u * t * qx + t * t * x1,
+      y: u * u * y0 + 2 * u * t * qy + t * t * y1,
+    });
+  }
+  return pts;
+}
+
+/** Draggable world globe with pins, optional ticket arc, and inertia. */
 export function Globe({ game }) {
-  const { state, city, setRot, setDragging, setFocusDest, buzz } = game;
+  const { state, city, setRot, setDragging, openPinCity, buzz } = game;
   const rot = state.rot === null || state.rot === undefined ? -city.lon : state.rot;
   const rotRef = useRef(rot);
   rotRef.current = rot;
   const pinPressRef = useRef({ t: 0, x: 0, y: 0, id: null });
+  const inertiaRef = useRef(null);
+  const optReduceRef = useRef(state.optReduce);
+  optReduceRef.current = state.optReduce;
+
+  useEffect(() => () => {
+    if (inertiaRef.current) cancelAnimationFrame(inertiaRef.current);
+  }, []);
 
   const pan = useMemo(() => PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onMoveShouldSetPanResponder: (_e, g) => Math.abs(g.dx) > 3,
-    onPanResponderGrant: () => setDragging(true),
+    onPanResponderGrant: () => {
+      if (inertiaRef.current) cancelAnimationFrame(inertiaRef.current);
+      setDragging(true);
+    },
     onPanResponderMove: (_e, g) => {
       setRot(rotRef.current + g.dx * 0.55 * (276 / SIZE));
     },
-    onPanResponderRelease: () => setDragging(false),
+    onPanResponderRelease: (_e, g) => {
+      setDragging(false);
+      if (optReduceRef.current) return;
+      let vx = (g.vx || 0) * 22;
+      if (Math.abs(vx) < 0.4) return;
+      const step = () => {
+        if (Math.abs(vx) < 0.12) return;
+        setRot(rotRef.current + vx);
+        vx *= 0.9;
+        inertiaRef.current = requestAnimationFrame(step);
+      };
+      inertiaRef.current = requestAnimationFrame(step);
+    },
     onPanResponderTerminate: () => setDragging(false),
   }), [setRot, setDragging]);
 
-  // Wrap the strip so the world scrolls seamlessly in both directions.
   const raw = -((90 - rot) / 360) * IMG_W;
   const off = ((raw % IMG_W) + IMG_W) % IMG_W - IMG_W;
 
   const pins = CIDS.map((k) => {
     const c = CITIES[k];
-    const rel = ((c.lon + rot + 540) % 360) - 180;
-    const vis = Math.abs(rel) < 88;
-    const edge = Math.cos(rel * R);
+    const p = projectPin(c.lon, c.lat, rot);
     const here = k === state.city;
     const seen = state.visited.includes(k);
+    const ticketEnd = state.ticket && (k === state.city || k === state.ticket.toId);
     return {
       id: k,
       iata: c.iata,
       name: c.name,
-      x: (50 + (rel / 90) * 50) / 100 * SIZE,
-      y: (50 - (c.lat / 90) * 50) / 100 * SIZE,
-      opacity: vis ? (here ? 1 : 0.4 + edge * 0.6) : 0,
-      size: here ? 10 : 6,
-      color: here ? COLORS.orange : seen ? COLORS.teal : COLORS.blue,
-      label: vis && (here || (seen && edge > 0.5)),
+      x: p.x,
+      y: p.y,
+      opacity: p.vis ? (here || ticketEnd ? 1 : 0.4 + p.edge * 0.6) : 0,
+      size: here || ticketEnd ? 10 : 6,
+      color: here ? COLORS.teal : ticketEnd ? COLORS.orange : seen ? COLORS.teal : COLORS.blue,
+      label: p.vis && (here || ticketEnd || (seen && p.edge > 0.5)),
       here,
-      vis,
+      vis: p.vis,
     };
   });
 
+  const arcPts = (() => {
+    const t = state.ticket;
+    if (!t || !CITIES[t.toId]) return [];
+    const a = projectPin(CITIES[state.city].lon, CITIES[state.city].lat, rot);
+    const b = projectPin(CITIES[t.toId].lon, CITIES[t.toId].lat, rot);
+    if (!a.vis && !b.vis) return [];
+    return sampleArc(a.x, a.y, b.x, b.y).filter((pt) => {
+      const dx = pt.x - SIZE / 2;
+      const dy = pt.y - SIZE / 2;
+      return dx * dx + dy * dy <= (SIZE / 2 - 2) ** 2;
+    });
+  })();
+
   const hint = state.dragging
     ? `${city.name} · ${Math.round(((-rot % 360) + 360) % 360)}° E`
-    : 'Drag to spin · tap a pin to fly';
+    : 'Drag to spin · tap a pin for details';
 
   const onPinPressIn = (p, e) => {
     pinPressRef.current = {
@@ -84,7 +153,7 @@ export function Globe({ game }) {
       buzz('You are here', 'ok');
       return;
     }
-    setFocusDest(p.id);
+    openPinCity(p.id);
   };
 
   return (
@@ -104,6 +173,13 @@ export function Globe({ game }) {
           accessible={false}
         />
         <View style={styles.shade} pointerEvents="none" />
+        {arcPts.map((pt, i) => (
+          <View
+            key={`arc-${i}`}
+            pointerEvents="none"
+            style={[styles.arcDot, { left: pt.x - 1.5, top: pt.y - 1.5, opacity: 0.35 + (i / arcPts.length) * 0.55 }]}
+          />
+        ))}
       </View>
 
       <View style={styles.pinLayer} pointerEvents="box-none">
@@ -116,7 +192,7 @@ export function Globe({ game }) {
               onPressOut={(e) => onPinPressOut(p, e)}
               hitSlop={10}
               accessibilityRole="button"
-              accessibilityLabel={p.here ? `${p.name}, you are here` : `Fly to ${p.name}`}
+              accessibilityLabel={p.here ? `${p.name}, you are here` : `${p.name} details`}
             >
               <View
                 style={[
@@ -128,7 +204,7 @@ export function Globe({ game }) {
                     backgroundColor: p.color,
                     marginLeft: -p.size / 2,
                     marginTop: -p.size / 2,
-                    shadowColor: p.here ? COLORS.orange : '#040E18',
+                    shadowColor: p.here ? COLORS.teal : '#040E18',
                     shadowRadius: p.here ? 7 : 3,
                   },
                 ]}
@@ -186,6 +262,13 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(4, 14, 24, 0.22)',
   },
+  arcDot: {
+    position: 'absolute',
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: COLORS.orange,
+  },
   pinLayer: {
     position: 'absolute',
     width: SIZE,
@@ -207,7 +290,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
   },
   pinLabelHere: {
-    color: COLORS.orange,
+    color: COLORS.teal,
   },
   hint: {
     marginTop: 14,

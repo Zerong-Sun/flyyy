@@ -1,4 +1,4 @@
-import { AIRLINE, CIDS, CITIES, FLIGHTS, PRODUCTS, PRODUCT_IDS } from './gameData';
+import { AIRLINE, CIDS, CITIES, FLIGHTS, PRODUCTS, PRODUCT_IDS } from './gameData.js';
 
 const FACTORS = [1.58, 1.41, 1.24, 1.08, 0.95, 0.82];
 
@@ -231,4 +231,46 @@ export function cityMinutes(gameMin, cityId) {
 export function clockLabel(gameMin, use24 = true) {
   const m = utcMinutes(gameMin);
   return `Mar ${12 + Math.floor(m / 1440)} · ${fmtClock(m, use24)}`;
+}
+
+/** Minutes until depMin on the city's local clock (wraps past midnight). */
+export function waitUntilDep(gameMin, cityId, depMin) {
+  const localNow = ((cityMinutes(gameMin, cityId) % 1440) + 1440) % 1440;
+  let wait = depMin - localNow;
+  if (wait <= 0) wait += 1440;
+  return wait;
+}
+
+/** Weighted-average unit cost when stacking inventory. */
+export function mergeInvCost(prevCost, prevN, unit, n) {
+  const totalN = prevN + n;
+  if (totalN <= 0) return 0;
+  return (prevCost * prevN + unit * n) / totalN;
+}
+
+/**
+ * Stable fake price history (3–5 points) ending at current local price.
+ * Not real market data — for sparkline UI only.
+ */
+export function priceSparkline(pid, cityId, points = 5) {
+  const now = priceAt(pid, cityId);
+  const n = Math.max(3, Math.min(5, points));
+  const out = [];
+  for (let i = 0; i < n; i += 1) {
+    const wobble = ((hsh(`${pid}|${cityId}|hist|${i}`) % 21) - 10) / 100;
+    const t = i / (n - 1);
+    out.push(Math.max(1, Math.round(now * (1 + wobble * (1 - t)))));
+  }
+  out[n - 1] = now;
+  return out;
+}
+
+/** Sort product ids by profit uplift to dest (desc). */
+export function sortByDestProfit(ids, fromCity, destId) {
+  if (!destId) return ids.slice();
+  return ids.slice().sort((a, b) => {
+    const da = priceAt(a, destId) - priceAt(a, fromCity);
+    const db = priceAt(b, destId) - priceAt(b, fromCity);
+    return db - da;
+  });
 }

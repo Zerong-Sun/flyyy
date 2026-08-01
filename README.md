@@ -131,6 +131,12 @@ npx expo start
 
 安装 Expo Go，手机与电脑同一 Wi‑Fi，扫描终端二维码。详见 [`ios/expo/README.md`](ios/expo/README.md)。
 
+```bash
+python3 tools/export_expo_data.py          # ETL → ios/expo/data/ios-data.json
+cd ios/expo && npm test                    # 逻辑单测
+# npx eas build --profile preview --platform ios   # 内测包（见 eas.json）
+```
+
 ---
 
 ## 内容与资产规格

@@ -32,15 +32,44 @@ const FLIGHT_FILTERS = [
   { value: 'biz', label: 'Business' },
 ];
 
+function MiniSpark({ points }) {
+  if (!points || points.length < 2) return null;
+  const min = Math.min(...points);
+  const max = Math.max(...points);
+  const span = Math.max(1, max - min);
+  return (
+    <View style={styles.sparkRow}>
+      {points.map((v, i) => {
+        const h = 4 + ((v - min) / span) * 14;
+        return <View key={i} style={[styles.sparkBar, { height: h }]} />;
+      })}
+    </View>
+  );
+}
+
 export function MarketScreen({ game }) {
-  const { state, city, productRows, setSeg, openProduct } = game;
+  const { state, city, destId, productRows, setSeg, openProduct, setFocusDest } = game;
+  const sortCity = destId ? CITIES[destId] : null;
 
   return (
     <View style={styles.screen}>
       <ScreenTitle
         title="Market"
-        subtitle={`${city.name} · ${state.seg === 'local' ? 'local goods' : 'imports'}`}
+        subtitle={
+          sortCity
+            ? `${city.name} · sorted for ${sortCity.name}`
+            : `${city.name} · ${state.seg === 'local' ? 'local goods' : 'imports'}`
+        }
       />
+      {state.ticket && sortCity ? (
+        <View style={styles.focusChip}>
+          <Text style={styles.focusChipText}>Ticket → {sortCity.iata}</Text>
+        </View>
+      ) : state.focusDest && sortCity ? (
+        <Pressable style={styles.focusChip} onPress={() => setFocusDest('')}>
+          <Text style={styles.focusChipText}>Watching {sortCity.iata} · Clear</Text>
+        </Pressable>
+      ) : null}
       <SegControl
         style={styles.seg}
         options={MARKET_SEGS}
@@ -67,6 +96,7 @@ export function MarketScreen({ game }) {
                 </View>
               </View>
               <Text style={styles.productMeta}>{p.meta}</Text>
+              <MiniSpark points={p.spark} />
               {p.tag ? (
                 <View style={styles.tagRow}>
                   <View style={[styles.tagDot, { backgroundColor: tagColor(p.tagKind) }]} />
@@ -142,15 +172,26 @@ export function FlightsScreen({ game }) {
             style={({ pressed }) => [
               styles.flightCard,
               f.focused && styles.flightCardFocused,
+              f.past && styles.flightCardPast,
               pressed && styles.rowPressed,
             ]}
             onPress={() => openFlight(f)}
             accessibilityRole="button"
-            accessibilityLabel={`${f.no} to ${f.toName}, departs ${f.dep}, economy ${money(f.econ)}`}
+            accessibilityLabel={`${f.no} to ${f.toName}, departs ${f.dep}, economy ${money(f.econ)}${f.isNext ? ', next departure' : ''}`}
           >
             <View style={styles.flightHeader}>
-              <Text style={styles.flightNo}>{f.no}</Text>
-              <Text style={styles.flightAirline} numberOfLines={1}>{f.airline}</Text>
+              <Text style={[styles.flightNo, f.past && styles.flightTextPast]}>{f.no}</Text>
+              <Text style={[styles.flightAirline, f.past && styles.flightTextPast]} numberOfLines={1}>{f.airline}</Text>
+              {f.isNext ? (
+                <View style={styles.nextChip}>
+                  <Text style={styles.nextChipText}>Next</Text>
+                </View>
+              ) : null}
+              {f.past ? (
+                <View style={styles.tomorrowChip}>
+                  <Text style={styles.tomorrowChipText}>Tomorrow</Text>
+                </View>
+              ) : null}
               {f.focused ? (
                 <View style={styles.newCityChip}>
                   <Text style={styles.newCityText}>Focus</Text>
@@ -565,6 +606,46 @@ const styles = StyleSheet.create({
   },
   flightCardFocused: {
     borderColor: COLORS.orange,
+  },
+  flightCardPast: {
+    opacity: 0.55,
+  },
+  flightTextPast: {
+    color: COLORS.muted2,
+  },
+  nextChip: {
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 5,
+    backgroundColor: 'rgba(60, 184, 164, 0.2)',
+  },
+  nextChipText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: COLORS.teal,
+  },
+  tomorrowChip: {
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 5,
+    backgroundColor: 'rgba(168, 184, 200, 0.15)',
+  },
+  tomorrowChipText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: COLORS.muted,
+  },
+  sparkRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 2,
+    height: 18,
+    marginTop: 4,
+  },
+  sparkBar: {
+    width: 3,
+    borderRadius: 1,
+    backgroundColor: 'rgba(96, 168, 214, 0.55)',
   },
   sheetScroll: {
     maxHeight: '100%',

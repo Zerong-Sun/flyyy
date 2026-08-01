@@ -3,20 +3,21 @@
 | 字段 | 内容 |
 |------|------|
 | 文档编号 | REQ-ios-expo-M2 |
-| 版本 | v0.1（初稿） |
+| 版本 | v0.2 |
 | 产品 | 《环球航商》/ Airborne Trader |
 | 目标工程 | [`ios/expo/`](../ios/expo/)（Expo Go SDK 54 · 12 枢纽 Demo） |
-| 关联 | [PRD_01.md](../PRD_01.md)；[v0.2_REQUIREMENTS.md](v0.2_REQUIREMENTS.md)（Godot 主线，内容对齐参考）；[ios/expo/README.md](../ios/expo/README.md)；[ios/github.md](../ios/github.md) |
+| 关联 | [PRD_01.md](../PRD_01.md)；[CONTENT_ASSET_SPEC.md](CONTENT_ASSET_SPEC.md)（CAS-01 · Godot 美术/音乐真源）；[v0.2_REQUIREMENTS.md](v0.2_REQUIREMENTS.md)；[ios/expo/README.md](../ios/expo/README.md)；[ios/github.md](../ios/github.md) |
 | 前置里程碑 | **M1（已交付）**：审阅优化 — 真实登机倒计时与自动起飞、行李随票失效、购买校验与加权成本、时钟隔离、AsyncStorage 存档、成就 toast、Reduce motion、safe-area |
-| 状态 | 需求起草 |
+| 状态 | 需求起草（v0.2 增补媒体与素材专节） |
 
 本文档定义 **iOS Expo Demo 的 M2 里程碑**：在 M1 已可玩、可存档的闭环上，补齐「可感知的地球」、贸易深度、内容管线与可发布质量，使手机版从「设计稿可玩移植」升级为「可持续迭代的移动 Demo」。
 
-与 Godot [`docs/v0.2_REQUIREMENTS.md`](v0.2_REQUIREMENTS.md) 的关系：
+与 Godot / CAS 的关系：
 
-- **玩法与内容语义**尽量对齐（定价、枢纽、成就口径）；
+- **玩法与内容语义**尽量对齐 [`v0.2_REQUIREMENTS.md`](v0.2_REQUIREMENTS.md)（定价、枢纽、成就口径）；
+- **美术气质、命名、版权**对齐 [`CONTENT_ASSET_SPEC.md`](CONTENT_ASSET_SPEC.md)；**Expo 子集、落盘路径与验收以本文件 §9 为准**；
 - **表现与工程**独立于 Godot（React Native / Expo）；
-- 冲突时：移动端以本文件为准，桌面主线以 PRD / v0.2 为准。
+- 冲突时：移动端以本文件为准，桌面主线以 PRD / v0.2 / CAS 为准。
 
 ---
 
@@ -30,10 +31,10 @@
 | 时间与登机 | `depMin` 真实等待；到点强制起飞；Speed up | 无「距起飞 &lt;2h 灰显 / 默认聚焦下一班」 |
 | 行李 | 加购随票；落地重置 23 kg | 落地超重无明确处置文案；cargo 与 carry-on 策略仍粗 |
 | 存档 | AsyncStorage 节流读写 | 无多存档槽、无导出/清除确认分级、无版本迁移测试 |
-| 地球 | 静态 `earth.png` + 城市 chip | **不可旋转、无航线弧、无点选枢纽**（与 PRD「可旋转地球」差距最大） |
-| 市场情报 | 有 hot/ok/cold 标签（持票时） | 无付费精准预测；无价格历史 sparkline |
-| 内容 | 手写 `gameData.js` 12 城 | 未接 ETL；扩城靠手工 `require()` |
-| 反馈 | Toast + 成就 toast | 无 SFX / 触感；出售无分级反馈 |
+| 地球 | `earth.png` + 可拖转 + 枢纽 pin | 无持票航线弧；无只读城市卡；无松手惯性 |
+| 市场情报 | 有 hot/ok/cold 标签（持票 / focus 时） | 无目的地利润排序；无付费快照；无 sparkline |
+| 内容 | 手写 `gameData.js` 12 城；[`ios/assets/`](../ios/assets/) 图包已齐 | 未接 ETL；扩城靠手工 `require()`；见 §9 |
+| 反馈 | Toast、成就 toast、`expo-haptics`、`optSound` 触感 click | 无真·SFX 文件；出售分级仅 toast 文案 |
 | 平台 | Expo Go、safe-area、Reduce motion | 无 EAS / TestFlight；无自动化测试 |
 
 ### 1.2 M2 目标一句话
@@ -66,8 +67,8 @@
 | S2 | 逻辑层单测 / 小型测试脚手架 | P0 | 定价、登机等待、存档 round-trip |
 | C1 | ETL → Expo 内容导出（12→可扩） | P1 | 与 `tools/export_ios_data.py` 等对齐 |
 | C2 | 枢纽扩至 **16–20**（可选冲刺） | P2 | 有管线后再扩；否则维持 12 |
-| A1 | 关键操作触感（购票、起飞、成交） | P2 | `expo-haptics` |
-| A2 | 最小 SFX 包（3–5 个） | P2 | 可选；无音频亦可验收 G/T/S |
+| A1 | 关键操作触感（购票、起飞、成交） | P2 | `expo-haptics`；事件表见 §8 |
+| A2 | 最小 SFX 包（5 个逻辑 ID） | P2 | 可选；无音频可用触感验收 G/T/S；清单与工程约定见 **§9** |
 | P1 | EAS Build / 内测分发文档 | P1 | 不强制上架 App Store |
 | U1 | 航班列表「下一班」默认排序与即将起飞提示 | P1 | 对齐桌面航班 UX 的一小部分 |
 
@@ -82,6 +83,7 @@
 | Lock Screen Widget / Push Banner（设计稿有、无实现） | M3 探索 |
 | 将 Expo 与根目录 `expo-go/`（30 城快照）合并为单一工程 | 需单独立项 |
 | 修改 Godot `EconomySystem` 核心公式 | 桌面主线；移动端只消费同源语义 |
+| 循环 BGM / 完整配乐系统 | M3；M2 明确不做（见 §9.3） |
 
 ---
 
@@ -206,23 +208,120 @@ Metro 仍要求字面量 `require()`：导出工具需 **生成或校验** [`src
 
 ---
 
-## 8. 反馈与打磨（A1 / A2，P2）
+## 8. 反馈与打磨（A1，P2）
 
-| 事件 | 触感 | SFX（可选） |
-|------|------|-------------|
-| 购票成功 | light | `sfx_ticket` |
-| 开始过场 | medium | `sfx_gate` |
-| 出售盈利 | success | `sfx_profit` |
-| 出售亏损 | warning | `sfx_loss` |
-| 成就解锁 | success | 复用 profit 或短音 |
+事件与触感 / 可选 SFX 的对应关系如下；**SFX 文件、目录、接线与验收以 §9 为准**。
 
-Reduce motion / 系统「减弱动态效果」开启时：触感可保留，SFX 跟随系统静音。
+| 事件 | 触感（`optHaptics`） | SFX 逻辑 ID（`optSound`，可选） |
+|------|----------------------|----------------------------------|
+| 购票成功 | notification success 或 light impact | `sfx_ticket` |
+| 开始过场 / Speed up 起飞 | medium / light impact（click） | `sfx_gate` |
+| 出售盈利 | notification success | `sfx_profit` |
+| 出售亏损 | notification warning | `sfx_loss` |
+| 成就解锁 | notification success | `sfx_ach`（可复用 profit 音色） |
+
+Reduce motion 开启时：触感可保留；真·SFX 跟随系统静音 / 铃声开关（见 §9.4）。
 
 ---
 
-## 9. 工程、测试与分发（S2 / P1）
+## 9. 媒体与素材需求（美术 · 音乐）
 
-### 9.1 测试（P0）
+本节定义 **iOS Expo Demo** 的美术与音频交付口径。气质、禁止风格、版权总则对齐 [CONTENT_ASSET_SPEC.md](CONTENT_ASSET_SPEC.md)（CAS-01）；**本文件列出 Expo 子集、仓库落点与 M2 验收**。CAS 管 Godot 全量；路径冲突时以本节 Expo 路径为准。
+
+### 9.1 范围与原则
+
+1. **气质：**「可旋转的真实世界航线图鉴」——清晰、可信、略带旅途温度（CAS §0.1–0.2）。
+2. **UI 语言：** Expo Demo 界面保持英文；资源文件名与逻辑 ID 使用 ASCII。
+3. **美术真源目录：** [`ios/assets/`](../ios/assets/)，经 Metro [`ios/expo/src/assets.js`](../ios/expo/src/assets.js) 字面量 `require()` 注册。
+4. **音频真源（Godot）：** [`game/assets/audio/`](../game/assets/audio/)；**Expo 仓内当前无** `ios/assets/audio/`。M2 的 G/T/S 验收**不依赖**真音频文件。
+5. **禁止：** 未授权航司 Logo、违禁品包装图、CAS §0.4 所列风格套路。
+
+### 9.2 美术素材清单（现状盘点 · 2026-08）
+
+| 类 | 命名约定 | 规格 | Expo 现状 | M2 |
+|----|----------|------|-----------|-----|
+| 地球贴图 | `earth.png` | 等距柱状；建议 ≥2048×1024 | 已有 | **必有**（已交付） |
+| 城头图 | `city_{id}.webp` | 横构图 WebP；每枢纽 1 | 12 城已齐（istanbul…tokyo） | 扩城时每城必交 |
+| 商品图 | `p_{hub}_{sku}.webp`、`p_cat_*.webp`、`p_generic.webp` | 方图；缺图回退 generic | 特色/品类/generic 已齐 | 新商品必交图或声明使用 generic |
+| 成就图标 | `ach_*.webp` | 与 `ACHIEVEMENTS[].icon` 一一对应 | 已齐 | 新成就必交 |
+| UI 图标 | `ic_*.webp` | 约 24–32px 语义图标 | 已齐 | 仅新控件时补 |
+| 过场帧 | `anim_flight_{takeoff,cruise,land}.webp` | 全屏可读；三段语义可辨 | 已齐 | **必有**（已交付） |
+| 品牌 | `logo_mark.webp`、`app_icon.webp`、`splash.webp`；Expo 壳 [`ios/expo/assets/`](../ios/expo/assets/)（`icon.png` 等） | App 图标 / 启动 | 已齐 | **必有**（已交付） |
+| 航线弧 / pin | 程序绘制（非贴图） | 当前 / 已访 / 未访色区分 | pin 已有；**弧未做** | 弧为功能（G2），非新美术文件 |
+
+**扩城（C2）附加美术：** 新枢纽至少 **头图 + ≥2 本地商品图 + note**；无完整美术时允许 `p_generic` / 占位头图，须在数据来源（Sources）页声明。
+
+**Metro 约束：** 新增光栅必须同时登记进 `assets.js`；导出/校验工具缺图时回退 `p_generic` 并在 CI 警告（见 §6.2）。
+
+### 9.3 音乐与音效清单
+
+分三层，避免「可选」含糊：
+
+#### 9.3.1 M2 默认可验收路径（无音频文件）
+
+| 开关 | 行为 |
+|------|------|
+| `optSound === true` | 购票成功 / 卖出 / 起飞开始时额外 `Haptics.impactAsync(Light)`（click） |
+| `optHaptics === true` | Toast 类反馈使用 success / warning 通知触感 |
+| 两开关独立 | Sound 开、Haptics 关时仍可有 click；反之亦然 |
+
+无 `ios/assets/audio/` 时**不得因缺文件崩溃**；Settings 文案可写明「Sound clicks · no audio files」。
+
+#### 9.3.2 M2 可选完整 SFX 包（A2 · P2）— 最小 5 条
+
+交付时从 Godot 包拷贝或转码到 Expo 目录（见 §9.4）。逻辑 ID 与触发时机固定如下：
+
+| Expo 逻辑 ID | 触发时机 | Expo 文件 | 源 Godot 文件 |
+|--------------|----------|-----------|----------------|
+| `sfx_ticket` | 购票成功 | `sfx_ticket.m4a` | `audio_sfx_ticket_ok.ogg` |
+| `sfx_gate` | 开始过场 / Speed up | `sfx_gate.m4a` | `audio_sfx_ff_confirm.ogg` |
+| `sfx_profit` | 出售净值 ≥ 0 | `sfx_profit.m4a` | `audio_sfx_sell.ogg` |
+| `sfx_loss` | 出售净值 &lt; 0 | `sfx_loss.m4a` | `audio_sfx_loss.ogg` |
+| `sfx_ach` | 成就解锁 toast | `sfx_ach.m4a` | `audio_sfx_arrive.ogg` |
+
+Godot 侧另有更全的 P0 SFX（见 CAS §2.3 / `AUDIO_MANIFEST.csv`）；**Expo M2 不强制导入全表**，以上 5 条为移动端最小集。
+
+#### 9.3.3 BGM（M2 明确不做 · 预留 M3）
+
+- **不引入**循环配乐；不要求 `expo-av` 播放 BGM。
+- 若 M3 需要，映射 CAS：`bgm_globe_day` / `bgm_market` / `bgm_menu` / `bgm_night`，建议落盘 `ios/assets/audio/bgm/`。
+
+### 9.4 工程与目录约定
+
+```text
+ios/assets/audio/sfx/           # 镜像副本（文档/管线）
+ios/expo/assets/audio/sfx/      # Metro 打包真源：sfx_{ticket,gate,profit,loss,ach}.m4a
+ios/expo/src/assets.js          # 图片 require 表（必维）
+ios/expo/src/audio.js           # load + play(logicId)；尊重 optSound / 系统静音
+```
+
+| 约定 | 要求 |
+|------|------|
+| 依赖 | `expo-av`；**播放失败时**回退 §9.3.1 触感，禁止抛未捕获异常 |
+| Metro | 使用 **AAC `.m4a`**（Metro / iOS AVPlayer 均支持；**勿用 `.ogg`**） |
+| Settings | Sound 开 = 真 SFX 或 click 触感 fallback；与 Haptics 开关独立 |
+| Reduce motion | 不强制关闭 SFX；SFX 跟随系统静音 |
+| 格式 | AAC `.m4a`，单文件建议 &lt; 100 KB；可由 Godot `.ogg` 用 ffmpeg 转码 |
+
+### 9.5 版权与署名
+
+- 复用 Godot 音频包：许可与 [`game/assets/audio/AUDIO_MANIFEST.csv`](../game/assets/audio/AUDIO_MANIFEST.csv) 及 CAS §2.6 一致。
+- 城头图 / 商品图：非品牌包装照；禁止项同 CAS。
+- Sources（数据来源）页在交付 A2 音频后增加一行说明（如 procedural / listed licenses）；纯触感阶段可不增加。
+
+### 9.6 媒体验收清单
+
+- [ ] §9.2 表中标注「必有」的类别在 `ios/assets/` 存在，且 `assets.js` 可解析，无坏链。
+- [ ] 缺商品图时 UI 回退 `p_generic`，不白屏、不红屏。
+- [ ] 无音频目录/文件时：`optSound` 开仍有 click 触感；冷启动与购票/卖出路径无因缺音频导致的崩溃。
+- [ ] 若交付 A2 音频包：5 个逻辑 ID 均可播；`optSound` 关则静音；Sources 或 README 有一句来源说明。
+- [ ] 新增枢纽/商品的美术步骤可对照 §9.2 扩城行 + §6.3 checklist 执行。
+
+---
+
+## 10. 工程、测试与分发（S2 / P1）
+
+### 10.1 测试（P0）
 
 在 `tests/` 或 `ios/expo/__tests__/` 增加 **不依赖 Expo 运行时** 的逻辑测试，至少覆盖：
 
@@ -235,7 +334,7 @@ Reduce motion / 系统「减弱动态效果」开启时：触感可保留，SFX 
 7. 成就阈值在临界值恰好解锁；
 8. `sellData` 净值符号与金额。
 
-### 9.2 分发（P1）
+### 10.2 分发（P1）
 
 文档化：
 
@@ -246,14 +345,14 @@ npx eas build --profile preview   # 或 development
 
 说明：Expo Go 与 Dev Client 差异、SDK 54 版本钉扎、试玩账号无需登录。
 
-### 9.3 性能预算
+### 10.3 性能预算
 
 - 时钟隔离在 M1 已做；M2 地球拖转时 Market 未挂载则不应被拖转拖垮（Globe 独立重绘）。
 - 目标：中端 iPhone 上拖转 ≥ 30 FPS（可接受掉帧，不可卡死）。
 
 ---
 
-## 10. 里程碑切片与依赖
+## 11. 里程碑切片与依赖
 
 ```mermaid
 flowchart LR
@@ -276,13 +375,13 @@ flowchart LR
 | **M2b** | 交互地球 + 航线弧 | 中 |
 | **M2c** | 部分出售/丢弃、超重提示、深度情报 A | 中 |
 | **M2d** | ETL 导出 + assets 校验；可选扩到 16 城 | 中 |
-| **M2e** | 航班 Next 提示、触感/SFX、EAS 文档 | 小 |
+| **M2e** | 航班 Next 提示、触感/SFX（§9）、EAS 文档 | 小 |
 
 建议实现顺序：**M2a → M2c → M2b → M2d → M2e**（先保证贸易与存档正确，再做地球表现与扩内容）。
 
 ---
 
-## 11. 验收清单（发布试玩前）
+## 12. 验收清单（发布试玩前）
 
 - [ ] 新用户：Intro → 买本地货 → 订票 → 等待或 Speed up → 落地 → 部分出售 → 再起飞
 - [ ] 杀进程恢复持票倒计时，到点仍自动起飞
@@ -291,21 +390,24 @@ flowchart LR
 - [ ] Restart 需确认；清档后回到伊斯坦布尔与起始现金
 - [ ] 单测全部通过；`export_ios_data`（或等价）可重复执行
 - [ ] 内测包或 Expo Go 扫码说明可交给非开发同学
+- [ ] 媒体：§9.6 清单通过（无音频亦可；有 A2 则 5 条 SFX 可播）
 
 ---
 
-## 12. 开放问题（需产品拍板）
+## 13. 开放问题（需产品拍板）
 
 1. **情报方案**默认 A、B 还是 A+C？（§4.3）
 2. **扩城**：M2 是否必须冲到 16–20，还是管线就绪即可？
 3. **UI 语言**：继续全英文，还是 M2 开始中英切换？（影响文案量）
 4. **与 `expo-go/`（30 城）**：保持双轨，还是 M3 合并？
 5. **超重起飞**：本版「不阻断」是否改为「必须减重才能购票」？
+6. **A2 音频**：M2 试玩包是否必须带真·SFX，还是触感 click 即可对外？（§9.3）
 
 ---
 
-## 13. 修订记录
+## 14. 修订记录
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-08-01 | v0.1 | 基于 ios/expo M1 审阅优化完成后的下一步需求初稿 |
+| 2026-08-01 | v0.2 | 新增 §9 媒体与素材（美术·音乐）；修正 §1.1 过时现状；A2/BGM 范围消歧；关联 CAS-01 |

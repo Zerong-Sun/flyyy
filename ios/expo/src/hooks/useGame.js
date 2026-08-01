@@ -28,21 +28,20 @@ import {
   locals,
   money,
   priceAt,
+  priceSparkline,
   destinationsFrom,
   routesFrom,
   sellData,
+  sortByDestProfit,
+  waitUntilDep,
 } from '../gameLogic';
-
-const SAVE_KEY = 'airborne-trader/slot-1';
-const SAVE_VERSION = 1;
-
-/** Fields that survive a reload; transient UI state is rebuilt fresh. */
-const PERSIST = [
-  'cash', 'bagLimit', 'cargoCap', 'inv', 'ticket', 'minsToDep', 'gameMin',
-  'city', 'visited', 'log', 'legs', 'bizLegs', 'cargoLots', 'profitable',
-  'profit', 'km', 'savedAt', 'intro', 'focusDest', 'unlockedAch',
-  'optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce',
-];
+import { playSfx } from '../audio';
+import {
+  SAVE_KEY,
+  serializeSave,
+  loadSavePayload,
+  corruptBackupKey,
+} from '../saveGame';
 
 const initialState = () => ({
   tab: 'globe',
@@ -88,19 +87,13 @@ const initialState = () => ({
   dragging: false,
   unlockedAch: [],
   overweightNote: '',
+  pinCity: null,
   optHaptics: true,
   optPush: true,
   optSound: true,
   opt24h: true,
   optReduce: false,
 });
-
-function waitUntilDep(gameMin, cityId, depMin) {
-  const localNow = ((cityMinutes(gameMin, cityId) % 1440) + 1440) % 1440;
-  let wait = depMin - localNow;
-  if (wait <= 0) wait += 1440;
-  return wait;
-}
 
 function unlockedIds(stats, unlocked = []) {
   return ACHIEVEMENTS
@@ -123,6 +116,8 @@ export function useGame() {
   const interactedRef = useRef(false);
   const flyingRef = useRef(false);
   const calledEdgeRef = useRef(false);
+  const suspendAutosaveRef = useRef(false);
+  const pendingAchRef = useRef([]);
   stateRef.current = state;
 
   const tap = useCallback((kind) => {
@@ -133,9 +128,16 @@ export function useGame() {
     Haptics.notificationAsync(style).catch(() => {});
   }, []);
 
-  const click = useCallback(() => {
+  const click = useCallback((sfxId) => {
     if (!stateRef.current.optSound) return;
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    const fallback = () => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    };
+    if (!sfxId) {
+      fallback();
+      return;
+    }
+    playSfx(sfxId).then((ok) => { if (!ok) fallback(); }).catch(fallback);
   }, []);
 
   const buzz = useCallback((message, kind = 'ok') => {
@@ -147,17 +149,13 @@ export function useGame() {
     tap(kind);
   }, [tap]);
 
+  /** Pure: returns updated unlock ids; queues toast ids for a later effect. */
   const announceAchievements = useCallback((prevUnlocked, nextStats) => {
     const next = unlockedIds(nextStats, prevUnlocked);
     const fresh = next.filter((id) => !prevUnlocked.includes(id));
-    if (fresh.length > 0) {
-      const first = ACHIEVEMENTS.find((a) => a.id === fresh[0]);
-      if (first) {
-        setTimeout(() => buzz(`Achievement unlocked — ${first.name}`, 'ok'), 2500);
-      }
-    }
+    if (fresh.length) pendingAchRef.current = pendingAchRef.current.concat(fresh);
     return next;
-  }, [buzz]);
+  }, []);
 
   const markInteracted = useCallback(() => {
     interactedRef.current = true;
@@ -168,29 +166,47 @@ export function useGame() {
   useEffect(() => {
     let alive = true;
     AsyncStorage.getItem(SAVE_KEY)
-      .then((raw) => {
+      .then(async (raw) => {
         if (!alive || !raw) return;
         if (interactedRef.current) return;
-        const saved = JSON.parse(raw);
-        const ver = saved.saveVersion == null ? 1 : Number(saved.saveVersion);
-        if (ver > SAVE_VERSION) {
-          setTimeout(() => buzz('Save is from a newer build — start a new run from Settings.', 'bad'), 400);
+        let result;
+        try {
+          result = loadSavePayload(raw, initialState(), CITIES, STARTING_CITY);
+        } catch (err) {
+          const bak = corruptBackupKey();
+          await AsyncStorage.setItem(bak, raw).catch(() => {});
+          await AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
+          setTimeout(() => buzz('Save was corrupted — started a new run. Backup kept on device.', 'bad'), 400);
           return;
         }
-        setState((s) => {
-          if (interactedRef.current) return s;
-          const next = { ...s };
-          PERSIST.forEach((k) => {
-            if (saved[k] !== undefined) next[k] = saved[k];
-          });
-          if (!CITIES[next.city]) return s;
-          if (!Array.isArray(next.inv)) next.inv = [];
-          if (!Array.isArray(next.visited)) next.visited = [STARTING_CITY];
-          if (!Array.isArray(next.log)) next.log = [];
-          if (!Array.isArray(next.unlockedAch)) next.unlockedAch = [];
-          if (next.ticket && next.ticket.extraKg == null) next.ticket.extraKg = 0;
-          return next;
-        });
+        if (!result.ok && result.reason === 'future') {
+          // Park the newer save so autosave cannot clobber it; play a fresh run.
+          const parked = `${SAVE_KEY}-future-${Date.now()}`;
+          await AsyncStorage.setItem(parked, raw).catch(() => {});
+          await AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
+          suspendAutosaveRef.current = false;
+          setTimeout(() => {
+            Alert.alert(
+              'Save from a newer build',
+              'That save was parked on this device. Continue with a new run here?',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => buzz('New run — newer save kept as a backup key.', 'ok'),
+                },
+              ],
+            );
+          }, 400);
+          return;
+        }
+        if (!result.ok) {
+          const bak = corruptBackupKey();
+          await AsyncStorage.setItem(bak, raw).catch(() => {});
+          await AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
+          setTimeout(() => buzz('Save could not be restored — started fresh.', 'bad'), 400);
+          return;
+        }
+        setState((s) => (interactedRef.current ? s : { ...s, ...result.data }));
       })
       .catch(() => {})
       .finally(() => { if (alive) setLoaded(true); });
@@ -198,13 +214,12 @@ export function useGame() {
   }, [buzz]);
 
   useEffect(() => {
-    if (!loaded) return undefined;
+    if (!loaded || suspendAutosaveRef.current) return undefined;
     clearTimeout(saveRef.current);
     saveRef.current = setTimeout(() => {
+      if (suspendAutosaveRef.current) return;
       const savedAt = stateRef.current.gameMin;
-      const slice = { saveVersion: SAVE_VERSION };
-      PERSIST.forEach((k) => { slice[k] = stateRef.current[k]; });
-      slice.savedAt = savedAt;
+      const slice = serializeSave({ ...stateRef.current, savedAt });
       AsyncStorage.setItem(SAVE_KEY, JSON.stringify(slice))
         .then(() => {
           setState((s) => (s.savedAt === savedAt ? s : { ...s, savedAt }));
@@ -213,6 +228,20 @@ export function useGame() {
     }, 700);
     return () => clearTimeout(saveRef.current);
   }, [state, loaded]);
+
+  // Flush achievement toasts outside setState updaters.
+  useEffect(() => {
+    const pending = pendingAchRef.current;
+    if (!pending.length) return undefined;
+    pendingAchRef.current = [];
+    const first = ACHIEVEMENTS.find((a) => a.id === pending[0]);
+    if (!first) return undefined;
+    const t = setTimeout(() => {
+      click('sfx_ach');
+      buzz(`Achievement unlocked — ${first.name}`, 'ok');
+    }, 400);
+    return () => clearTimeout(t);
+  }, [state.unlockedAch, buzz, click]);
 
   const finishLanding = useCallback((ticket) => {
     const to = CITIES[ticket.toId];
@@ -279,10 +308,21 @@ export function useGame() {
   const runCutscene = useCallback(() => {
     const t = stateRef.current.ticket;
     if (!t || stateRef.current.cut || flyingRef.current) return;
+    const to = CITIES[t.toId];
+    if (!to) {
+      buzz('Ticket destination missing — ticket cleared', 'bad');
+      setState((s) => ({
+        ...s,
+        ticket: null,
+        minsToDep: 0,
+        called: false,
+        bagLimit: DEFAULT_BAG_LIMIT,
+      }));
+      return;
+    }
     flyingRef.current = true;
     clearTimeout(cutRef.current);
-    click();
-    const to = CITIES[t.toId];
+    click('sfx_gate');
     const steps = CUTSCENE_ART.map((step, i) => (
       i === 2 ? { ...step, title: to.name } : step
     ));
@@ -304,7 +344,7 @@ export function useGame() {
       }
     };
     cutRef.current = setTimeout(tick, dur);
-  }, [click, finishLanding]);
+  }, [buzz, click, finishLanding]);
 
   /* ---- world clock ---------------------------------------------- */
 
@@ -387,15 +427,44 @@ export function useGame() {
   }, [markInteracted]);
   const setFocusDest = useCallback((focusDest) => {
     markInteracted();
+    // Clearing focus stays on the current tab; setting focus opens Flights.
+    if (!focusDest) {
+      setState((s) => ({ ...s, focusDest: '', pinCity: null }));
+      return;
+    }
     setState((s) => ({
       ...s,
-      focusDest: focusDest || '',
+      focusDest,
       query: '',
       tab: 'flights',
       page: null,
       filter: 'departure',
+      pinCity: null,
     }));
   }, [markInteracted]);
+
+  const openPinCity = useCallback((id) => {
+    if (!id || !CITIES[id]) return;
+    setState((s) => ({ ...s, pinCity: id }));
+  }, []);
+
+  const closePinCity = useCallback(() => {
+    setState((s) => ({ ...s, pinCity: null }));
+  }, []);
+
+  /** Focus a hub for market intel without opening Flights. */
+  const watchDest = useCallback((focusDest) => {
+    markInteracted();
+    setState((s) => ({
+      ...s,
+      focusDest: focusDest || '',
+      query: '',
+      tab: 'market',
+      page: null,
+      pinCity: null,
+    }));
+  }, [markInteracted]);
+
   const setFilter = useCallback((filter) => setState((s) => ({ ...s, filter })), []);
   const closeSheet = useCallback(() => setState((s) => ({
     ...s, sheet: null, selInv: null, invQty: 1, overweightNote: s.sheet === 'sell' ? '' : s.overweightNote,
@@ -604,7 +673,7 @@ export function useGame() {
         log: [entry].concat(st.log).slice(0, 40),
       };
     });
-    if (result?.ok) click();
+    if (result?.ok) click('sfx_ticket');
     if (result) setTimeout(() => buzz(result.msg, result.kind), 0);
   }, [buzz, click, markInteracted]);
 
@@ -640,7 +709,7 @@ export function useGame() {
       return next;
     });
     if (!result) return;
-    click();
+    click(result.net >= 0 ? 'sfx_profit' : 'sfx_loss');
     if (result.net >= 0) setTimeout(() => buzz(`Nice trade! ${money(result.net)} profit`, 'ok'), 0);
     else setTimeout(() => buzz(`Rough run — ${money(-result.net)} down. Next leg pays it back.`, 'bad'), 0);
   }, [announceAchievements, buzz, click, markInteracted]);
@@ -691,7 +760,7 @@ export function useGame() {
       return next;
     });
     if (!result) return;
-    click();
+    click(result.net >= 0 ? 'sfx_profit' : 'sfx_loss');
     setTimeout(() => buzz(result.msg, result.kind), 0);
   }, [announceAchievements, buzz, click, markInteracted]);
 
@@ -802,9 +871,7 @@ export function useGame() {
     markInteracted();
     const savedAt = stateRef.current.gameMin;
     setState((s) => ({ ...s, savedAt }));
-    const slice = { saveVersion: SAVE_VERSION };
-    PERSIST.forEach((k) => { slice[k] = stateRef.current[k]; });
-    slice.savedAt = savedAt;
+    const slice = serializeSave({ ...stateRef.current, savedAt });
     AsyncStorage.setItem(SAVE_KEY, JSON.stringify(slice)).catch(() => {});
     buzz('Progress saved to slot 1', 'ok');
   }, [buzz, markInteracted]);
@@ -827,51 +894,63 @@ export function useGame() {
   }, [buzz, markInteracted]);
 
   const productRows = useMemo(() => {
-    const ids = state.seg === 'local' ? localIds : importIds;
+    const baseIds = state.seg === 'local' ? localIds : importIds;
+    const ids = destId ? sortByDestProfit(baseIds, state.city, destId) : baseIds;
     return ids.map((id) => {
       const q = PRODUCTS[id];
       const unit = priceAt(id, state.city);
       const tag = intel(id, state.city, destId);
+      const spark = priceSparkline(id, state.city, 5);
+      const destPrice = destId ? priceAt(id, destId) : null;
       return {
         id,
         name: q.name,
         icon: q.icon,
         buy: money(unit),
         weight: `${q.w.toFixed(1)} kg`,
-        meta: `${q.category} · local price ${money(unit)}`,
+        meta: destPrice != null
+          ? `${q.category} · here ${money(unit)} · there ${money(destPrice)}`
+          : `${q.category} · local price ${money(unit)}`,
         origin: q.home === state.city ? 'Local' : 'Import',
         tag: tag.text,
         tagKind: tag.kind,
+        spark,
       };
     });
   }, [state.seg, state.city, destId, localIds, importIds]);
 
   const sortedFlights = useMemo(() => {
-    let list = [...routes];
-    if (state.focusDest) {
-      const focused = list.filter((f) => f.toId === state.focusDest);
-      const rest = list.filter((f) => f.toId !== state.focusDest);
-      list = focused.concat(rest);
-    }
-    return list
-      .sort((a, b) => {
-        if (state.focusDest) {
-          const af = a.toId === state.focusDest ? 0 : 1;
-          const bf = b.toId === state.focusDest ? 0 : 1;
-          if (af !== bf) return af - bf;
-        }
-        if (state.filter === 'price') return a.econ - b.econ;
-        if (state.filter === 'duration') return a.mins - b.mins;
-        if (state.filter === 'unvisited') {
-          const av = state.visited.includes(a.toId) ? 1 : 0;
-          const bv = state.visited.includes(b.toId) ? 1 : 0;
-          return av - bv || a.depMin - b.depMin;
-        }
-        if (state.filter === 'biz') return a.biz - b.biz;
-        return a.depMin - b.depMin;
-      })
-      .slice(0, 12)
-      .map((fl) => ({
+    const localNow = ((cityMinutes(state.gameMin, state.city) % 1440) + 1440) % 1440;
+    // True next departure by local clock (independent of focus / filter order).
+    const nextKey = [...routes]
+      .filter((f) => f.depMin >= localNow)
+      .sort((a, b) => a.depMin - b.depMin)[0];
+    const nextId = nextKey ? `${nextKey.no}-${nextKey.toId}-${nextKey.depMin}` : null;
+
+    let list = [...routes].sort((a, b) => {
+      if (state.focusDest) {
+        const af = a.toId === state.focusDest ? 0 : 1;
+        const bf = b.toId === state.focusDest ? 0 : 1;
+        if (af !== bf) return af - bf;
+      }
+      const ap = a.depMin < localNow ? 1 : 0;
+      const bp = b.depMin < localNow ? 1 : 0;
+      if (ap !== bp) return ap - bp;
+      if (state.filter === 'price') return a.econ - b.econ;
+      if (state.filter === 'duration') return a.mins - b.mins;
+      if (state.filter === 'unvisited') {
+        const av = state.visited.includes(a.toId) ? 1 : 0;
+        const bv = state.visited.includes(b.toId) ? 1 : 0;
+        return av - bv || a.depMin - b.depMin;
+      }
+      if (state.filter === 'biz') return a.biz - b.biz;
+      return a.depMin - b.depMin;
+    }).slice(0, 12);
+
+    return list.map((fl) => {
+      const past = fl.depMin < localNow;
+      const key = `${fl.no}-${fl.toId}-${fl.depMin}`;
+      return {
         ...fl,
         dep: fmtClock(fl.depMin, state.opt24h),
         arr: fmtClock(fl.depMin + fl.mins + (CITIES[fl.toId].tz - city.tz) * 60, state.opt24h),
@@ -880,8 +959,11 @@ export function useGame() {
         toName: CITIES[fl.toId].name,
         unvisited: !state.visited.includes(fl.toId),
         focused: fl.toId === state.focusDest,
-      }));
-  }, [routes, state.filter, state.visited, state.focusDest, state.opt24h, city]);
+        past,
+        isNext: key === nextId,
+      };
+    });
+  }, [routes, state.filter, state.visited, state.focusDest, state.opt24h, state.gameMin, state.city, city]);
 
   const q = state.query.trim().toLowerCase();
   const searchResults = q
@@ -957,6 +1039,9 @@ export function useGame() {
     setSeg,
     setQuery,
     setFocusDest,
+    watchDest,
+    openPinCity,
+    closePinCity,
     setFilter,
     setRot,
     setDragging,

@@ -7,7 +7,7 @@ Use this folder for the mobile flight trading game prototype.
 ## Start (LAN first)
 
 ```bash
-cd "Mobile flight trading game/expo"
+cd ios/expo
 npm install
 npx expo start
 ```
@@ -50,20 +50,48 @@ One real second = six in-game minutes. A buy → fly → sell leg takes about a 
 Full port of the HTML prototype's game, minus the fake-phone chrome (device bezel,
 lock-screen widget and push mockups) — the real OS provides those.
 
-- **Globe** — drag to spin the world; a pin per hub, lit for where you are and where
-  you've been. Airport search (IATA/ICAO/city/country), live local clock, carry-on and
-  cargo load, route count, field elevation, and the boarding banner with Speed up.
-- **Market** — local vs imported goods, price intel against your booked destination,
-  buy sheet with quantity, carry-on/cargo choice and live weight check.
-- **Flights** — departure board sorted by time, price, duration, new cities or business
-  fare; booking sheet with cabin, baggage add-ons and the running total.
-- **Bags** — load ring, per-lot manifest, sale review.
-- **More** — Trader notes (unlock by landing), Achievements (12 goals on live stats),
-  Trade log (every buy, booking, landing and sale), Data sources, Settings & save.
-- **Settings** — haptics, boarding notifications, sound, 24-hour clock, reduce motion,
-  save slot 1 and restart.
-- **Persistence** — the run autosaves to device storage and comes back on relaunch.
-- **Haptics** — real device feedback on every confirmation and warning.
+- **Globe** — drag (with inertia; off when Reduce motion), tap a pin for a city card,
+  ticket great-circle arc, search, boarding banner with Speed up.
+- **Market** — local/imported goods, optional watch-destination sort + sparklines,
+  buy sheet with quantity and weight checks.
+- **Flights** — Next / Tomorrow badges, focus chip, cabin + baggage booking.
+- **Bags** — partial sell / discard / move bag↔cargo, overweight guidance.
+- **More** — notes, achievements, trade log, sources, settings & save.
+- **Settings** — haptics, sound (SFX via `expo-av`, haptic click fallback), 24h clock,
+  reduce motion, save slot 1, restart (confirmed).
+- **Persistence** — `saveVersion` migrate, corrupt-save backup, autosave.
+- **Audio** — five short SFX under `assets/audio/sfx/` (see `docs/ios_expo_M2_REQUIREMENTS.md` §9).
+
+## Content export (ETL → Expo)
+
+```bash
+# from repo root
+python3 tools/export_expo_data.py
+# writes ios/expo/data/ios-data.json from game/data/world.json + ios/config/expo_hubs.json
+```
+
+Playable content still lives in `src/gameData.js`; the JSON snapshot is the content-pipeline artifact for CI / expansion.
+
+## Logic tests
+
+```bash
+cd ios/expo
+node --test src/__tests__/gameLogic.test.mjs
+```
+
+## EAS / internal builds
+
+Requires an Expo account and Apple credentials for device builds.
+
+```bash
+cd ios/expo
+npx eas login
+npx eas build --profile preview --platform ios
+# development client (simulator):
+npx eas build --profile development --platform ios
+```
+
+Profiles are defined in [`eas.json`](eas.json). Expo Go remains the fastest path for day-to-day play; use EAS when you need a shareable install outside Expo Go.
 
 ## Adding cities, products and flights
 

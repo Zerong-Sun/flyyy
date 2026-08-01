@@ -7,7 +7,9 @@ import {
   Pressable,
   StyleSheet,
 } from 'react-native';
+import { CITIES } from '../gameData';
 import { assetSource } from '../assets';
+import { gcKm } from '../gameLogic';
 import { COLORS } from '../theme';
 import { AssetIcon, Button, Card } from './ui';
 import { Globe } from './Globe';
@@ -25,6 +27,8 @@ export function GlobeScreen({ game }) {
     hm,
     setQuery,
     setFocusDest,
+    watchDest,
+    closePinCity,
     openFF,
     cancelTicket,
     setTab,
@@ -116,6 +120,46 @@ export function GlobeScreen({ game }) {
         <>
           <Globe game={game} />
 
+          {state.pinCity && CITIES[state.pinCity] ? (() => {
+            const pin = CITIES[state.pinCity];
+            const visited = state.visited.includes(state.pinCity);
+            const km = gcKm(city, pin);
+            return (
+              <Card style={styles.pinCard}>
+                <View style={styles.pinCardTop}>
+                  <View style={styles.pinCardBody}>
+                    <Text style={styles.pinCardName}>{pin.name}</Text>
+                    <Text style={styles.pinCardMeta}>
+                      {pin.iata} · {pin.country} · {km.toLocaleString('en-US')} km
+                    </Text>
+                    <Text style={styles.pinCardVisit}>
+                      {visited ? 'Visited' : 'Not visited yet'}
+                    </Text>
+                  </View>
+                  <Pressable onPress={closePinCity} hitSlop={10} accessibilityRole="button" accessibilityLabel="Close">
+                    <Text style={styles.pinCardClose}>✕</Text>
+                  </Pressable>
+                </View>
+                <View style={styles.pinCardActions}>
+                  <Button
+                    variant="primary"
+                    style={styles.pinCardBtn}
+                    onPress={() => setFocusDest(state.pinCity)}
+                  >
+                    Find flights
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    style={styles.pinCardBtn}
+                    onPress={() => watchDest(state.pinCity)}
+                  >
+                    Watch in Market
+                  </Button>
+                </View>
+              </Card>
+            );
+          })() : null}
+
           <Card style={styles.heroCard}>
             <View style={styles.heroImageWrap}>
               <Image
@@ -186,6 +230,48 @@ const styles = StyleSheet.create({
   wrap: {
     paddingTop: 12,
     paddingBottom: 24,
+  },
+  pinCard: {
+    marginHorizontal: 16,
+    marginTop: 10,
+    padding: 14,
+    gap: 12,
+  },
+  pinCardTop: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  pinCardBody: {
+    flex: 1,
+    minWidth: 0,
+  },
+  pinCardName: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  pinCardMeta: {
+    fontSize: 13,
+    color: COLORS.muted,
+    marginTop: 3,
+  },
+  pinCardVisit: {
+    fontSize: 12,
+    color: COLORS.teal,
+    marginTop: 4,
+  },
+  pinCardClose: {
+    fontSize: 16,
+    color: COLORS.muted2,
+    padding: 4,
+  },
+  pinCardActions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  pinCardBtn: {
+    flex: 1,
   },
   searchRow: {
     marginHorizontal: 16,
