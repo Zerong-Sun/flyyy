@@ -6,6 +6,7 @@ import {
   ScrollView,
   Pressable,
   Modal,
+  Alert,
   StyleSheet,
 } from 'react-native';
 import {
@@ -52,7 +53,7 @@ export function BagsScreen({ game }) {
           </View>
           <View>
             <Text style={styles.weightLabel}>Cargo hold</Text>
-            <Text style={styles.weightVal}>{game.cargoText}</Text>
+            <Text style={styles.weightVal}>{cargoText}</Text>
           </View>
         </View>
       </Card>
@@ -294,7 +295,6 @@ export function MoreScreen({ game }) {
     const toggles = [
       ['optHaptics', 'Haptic feedback', 'A tap on every buy, sell and boarding call.'],
       ['optPush', 'Boarding notifications', 'Alert you when the gate is about to close.'],
-      ['optSound', 'Sound effects', 'Cabin tones and market chatter.'],
       ['opt24h', '24-hour clock', 'Show all times as 00:00–23:59.'],
       ['optReduce', 'Reduce motion', 'Shorten the flight cutscene.'],
     ];
@@ -348,13 +348,26 @@ export function MoreScreen({ game }) {
             </View>
           </View>
           <View style={styles.settingsActions}>
-            <Button variant="secondary" style={styles.settingsBtn} onPress={restart}>
+            <Button
+              variant="secondary"
+              style={styles.settingsBtn}
+              onPress={() => {
+                Alert.alert(
+                  'Start a new run?',
+                  'This clears your save and returns you to Istanbul.',
+                  [
+                    { text: 'Keep playing', style: 'cancel' },
+                    { text: 'Restart', style: 'destructive', onPress: restart },
+                  ],
+                );
+              }}
+            >
               Restart game
             </Button>
           </View>
         </Card>
 
-        <Text style={styles.version}>Airborne Trader · Demo build 0.2</Text>
+        <Text style={styles.version}>Airborne Trader · Demo build 0.3</Text>
       </View>
     );
   }
@@ -429,53 +442,60 @@ export function OverlaySheets({ game }) {
             <Text style={styles.ffCancel}>Cancel</Text>
           </Pressable>
           <View style={styles.ffDivider} />
-          <Pressable style={styles.ffBtn} onPress={runCutscene}>
+          <Pressable style={styles.ffBtn} onPress={() => runCutscene()}>
             <Text style={styles.ffConfirm}>Speed up</Text>
           </Pressable>
         </View>
       </Sheet>
 
       <Sheet visible={state.sheet === 'sell'} onClose={closeSheet}>
-        <View style={styles.sellHeroWrap}>
-          <Image source={assetSource(city.hero)} style={styles.sellHero} />
-          <View style={styles.sellHeroShade} />
-          <View style={styles.sellHeroLabels}>
-            <Text style={styles.sellPhase}>Landed</Text>
-            <Text style={styles.sellCity}>{city.name}</Text>
-          </View>
-        </View>
-        <View style={styles.sheetPad}>
-          <Text style={styles.sellHeadline}>
-            {sell.net >= 0
-              ? `Market looks good — ${money(sell.net)} net if you sell now.`
-              : `Tough market — ${money(-sell.net)} down if you sell now.`}
-          </Text>
-          {sell.rows.map((row, idx) => (
-            <View key={idx} style={styles.sellRow}>
-              <Image source={assetSource(row.icon)} style={styles.sellIcon} />
-              <View style={styles.sellRowBody}>
-                <Text style={styles.sellRowName}>{row.name}</Text>
-                <Text style={styles.sellRowMeta}>{row.meta}</Text>
-              </View>
-              <View style={styles.sellRowPrice}>
-                <Text style={[styles.sellDelta, { color: row.color }]}>{row.delta}</Text>
-                <Text style={styles.sellGross}>{row.gross}</Text>
-              </View>
+        <ScrollView>
+          <View style={styles.sellHeroWrap}>
+            <Image source={assetSource(city.hero)} style={styles.sellHero} />
+            <View style={styles.sellHeroShade} />
+            <View style={styles.sellHeroLabels}>
+              <Text style={styles.sellPhase}>Landed</Text>
+              <Text style={styles.sellCity}>{city.name}</Text>
             </View>
-          ))}
-          <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Net profit</Text>
-            <Text style={[styles.totalVal, { color: sell.net >= 0 ? COLORS.teal : COLORS.red }]}>
-              {sell.net >= 0 ? '+' : '−'}{money(Math.abs(sell.net))}
-            </Text>
           </View>
-          <Button variant="primary" onPress={sellAll} style={styles.sellAllBtn}>
-            Sell everything
-          </Button>
-          <Button variant="ghost" onPress={closeSheet}>
-            Hold and look for a better market
-          </Button>
-        </View>
+          <View style={styles.sheetPad}>
+            <Text style={styles.sellHeadline}>
+              {sell.net >= 0
+                ? `Market looks good — ${money(sell.net)} net if you sell now.`
+                : `Tough market — ${money(-sell.net)} down if you sell now.`}
+            </Text>
+            {sell.rows.map((row, idx) => (
+              <View key={idx} style={styles.sellRow}>
+                <Image source={assetSource(row.icon)} style={styles.sellIcon} />
+                <View style={styles.sellRowBody}>
+                  <Text style={styles.sellRowName}>{row.name}</Text>
+                  <Text style={styles.sellRowMeta}>{row.meta}</Text>
+                </View>
+                <View style={styles.sellRowPrice}>
+                  <Text style={[styles.sellDelta, { color: row.color }]}>{row.delta}</Text>
+                  <Text style={styles.sellGross}>{row.gross}</Text>
+                </View>
+              </View>
+            ))}
+            <View style={styles.totalRow}>
+              <Text style={styles.totalLabel}>Net profit</Text>
+              <Text style={[styles.totalVal, { color: sell.net >= 0 ? COLORS.teal : COLORS.red }]}>
+                {sell.net >= 0 ? '+' : '−'}{money(Math.abs(sell.net))}
+              </Text>
+            </View>
+            <Button
+              variant="primary"
+              onPress={sellAll}
+              style={styles.sellAllBtn}
+              disabled={!state.inv.length}
+            >
+              Sell everything
+            </Button>
+            <Button variant="ghost" onPress={closeSheet}>
+              Hold and look for a better market
+            </Button>
+          </View>
+        </ScrollView>
       </Sheet>
 
       <Modal visible={!!cut} animationType="fade" transparent={false}>

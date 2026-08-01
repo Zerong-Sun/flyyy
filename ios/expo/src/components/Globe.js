@@ -61,9 +61,9 @@ export function Globe({ game }) {
     : 'Drag to spin the world';
 
   return (
-    <View style={styles.stage} {...pan.panHandlers}>
-      <View style={styles.glow} />
-      <View style={styles.circle}>
+    <View style={styles.stage} pointerEvents="box-none">
+      <View style={styles.glow} pointerEvents="none" />
+      <View style={styles.circle} {...pan.panHandlers}>
         <Image
           source={assetSource('assets/earth.png')}
           style={[styles.strip, { left: off }]}
@@ -74,7 +74,7 @@ export function Globe({ game }) {
           style={[styles.strip, { left: off + IMG_W }]}
           resizeMode="stretch"
         />
-        <View style={styles.shade} />
+        <View style={styles.shade} pointerEvents="none" />
       </View>
 
       <View style={styles.pinLayer} pointerEvents="none">
@@ -102,7 +102,7 @@ export function Globe({ game }) {
         ))}
       </View>
 
-      <Text style={styles.hint}>{hint}</Text>
+      <Text style={styles.hint} pointerEvents="none">{hint}</Text>
     </View>
   );
 }
@@ -113,12 +113,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
+    overflow: 'hidden',
+    zIndex: 0,
   },
   glow: {
     position: 'absolute',
-    width: 418,
-    height: 418,
-    borderRadius: 209,
+    width: 320,
+    height: 320,
+    borderRadius: 160,
     backgroundColor: 'rgba(96, 168, 214, 0.09)',
   },
   circle: {

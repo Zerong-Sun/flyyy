@@ -43,7 +43,7 @@ export function hm(m) {
   return h > 0 ? `${h}h ${pad(Math.round(m % 60))}m` : `${Math.round(m)}m`;
 }
 
-const one = (v) => (typeof v === 'number' && v > 0 ? v : 1);
+const one = (v) => (typeof v === 'number' && !Number.isNaN(v) ? v : 1);
 
 /** Local price level × category appetite × standing order. */
 export function demandFor(pid, city) {
@@ -177,7 +177,8 @@ export function intel(pid, cityId, destId) {
     const cn = CITIES[destId].name;
     if (pct >= 25) return { text: `+${pct}% in ${cn}`, kind: 'hot' };
     if (pct >= 5) return { text: `${cn}: +${pct}%`, kind: 'ok' };
-    return { text: `Avoid — ${pct}% in ${cn}`, kind: 'cold' };
+    if (pct > -5) return { text: `${cn}: ${pct >= 0 ? '+' : ''}${pct}%`, kind: 'ok' };
+    return { text: `${cn}: ${pct}%`, kind: 'cold' };
   }
   let best = null;
   destinationsFrom(cityId).forEach((toId) => {
@@ -203,7 +204,7 @@ export function computeStats(state) {
     const c = CITIES[v];
     countries[c.country] = 1;
     if (c.cont === 'Europe') europe += 1;
-    else asia += 1;
+    else if (c.cont === 'Asia') asia += 1;
   });
   return {
     cities: state.visited.length,

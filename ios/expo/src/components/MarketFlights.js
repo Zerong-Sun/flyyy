@@ -90,17 +90,28 @@ export function MarketScreen({ game }) {
 }
 
 export function FlightsScreen({ game }) {
-  const { state, city, sortedFlights, setFilter, openFlight } = game;
+  const { state, city, sortedFlights, setFilter, openFlight, setFocusDest } = game;
+  const focusCity = state.focusDest ? CITIES[state.focusDest] : null;
 
   return (
     <View style={styles.screen}>
       <ScreenTitle
         title="Flights"
-        subtitle={`Departing ${city.iata} · next 24 h`}
+        subtitle={
+          focusCity
+            ? `Departing ${city.iata} · focused on ${focusCity.name}`
+            : `Departing ${city.iata} · next 24 h`
+        }
       />
+      {focusCity ? (
+        <Pressable style={styles.focusChip} onPress={() => setFocusDest('')}>
+          <Text style={styles.focusChipText}>To {focusCity.iata} · Clear</Text>
+        </Pressable>
+      ) : null}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        nestedScrollEnabled
         contentContainerStyle={styles.filtersRow}
       >
         {FLIGHT_FILTERS.map((f) => {
@@ -117,15 +128,30 @@ export function FlightsScreen({ game }) {
         })}
       </ScrollView>
       <View style={styles.list}>
+        {sortedFlights.length === 0 ? (
+          <View style={styles.emptyBox}>
+            <Text style={styles.emptyTitle}>No departures</Text>
+            <Text style={styles.emptySub}>Try another filter or clear the destination focus.</Text>
+          </View>
+        ) : null}
         {sortedFlights.map((f) => (
           <Pressable
             key={`${f.no}-${f.toId}-${f.depMin}`}
-            style={({ pressed }) => [styles.flightCard, pressed && styles.rowPressed]}
+            style={({ pressed }) => [
+              styles.flightCard,
+              f.focused && styles.flightCardFocused,
+              pressed && styles.rowPressed,
+            ]}
             onPress={() => openFlight(f)}
           >
             <View style={styles.flightHeader}>
               <Text style={styles.flightNo}>{f.no}</Text>
               <Text style={styles.flightAirline} numberOfLines={1}>{f.airline}</Text>
+              {f.focused ? (
+                <View style={styles.newCityChip}>
+                  <Text style={styles.newCityText}>Focus</Text>
+                </View>
+              ) : null}
               {f.unvisited ? (
                 <View style={styles.newCityChip}>
                   <Text style={styles.newCityText}>New city</Text>
@@ -172,7 +198,8 @@ export function MarketSheets({ game }) {
     slotUsed,
     slotCap,
     fareTotal,
-    add,
+    canBuy,
+    canBook,
     money,
     priceAt,
     closeSheet,
@@ -186,7 +213,7 @@ export function MarketSheets({ game }) {
 
   const selFlight = state.selFlight;
   const forecast = selProduct
-    ? (destId ? money(priceAt(selProduct.id, destId)) : '— book first')
+    ? (destId ? money(priceAt(selProduct.id, destId)) : '— pick a destination')
     : '';
   const selIntel = selProduct ? intel(selProduct.id, state.city, destId) : { kind: '' };
 
@@ -194,7 +221,7 @@ export function MarketSheets({ game }) {
     <>
       <Sheet visible={state.sheet === 'product'} onClose={closeSheet}>
         {selProduct ? (
-          <View style={styles.sheetPad}>
+          <ScrollView style={styles.sheetScroll} contentContainerStyle={styles.sheetPad}>
             <View style={styles.sheetHeader}>
               <Image source={assetSource(selProduct.icon)} style={styles.sheetIcon} />
               <View style={styles.sheetHeaderText}>
@@ -213,7 +240,7 @@ export function MarketSheets({ game }) {
               <View style={styles.priceCell}>
                 <Text style={styles.priceLabel}>Sells here</Text>
                 <Text style={[styles.priceVal, styles.priceMuted]}>
-                  {money(Math.round(unitHere * 0.92))}
+                  {money(unitHere)}
                 </Text>
               </View>
               <View style={[styles.priceCell, { flex: 1.2 }]}>
@@ -252,16 +279,20 @@ export function MarketSheets({ game }) {
               {over ? ' · over limit' : ''}
             </Text>
 
-            <Button variant="primary" onPress={buy} disabled={over}>
-              Buy {state.qty} for {money(costTotal)}
+            <Button variant="primary" onPress={buy} disabled={!canBuy}>
+              {over
+                ? 'Over weight limit'
+                : costTotal > state.cash
+                  ? 'Not enough cash'
+                  : `Buy ${state.qty} for ${money(costTotal)}`}
             </Button>
-          </View>
+          </ScrollView>
         ) : null}
       </Sheet>
 
       <Sheet visible={state.sheet === 'flight'} onClose={closeSheet}>
         {selFlight ? (
-          <View style={styles.sheetPad}>
+          <ScrollView style={styles.sheetScroll} contentContainerStyle={styles.sheetPad}>
             <View style={styles.flightSheetTop}>
               <Text style={styles.flightNo}>{selFlight.no}</Text>
               <Text style={styles.flightAirline}>{selFlight.airline}</Text>
@@ -333,13 +364,17 @@ export function MarketSheets({ game }) {
             </View>
             <Text style={styles.addonNote}>Includes {add.label} baggage</Text>
 
-            <Button variant="primary" onPress={buyTicket}>
-              Buy ticket
+            <Button variant="primary" onPress={buyTicket} disabled={!canBook}>
+              {state.ticket
+                ? 'Ticket already booked'
+                : fareTotal > state.cash
+                  ? 'Not enough cash'
+                  : `Buy ticket · ${money(fareTotal)}`}
             </Button>
             <Text style={styles.boardingNote}>
               Boarding is mandatory. Once the gate closes you fly, cargo and all.
             </Text>
-          </View>
+          </ScrollView>
         ) : null}
       </Sheet>
     </>
@@ -475,10 +510,51 @@ const styles = StyleSheet.create({
     marginTop: 3,
     lineHeight: 17,
   },
+  focusChip: {
+    alignSelf: 'flex-start',
+    marginHorizontal: 16,
+    marginTop: 10,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: 'rgba(232, 154, 60, 0.14)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(232, 154, 60, 0.35)',
+  },
+  focusChipText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.orange,
+  },
+  emptyBox: {
+    padding: 28,
+    alignItems: 'center',
+    backgroundColor: COLORS.panel,
+    borderRadius: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.border,
+  },
+  emptyTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: COLORS.text,
+  },
+  emptySub: {
+    fontSize: 13,
+    color: COLORS.muted,
+    marginTop: 4,
+    textAlign: 'center',
+  },
   filtersRow: {
     paddingHorizontal: 16,
     paddingTop: 14,
     gap: 7,
+  },
+  flightCardFocused: {
+    borderColor: COLORS.orange,
+  },
+  sheetScroll: {
+    maxHeight: '100%',
   },
   filterChip: {
     paddingVertical: 7,

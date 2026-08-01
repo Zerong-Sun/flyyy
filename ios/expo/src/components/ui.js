@@ -14,6 +14,24 @@ export function Card({ children, style }) {
   return <View style={[styles.card, style]}>{children}</View>;
 }
 
+function isTextChild(node) {
+  return node == null
+    || typeof node === 'string'
+    || typeof node === 'number'
+    || typeof node === 'boolean';
+}
+
+/** Wrap plain / interpolated labels so RN never sees raw strings under Pressable. */
+function ButtonLabel({ children, style }) {
+  if (isTextChild(children)) {
+    return <Text style={style}>{children}</Text>;
+  }
+  if (Array.isArray(children) && children.every(isTextChild)) {
+    return <Text style={style}>{children}</Text>;
+  }
+  return children;
+}
+
 export function Button({
   variant = 'primary',
   onPress,
@@ -46,11 +64,9 @@ export function Button({
         style,
       ]}
     >
-      {typeof children === 'string' ? (
-        <Text style={[styles.btnText, variantText, textStyle]}>{children}</Text>
-      ) : (
-        children
-      )}
+      <ButtonLabel style={[styles.btnText, variantText, textStyle]}>
+        {children}
+      </ButtonLabel>
     </Pressable>
   );
 }

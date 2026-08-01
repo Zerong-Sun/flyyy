@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,8 +6,9 @@ import {
   Pressable,
   StyleSheet,
   StatusBar,
-  SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useGame } from './src/hooks/useGame';
 import { TABS } from './src/gameData';
 import { COLORS } from './src/theme';
@@ -34,12 +35,32 @@ function TabContent({ game }) {
   }
 }
 
-export default function App() {
+function GameApp() {
   const game = useGame();
-  const { state, city, clockText, money, setTab } = game;
+  const { state, city, clockText, money, setTab, loaded } = game;
+  const scrollRef = useRef(null);
+  const prevTab = useRef(state.tab);
+
+  useEffect(() => {
+    if (prevTab.current !== state.tab) {
+      prevTab.current = state.tab;
+      scrollRef.current?.scrollTo({ y: 0, animated: false });
+    }
+  }, [state.tab]);
+
+  if (!loaded) {
+    return (
+      <SafeAreaView style={styles.root}>
+        <StatusBar barStyle="light-content" />
+        <View style={styles.loading}>
+          <ActivityIndicator color={COLORS.orange} size="large" />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
       <StatusBar barStyle="light-content" />
 
       <View style={styles.header}>
@@ -58,9 +79,11 @@ export default function App() {
       </View>
 
       <ScrollView
+        ref={scrollRef}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        nestedScrollEnabled
       >
         <TabContent game={game} />
       </ScrollView>
@@ -77,27 +100,32 @@ export default function App() {
         </View>
       ) : null}
 
-      <View style={styles.tabBar}>
-        {TABS.map((tab) => {
-          const active = state.tab === tab.k;
-          return (
-            <Pressable
-              key={tab.k}
-              onPress={() => setTab(tab.k)}
-              style={({ pressed }) => [styles.tabItem, pressed && styles.tabPressed]}
-            >
-              <AssetIcon
-                path={tab.icon}
-                size={25}
-                tintColor={active ? COLORS.orange : COLORS.muted2}
-              />
-              <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
-                {tab.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </View>
+      <SafeAreaView edges={['bottom']} style={styles.tabBarSafe}>
+        <View style={styles.tabBar}>
+          {TABS.map((tab) => {
+            const active = state.tab === tab.k;
+            return (
+              <Pressable
+                key={tab.k}
+                onPress={() => setTab(tab.k)}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: active }}
+                accessibilityLabel={tab.label}
+                style={({ pressed }) => [styles.tabItem, pressed && styles.tabPressed]}
+              >
+                <AssetIcon
+                  path={tab.icon}
+                  size={25}
+                  tintColor={active ? COLORS.orange : COLORS.muted2}
+                />
+                <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
+                  {tab.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </SafeAreaView>
 
       <MarketSheets game={game} />
       <OverlaySheets game={game} />
@@ -105,10 +133,23 @@ export default function App() {
   );
 }
 
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <GameApp />
+    </SafeAreaProvider>
+  );
+}
+
 const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: COLORS.bg,
+  },
+  loading: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   header: {
     paddingHorizontal: 16,
@@ -173,6 +214,8 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     bottom: 112,
+    zIndex: 40,
+    elevation: 40,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
@@ -194,10 +237,13 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     lineHeight: 18,
   },
+  tabBarSafe: {
+    backgroundColor: 'rgba(11, 28, 44, 0.96)',
+  },
   tabBar: {
     flexDirection: 'row',
     paddingTop: 8,
-    paddingBottom: 22,
+    paddingBottom: 8,
     paddingHorizontal: 4,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: COLORS.border,

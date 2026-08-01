@@ -56,6 +56,15 @@ const CAT_ICON = {
   Electronics: 'assets/p_cat_electronics.webp',
   Energy: 'assets/p_cat_energy.webp',
   Toys: 'assets/p_cat_toys.webp',
+  Crafts: 'assets/p_generic.webp',
+  Machinery: 'assets/p_fra_machinery.webp',
+  Textiles: 'assets/p_ist_textile.webp',
+  Cosmetics: 'assets/p_cdg_cosmetics.webp',
+  Food: 'assets/p_ams_cheese.webp',
+  Spices: 'assets/p_dxb_spice.webp',
+  Tea: 'assets/p_lhr_tea.webp',
+  Confectionery: 'assets/p_ist_lokum.webp',
+  'Daily goods': 'assets/p_ams_flower.webp',
 };
 
 const warn = (m) => console.warn('[content] ' + m);
@@ -139,9 +148,9 @@ export function defineFlight(s) {
     depMin: toMin(s.dep) % 1440,
     no: s.no || null,
     airline: s.airline || null,
-    mins: s.mins ? Number(s.mins) : null,
-    econ: s.econ ? Number(s.econ) : null,
-    biz: s.biz ? Number(s.biz) : null,
+    mins: s.mins != null && s.mins !== '' ? Number(s.mins) : null,
+    econ: s.econ != null && s.econ !== '' ? Number(s.econ) : null,
+    biz: s.biz != null && s.biz !== '' ? Number(s.biz) : null,
     stops: s.stops || 'Nonstop',
     aircraft: s.aircraft || null,
     replace: !!s.replace,

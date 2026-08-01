@@ -23,15 +23,21 @@ export function GlobeScreen({ game }) {
     localTime,
     searchResults,
     hm,
-    setTab,
     setQuery,
+    setFocusDest,
     openFF,
+    cancelTicket,
   } = game;
 
   const ticket = state.ticket;
   const searching = state.query.trim().length > 0;
   const ratio = state.bagLimit > 0 ? Math.min(1, bagKg / state.bagLimit) : 0;
   const bagColor = ratio > 0.9 ? COLORS.red : ratio > 0.7 ? COLORS.orange : COLORS.text;
+  const depLabel = !ticket
+    ? ''
+    : state.minsToDep <= 0
+      ? 'Boarding now'
+      : `${hm(state.minsToDep)} to departure`;
 
   return (
     <View style={styles.wrap}>
@@ -61,11 +67,25 @@ export function GlobeScreen({ game }) {
               {ticket.no} · {ticket.from} → {ticket.to}
             </Text>
             <Text style={styles.ticketSub}>
-              {hm(state.minsToDep)} to departure · {ticket.cabin}
+              {depLabel} · {ticket.cabin}
             </Text>
           </View>
-          <Pressable style={styles.speedBtn} onPress={openFF}>
+          <Pressable
+            style={styles.speedBtn}
+            onPress={openFF}
+            accessibilityRole="button"
+            accessibilityLabel="Speed up to takeoff"
+          >
             <Text style={styles.speedBtnText}>Speed up</Text>
+          </Pressable>
+          <Pressable
+            style={styles.cancelBtn}
+            onPress={cancelTicket}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel="Cancel ticket"
+          >
+            <Text style={styles.cancelBtnText}>Cancel</Text>
           </Pressable>
         </View>
       ) : null}
@@ -78,7 +98,7 @@ export function GlobeScreen({ game }) {
             searchResults.map((c) => (
               <Pressable
                 key={c.id}
-                onPress={() => { setQuery(''); setTab('flights'); }}
+                onPress={() => setFocusDest(c.id)}
                 style={({ pressed }) => [styles.resultRow, pressed && styles.rowPressed]}
               >
                 <Text style={styles.resultIata}>{c.iata}</Text>
@@ -244,7 +264,7 @@ const styles = StyleSheet.create({
   },
   ticketBanner: {
     marginHorizontal: 16,
-    marginBottom: 4,
+    marginBottom: 8,
     padding: 10,
     borderRadius: 14,
     backgroundColor: 'rgba(232, 154, 60, 0.12)',
@@ -253,6 +273,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    // Sit above the globe stage — its glow/pan layer overflows and steals taps.
+    zIndex: 20,
+    elevation: 20,
   },
   ticketBody: {
     flex: 1,
@@ -279,6 +302,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.bg,
+  },
+  cancelBtn: {
+    paddingVertical: 7,
+    paddingHorizontal: 9,
+    borderRadius: 10,
+    backgroundColor: COLORS.panel3,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.border2,
+  },
+  cancelBtnText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.muted,
   },
   heroCard: {
     marginHorizontal: 16,
