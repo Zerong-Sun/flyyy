@@ -201,9 +201,15 @@ export function useGame() {
     if (!loaded) return undefined;
     clearTimeout(saveRef.current);
     saveRef.current = setTimeout(() => {
+      const savedAt = stateRef.current.gameMin;
       const slice = { saveVersion: SAVE_VERSION };
       PERSIST.forEach((k) => { slice[k] = stateRef.current[k]; });
-      AsyncStorage.setItem(SAVE_KEY, JSON.stringify(slice)).catch(() => {});
+      slice.savedAt = savedAt;
+      AsyncStorage.setItem(SAVE_KEY, JSON.stringify(slice))
+        .then(() => {
+          setState((s) => (s.savedAt === savedAt ? s : { ...s, savedAt }));
+        })
+        .catch(() => {});
     }, 700);
     return () => clearTimeout(saveRef.current);
   }, [state, loaded]);
@@ -211,7 +217,9 @@ export function useGame() {
   const finishLanding = useCallback((ticket) => {
     const to = CITIES[ticket.toId];
     if (!to) return;
-    const bagNow = bagUsed(stateRef.current.inv);
+    const s0 = stateRef.current;
+    const bagNow = bagUsed(s0.inv);
+    const allowance = s0.bagLimit;
     const overweightKg = Math.max(0, bagNow - DEFAULT_BAG_LIMIT);
     setState((s) => {
       if (!s.ticket || s.ticket.toId !== ticket.toId) return s;
@@ -256,6 +264,11 @@ export function useGame() {
     flyingRef.current = false;
     calledEdgeRef.current = false;
     buzz(`Landed in ${to.name}`, 'ok');
+    if (bagNow > allowance) {
+      setTimeout(() => {
+        buzz(`Your ${allowance} kg allowance covered this leg; base carry-on is ${DEFAULT_BAG_LIMIT} kg again.`, 'ok');
+      }, 1200);
+    }
     if (overweightKg > 0) {
       setTimeout(() => {
         buzz(`Carry-on over by ${overweightKg.toFixed(1)} kg — sell or discard in Bags.`, 'bad');
@@ -368,7 +381,10 @@ export function useGame() {
     setState((s) => ({ ...s, page }));
   }, [markInteracted]);
   const setSeg = useCallback((seg) => setState((s) => ({ ...s, seg })), []);
-  const setQuery = useCallback((query) => setState((s) => ({ ...s, query })), []);
+  const setQuery = useCallback((query) => {
+    markInteracted();
+    setState((s) => ({ ...s, query }));
+  }, [markInteracted]);
   const setFocusDest = useCallback((focusDest) => {
     markInteracted();
     setState((s) => ({
@@ -388,8 +404,14 @@ export function useGame() {
     markInteracted();
     setState((s) => ({ ...s, intro: false }));
   }, [markInteracted]);
-  const setRot = useCallback((rot) => setState((s) => ({ ...s, rot })), []);
-  const setDragging = useCallback((dragging) => setState((s) => ({ ...s, dragging })), []);
+  const setRot = useCallback((rot) => {
+    markInteracted();
+    setState((s) => ({ ...s, rot }));
+  }, [markInteracted]);
+  const setDragging = useCallback((dragging) => {
+    if (dragging) markInteracted();
+    setState((s) => ({ ...s, dragging }));
+  }, [markInteracted]);
   const toggleOpt = useCallback((key) => {
     markInteracted();
     setState((s) => ({ ...s, [key]: !s[key] }));
@@ -517,7 +539,7 @@ export function useGame() {
         cash: st.cash - cost,
         sheet: null,
         qty: 1,
-        cargoLots: st.cargoLots + (slot === 'cargo' ? 1 : 0),
+        cargoLots: st.cargoLots + (slot === 'cargo' ? n : 0),
         log: [entry].concat(st.log).slice(0, 40),
       };
       next.unlockedAch = announceAchievements(st.unlockedAch || [], computeStats(next));
@@ -658,6 +680,12 @@ export function useGame() {
         profit: s.profit + Math.max(0, net),
         profitable: s.profitable + (net > 0 ? 1 : 0),
         log: [entry].concat(s.log).slice(0, 40),
+        overweightNote: (() => {
+          const over = Math.max(0, bagUsed(inv) - DEFAULT_BAG_LIMIT);
+          return over > 0
+            ? `Carry-on over by ${over.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`
+            : '';
+        })(),
       };
       next.unlockedAch = announceAchievements(s.unlockedAch || [], computeStats(next));
       return next;
@@ -691,12 +719,16 @@ export function useGame() {
               const inv = s.inv.slice();
               if (qty >= item.n) inv.splice(idx, 1);
               else inv[idx] = { ...item, n: item.n - qty };
+              const over = Math.max(0, bagUsed(inv) - DEFAULT_BAG_LIMIT);
               return {
                 ...s,
                 inv,
                 sheet: null,
                 selInv: null,
                 invQty: 1,
+                overweightNote: over > 0
+                  ? `Carry-on over by ${over.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`
+                  : '',
               };
             });
             buzz(`Discarded ${qty0} × ${item0.name}`, 'bad');
@@ -760,7 +792,7 @@ export function useGame() {
         sheet: null,
         selInv: null,
         invQty: 1,
-        cargoLots: s.cargoLots + (dest === 'cargo' ? 1 : 0),
+        cargoLots: s.cargoLots + (dest === 'cargo' ? qty : 0),
       };
     });
     if (result) setTimeout(() => buzz(result.msg, result.kind), 0);
@@ -868,11 +900,13 @@ export function useGame() {
   const over = slotUsed + wtTotal > slotCap;
   const canBuy = !!selProduct && !over && costTotal <= state.cash;
   const add = ADDONS.find((a) => a.k === state.addon) || ADDONS[0];
+  const addonKg = add.k === 'light' ? 10 : add.k === 'standard' ? 20 : add.k === 'heavy' ? 50 : 0;
+  const bookingBagLimit = state.ticket ? state.bagLimit : DEFAULT_BAG_LIMIT + addonKg;
   const fareTotal = state.selFlight
     ? (state.cabin === 'economy' ? state.selFlight.econ : state.selFlight.biz) + add.price
     : 0;
   const canBook = !!state.selFlight && !state.ticket && fareTotal <= state.cash;
-  const bagOverKg = Math.max(0, bagKg - DEFAULT_BAG_LIMIT);
+  const bagOverKg = Math.max(0, bagKg - bookingBagLimit);
   const selInvItem = (() => {
     const idx = findInv(state.inv, state.selInv);
     return idx >= 0 ? state.inv[idx] : null;

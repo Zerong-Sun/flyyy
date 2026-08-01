@@ -301,7 +301,7 @@ export const ACHIEVEMENTS = [
   { id: 'europe', icon: 'assets/ach_europe.webp', name: 'Old Continent', desc: 'Visit five European hubs.', goal: 5, stat: 'europe' },
   { id: 'asia', icon: 'assets/ach_asia.webp', name: 'Eastbound', desc: 'Visit five Asian hubs.', goal: 5, stat: 'asia' },
   { id: 'cities_10', icon: 'assets/ach_cities_10.webp', name: 'Frequent Flyer', desc: 'Visit ten hub cities.', goal: 10, stat: 'cities' },
-  { id: 'countries_5', icon: 'assets/ic_city.webp', name: 'Passport Stamps', desc: 'Trade in five countries.', goal: 5, stat: 'countries' },
+  { id: 'countries_5', icon: 'assets/ach_countries_5.webp', name: 'Passport Stamps', desc: 'Trade in five countries.', goal: 5, stat: 'countries' },
   { id: 'business_10', icon: 'assets/ach_business_10.webp', name: 'Up Front', desc: 'Fly ten business legs.', goal: 10, stat: 'bizLegs' },
   { id: 'cargo_20', icon: 'assets/ach_cargo_20.webp', name: 'Heavy Lifter', desc: 'Move 20 cargo shipments.', goal: 20, stat: 'cargoLots' },
   { id: 'wealth_100k', icon: 'assets/ach_wealth_100k.webp', name: 'Six Figures', desc: 'Hold $100,000 in cash.', goal: 100000, stat: 'cash' },

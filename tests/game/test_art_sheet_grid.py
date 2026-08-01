@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -10,6 +11,12 @@ sys.path.insert(0, str(ROOT / "tools" / "art-gen-kit"))
 
 from batch_art_utils import parse_batch_prompts_md, split_contact_sheet  # noqa: E402
 from crop_contact_sheet import crop_job  # noqa: E402
+
+I3_SHEET = ROOT / "game" / "assets" / "art" / "_sheets" / "art_prompts_req--i3-icons-status-info-sheet-2-3-cell-256-256-outp.webp"
+requires_i3_sheet = pytest.mark.skipif(
+    not I3_SHEET.is_file(),
+    reason=f"Contact sheet fixture missing: {I3_SHEET.name}",
+)
 
 
 def _rgb(pixel):
@@ -59,9 +66,10 @@ def test_split_contact_sheet_auto_swaps_declared_grid():
     assert _rgb(cells[5].getpixel((50, 50))) == colors[5]
 
 
+@requires_i3_sheet
 def test_i3_sheet_auto_swaps_grid_orientation():
     job = _i3_job()
-    sheet = ROOT / "game" / "assets" / "art" / "_sheets" / "art_prompts_req--i3-icons-status-info-sheet-2-3-cell-256-256-outp.webp"
+    sheet = I3_SHEET
 
     cells = split_contact_sheet(Image.open(sheet), job)
 
@@ -69,11 +77,12 @@ def test_i3_sheet_auto_swaps_grid_orientation():
     assert all(cell.size == (256, 256) for cell in cells[:3])
 
 
+@requires_i3_sheet
 def test_crop_job_uses_job_output_dir(tmp_path):
     job = _i3_job()
     job.files = job.files[:1]
     job.output_dir = tmp_path / "icons"
-    sheet = ROOT / "game" / "assets" / "art" / "_sheets" / "art_prompts_req--i3-icons-status-info-sheet-2-3-cell-256-256-outp.webp"
+    sheet = I3_SHEET
 
     saved = crop_job(job, sheet, tmp_path / "art", quality=90, force=True)
 

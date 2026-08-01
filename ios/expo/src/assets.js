@@ -70,6 +70,7 @@ const ASSETS = {
   'assets/ach_cities_10.webp': require('../../assets/ach_cities_10.webp'),
   'assets/ach_business_10.webp': require('../../assets/ach_business_10.webp'),
   'assets/ach_cargo_20.webp': require('../../assets/ach_cargo_20.webp'),
+  'assets/ach_countries_5.webp': require('../../assets/ach_countries_5.webp'),
   'assets/ach_wealth_100k.webp': require('../../assets/ach_wealth_100k.webp'),
   'assets/ach_legendary.webp': require('../../assets/ach_legendary.webp'),
   'assets/logo_mark.webp': require('../../assets/logo_mark.webp'),

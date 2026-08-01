@@ -8,8 +8,23 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WORLD = json.loads((ROOT / "game" / "data" / "world.json").read_text(encoding="utf-8"))
-MARKETS_BY_CITY = json.loads((ROOT / "game" / "data" / "markets.json").read_text(encoding="utf-8"))
 ECONOMY = WORLD["economy"]
+
+
+def _load_markets_by_city() -> dict:
+    markets_dir = ROOT / "game" / "data" / "markets"
+    if markets_dir.is_dir():
+        return {
+            path.stem: json.loads(path.read_text(encoding="utf-8"))
+            for path in sorted(markets_dir.glob("*.json"))
+        }
+    legacy = ROOT / "game" / "data" / "markets.json"
+    if legacy.exists():
+        return json.loads(legacy.read_text(encoding="utf-8"))
+    raise FileNotFoundError("Run the ETL pipeline to generate market data.")
+
+
+MARKETS_BY_CITY = _load_markets_by_city()
 
 
 def market_row(city_id: str, product_id: str) -> dict:

@@ -1,8 +1,11 @@
 import unittest
 from pathlib import Path
 
+import pytest
+
 from tools.export_ios_data import (
     BEGIN_MARKER,
+    CITY_CONFIG_PATH,
     END_MARKER,
     HTML_PATH,
     WORLD_PATH,
@@ -12,6 +15,10 @@ from tools.export_ios_data import (
 )
 
 
+@pytest.mark.skipif(
+    not CITY_CONFIG_PATH.is_file(),
+    reason="ios/config/curated_cities.json not checked in — run export tooling setup first",
+)
 class IOSExportContractTest(unittest.TestCase):
     def test_snapshot_contract_and_embedded_html(self):
         snapshot = build_snapshot()

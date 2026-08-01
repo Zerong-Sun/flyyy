@@ -27,6 +27,7 @@ export function GlobeScreen({ game }) {
     setFocusDest,
     openFF,
     cancelTicket,
+    setTab,
   } = game;
 
   const ticket = state.ticket;

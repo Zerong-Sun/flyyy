@@ -6,13 +6,23 @@
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "scheme": "airborne-trader-mobile",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#403425"
+    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#0B1C2C"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#403425"
       }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     }
   }
 }

@@ -131,7 +131,7 @@ def test_sell_buy_ratio_hot_threshold():
 
 
 def test_sell_buy_ratio_cold_threshold():
-    """Cold cities must have sell_buy_ratio < 1.0."""
+    """Cold cities must have sell_buy_ratio < 1.10 (ETL cold cutoff)."""
     tags = PRODUCT_MARKET_TAGS
     mi = _market_index(MARKETS)
 
@@ -142,8 +142,8 @@ def test_sell_buy_ratio_cold_threshold():
             buy_origin = mi[(origin_id, product_id)]["buy"]
             if buy_origin > 0:
                 ratio = sell_base / buy_origin
-                assert ratio < 1.0, (
-                    f"{key} → {city_id} tagged cold but ratio={ratio:.3f} >= 1.0"
+                assert ratio < 1.10, (
+                    f"{key} → {city_id} tagged cold but ratio={ratio:.3f} >= 1.10"
                 )
 
 

@@ -1,8 +1,8 @@
 # Airborne Trader — Expo Go (12-hub demo)
 
-React Native port of the playable **12-hub** demo from `Airborne Trader iOS.dc.html`. Runs in **Expo Go SDK 54** on a phone over your local network.
+React Native port of the playable **12-hub** demo. Runs in **Expo Go SDK 54** on a phone over your local network.
 
-This app is **separate** from the repo-root [`expo-go/`](../../expo-go/) project, which loads the 30-city Godot export. Use this folder for the Mobile flight trading game prototype.
+Use this folder for the mobile flight trading game prototype.
 
 ## Start (LAN first)
 

@@ -19,6 +19,8 @@ game/assets/art/_sheets/
 game/assets/art/_archive/
 game/assets/art/orchestrate_req_status.json
 assets/art/
+ios/expo/dist/
+ios/expo/.expo/
 
 # Generated game data (run pipeline to regenerate)
 game/data/world.json
