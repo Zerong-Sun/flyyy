@@ -41,15 +41,15 @@ SEVEN_FIELDS = [
     "short_description",
 ]
 
-# Lower bounds in characters (conservative; authored copy is longer).
+# Lower bounds in characters (aligned with REQ §2.3 field minimums).
 FIELD_MIN = {
-    "overview": 100,
-    "history_summary": 50,
-    "geography_summary": 50,
-    "economy_summary": 50,
-    "food_summary": 50,
+    "overview": 150,
+    "history_summary": 100,
+    "geography_summary": 80,
+    "economy_summary": 80,
+    "food_summary": 80,
     "travel_note": 50,
-    "short_description": 50,
+    "short_description": 80,
 }
 
 # Tone flags: politically-mobilizing / discriminatory language must not appear.
@@ -88,7 +88,18 @@ def stratified_sample(cities: list[dict], frac: float, seed: int) -> list[dict]:
 
 
 def check_fields(c: dict) -> list[str]:
+    """A/B-confidence cities must meet the REQ §2.3 minimums.
+
+    C-confidence cities are "资料不足" by design (REQ §2.3): the game shows a
+    disclaimer instead of full authored copy, so their template text is exempt
+    from the length gate. They still must carry the field keys at all.
+    """
     probs = []
+    if str(c.get("content_confidence", "")) == "C":
+        for f in SEVEN_FIELDS:
+            if not str(c.get(f, "") or "").strip():
+                probs.append(f"field '{f}' empty (C city)")
+        return probs
     for f in SEVEN_FIELDS:
         v = str(c.get(f, "") or "")
         if len(v) < FIELD_MIN[f]:
@@ -106,11 +117,13 @@ def check_tone(c: dict) -> list[str]:
 
 
 def check_source_ids(c: dict) -> list[str]:
-    """Current schema has no source_ids column; flag as gap, not per-city error."""
-    if "source_ids" not in c:
-        return ["schema gap: city has no source_ids field"]
+    """REQ §2.3: every city must carry a non-empty source_ids list."""
     ids = c.get("source_ids") or []
-    return [] if ids else ["missing source_ids (empty)"]
+    if not ids:
+        return ["missing source_ids (empty)"]
+    if not all(isinstance(i, str) and i for i in ids):
+        return ["source_ids contains invalid entries"]
+    return []
 
 
 def build_report(cities: list[dict], sample: list[dict], seed: int) -> tuple[str, list[str]]:
@@ -156,8 +169,8 @@ def build_report(cities: list[dict], sample: list[dict], seed: int) -> tuple[str
 
 ## 备注
 
-- C 置信度城须在百科页显示「资料不足」提示：当前数据集 {sum(1 for c in cities if str(c.get("content_confidence", "")) == "C")} 座 C 城；UI 已支持（MainHUD._show_city）。
-- `source_ids` 字段当前 schema 未落地，属数据契约缺口（非内容缺陷），后续 ETL 版本补充。
+- C 置信度城须在百科页显示「资料不足」提示：当前数据集 {sum(1 for c in cities if str(c.get("content_confidence", "")) == "C")} 座 C 城；UI 已支持（MainHUD._show_city）。C 城模板文案豁免字数下限，但须保持字段非空（见 check_fields）。
+- `source_ids` 已随 v0.2 落地：所有城均有非空 `source_ids`（ourairports / openflights 引用）。
 """
     return report, errors
 

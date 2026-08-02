@@ -46,6 +46,32 @@ V02_BGM = [
     "bgm_night",
 ]
 
+# Achievements whose icon reference has no dedicated art file yet (v0.3-era
+# additions). IconFactory.get_achievement_icon falls back to a category badge,
+# and REQ §6.6 tracks this as a known todo until dedicated icons ship.
+ACH_ICON_EXCEPTIONS = {
+    "icon_ach_explore_cities_100_64",
+    "icon_ach_explore_cities_500_64",
+    "icon_ach_explore_countries_10_64",
+    "icon_ach_explore_countries_30_64",
+    "icon_ach_explore_hubs_20_64",
+    "icon_ach_explore_extreme_ns_64",
+    "icon_ach_explore_extreme_ew_64",
+    "icon_ach_trade_profit_10k_64",
+    "icon_ach_trade_net_100k_64",
+    "icon_ach_trade_big_loss_64",
+    "icon_ach_trade_intel_64",
+    "icon_ach_trade_categories_8_64",
+    "icon_ach_flight_10_64",
+    "icon_ach_flight_50_64",
+    "icon_ach_flight_distance_40k_64",
+    "icon_ach_flight_ff_64",
+    "icon_ach_collect_products_50_64",
+    "icon_ach_collect_products_200_64",
+    "icon_ach_collect_notes_20_64",
+    "icon_ach_collect_heroes_50_64",
+}
+
 TUTORIAL_TRIGGERS = [
     "new_game",
     "first_buy",
@@ -396,4 +422,32 @@ def test_merchant_portraits_present_and_distinct():
         encoding="utf-8"
     )
     assert "set_portrait" in popup_script
+
+
+def test_achievement_icon_refs_resolve_to_files():
+    """Every achievement icon reference must resolve to a shipped art file.
+
+    Missing art falls back to a category placeholder at runtime, but a stray
+    reference that no longer matches any file is a data regression (icon wall
+    would silently show a generic badge). Known exceptions without dedicated
+    art are whitelisted below and tracked in REQ §6.6.
+    """
+    ach_path = GAME / "data" / "achievements.json"
+    assert ach_path.is_file()
+    achievements = json.loads(ach_path.read_text(encoding="utf-8"))["achievements"]
+    assert len(achievements) >= 30
+
+    ach_dir = GAME / "assets" / "icons" / "achievements"
+    files = {
+        p.stem for p in ach_dir.iterdir() if p.suffix in (".png", ".webp")
+    }
+    missing = [a["icon"] for a in achievements if a.get("icon") not in files]
+    # v0.3-era achievements without dedicated art are expected; they use the
+    # category fallback in IconFactory.get_achievement_icon. All newly added
+    # achievements must ship real art.
+    assert set(missing) <= set(ACH_ICON_EXCEPTIONS), (
+        f"new missing achievement icons beyond known exceptions: "
+        f"{sorted(set(missing) - set(ACH_ICON_EXCEPTIONS))}"
+    )
+
 

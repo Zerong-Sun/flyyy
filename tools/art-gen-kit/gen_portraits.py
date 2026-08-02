@@ -20,7 +20,6 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT_DIR = ROOT / "game" / "assets" / "portraits"
 
 SIZE = 64
-BG_KEYS = ((0, 0, 0, 0), (0, 0, 0, 0))  # transparent outside the bust
 
 SKIN = (226, 190, 152, 255)
 SKIN_SHADE = (198, 160, 122, 255)
@@ -28,7 +27,6 @@ HAIR = (70, 52, 38, 255)
 HAT = (66, 92, 120, 255)  # travel-blue beret-ish
 HAT_BAND = (232, 154, 60, 255)
 SCARF = (200, 96, 78, 255)  # warm red
-SHIRT = (58, 74, 92, 255)
 OUTLINE = (42, 38, 44, 255)
 
 

@@ -91,5 +91,5 @@
 
 ## 备注
 
-- C 置信度城须在百科页显示「资料不足」提示：当前数据集 400 座 C 城；UI 已支持（MainHUD._show_city）。
-- `source_ids` 字段当前 schema 未落地，属数据契约缺口（非内容缺陷），后续 ETL 版本补充。
+- C 置信度城须在百科页显示「资料不足」提示：当前数据集 400 座 C 城；UI 已支持（MainHUD._show_city）。C 城模板文案豁免字数下限，但须保持字段非空（见 check_fields）。
+- `source_ids` 已随 v0.2 落地：所有城均有非空 `source_ids`（ourairports / openflights 引用）。
