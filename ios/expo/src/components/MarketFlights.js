@@ -48,17 +48,17 @@ function MiniSpark({ points }) {
 }
 
 export function MarketScreen({ game }) {
-  const { state, city, destId, productRows, setSeg, openProduct, setFocusDest } = game;
+  const { state, city, destId, productRows, setSeg, openProduct, setFocusDest, t } = game;
   const sortCity = destId ? CITIES[destId] : null;
 
   return (
     <View style={styles.screen}>
       <ScreenTitle
-        title="Market"
+        title={t('market_title', 'Market')}
         subtitle={
           sortCity
             ? `${city.name} · sorted for ${sortCity.name}`
-            : `${city.name} · ${state.seg === 'local' ? 'local goods' : 'imports'}`
+            : `${city.name} · ${state.seg === 'local' ? t('market_here', 'local goods') : t('market_import', 'imports')}`
         }
       />
       {state.ticket && sortCity ? (
@@ -122,13 +122,13 @@ export function MarketScreen({ game }) {
 }
 
 export function FlightsScreen({ game }) {
-  const { state, city, sortedFlights, setFilter, openFlight, setFocusDest } = game;
+  const { state, city, sortedFlights, setFilter, openFlight, setFocusDest, t } = game;
   const focusCity = state.focusDest ? CITIES[state.focusDest] : null;
 
   return (
     <View style={styles.screen}>
       <ScreenTitle
-        title="Flights"
+        title={t('flights_title', 'Flights')}
         subtitle={
           focusCity
             ? `Departing ${city.iata} · focused on ${focusCity.name}`

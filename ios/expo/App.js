@@ -16,6 +16,7 @@ import { AssetIcon } from './src/components/ui';
 import { GlobeScreen } from './src/components/GlobeScreen';
 import { MarketScreen, FlightsScreen, MarketSheets } from './src/components/MarketFlights';
 import { BagsScreen, MoreScreen, OverlaySheets } from './src/components/BagsMore';
+import { playBgm, stopBgm } from './src/audio';
 
 function TabContent({ game }) {
   const { state } = game;
@@ -37,7 +38,7 @@ function TabContent({ game }) {
 
 function GameApp() {
   const game = useGame();
-  const { state, city, clockText, money, setTab, loaded } = game;
+  const { state, city, clockText, money, setTab, loaded, t } = game;
   const scrollRef = useRef(null);
   const prevTab = useRef(state.tab);
 
@@ -47,6 +48,23 @@ function GameApp() {
       scrollRef.current?.scrollTo({ y: 0, animated: false });
     }
   }, [state.tab]);
+
+  // Loop BGM per scene; respect the Sound toggle. Night pad applies on the
+  // globe when local time is 22:00–04:59.
+  useEffect(() => {
+    if (!loaded) return;
+    if (!state.optSound) {
+      stopBgm();
+      return;
+    }
+    const localHour = Number(String(state.localTime ?? '').split(':')[0] ?? 0);
+    const isNight = localHour >= 22 || localHour < 5;
+    let track = 'bgm_globe_day';
+    if (state.tab === 'market' || state.tab === 'flights') track = 'bgm_market';
+    else if (state.tab === 'more' || state.tab === 'bags') track = 'bgm_menu';
+    else if (isNight) track = 'bgm_night';
+    playBgm(track);
+  }, [state.tab, state.localTime, state.optSound, loaded]);
 
   if (!loaded) {
     return (
@@ -66,7 +84,7 @@ function GameApp() {
       <View style={styles.header}>
         <View style={styles.brandRow}>
           <AssetIcon path="assets/logo_mark.webp" size={22} />
-          <Text style={styles.brand}>Airborne Trader</Text>
+          <Text style={styles.brand}>{t('brand', 'Airborne Trader')}</Text>
         </View>
         <View style={styles.headerMeta}>
           <Text style={styles.cityLabel}>{city.iata}</Text>
@@ -110,7 +128,7 @@ function GameApp() {
                 onPress={() => setTab(tab.k)}
                 accessibilityRole="tab"
                 accessibilityState={{ selected: active }}
-                accessibilityLabel={tab.label}
+                accessibilityLabel={t('tab_' + tab.k, tab.label)}
                 style={({ pressed }) => [styles.tabItem, pressed && styles.tabPressed]}
               >
                 <AssetIcon
@@ -119,7 +137,7 @@ function GameApp() {
                   tintColor={active ? COLORS.orange : COLORS.muted2}
                 />
                 <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
-                  {tab.label}
+                  {t('tab_' + tab.k, tab.label)}
                 </Text>
               </Pressable>
             );

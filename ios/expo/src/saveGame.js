@@ -11,6 +11,7 @@ export const PERSIST = [
   'city', 'visited', 'log', 'legs', 'bizLegs', 'cargoLots', 'profitable',
   'profit', 'km', 'savedAt', 'intro', 'focusDest', 'unlockedAch',
   'optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce',
+  'locale',
 ];
 
 /** Chain upgrades from stored version up to SAVE_VERSION. */

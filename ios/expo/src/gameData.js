@@ -191,6 +191,14 @@ const CITY_SEED = {
   tokyo: C('tokyo', 'Tokyo', 'Tokyo Haneda', 'HND', 'RJTT', 'Japan', 'Asia', 'assets/city_tokyo.webp', 35.55, 139.78, 21, 9),
   singapore: C('singapore', 'Singapore', 'Singapore Changi', 'SIN', 'WSSS', 'Singapore', 'Asia', 'assets/city_singapore.webp', 1.36, 103.99, 22, 8),
   bangkok: C('bangkok', 'Bangkok', 'Bangkok Suvarnabhumi', 'BKK', 'VTBS', 'Thailand', 'Asia', 'assets/city_bangkok.webp', 13.69, 100.75, 5, 7),
+  atlanta: C('atlanta', 'Atlanta', 'Hartsfield-Jackson Atlanta International', 'ATL', 'KATL', 'United States', 'North America', 'assets/city_atlanta.webp', 33.64, -84.43, 1026, -5),
+  dallas: C('dallas', 'Dallas', 'Dallas Fort Worth International', 'DFW', 'KDFW', 'United States', 'North America', 'assets/city_dallas.webp', 32.9, -97.04, 607, -6),
+  denver: C('denver', 'Denver', 'Denver International', 'DEN', 'KDEN', 'United States', 'North America', 'assets/city_denver.webp', 39.86, -104.67, 5431, -7),
+  chicago: C('chicago', 'Chicago', 'O\'Hare International', 'ORD', 'KORD', 'United States', 'North America', 'assets/city_chicago.webp', 41.98, -87.9, 680, -6),
+  los_angeles: C('los_angeles', 'Los Angeles', 'Los Angeles International', 'LAX', 'KLAX', 'United States', 'North America', 'assets/city_los_angeles.webp', 33.94, -118.41, 125, -8),
+  guangzhou: C('guangzhou', 'Guangzhou', 'Guangzhou Baiyun International', 'CAN', 'ZGGG', 'China', 'Asia', 'assets/city_guangzhou.webp', 23.39, 113.3, 50, 8),
+  seoul: C('seoul', 'Seoul', 'Incheon International', 'ICN', 'RKSI', 'South Korea', 'Asia', 'assets/city_seoul.webp', 37.47, 126.45, 23, 9),
+  miami: C('miami', 'Miami', 'Miami International', 'MIA', 'KMIA', 'United States', 'North America', 'assets/city_miami.webp', 25.8, -80.29, 8, -5),
 };
 
 Object.values(CITY_SEED).forEach(defineCity);
@@ -209,6 +217,14 @@ const CITY_TUNING = {
   tokyo: { costIndex: 1.11, demand: { Electronics: 0.85, Textiles: 1.2 } },
   singapore: { costIndex: 1.04, demand: { Spices: 1.15 } },
   bangkok: { costIndex: 0.86, demand: { Machinery: 1.24, Electronics: 1.18 } },
+  atlanta: { costIndex: 1.0, demand: { Electronics: 1.15, Food: 1.08 } },
+  dallas: { costIndex: 0.98, demand: { Energy: 1.2, Machinery: 1.12 } },
+  denver: { costIndex: 1.02, demand: { Toys: 1.18 } },
+  chicago: { costIndex: 1.03, demand: { Machinery: 1.16, Confectionery: 1.1 } },
+  los_angeles: { costIndex: 1.1, demand: { Cosmetics: 1.18, Toys: 1.14 } },
+  guangzhou: { costIndex: 0.93, demand: { Textiles: 1.16, Cosmetics: 1.1 } },
+  seoul: { costIndex: 1.07, demand: { Electronics: 0.88, Cosmetics: 1.2 } },
+  miami: { costIndex: 0.99, demand: { Food: 1.22, Spices: 1.1 } },
 };
 Object.keys(CITY_TUNING).forEach((id) => defineCity({ id, ...CITY_TUNING[id] }));
 
@@ -274,6 +290,14 @@ const AIRLINE_SEED = {
   tokyo: ['NH', 'All Nippon'],
   singapore: ['SQ', 'Singapore Airlines'],
   bangkok: ['TG', 'Thai Airways'],
+  atlanta: ['DL', 'Delta Air Lines'],
+  dallas: ['AA', 'American Airlines'],
+  denver: ['UA', 'United Airlines'],
+  chicago: ['UA', 'United Airlines'],
+  los_angeles: ['AA', 'American Airlines'],
+  guangzhou: ['CZ', 'China Southern'],
+  seoul: ['KE', 'Korean Air'],
+  miami: ['AA', 'American Airlines'],
 };
 Object.keys(AIRLINE_SEED).forEach((id) => defineCity({ id, airline: AIRLINE_SEED[id] }));
 
@@ -328,6 +352,14 @@ const NOTE_SEED = {
   tokyo: 'Sensors are tiny and precious; sake is bulky and sentimental. Pick one.',
   singapore: 'Duty-free by design. Buy scent here, sell it where duty is not free.',
   bangkok: 'Spice, silk and lacquer at low entry prices — the best place to start a thin wallet.',
+  atlanta: 'North America\'s great interchange. Electronics fly in on the transatlantic leg; food moves on the regional hops.',
+  dallas: 'Energy and machinery are the backbone here. Heavy loads earn on the long haul west and south.',
+  denver: 'Mile-high gateway to the Rockies. Light toys and electronics ride well on the mountain feed.',
+  chicago: 'The rail-to-runway crossroads. Machinery moves east, confectionery travels with the commuters.',
+  los_angeles: 'Pacific door to Asia. Cosmetics and toys cross the water both ways at steady margins.',
+  guangzhou: 'The Pearl River Delta workbench — textiles and cosmetics cheap at origin, valued everywhere.',
+  seoul: 'Semiconductors whisper and cosmetics shine. Carry light, carry well.',
+  miami: 'The Americas doorstep. Food and spice from the south meet northbound tourist cash.',
 };
 Object.keys(NOTE_SEED).forEach((id) => defineCity({ id, note: NOTE_SEED[id] }));
 

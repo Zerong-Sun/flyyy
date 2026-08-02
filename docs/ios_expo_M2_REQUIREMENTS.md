@@ -401,7 +401,7 @@ flowchart LR
 | 1 | 情报方案 A / B / A+C | **A 关注目的地 + 轻量 C sparkline** | B 付费快照 → M3 P2 |
 | 2 | 扩城是否冲 16–20 | **管线就绪即可**，维持 12 枢纽 | C2 扩城 → M3 |
 | 3 | UI 语言 | **保持英文** | 中英切换 → M3 |
-| 4 | 与 `expo-go/` 双轨 | **M2 维持双轨** | 合并评估 → M3 |
+| 4 | 与 `expo-go/` 双轨 | **M2 维持双轨** | **已决议**：统一到 `ios/expo/` 单一工程，`expo-go/` 从未存在（见 [2026-08-02-dualtrack-merger-resolution.md](superpowers/plans/2026-08-02-dualtrack-merger-resolution.md)） |
 | 5 | 超重起飞是否阻断 | **不阻断**（仅提示） | 与 §4.2 一致 |
 | 6 | A2 音频是否必须 | **必须带真·SFX**（5 条 AAC） | 已入库；§9.3.2 |
 

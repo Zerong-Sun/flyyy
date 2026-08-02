@@ -3,10 +3,10 @@
 | 字段 | 内容 |
 |------|------|
 | 文档编号 | REQ-ios-expo-M3 |
-| 版本 | v0.1（规划） |
+| 版本 | v0.2（执行中） |
 | 前置 | M2 已关闭（见 [2026-08-01-ios-expo-m2-acceptance.md](superpowers/plans/2026-08-01-ios-expo-m2-acceptance.md)） |
 | 启动条件 | 桌面 v0.3 MVP（经停/MCT/延误/头等）可玩后 |
-| 状态 | 规划中（本里程碑不强制实现代码） |
+| 状态 | 执行中（2026-08-02 起实施；M1 双轨已决议，见 [2026-08-02-dualtrack-merger-resolution.md](superpowers/plans/2026-08-02-dualtrack-merger-resolution.md)） |
 
 ## 1. 目标一句话
 
@@ -45,13 +45,15 @@ flowchart LR
 
 ## 5. 成功标准
 
-1. 试玩包含循环 BGM，Sound 开关有效。  
-2. 枢纽 ≥20，导出管线一键可跑。  
-3. 非开发同学可用 Preview/TestFlight 安装说明独立开玩。  
-4. 双轨合并有明确书面决议。
+1. 试玩包含循环 BGM，Sound 开关有效。**已实施**（`src/audio.js` + `App.js` 场景映射）。  
+2. 枢纽 ≥20，导出管线一键可跑。**已实施**（20 枢纽，`export_expo_data.py` hub_count=20）。  
+3. 非开发同学可用 Preview/TestFlight 安装说明独立开玩。**已补 README**。  
+4. 双轨合并有明确书面决议。**已决议**（统一 `ios/expo/`，见 §7）。
 
 ## 6. 修订
 
-| 日期 | 说明 |
-|------|------|
-| 2026-08-01 | 初稿：承接全周期路线图阶段 3 |
+| 日期 | 版本 | 说明 |
+|------|------|------|
+| 2026-08-01 | v0.1 | 初稿：承接全周期路线图阶段 3 |
+| 2026-08-02 | v0.2 | M1 双轨决议关闭（统一到 `ios/expo/`）；BGM/扩城 20/i18n 结构/EAS 说明已实施 |
+| 2026-08-02 | v0.2 | T1 代码级核对完成、U1 记录不实现（见 [reviews/2026-08-02-expo-m3-perf-u1.md](superpowers/reviews/2026-08-02-expo-m3-perf-u1.md)） |

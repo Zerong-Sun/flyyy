@@ -1,6 +1,6 @@
-# Airborne Trader — Expo Go (12-hub demo)
+# Airborne Trader — Expo Go (20-hub demo)
 
-React Native port of the playable **12-hub** demo. Runs in **Expo Go SDK 54** on a phone over your local network.
+React Native port of the playable **20-hub** demo. Runs in **Expo Go SDK 54** on a phone over your local network.
 
 Use this folder for the mobile flight trading game prototype.
 
@@ -41,7 +41,7 @@ If tunnel fails (e.g. ngrok errors):
 4. **Globe** — tap **Speed up** when a ticket is held.
 5. **Cutscene** — takeoff → cruise → land (auto-advances).
 6. **Sell sheet** — sell inventory at the destination, profit or loss.
-7. Repeat across the twelve hubs.
+7. Repeat across the twenty hubs (12 original + ATL/DFW/DEN/ORD/LAX/CAN/ICN/MIA).
 
 One real second = six in-game minutes. A buy → fly → sell leg takes about a minute.
 
@@ -60,7 +60,9 @@ lock-screen widget and push mockups) — the real OS provides those.
 - **Settings** — haptics, sound (SFX via `expo-av`, haptic click fallback), 24h clock,
   reduce motion, save slot 1, restart (confirmed).
 - **Persistence** — `saveVersion` migrate, corrupt-save backup, autosave.
-- **Audio** — five short SFX under `assets/audio/sfx/` (see `docs/ios_expo_M2_REQUIREMENTS.md` §9).
+- **Audio** — five short SFX + four looping BGM scenes (`globe_day` / `market` / `menu`
+  / `night`) under `assets/audio/`; BGM follows the active tab and the Sound toggle
+  (see `docs/ios_expo_M2_REQUIREMENTS.md` §9 and M3 A1).
 
 ## Content export (ETL → Expo)
 
@@ -98,9 +100,18 @@ Profiles ([`eas.json`](eas.json)):
 |---------|--------------|-------|
 | `development` | internal | Dev Client; iOS Simulator |
 | `preview` | internal | Device IPA for TestFlight-like sharing |
-| `production` | store | Auto-increment; not required for M2 |
+| `production` | store | Auto-increment; not required for M3 |
 
-**Handoff to non-devs:** prefer Expo Go QR on the same Wi‑Fi; if LAN fails use `npx expo start --tunnel`. No in-game login. Use `preview` only when you need an install outside Expo Go.
+**Handoff to non-devs (three options, easiest first):**
+
+1. **Expo Go** — fastest for day-to-day play: `npx expo start`, scan the QR on the same Wi‑Fi. If LAN fails use `npx expo start --tunnel`. No install, no credentials.
+2. **Preview IPA (TestFlight)** — when the recipient is not on your Wi‑Fi or you want a standalone install:
+   - Run `npx eas build --profile preview --platform ios`.
+   - On success run `npx eas submit --platform ios` (TestFlight) **or** open the build's **Install** page in `expo.dev` → copy the **.ipa / simulator** link to the recipient.
+   - The recipient opens the link on their iPhone, taps **Install**, and in **Settings → General → VPN & Device Management** trusts the **Apple Development** profile before launching.
+3. **Simulator** — from a Mac: `npx eas build --profile development --platform ios`, then `npx expo start --ios`.
+
+No in-game login is required for any path.
 
 Expo Go remains the fastest path for day-to-day play.
 
