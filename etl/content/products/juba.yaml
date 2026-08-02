@@ -1,51 +1,51 @@
 products:
+- product_id: juba_电子_A
+  name_zh: 朱巴电子合约
+  category: 电子
+  weight_kg: 1.2
+  base_reference_price: 2573.76
+  reference_currency: USD
+  shelf_life_hours: 43812
+  fragility: 0.3
+  rarity: 0.55
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: juba_工艺品_B
   name_zh: 朱巴工艺品合约
   category: 工艺品
-  weight_kg: 12.6
-  base_reference_price: 396.03
+  weight_kg: 1.6
+  base_reference_price: 289.79
   reference_currency: USD
-  shelf_life_hours: 69997
+  shelf_life_hours: 15861
   fragility: 0.5
-  rarity: 0.53
+  rarity: 0.63
   description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: juba_香料_B
+- product_id: juba_香料_C
   name_zh: 朱巴香料合约
   category: 香料
-  weight_kg: 0.6
-  base_reference_price: 153.99
+  weight_kg: 0.5
+  base_reference_price: 226.93
   reference_currency: USD
-  shelf_life_hours: 6771
+  shelf_life_hours: 8138
   fragility: 0.0
-  rarity: 0.58
+  rarity: 0.45
   description: 精选干制香料，价值密度高，跨境贸易理想品。
-- product_id: juba_纺织品_B
+- product_id: juba_纺织品_D
   name_zh: 朱巴纺织品合约
   category: 纺织品
-  weight_kg: 15.6
-  base_reference_price: 371.05
+  weight_kg: 10.2
+  base_reference_price: 236.42
   reference_currency: USD
-  shelf_life_hours: 46236
+  shelf_life_hours: 35719
   fragility: 0.0
-  rarity: 0.43
+  rarity: 0.35
   description: 地区纺织产品合约，不易变质适合长途贸易。
-- product_id: juba_日用品_B
+- product_id: juba_日用品_E
   name_zh: 朱巴日用品合约
   category: 日用品
-  weight_kg: 14.2
-  base_reference_price: 118.99
+  weight_kg: 9.7
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 81256
+  shelf_life_hours: 91809
   fragility: 0.0
-  rarity: 0.09
+  rarity: 0.08
   description: 地方日用品合约，需求平稳利润适中。
-- product_id: juba_糖果_B
-  name_zh: 朱巴糖果合约
-  category: 糖果
-  weight_kg: 5.3
-  base_reference_price: 134.43
-  reference_currency: USD
-  shelf_life_hours: 1500
-  fragility: 0.1
-  rarity: 0.25
-  description: 地方传统糖果点心合约，便携适合礼品转售。

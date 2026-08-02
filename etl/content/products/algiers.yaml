@@ -1,51 +1,51 @@
 products:
-- product_id: algiers_食品_B
-  name_zh: 阿尔及尔食品合约
-  category: 食品
-  weight_kg: 26.5
-  base_reference_price: 63.61
-  reference_currency: USD
-  shelf_life_hours: 711
-  fragility: 0.2
-  rarity: 0.21
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: algiers_能源_B
-  name_zh: 阿尔及尔能源合约
-  category: 能源
-  weight_kg: 5.8
-  base_reference_price: 310.21
+- product_id: algiers_电子_A
+  name_zh: 阿尔及尔电子合约
+  category: 电子
+  weight_kg: 1.0
+  base_reference_price: 2379.8
   reference_currency: USD
   shelf_life_hours: 77471
-  fragility: 0.0
-  rarity: 0.67
-  description: 能源产品合约代理，轻量高价值适合跨境。
-- product_id: algiers_纺织品_B
-  name_zh: 阿尔及尔纺织品合约
-  category: 纺织品
-  weight_kg: 16.9
-  base_reference_price: 249.75
+  fragility: 0.3
+  rarity: 0.7
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
+- product_id: algiers_香料_B
+  name_zh: 阿尔及尔香料合约
+  category: 香料
+  weight_kg: 1.6
+  base_reference_price: 209.43
   reference_currency: USD
-  shelf_life_hours: 94457
+  shelf_life_hours: 8138
   fragility: 0.0
-  rarity: 0.26
-  description: 地区纺织产品合约，不易变质适合长途贸易。
-- product_id: algiers_矿产_B
-  name_zh: 阿尔及尔矿产合约
-  category: 矿产
-  weight_kg: 26.7
-  base_reference_price: 430.56
-  reference_currency: USD
-  shelf_life_hours: 44097
-  fragility: 0.0
-  rarity: 0.44
-  description: 矿产品样品合约，重量较大但价值稳定。
-- product_id: algiers_日用品_B
+  rarity: 0.56
+  description: 精选干制香料，价值密度高，跨境贸易理想品。
+- product_id: algiers_日用品_C
   name_zh: 阿尔及尔日用品合约
   category: 日用品
-  weight_kg: 11.6
-  base_reference_price: 31.54
+  weight_kg: 9.5
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 83449
+  shelf_life_hours: 95038
   fragility: 0.0
-  rarity: 0.07
+  rarity: 0.05
   description: 地方日用品合约，需求平稳利润适中。
+- product_id: algiers_糖果_D
+  name_zh: 阿尔及尔糖果合约
+  category: 糖果
+  weight_kg: 7.3
+  base_reference_price: 200.0
+  reference_currency: USD
+  shelf_life_hours: 2271
+  fragility: 0.1
+  rarity: 0.23
+  description: 地方传统糖果点心合约，便携适合礼品转售。
+- product_id: algiers_能源_E
+  name_zh: 阿尔及尔能源合约
+  category: 能源
+  weight_kg: 7.4
+  base_reference_price: 506.22
+  reference_currency: USD
+  shelf_life_hours: 68854
+  fragility: 0.0
+  rarity: 0.65
+  description: 能源产品合约代理，轻量高价值适合跨境。

@@ -1,51 +1,51 @@
 products:
+- product_id: almaty_电子_A
+  name_zh: 阿拉木图电子合约
+  category: 电子
+  weight_kg: 0.4
+  base_reference_price: 2741.77
+  reference_currency: USD
+  shelf_life_hours: 82303
+  fragility: 0.3
+  rarity: 0.56
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: almaty_糖果_B
   name_zh: 阿拉木图糖果合约
   category: 糖果
-  weight_kg: 5.1
-  base_reference_price: 131.24
+  weight_kg: 1.8
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 860
+  shelf_life_hours: 1839
   fragility: 0.1
-  rarity: 0.16
+  rarity: 0.15
   description: 地方传统糖果点心合约，便携适合礼品转售。
-- product_id: almaty_矿产_B
+- product_id: almaty_矿产_C
   name_zh: 阿拉木图矿产合约
   category: 矿产
-  weight_kg: 30.0
-  base_reference_price: 440.5
+  weight_kg: 12.0
+  base_reference_price: 796.9
   reference_currency: USD
-  shelf_life_hours: 90711
+  shelf_life_hours: 65435
   fragility: 0.0
-  rarity: 0.37
+  rarity: 0.47
   description: 矿产品样品合约，重量较大但价值稳定。
-- product_id: almaty_日用品_B
+- product_id: almaty_日用品_D
   name_zh: 阿拉木图日用品合约
   category: 日用品
-  weight_kg: 10.7
-  base_reference_price: 86.56
+  weight_kg: 10.6
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 51586
+  shelf_life_hours: 13632
   fragility: 0.0
-  rarity: 0.05
+  rarity: 0.14
   description: 地方日用品合约，需求平稳利润适中。
-- product_id: almaty_咖啡_B
+- product_id: almaty_咖啡_E
   name_zh: 阿拉木图咖啡合约
   category: 咖啡
-  weight_kg: 12.7
-  base_reference_price: 238.17
+  weight_kg: 11.5
+  base_reference_price: 277.32
   reference_currency: USD
-  shelf_life_hours: 3211
+  shelf_life_hours: 3483
   fragility: 0.0
   rarity: 0.46
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: almaty_食品_B
-  name_zh: 阿拉木图食品合约
-  category: 食品
-  weight_kg: 22.1
-  base_reference_price: 216.65
-  reference_currency: USD
-  shelf_life_hours: 556
-  fragility: 0.2
-  rarity: 0.2
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。

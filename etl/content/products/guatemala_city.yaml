@@ -1,51 +1,51 @@
 products:
+- product_id: guatemala_city_电子_A
+  name_zh: 危地马拉城电子合约
+  category: 电子
+  weight_kg: 1.0
+  base_reference_price: 2977.79
+  reference_currency: USD
+  shelf_life_hours: 81441
+  fragility: 0.3
+  rarity: 0.56
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: guatemala_city_食品_B
   name_zh: 危地马拉城食品合约
   category: 食品
-  weight_kg: 22.4
-  base_reference_price: 85.3
+  weight_kg: 0.9
+  base_reference_price: 238.85
   reference_currency: USD
-  shelf_life_hours: 1615
+  shelf_life_hours: 732
   fragility: 0.2
-  rarity: 0.28
+  rarity: 0.37
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: guatemala_city_工艺品_B
+- product_id: guatemala_city_工艺品_C
   name_zh: 危地马拉城工艺品合约
   category: 工艺品
-  weight_kg: 5.7
-  base_reference_price: 486.31
+  weight_kg: 10.4
+  base_reference_price: 421.13
   reference_currency: USD
-  shelf_life_hours: 57188
+  shelf_life_hours: 81725
   fragility: 0.5
-  rarity: 0.59
+  rarity: 0.52
   description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: guatemala_city_糖果_B
+- product_id: guatemala_city_糖果_D
   name_zh: 危地马拉城糖果合约
   category: 糖果
-  weight_kg: 7.1
-  base_reference_price: 133.61
+  weight_kg: 5.1
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 2766
+  shelf_life_hours: 2835
   fragility: 0.1
-  rarity: 0.3
+  rarity: 0.33
   description: 地方传统糖果点心合约，便携适合礼品转售。
-- product_id: guatemala_city_香料_B
+- product_id: guatemala_city_香料_E
   name_zh: 危地马拉城香料合约
   category: 香料
-  weight_kg: 0.3
-  base_reference_price: 171.38
+  weight_kg: 0.6
+  base_reference_price: 201.3
   reference_currency: USD
-  shelf_life_hours: 8296
+  shelf_life_hours: 6156
   fragility: 0.0
-  rarity: 0.58
+  rarity: 0.44
   description: 精选干制香料，价值密度高，跨境贸易理想品。
-- product_id: guatemala_city_咖啡_B
-  name_zh: 危地马拉城咖啡合约
-  category: 咖啡
-  weight_kg: 10.9
-  base_reference_price: 268.35
-  reference_currency: USD
-  shelf_life_hours: 2226
-  fragility: 0.0
-  rarity: 0.49
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。

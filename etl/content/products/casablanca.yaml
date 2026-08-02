@@ -1,51 +1,51 @@
 products:
-- product_id: casablanca_陶瓷_B
-  name_zh: 卡萨布兰卡陶瓷合约
-  category: 陶瓷
-  weight_kg: 25.0
-  base_reference_price: 226.45
+- product_id: casablanca_电子_A
+  name_zh: 卡萨布兰卡电子合约
+  category: 电子
+  weight_kg: 1.9
+  base_reference_price: 2332.98
   reference_currency: USD
-  shelf_life_hours: 95441
-  fragility: 0.7
-  rarity: 0.43
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
-- product_id: casablanca_香料_B
-  name_zh: 卡萨布兰卡香料合约
-  category: 香料
-  weight_kg: 0.3
-  base_reference_price: 222.97
+  shelf_life_hours: 22288
+  fragility: 0.3
+  rarity: 0.62
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
+- product_id: casablanca_糖果_B
+  name_zh: 卡萨布兰卡糖果合约
+  category: 糖果
+  weight_kg: 1.2
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 7108
+  shelf_life_hours: 2595
+  fragility: 0.1
+  rarity: 0.29
+  description: 地方传统糖果点心合约，便携适合礼品转售。
+- product_id: casablanca_日用品_C
+  name_zh: 卡萨布兰卡日用品合约
+  category: 日用品
+  weight_kg: 5.9
+  base_reference_price: 200.0
+  reference_currency: USD
+  shelf_life_hours: 65778
   fragility: 0.0
-  rarity: 0.6
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
-- product_id: casablanca_食品_B
+  rarity: 0.15
+  description: 地方日用品合约，需求平稳利润适中。
+- product_id: casablanca_工艺品_D
+  name_zh: 卡萨布兰卡工艺品合约
+  category: 工艺品
+  weight_kg: 5.7
+  base_reference_price: 485.94
+  reference_currency: USD
+  shelf_life_hours: 45176
+  fragility: 0.5
+  rarity: 0.58
+  description: 本地手工制品合约，精工细作运输需缓冲包装。
+- product_id: casablanca_食品_E
   name_zh: 卡萨布兰卡食品合约
   category: 食品
-  weight_kg: 28.9
-  base_reference_price: 117.34
+  weight_kg: 12.0
+  base_reference_price: 249.33
   reference_currency: USD
-  shelf_life_hours: 1853
+  shelf_life_hours: 2039
   fragility: 0.2
-  rarity: 0.26
+  rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: casablanca_纺织品_B
-  name_zh: 卡萨布兰卡纺织品合约
-  category: 纺织品
-  weight_kg: 14.4
-  base_reference_price: 246.01
-  reference_currency: USD
-  shelf_life_hours: 93734
-  fragility: 0.0
-  rarity: 0.27
-  description: 地区纺织产品合约，不易变质适合长途贸易。
-- product_id: casablanca_矿产_B
-  name_zh: 卡萨布兰卡矿产合约
-  category: 矿产
-  weight_kg: 23.9
-  base_reference_price: 376.58
-  reference_currency: USD
-  shelf_life_hours: 17222
-  fragility: 0.0
-  rarity: 0.37
-  description: 矿产品样品合约，重量较大但价值稳定。

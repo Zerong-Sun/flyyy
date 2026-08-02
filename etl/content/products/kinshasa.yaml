@@ -1,51 +1,51 @@
 products:
+- product_id: kinshasa_电子_A
+  name_zh: 金沙萨电子合约
+  category: 电子
+  weight_kg: 1.2
+  base_reference_price: 2437.01
+  reference_currency: USD
+  shelf_life_hours: 69691
+  fragility: 0.3
+  rarity: 0.65
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: kinshasa_食品_B
   name_zh: 金沙萨食品合约
   category: 食品
-  weight_kg: 18.5
-  base_reference_price: 220.47
+  weight_kg: 1.6
+  base_reference_price: 212.15
   reference_currency: USD
-  shelf_life_hours: 1086
+  shelf_life_hours: 927
   fragility: 0.2
-  rarity: 0.3
+  rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: kinshasa_咖啡_B
+- product_id: kinshasa_咖啡_C
   name_zh: 金沙萨咖啡合约
   category: 咖啡
-  weight_kg: 7.3
-  base_reference_price: 192.33
+  weight_kg: 6.3
+  base_reference_price: 201.82
   reference_currency: USD
-  shelf_life_hours: 2435
+  shelf_life_hours: 1888
   fragility: 0.0
-  rarity: 0.46
+  rarity: 0.34
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: kinshasa_纺织品_B
+- product_id: kinshasa_纺织品_D
   name_zh: 金沙萨纺织品合约
   category: 纺织品
-  weight_kg: 8.7
-  base_reference_price: 311.7
+  weight_kg: 8.8
+  base_reference_price: 478.65
   reference_currency: USD
-  shelf_life_hours: 33524
+  shelf_life_hours: 62935
   fragility: 0.0
-  rarity: 0.41
+  rarity: 0.35
   description: 地区纺织产品合约，不易变质适合长途贸易。
-- product_id: kinshasa_日用品_B
+- product_id: kinshasa_日用品_E
   name_zh: 金沙萨日用品合约
   category: 日用品
-  weight_kg: 13.3
-  base_reference_price: 65.98
+  weight_kg: 9.9
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 36343
+  shelf_life_hours: 31558
   fragility: 0.0
-  rarity: 0.07
+  rarity: 0.06
   description: 地方日用品合约，需求平稳利润适中。
-- product_id: kinshasa_香料_B
-  name_zh: 金沙萨香料合约
-  category: 香料
-  weight_kg: 0.9
-  base_reference_price: 303.71
-  reference_currency: USD
-  shelf_life_hours: 8757
-  fragility: 0.0
-  rarity: 0.5
-  description: 精选干制香料，价值密度高，跨境贸易理想品。

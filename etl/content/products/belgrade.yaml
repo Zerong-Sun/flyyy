@@ -1,51 +1,51 @@
 products:
+- product_id: belgrade_电子_A
+  name_zh: 贝尔格莱德电子合约
+  category: 电子
+  weight_kg: 0.9
+  base_reference_price: 2579.25
+  reference_currency: USD
+  shelf_life_hours: 85970
+  fragility: 0.3
+  rarity: 0.61
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: belgrade_咖啡_B
   name_zh: 贝尔格莱德咖啡合约
   category: 咖啡
-  weight_kg: 13.6
-  base_reference_price: 130.35
+  weight_kg: 0.4
+  base_reference_price: 267.83
   reference_currency: USD
-  shelf_life_hours: 3381
+  shelf_life_hours: 1695
   fragility: 0.0
-  rarity: 0.37
+  rarity: 0.43
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: belgrade_日用品_B
+- product_id: belgrade_日用品_C
   name_zh: 贝尔格莱德日用品合约
   category: 日用品
-  weight_kg: 10.4
-  base_reference_price: 104.84
+  weight_kg: 6.6
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 93807
+  shelf_life_hours: 32303
   fragility: 0.0
-  rarity: 0.1
+  rarity: 0.11
   description: 地方日用品合约，需求平稳利润适中。
-- product_id: belgrade_食品_B
+- product_id: belgrade_食品_D
   name_zh: 贝尔格莱德食品合约
   category: 食品
-  weight_kg: 25.8
-  base_reference_price: 135.13
+  weight_kg: 12.0
+  base_reference_price: 242.65
   reference_currency: USD
-  shelf_life_hours: 1797
+  shelf_life_hours: 2102
   fragility: 0.2
-  rarity: 0.29
+  rarity: 0.33
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: belgrade_矿产_B
+- product_id: belgrade_矿产_E
   name_zh: 贝尔格莱德矿产合约
   category: 矿产
-  weight_kg: 15.4
-  base_reference_price: 344.8
+  weight_kg: 12.0
+  base_reference_price: 279.25
   reference_currency: USD
-  shelf_life_hours: 60563
+  shelf_life_hours: 80756
   fragility: 0.0
-  rarity: 0.38
+  rarity: 0.43
   description: 矿产品样品合约，重量较大但价值稳定。
-- product_id: belgrade_工艺品_B
-  name_zh: 贝尔格莱德工艺品合约
-  category: 工艺品
-  weight_kg: 13.4
-  base_reference_price: 411.05
-  reference_currency: USD
-  shelf_life_hours: 92979
-  fragility: 0.5
-  rarity: 0.5
-  description: 本地手工制品合约，精工细作运输需缓冲包装。

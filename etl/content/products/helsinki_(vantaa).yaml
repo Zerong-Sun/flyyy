@@ -1,51 +1,51 @@
 products:
+- product_id: helsinki_(vantaa)_电子_A
+  name_zh: 赫尔辛基电子合约
+  category: 电子
+  weight_kg: 1.6
+  base_reference_price: 2492.48
+  reference_currency: USD
+  shelf_life_hours: 14770
+  fragility: 0.3
+  rarity: 0.68
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: helsinki_(vantaa)_食品_B
   name_zh: 赫尔辛基食品合约
   category: 食品
-  weight_kg: 15.4
-  base_reference_price: 95.48
+  weight_kg: 1.7
+  base_reference_price: 227.85
   reference_currency: USD
-  shelf_life_hours: 1228
+  shelf_life_hours: 1099
   fragility: 0.2
-  rarity: 0.35
+  rarity: 0.38
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: helsinki_(vantaa)_矿产_B
+- product_id: helsinki_(vantaa)_矿产_C
   name_zh: 赫尔辛基矿产合约
   category: 矿产
-  weight_kg: 32.6
-  base_reference_price: 275.22
+  weight_kg: 12.0
+  base_reference_price: 323.32
   reference_currency: USD
-  shelf_life_hours: 74849
+  shelf_life_hours: 39943
   fragility: 0.0
-  rarity: 0.48
+  rarity: 0.42
   description: 矿产品样品合约，重量较大但价值稳定。
-- product_id: helsinki_(vantaa)_工艺品_B
+- product_id: helsinki_(vantaa)_工艺品_D
   name_zh: 赫尔辛基工艺品合约
   category: 工艺品
-  weight_kg: 10.6
-  base_reference_price: 443.46
+  weight_kg: 5.6
+  base_reference_price: 381.57
   reference_currency: USD
-  shelf_life_hours: 93471
+  shelf_life_hours: 79967
   fragility: 0.5
-  rarity: 0.48
+  rarity: 0.43
   description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: helsinki_(vantaa)_纺织品_B
+- product_id: helsinki_(vantaa)_纺织品_E
   name_zh: 赫尔辛基纺织品合约
   category: 纺织品
-  weight_kg: 12.1
-  base_reference_price: 239.99
+  weight_kg: 11.5
+  base_reference_price: 325.07
   reference_currency: USD
-  shelf_life_hours: 19968
+  shelf_life_hours: 12832
   fragility: 0.0
-  rarity: 0.3
+  rarity: 0.35
   description: 地区纺织产品合约，不易变质适合长途贸易。
-- product_id: helsinki_(vantaa)_咖啡_B
-  name_zh: 赫尔辛基咖啡合约
-  category: 咖啡
-  weight_kg: 6.2
-  base_reference_price: 179.68
-  reference_currency: USD
-  shelf_life_hours: 3321
-  fragility: 0.0
-  rarity: 0.32
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。

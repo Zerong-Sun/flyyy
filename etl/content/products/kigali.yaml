@@ -1,51 +1,51 @@
 products:
+- product_id: kigali_电子_A
+  name_zh: 基加利电子合约
+  category: 电子
+  weight_kg: 1.2
+  base_reference_price: 2825.34
+  reference_currency: USD
+  shelf_life_hours: 67044
+  fragility: 0.3
+  rarity: 0.59
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: kigali_咖啡_B
   name_zh: 基加利咖啡合约
   category: 咖啡
-  weight_kg: 10.9
-  base_reference_price: 207.36
+  weight_kg: 0.9
+  base_reference_price: 273.41
   reference_currency: USD
-  shelf_life_hours: 2908
+  shelf_life_hours: 3632
   fragility: 0.0
-  rarity: 0.41
+  rarity: 0.31
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: kigali_工艺品_B
+- product_id: kigali_工艺品_C
   name_zh: 基加利工艺品合约
   category: 工艺品
-  weight_kg: 9.4
-  base_reference_price: 239.2
+  weight_kg: 5.8
+  base_reference_price: 264.69
   reference_currency: USD
-  shelf_life_hours: 38377
+  shelf_life_hours: 26485
   fragility: 0.5
-  rarity: 0.59
+  rarity: 0.41
   description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: kigali_香料_B
+- product_id: kigali_香料_D
   name_zh: 基加利香料合约
   category: 香料
-  weight_kg: 0.6
-  base_reference_price: 283.84
+  weight_kg: 0.5
+  base_reference_price: 330.81
   reference_currency: USD
-  shelf_life_hours: 6086
+  shelf_life_hours: 8011
   fragility: 0.0
-  rarity: 0.5
+  rarity: 0.41
   description: 精选干制香料，价值密度高，跨境贸易理想品。
-- product_id: kigali_食品_B
+- product_id: kigali_食品_E
   name_zh: 基加利食品合约
   category: 食品
-  weight_kg: 21.5
-  base_reference_price: 88.82
+  weight_kg: 12.0
+  base_reference_price: 219.71
   reference_currency: USD
-  shelf_life_hours: 1819
+  shelf_life_hours: 1665
   fragility: 0.2
-  rarity: 0.27
+  rarity: 0.36
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: kigali_日用品_B
-  name_zh: 基加利日用品合约
-  category: 日用品
-  weight_kg: 8.7
-  base_reference_price: 43.79
-  reference_currency: USD
-  shelf_life_hours: 60425
-  fragility: 0.0
-  rarity: 0.15
-  description: 地方日用品合约，需求平稳利润适中。

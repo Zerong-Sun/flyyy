@@ -7,82 +7,83 @@
 | 指标 | 值 |
 |------|-----|
 | 城市总数 | 500 |
-| 抽样数（≥10%） | 68 |
-| 抽样率 | 13.6% |
+| 抽样数（≥10%） | 69 |
+| 抽样率 | 13.8% |
 | Demo 20 枢纽 | 20/20 覆盖 |
-| PASS | 68 |
+| PASS | 69 |
 | ISSUE | 0 |
 
 ## 抽样明细（seed=20260802）
 
-- `accra` · Accra · conf=B · PASS
-- `agadir_(temsia)` · Agadir (Temsia) · conf=B · PASS
+- `abu_dhabi` · Abu Dhabi · conf=A · PASS
+- `ad_dammam` · Ad Dammam · conf=C · PASS
+- `aguascalientes` · Aguascalientes · conf=C · PASS
+- `ahvaz` · Ahvaz · conf=C · PASS
+- `akureyri` · Akureyri · conf=C · PASS
+- `al_jawf` · Al-Jawf · conf=C · PASS
+- `algiers` · Algiers · conf=A · PASS
+- `almaty` · Almaty · conf=A · PASS
 - `amsterdam` (demo hub) · Amsterdam · conf=A · PASS
-- `astrakhan` · Astrakhan · conf=B · PASS
-- `asunción` · Asunción · conf=B · PASS
+- `aomori` · Aomori · conf=C · PASS
+- `apia` · Apia · conf=A · PASS
 - `atlanta` (demo hub) · Atlanta · conf=A · PASS
-- `bandar_abbas` · Bandar Abbas · conf=B · PASS
 - `bangkok` (demo hub) · Bangkok · conf=A · PASS
-- `banjarbaru` · Banjarbaru · conf=B · PASS
-- `banjul_(yundum)` · Banjul (Yundum) · conf=B · PASS
+- `bangui` · Bangui · conf=A · PASS
+- `barnaul` · Barnaul · conf=C · PASS
+- `barranquilla` · Barranquilla · conf=C · PASS
+- `batam` · Batam · conf=C · PASS
 - `beijing` (demo hub) · Beijing · conf=A · PASS
-- `bhopal` · Bhopal · conf=B · PASS
-- `blantyre` · Blantyre · conf=B · PASS
-- `bosaso` · Bosaso · conf=B · PASS
-- `brazzaville` · Brazzaville · conf=B · PASS
-- `brindisi` · Brindisi · conf=B · PASS
-- `bristol` · Bristol · conf=B · PASS
-- `buenos_aires_(ezeiza)` · Buenos Aires (Ezeiza) · conf=B · PASS
-- `cairns` · Cairns · conf=B · PASS
+- `belo_horizonte` · Belo Horizonte · conf=C · PASS
+- `birmingham,_west_midlands` · Birmingham, West Midlands · conf=C · PASS
+- `bobo_dioulasso` · Bobo Dioulasso · conf=C · PASS
+- `bridgetown` · Bridgetown · conf=A · PASS
+- `burgas` · Burgas · conf=C · PASS
+- `béjaïa` · Béjaïa · conf=C · PASS
+- `calicut` · Calicut · conf=C · PASS
+- `cebu_city_lapu_lapu_city` · Cebu City/Lapu-Lapu City · conf=C · PASS
 - `chicago` (demo hub) · Chicago · conf=A · PASS
-- `christchurch` · Christchurch · conf=B · PASS
-- `da_nang` · Da Nang · conf=B · PASS
+- `chihuahua` · Chihuahua · conf=C · PASS
+- `chongqing` · Chongqing · conf=C · PASS
+- `cochabamba` · Cochabamba · conf=C · PASS
 - `dallas` (demo hub) · Dallas · conf=A · PASS
+- `dar_es_salaam` · Dar es Salaam · conf=A · PASS
 - `denver` (demo hub) · Denver · conf=A · PASS
-- `dili` · Dili · conf=B · PASS
-- `doha` · Doha · conf=B · PASS
 - `dubai` (demo hub) · Dubai · conf=A · PASS
-- `dunhuang` · Dunhuang · conf=B · PASS
-- `durban` · Durban · conf=B · PASS
-- `erfurt` · Erfurt · conf=B · PASS
+- `dushanbe` · Dushanbe · conf=A · PASS
+- `düsseldorf` · Düsseldorf · conf=C · PASS
+- `edremit` · Edremit · conf=C · PASS
+- `el_aaiún` · El Aaiún · conf=C · PASS
 - `frankfurt` (demo hub) · Frankfurt · conf=A · PASS
-- `geneva` · Geneva · conf=B · PASS
-- `gibraltar` · Gibraltar · conf=B · PASS
-- `glasgow` · Glasgow · conf=B · PASS
+- `funchal` · Funchal · conf=C · PASS
+- `goiânia` · Goiânia · conf=C · PASS
+- `guadalajara` · Guadalajara · conf=A · PASS
 - `guangzhou` (demo hub) · Guangzhou · conf=A · PASS
-- `guatemala_city` · Guatemala City · conf=B · PASS
+- `gurandani` · Gurandani · conf=C · PASS
+- `guwahati` · Guwahati · conf=C · PASS
+- `haiphong_(hai_an)` · Haiphong (Hai An) · conf=C · PASS
+- `harbin` · Harbin · conf=C · PASS
 - `hong_kong` (demo hub) · Hong Kong · conf=A · PASS
-- `huatulco` · Huatulco · conf=B · PASS
-- `imphal` · Imphal · conf=B · PASS
-- `isfahan` · Isfahan · conf=B · PASS
-- `isla_de_pascua` · Isla De Pascua · conf=B · PASS
+- `hyderabad` · Hyderabad · conf=C · PASS
+- `iquitos` · Iquitos · conf=C · PASS
 - `istanbul` (demo hub) · Istanbul · conf=A · PASS
-- `jeddah` · Jeddah · conf=B · PASS
-- `jiayuguan` · Jiayuguan · conf=B · PASS
-- `kasane` · Kasane · conf=B · PASS
-- `kota_kinabalu` · Kota Kinabalu · conf=B · PASS
-- `kumamoto` · Kumamoto · conf=B · PASS
-- `kumasi` · Kumasi · conf=B · PASS
+- `ivalo` · Ivalo · conf=C · PASS
+- `jaipur` · Jaipur · conf=C · PASS
+- `kailua_kona` · Kailua-Kona · conf=C · PASS
+- `kochi` · Kochi · conf=C · PASS
 - `london` (demo hub) · London · conf=A · PASS
 - `los_angeles` (demo hub) · Los Angeles · conf=A · PASS
-- `mabalacat` · Mabalacat · conf=B · PASS
-- `matoury` · Matoury · conf=B · PASS
+- `lubumbashi` · Lubumbashi · conf=C · PASS
 - `miami` (demo hub) · Miami · conf=A · PASS
-- `miyazaki` · Miyazaki · conf=B · PASS
+- `miyazaki` · Miyazaki · conf=C · PASS
+- `orio_al_serio_(bg)` · Orio al Serio (BG) · conf=C · PASS
 - `paris` (demo hub) · Paris · conf=A · PASS
-- `porto_seguro` · Porto Seguro · conf=B · PASS
-- `saga` · Saga · conf=B · PASS
-- `san_carlos_de_bariloche` · San Carlos de Bariloche · conf=B · PASS
+- `qeshm(dayrestan)` · Qeshm(Dayrestan) · conf=C · PASS
 - `seoul` (demo hub) · Seoul · conf=A · PASS
 - `shanghai` (demo hub) · Shanghai · conf=A · PASS
-- `siliguri` · Siliguri · conf=B · PASS
 - `singapore` (demo hub) · Singapore · conf=A · PASS
-- `souda` · Souda · conf=B · PASS
-- `spokane` · Spokane · conf=B · PASS
-- `stockholm` · Stockholm · conf=B · PASS
 - `tokyo` (demo hub) · Tokyo · conf=A · PASS
-- `west_island` · West Island · conf=B · PASS
-- `ålesund` · Ålesund · conf=B · PASS
+- `tunoshna` · Tunoshna · conf=C · PASS
+- `willemstad` · Willemstad · conf=C · PASS
 
 ## 缺陷清单
 
@@ -90,5 +91,5 @@
 
 ## 备注
 
-- C 置信度城须在百科页显示「资料不足」提示：当前数据集 0 座 C 城；UI 已支持（MainHUD._show_city）。
+- C 置信度城须在百科页显示「资料不足」提示：当前数据集 400 座 C 城；UI 已支持（MainHUD._show_city）。
 - `source_ids` 字段当前 schema 未落地，属数据契约缺口（非内容缺陷），后续 ETL 版本补充。

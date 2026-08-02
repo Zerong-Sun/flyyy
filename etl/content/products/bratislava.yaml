@@ -1,51 +1,51 @@
 products:
+- product_id: bratislava_电子_A
+  name_zh: 布拉迪斯拉发电子合约
+  category: 电子
+  weight_kg: 0.4
+  base_reference_price: 2925.34
+  reference_currency: USD
+  shelf_life_hours: 46830
+  fragility: 0.3
+  rarity: 0.65
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: bratislava_纺织品_B
   name_zh: 布拉迪斯拉发纺织品合约
   category: 纺织品
-  weight_kg: 16.2
-  base_reference_price: 228.79
-  reference_currency: USD
-  shelf_life_hours: 46830
-  fragility: 0.0
-  rarity: 0.26
-  description: 地区纺织产品合约，不易变质适合长途贸易。
-- product_id: bratislava_日用品_B
-  name_zh: 布拉迪斯拉发日用品合约
-  category: 日用品
-  weight_kg: 10.2
-  base_reference_price: 91.49
+  weight_kg: 1.9
+  base_reference_price: 476.43
   reference_currency: USD
   shelf_life_hours: 37704
   fragility: 0.0
-  rarity: 0.19
+  rarity: 0.36
+  description: 地区纺织产品合约，不易变质适合长途贸易。
+- product_id: bratislava_日用品_C
+  name_zh: 布拉迪斯拉发日用品合约
+  category: 日用品
+  weight_kg: 11.5
+  base_reference_price: 200.0
+  reference_currency: USD
+  shelf_life_hours: 98820
+  fragility: 0.0
+  rarity: 0.13
   description: 地方日用品合约，需求平稳利润适中。
-- product_id: bratislava_糖果_B
+- product_id: bratislava_糖果_D
   name_zh: 布拉迪斯拉发糖果合约
   category: 糖果
-  weight_kg: 5.8
-  base_reference_price: 142.8
+  weight_kg: 7.7
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 2768
+  shelf_life_hours: 1068
   fragility: 0.1
-  rarity: 0.24
+  rarity: 0.26
   description: 地方传统糖果点心合约，便携适合礼品转售。
-- product_id: bratislava_咖啡_B
+- product_id: bratislava_咖啡_E
   name_zh: 布拉迪斯拉发咖啡合约
   category: 咖啡
-  weight_kg: 10.4
-  base_reference_price: 266.3
+  weight_kg: 7.6
+  base_reference_price: 266.47
   reference_currency: USD
-  shelf_life_hours: 1788
+  shelf_life_hours: 4030
   fragility: 0.0
-  rarity: 0.49
+  rarity: 0.45
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: bratislava_香料_B
-  name_zh: 布拉迪斯拉发香料合约
-  category: 香料
-  weight_kg: 0.7
-  base_reference_price: 241.6
-  reference_currency: USD
-  shelf_life_hours: 5112
-  fragility: 0.0
-  rarity: 0.57
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
