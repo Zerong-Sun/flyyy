@@ -4,7 +4,7 @@ class_name GlobeController
 
 const EARTH_RADIUS := 10.0
 const GRID_RADIUS := 10.08
-const PIN_HEIGHT := 0.42
+const PIN_HEIGHT := 0.34
 
 signal airport_clicked(airport_id: String)
 
@@ -48,7 +48,7 @@ func _build_earth() -> void:
 	mesh.rings = 32
 	earth.mesh = mesh
 	var mat := StandardMaterial3D.new()
-	mat.roughness = 0.9
+	mat.roughness = 0.82
 	mat.metallic = 0.0
 	var tex_path := "res://assets/earth/earth_albedo_day_4k.png"
 	if not ResourceLoader.exists(tex_path):
@@ -126,11 +126,15 @@ func latlon_to_vec(lat: float, lon: float, radius: float = EARTH_RADIUS) -> Vect
 
 
 func _make_pin_mesh() -> ArrayMesh:
-	## Low-poly map pin: stem cylinder + round head (≤200 tris target).
+	## Compact map pin: thin stem + small head (fewer tris than before).
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	_add_cylinder(st, 0.04, 0.04, 0.28, 8, Vector3(0, 0.14, 0))
-	_add_icosphere(st, 0.11, Vector3(0, 0.34, 0))
+	# Stem (slightly darker via vertex color)
+	st.set_color(Color(0.55, 0.57, 0.61))
+	_add_cylinder(st, 0.028, 0.032, 0.22, 6, Vector3(0, 0.11, 0))
+	# Head (lighter, more jewel-like)
+	st.set_color(Color(0.82, 0.84, 0.88))
+	_add_icosphere(st, 0.085, Vector3(0, 0.27, 0))
 	st.generate_normals()
 	return st.commit()
 
@@ -171,9 +175,9 @@ func _add_cylinder(st: SurfaceTool, r_bottom: float, r_top: float, height: float
 
 
 func _add_icosphere(st: SurfaceTool, radius: float, center: Vector3) -> void:
-	## Lat/lon UV sphere (low rings) as pin head.
-	var rings := 6
-	var segs := 8
+	## Lat/lon UV sphere (low rings) as pin head — 4×6 keeps tris low.
+	var rings := 4
+	var segs := 6
 	for r in rings:
 		var v0 := float(r) / float(rings)
 		var v1 := float(r + 1) / float(rings)
@@ -206,12 +210,15 @@ func _spawn_airports() -> void:
 		var mi := MeshInstance3D.new()
 		mi.mesh = pin_mesh
 		var mat := StandardMaterial3D.new()
-		mat.albedo_color = Color(0.55, 0.58, 0.62)
+		mat.vertex_color_use_as_albedo = true
+		mat.albedo_color = Color(0.58, 0.60, 0.64)
+		mat.roughness = 0.35
+		mat.metallic = 0.25
 		mat.emission_enabled = true
-		mat.emission = Color(0.1, 0.1, 0.12)
-		mat.emission_energy_multiplier = 0.6
+		mat.emission = Color(0.12, 0.13, 0.15)
+		mat.emission_energy_multiplier = 0.45
 		mi.material_override = mat
-		var pos := latlon_to_vec(float(a.latitude), float(a.longitude), EARTH_RADIUS + 0.02)
+		var pos := latlon_to_vec(float(a.latitude), float(a.longitude), EARTH_RADIUS + 0.015)
 		mi.position = pos
 		# Orient pin: local +Y points outward from globe
 		var outward := pos.normalized()
@@ -221,15 +228,16 @@ func _spawn_airports() -> void:
 		tangent = tangent.normalized()
 		var bitangent := outward.cross(tangent).normalized()
 		mi.basis = Basis(tangent, outward, bitangent)
+		mi.scale = Vector3.ONE * 0.92
 		mi.name = str(a.airport_id)
 		airports_root.add_child(mi)
 		_airport_nodes[a.airport_id] = mi
 		var lab := Label3D.new()
 		lab.text = str(a.get("iata", ""))
-		lab.font_size = 48
-		lab.pixel_size = 0.008
+		lab.font_size = 42
+		lab.pixel_size = 0.007
 		lab.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-		lab.position = pos.normalized() * (EARTH_RADIUS + 0.55)
+		lab.position = pos.normalized() * (EARTH_RADIUS + 0.42)
 		lab.visible = false
 		lab.modulate = Color(1, 0.95, 0.7)
 		airports_root.add_child(lab)
@@ -341,17 +349,29 @@ func _update_markers() -> void:
 		if lab:
 			lab.visible = show_label
 		if id == AppState.current_airport_id:
-			mat.albedo_color = Color(0.2, 1.0, 0.45)
-			mat.emission = Color(0.1, 0.5, 0.2)
+			mat.albedo_color = Color(0.28, 0.88, 0.48)
+			mat.emission = Color(0.08, 0.42, 0.18)
+			mat.emission_energy_multiplier = 0.7
+			mat.metallic = 0.35
+			mat.roughness = 0.28
 		elif id == _selected_id:
-			mat.albedo_color = Color(1.0, 0.45, 0.2)
-			mat.emission = Color(0.6, 0.2, 0.05)
+			mat.albedo_color = Color(0.92, 0.48, 0.26)
+			mat.emission = Color(0.5, 0.18, 0.06)
+			mat.emission_energy_multiplier = 0.75
+			mat.metallic = 0.35
+			mat.roughness = 0.28
 		elif AppState.visited_airports.has(id):
-			mat.albedo_color = Color(1.0, 0.85, 0.2)
-			mat.emission = Color(0.6, 0.4, 0.05)
+			mat.albedo_color = Color(0.92, 0.78, 0.28)
+			mat.emission = Color(0.48, 0.34, 0.06)
+			mat.emission_energy_multiplier = 0.55
+			mat.metallic = 0.3
+			mat.roughness = 0.32
 		else:
-			mat.albedo_color = Color(0.55, 0.58, 0.62)
-			mat.emission = Color(0.1, 0.1, 0.12)
+			mat.albedo_color = Color(0.58, 0.60, 0.64)
+			mat.emission = Color(0.12, 0.13, 0.15)
+			mat.emission_energy_multiplier = 0.45
+			mat.metallic = 0.25
+			mat.roughness = 0.35
 
 
 func clear_routes() -> void:
@@ -480,7 +500,7 @@ func _pick_nearest_airport_id() -> String:
 	var from := cam.project_ray_origin(mouse)
 	var dir := cam.project_ray_normal(mouse)
 	var best_id := ""
-	var best_dist := 0.45
+	var best_dist := 0.30
 	for id in _airport_nodes.keys():
 		var mi: MeshInstance3D = _airport_nodes[id]
 		var to_point := mi.global_position - from
