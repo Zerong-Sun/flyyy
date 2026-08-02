@@ -1,192 +1,328 @@
 #!/usr/bin/env python3
-"""Generate a realistic Earth albedo texture at 2048×1024 for the GlobeController.
+"""Generate a stylized Earth albedo texture for the GlobeController.
 
-Uses embedded simplified continent polygons rendered in the game palette:
-  ocean #1A4A6E, land #3D6B4F, ice #D9E6F0.
-Output: game/assets/earth/earth_albedo_day_2k.png
+Uses the game palette (ocean #1A4A6E, land greens/tans, ice #D9E6F0)
+with denser coastlines, FBM terrain shading, and subtle ocean depth.
+
+  python3 tools/generate_earth_albedo.py
+  python3 tools/generate_earth_albedo.py --size 4096 --out game/assets/earth/earth_albedo_day_4k.png
 """
 
 from __future__ import annotations
 
+import argparse
 import math
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT_PATH = ROOT / "game" / "assets" / "earth" / "earth_albedo_day_2k.png"
+DEFAULT_OUT = ROOT / "game" / "assets" / "earth" / "earth_albedo_day_2k.png"
 
 WIDTH = 2048
 HEIGHT = 1024
 
 # ── Game palette ──────────────────────────────────────────────────────
-OCEAN = (0x1A, 0x4A, 0x6E, 0xFF)       # #1A4A6E
-LAND = (0x3D, 0x6B, 0x4F, 0xFF)        # #3D6B4F
-ICE = (0xD9, 0xE6, 0xF0, 0xFF)         # #D9E6F0
-COAST = (0x2A, 0x58, 0x3A, 0xFF)       # slightly darker coast
-BORDER = (0x5A, 0x7A, 0x8A, 0x60)      # subtle country border
-GRATICULE = (0x40, 0x60, 0x78, 0x30)   # grid lines
+OCEAN_DEEP = (0x12, 0x38, 0x58)
+OCEAN = (0x1A, 0x4A, 0x6E)
+OCEAN_SHALLOW = (0x2A, 0x62, 0x82)
+LAND_LOW = (0x3A, 0x6E, 0x4A)
+LAND = (0x3D, 0x6B, 0x4F)
+LAND_MID = (0x5A, 0x72, 0x48)
+LAND_HIGH = (0x7A, 0x6E, 0x4A)
+LAND_PEAK = (0x8A, 0x7A, 0x68)
+ICE = (0xD9, 0xE6, 0xF0)
+COAST = (0x2A, 0x58, 0x3A)
+BORDER = (0x5A, 0x7A, 0x8A, 0x70)
+GRATICULE = (0x40, 0x60, 0x78, 0x18)
 
-# ============ Simplified world continent polygons (lon, lat) ============
-# Order: draw outlines then fill. Points in normalized [-180,180],[-90,90].
 
-
-def _px(lon: float, lat: float) -> tuple[int, int]:
-    """Convert lon/lat to pixel coords."""
-    x = int((lon + 180.0) / 360.0 * WIDTH)
-    y = int((90.0 - lat) / 180.0 * HEIGHT)
+def _px(lon: float, lat: float, width: int | None = None, height: int | None = None) -> tuple[int, int]:
+    # Read WIDTH/HEIGHT at call time (defaults are bound at import and would stale on --size).
+    w = WIDTH if width is None else width
+    h = HEIGHT if height is None else height
+    x = int((lon + 180.0) / 360.0 * w)
+    y = int((90.0 - lat) / 180.0 * h)
     return (x, y)
 
 
-# Simplified polygons — just enough coastline points to look recognisable.
+# Denser continent outlines (lon, lat)
 CONTINENTS = [
     # North America
     [
-        (-170, 65), (-165, 70), (-140, 75), (-120, 72), (-105, 70), (-90, 75),
-        (-80, 72), (-70, 75), (-60, 70), (-55, 60), (-65, 45), (-75, 40),
-        (-85, 30), (-82, 25), (-80, 28), (-90, 20), (-95, 18), (-100, 20),
-        (-105, 22), (-110, 30), (-120, 35), (-125, 40), (-125, 50), (-130, 55),
-        (-140, 60), (-150, 60), (-160, 58), (-170, 65),
+        (-168, 65), (-165, 68), (-160, 66), (-155, 64), (-150, 61), (-145, 60),
+        (-140, 60), (-135, 58), (-130, 55), (-125, 50), (-124, 48), (-124, 42),
+        (-122, 38), (-120, 35), (-117, 33), (-115, 30), (-112, 28), (-110, 26),
+        (-106, 24), (-102, 22), (-97, 20), (-95, 18), (-92, 18), (-90, 20),
+        (-88, 22), (-86, 24), (-84, 26), (-82, 26), (-80, 28), (-82, 30),
+        (-85, 30), (-88, 32), (-90, 35), (-88, 38), (-85, 40), (-82, 42),
+        (-80, 44), (-76, 42), (-74, 40), (-72, 42), (-70, 44), (-68, 46),
+        (-66, 48), (-64, 50), (-62, 52), (-60, 55), (-58, 58), (-56, 60),
+        (-55, 62), (-58, 65), (-62, 68), (-68, 70), (-75, 72), (-82, 74),
+        (-90, 75), (-100, 74), (-110, 72), (-120, 72), (-130, 70), (-140, 70),
+        (-150, 70), (-160, 68), (-168, 65),
     ],
     # Greenland
     [
-        (-55, 82), (-45, 83), (-20, 82), (-15, 78), (-20, 72), (-30, 68),
-        (-35, 65), (-40, 60), (-50, 62), (-55, 68), (-52, 72), (-50, 78),
-        (-55, 82),
+        (-55, 83), (-48, 83), (-40, 82), (-30, 80), (-22, 78), (-18, 75),
+        (-20, 72), (-25, 70), (-30, 68), (-35, 66), (-40, 64), (-45, 62),
+        (-50, 63), (-54, 66), (-55, 70), (-53, 74), (-52, 78), (-54, 81),
+        (-55, 83),
     ],
     # South America
     [
-        (-80, 10), (-75, 12), (-70, 8), (-60, 5), (-50, 0), (-45, -5),
-        (-38, -10), (-35, -18), (-38, -22), (-42, -23), (-48, -28), (-55, -35),
-        (-58, -40), (-65, -50), (-68, -55), (-72, -50), (-75, -45), (-74, -38),
-        (-72, -30), (-70, -20), (-68, -12), (-65, -5), (-60, 2), (-70, 5),
-        (-75, 10), (-80, 10),
+        (-80, 10), (-78, 11), (-75, 11), (-72, 10), (-70, 8), (-68, 6),
+        (-65, 4), (-62, 2), (-58, 0), (-54, -2), (-50, -4), (-46, -6),
+        (-42, -8), (-38, -12), (-36, -16), (-35, -20), (-38, -24), (-42, -26),
+        (-46, -28), (-50, -30), (-54, -34), (-58, -38), (-62, -42), (-66, -46),
+        (-68, -50), (-70, -54), (-72, -52), (-74, -48), (-74, -44), (-73, -40),
+        (-72, -36), (-71, -32), (-70, -28), (-70, -24), (-72, -20), (-74, -16),
+        (-76, -12), (-78, -8), (-79, -4), (-80, 0), (-80, 4), (-80, 8),
+        (-80, 10),
     ],
-    # Europe
+    # Europe (simple non-self-intersecting outline)
     [
-        (-10, 36), (0, 38), (5, 44), (3, 48), (8, 52), (5, 55), (10, 58),
-        (12, 56), (15, 54), (20, 56), (25, 58), (30, 60), (28, 65), (32, 70),
-        (25, 70), (20, 68), (15, 65), (10, 62), (5, 62), (0, 58), (-5, 55),
-        (-8, 60), (-5, 65), (-10, 68), (-8, 72), (-5, 70), (0, 72), (5, 70),
-        (8, 65), (10, 58), (5, 55), (-2, 50), (-5, 48), (-8, 44), (-5, 40),
-        (-3, 38), (0, 42), (5, 38), (8, 36), (5, 40), (2, 44), (-2, 46),
-        (-10, 36),
+        (-9, 36), (-5, 36), (0, 38), (5, 40), (10, 40), (15, 42),
+        (20, 44), (25, 46), (30, 50), (32, 55), (30, 60), (28, 65),
+        (25, 70), (20, 71), (15, 70), (10, 68), (5, 65), (0, 62),
+        (-5, 60), (-8, 58), (-9, 55), (-8, 50), (-6, 46), (-8, 42),
+        (-9, 38), (-9, 36),
     ],
-    # UK
+    # UK + Ireland
     [
-        (-6, 58), (-5, 60), (-2, 58), (0, 55), (-3, 52), (-5, 50), (-6, 55),
-        (-6, 58),
+        (-8, 55), (-7, 57), (-5, 58), (-3, 58), (-1, 57), (0, 55),
+        (-1, 53), (-3, 51), (-5, 50), (-6, 51), (-7, 53), (-8, 55),
     ],
     # Africa
     [
-        (-17, 15), (-15, 18), (-5, 20), (0, 18), (5, 10), (8, 5), (10, 8),
-        (12, 5), (15, 2), (20, 0), (25, -5), (30, -10), (35, -15),
-        (40, -15), (45, -5), (50, 5), (50, 10), (45, 12), (40, 15),
-        (38, 22), (35, 30), (32, 35), (25, 35), (20, 32), (15, 30), (10, 32),
-        (10, 36), (12, 38), (8, 38), (5, 35), (-5, 35), (-8, 32), (-12, 30),
-        (-15, 28), (-17, 22), (-17, 15),
+        (-17, 15), (-16, 18), (-14, 20), (-10, 22), (-6, 22), (-2, 20),
+        (2, 18), (6, 14), (8, 10), (10, 8), (12, 6), (14, 4),
+        (16, 2), (20, 0), (24, -2), (28, -6), (32, -10), (36, -14),
+        (40, -16), (44, -14), (48, -10), (50, -4), (50, 2), (48, 8),
+        (46, 12), (42, 14), (38, 18), (36, 24), (34, 28), (32, 32),
+        (30, 34), (26, 34), (22, 32), (18, 30), (14, 30), (12, 32),
+        (10, 34), (10, 36), (8, 37), (4, 36), (0, 34), (-4, 34),
+        (-8, 32), (-12, 30), (-15, 28), (-17, 24), (-17, 20), (-17, 15),
     ],
     # Asia
     [
-        (30, 40), (35, 42), (40, 42), (45, 40), (50, 40), (55, 42),
-        (60, 45), (65, 48), (70, 50), (75, 52), (80, 50), (85, 52), (90, 55),
-        (100, 58), (105, 60), (110, 55), (115, 50), (120, 45), (125, 42),
-        (130, 38), (135, 35), (140, 35), (145, 42), (150, 45), (155, 50),
-        (160, 55), (162, 60), (165, 62), (170, 65), (175, 62), (178, 58),
-        (170, 55), (160, 52), (150, 48), (140, 42), (135, 38), (130, 35),
-        (128, 35), (125, 38), (120, 35), (115, 30), (110, 22), (105, 10),
-        (100, 12), (98, 8), (95, 16), (90, 22), (88, 25), (80, 28), (75, 25),
-        (70, 22), (65, 25), (62, 28), (58, 28), (55, 30), (50, 30), (45, 32),
-        (40, 30), (35, 28), (30, 30), (28, 32), (30, 40),
+        (30, 40), (34, 42), (40, 42), (46, 40), (52, 42), (58, 44),
+        (64, 48), (70, 50), (76, 52), (82, 52), (88, 54), (94, 56),
+        (100, 58), (106, 58), (112, 54), (118, 48), (122, 44), (126, 40),
+        (130, 38), (134, 36), (138, 36), (142, 40), (146, 44), (150, 48),
+        (154, 52), (158, 56), (162, 60), (166, 64), (170, 66), (174, 64),
+        (176, 60), (172, 56), (166, 54), (160, 52), (154, 50), (148, 46),
+        (142, 42), (138, 38), (134, 36), (130, 34), (126, 36), (122, 34),
+        (118, 32), (114, 28), (110, 24), (106, 18), (102, 12), (100, 10),
+        (98, 8), (96, 12), (94, 16), (90, 20), (86, 24), (80, 26),
+        (74, 24), (68, 22), (64, 24), (60, 28), (56, 28), (52, 30),
+        (48, 32), (44, 32), (40, 30), (36, 28), (32, 30), (30, 34),
+        (30, 40),
     ],
     # Japan
     [
-        (130, 45), (135, 44), (140, 45), (145, 44), (145, 40), (143, 38),
-        (140, 36), (137, 34), (130, 33), (130, 35), (128, 38), (130, 45),
+        (130, 45), (133, 44), (136, 44), (140, 45), (144, 44), (145, 42),
+        (144, 40), (142, 38), (140, 36), (138, 34), (136, 33), (132, 33),
+        (130, 34), (129, 36), (129, 40), (130, 45),
     ],
-    # Australian continent
+    # Australia
     [
-        (115, -15), (120, -12), (125, -12), (130, -12), (135, -15),
-        (138, -18), (142, -20), (145, -22), (148, -25), (150, -30),
-        (152, -32), (150, -35), (148, -38), (145, -38), (140, -35),
-        (135, -35), (130, -32), (125, -30), (120, -28), (115, -20),
-        (115, -15),
+        (114, -22), (116, -18), (118, -14), (122, -12), (126, -12), (130, -12),
+        (134, -14), (138, -16), (142, -18), (145, -20), (148, -22), (150, -26),
+        (152, -30), (153, -34), (151, -36), (148, -38), (144, -38), (140, -36),
+        (136, -35), (132, -34), (128, -32), (124, -30), (120, -28), (116, -26),
+        (114, -24), (114, -22),
     ],
-    # New Zealand (North + South Islands)
+    # New Zealand
     [
-        (172, -35), (174, -36), (176, -38), (178, -39), (176, -41),
-        (174, -43), (172, -45), (170, -44), (168, -42), (170, -40),
-        (172, -35),
+        (172, -35), (174, -36), (176, -38), (177, -40), (176, -42),
+        (174, -44), (172, -46), (170, -45), (168, -43), (169, -40),
+        (171, -37), (172, -35),
     ],
     # Iceland
     [
-        (-22, 66), (-18, 66), (-14, 65), (-14, 64), (-16, 63),
-        (-20, 63), (-24, 64), (-24, 65), (-22, 66),
+        (-24, 65), (-22, 66), (-18, 66), (-14, 65), (-13, 64),
+        (-15, 63), (-18, 63), (-22, 64), (-24, 65),
     ],
     # Madagascar
     [
-        (44, -12), (48, -14), (50, -18), (50, -22), (48, -25), (45, -22),
-        (44, -18), (44, -12),
+        (44, -12), (46, -13), (48, -14), (50, -16), (50, -20),
+        (49, -24), (47, -25), (45, -22), (44, -18), (44, -12),
     ],
-    # Indonesia / SE Asia islands
+    # SE Asia / Indonesia arc
     [
-        (96, 6), (98, 5), (100, 2), (102, 0), (104, -2), (106, -5),
-        (108, -6), (110, -6), (112, -4), (114, -2), (116, 0), (118, 1),
-        (120, 0), (122, -2), (124, -4), (126, -3), (128, -3), (130, -2),
-        (132, 0), (134, 2), (136, 4), (138, 6), (140, 5), (136, 2),
-        (132, -2), (128, -1), (124, -2), (120, -1), (116, 0), (112, 1),
-        (108, 0), (104, 2), (100, 4), (96, 6),
+        (95, 6), (98, 5), (100, 3), (102, 1), (104, -1), (106, -4),
+        (108, -6), (110, -7), (112, -6), (114, -4), (116, -2), (118, 0),
+        (120, -1), (122, -3), (124, -4), (126, -3), (128, -2), (130, -1),
+        (132, 1), (134, 3), (136, 4), (138, 5), (140, 4), (138, 2),
+        (134, 0), (130, -1), (126, -2), (122, -1), (118, 0), (114, 1),
+        (110, 0), (106, 1), (102, 3), (98, 5), (95, 6),
     ],
     # Antarctica
     [
-        (-180, -90), (-150, -70), (-120, -72), (-90, -72), (-60, -75),
-        (-30, -70), (0, -72), (30, -70), (60, -72), (90, -70), (120, -72),
-        (150, -68), (180, -90), (-180, -90),
+        (-180, -90), (-150, -72), (-120, -74), (-90, -74), (-60, -76),
+        (-30, -72), (0, -74), (30, -72), (60, -74), (90, -72),
+        (120, -74), (150, -70), (180, -90), (-180, -90),
     ],
 ]
 
-# Simplified country borders (optional overlay lines)
 BORDERS = [
-    # US-Canada
-    [(-125, 49), (-95, 49), (-90, 50), (-85, 47), (-82, 45), (-80, 43), (-75, 45), (-67, 45)],
-    # US-Mexico
-    [(-117, 32), (-110, 31), (-105, 30), (-100, 26), (-97, 26)],
+    [(-125, 49), (-110, 49), (-95, 49), (-90, 49), (-85, 47), (-82, 45), (-75, 45), (-68, 45)],
+    [(-117, 32), (-112, 31), (-108, 31), (-104, 30), (-100, 28), (-97, 26)],
 ]
 
 
-def _draw_polygon(draw: ImageDraw.ImageDraw, points: list[tuple[int, int]],
-                  fill: tuple, outline: tuple, outline_width: int = 2) -> None:
-    """Draw a filled polygon with outline."""
-    draw.polygon(points, fill=fill, outline=outline, width=outline_width)
+def _hash2(x: int, y: int) -> float:
+    n = x * 374761393 + y * 668265263
+    n = (n ^ (n >> 13)) * 1274126177
+    n = n ^ (n >> 16)
+    return (n & 0x7FFFFFFF) / 0x7FFFFFFF
 
 
-def generate() -> None:
-    img = Image.new("RGBA", (WIDTH, HEIGHT), OCEAN)
-    draw = ImageDraw.Draw(img)
+def _noise2(x: float, y: float) -> float:
+    x0 = math.floor(x)
+    y0 = math.floor(y)
+    fx = x - x0
+    fy = y - y0
+    u = fx * fx * (3.0 - 2.0 * fx)
+    v = fy * fy * (3.0 - 2.0 * fy)
+    a = _hash2(x0, y0)
+    b = _hash2(x0 + 1, y0)
+    c = _hash2(x0, y0 + 1)
+    d = _hash2(x0 + 1, y0 + 1)
+    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v
 
-    # Draw graticule (thin lat/lon lines)
-    for lat in range(-90, 91, 15):
+
+def _fbm(x: float, y: float, octaves: int = 5) -> float:
+    amp = 0.5
+    freq = 1.0
+    total = 0.0
+    norm = 0.0
+    for _ in range(octaves):
+        total += _noise2(x * freq, y * freq) * amp
+        norm += amp
+        amp *= 0.5
+        freq *= 2.0
+    return total / norm if norm > 0 else 0.0
+
+
+def _lerp_rgb(a: tuple[int, int, int], b: tuple[int, int, int], t: float) -> tuple[int, int, int]:
+    t = max(0.0, min(1.0, t))
+    return (
+        int(a[0] + (b[0] - a[0]) * t),
+        int(a[1] + (b[1] - a[1]) * t),
+        int(a[2] + (b[2] - a[2]) * t),
+    )
+
+
+def _land_color(elev: float, lat: float) -> tuple[int, int, int]:
+    """Map elevation + latitude into stylized land tones."""
+    abs_lat = abs(lat)
+    if abs_lat > 72:
+        return ICE
+    if abs_lat > 65:
+        t = (abs_lat - 65) / 7.0
+        base = _lerp_rgb(LAND_LOW, ICE, t)
+    elif elev < 0.35:
+        base = _lerp_rgb(LAND_LOW, LAND, elev / 0.35)
+    elif elev < 0.6:
+        base = _lerp_rgb(LAND, LAND_MID, (elev - 0.35) / 0.25)
+    elif elev < 0.82:
+        base = _lerp_rgb(LAND_MID, LAND_HIGH, (elev - 0.6) / 0.22)
+    else:
+        base = _lerp_rgb(LAND_HIGH, LAND_PEAK, (elev - 0.82) / 0.18)
+    # Slight desert tint in subtropical belts
+    if 15 < abs_lat < 35 and elev < 0.45:
+        desert = (0x8A, 0x7A, 0x52)
+        base = _lerp_rgb(base, desert, 0.35)
+    return base
+
+
+def _ocean_color(depth: float, lat: float) -> tuple[int, int, int]:
+    if abs(lat) > 75:
+        return _lerp_rgb(OCEAN, ICE, 0.35)
+    if depth < 0.25:
+        return _lerp_rgb(OCEAN_SHALLOW, OCEAN, depth / 0.25)
+    if depth < 0.7:
+        return _lerp_rgb(OCEAN, OCEAN_DEEP, (depth - 0.25) / 0.45)
+    return OCEAN_DEEP
+
+
+def generate(width: int = 2048, out_path: Path | None = None) -> None:
+    global WIDTH, HEIGHT
+    WIDTH = int(width)
+    HEIGHT = int(width) // 2
+    out = out_path or DEFAULT_OUT
+
+    # Land mask from polygons
+    mask_img = Image.new("L", (WIDTH, HEIGHT), 0)
+    mask_draw = ImageDraw.Draw(mask_img)
+    for polygon in CONTINENTS:
+        px_points = [_px(lon, lat) for lon, lat in polygon]
+        mask_draw.polygon(px_points, fill=255)
+
+    # Soften coasts slightly
+    mask_img = mask_img.filter(ImageFilter.GaussianBlur(radius=max(0.6, WIDTH / 2048.0)))
+
+    img = Image.new("RGB", (WIDTH, HEIGHT), OCEAN)
+    pixels = img.load()
+    mask = mask_img.load()
+
+    inv_w = 1.0 / float(WIDTH)
+    inv_h = 1.0 / float(HEIGHT)
+    scale = WIDTH / 512.0
+
+    for y in range(HEIGHT):
+        lat = 90.0 - (y + 0.5) * inv_h * 180.0
+        for x in range(WIDTH):
+            lon = -180.0 + (x + 0.5) * inv_w * 360.0
+            land_a = mask[x, y] / 255.0
+            nx = x * inv_w * 8.0 * scale
+            ny = y * inv_h * 4.0 * scale
+            n = _fbm(nx, ny, octaves=5)
+            if land_a > 0.08:
+                elev = n * 0.75 + land_a * 0.25
+                # Boost elevation inland (distance from soft edge)
+                elev = min(1.0, elev + max(0.0, land_a - 0.55) * 0.35)
+                col = _land_color(elev, lat)
+                if land_a < 0.85:
+                    # Blend toward coast / shallow water at edges
+                    coast_blend = 1.0 - land_a
+                    shallow = _ocean_color(0.15, lat)
+                    col = _lerp_rgb(col, shallow, coast_blend * 0.55)
+                pixels[x, y] = col
+            else:
+                depth = 0.35 + n * 0.55
+                # Continental shelf near land
+                depth *= 1.0 - land_a * 0.8
+                pixels[x, y] = _ocean_color(depth, lat)
+
+    draw = ImageDraw.Draw(img, "RGBA")
+
+    # Very faint graticule
+    for lat in range(-75, 76, 15):
         y = _px(0, lat)[1]
         draw.line([(0, y), (WIDTH - 1, y)], fill=GRATICULE, width=1)
-    for lon in range(-180, 181, 15):
+    for lon in range(-180, 181, 30):
         x = _px(lon, 0)[0]
         draw.line([(x, 0), (x, HEIGHT - 1)], fill=GRATICULE, width=1)
 
-    # Draw continents
-    for polygon in CONTINENTS:
-        px_points = [_px(lon, lat) for lon, lat in polygon]
-        _draw_polygon(draw, px_points, fill=LAND, outline=COAST, outline_width=2)
-
-    # Draw country borders
+    # Subtle borders
     for border in BORDERS:
         px_points = [_px(lon, lat) for lon, lat in border]
-        draw.line(px_points, fill=BORDER, width=1)
+        draw.line(px_points, fill=BORDER, width=max(1, WIDTH // 2048))
 
-    # Ensure directory exists
-    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    img.save(OUT_PATH, "PNG")
-    print(f"Earth albedo saved: {OUT_PATH} ({WIDTH}×{HEIGHT})")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out, "PNG", optimize=True)
+    print(f"Earth albedo saved: {out} ({WIDTH}×{HEIGHT})")
 
 
 if __name__ == "__main__":
-    generate()
+    ap = argparse.ArgumentParser(description="Generate stylized Earth albedo PNG for Godot globe")
+    ap.add_argument("--size", type=int, default=2048, help="Width in pixels (height = size/2)")
+    ap.add_argument("--out", type=Path, default=None, help="Output PNG path")
+    args = ap.parse_args()
+    out = args.out
+    if out is None and args.size >= 4096:
+        out = ROOT / "game" / "assets" / "earth" / "earth_albedo_day_4k.png"
+    generate(width=args.size, out_path=out)

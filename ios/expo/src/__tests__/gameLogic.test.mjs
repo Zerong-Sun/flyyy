@@ -14,6 +14,7 @@ import {
   priceSparkline,
 } from '../gameLogic.js';
 import { ACHIEVEMENTS, CITIES, STARTING_CITY } from '../gameData.js';
+import { t, LOCALES, DICT } from '../i18n.js';
 import {
   SAVE_VERSION,
   migrateSave,
@@ -188,5 +189,23 @@ describe('market intel helpers', () => {
     const pts = priceSparkline('ist_lokum', 'istanbul', 5);
     assert.equal(pts.length, 5);
     assert.equal(pts[4], priceAt('ist_lokum', 'istanbul'));
+  });
+});
+
+describe('i18n', () => {
+  it('has en and zh locales with matching keys', () => {
+    assert.deepEqual(LOCALES, ['en', 'zh']);
+    const enKeys = Object.keys(DICT.en);
+    assert.ok(enKeys.length > 10);
+    assert.deepEqual(enKeys.sort(), Object.keys(DICT.zh).sort());
+  });
+
+  it('t returns the localized string and falls back safely', () => {
+    assert.equal(t('en', 'brand'), 'Airborne Trader');
+    assert.equal(t('zh', 'brand'), '环球航商');
+    assert.equal(t('en', 'tab_market'), 'Market');
+    assert.equal(t('zh', 'tab_market'), '市场');
+    assert.equal(t('en', 'missing_key'), 'missing_key');
+    assert.equal(t('xx', 'brand'), 'Airborne Trader'); // unknown locale → en
   });
 });

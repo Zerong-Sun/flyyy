@@ -25,6 +25,39 @@ static func build() -> Theme:
 	return theme
 
 
+## Rounded card StyleBox with soft shadow (shared by airport / flight / market cards).
+static func card_style(accent: bool = false) -> StyleBoxFlat:
+	var s := StyleBoxFlat.new()
+	s.bg_color = _Colors.BG_PANEL
+	s.border_color = _Colors.ACCENT_AMBER if accent else _Colors.BORDER
+	s.set_border_width_all(2 if accent else 1)
+	s.set_corner_radius_all(10)
+	s.content_margin_left = 12
+	s.content_margin_right = 12
+	s.content_margin_top = 10
+	s.content_margin_bottom = 10
+	s.shadow_color = Color(0, 0, 0, 0.32)
+	s.shadow_size = 5
+	s.shadow_offset = Vector2(0, 2)
+	return s
+
+
+static func selected_row_style() -> StyleBoxFlat:
+	var s := StyleBoxFlat.new()
+	s.bg_color = Color(_Colors.ACCENT_TEAL.r, _Colors.ACCENT_TEAL.g, _Colors.ACCENT_TEAL.b, 0.25)
+	s.border_color = _Colors.ACCENT_TEAL
+	s.set_border_width_all(1)
+	s.set_corner_radius_all(8)
+	s.content_margin_left = 8
+	s.content_margin_right = 8
+	s.content_margin_top = 4
+	s.content_margin_bottom = 4
+	s.shadow_color = Color(0, 0, 0, 0.2)
+	s.shadow_size = 3
+	s.shadow_offset = Vector2(0, 1)
+	return s
+
+
 static func _load_font(path: String) -> FontFile:
 	if not ResourceLoader.exists(path) and not FileAccess.file_exists(path):
 		push_warning("ThemeFactory: missing font %s" % path)
@@ -51,7 +84,8 @@ static func _flat(bg: Color, border: Color, radius: float = 6.0, border_w: float
 
 
 static func _set_panel(theme: Theme) -> void:
-	var panel := _flat(_Colors.BG_PANEL, _Colors.BORDER, 8.0)
+	var panel := card_style(false)
+	panel.set_corner_radius_all(8)
 	theme.set_stylebox("panel", "PanelContainer", panel)
 	theme.set_stylebox("panel", "Panel", panel)
 

@@ -1,51 +1,51 @@
 products:
+- product_id: nuuk_电子_A
+  name_zh: 努克电子合约
+  category: 电子
+  weight_kg: 1.3
+  base_reference_price: 2522.93
+  reference_currency: USD
+  shelf_life_hours: 83906
+  fragility: 0.3
+  rarity: 0.64
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: nuuk_糖果_B
   name_zh: 努克糖果合约
   category: 糖果
-  weight_kg: 5.4
-  base_reference_price: 85.16
+  weight_kg: 1.4
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 2373
+  shelf_life_hours: 917
   fragility: 0.1
-  rarity: 0.27
+  rarity: 0.28
   description: 地方传统糖果点心合约，便携适合礼品转售。
-- product_id: nuuk_香料_B
+- product_id: nuuk_香料_C
   name_zh: 努克香料合约
   category: 香料
-  weight_kg: 0.5
-  base_reference_price: 293.33
+  weight_kg: 0.8
+  base_reference_price: 215.6
   reference_currency: USD
-  shelf_life_hours: 5691
+  shelf_life_hours: 7935
   fragility: 0.0
-  rarity: 0.48
+  rarity: 0.5
   description: 精选干制香料，价值密度高，跨境贸易理想品。
-- product_id: nuuk_工艺品_B
+- product_id: nuuk_工艺品_D
   name_zh: 努克工艺品合约
   category: 工艺品
-  weight_kg: 11.2
-  base_reference_price: 420.62
+  weight_kg: 8.4
+  base_reference_price: 223.7
   reference_currency: USD
-  shelf_life_hours: 78145
+  shelf_life_hours: 31321
   fragility: 0.5
-  rarity: 0.55
+  rarity: 0.63
   description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: nuuk_咖啡_B
+- product_id: nuuk_咖啡_E
   name_zh: 努克咖啡合约
   category: 咖啡
-  weight_kg: 5.5
-  base_reference_price: 262.22
+  weight_kg: 5.3
+  base_reference_price: 214.59
   reference_currency: USD
-  shelf_life_hours: 2806
+  shelf_life_hours: 3353
   fragility: 0.0
-  rarity: 0.35
+  rarity: 0.4
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: nuuk_纺织品_B
-  name_zh: 努克纺织品合约
-  category: 纺织品
-  weight_kg: 18.3
-  base_reference_price: 397.39
-  reference_currency: USD
-  shelf_life_hours: 73020
-  fragility: 0.0
-  rarity: 0.35
-  description: 地区纺织产品合约，不易变质适合长途贸易。

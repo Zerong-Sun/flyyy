@@ -9,9 +9,13 @@ ticket:
   random_factor_min: 0.95
   random_factor_max: 1.08
   business_multiplier: 10.0
+  first_multiplier: 25.0          # v0.3 first class vs economy
   baggage_economy_kg: 20.0
   baggage_business_kg: 60.0
+  baggage_first_kg: 100.0
   carry_on_kg: 5.0
+  price_per_km_usd: 0.12          # connection estimate (runtime)
+  connection_price_factor: 0.9
 
 flight_synth:
   cruise_km_per_min: 13.5   # ~810 km/h
@@ -23,13 +27,33 @@ flight_synth:
   min_destinations_per_hub: 8
   schedule_start: "2025-03-01"
   schedule_days: 31         # cover >=30 game days
+  stopover_fraction: 0.04   # ~4% of long-haul OD pairs get a one-stop marketed flight
+  stopover_ground_min: 45   # minutes on ground at stop (no disembark for player)
 
 baggage_extras:
   light: {extra_kg: 10, price_usd: 160}
   standard: {extra_kg: 20, price_usd: 320}
   heavy: {extra_kg: 50, price_usd: 650}
+  cold: {extra_kg: 0, price_usd: 120, enables_cold_chain: true}  # v0.3 cold hold
   cargo_per_50kg_usd: 380
   refund_fee_rate: 0.30
+
+# Minimum connection time (minutes). Per-airport override via airport.mct_minutes.
+mct:
+  default_min: 90
+  international_min: 120
+  max_connection_min: 480
+  same_alliance_discount_min: 15   # subtract from MCT when both legs share alliance
+
+# Delay / cancel simulation (seeded at runtime; conservative defaults)
+reliability:
+  enabled: true
+  delay_prob: 0.08
+  cancel_prob: 0.015
+  delay_min_mean: 25
+  delay_min_sigma: 18
+  delay_min_cap: 180
+  player_can_disable: true
 
 starting_cash_usd: 50000.0   # demo trade float; ~¥360,000 at ~7.2
 fx:
@@ -44,3 +68,8 @@ market:
   scarcity_remote_bonus: 1.35
   demand_decay_per_sale: 0.08
   demand_recovery_per_day: 0.05
+
+# Cold-chain decay multiplier when cold baggage is NOT active (1.0 = normal)
+cold_chain:
+  unprotected_decay_mult: 2.0
+  protected_decay_mult: 0.35

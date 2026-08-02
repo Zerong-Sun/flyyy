@@ -1,51 +1,51 @@
 products:
-- product_id: barcelona_食品_B
-  name_zh: 巴塞罗那食品合约
-  category: 食品
-  weight_kg: 26.1
-  base_reference_price: 151.25
+- product_id: barcelona_电子_A
+  name_zh: 巴塞罗那电子合约
+  category: 电子
+  weight_kg: 1.0
+  base_reference_price: 2544.78
   reference_currency: USD
-  shelf_life_hours: 610
-  fragility: 0.2
-  rarity: 0.39
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: barcelona_日用品_B
-  name_zh: 巴塞罗那日用品合约
-  category: 日用品
-  weight_kg: 7.1
-  base_reference_price: 77.93
-  reference_currency: USD
-  shelf_life_hours: 65249
-  fragility: 0.0
-  rarity: 0.11
-  description: 地方日用品合约，需求平稳利润适中。
+  shelf_life_hours: 15199
+  fragility: 0.3
+  rarity: 0.72
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: barcelona_陶瓷_B
   name_zh: 巴塞罗那陶瓷合约
   category: 陶瓷
-  weight_kg: 13.1
-  base_reference_price: 418.48
+  weight_kg: 1.0
+  base_reference_price: 283.05
   reference_currency: USD
-  shelf_life_hours: 52304
+  shelf_life_hours: 49508
   fragility: 0.7
-  rarity: 0.59
+  rarity: 0.48
   description: 本地陶瓷器具合约，运输需严密包装防破损。
-- product_id: barcelona_糖果_B
+- product_id: barcelona_糖果_C
   name_zh: 巴塞罗那糖果合约
   category: 糖果
-  weight_kg: 3.0
-  base_reference_price: 106.23
+  weight_kg: 5.8
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 2359
+  shelf_life_hours: 1771
   fragility: 0.1
-  rarity: 0.23
+  rarity: 0.22
   description: 地方传统糖果点心合约，便携适合礼品转售。
-- product_id: barcelona_纺织品_B
-  name_zh: 巴塞罗那纺织品合约
-  category: 纺织品
-  weight_kg: 12.7
-  base_reference_price: 479.64
+- product_id: barcelona_食品_D
+  name_zh: 巴塞罗那食品合约
+  category: 食品
+  weight_kg: 12.0
+  base_reference_price: 247.44
   reference_currency: USD
-  shelf_life_hours: 46784
+  shelf_life_hours: 1772
+  fragility: 0.2
+  rarity: 0.31
+  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: barcelona_日用品_E
+  name_zh: 巴塞罗那日用品合约
+  category: 日用品
+  weight_kg: 6.8
+  base_reference_price: 200.0
+  reference_currency: USD
+  shelf_life_hours: 29208
   fragility: 0.0
-  rarity: 0.32
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  rarity: 0.06
+  description: 地方日用品合约，需求平稳利润适中。

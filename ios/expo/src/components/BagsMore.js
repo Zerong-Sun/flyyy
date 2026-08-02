@@ -118,7 +118,7 @@ function BackButton({ onPress }) {
 }
 
 export function MoreScreen({ game }) {
-  const { state, stats, city, setPage, restart, saveNow, saveSub, toggleOpt } = game;
+  const { state, stats, city, setPage, restart, saveNow, saveSub, toggleOpt, setLocale, t } = game;
   const page = state.page;
 
   if (page === 'ach') {
@@ -319,7 +319,7 @@ export function MoreScreen({ game }) {
       <View style={styles.screen}>
         <View style={styles.subHeader}>
           <BackButton onPress={() => setPage(null)} />
-          <ScreenTitle title="Settings & save" style={styles.subTitle} />
+          <ScreenTitle title={t('settings_title', 'Settings & save')} style={styles.subTitle} />
         </View>
 
         <Card style={styles.settingsCard}>
@@ -333,6 +333,27 @@ export function MoreScreen({ game }) {
               />
             </View>
           ))}
+        </Card>
+
+        <Card style={styles.settingsCard}>
+          <View style={styles.settingsRow}>
+            <View style={styles.settingsBody}>
+              <Text style={styles.settingsTitle}>{t('settings_lang', 'Language')}</Text>
+              <Text style={styles.settingsSub}>{t('settings_lang_sub', 'Switch the interface between English and 中文.')}</Text>
+            </View>
+          </View>
+          <View style={styles.langRow}>
+            {(['en', 'zh']).map((lng) => (
+              <Button
+                key={lng}
+                variant={state.locale === lng ? 'primary' : 'secondary'}
+                style={styles.langBtn}
+                onPress={() => setLocale(lng)}
+              >
+                {lng === 'en' ? 'English' : '中文'}
+              </Button>
+            ))}
+          </View>
         </Card>
 
         <Card style={styles.settingsCard}>
@@ -1141,6 +1162,14 @@ const styles = StyleSheet.create({
   },
   settingsBtn: {
     width: '100%',
+  },
+  langRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 12,
+  },
+  langBtn: {
+    flex: 1,
   },
   version: {
     marginTop: 18,

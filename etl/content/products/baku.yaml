@@ -1,51 +1,51 @@
 products:
+- product_id: baku_电子_A
+  name_zh: 巴库电子合约
+  category: 电子
+  weight_kg: 1.8
+  base_reference_price: 2562.26
+  reference_currency: USD
+  shelf_life_hours: 29091
+  fragility: 0.3
+  rarity: 0.69
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: baku_矿产_B
   name_zh: 巴库矿产合约
   category: 矿产
-  weight_kg: 28.5
-  base_reference_price: 675.54
+  weight_kg: 0.6
+  base_reference_price: 373.99
   reference_currency: USD
-  shelf_life_hours: 68113
+  shelf_life_hours: 83355
   fragility: 0.0
-  rarity: 0.57
+  rarity: 0.53
   description: 矿产品样品合约，重量较大但价值稳定。
-- product_id: baku_工艺品_B
+- product_id: baku_工艺品_C
   name_zh: 巴库工艺品合约
   category: 工艺品
-  weight_kg: 9.9
-  base_reference_price: 204.29
+  weight_kg: 10.0
+  base_reference_price: 472.58
   reference_currency: USD
-  shelf_life_hours: 44415
+  shelf_life_hours: 59660
   fragility: 0.5
-  rarity: 0.63
+  rarity: 0.58
   description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: baku_日用品_B
+- product_id: baku_日用品_D
   name_zh: 巴库日用品合约
   category: 日用品
-  weight_kg: 7.3
-  base_reference_price: 53.19
+  weight_kg: 11.7
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 21810
+  shelf_life_hours: 23208
   fragility: 0.0
-  rarity: 0.19
+  rarity: 0.17
   description: 地方日用品合约，需求平稳利润适中。
-- product_id: baku_香料_B
+- product_id: baku_香料_E
   name_zh: 巴库香料合约
   category: 香料
-  weight_kg: 0.8
-  base_reference_price: 377.15
+  weight_kg: 0.4
+  base_reference_price: 230.82
   reference_currency: USD
-  shelf_life_hours: 7501
+  shelf_life_hours: 5678
   fragility: 0.0
-  rarity: 0.59
+  rarity: 0.46
   description: 精选干制香料，价值密度高，跨境贸易理想品。
-- product_id: baku_咖啡_B
-  name_zh: 巴库咖啡合约
-  category: 咖啡
-  weight_kg: 12.0
-  base_reference_price: 273.5
-  reference_currency: USD
-  shelf_life_hours: 4316
-  fragility: 0.0
-  rarity: 0.44
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。

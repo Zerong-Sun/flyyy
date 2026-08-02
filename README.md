@@ -87,7 +87,9 @@
 对照表：[docs/superpowers/plans/2026-07-26-demo-acceptance.md](docs/superpowers/plans/2026-07-26-demo-acceptance.md)  
 阶段一地图门控：[docs/superpowers/plans/2026-07-26-map-prototype-acceptance.md](docs/superpowers/plans/2026-07-26-map-prototype-acceptance.md)
 
-v0.2 扩展（500+ 城市、联程、价格锚点、成就等）见 [docs/v0.2_REQUIREMENTS.md](docs/v0.2_REQUIREMENTS.md)。
+v0.2 扩展（500+ 城市、联程、价格锚点、成就等）见 [docs/v0.2_REQUIREMENTS.md](docs/v0.2_REQUIREMENTS.md)。  
+iOS Expo M2 验收：[docs/superpowers/plans/2026-08-01-ios-expo-m2-acceptance.md](docs/superpowers/plans/2026-08-01-ios-expo-m2-acceptance.md)。  
+下一步全周期（v0.3 / M3 / v1.0）：[docs/v0.3_REQUIREMENTS.md](docs/v0.3_REQUIREMENTS.md)、[docs/ios_expo_M3_REQUIREMENTS.md](docs/ios_expo_M3_REQUIREMENTS.md)、[docs/v1.0_GATE.md](docs/v1.0_GATE.md)。
 
 ---
 

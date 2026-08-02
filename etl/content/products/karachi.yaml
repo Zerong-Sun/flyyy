@@ -1,51 +1,51 @@
 products:
-- product_id: karachi_茶叶_B
-  name_zh: 卡拉奇茶叶合约
-  category: 茶叶
-  weight_kg: 9.8
-  base_reference_price: 155.0
-  reference_currency: USD
-  shelf_life_hours: 7292
-  fragility: 0.1
-  rarity: 0.51
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
-- product_id: karachi_玩具_B
-  name_zh: 卡拉奇玩具合约
-  category: 玩具
-  weight_kg: 7.2
-  base_reference_price: 60.97
+- product_id: karachi_电子_A
+  name_zh: 卡拉奇电子合约
+  category: 电子
+  weight_kg: 2.0
+  base_reference_price: 2826.28
   reference_currency: USD
   shelf_life_hours: 66336
-  fragility: 0.1
-  rarity: 0.3
-  description: 本地特色玩具合约，适合作为伴手礼转售。
-- product_id: karachi_纺织品_B
-  name_zh: 卡拉奇纺织品合约
-  category: 纺织品
-  weight_kg: 12.5
-  base_reference_price: 183.39
+  fragility: 0.3
+  rarity: 0.62
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
+- product_id: karachi_香料_B
+  name_zh: 卡拉奇香料合约
+  category: 香料
+  weight_kg: 0.6
+  base_reference_price: 202.44
   reference_currency: USD
-  shelf_life_hours: 34736
+  shelf_life_hours: 4789
   fragility: 0.0
-  rarity: 0.25
-  description: 地区纺织产品合约，不易变质适合长途贸易。
-- product_id: karachi_日用品_B
-  name_zh: 卡拉奇日用品合约
-  category: 日用品
-  weight_kg: 5.1
-  base_reference_price: 22.3
-  reference_currency: USD
-  shelf_life_hours: 70373
-  fragility: 0.0
-  rarity: 0.17
-  description: 地方日用品合约，需求平稳利润适中。
-- product_id: karachi_食品_B
+  rarity: 0.45
+  description: 精选干制香料，价值密度高，跨境贸易理想品。
+- product_id: karachi_食品_C
   name_zh: 卡拉奇食品合约
   category: 食品
-  weight_kg: 17.1
-  base_reference_price: 68.95
+  weight_kg: 12.0
+  base_reference_price: 207.16
   reference_currency: USD
-  shelf_life_hours: 933
+  shelf_life_hours: 1177
   fragility: 0.2
-  rarity: 0.35
+  rarity: 0.25
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
+- product_id: karachi_工艺品_D
+  name_zh: 卡拉奇工艺品合约
+  category: 工艺品
+  weight_kg: 10.9
+  base_reference_price: 441.57
+  reference_currency: USD
+  shelf_life_hours: 43959
+  fragility: 0.5
+  rarity: 0.57
+  description: 本地手工制品合约，精工细作运输需缓冲包装。
+- product_id: karachi_矿产_E
+  name_zh: 卡拉奇矿产合约
+  category: 矿产
+  weight_kg: 12.0
+  base_reference_price: 578.48
+  reference_currency: USD
+  shelf_life_hours: 78355
+  fragility: 0.0
+  rarity: 0.45
+  description: 矿产品样品合约，重量较大但价值稳定。

@@ -21,6 +21,15 @@ static func buy(product_id: String, qty: int, as_cargo: bool = false, discount_f
 	if total > AppState.cash_usd:
 		return "资金不足"
 	var p: Dictionary = DataService.get_product(product_id)
+	var hazmat := str(p.get("hazmat_class", "none"))
+	var rule: Dictionary = DataService.hazmat_rule(hazmat)
+	# Soft warnings only (v0.3): do not hard-block trade.
+	if not bool(rule.get("cabin_ok", true)) and not as_cargo:
+		var label := str(rule.get("label_zh", "受限"))
+		if label != "":
+			EventBus.tutorial_hint.emit("提示：%s — %s（建议货运/冷藏；本版不阻断购买）" % [p.get("name_zh", product_id), label])
+	if bool(p.get("requires_cold_chain", false)) and not AppState.trip_cold_chain:
+		EventBus.tutorial_hint.emit("提示：%s 建议加购冷藏行李，否则品质衰减更快" % p.get("name_zh", product_id))
 	var add_w: float = float(p.get("weight_kg", 0.1)) * float(qty)
 	if as_cargo:
 		var used: float = AppState.inventory_weight_kg(true, false)

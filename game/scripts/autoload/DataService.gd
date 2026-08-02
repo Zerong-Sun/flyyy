@@ -17,6 +17,9 @@ var economy: Dictionary = {}
 var tz_offsets: Dictionary = {}
 var disclaimer: String = ""
 var product_market_tags: Dictionary = {}
+var airlines_by_id: Dictionary = {}
+var alliances_by_id: Dictionary = {}
+var dangerous_goods: Dictionary = {}
 var transfer_edges: Dictionary = {}
 var _transfer_keys: Array = []        # available transfer origin keys
 var _transfer_loaded: bool = false
@@ -82,6 +85,16 @@ func _load_all() -> void:
 	economy = world.get("economy", {})
 	tz_offsets = world.get("tz_offsets", {})
 	disclaimer = str(world.get("disclaimer", ""))
+	dangerous_goods = world.get("dangerous_goods", {})
+
+	airlines_by_id.clear()
+	for a_v in world.get("airlines", []):
+		var a: Dictionary = a_v
+		airlines_by_id[str(a.get("id", ""))] = a
+	alliances_by_id.clear()
+	for al_v in world.get("alliances", []):
+		var al: Dictionary = al_v
+		alliances_by_id[str(al.get("id", ""))] = al
 
 	airports_by_id.clear()
 	airports_by_iata.clear()
@@ -120,10 +133,40 @@ func _load_all() -> void:
 		])
 
 	loaded = true
-	print("DataService loaded: %d airports, %d products, %d tags, %d transfer-origins" % [
+	print("DataService loaded: %d airports, %d products, %d tags, %d transfer-origins, %d airlines" % [
 		airports.size(), products_by_id.size(),
-		product_market_tags.size(), _transfer_keys.size()
+		product_market_tags.size(), _transfer_keys.size(), airlines_by_id.size()
 	])
+
+
+func mct_minutes_for_airport(airport_or_iata: String, international: bool = false) -> int:
+	## Resolve MCT minutes from airport override or economy.mct defaults.
+	var mct_cfg: Dictionary = economy.get("mct", {})
+	var default_m := int(mct_cfg.get("default_min", 90))
+	var intl_m := int(mct_cfg.get("international_min", default_m))
+	var ap: Dictionary = get_airport(airport_or_iata)
+	if ap.is_empty():
+		ap = get_airport_by_iata(airport_or_iata)
+	if ap.has("mct_minutes"):
+		return int(ap.get("mct_minutes", default_m))
+	return intl_m if international else default_m
+
+
+func alliance_name(alliance_id: String) -> String:
+	var al: Dictionary = alliances_by_id.get(alliance_id, {})
+	if al.is_empty():
+		return ""
+	return str(al.get("name_zh", al.get("name_en", alliance_id)))
+
+
+func airline_alliance_id(airline_id: String) -> String:
+	var a: Dictionary = airlines_by_id.get(airline_id, {})
+	return str(a.get("alliance_id", "none"))
+
+
+func hazmat_rule(hazmat_class: String) -> Dictionary:
+	var classes: Dictionary = dangerous_goods.get("classes", {})
+	return classes.get(hazmat_class, classes.get("none", {}))
 
 
 func get_airport(airport_id: String) -> Dictionary:

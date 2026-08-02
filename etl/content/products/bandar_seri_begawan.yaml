@@ -1,51 +1,51 @@
 products:
+- product_id: bandar_seri_begawan_电子_A
+  name_zh: 斯里巴加湾电子合约
+  category: 电子
+  weight_kg: 0.5
+  base_reference_price: 2239.38
+  reference_currency: USD
+  shelf_life_hours: 65787
+  fragility: 0.3
+  rarity: 0.65
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: bandar_seri_begawan_香料_B
   name_zh: 斯里巴加湾香料合约
   category: 香料
-  weight_kg: 0.5
-  base_reference_price: 296.13
+  weight_kg: 1.5
+  base_reference_price: 393.25
   reference_currency: USD
-  shelf_life_hours: 4723
+  shelf_life_hours: 7789
   fragility: 0.0
-  rarity: 0.42
+  rarity: 0.48
   description: 精选干制香料，价值密度高，跨境贸易理想品。
-- product_id: bandar_seri_begawan_糖果_B
+- product_id: bandar_seri_begawan_糖果_C
   name_zh: 斯里巴加湾糖果合约
   category: 糖果
-  weight_kg: 4.1
-  base_reference_price: 101.68
+  weight_kg: 3.5
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 2810
+  shelf_life_hours: 2033
   fragility: 0.1
-  rarity: 0.22
+  rarity: 0.32
   description: 地方传统糖果点心合约，便携适合礼品转售。
-- product_id: bandar_seri_begawan_日用品_B
+- product_id: bandar_seri_begawan_日用品_D
   name_zh: 斯里巴加湾日用品合约
   category: 日用品
-  weight_kg: 11.8
-  base_reference_price: 73.88
+  weight_kg: 11.3
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 90596
+  shelf_life_hours: 55185
   fragility: 0.0
-  rarity: 0.08
+  rarity: 0.11
   description: 地方日用品合约，需求平稳利润适中。
-- product_id: bandar_seri_begawan_咖啡_B
+- product_id: bandar_seri_begawan_咖啡_E
   name_zh: 斯里巴加湾咖啡合约
   category: 咖啡
-  weight_kg: 7.0
-  base_reference_price: 157.73
+  weight_kg: 10.0
+  base_reference_price: 213.13
   reference_currency: USD
-  shelf_life_hours: 3650
+  shelf_life_hours: 1456
   fragility: 0.0
-  rarity: 0.31
+  rarity: 0.43
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: bandar_seri_begawan_食品_B
-  name_zh: 斯里巴加湾食品合约
-  category: 食品
-  weight_kg: 18.0
-  base_reference_price: 140.21
-  reference_currency: USD
-  shelf_life_hours: 815
-  fragility: 0.2
-  rarity: 0.38
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。

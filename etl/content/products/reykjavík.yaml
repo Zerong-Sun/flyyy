@@ -1,51 +1,51 @@
 products:
+- product_id: reykjavík_电子_A
+  name_zh: 雷克雅未克电子合约
+  category: 电子
+  weight_kg: 1.0
+  base_reference_price: 2934.7
+  reference_currency: USD
+  shelf_life_hours: 54436
+  fragility: 0.3
+  rarity: 0.56
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: reykjavík_工艺品_B
   name_zh: 雷克雅未克工艺品合约
   category: 工艺品
-  weight_kg: 13.9
-  base_reference_price: 272.94
+  weight_kg: 1.5
+  base_reference_price: 491.28
   reference_currency: USD
-  shelf_life_hours: 14348
+  shelf_life_hours: 74177
   fragility: 0.5
-  rarity: 0.51
+  rarity: 0.59
   description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: reykjavík_咖啡_B
+- product_id: reykjavík_咖啡_C
   name_zh: 雷克雅未克咖啡合约
   category: 咖啡
-  weight_kg: 8.5
-  base_reference_price: 143.68
+  weight_kg: 10.4
+  base_reference_price: 272.98
   reference_currency: USD
-  shelf_life_hours: 2299
+  shelf_life_hours: 2405
   fragility: 0.0
-  rarity: 0.43
+  rarity: 0.41
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: reykjavík_香料_B
+- product_id: reykjavík_香料_D
   name_zh: 雷克雅未克香料合约
   category: 香料
-  weight_kg: 0.8
-  base_reference_price: 274.77
+  weight_kg: 1.0
+  base_reference_price: 210.19
   reference_currency: USD
-  shelf_life_hours: 6251
+  shelf_life_hours: 8308
   fragility: 0.0
-  rarity: 0.51
+  rarity: 0.5
   description: 精选干制香料，价值密度高，跨境贸易理想品。
-- product_id: reykjavík_纺织品_B
+- product_id: reykjavík_纺织品_E
   name_zh: 雷克雅未克纺织品合约
   category: 纺织品
-  weight_kg: 14.8
-  base_reference_price: 488.2
+  weight_kg: 8.4
+  base_reference_price: 332.19
   reference_currency: USD
-  shelf_life_hours: 84565
+  shelf_life_hours: 82189
   fragility: 0.0
-  rarity: 0.26
+  rarity: 0.29
   description: 地区纺织产品合约，不易变质适合长途贸易。
-- product_id: reykjavík_糖果_B
-  name_zh: 雷克雅未克糖果合约
-  category: 糖果
-  weight_kg: 6.9
-  base_reference_price: 102.5
-  reference_currency: USD
-  shelf_life_hours: 2524
-  fragility: 0.1
-  rarity: 0.17
-  description: 地方传统糖果点心合约，便携适合礼品转售。

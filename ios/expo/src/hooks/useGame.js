@@ -36,6 +36,7 @@ import {
   waitUntilDep,
 } from '../gameLogic';
 import { playSfx } from '../audio';
+import { t as i18nT } from '../i18n';
 import {
   SAVE_KEY,
   serializeSave,
@@ -93,6 +94,7 @@ const initialState = () => ({
   optSound: true,
   opt24h: true,
   optReduce: false,
+  locale: 'en',
 });
 
 function unlockedIds(stats, unlocked = []) {
@@ -484,6 +486,11 @@ export function useGame() {
   const toggleOpt = useCallback((key) => {
     markInteracted();
     setState((s) => ({ ...s, [key]: !s[key] }));
+  }, [markInteracted]);
+
+  const setLocale = useCallback((lng) => {
+    markInteracted();
+    setState((s) => ({ ...s, locale: lng === 'zh' ? 'zh' : 'en' }));
   }, [markInteracted]);
 
   const openProduct = useCallback((id) => setState((s) => ({
@@ -1013,6 +1020,8 @@ export function useGame() {
     searchResults,
     clockText: clockLabel(state.gameMin, state.opt24h),
     localTime: fmtClock(cityMinutes(state.gameMin, state.city), state.opt24h),
+    locale: state.locale || 'en',
+    t: (key, fallback) => i18nT(state.locale || 'en', key, fallback),
     bagText: `${bagKg.toFixed(1)} / ${state.bagLimit} kg`,
     cargoText: `${cargoKg.toFixed(1)} / ${state.cargoCap} kg`,
     saveSub: `Last saved ${state.savedAt ? `${hm(state.gameMin - state.savedAt)} ago` : 'at takeoff'} · slot 1`,
@@ -1046,6 +1055,7 @@ export function useGame() {
     setRot,
     setDragging,
     toggleOpt,
+    setLocale,
     closeSheet,
     startGame,
     openProduct,

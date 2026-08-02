@@ -8,6 +8,12 @@ const _FlightSearch = preload("res://scripts/systems/FlightSearch.gd")
 const _Colors = preload("res://themes/DemoColors.gd")
 const _ThemeFactory = preload("res://themes/ThemeFactory.gd")
 const _IconFactory = preload("res://themes/IconFactory.gd")
+const _FlightCarousel = preload("res://scripts/ui/FlightCarousel.gd")
+
+const PANEL_CENTER_POS := Vector2(260, 150)
+const PANEL_CENTER_SIZE := Vector2(720, 460)
+const PANEL_FLIGHT_POS := Vector2(40, 430)
+const PANEL_FLIGHT_SIZE := Vector2(1200, 280)
 
 @onready var globe: Node3D = $"../Globe"
 @onready var flight_ops: Node = $"../FlightOps"
@@ -26,9 +32,12 @@ var _countdown: Label
 var _btn_ff: Button
 var _panel_host: Control
 var _flight_list: ItemList
+var _flight_carousel: Control = null  # FlightCarousel instance
 var _flight_query: LineEdit
 var _dest_code_query: LineEdit
 var _flight_detail: RichTextLabel
+var _airport_card_panel: PanelContainer
+var _bottom_nav: HBoxContainer
 const INTEL_UPGRADE_COST := 200.0
 var _market_container: VBoxContainer
 var _inv_list: ItemList
@@ -62,7 +71,7 @@ var _flight_page: int = 0
 var _max_price: float = 0.0
 var _max_duration: int = 0
 var _biz_only: bool = false
-const FLIGHTS_PER_PAGE := 80
+const FLIGHTS_PER_PAGE := 24
 var _cash_rolling: bool = false
 var _search_sfx_at: float = 0.0
 var _transition_running: bool = false
@@ -221,7 +230,9 @@ func _build_ui() -> void:
 	var right := PanelContainer.new()
 	right.position = Vector2(1000, 120)
 	right.size = Vector2(270, 360)
+	right.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	add_child(right)
+	_airport_card_panel = right
 	_airport_card = RichTextLabel.new()
 	_airport_card.bbcode_enabled = true
 	_airport_card.fit_content = false
@@ -234,6 +245,7 @@ func _build_ui() -> void:
 	bottom.position = Vector2(200, 640)
 	bottom.size = Vector2(880, 40)
 	add_child(bottom)
+	_bottom_nav = bottom
 	for pair in [
 		[I18nService.t("ui.tab.city"), "_show_city", "ic_city"],
 		[I18nService.t("ui.tab.market"), "_show_market", "ic_market"],
@@ -257,10 +269,11 @@ func _build_ui() -> void:
 		bottom.add_child(b)
 
 	_panel_host = PanelContainer.new()
-	_panel_host.position = Vector2(260, 150)
-	_panel_host.size = Vector2(720, 460)
+	_panel_host.position = PANEL_CENTER_POS
+	_panel_host.size = PANEL_CENTER_SIZE
 	_panel_host.clip_contents = true
 	_panel_host.visible = false
+	_panel_host.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	add_child(_panel_host)
 
 	_overlay = ColorRect.new()
@@ -298,6 +311,7 @@ func _build_ui() -> void:
 	_new_game_panel = PanelContainer.new()
 	_new_game_panel.position = Vector2(360, 160)
 	_new_game_panel.size = Vector2(560, 360)
+	_new_game_panel.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	add_child(_new_game_panel)
 	var ngv := VBoxContainer.new()
 	_new_game_panel.add_child(ngv)
@@ -433,6 +447,7 @@ func _on_search_changed(q: String) -> void:
 
 func _close_panel() -> void:
 	_panel_host.visible = false
+	_restore_panel_center()
 	AudioService.play_sfx("sfx_ui_close_panel")
 	_set_panel_bgm("globe")
 
@@ -472,14 +487,32 @@ func _dismiss_open_panel() -> void:
 	for c in _panel_host.get_children():
 		c.queue_free()
 	_panel_host.visible = false
+	_restore_panel_center()
 	_market_built_city = ""
 	_market_container = null
 	_selected_market_product_id = ""
 	_flight_list = null
+	_flight_carousel = null
 	_flight_query = null
 	_dest_code_query = null
 	_flight_detail = null
 	_recommend_box = null
+
+
+func _restore_panel_center() -> void:
+	_panel_host.position = PANEL_CENTER_POS
+	_panel_host.size = PANEL_CENTER_SIZE
+	_panel_host.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
+	if _bottom_nav:
+		_bottom_nav.visible = true
+
+
+func _dock_panel_flights() -> void:
+	_panel_host.position = PANEL_FLIGHT_POS
+	_panel_host.size = PANEL_FLIGHT_SIZE
+	_panel_host.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
+	if _bottom_nav:
+		_bottom_nav.visible = false
 
 
 func _on_random() -> void:
@@ -826,9 +859,12 @@ func _clear_panel() -> void:
 	for c in _panel_host.get_children():
 		c.queue_free()
 	_panel_host.visible = true
+	_restore_panel_center()
 	_market_built_city = ""
 	_market_container = null
 	_selected_market_product_id = ""
+	_flight_carousel = null
+	_flight_list = null
 	AudioService.play_sfx("sfx_ui_open_panel")
 
 
@@ -906,6 +942,9 @@ func _show_city() -> void:
 	_city_text.text = "[b]%s[/b]\n\n%s\n\n[b]历史[/b]\n%s\n\n[b]地理[/b]\n%s\n\n[b]经济[/b]\n%s\n\n[b]饮食[/b]\n%s\n\n[b]旅行提示[/b]\n%s" % [
 		DataService.place_name(c, "name"), c.overview, c.history_summary, c.geography_summary, c.economy_summary, c.food_summary, c.travel_note
 	]
+	# Low-content-confidence cities get an explicit disclaimer (content_confidence C).
+	if str(c.get("content_confidence", "")) == "C":
+		_city_text.text = "[color=#d9a441]⚠ 资料不足：该城市内容为低置信度自动生成，仅供参考。[/color]\n\n" + _city_text.text
 
 
 func _show_market() -> void:
@@ -1049,6 +1088,14 @@ func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_ci
 
 	var panel := PanelContainer.new()
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var row_style := StyleBoxFlat.new()
+	row_style.bg_color = Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.35)
+	row_style.set_corner_radius_all(6)
+	row_style.content_margin_left = 6
+	row_style.content_margin_right = 6
+	row_style.content_margin_top = 3
+	row_style.content_margin_bottom = 3
+	panel.add_theme_stylebox_override("panel", row_style)
 	_market_container.add_child(panel)
 	_market_row_panels[product_id] = panel
 
@@ -1145,12 +1192,7 @@ func _select_market_row(product_id: String) -> void:
 
 	if _market_row_panels.has(product_id):
 		var panel: PanelContainer = _market_row_panels[product_id]
-		var style := StyleBoxFlat.new()
-		style.bg_color = Color(_Colors.ACCENT_TEAL.r, _Colors.ACCENT_TEAL.g, _Colors.ACCENT_TEAL.b, 0.25)
-		style.set_border_width_all(1)
-		style.border_color = _Colors.ACCENT_TEAL
-		style.set_corner_radius_all(4)
-		panel.add_theme_stylebox_override("panel", style)
+		panel.add_theme_stylebox_override("panel", _ThemeFactory.selected_row_style())
 
 
 func _get_intel_color(intel: String) -> Color:
@@ -1238,116 +1280,98 @@ func _show_flights() -> void:
 		return
 	_set_panel_bgm("globe")
 	_clear_panel()
+	_dock_panel_flights()
 	_flight_auto_focus = true
 	_selected_connection = {}
-	var scroll := ScrollContainer.new()
-	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_panel_host.add_child(scroll)
 	var v := VBoxContainer.new()
 	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.add_child(v)
-	# Recommended routes
-	_recommend_box = VBoxContainer.new()
-	v.add_child(_recommend_box)
-	_rebuild_recommendations()
-	var tip := Label.new()
-	tip.text = "当前机场出港 · 灰字=距起飞不足2小时 · 联程为重建网络拼装"
-	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	v.add_child(tip)
+	v.add_theme_constant_override("separation", 4)
+	_panel_host.add_child(v)
+
+	# Row 1: search + mode + compact filters
+	var top := HBoxContainer.new()
+	top.add_theme_constant_override("separation", 6)
+	v.add_child(top)
 	_flight_query = LineEdit.new()
-	_flight_query.placeholder_text = "航班号 / 航空公司 / 城市名"
+	_flight_query.placeholder_text = "航班号 / 航空公司 / 城市"
+	_flight_query.custom_minimum_size = Vector2(180, 0)
+	_flight_query.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_flight_query.text_changed.connect(func (_t): _flight_page = 0; _reload_flights())
-	v.add_child(_flight_query)
+	top.add_child(_flight_query)
 	_dest_code_query = LineEdit.new()
-	_dest_code_query.placeholder_text = "目的地 IATA 代码 (如 JFK, LHR)"
+	_dest_code_query.placeholder_text = "IATA"
+	_dest_code_query.custom_minimum_size = Vector2(72, 0)
 	_dest_code_query.text_changed.connect(func (_t): _flight_page = 0; _reload_flights())
-	v.add_child(_dest_code_query)
-	var mode_row := HBoxContainer.new()
-	v.add_child(mode_row)
+	top.add_child(_dest_code_query)
 	var b_direct := Button.new()
 	b_direct.text = "直飞"
 	b_direct.toggle_mode = true
 	b_direct.button_pressed = not _show_connections
-	b_direct.pressed.connect(func (): _show_connections = false; b_direct.button_pressed = true; _flight_page = 0; _reload_flights())
-	mode_row.add_child(b_direct)
+	b_direct.pressed.connect(func ():
+		_show_connections = false
+		b_direct.button_pressed = true
+		_flight_page = 0
+		_reload_flights()
+	)
+	top.add_child(b_direct)
 	var b_cnx := Button.new()
 	b_cnx.text = I18nService.t("ui.transfer.tab")
 	if b_cnx.text == "" or b_cnx.text.begins_with("ui."):
 		b_cnx.text = "联程"
 	b_cnx.toggle_mode = true
 	b_cnx.button_pressed = _show_connections
-	b_cnx.pressed.connect(func (): _show_connections = true; b_cnx.button_pressed = true; _flight_page = 0; _reload_flights())
-	mode_row.add_child(b_cnx)
-	var filters := HBoxContainer.new()
-	v.add_child(filters)
-	var bun := Button.new()
-	bun.text = "仅未访问"
-	bun.toggle_mode = true
-	bun.button_pressed = _filter_unvisited
-	bun.toggled.connect(func (on): _filter_unvisited = on; _flight_page = 0; _reload_flights())
-	filters.add_child(bun)
-	var bbiz := Button.new()
-	bbiz.text = "含公务舱"
-	bbiz.toggle_mode = true
-	bbiz.button_pressed = _biz_only
-	bbiz.toggled.connect(func (on): _biz_only = on; _flight_page = 0; _reload_flights())
-	filters.add_child(bbiz)
-	for pair in [["起飞", "departure"], ["票价", "price"], ["时长", "duration"], ["距离", "distance"]]:
-		var bs := Button.new()
-		bs.text = "排序:" + pair[0]
-		var key: String = pair[1]
-		bs.pressed.connect(func (): _sort_by = key; _flight_page = 0; _reload_flights())
-		filters.add_child(bs)
-	var filters2 := HBoxContainer.new()
-	v.add_child(filters2)
-	var bp := Button.new()
-	bp.text = "票价≤$800"
-	bp.toggle_mode = true
-	bp.toggled.connect(func (on): _max_price = 800.0 if on else 0.0; _flight_page = 0; _reload_flights())
-	filters2.add_child(bp)
-	var bd := Button.new()
-	bd.text = "时长≤8h"
-	bd.toggle_mode = true
-	bd.toggled.connect(func (on): _max_duration = 480 if on else 0; _flight_page = 0; _reload_flights())
-	filters2.add_child(bd)
-	var bclear := Button.new()
-	bclear.text = "清除筛选"
-	bclear.pressed.connect(func ():
-		_max_price = 0.0
-		_max_duration = 0
-		_biz_only = false
-		_filter_unvisited = false
+	b_cnx.pressed.connect(func ():
+		_show_connections = true
+		b_cnx.button_pressed = true
 		_flight_page = 0
 		_reload_flights()
 	)
-	filters2.add_child(bclear)
-	_flight_list = ItemList.new()
-	_flight_list.custom_minimum_size = Vector2(680, 150)
-	_flight_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_flight_list.item_selected.connect(_on_flight_selected)
-	v.add_child(_flight_list)
-	var pager := HBoxContainer.new()
-	v.add_child(pager)
+	top.add_child(b_cnx)
+	var bun := Button.new()
+	bun.text = "未访"
+	bun.toggle_mode = true
+	bun.button_pressed = _filter_unvisited
+	bun.toggled.connect(func (on): _filter_unvisited = on; _flight_page = 0; _reload_flights())
+	top.add_child(bun)
+	for pair in [["起飞", "departure"], ["票价", "price"], ["时长", "duration"]]:
+		var bs := Button.new()
+		bs.text = pair[0]
+		var key: String = pair[1]
+		bs.pressed.connect(func (): _sort_by = key; _flight_page = 0; _reload_flights())
+		top.add_child(bs)
 	var prev := Button.new()
-	prev.text = "上一页"
+	prev.text = "‹"
 	prev.pressed.connect(func (): _flight_page = maxi(0, _flight_page - 1); _reload_flights())
-	pager.add_child(prev)
+	top.add_child(prev)
 	var nxt := Button.new()
-	nxt.text = "下一页"
+	nxt.text = "›"
 	nxt.pressed.connect(func (): _flight_page += 1; _reload_flights())
-	pager.add_child(nxt)
+	top.add_child(nxt)
+
+	# Recommended chips (compact)
+	_recommend_box = VBoxContainer.new()
+	v.add_child(_recommend_box)
+	_rebuild_recommendations()
+
+	# Row 2: carousel
+	_flight_carousel = _FlightCarousel.new() as Control
+	_flight_carousel.custom_minimum_size = Vector2(1160, 104)
+	_flight_carousel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_flight_carousel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_flight_carousel.focus_changed.connect(_on_flight_selected)
+	v.add_child(_flight_carousel)
+
+	# Row 3: detail + purchase
 	_flight_detail = RichTextLabel.new()
 	_flight_detail.bbcode_enabled = true
 	_flight_detail.fit_content = false
-	_flight_detail.scroll_active = true
-	_flight_detail.custom_minimum_size = Vector2(680, 80)
-	_flight_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_flight_detail.scroll_active = false
+	_flight_detail.custom_minimum_size = Vector2(1160, 24)
+	_flight_detail.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	v.add_child(_flight_detail)
 	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
 	v.add_child(row)
 	var be := Button.new()
 	be.text = I18nService.t("ui.ticket.economy")
@@ -1359,6 +1383,10 @@ func _show_flights() -> void:
 	bb.pressed.connect(func (): _purchase("business"))
 	_IconFactory.decorate_button(bb, "ic_business", 18.0)
 	row.add_child(bb)
+	var bf := Button.new()
+	bf.text = "头等舱"
+	bf.pressed.connect(func (): _purchase("first"))
+	row.add_child(bf)
 	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
 		var bx := Button.new()
 		var tier: String = pair[1]
@@ -1377,10 +1405,6 @@ func _show_flights() -> void:
 	)
 	_IconFactory.decorate_button(bc, "ic_cargo", 16.0)
 	row.add_child(bc)
-	var bcr := Button.new()
-	bcr.text = "清零货运"
-	bcr.pressed.connect(func (): _cargo_blocks = 0; _show_hint("已清零货运加购"))
-	row.add_child(bcr)
 	var br := Button.new()
 	br.text = I18nService.t("ui.ticket.refund")
 	br.pressed.connect(func (): _show_hint(_Tickets.refund_current()); _refresh_bags())
@@ -1483,9 +1507,8 @@ func _cargo_block_price() -> float:
 
 
 func _reload_flights(_q: String = "") -> void:
-	if _flight_list == null:
+	if _flight_carousel == null:
 		return
-	_flight_list.clear()
 	_selected_flight = {}
 	_selected_connection = {}
 	var q: String = _flight_query.text if _flight_query else ""
@@ -1511,7 +1534,7 @@ func _reload_flights(_q: String = "") -> void:
 		_connection_cache = all_cnx.slice(start_c, mini(all_cnx.size(), start_c + FLIGHTS_PER_PAGE))
 		_flights_cache = []
 		_fill_connection_rows()
-		_show_hint("联程 %d–%d / 共 %d（页 %d）" % [
+		_show_hint("联程 %d–%d / 共 %d（页 %d）· 滚轮/拖拽选班" % [
 			start_c + (1 if all_cnx.size() > 0 else 0), start_c + _connection_cache.size(), all_cnx.size(), _flight_page + 1
 		])
 		return
@@ -1528,9 +1551,7 @@ func _reload_flights(_q: String = "") -> void:
 		_fill_flight_rows()
 		var local_idx: int = focus_idx - start_f
 		if local_idx >= 0 and local_idx < _flights_cache.size():
-			_flight_list.select(local_idx)
-			_flight_list.ensure_current_is_visible()
-			_on_flight_selected(local_idx)
+			_flight_carousel.select_index(local_idx, false)
 		_show_hint("航班 %d–%d / 共 %d（页 %d）· 已定位≥2小时后班次" % [
 			start_f + 1, start_f + _flights_cache.size(), all.size(), _flight_page + 1
 		])
@@ -1541,47 +1562,83 @@ func _reload_flights(_q: String = "") -> void:
 		start = _flight_page * FLIGHTS_PER_PAGE
 	_flights_cache = all.slice(start, mini(all.size(), start + FLIGHTS_PER_PAGE))
 	_fill_flight_rows()
-	_show_hint("航班 %d–%d / 共 %d（页 %d）" % [
+	_show_hint("航班 %d–%d / 共 %d（页 %d）· 滚轮/拖拽选班" % [
 		start + (1 if all.size() > 0 else 0), start + _flights_cache.size(), all.size(), _flight_page + 1
 	])
 
 
 func _fill_flight_rows() -> void:
-	var gray := Color(0.55, 0.55, 0.55)
+	if _flight_carousel == null:
+		return
+	var items: Array = []
 	for i in _flights_cache.size():
 		var fl: Dictionary = _flights_cache[i]
-		_flight_list.add_item("%s  %s→%s  %s  $%.0f  %dmin" % [
-			fl.marketing_flight_number, fl.origin_iata, fl.destination_iata,
-			str(fl.scheduled_departure_utc).substr(0, 16),
-			float(fl.ticket_base_price_economy),
-			int(fl.duration_minutes)
-		])
-		if _FlightSearch.is_short_lead(fl):
-			_flight_list.set_item_custom_fg_color(i, gray)
+		var stop_n := int(fl.get("stops", 0))
+		var stop_tag := "" if stop_n <= 0 else " 经停×%d" % stop_n
+		var al_id := str(fl.get("alliance_id", ""))
+		var al_tag := ""
+		if al_id != "" and al_id != "none":
+			al_tag = " ·%s" % DataService.alliance_name(al_id)
+		var muted := _FlightSearch.is_short_lead(fl)
+		items.append({
+			"title": "%s  %s→%s" % [fl.marketing_flight_number, fl.origin_iata, fl.destination_iata],
+			"subtitle": str(fl.scheduled_departure_utc).substr(0, 16),
+			"meta": "$%.0f · %dmin%s%s" % [
+				float(fl.ticket_base_price_economy), int(fl.duration_minutes), stop_tag, al_tag
+			],
+			"muted": muted,
+			"data": fl,
+		})
+	_flight_carousel.set_items(items)
+	if not items.is_empty():
+		_flight_carousel.select_index(0, false)
+	elif _flight_detail:
+		_flight_detail.text = "无匹配航班"
+		_selected_flight = {}
+		_selected_connection = {}
 
 
 func _fill_connection_rows() -> void:
+	if _flight_carousel == null:
+		return
+	var items: Array = []
 	for i in _connection_cache.size():
 		var c: Dictionary = _connection_cache[i]
-		_flight_list.add_item("%s→%s→%s  %.0fkm  ~%dmin  $%.0f  经%s中转" % [
-			c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", ""),
-			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)),
-			float(c.get("ticket_base_price_economy", 0)), c.get("hub_iata", "")
-		])
-		_flight_list.set_item_custom_fg_color(i, _Colors.ACCENT_TEAL)
+		items.append({
+			"title": "%s→%s→%s" % [c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", "")],
+			"subtitle": "经 %s 中转 · MCT %dmin" % [c.get("hub_iata", ""), int(c.get("mct_minutes", 90))],
+			"meta": "$%.0f · ~%dmin · %.0fkm" % [
+				float(c.get("ticket_base_price_economy", 0)),
+				int(c.get("duration_minutes", 0)),
+				float(c.get("total_distance_km", 0)),
+			],
+			"muted": false,
+			"data": c,
+		})
+	_flight_carousel.set_items(items)
+	if not items.is_empty():
+		_flight_carousel.select_index(0, false)
+	elif _flight_detail:
+		_flight_detail.text = "无匹配联程"
+		_selected_flight = {}
+		_selected_connection = {}
 
 
 func _on_flight_selected(idx: int) -> void:
+	if _flight_detail == null:
+		return
 	if _show_connections:
 		if idx < 0 or idx >= _connection_cache.size():
 			return
 		_selected_connection = _connection_cache[idx]
 		_selected_flight = {}
 		var c: Dictionary = _selected_connection
-		_flight_detail.text = "[b]联程[/b] %s → %s → %s\n总距离 %.0f km · 估计时长 %d 分钟（含转机 90 分钟）\n经济舱 $%.2f / 公务舱 $%.2f\n声明：联程为重建网络上的合理拼装，不代表真实联程票\n加购：行李档=%s  货运×%d" % [
+		var mct := int(c.get("mct_minutes", 90))
+		_flight_detail.text = "[b]联程[/b] %s→%s→%s · %.0fkm · %dmin(MCT%d) · 经$%.0f/公$%.0f/头$%.0f · 行李=%s 货运×%d" % [
 			c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", ""),
-			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)),
+			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)), mct,
 			float(c.get("ticket_base_price_economy", 0)), float(c.get("ticket_base_price_business", 0)),
+			float(c.get("ticket_base_price_first", 0)),
 			_extra_tier if _extra_tier != "" else "无", _cargo_blocks
 		]
 		return
@@ -1590,11 +1647,20 @@ func _on_flight_selected(idx: int) -> void:
 	_selected_flight = _flights_cache[idx]
 	_selected_connection = {}
 	var fl: Dictionary = _selected_flight
-	_flight_detail.text = "航班 %s（%s）\n%s → %s\n起飞 %s\n到达 %s\n距离 %.0f km · %d 分钟\n经济舱 $%.2f / 公务舱 $%.2f（10×）\n行李额：经济 %.0fkg / 公务 %.0fkg\n加购：行李档=%s  货运×%d" % [
-		fl.get("marketing_flight_number", ""), fl.get("airline_name", ""), fl.get("origin_iata", ""), fl.get("destination_iata", ""),
-		fl.get("scheduled_departure_utc", ""), fl.get("scheduled_arrival_utc", ""), float(fl.get("distance_km", 0)), int(fl.get("duration_minutes", 0)),
+	var stop_n := int(fl.get("stops", 0))
+	var stop_tag := "" if stop_n <= 0 else " · 经停%s" % ", ".join(fl.get("stop_airports", []))
+	var al_id := str(fl.get("alliance_id", ""))
+	var al_tag := ""
+	if al_id != "" and al_id != "none":
+		al_tag = " · %s" % DataService.alliance_name(al_id)
+	_flight_detail.text = "[b]%s[/b] %s→%s · 起飞 %s · %.0fkm/%dmin · 经$%.0f/公$%.0f/头$%.0f%s%s · 行李=%s 货运×%d" % [
+		fl.get("marketing_flight_number", ""),
+		fl.get("origin_iata", ""), fl.get("destination_iata", ""),
+		str(fl.get("scheduled_departure_utc", "")).substr(0, 16),
+		float(fl.get("distance_km", 0)), int(fl.get("duration_minutes", 0)),
 		float(fl.get("ticket_base_price_economy", 0)), float(fl.get("ticket_base_price_business", 0)),
-		float(fl.get("baggage_allowance_economy", 20)), float(fl.get("baggage_allowance_business", 60)),
+		float(fl.get("ticket_base_price_first", 0)),
+		stop_tag, al_tag,
 		_extra_tier if _extra_tier != "" else "无", _cargo_blocks
 	]
 

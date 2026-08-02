@@ -218,6 +218,63 @@ AIRLINES = [
     ("QR", "Qatar Airways"),
 ]
 
+# Populated by load_aviation_config() in main(); falls back to AIRLINES tuples.
+_AIRLINE_ROWS: list[dict] = []
+_ALLIANCES: list[dict] = []
+_DG_RULES: dict = {}
+
+
+def load_aviation_config() -> tuple[list[dict], list[dict], dict]:
+    """Load airlines.yaml + dangerous_goods.yaml (v0.3)."""
+    al_path = CFG / "airlines.yaml"
+    dg_path = CFG / "dangerous_goods.yaml"
+    airlines: list[dict] = []
+    alliances: list[dict] = []
+    if al_path.exists():
+        raw = load_yaml(al_path) or {}
+        alliances = list(raw.get("alliances") or [])
+        for row in raw.get("airlines") or []:
+            airlines.append(
+                {
+                    "id": row["id"],
+                    "name": row["name"],
+                    "alliance_id": row.get("alliance_id", "none"),
+                }
+            )
+    if not airlines:
+        airlines = [{"id": a, "name": n, "alliance_id": "none"} for a, n in AIRLINES]
+    dg = load_yaml(dg_path) if dg_path.exists() else {}
+    return airlines, alliances, dg or {}
+
+
+def airport_mct_minutes(airport: dict, eco: dict, international: bool = False) -> int:
+    """Resolve MCT for an airport (override → intl default → default)."""
+    mct = eco.get("mct") or {}
+    if international:
+        default = int(mct.get("international_min", mct.get("default_min", 90)))
+    else:
+        default = int(mct.get("default_min", 90))
+    return int(airport.get("mct_minutes", default))
+
+
+def resolve_hazmat_class(category: str, override: str | None = None) -> str:
+    if override:
+        return override
+    defaults = (_DG_RULES.get("category_defaults") or {})
+    return str(defaults.get(category, "none"))
+
+
+def product_requires_cold(category: str, shelf_life_hours: int, hazmat_class: str) -> bool:
+    classes = _DG_RULES.get("classes") or {}
+    if (classes.get(hazmat_class) or {}).get("requires_cold_chain"):
+        return True
+    # Short-life or food-like categories default to cold-chain when shelf life < 168h
+    if shelf_life_hours < 168 and category in ("食品", "糖果", "咖啡", "茶叶"):
+        return True
+    if hazmat_class == "perishable_cold":
+        return True
+    return False
+
 
 def build_tz_offsets(hubs_cfg: dict, days: int = 31) -> dict:
     """Per-timezone UTC offsets for each calendar day in March 2025 (handles DST)."""
@@ -714,8 +771,16 @@ def build_airports(hubs_cfg: dict, oa: dict[str, dict], passenger_iatas: set[str
         if abs(lat) < 1e-6 and abs(lon) < 1e-6:
             lat, lon, elev = fb.get("lat", 0), fb.get("lon", 0), fb.get("elev_ft", 0)
         has_svc = iata in passenger_iatas
-        airports.append(
-            {
+        # Demo / authored hubs get a slightly tighter MCT override.
+        mct_override = 75 if bool(h.get("has_content_file", h.get("authored", False))) else None
+        if mct_override is None and h.get("city_id") in (
+            "beijing", "shanghai", "hongkong", "tokyo", "singapore", "dubai",
+            "london", "paris", "frankfurt", "amsterdam", "istanbul", "newyork",
+            "losangeles", "chicago", "atlanta", "dallas", "denver", "miami",
+            "seoul", "bangkok",
+        ):
+            mct_override = 75
+        row = {
                 "airport_id": iata.lower(),
                 "iata": iata,
                 "icao": h.get("icao", ""),
@@ -735,7 +800,9 @@ def build_airports(hubs_cfg: dict, oa: dict[str, dict], passenger_iatas: set[str
                 "has_passenger_service": has_svc,
                 "data_confidence": "B" if has_svc else "C",
             }
-        )
+        if mct_override is not None:
+            row["mct_minutes"] = mct_override
+        airports.append(row)
     return airports
 
 
@@ -787,6 +854,9 @@ def synth_flights(
     fcfg = eco["flight_synth"]
     start = date.fromisoformat(fcfg["schedule_start"])
     days = int(fcfg["schedule_days"])
+    airline_pool = _AIRLINE_ROWS or [{"id": a, "name": n, "alliance_id": "none"} for a, n in AIRLINES]
+    first_mult = float(tcfg.get("first_multiplier", 25.0))
+    bag_first = float(tcfg.get("baggage_first_kg", 100.0))
     flights: list[dict] = []
     fid = 0
     for origin, dest in sorted(routes):
@@ -797,7 +867,7 @@ def synth_flights(
         duration = max(fcfg["duration_min_floor"], min(fcfg["duration_min_ceil"], duration))
         rr = stable_rand("route", origin, dest)
         per_day = rr.randint(fcfg["flights_per_day_min"], fcfg["flights_per_day_max"])
-        airline = AIRLINES[rr.randrange(len(AIRLINES))]
+        airline = airline_pool[rr.randrange(len(airline_pool))]
         demand = rr.uniform(tcfg["demand_factor_min"], tcfg["demand_factor_max"])
         base = (
             tcfg["c_route"]
@@ -812,22 +882,22 @@ def synth_flights(
                 minute = rng.choice([0, 10, 20, 30, 40, 50])
                 hour = min(22, hour)
                 dep_local_naive = datetime(day.year, day.month, day.day, hour, minute)
-                # store as UTC-ish naive ISO; game applies timezone display separately
-                # Use approximate fixed offsets via zoneinfo if available
                 dep_utc = localize_to_utc(dep_local_naive, oa["timezone"])
                 arr_utc = dep_utc + timedelta(minutes=duration)
                 rnd = rng.uniform(tcfg["random_factor_min"], tcfg["random_factor_max"])
                 p_eco = round(base * rnd, 2)
                 p_biz = round(p_eco * tcfg["business_multiplier"], 2)
-                fn = f"{airline[0]}{100 + (hash((origin, dest, day_i, slot)) % 900)}"
+                p_first = round(p_eco * first_mult, 2)
+                fn = f"{airline['id']}{100 + (hash((origin, dest, day_i, slot)) % 900)}"
                 fid += 1
                 flights.append(
                     {
                         "flight_instance_id": f"F{fid:06d}",
                         "marketing_flight_number": fn,
-                        "operating_airline_id": airline[0],
-                        "marketing_airline_id": airline[0],
-                        "airline_name": airline[1],
+                        "operating_airline_id": airline["id"],
+                        "marketing_airline_id": airline["id"],
+                        "airline_name": airline["name"],
+                        "alliance_id": airline.get("alliance_id", "none"),
                         "origin_airport_id": oa["airport_id"],
                         "destination_airport_id": da["airport_id"],
                         "origin_iata": origin,
@@ -839,14 +909,129 @@ def synth_flights(
                         "aircraft_type": "A321" if dist < 4000 else "B777",
                         "ticket_base_price_economy": p_eco,
                         "ticket_base_price_business": p_biz,
+                        "ticket_base_price_first": p_first,
                         "baggage_allowance_economy": tcfg["baggage_economy_kg"],
                         "baggage_allowance_business": tcfg["baggage_business_kg"],
+                        "baggage_allowance_first": bag_first,
                         "cabin_business_available": True,
+                        "cabin_first_available": dist >= 2500,
+                        "stops": 0,
+                        "stop_airports": [],
                         "data_source": "synthetic_openflights",
                         "data_confidence": "C",
                     }
                 )
+    # One-stop marketed flights on a fraction of long-haul OD pairs (v0.3)
+    flights.extend(_synth_stopover_flights(routes, airports_by_iata, eco, airline_pool, fid))
     return flights
+
+
+def _synth_stopover_flights(
+    routes: set[tuple[str, str]],
+    airports_by_iata: dict[str, dict],
+    eco: dict,
+    airline_pool: list[dict],
+    start_fid: int,
+) -> list[dict]:
+    """Add a small set of one-stop marketed flights (player stays aboard)."""
+    fcfg = eco["flight_synth"]
+    tcfg = eco["ticket"]
+    frac = float(fcfg.get("stopover_fraction", 0.04))
+    ground = int(fcfg.get("stopover_ground_min", 45))
+    first_mult = float(tcfg.get("first_multiplier", 25.0))
+    bag_first = float(tcfg.get("baggage_first_kg", 100.0))
+    start = date.fromisoformat(fcfg["schedule_start"])
+    days = int(fcfg["schedule_days"])
+
+    neighbor_of: dict[str, set[str]] = {}
+    for o, d in routes:
+        neighbor_of.setdefault(o, set()).add(d)
+
+    long_haul = [
+        (o, d)
+        for o, d in sorted(routes)
+        if haversine_km(
+            airports_by_iata[o]["latitude"],
+            airports_by_iata[o]["longitude"],
+            airports_by_iata[d]["latitude"],
+            airports_by_iata[d]["longitude"],
+        )
+        >= 4500
+    ]
+    target_n = max(1, int(len(long_haul) * frac))
+    out: list[dict] = []
+    fid = start_fid
+    for origin, dest in long_haul[:target_n]:
+        # Pick a geographic mid-hub that connects both ends when possible
+        candidates = [
+            h
+            for h in neighbor_of.get(origin, set())
+            if h != dest and dest in neighbor_of.get(h, set())
+        ]
+        if not candidates:
+            continue
+        rr = stable_rand("stopover", origin, dest)
+        hub = candidates[rr.randrange(len(candidates))]
+        oa = airports_by_iata[origin]
+        ha = airports_by_iata[hub]
+        da = airports_by_iata[dest]
+        d1 = haversine_km(oa["latitude"], oa["longitude"], ha["latitude"], ha["longitude"])
+        d2 = haversine_km(ha["latitude"], ha["longitude"], da["latitude"], da["longitude"])
+        dur1 = int(d1 / fcfg["cruise_km_per_min"] + fcfg["taxi_pad_min"])
+        dur2 = int(d2 / fcfg["cruise_km_per_min"] + fcfg["taxi_pad_min"])
+        duration = dur1 + ground + dur2
+        dist = d1 + d2
+        airline = airline_pool[rr.randrange(len(airline_pool))]
+        demand = rr.uniform(tcfg["demand_factor_min"], tcfg["demand_factor_max"])
+        base = (
+            tcfg["c_route"]
+            + dist * tcfg["c_km"] * 0.92
+            + tcfg["airport_fee_default"] * 2
+        ) * demand
+        for day_i in range(0, days, 2):  # every other day to limit volume
+            day = start + timedelta(days=day_i)
+            rng = stable_rand("stopflight", origin, hub, dest, day.isoformat())
+            hour = rng.randint(7, 18)
+            minute = rng.choice([0, 15, 30, 45])
+            dep_local = datetime(day.year, day.month, day.day, hour, minute)
+            dep_utc = localize_to_utc(dep_local, oa["timezone"])
+            arr_utc = dep_utc + timedelta(minutes=duration)
+            rnd = rng.uniform(tcfg["random_factor_min"], tcfg["random_factor_max"])
+            p_eco = round(base * rnd, 2)
+            fid += 1
+            out.append(
+                {
+                    "flight_instance_id": f"F{fid:06d}",
+                    "marketing_flight_number": f"{airline['id']}{800 + (fid % 100)}",
+                    "operating_airline_id": airline["id"],
+                    "marketing_airline_id": airline["id"],
+                    "airline_name": airline["name"],
+                    "alliance_id": airline.get("alliance_id", "none"),
+                    "origin_airport_id": oa["airport_id"],
+                    "destination_airport_id": da["airport_id"],
+                    "origin_iata": origin,
+                    "destination_iata": dest,
+                    "scheduled_departure_utc": dep_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "scheduled_arrival_utc": arr_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "distance_km": round(dist, 1),
+                    "duration_minutes": duration,
+                    "aircraft_type": "B777",
+                    "ticket_base_price_economy": p_eco,
+                    "ticket_base_price_business": round(p_eco * tcfg["business_multiplier"], 2),
+                    "ticket_base_price_first": round(p_eco * first_mult, 2),
+                    "baggage_allowance_economy": tcfg["baggage_economy_kg"],
+                    "baggage_allowance_business": tcfg["baggage_business_kg"],
+                    "baggage_allowance_first": bag_first,
+                    "cabin_business_available": True,
+                    "cabin_first_available": True,
+                    "stops": 1,
+                    "stop_airports": [hub],
+                    "stop_minutes": [ground],
+                    "data_source": "synthetic_stopover",
+                    "data_confidence": "C",
+                }
+            )
+    return out
 
 
 def localize_to_utc(local_dt: datetime, tz_name: str) -> datetime:
@@ -912,25 +1097,47 @@ def _make_product_entry(p: dict, cid: str, country_id: str, product_ids: set[str
         return None
     product_ids.add(pid)
     w = float(p["weight_kg"])
+    category = p["category"]
+    shelf = int(p.get("shelf_life_hours", 99999))
+    hazmat = resolve_hazmat_class(category, p.get("hazmat_class"))
+    requires_cold = bool(p.get("requires_cold_chain", product_requires_cold(category, shelf, hazmat)))
     entry = {
         "product_id": pid,
         "name_zh": p["name_zh"],
-        "category": p["category"],
+        "category": category,
         "origin_city_id": cid,
         "origin_country_id": country_id,
         "weight_kg": w,
         "volume_l": round(w * 1.2, 2),
         "base_reference_price": float(p["base_reference_price"]),
         "reference_currency": p.get("reference_currency", "USD"),
-        "shelf_life_hours": int(p.get("shelf_life_hours", 99999)),
+        "shelf_life_hours": shelf,
         "fragility": float(p.get("fragility", 0.0)),
         "rarity": float(p["rarity"]),
         "description": p.get("description", ""),
         "price_confidence": "C",
+        "hazmat_class": hazmat,
+        "requires_cold_chain": requires_cold,
     }
     if p.get("inherited_from"):
         entry["inherited_from"] = p["inherited_from"]
     return entry
+
+
+def _is_template_filler(blur: dict) -> bool:
+    """True when a city's text is still padded with the expansion placeholder.
+
+    Template-filler cities are downgraded to C confidence so the game UI shows
+    the "资料不足" disclaimer (MainHUD checks content_confidence == "C").
+    """
+    filler = "更多细节将在后续更新中扩展"
+    return any(
+        filler in str(blur.get(k, ""))
+        for k in (
+            "short_description", "overview", "history_summary",
+            "geography_summary", "economy_summary", "food_summary", "travel_note",
+        )
+    )
 
 
 def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[dict], list[dict]]:
@@ -946,6 +1153,7 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
                                country_id, country_zh, h.get("timezone", "UTC"))
         has_content = h.get("has_content_file", True)
         image_id = h.get("image_asset_id", f"city_{cid}_hero_720")
+        conf = "C" if _is_template_filler(blur) else blur.get("content_confidence", "C")
         cities.append(
             {
                 "city_id": cid,
@@ -961,7 +1169,8 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
                 "economy_summary": blur["economy_summary"],
                 "food_summary": blur["food_summary"],
                 "travel_note": blur["travel_note"],
-                "content_confidence": blur.get("content_confidence", "C"),
+                "content_confidence": conf,
+                "source_ids": blur.get("source_ids", []),
                 "image_asset_id": image_id,
                 "has_content_file": has_content,
             }
@@ -971,6 +1180,9 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
         for p in authored:
             entry = _make_product_entry(p, cid, country_id, product_ids)
             if entry:
+                # Template cities use national-standard products (inheritance).
+                if conf == "C":
+                    entry["inherited_from"] = "country_template"
                 products.append(entry)
         # Generate inherited products if needed
         if len(authored) < 3:
@@ -1178,22 +1390,36 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
     GAME_DATA.mkdir(parents=True, exist_ok=True)
 
     # ── world.json (lightweight core) ──
-    payload = {
-        "meta": meta,
-        "economy": {
+    economy_out = {
             "starting_cash_usd": eco["starting_cash_usd"],
             "fx_usd_cny": eco["fx"]["USD_CNY"],
             "baggage_extras": eco["baggage_extras"],
             "ticket": eco["ticket"],
             "market": eco["market"],
             "carry_on_kg": eco["ticket"]["carry_on_kg"],
-        },
+        }
+    if eco.get("mct"):
+        economy_out["mct"] = eco["mct"]
+    if eco.get("reliability"):
+        economy_out["reliability"] = eco["reliability"]
+    if eco.get("cold_chain"):
+        economy_out["cold_chain"] = eco["cold_chain"]
+
+    airlines_out = _AIRLINE_ROWS or [{"id": a, "name": n, "alliance_id": "none"} for a, n in AIRLINES]
+    payload = {
+        "meta": meta,
+        "economy": economy_out,
         "airports": airports,
         "routes": [{"origin": o, "destination": d} for o, d in sorted(routes)],
         "cities": cities,
         "products": products,
         "tz_offsets": tz_offsets,
-        "airlines": [{"id": a, "name": n} for a, n in AIRLINES],
+        "airlines": airlines_out,
+        "alliances": _ALLIANCES,
+        "dangerous_goods": {
+            "classes": (_DG_RULES.get("classes") or {}),
+            "category_defaults": (_DG_RULES.get("category_defaults") or {}),
+        },
         "attributions": [
             {"name": "OurAirports", "license": "Unlicense", "note": "Airport coordinates"},
             {"name": "OpenFlights", "license": "ODbL", "note": "Route seed for synthetic schedules"},
@@ -1285,28 +1511,27 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
 
 
 def build_transfer_edges(routes: set[tuple[str, str]], airports_by_iata: dict[str, dict],
-                         iatas: list[str]) -> dict:
+                         iatas: list[str], eco: dict | None = None) -> dict:
     """Build single-hop transfer edges for city pairs without direct routes.
 
-    Returns dict keyed by "origin_iata|dest_iata" → [{hub, total_distance_km, seg1_duration_avg, seg2_duration_avg}].
+    Returns dict keyed by "origin_iata|dest_iata" →
+    [{hub, total_distance_km, seg1_duration_avg, seg2_duration_avg, mct_minutes}].
     Hubs must have degree >= 8. Total 5 shortest edges per O/D pair.
-    MCT constraint (>= 90 min) enforced at runtime.
+    MCT is per-hub (economy.mct / airport.mct_minutes).
     """
+    eco = eco or {}
     transfer_edges: dict[str, list] = {}
     direct = set(routes)
-    MCT_MIN = 90  # minutes
     CRUISE = 13.5  # km/min
     TAXI = 40  # minutes
+    max_conn = int((eco.get("mct") or {}).get("max_connection_min", 480))
 
-    # Precompute: for each hub, which airports can it reach (out-degree neighbors)
     neighbor_of: dict[str, set[str]] = {}
     for o, d in direct:
         neighbor_of.setdefault(o, set()).add(d)
 
-    # High-degree hubs (>= 8 connections)
     hub_set = {iata for iata in iatas if len(neighbor_of.get(iata, set())) >= 8}
 
-    # Precompute hub→all distances for reuse
     hub_dists: dict[str, dict[str, float]] = {}
     for hub in hub_set:
         ha = airports_by_iata[hub]
@@ -1326,28 +1551,33 @@ def build_transfer_edges(routes: set[tuple[str, str]], airports_by_iata: dict[st
             if (origin, dest) in direct:
                 continue
             da = airports_by_iata[dest]
+            international = oa.get("country_id") != da.get("country_id")
             edges = []
             for hub in hub_set:
                 if hub == origin or hub == dest:
                     continue
-                # Only consider hub if it has routes to both origin and dest
                 o_neighbors = neighbor_of.get(origin, set())
                 if hub not in o_neighbors:
                     continue
                 if dest not in neighbor_of.get(hub, set()):
                     continue
+                hub_ap = airports_by_iata[hub]
+                mct = airport_mct_minutes(hub_ap, eco, international=international)
                 d1 = hub_dists[hub][origin]
                 d2 = hub_dists[hub][dest]
                 total_dist = d1 + d2
                 seg1_dur = int(d1 / CRUISE + TAXI)
                 seg2_dur = int(d2 / CRUISE + TAXI)
-                if seg1_dur + MCT_MIN + seg2_dur > 1440:  # max 24h
+                if seg1_dur + mct + seg2_dur > 1440:
+                    continue
+                if mct > max_conn:
                     continue
                 edges.append({
                     "hub": hub,
                     "total_distance_km": round(total_dist, 1),
                     "seg1_duration_avg": seg1_dur,
                     "seg2_duration_avg": seg2_dur,
+                    "mct_minutes": mct,
                 })
             if edges:
                 edges.sort(key=lambda e: e["total_distance_km"])
@@ -1356,7 +1586,8 @@ def build_transfer_edges(routes: set[tuple[str, str]], airports_by_iata: dict[st
     return transfer_edges
 
 
-def build_coverage_report(cities, airports, products, product_market_tags, transfer_edges) -> dict:
+def build_coverage_report(cities, airports, products, product_market_tags, transfer_edges,
+                          flights: list | None = None) -> dict:
     """Generate coverage report for CI gating."""
     l2_cities = len(cities)
     l1_airports = sum(1 for a in airports if a.get("has_passenger_service", False))
@@ -1366,6 +1597,13 @@ def build_coverage_report(cities, airports, products, product_market_tags, trans
     product_market_pairs = len(product_market_tags)
     transfer_pairs = len(transfer_edges)
     categories = len(set(p.get("category", "") for p in products))
+    flights = flights or []
+    stopover_count = sum(1 for f in flights if int(f.get("stops", 0)) > 0)
+    cold_products = sum(1 for p in products if p.get("requires_cold_chain"))
+    hazmat_restricted = sum(
+        1 for p in products if p.get("hazmat_class") in ("restricted_cabin", "forbidden")
+    )
+    mct_overrides = sum(1 for a in airports if "mct_minutes" in a)
 
     report = {
         "l2_cities": l2_cities,
@@ -1378,6 +1616,11 @@ def build_coverage_report(cities, airports, products, product_market_tags, trans
         "missing_content_cities": missing_content,
         "missing_content_count": len(missing_content),
         "has_souvenir_category": any(p.get("category") == "纪念品" for p in products),
+        "stopover_flights": stopover_count,
+        "cold_chain_products": cold_products,
+        "hazmat_restricted_products": hazmat_restricted,
+        "mct_override_airports": mct_overrides,
+        "etl_version": "0.3.0",
     }
     return report
 
@@ -1480,8 +1723,9 @@ def validate(airports, routes, flights, cities, products) -> None:
 
 
 def main() -> int:
-    global _CITY_NAME_ZH
+    global _CITY_NAME_ZH, _AIRLINE_ROWS, _ALLIANCES, _DG_RULES
     _CITY_NAME_ZH = _load_city_names()
+    _AIRLINE_ROWS, _ALLIANCES, _DG_RULES = load_aviation_config()
     hubs_cfg = load_yaml(CFG / "hubs_20.yaml")
     eco = load_yaml(CFG / "economy.yaml")
     oa = read_ourairports_by_iata(RAW / "airports.csv")
@@ -1575,13 +1819,15 @@ def main() -> int:
     # Hot-tag profit-rate sampling
     _check_hot_win_rate(product_market_tags, market_index)
 
-    transfer_edges = build_transfer_edges(routes, by_iata, iatas)
+    transfer_edges = build_transfer_edges(routes, by_iata, iatas, eco)
 
-    coverage_report = build_coverage_report(cities, airports, products, product_market_tags, transfer_edges)
+    coverage_report = build_coverage_report(
+        cities, airports, products, product_market_tags, transfer_edges, flights
+    )
 
     tz_offsets = build_tz_offsets(hubs_cfg_expanded, int(eco["flight_synth"]["schedule_days"]))
     meta = {
-        "etl_version": "0.2.0",
+        "etl_version": "0.3.0",
         "baseline_date": "2025-03-01",
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "flight_count": len(flights),

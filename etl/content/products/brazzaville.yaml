@@ -1,51 +1,51 @@
 products:
+- product_id: brazzaville_电子_A
+  name_zh: 布拉柴维尔电子合约
+  category: 电子
+  weight_kg: 0.9
+  base_reference_price: 2310.71
+  reference_currency: USD
+  shelf_life_hours: 49430
+  fragility: 0.3
+  rarity: 0.66
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: brazzaville_咖啡_B
   name_zh: 布拉柴维尔咖啡合约
   category: 咖啡
-  weight_kg: 8.0
-  base_reference_price: 213.0
+  weight_kg: 1.6
+  base_reference_price: 276.96
   reference_currency: USD
-  shelf_life_hours: 2006
+  shelf_life_hours: 3492
   fragility: 0.0
-  rarity: 0.37
+  rarity: 0.33
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: brazzaville_工艺品_B
+- product_id: brazzaville_工艺品_C
   name_zh: 布拉柴维尔工艺品合约
   category: 工艺品
-  weight_kg: 13.6
-  base_reference_price: 258.6
-  reference_currency: USD
-  shelf_life_hours: 74445
-  fragility: 0.5
-  rarity: 0.61
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: brazzaville_纺织品_B
-  name_zh: 布拉柴维尔纺织品合约
-  category: 纺织品
-  weight_kg: 10.0
-  base_reference_price: 329.27
+  weight_kg: 8.0
+  base_reference_price: 469.18
   reference_currency: USD
   shelf_life_hours: 90300
+  fragility: 0.5
+  rarity: 0.58
+  description: 本地手工制品合约，精工细作运输需缓冲包装。
+- product_id: brazzaville_纺织品_D
+  name_zh: 布拉柴维尔纺织品合约
+  category: 纺织品
+  weight_kg: 10.2
+  base_reference_price: 328.41
+  reference_currency: USD
+  shelf_life_hours: 80183
   fragility: 0.0
   rarity: 0.43
   description: 地区纺织产品合约，不易变质适合长途贸易。
-- product_id: brazzaville_食品_B
+- product_id: brazzaville_食品_E
   name_zh: 布拉柴维尔食品合约
   category: 食品
-  weight_kg: 25.8
-  base_reference_price: 173.14
+  weight_kg: 12.0
+  base_reference_price: 206.87
   reference_currency: USD
-  shelf_life_hours: 1595
+  shelf_life_hours: 481
   fragility: 0.2
   rarity: 0.29
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: brazzaville_日用品_B
-  name_zh: 布拉柴维尔日用品合约
-  category: 日用品
-  weight_kg: 14.0
-  base_reference_price: 112.02
-  reference_currency: USD
-  shelf_life_hours: 8824
-  fragility: 0.0
-  rarity: 0.07
-  description: 地方日用品合约，需求平稳利润适中。

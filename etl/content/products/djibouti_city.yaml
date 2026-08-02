@@ -1,51 +1,51 @@
 products:
+- product_id: djibouti_city_电子_A
+  name_zh: 吉布提市电子合约
+  category: 电子
+  weight_kg: 1.0
+  base_reference_price: 2855.45
+  reference_currency: USD
+  shelf_life_hours: 73901
+  fragility: 0.3
+  rarity: 0.55
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: djibouti_city_糖果_B
   name_zh: 吉布提市糖果合约
   category: 糖果
-  weight_kg: 7.9
-  base_reference_price: 78.0
+  weight_kg: 0.3
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 2755
+  shelf_life_hours: 1391
   fragility: 0.1
-  rarity: 0.23
+  rarity: 0.35
   description: 地方传统糖果点心合约，便携适合礼品转售。
-- product_id: djibouti_city_香料_B
+- product_id: djibouti_city_香料_C
   name_zh: 吉布提市香料合约
   category: 香料
-  weight_kg: 0.3
-  base_reference_price: 367.4
+  weight_kg: 0.4
+  base_reference_price: 397.54
   reference_currency: USD
-  shelf_life_hours: 4489
+  shelf_life_hours: 4664
   fragility: 0.0
-  rarity: 0.42
+  rarity: 0.55
   description: 精选干制香料，价值密度高，跨境贸易理想品。
-- product_id: djibouti_city_工艺品_B
+- product_id: djibouti_city_工艺品_D
   name_zh: 吉布提市工艺品合约
   category: 工艺品
-  weight_kg: 11.7
-  base_reference_price: 207.36
+  weight_kg: 9.5
+  base_reference_price: 450.93
   reference_currency: USD
-  shelf_life_hours: 63871
+  shelf_life_hours: 60341
   fragility: 0.5
-  rarity: 0.64
+  rarity: 0.57
   description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: djibouti_city_矿产_B
+- product_id: djibouti_city_矿产_E
   name_zh: 吉布提市矿产合约
   category: 矿产
-  weight_kg: 39.7
-  base_reference_price: 273.14
+  weight_kg: 12.0
+  base_reference_price: 357.91
   reference_currency: USD
-  shelf_life_hours: 77066
+  shelf_life_hours: 21124
   fragility: 0.0
-  rarity: 0.56
+  rarity: 0.59
   description: 矿产品样品合约，重量较大但价值稳定。
-- product_id: djibouti_city_食品_B
-  name_zh: 吉布提市食品合约
-  category: 食品
-  weight_kg: 20.9
-  base_reference_price: 176.3
-  reference_currency: USD
-  shelf_life_hours: 1996
-  fragility: 0.2
-  rarity: 0.33
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。

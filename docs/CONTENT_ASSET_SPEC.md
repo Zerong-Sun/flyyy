@@ -52,7 +52,7 @@ Demo **不要求**城市摄影图、航司 Logo、完整飞机驾驶舱模拟（
 
 | CAS ID / 类别 | 状态 | 现状说明 |
 |---------------|------|----------|
-| `EARTH_ALBEDO` | **已交付（D1）** | 2048×1024 PNG；[`tools/generate_earth_albedo.py`](../tools/generate_earth_albedo.py) 用简化大陆多边形渲染；[`GlobeController._build_earth`](../game/scripts/render/GlobeController.gd) 加载 [`earth_albedo_day_2k.png`](../game/assets/earth/earth_albedo_day_2k.png)；回退 `earth_albedo_placeholder.png` |
+| `EARTH_ALBEDO` | **已交付（D1）** | 2048×1024 PNG；[`tools/generate_earth_albedo.py`](../tools/generate_earth_albedo.py) 支持 `--size 4096` → `earth_albedo_day_4k.png`；[`GlobeController`](../game/scripts/render/GlobeController.gd) 优先 4K，回退 2K / placeholder |
 | `EARTH_NORMAL` / `EARTH_SPEC` / `EARTH_NIGHT` | **缺（可选）** | Demo 可省略 |
 | `GRID_OVERLAY` | **占位（代码生成）** | [`_build_grid_overlay`](../game/scripts/render/GlobeController.gd)：每 15° 经纬线，`ImmediateMesh`，远淡近显 |
 | `MESH_AIRPORT_PIN` | **占位（代码生成）** | 低模 Pin（圆柱+球头 ArrayMesh）；四色：当前=绿 `#33FF73`、选中=橙 `#FF7333`、已访=黄 `#FFD933`、未访=灰 `#8C939E`；见 [`GlobeController._update_markers`](../game/scripts/render/GlobeController.gd) |

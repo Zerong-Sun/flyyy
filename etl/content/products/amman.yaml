@@ -1,51 +1,51 @@
 products:
+- product_id: amman_电子_A
+  name_zh: 安曼电子合约
+  category: 电子
+  weight_kg: 0.7
+  base_reference_price: 2535.18
+  reference_currency: USD
+  shelf_life_hours: 9420
+  fragility: 0.3
+  rarity: 0.74
+  description: 电子元器件合约，体积小价值极高，航空快运首选。
 - product_id: amman_食品_B
   name_zh: 安曼食品合约
   category: 食品
-  weight_kg: 24.8
-  base_reference_price: 171.34
+  weight_kg: 0.6
+  base_reference_price: 214.43
   reference_currency: USD
-  shelf_life_hours: 1338
+  shelf_life_hours: 824
   fragility: 0.2
-  rarity: 0.24
+  rarity: 0.2
   description: 密封保鲜的地方特色食品合约，适合区域贸易。
-- product_id: amman_工艺品_B
+- product_id: amman_工艺品_C
   name_zh: 安曼工艺品合约
   category: 工艺品
-  weight_kg: 9.4
-  base_reference_price: 491.18
+  weight_kg: 10.1
+  base_reference_price: 404.63
   reference_currency: USD
-  shelf_life_hours: 46583
+  shelf_life_hours: 72363
   fragility: 0.5
-  rarity: 0.57
+  rarity: 0.6
   description: 本地手工制品合约，精工细作运输需缓冲包装。
-- product_id: amman_咖啡_B
+- product_id: amman_咖啡_D
   name_zh: 安曼咖啡合约
   category: 咖啡
-  weight_kg: 9.0
-  base_reference_price: 263.39
+  weight_kg: 11.9
+  base_reference_price: 213.75
   reference_currency: USD
-  shelf_life_hours: 2641
+  shelf_life_hours: 3550
   fragility: 0.0
-  rarity: 0.3
+  rarity: 0.39
   description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
-- product_id: amman_糖果_B
+- product_id: amman_糖果_E
   name_zh: 安曼糖果合约
   category: 糖果
-  weight_kg: 6.4
-  base_reference_price: 141.21
+  weight_kg: 3.9
+  base_reference_price: 200.0
   reference_currency: USD
-  shelf_life_hours: 1995
+  shelf_life_hours: 1542
   fragility: 0.1
-  rarity: 0.32
+  rarity: 0.19
   description: 地方传统糖果点心合约，便携适合礼品转售。
-- product_id: amman_香料_B
-  name_zh: 安曼香料合约
-  category: 香料
-  weight_kg: 1.0
-  base_reference_price: 192.97
-  reference_currency: USD
-  shelf_life_hours: 5755
-  fragility: 0.0
-  rarity: 0.5
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
