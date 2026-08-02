@@ -61,6 +61,17 @@ func _show_sell_result(data: Dictionary) -> void:
 	# One close button only
 	add_button("继续", true)
 
+
+func set_portrait(kind: String) -> void:
+	## Show a merchant portrait (kind: "worried" | "celebrating") beside the
+	## dialog text. No-op when the art is missing so feedback still works.
+	var tex: Texture2D = IconFactory.get_portrait(kind)
+	var frame := get_node_or_null("PortraitFrame") as TextureRect
+	if frame == null:
+		return
+	frame.texture = tex
+	frame.visible = tex != null
+
 func _on_confirmed() -> void:
 	event_confirmed.emit({"accepted": true, "type": _event_type, "data": _event_data})
 

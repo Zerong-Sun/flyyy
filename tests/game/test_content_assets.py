@@ -72,6 +72,31 @@ REQUIRED_UI_KEYS = [
     "ui.disclaimer",
 ]
 
+# REQ §5.5 / trade-feedback design §4.3–4.4: consolation/celebration pools
+# plus sell-result titles moved into zh_CN.csv (i18n-copy).
+FEEDBACK_KEYS = [
+    "sell_console_1",
+    "sell_console_2",
+    "sell_console_3",
+    "sell_console_4",
+    "sell_console_5",
+    "sell_console_big_loss",
+    "celebration_w1_1",
+    "celebration_w1_2",
+    "celebration_w1_3",
+    "celebration_w2_1",
+    "celebration_w2_2",
+    "celebration_w2_3",
+    "sell_result_title_l1",
+    "sell_result_title_l2",
+    "sell_result_title_w0",
+    "sell_result_title_w1",
+    "sell_result_title_w2",
+    "sell_result_title_w2_discovery",
+    "sell_result_milestone",
+    "sell_result_continue",
+]
+
 
 def test_i18n_csv_loads_and_has_required_keys():
     path = I18N / "zh_CN.csv"
@@ -80,7 +105,10 @@ def test_i18n_csv_loads_and_has_required_keys():
         rows = list(csv.DictReader(f))
     keys = {r["keys"] for r in rows}
     assert len(keys) >= 50
+    assert len(keys) == len(rows), "duplicate i18n key"
     for k in REQUIRED_UI_KEYS:
+        assert k in keys, k
+    for k in FEEDBACK_KEYS:
         assert k in keys, k
     disc = next(r["zh_CN"] for r in rows if r["keys"] == "ui.disclaimer")
     assert "公开航空数据重建" in disc
@@ -323,3 +351,49 @@ def test_all_cities_have_hero_assets():
 
     # Every non-Demo city in world.json is covered by a generated plate.
     assert plates == len(cities) - len(demo_ids)
+
+
+def test_merchant_portraits_present_and_distinct():
+    """Sell-feedback portraits exist at 64x64 and are visibly distinct."""
+    from PIL import Image
+
+    portraits_dir = GAME / "assets" / "portraits"
+    files = {
+        "worried": portraits_dir / "portrait_worried_64.png",
+        "celebrating": portraits_dir / "portrait_celebrating_64.png",
+    }
+    for kind, path in files.items():
+        assert path.is_file(), f"{kind}: missing portrait"
+        with Image.open(path) as im:
+            assert im.size == (64, 64), f"{kind}: expected 64x64"
+            assert im.mode == "RGBA", f"{kind}: expected RGBA"
+
+    # Distinct expressions: worried carries a sweat drop (cool blue), the
+    # celebrating frame must differ meaningfully in pixel content.
+    import numpy as np
+
+    worried = Image.open(files["worried"]).convert("RGBA")
+    celebrating = Image.open(files["celebrating"]).convert("RGBA")
+    assert worried.tobytes() != celebrating.tobytes()
+    wpx = np.asarray(worried)
+    sweat = int(
+        np.count_nonzero(
+            (wpx[..., 3] > 0)
+            & (wpx[..., 2] > 150)
+            & (wpx[..., 0] > 100) & (wpx[..., 0] < 170)
+        )
+    )
+    assert sweat >= 10, f"worried sweat highlight missing ({sweat} px)"
+
+    # IconFactory wiring: get_portrait resolves both and popup scene has frame.
+    icon_src = (GAME / "themes" / "IconFactory.gd").read_text(encoding="utf-8")
+    assert "portrait_" in icon_src and "get_portrait" in icon_src
+    assert "res://assets/portraits/" in icon_src
+
+    popup_scene = (GAME / "scenes" / "PopupEvent.tscn").read_text(encoding="utf-8")
+    assert "PortraitFrame" in popup_scene
+    popup_script = (GAME / "scripts" / "components" / "PopupEvent.gd").read_text(
+        encoding="utf-8"
+    )
+    assert "set_portrait" in popup_script
+

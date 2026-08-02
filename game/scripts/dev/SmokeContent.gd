@@ -43,6 +43,15 @@ func _run() -> void:
 		if disc.find("公开航空数据重建") < 0:
 			ok = false
 			errors.append("disclaimer missing")
+		# v0.2 i18n-copy: sell feedback pools must resolve in zh_CN.csv
+		for key in ["sell_console_1", "sell_console_5", "sell_console_big_loss",
+				"celebration_w1_1", "celebration_w2_3",
+				"sell_result_title_l2", "sell_result_title_w2",
+				"sell_result_title_w2_discovery", "sell_result_milestone",
+				"sell_result_continue"]:
+			if not bool(i18n.call("has_key", key)):
+				ok = false
+				errors.append("i18n key missing: %s" % key)
 
 	if audio != null:
 		audio.call("play_sfx", "sfx_ui_click")
@@ -153,6 +162,19 @@ func _run() -> void:
 			if hero == null:
 				ok = false
 				errors.append("get_city_hero(shanghai) failed")
+			for mood in ["worried", "celebrating"]:
+				var portrait_path := "res://assets/portraits/portrait_%s_64.png" % mood
+				if not FileAccess.file_exists(portrait_path):
+					ok = false
+					errors.append("portrait missing: %s" % portrait_path)
+				var pt: Texture2D = icf.call("get_portrait", mood) as Texture2D
+				if pt == null:
+					ok = false
+					errors.append("get_portrait(%s) failed" % mood)
+			var popup_scene: PackedScene = load("res://scenes/PopupEvent.tscn") as PackedScene
+			if popup_scene == null:
+				ok = false
+				errors.append("PopupEvent.tscn missing")
 			var ach_tex: Texture2D = icf.call("get_achievement_icon", "icon_ach_flight_first_64", true) as Texture2D
 			if ach_tex == null:
 				ok = false

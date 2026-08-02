@@ -111,6 +111,14 @@ celebration_w1_3,"路走对了"
 celebration_w2_1,"传奇交易！"
 celebration_w2_2,"你就是这条航线的王"
 celebration_w2_3,"同行看了都眼红"
+sell_result_title_l2,交易亏损
+sell_result_title_l1,交易亏损
+sell_result_title_w0,交易成功
+sell_result_title_w1,大赚一笔！
+sell_result_title_w2,大满贯！
+sell_result_title_w2_discovery,✨发现者加成 — 大满贯！
+sell_result_milestone,财富里程碑！
+sell_result_continue,继续
 ui.intel.upgrade,"🔍精准预测"
 ui.intel.cost,"$200"
 ui.product.inherited_region,"区域特产"

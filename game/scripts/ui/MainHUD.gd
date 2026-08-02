@@ -88,17 +88,8 @@ var _ach_filter_category: String = "all"
 var _ach_filter_unlocked_only: bool = false
 var _recommend_box: VBoxContainer
 
-# Five-tier sell feedback
-var _sell_console_lines := [
-	"没事，学费而已",
-	"下一趟回本",
-	"做生意就是这样",
-	"这个城市不太行",
-	"及时止损也是赢",
-]
-var _sell_console_big_loss := "赔大了...但旅行本身就值得"
-var _celebration_w1 := ["这笔漂亮！", "眼光不错", "路走对了"]
-var _celebration_w2 := ["传奇交易！", "你就是这条航线的王", "同行看了都眼红"]
+# Five-tier sell feedback copy now lives in zh_CN.csv (REQ §5.5):
+# sell_console_*, celebration_w*_*, sell_result_title_*.
 
 
 func _ready() -> void:
@@ -2203,29 +2194,31 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 
 	match tier:
 		"L2":
-			popup.title = "交易亏损"
+			popup.title = I18nService.t("sell_result_title_l2")
+			popup.set_portrait("worried")
 			if not AppState.reduced_animations:
 				FeedbackParticles.play(self, {"palette": "grey", "count": 25, "duration": 2.0, "direction": "down"})
 			AudioService.play_sfx("sfx_loss")
 
 		"L1":
-			popup.title = "交易亏损"
+			popup.title = I18nService.t("sell_result_title_l1")
 			AudioService.play_sfx("sfx_loss_light")
 
 		"W0":
-			popup.title = "交易成功"
+			popup.title = I18nService.t("sell_result_title_w0")
 			AudioService.play_sfx("sfx_sell")
 
 		"W1":
-			popup.title = "大赚一笔！"
+			popup.title = I18nService.t("sell_result_title_w1")
 			if not AppState.reduced_animations:
 				FeedbackParticles.play(self, {"palette": "gold", "count": 30, "duration": 2.0, "direction": "right_arc"})
 			AudioService.play_sfx("sfx_big_win")
 
 		"W2":
-			popup.title = "大满贯！"
+			popup.title = I18nService.t("sell_result_title_w2")
+			popup.set_portrait("celebrating")
 			if sell_result.get("discovery_bonus", false):
-				popup.title = "✨发现者加成 — 大满贯！"
+				popup.title = I18nService.t("sell_result_title_w2_discovery")
 			if not AppState.reduced_animations:
 				FeedbackParticles.play(self, {"palette": "gold_rain", "count": 60, "duration": 3.0, "direction": "down"})
 			AudioService.play_sfx("sfx_grand_slam")
@@ -2261,24 +2254,24 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 		body += "──────────────────\n"
 		body += "行程净利：" + net_sign + "$" + str(int(net)) + "\n"
 
-	# Consolation or celebration copy
+	# Consolation or celebration copy (pool from zh_CN.csv)
 	match tier:
 		"L2":
-			body += "\n" + _sell_console_big_loss
+			body += "\n" + I18nService.t("sell_console_big_loss")
 		"L1":
-			body += "\n" + _sell_console_lines[randi() % _sell_console_lines.size()]
+			body += "\n" + _draw_i18n_pool("sell_console", 5)
 		"W1":
-			body += "\n" + _celebration_w1[randi() % _celebration_w1.size()]
+			body += "\n" + _draw_i18n_pool("celebration_w1", 3)
 		"W2":
-			body += "\n" + _celebration_w2[randi() % _celebration_w2.size()]
+			body += "\n" + _draw_i18n_pool("celebration_w2", 3)
 
 	# Wealth milestone toast
 	var start_cash: float = float(DataService.economy.get("starting_cash_usd", 50000.0))
 	if AppState.cash_usd >= 100000 or AppState.cash_usd >= start_cash * 2.0:
-		_show_toast("财富里程碑！")
+		_show_toast(I18nService.t("sell_result_milestone"))
 
 	popup.dialog_text = body
-	popup.add_button("继续", true)
+	popup.add_button(I18nService.t("sell_result_continue"), true)
 	popup.popup_centered()
 
 	add_child(popup)
@@ -2287,6 +2280,19 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 	popup.event_confirmed.connect(func(_r):
 		_cash_roll_animation(int(sell_result["revenue"] - sell_result["total_unit_cost"]))
 	)
+
+
+## Draw one random line from an i18n pool named {prefix}_{1..n} (zh_CN.csv).
+func _draw_i18n_pool(prefix: String, count: int) -> String:
+	var keys: Array[String] = []
+	for i in range(1, count + 1):
+		var k := "%s_%d" % [prefix, i]
+		if I18nService.has_key(k):
+			keys.append(k)
+	if keys.is_empty():
+		push_warning("MainHUD: i18n pool %s empty" % prefix)
+		return ""
+	return I18nService.t(keys[randi() % keys.size()])
 
 
 func _show_toast(text: String) -> void:

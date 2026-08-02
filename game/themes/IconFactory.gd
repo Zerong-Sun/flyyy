@@ -11,6 +11,7 @@ const PRODUCTS_DIR := "res://assets/products/"
 const CITIES_DIR := "res://assets/cities/"
 const BRAND_DIR := "res://assets/brand/"
 const ANIM_DIR := "res://assets/anim/flight_transition/"
+const PORTRAITS_DIR := "res://assets/portraits/"
 
 ## icon_id -> art filename stem (without extension)
 const _ART_UI: Dictionary = {
@@ -142,6 +143,8 @@ static func _dirs_for_stem(stem: String) -> PackedStringArray:
 		return PackedStringArray([CITIES_DIR, ART_LEGACY])
 	if stem.begins_with("anim_flight_"):
 		return PackedStringArray([ANIM_DIR, ART_LEGACY])
+	if stem.begins_with("portrait_"):
+		return PackedStringArray([PORTRAITS_DIR, ART_LEGACY])
 	if stem.begins_with("logo_") or stem in ["app_icon", "splash"]:
 		return PackedStringArray([BRAND_DIR, ART_LEGACY])
 	return PackedStringArray([ART_LEGACY, ICONS_DIR, PRODUCTS_DIR, CITIES_DIR, BRAND_DIR, ANIM_DIR, ACH_DIR])
@@ -322,6 +325,13 @@ static func get_city_hero(city_id: String) -> Texture2D:
 		return tex
 	# Fallback: logo_mark as atmosphere placeholder
 	return load_art("logo_mark")
+
+
+static func get_portrait(kind: String) -> Texture2D:
+	## Load a merchant portrait by kind ("worried" | "celebrating").
+	## Falls back to null; callers show nothing when a portrait is missing.
+	var stem := "portrait_%s_64" % kind
+	return load_art(stem)
 
 
 static func get_transition_art(phase: String) -> Texture2D:

@@ -63,14 +63,15 @@ Demo **不要求**城市摄影图、航司 Logo、完整飞机驾驶舱模拟（
 | 图标图集 | **已齐（A2）** | [`game/assets/icons/`](../game/assets/icons/) §1.2.E + 情报/笔记/冷热标签；[`IconFactory.gd`](../game/themes/IconFactory.gd) 优先加载光栅，缺失回退程序图标 |
 | 字体（Noto Sans SC / JetBrains Mono） | **已齐（基础）** | [`game/assets/fonts/`](../game/assets/fonts/) OFL；见 LICENSE.txt |
 | `bgm_globe_day` + §2.3 P0 SFX（17 项） | **已齐** | [`AUDIO_MANIFEST.csv`](../game/assets/audio/AUDIO_MANIFEST.csv) 与文件一一对应 |
-| `bgm_market` / `bgm_menu` / `bgm_night` | **缺（P1）** | 规格预留 |
+| `bgm_market` / `bgm_menu` / `bgm_night` | **已齐（A2·S2）** | [`game/assets/audio/bgm/`](../game/assets/audio/bgm/) + 五条反馈 SFX；Manifest 一一对应 |
 | 文本包：UI CSV + 20 城 + 100 商品 + 来源页 | **已齐** | 含字体署名 |
-| 城市插画 / 商品图鉴图标 | **已齐（A2 · Demo 20 城）** | [`game/assets/cities/`](../game/assets/cities/) 20 城头图；[`game/assets/products/`](../game/assets/products/) 品类+特色图标；成就 [`icons/achievements/`](../game/assets/icons/achievements/) 30 枚 |
+| 城市插画 / 商品图鉴图标 | **已齐（A2 · 全量 500 城）** | [`game/assets/cities/`](../game/assets/cities/) 20 城 AI 头图 + 480 程序化区域底板（`tools/art-gen-kit/gen_city_plates.py`，1280×720）；[`game/assets/products/`](../game/assets/products/) 品类+特色图标；成就 [`icons/achievements/`](../game/assets/icons/achievements/) 30 枚 |
+| 商人头像 `portrait_worried` / `portrait_celebrating` | **已齐（A2 · 程序生成）** | [`game/assets/portraits/`](../game/assets/portraits/) 64×64 RGBA PNG（`tools/art-gen-kit/gen_portraits.py`）；IconFactory `get_portrait` + PopupEvent 接入 L2/W2 |
 | 品牌 `logo_*` / `app_icon` / `splash` | **已齐（A2）** | [`game/assets/brand/`](../game/assets/brand/) |
 
 **运行时数据：** Godot 只读 [`game/data/world.json`](../game/data/world.json)（及 `flights.json`）；SQLite 为 ETL 校验产物。
 
-**与美术包 D1 / A2 关系：** Theme/字体已满足可玩 Demo；A2 已入库 UI 图标 WebP、过场三帧、品牌标、20 城头图、商品/成就图标。正式 `EARTH_ALBEDO` 高清贴图与 SVG 矢量源仍属 D1 收口。
+**与美术包 D1 / A2 关系：** Theme/字体已满足可玩 Demo；A2 已入库 UI 图标 WebP、过场三帧、品牌标、500 城头图（20 AI + 480 程序）、商品/成就图标、商人头像。正式 `EARTH_ALBEDO` 高清贴图与 SVG 矢量源仍属 D1 收口。
 
 **美术包 D1 待交付清单（剩余）：**
 
@@ -1069,6 +1070,7 @@ ATL 亚特兰大 · DXB 迪拜 · DFW 达拉斯 · DEN 丹佛 · LHR 伦敦 · O
 | v1.3 | 2026-07-26 | §0.5：基础 Theme + 字体标为已齐；对齐可玩 Demo §27 |
 | v1.4 | 2026-07-27 | §0.5：地球/网格/Pin/飞机/过场几何/IconFactory 代码占位符已齐；明确 D1 待交付清单 |
 | v1.5 | 2026-07-27 | §0.5：A2 美术入库（图标/过场/城头图/商品/成就/品牌）；IconFactory 优先加载光栅 |
+| v1.6 | 2026-08-02 | §0.5：全量 500 城头图（20 AI + 480 程序底板 `gen_city_plates.py`）；新增商人头像（`gen_portraits.py`）；BGM/SFX 标记已齐 |
 
 ---
 
