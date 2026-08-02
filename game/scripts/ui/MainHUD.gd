@@ -906,6 +906,9 @@ func _show_city() -> void:
 	_city_text.text = "[b]%s[/b]\n\n%s\n\n[b]历史[/b]\n%s\n\n[b]地理[/b]\n%s\n\n[b]经济[/b]\n%s\n\n[b]饮食[/b]\n%s\n\n[b]旅行提示[/b]\n%s" % [
 		DataService.place_name(c, "name"), c.overview, c.history_summary, c.geography_summary, c.economy_summary, c.food_summary, c.travel_note
 	]
+	# Low-content-confidence cities get an explicit disclaimer (content_confidence C).
+	if str(c.get("content_confidence", "")) == "C":
+		_city_text.text = "[color=#d9a441]⚠ 资料不足：该城市内容为低置信度自动生成，仅供参考。[/color]\n\n" + _city_text.text
 
 
 func _show_market() -> void:
