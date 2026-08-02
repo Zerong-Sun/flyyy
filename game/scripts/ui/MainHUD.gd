@@ -12,8 +12,8 @@ const _FlightCarousel = preload("res://scripts/ui/FlightCarousel.gd")
 
 const PANEL_CENTER_POS := Vector2(260, 150)
 const PANEL_CENTER_SIZE := Vector2(720, 460)
-const PANEL_FLIGHT_POS := Vector2(40, 430)
-const PANEL_FLIGHT_SIZE := Vector2(1200, 280)
+const PANEL_FLIGHT_POS := Vector2(40, 330)
+const PANEL_FLIGHT_SIZE := Vector2(1200, 300)
 
 @onready var globe: Node3D = $"../Globe"
 @onready var flight_ops: Node = $"../FlightOps"
@@ -1075,29 +1075,52 @@ func _update_market_rows(city: String) -> void:
 		var is_local: bool = str(p.get("origin_city_id", "")) == city
 		var buy: float = _Economy.buy_price(city, product_id)
 		var sell: float = _Economy.sell_price(city, product_id, 1.0)
-		var tag := "本地" if is_local else "外来"
-		var intel := _get_intelligence_tag(p, ticket_dest_city)
 		var row: HBoxContainer = panel.get_child(0)
-		for child in row.get_children():
-			if child is Label and child.name != "IntelligenceLabel" and child.name != "IntelUpgradeBtn":
-				child.text = "[%s] %s  买%s  卖%s  %.2fkg" % [
-					tag, p.get("name_zh", ""), _Economy.format_money(buy),
-					_Economy.format_money(sell), float(p.get("weight_kg", 0))
-				]
-				break
-		# Update intel label if present
-		for child in row.get_children():
-			if child is Label and child.name == "IntelligenceLabel":
-				child.text = intel
-				if intel != "":
-					child.add_theme_color_override("font_color", _get_intel_color(intel))
-				break
+		_apply_market_row_values(row, p, is_local, buy, sell)
+		var intel := _get_intelligence_tag(p, ticket_dest_city)
+		var intel_label: Label = row.get_node_or_null("IntelligenceLabel") as Label
+		if intel_label != null:
+			intel_label.text = intel
+			if intel != "":
+				intel_label.add_theme_color_override("font_color", _get_intel_color(intel))
+
+
+func _apply_market_row_values(row: HBoxContainer, p: Dictionary, is_local: bool, buy: float, sell: float) -> void:
+	var name_label: Label = row.get_node_or_null("NameLabel") as Label
+	if name_label != null:
+		name_label.text = str(p.get("name_zh", ""))
+	var weight_label: Label = row.get_node_or_null("WeightLabel") as Label
+	if weight_label != null:
+		weight_label.text = "%.2fkg" % float(p.get("weight_kg", 0))
+	var tag_label: Label = row.get_node_or_null("TagLabel") as Label
+	if tag_label != null:
+		tag_label.text = "本地" if is_local else "外来"
+		tag_label.add_theme_color_override(
+			"font_color", _Colors.ACCENT_AMBER if is_local else _Colors.TEXT_SECONDARY
+		)
+	var buy_label: Label = row.get_node_or_null("BuyPriceLabel") as Label
+	if buy_label != null:
+		buy_label.text = "买 %s" % _Economy.format_money(buy)
+	var sell_label: Label = row.get_node_or_null("SellPriceLabel") as Label
+	if sell_label != null:
+		sell_label.text = "卖 %s" % _Economy.format_money(sell)
+		sell_label.add_theme_color_override(
+			"font_color", _Colors.WARN_RED if sell < buy else _Colors.ACCENT_TEAL
+		)
+	var margin_label: Label = row.get_node_or_null("MarginLabel") as Label
+	if margin_label != null:
+		var margin := sell - buy
+		var sign := "+" if margin >= 0 else ""
+		margin_label.text = "%s$%.0f" % [sign, margin]
+		margin_label.add_theme_color_override(
+			"font_color",
+			Color(0.45, 0.85, 0.55) if margin >= 0 else _Colors.WARN_RED
+		)
 
 
 func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_city: String = "") -> void:
 	var buy: float = _Economy.buy_price(city, str(p.get("product_id", "")))
 	var sell: float = _Economy.sell_price(city, str(p.get("product_id", "")), 1.0)
-	var tag := "本地" if is_local else "外来"
 	var intel := _get_intelligence_tag(p, ticket_dest_city)
 	var product_id := str(p.get("product_id", ""))
 
@@ -1115,6 +1138,7 @@ func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_ci
 	_market_row_panels[product_id] = panel
 
 	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
 	row.mouse_filter = Control.MOUSE_FILTER_STOP
 	row.gui_input.connect(_on_market_row_input.bind(product_id))
 	panel.add_child(row)
@@ -1129,15 +1153,59 @@ func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_ci
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_child(icon)
 
-	var info_label := Label.new()
-	info_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var line := "[%s] %s  买%s  卖%s  %.2fkg" % [
-		tag, p.get("name_zh", ""), _Economy.format_money(buy), _Economy.format_money(sell), float(p.get("weight_kg", 0))
-	]
-	info_label.text = line
-	info_label.add_theme_font_size_override("font_size", 13)
-	info_label.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
-	row.add_child(info_label)
+	var name_label := Label.new()
+	name_label.name = "NameLabel"
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.clip_text = true
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	name_label.add_theme_font_size_override("font_size", 13)
+	name_label.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
+	row.add_child(name_label)
+
+	var weight_label := Label.new()
+	weight_label.name = "WeightLabel"
+	weight_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	weight_label.custom_minimum_size = Vector2(64, 0)
+	weight_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	weight_label.add_theme_font_size_override("font_size", 12)
+	weight_label.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+	row.add_child(weight_label)
+
+	var tag_label := Label.new()
+	tag_label.name = "TagLabel"
+	tag_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tag_label.custom_minimum_size = Vector2(52, 0)
+	tag_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	tag_label.add_theme_font_size_override("font_size", 12)
+	row.add_child(tag_label)
+
+	var buy_label := Label.new()
+	buy_label.name = "BuyPriceLabel"
+	buy_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	buy_label.custom_minimum_size = Vector2(92, 0)
+	buy_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	buy_label.add_theme_font_size_override("font_size", 12)
+	buy_label.add_theme_color_override("font_color", _Colors.ECONOMY)
+	row.add_child(buy_label)
+
+	var sell_label := Label.new()
+	sell_label.name = "SellPriceLabel"
+	sell_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sell_label.custom_minimum_size = Vector2(92, 0)
+	sell_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	sell_label.add_theme_font_size_override("font_size", 12)
+	row.add_child(sell_label)
+
+	var margin_label := Label.new()
+	margin_label.name = "MarginLabel"
+	margin_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin_label.custom_minimum_size = Vector2(84, 0)
+	margin_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	margin_label.add_theme_font_size_override("font_size", 12)
+	row.add_child(margin_label)
+
+	_apply_market_row_values(row, p, is_local, buy, sell)
 
 	var inherited := str(p.get("inherited_from", ""))
 	if inherited != "":

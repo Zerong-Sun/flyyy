@@ -44,6 +44,25 @@ func _ready() -> void:
 		print("FAIL: flight detail text is empty")
 		get_tree().quit(1)
 		return
+
+	var panel_host: Control = MainHUD.get("_panel_host")
+	if panel_host == null or not is_instance_valid(panel_host):
+		print("FAIL: _panel_host is null")
+		get_tree().quit(1)
+		return
+	var viewport_h := get_viewport().get_visible_rect().size.y
+	var top_y := panel_host.position.y
+	var bottom_y := top_y + panel_host.size.y
+	print("OK: panel bounds y=%.0f..%.0f viewport_h=%.0f" % [top_y, bottom_y, viewport_h])
+	if top_y < 200.0:
+		print("FAIL: flights panel top too high (y=%.0f < 200)" % top_y)
+		get_tree().quit(1)
+		return
+	if bottom_y > viewport_h:
+		print("FAIL: flights panel bottom out of bounds (%.0f > %.0f)" % [bottom_y, viewport_h])
+		get_tree().quit(1)
+		return
+
 	if MainHUD.has_method("_close_panel"):
 		MainHUD._close_panel()
 	await _frames(3)
