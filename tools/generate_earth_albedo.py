@@ -2,15 +2,21 @@
 """Generate a stylized Earth albedo texture for the GlobeController.
 
 Uses the game palette (ocean #1A4A6E, land greens/tans, ice #D9E6F0)
-with denser coastlines, FBM terrain shading, and subtle ocean depth.
+with real Natural Earth 1:50m coastlines (when cached in tools/geo/),
+FBM terrain shading, subtle ocean depth, and faint administrative
+borders (countries + large-country states/provinces).
 
   python3 tools/generate_earth_albedo.py
   python3 tools/generate_earth_albedo.py --size 4096 --out game/assets/earth/earth_albedo_day_4k.png
+
+Run tools/fetch_geo_data.py first for real geography; the tool falls back
+to embedded simplified outlines when the cache is absent.
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import math
 from pathlib import Path
 
@@ -18,6 +24,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = ROOT / "game" / "assets" / "earth" / "earth_albedo_day_2k.png"
+GEO_DIR = ROOT / "tools" / "geo"
 
 WIDTH = 2048
 HEIGHT = 1024
@@ -36,6 +43,13 @@ COAST = (0x2A, 0x58, 0x3A)
 BORDER = (0x5A, 0x7A, 0x8A, 0x70)
 GRATICULE = (0x40, 0x60, 0x78, 0x18)
 
+# Administrative-division border colors (drawn inside countries only).
+BORDER_ADMIN0 = (0x6A, 0x86, 0x96, 0x60)
+BORDER_ADMIN1 = (0x6A, 0x86, 0x96, 0x34)
+
+# Large countries for which to render state/province borders.
+ADMIN1_COUNTRIES = {"RUS", "USA", "IND", "IDN", "CHN", "BRA", "CAN", "AUS", "ZAF"}
+
 
 def _px(lon: float, lat: float, width: int | None = None, height: int | None = None) -> tuple[int, int]:
     # Read WIDTH/HEIGHT at call time (defaults are bound at import and would stale on --size).
@@ -46,7 +60,9 @@ def _px(lon: float, lat: float, width: int | None = None, height: int | None = N
     return (x, y)
 
 
-# Denser continent outlines (lon, lat)
+# ── Offline fallback geography ────────────────────────────────────────
+# Denser continent outlines (lon, lat), used only when Natural Earth
+# GeoJSON is not cached in tools/geo/.
 CONTINENTS = [
     # North America
     [
@@ -172,6 +188,94 @@ BORDERS = [
 ]
 
 
+# ── GeoJSON loading ───────────────────────────────────────────────────
+def _load_geojson_features(path: Path) -> list[dict] | None:
+    if not path.exists():
+        return None
+    try:
+        with open(path, encoding="utf-8") as f:
+            gj = json.load(f)
+        feats = gj.get("features", [])
+        if not feats:
+            return None
+        return feats
+    except Exception:  # noqa: BLE001 - corrupt/partial cache → fallback
+        return None
+
+
+def _iter_rings(geometry: dict):
+    """Yield (lon, lat) ring point lists from a Polygon/MultiPolygon geometry."""
+    if geometry is None:
+        return
+    gtype = geometry.get("type")
+    coords = geometry.get("coordinates", [])
+    if gtype == "Polygon":
+        for ring in coords:
+            yield ring
+    elif gtype == "MultiPolygon":
+        for poly in coords:
+            for ring in poly:
+                yield ring
+
+
+def _split_ring_at_seam(ring, width: int):
+    """Split a ring at the ±180° seam so ImageDraw doesn't draw a cross-map slash."""
+    xs = [_px(pt[0], pt[1], width=width)[0] for pt in ring]
+    out: list[list] = []
+    cur: list = []
+    for i, (pt, x) in enumerate(zip(ring, xs)):
+        if cur and abs(x - xs[i - 1]) > width // 2:
+            out.append(cur)
+            cur = []
+        cur.append((pt[0], pt[1]))
+    if len(cur) >= 3:
+        out.append(cur)
+    # Drop degenerate pieces that would draw a seam line.
+    return [seg for seg in out if len(seg) >= 3]
+
+
+def _build_land_mask(features: list[dict] | None, width: int, height: int) -> Image.Image:
+    """Rasterize land polygons into a soft-edged land mask."""
+    mask_img = Image.new("L", (width, height), 0)
+    mask_draw = ImageDraw.Draw(mask_img)
+    if features:
+        for feat in features:
+            geom = feat.get("geometry")
+            for ring in _iter_rings(geom):
+                for seg in _split_ring_at_seam(ring, width):
+                    if len(seg) < 3:
+                        continue
+                    seg_pts = [_px(pt[0], pt[1], width=width, height=height) for pt in seg]
+                    mask_draw.polygon(seg_pts, fill=255)
+    else:
+        for polygon in CONTINENTS:
+            px_points = [_px(lon, lat, width=width, height=height) for lon, lat in polygon]
+            mask_draw.polygon(px_points, fill=255)
+    mask_img = mask_img.filter(ImageFilter.GaussianBlur(radius=max(0.6, width / 2048.0)))
+    return mask_img
+
+
+def _border_layer(features, width: int, height: int, color) -> Image.Image:
+    """Draw ring outlines as polylines onto an RGBA layer."""
+    layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    for feat in features:
+        geom = feat.get("geometry")
+        for ring in _iter_rings(geom):
+            for seg in _split_ring_at_seam(ring, width):
+                if len(seg) < 3:
+                    continue
+                pts = [_px(pt[0], pt[1], width=width, height=height) for pt in seg]
+                draw.line(pts + [pts[0]], fill=color, width=max(1, width // 2048))
+    return layer
+
+
+def _interior_border_mask(mask_img: Image.Image) -> Image.Image:
+    """Land pixels whose 3x3 neighborhood is fully land (borders stay inland)."""
+    land = mask_img.point(lambda v: 255 if v > 128 else 0)
+    return land.filter(ImageFilter.MinFilter(3))
+
+
 def _hash2(x: int, y: int) -> float:
     n = x * 374761393 + y * 668265263
     n = (n ^ (n >> 13)) * 1274126177
@@ -254,17 +358,17 @@ def generate(width: int = 2048, out_path: Path | None = None) -> None:
     HEIGHT = int(width) // 2
     out = out_path or DEFAULT_OUT
 
+    admin0 = _load_geojson_features(GEO_DIR / "ne_50m_admin_0_countries.geojson")
+    admin1 = _load_geojson_features(GEO_DIR / "ne_50m_admin_1_states_provinces.geojson")
+    if admin0:
+        print(f"Natural Earth: {len(admin0)} countries loaded")
+    else:
+        print("Natural Earth cache missing → using embedded fallback outlines")
+
     # Land mask from polygons
-    mask_img = Image.new("L", (WIDTH, HEIGHT), 0)
-    mask_draw = ImageDraw.Draw(mask_img)
-    for polygon in CONTINENTS:
-        px_points = [_px(lon, lat) for lon, lat in polygon]
-        mask_draw.polygon(px_points, fill=255)
+    mask_img = _build_land_mask(admin0, WIDTH, HEIGHT)
 
-    # Soften coasts slightly
-    mask_img = mask_img.filter(ImageFilter.GaussianBlur(radius=max(0.6, WIDTH / 2048.0)))
-
-    img = Image.new("RGB", (WIDTH, HEIGHT), OCEAN)
+    img = Image.new("RGBA", (WIDTH, HEIGHT), OCEAN + (255,))
     pixels = img.load()
     mask = mask_img.load()
 
@@ -307,13 +411,39 @@ def generate(width: int = 2048, out_path: Path | None = None) -> None:
         x = _px(lon, 0)[0]
         draw.line([(x, 0), (x, HEIGHT - 1)], fill=GRATICULE, width=1)
 
-    # Subtle borders
-    for border in BORDERS:
-        px_points = [_px(lon, lat) for lon, lat in border]
-        draw.line(px_points, fill=BORDER, width=max(1, WIDTH // 2048))
+    if admin0:
+        # Coastline: soft edge of the blurred land mask, slightly stronger than borders.
+        edge = mask_img.filter(ImageFilter.FIND_EDGES).point(lambda v: 255 if v > 32 else 0)
+        coast = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
+        ImageDraw.Draw(coast).bitmap((0, 0), edge, fill=COAST)
+        img.alpha_composite(coast)
+
+        # Keep borders inland: exclude any line pixel whose 3x3 neighbourhood
+        # touches ocean, so coastlines don't get re-drawn as country borders.
+        interior = _interior_border_mask(mask_img)
+
+        def _masked(layer: Image.Image) -> Image.Image:
+            masked = layer.copy()
+            alpha = masked.getchannel("A").point(lambda a: 255 if a > 0 else 0)
+            masked.putalpha(Image.composite(alpha, Image.new("L", alpha.size, 0), interior))
+            return masked
+
+        # Admin-0 country borders (subtle).
+        if admin0:
+            img.alpha_composite(_masked(_border_layer(admin0, WIDTH, HEIGHT, BORDER_ADMIN0)))
+
+        # Admin-1 state/province borders for large countries (fainter still).
+        if admin1:
+            big = [f for f in admin1 if f.get("properties", {}).get("adm0_a3") in ADMIN1_COUNTRIES]
+            img.alpha_composite(_masked(_border_layer(big, WIDTH, HEIGHT, BORDER_ADMIN1)))
+    else:
+        # Fallback: legacy border segments only.
+        for border in BORDERS:
+            px_points = [_px(lon, lat) for lon, lat in border]
+            draw.line(px_points, fill=BORDER, width=max(1, WIDTH // 2048))
 
     out.parent.mkdir(parents=True, exist_ok=True)
-    img.save(out, "PNG", optimize=True)
+    img.convert("RGB").save(out, "PNG", optimize=True)
     print(f"Earth albedo saved: {out} ({WIDTH}×{HEIGHT})")
 
 

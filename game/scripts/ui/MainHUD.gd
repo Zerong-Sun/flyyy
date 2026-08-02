@@ -438,9 +438,33 @@ func _on_search_changed(q: String) -> void:
 
 func _close_panel() -> void:
 	_panel_host.visible = false
+	_flight_auto_focus = false
+	_selected_flight = {}
+	_selected_connection = {}
 	_restore_panel_center()
 	AudioService.play_sfx("sfx_ui_close_panel")
 	_set_panel_bgm("globe")
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not _panel_host.visible:
+		return
+	if _overlay.visible:
+		return
+	if _ff_dialog != null and _ff_dialog.visible:
+		return
+	if _replace_ticket_dialog != null and _replace_ticket_dialog.visible:
+		return
+	if event.is_action_pressed("ui_cancel"):
+		# If a text field has focus, ESC first releases focus (so the user can
+		# cancel an edit without losing the whole panel); a second ESC closes it.
+		var focused := get_viewport().gui_get_focus_owner()
+		if focused is LineEdit or focused is TextEdit:
+			focused.release_focus()
+			get_viewport().set_input_as_handled()
+			return
+		_close_panel()
+		get_viewport().set_input_as_handled()
 
 
 func _start_selected() -> void:
@@ -1340,8 +1364,9 @@ func _show_flights() -> void:
 	nxt.pressed.connect(func (): _flight_page += 1; _reload_flights())
 	top.add_child(nxt)
 
-	# Recommended chips (compact)
+	# Recommended chips (single compact row)
 	_recommend_box = VBoxContainer.new()
+	_recommend_box.add_theme_constant_override("separation", 2)
 	v.add_child(_recommend_box)
 	_rebuild_recommendations()
 
@@ -1353,14 +1378,23 @@ func _show_flights() -> void:
 	_flight_carousel.focus_changed.connect(_on_flight_selected)
 	v.add_child(_flight_carousel)
 
-	# Row 3: detail + purchase
+	# Row 3: detail (fixed-height scroll area so the carousel never reflows) + purchase
+	var detail_scroll := ScrollContainer.new()
+	detail_scroll.custom_minimum_size = Vector2(1160, 44)
+	detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	detail_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	detail_scroll.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	detail_scroll.clip_contents = true
+	v.add_child(detail_scroll)
 	_flight_detail = RichTextLabel.new()
 	_flight_detail.bbcode_enabled = true
-	_flight_detail.fit_content = false
+	# fit_content=true lets the label grow to its content so the parent
+	# ScrollContainer can scroll long details instead of clipping at 44px.
+	_flight_detail.fit_content = true
 	_flight_detail.scroll_active = false
-	_flight_detail.custom_minimum_size = Vector2(1160, 24)
-	_flight_detail.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	v.add_child(_flight_detail)
+	_flight_detail.custom_minimum_size = Vector2(1160, 0)
+	_flight_detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_scroll.add_child(_flight_detail)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 6)
 	v.add_child(row)
@@ -1453,21 +1487,23 @@ func _rebuild_recommendations() -> void:
 		return
 	for c in _recommend_box.get_children():
 		c.queue_free()
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	_recommend_box.add_child(row)
 	var header := Label.new()
 	header.text = I18nService.t("ui.recommend.title")
 	if header.text == "" or header.text.begins_with("ui."):
 		header.text = "推荐航线"
 	header.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
-	_recommend_box.add_child(header)
+	header.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	row.add_child(header)
 	var recs := _get_recommended_destinations(5)
 	if recs.is_empty():
 		var empty := Label.new()
 		empty.text = "（库存为空时无推荐；买入商品后根据热卖目的地生成）"
 		empty.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
-		_recommend_box.add_child(empty)
+		row.add_child(empty)
 		return
-	var row := HBoxContainer.new()
-	_recommend_box.add_child(row)
 	for rec_v in recs:
 		var rec: Dictionary = rec_v
 		var btn := Button.new()

@@ -37,3 +37,6 @@ etl/out/world.sqlite
 etl/out/flights_2025_03.sqlite
 etl/out/coverage_report.json
 etl/scripts/city_list.json
+
+# Natural Earth GeoJSON cache (download via tools/fetch_geo_data.py)
+tools/geo/

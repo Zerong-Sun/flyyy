@@ -31,7 +31,8 @@ var _style_focus: StyleBoxFlat = null
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	clip_contents = true
-	custom_minimum_size = Vector2(400, CARD_H + 12.0)
+	if custom_minimum_size == Vector2.ZERO:
+		custom_minimum_size = Vector2(400, CARD_H + 12.0)
 	resized.connect(_layout_cards)
 	mouse_exited.connect(_on_mouse_exited)
 	_ensure_styles()
