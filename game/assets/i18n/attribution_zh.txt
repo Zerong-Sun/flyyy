@@ -39,8 +39,12 @@ ODbL 主要义务摘要：
 完整说明见 game/assets/fonts/LICENSE.txt。
 
 美术（A2）
-- UI 图标、商品图标、成就图标、城市头图、飞行过场帧、品牌标：原创 AI 辅助插画（Airborne Trader / tools/art-gen-kit），许可 original。无航司 Logo、无商标包装复刻。
+- UI 图标、商品图标、成就图标、飞行过场帧、品牌标：原创 AI 辅助插画（Airborne Trader / tools/art-gen-kit），许可 original。无航司 Logo、无商标包装复刻。
 - 路径：game/assets/icons/、products/、cities/、brand/、anim/flight_transition/。
+
+城市头图
+- Demo 20 枢纽头图：原创 AI 辅助插画（Airborne Trader / tools/art-gen-kit），许可 original。
+- 其余约 480 城头图：程序生成过渡资产（区域通用底板 + 色调变体），由 Airborne Trader / tools/art-gen-kit/gen_city_plates.py 生成，许可 original-procedural。区域底板为临时通用方案，后续版本逐步替换为城特定插画。
 
 重要声明
 本游戏中的航班网络、票价和航班时刻均为模拟或模型估算，不代表任何航空公司的真实运营信息或实时购票建议。所有商品价格为固定快照，不反映实时市场价格。本游戏内容仅供娱乐目的。
