@@ -1124,6 +1124,22 @@ def _make_product_entry(p: dict, cid: str, country_id: str, product_ids: set[str
     return entry
 
 
+def _is_template_filler(blur: dict) -> bool:
+    """True when a city's text is still padded with the expansion placeholder.
+
+    Template-filler cities are downgraded to C confidence so the game UI shows
+    the "资料不足" disclaimer (MainHUD checks content_confidence == "C").
+    """
+    filler = "更多细节将在后续更新中扩展"
+    return any(
+        filler in str(blur.get(k, ""))
+        for k in (
+            "short_description", "overview", "history_summary",
+            "geography_summary", "economy_summary", "food_summary", "travel_note",
+        )
+    )
+
+
 def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[dict], list[dict]]:
     cities = []
     products = []
@@ -1137,6 +1153,7 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
                                country_id, country_zh, h.get("timezone", "UTC"))
         has_content = h.get("has_content_file", True)
         image_id = h.get("image_asset_id", f"city_{cid}_hero_720")
+        conf = "C" if _is_template_filler(blur) else blur.get("content_confidence", "C")
         cities.append(
             {
                 "city_id": cid,
@@ -1152,7 +1169,8 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
                 "economy_summary": blur["economy_summary"],
                 "food_summary": blur["food_summary"],
                 "travel_note": blur["travel_note"],
-                "content_confidence": blur.get("content_confidence", "C"),
+                "content_confidence": conf,
+                "source_ids": blur.get("source_ids", []),
                 "image_asset_id": image_id,
                 "has_content_file": has_content,
             }
@@ -1162,6 +1180,9 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
         for p in authored:
             entry = _make_product_entry(p, cid, country_id, product_ids)
             if entry:
+                # Template cities use national-standard products (inheritance).
+                if conf == "C":
+                    entry["inherited_from"] = "country_template"
                 products.append(entry)
         # Generate inherited products if needed
         if len(authored) < 3:
