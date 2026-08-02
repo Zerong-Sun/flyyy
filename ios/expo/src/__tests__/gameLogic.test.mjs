@@ -14,9 +14,13 @@ import {
   priceSparkline,
   locals,
   globeSizeFor,
+  hm,
+  fmtClock,
+  intel,
+  clockLabel,
 } from '../gameLogic.js';
-import { ACHIEVEMENTS, CITIES, CIDS, PRODUCT_IDS, PRODUCTS, STARTING_CITY } from '../gameData.js';
-import { t, LOCALES, DICT } from '../i18n.js';
+import { ACHIEVEMENTS, CITIES, CIDS, NOTE_TEXT, PRODUCT_IDS, PRODUCTS, STARTING_CITY } from '../gameData.js';
+import { t, f, LOCALES, DICT } from '../i18n.js';
 import {
   SAVE_VERSION,
   migrateSave,
@@ -257,5 +261,82 @@ describe('i18n', () => {
     assert.equal(t('zh', 'tab_market'), '市场');
     assert.equal(t('en', 'missing_key'), 'missing_key');
     assert.equal(t('xx', 'brand'), 'Airborne Trader'); // unknown locale → en
+  });
+
+  it('covers every city with name/airport/country/continent entries', () => {
+    const missing = [];
+    CIDS.forEach((cid) => {
+      ['city.{0}', 'city.{0}.airport', 'city.{0}.country', 'city.{0}.cont'].forEach((tmpl) => {
+        const key = tmpl.replace('{0}', cid);
+        if (!(key in DICT.en)) missing.push(key);
+      });
+    });
+    assert.deepEqual(missing, [], `missing city keys: ${missing.join(', ')}`);
+    // zh content sanity: localized values differ for a Chinese city
+    assert.ok(t('zh', 'city.beijing') !== t('en', 'city.beijing'));
+  });
+
+  it('covers every product with a localized name', () => {
+    const missing = PRODUCT_IDS.filter((id) => !(`prod.${id}` in DICT.en));
+    assert.deepEqual(missing, [], `missing product keys: ${missing.join(', ')}`);
+  });
+
+  it('covers every achievement name and description', () => {
+    const missing = [];
+    ACHIEVEMENTS.forEach((a) => {
+      if (!(`ach.${a.id}` in DICT.en)) missing.push(`ach.${a.id}`);
+      if (!(`ach.${a.id}.desc` in DICT.en)) missing.push(`ach.${a.id}.desc`);
+    });
+    assert.deepEqual(missing, [], `missing achievement keys: ${missing.join(', ')}`);
+  });
+
+  it('covers every hub note', () => {
+    const missing = CIDS.filter((cid) => !(`note.${cid}` in DICT.en));
+    assert.deepEqual(missing, [], `missing note keys: ${missing.join(', ')}`);
+    assert.equal(Object.keys(NOTE_TEXT).length, CIDS.length);
+  });
+
+  it('localizes format helpers', () => {
+    assert.equal(hm(90, 'zh'), '1小时30分');
+    assert.equal(hm(45, 'zh'), '45分');
+    assert.equal(hm(90, 'en'), '1h 30m');
+    assert.ok(fmtClock(0, false, 'zh').includes('上午'), fmtClock(0, false, 'zh'));
+    assert.ok(fmtClock(720, false, 'zh').includes('下午'));
+    assert.ok(fmtClock(0, false, 'en').includes('AM'));
+  });
+
+  it('template interpolation substitutes placeholders', () => {
+    assert.equal(f('en', 'fmt.km', { n: '1,200' }), '1,200 km');
+    assert.equal(f('zh', 'fmt.km', { n: '1,200' }), '1,200 公里');
+    assert.equal(f('en', 'msg.landed', { name: 'Tokyo' }), 'Landed in Tokyo');
+    assert.equal(f('zh', 'msg.landed', { name: '东京' }), '已降落 东京');
+  });
+
+  it('localizes intel tag text for dest and best-match hints', () => {
+    const zh = intel('ist_lokum', 'istanbul', 'tokyo', 'zh');
+    assert.match(zh.text, /东京/);
+    assert.match(zh.text, /\+/);
+    const en = intel('ist_lokum', 'istanbul', 'tokyo', 'en');
+    assert.match(en.text, /Tokyo/);
+    assert.match(en.text, /\+/);
+    const bestZh = intel('ist_lokum', 'istanbul', '', 'zh');
+    assert.ok(bestZh.text === '' || bestZh.text.includes('最佳'));
+    const bestEn = intel('ist_lokum', 'istanbul', '', 'en');
+    assert.ok(bestEn.text === '' || bestEn.text.startsWith('Best:'));
+  });
+
+  it('localizes sellData row meta units', () => {
+    const inv = [{ id: 'ist_lokum', name: 'Turkish Delight', icon: 'x', w: 2.4, n: 2, slot: 'bag', cost: 60 }];
+    const zh = sellData(inv, 'tokyo', 'zh');
+    assert.ok(zh.rows[0].meta.includes('公斤'), zh.rows[0].meta);
+    const en = sellData(inv, 'tokyo', 'en');
+    assert.ok(en.rows[0].meta.includes('kg'), en.rows[0].meta);
+  });
+
+  it('localizes clockLabel month and am/pm suffix', () => {
+    assert.ok(clockLabel(0, false, 'zh').includes('3月'), clockLabel(0, false, 'zh'));
+    assert.ok(clockLabel(0, false, 'zh').includes('上午'));
+    assert.ok(clockLabel(0, false, 'en').includes('Mar'));
+    assert.ok(clockLabel(0, false, 'en').includes('AM'));
   });
 });

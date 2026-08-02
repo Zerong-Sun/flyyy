@@ -56,7 +56,7 @@ export function Globe({ game }) {
   const { height } = useWindowDimensions();
   const SIZE = globeSizeFor(height);
   const IMG_W = SIZE * 2;
-  const { state, city, setRot, setDragging, openPinCity, buzz } = game;
+  const { state, city, setRot, setDragging, openPinCity, buzz, t, tf } = game;
   const rot = state.rot === null || state.rot === undefined ? -city.lon : state.rot;
   const rotRef = useRef(rot);
   rotRef.current = rot;
@@ -133,8 +133,8 @@ export function Globe({ game }) {
   })();
 
   const hint = state.dragging
-    ? `${city.name} · ${Math.round(((-rot % 360) + 360) % 360)}° E`
-    : 'Drag to spin · tap a pin for details';
+    ? tf('globe.drag_hint_dragging', { name: city.name, deg: Math.round(((-rot % 360) + 360) % 360) }, `${city.name} · ${Math.round(((-rot % 360) + 360) % 360)}° E`)
+    : t('globe.drag_hint', 'Drag to spin · tap a pin for details');
 
   const onPinPressIn = (p, e) => {
     pinPressRef.current = {
@@ -153,7 +153,7 @@ export function Globe({ game }) {
     const dy = Math.abs(e.nativeEvent.pageY - start.y);
     if (dt >= 220 || dx > 12 || dy > 12) return;
     if (p.here) {
-      buzz('You are here', 'ok');
+      buzz(t('globe.you_are_here', 'You are here'), 'ok');
       return;
     }
     openPinCity(p.id);
@@ -201,7 +201,7 @@ export function Globe({ game }) {
               onPressOut={(e) => onPinPressOut(p, e)}
               hitSlop={10}
               accessibilityRole="button"
-              accessibilityLabel={p.here ? `${p.name}, you are here` : `${p.name} details`}
+              accessibilityLabel={p.here ? tf('globe.pin_a11y_here', { name: p.name }, `${p.name}, you are here`) : tf('globe.pin_a11y', { name: p.name }, `${p.name} details`)}
             >
               <View
                 style={[

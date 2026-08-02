@@ -10,7 +10,9 @@ import {
   CUTSCENE_ART,
   DEFAULT_BAG_LIMIT,
   DEFAULT_CARGO_CAP,
+  NOTE_TEXT,
   PRODUCTS,
+  SOURCES,
   STARTING_CASH,
   STARTING_CITY,
 } from '../gameData';
@@ -27,6 +29,7 @@ import {
   intel,
   locals,
   money,
+  pad,
   priceAt,
   priceSparkline,
   destinationsFrom,
@@ -36,7 +39,7 @@ import {
   waitUntilDep,
 } from '../gameLogic';
 import { playSfx } from '../audio';
-import { t as i18nT } from '../i18n';
+import { f as i18nF, t as i18nT } from '../i18n';
 import {
   SAVE_KEY,
   serializeSave,
@@ -122,6 +125,14 @@ export function useGame() {
   const pendingAchRef = useRef([]);
   stateRef.current = state;
 
+  const loc = state.locale || 'en';
+  /** Live-locale lookup helpers (read current locale via ref, safe inside callbacks). */
+  const tr = useCallback((key, fallback) => i18nT(stateRef.current.locale || 'en', key, fallback), []);
+  const trf = useCallback((key, vars, fallback) => i18nF(stateRef.current.locale || 'en', key, vars, fallback), []);
+  /** Lookup helpers scoped to a state snapshot (for use inside setState updaters). */
+  const stT = (st, key, fallback) => i18nT(st.locale || 'en', key, fallback);
+  const stF = (st, key, vars, fallback) => i18nF(st.locale || 'en', key, vars, fallback);
+
   const tap = useCallback((kind) => {
     if (!stateRef.current.optHaptics) return;
     const style = kind === 'bad'
@@ -178,7 +189,7 @@ export function useGame() {
           const bak = corruptBackupKey();
           await AsyncStorage.setItem(bak, raw).catch(() => {});
           await AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
-          setTimeout(() => buzz('Save was corrupted — started a new run. Backup kept on device.', 'bad'), 400);
+          setTimeout(() => buzz(tr('msg.corrupt', 'Save was corrupted — started a new run. Backup kept on device.'), 'bad'), 400);
           return;
         }
         if (!result.ok && result.reason === 'future') {
@@ -189,12 +200,12 @@ export function useGame() {
           suspendAutosaveRef.current = false;
           setTimeout(() => {
             Alert.alert(
-              'Save from a newer build',
-              'That save was parked on this device. Continue with a new run here?',
+              tr('alert.newer_title', 'Save from a newer build'),
+              tr('alert.newer_body', 'That save was parked on this device. Continue with a new run here?'),
               [
                 {
-                  text: 'OK',
-                  onPress: () => buzz('New run — newer save kept as a backup key.', 'ok'),
+                  text: tr('alert.ok', 'OK'),
+                  onPress: () => buzz(tr('msg.parked_new', 'New run — newer save kept as a backup key.'), 'ok'),
                 },
               ],
             );
@@ -205,7 +216,7 @@ export function useGame() {
           const bak = corruptBackupKey();
           await AsyncStorage.setItem(bak, raw).catch(() => {});
           await AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
-          setTimeout(() => buzz('Save could not be restored — started fresh.', 'bad'), 400);
+          setTimeout(() => buzz(tr('msg.restore_failed', 'Save could not be restored — started fresh.'), 'bad'), 400);
           return;
         }
         setState((s) => (interactedRef.current ? s : { ...s, ...result.data }));
@@ -240,7 +251,7 @@ export function useGame() {
     if (!first) return undefined;
     const t = setTimeout(() => {
       click('sfx_ach');
-      buzz(`Achievement unlocked — ${first.name}`, 'ok');
+      buzz(trf('msg.ach_unlocked', { name: tr(`ach.${first.id}`, first.name) }, `Achievement unlocked — ${first.name}`), 'ok');
     }, 400);
     return () => clearTimeout(t);
   }, [state.unlockedAch, buzz, click]);
@@ -258,8 +269,11 @@ export function useGame() {
       const hasInv = s.inv.length > 0;
       const entry = {
         icon: 'assets/ic_flight.webp',
-        title: `Landed in ${to.name}`,
-        sub: `${ticket.no} · ${ticket.km.toLocaleString('en-US')} km`,
+        title: stF(s, 'log.landed', { name: stT(s, `city.${ticket.toId}`, to.name) }, `Landed in ${to.name}`),
+        sub: stF(s, 'log.landed_sub', {
+          no: ticket.no,
+          km: stF(s, 'fmt.km', { n: ticket.km.toLocaleString('en-US') }, `${ticket.km.toLocaleString('en-US')} km`),
+        }, `${ticket.no} · ${ticket.km.toLocaleString('en-US')} km`),
         amount: '',
         color: '#A8B8C8',
         t: s.gameMin + s.minsToDep + ticket.mins,
@@ -286,7 +300,7 @@ export function useGame() {
         bizLegs: s.bizLegs + (ticket.cabin === 'business' ? 1 : 0),
         sheet: hasInv ? 'sell' : null,
         overweightNote: overweightKg > 0
-          ? `Carry-on over by ${overweightKg.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`
+          ? stF(s, 'msg.overweight_note', { n: overweightKg.toFixed(1) }, `Carry-on over by ${overweightKg.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`)
           : '',
       };
       next.unlockedAch = announceAchievements(s.unlockedAch || [], computeStats(next));
@@ -294,15 +308,15 @@ export function useGame() {
     });
     flyingRef.current = false;
     calledEdgeRef.current = false;
-    buzz(`Landed in ${to.name}`, 'ok');
+    buzz(trf('msg.landed', { name: tr(`city.${ticket.toId}`, to.name) }, `Landed in ${to.name}`), 'ok');
     if (bagNow > allowance) {
       setTimeout(() => {
-        buzz(`Your ${allowance} kg allowance covered this leg; base carry-on is ${DEFAULT_BAG_LIMIT} kg again.`, 'ok');
+        buzz(trf('msg.allowance_ok', { n: allowance, base: DEFAULT_BAG_LIMIT }, `Your ${allowance} kg allowance covered this leg; base carry-on is ${DEFAULT_BAG_LIMIT} kg again.`), 'ok');
       }, 1200);
     }
     if (overweightKg > 0) {
       setTimeout(() => {
-        buzz(`Carry-on over by ${overweightKg.toFixed(1)} kg — sell or discard in Bags.`, 'bad');
+        buzz(trf('msg.overweight', { n: overweightKg.toFixed(1) }, `Carry-on over by ${overweightKg.toFixed(1)} kg — sell or discard in Bags.`), 'bad');
       }, 2600);
     }
   }, [announceAchievements, buzz]);
@@ -312,7 +326,7 @@ export function useGame() {
     if (!t || stateRef.current.cut || flyingRef.current) return;
     const to = CITIES[t.toId];
     if (!to) {
-      buzz('Ticket destination missing — ticket cleared', 'bad');
+      buzz(tr('msg.ticket_missing', 'Ticket destination missing — ticket cleared'), 'bad');
       setState((s) => ({
         ...s,
         ticket: null,
@@ -325,16 +339,21 @@ export function useGame() {
     flyingRef.current = true;
     clearTimeout(cutRef.current);
     click('sfx_gate');
-    const steps = CUTSCENE_ART.map((step, i) => (
-      i === 2 ? { ...step, title: to.name } : step
-    ));
+    const l = stateRef.current.locale || 'en';
+    const steps = CUTSCENE_ART.map((step, i) => ({
+      ...step,
+      phase: i18nT(l, `cut.${step.phase}`, step.phase),
+      title: i === 2
+        ? i18nT(l, `city.${t.toId}`, to.name)
+        : i18nT(l, `cut.${step.phase}.title`, step.title),
+    }));
     const dur = stateRef.current.optReduce ? 600 : 1700;
     let i = 0;
     setState((s) => ({
       ...s,
       sheet: null,
       cut: steps[0],
-      cutLine: `${t.no} · ${t.from} → ${t.to} · ${t.km.toLocaleString('en-US')} km`,
+      cutLine: `${t.no} · ${t.from} → ${t.to} · ${i18nF(l, 'fmt.km', { n: t.km.toLocaleString('en-US') }, `${t.km.toLocaleString('en-US')} km`)}`,
     }));
     const tick = () => {
       i += 1;
@@ -387,12 +406,19 @@ export function useGame() {
   useEffect(() => {
     if (state.called && state.optPush && state.ticket && !calledEdgeRef.current) {
       calledEdgeRef.current = true;
-      buzz(`Boarding call · ${state.ticket.no} · gate closing`, 'ok');
+      buzz(trf('msg.boarding_call', { no: state.ticket.no }, `Boarding call · ${state.ticket.no} · gate closing`), 'ok');
     }
     if (!state.ticket) calledEdgeRef.current = false;
-  }, [state.called, state.optPush, state.ticket, buzz]);
+  }, [state.called, state.optPush, state.ticket, buzz, trf]);
 
-  const city = CITIES[state.city];
+  const baseCity = CITIES[state.city];
+  const city = {
+    ...baseCity,
+    name: i18nT(loc, `city.${state.city}`, baseCity.name),
+    airport: i18nT(loc, `city.${state.city}.airport`, baseCity.airport),
+    country: i18nT(loc, `city.${state.city}.country`, baseCity.country),
+    cont: i18nT(loc, `city.${state.city}.cont`, baseCity.cont),
+  };
   const destId = state.ticket ? state.ticket.toId : (state.focusDest || '');
   const bagKg = bagUsed(state.inv);
   const cargoKg = cargoUsed(state.inv);
@@ -412,7 +438,7 @@ export function useGame() {
     state.visited, state.legs, state.profitable, state.bizLegs,
     state.cargoLots, state.cash, state.profit,
   ]);
-  const sell = useMemo(() => sellData(state.inv, state.city), [state.inv, state.city]);
+  const sell = useMemo(() => sellData(state.inv, state.city, loc), [state.inv, state.city, loc]);
 
   const setTab = useCallback((tab) => {
     markInteracted();
@@ -556,8 +582,8 @@ export function useGame() {
     });
     flyingRef.current = false;
     calledEdgeRef.current = false;
-    buzz('Ticket cancelled — baggage allowance reset', 'ok');
-  }, [buzz, markInteracted]);
+    buzz(tr('msg.ticket_cancelled', 'Ticket cancelled — baggage allowance reset'), 'ok');
+  }, [buzz, markInteracted, tr]);
 
   const buy = useCallback(() => {
     markInteracted();
@@ -571,7 +597,7 @@ export function useGame() {
       const cost = unit * n;
       const wt = p.w * n;
       if (cost > st.cash) {
-        result = { ok: false, msg: `Not enough cash — short ${money(cost - st.cash)}`, kind: 'bad' };
+        result = { ok: false, msg: stF(st, 'msg.no_cash_short', { short: money(cost - st.cash) }, `Not enough cash — short ${money(cost - st.cash)}`), kind: 'bad' };
         return st;
       }
       const bagKgNow = bagUsed(st.inv);
@@ -581,7 +607,10 @@ export function useGame() {
       if (used + wt > cap) {
         result = {
           ok: false,
-          msg: `Over the ${slot === 'bag' ? 'carry-on' : 'cargo'} limit by ${(used + wt - cap).toFixed(1)} kg`,
+          msg: stF(st, 'msg.over_limit', {
+            slot: stT(st, slot === 'bag' ? 'slot.carry_on' : 'slot.cargo', slot === 'bag' ? 'carry-on' : 'cargo'),
+            n: (used + wt - cap).toFixed(1),
+          }, `Over the ${slot === 'bag' ? 'carry-on' : 'cargo'} limit by ${(used + wt - cap).toFixed(1)} kg`),
           kind: 'bad',
         };
         return st;
@@ -602,13 +631,13 @@ export function useGame() {
       const here = CITIES[st.city];
       const entry = {
         icon: p.icon,
-        title: `Bought ${n} × ${p.name}`,
-        sub: `${here.name} · ${fmtClock(cityMinutes(st.gameMin, st.city), st.opt24h)}`,
+        title: stF(st, 'log.bought', { n, name: stT(st, `prod.${p.id}`, p.name) }, `Bought ${n} × ${p.name}`),
+        sub: `${stT(st, `city.${st.city}`, here.name)} · ${fmtClock(cityMinutes(st.gameMin, st.city), st.opt24h, st.locale)}`,
         amount: `−${money(cost)}`,
         color: '#E05555',
         t: st.gameMin,
       };
-      result = { ok: true, msg: `Bought ${n} × ${p.name} · ${money(cost)}`, kind: 'ok' };
+      result = { ok: true, msg: stF(st, 'msg.bought', { n, name: stT(st, `prod.${p.id}`, p.name), total: money(cost) }, `Bought ${n} × ${p.name} · ${money(cost)}`), kind: 'ok' };
       const next = {
         ...st,
         inv,
@@ -630,7 +659,7 @@ export function useGame() {
     let result = null;
     setState((st) => {
       if (st.ticket) {
-        result = { ok: false, msg: 'Cancel your current ticket first', kind: 'bad' };
+        result = { ok: false, msg: stT(st, 'msg.cancel_ticket_first', 'Cancel your current ticket first'), kind: 'bad' };
         return st;
       }
       const fl = st.selFlight;
@@ -638,22 +667,25 @@ export function useGame() {
       const add = ADDONS.find((a) => a.k === st.addon) || ADDONS[0];
       const total = (st.cabin === 'economy' ? fl.econ : fl.biz) + add.price;
       if (total > st.cash) {
-        result = { ok: false, msg: 'Not enough cash for this fare', kind: 'bad' };
+        result = { ok: false, msg: stT(st, 'msg.no_cash_fare', 'Not enough cash for this fare'), kind: 'bad' };
         return st;
       }
       const from = CITIES[st.city];
       const to = CITIES[fl.toId];
       const kg = add.k === 'light' ? 10 : add.k === 'standard' ? 20 : add.k === 'heavy' ? 50 : 0;
       const wait = waitUntilDep(st.gameMin, st.city, fl.depMin);
+      const cabinLabel = st.cabin === 'economy'
+        ? stF(st, 'log.cabin_economy', {}, 'Economy')
+        : stF(st, 'log.cabin_business', {}, 'Business');
       const entry = {
         icon: 'assets/ic_flight.webp',
-        title: `Booked ${fl.no}`,
-        sub: `${from.iata} → ${to.iata} · ${st.cabin === 'economy' ? 'Economy' : 'Business'}`,
+        title: stF(st, 'log.booked', { no: fl.no }, `Booked ${fl.no}`),
+        sub: stF(st, 'log.booked_sub', { from: from.iata, to: to.iata, cabin: cabinLabel }, `${from.iata} → ${to.iata} · ${st.cabin === 'economy' ? 'Economy' : 'Business'}`),
         amount: `−${money(total)}`,
         color: '#E05555',
         t: st.gameMin,
       };
-      result = { ok: true, msg: `Ticket booked · ${fl.no} to ${to.name}`, kind: 'ok' };
+      result = { ok: true, msg: stF(st, 'msg.ticket_booked', { no: fl.no, name: stT(st, `city.${fl.toId}`, to.name) }, `Ticket booked · ${fl.no} to ${to.name}`), kind: 'ok' };
       flyingRef.current = false;
       calledEdgeRef.current = false;
       return {
@@ -689,12 +721,14 @@ export function useGame() {
     let result = null;
     setState((s) => {
       if (!s.inv.length) return s;
-      const d = sellData(s.inv, s.city);
+      const d = sellData(s.inv, s.city, s.locale);
       const here = CITIES[s.city];
       const entry = {
         icon: 'assets/ic_market.webp',
-        title: `Sold ${d.rows.length} ${d.rows.length === 1 ? 'lot' : 'lots'}`,
-        sub: `${here.name} · ${fmtClock(cityMinutes(s.gameMin, s.city), s.opt24h)}`,
+        title: d.rows.length === 1
+          ? stF(s, 'log.sold_lot', { n: d.rows.length }, `Sold ${d.rows.length} lot`)
+          : stF(s, 'log.sold_lots', { n: d.rows.length }, `Sold ${d.rows.length} lots`),
+        sub: `${stT(s, `city.${s.city}`, here.name)} · ${fmtClock(cityMinutes(s.gameMin, s.city), s.opt24h, s.locale)}`,
         amount: `${d.net >= 0 ? '+' : '−'}${money(Math.abs(d.net))}`,
         color: d.net >= 0 ? '#3CB8A4' : '#E05555',
         t: s.gameMin,
@@ -717,9 +751,12 @@ export function useGame() {
     });
     if (!result) return;
     click(result.net >= 0 ? 'sfx_profit' : 'sfx_loss');
-    if (result.net >= 0) setTimeout(() => buzz(`Nice trade! ${money(result.net)} profit`, 'ok'), 0);
-    else setTimeout(() => buzz(`Rough run — ${money(-result.net)} down. Next leg pays it back.`, 'bad'), 0);
-  }, [announceAchievements, buzz, click, markInteracted]);
+    if (result.net >= 0) {
+      setTimeout(() => buzz(trf('msg.nice_trade', { net: money(result.net) }, `Nice trade! ${money(result.net)} profit`), 'ok'), 0);
+    } else {
+      setTimeout(() => buzz(trf('msg.rough_run', { loss: money(-result.net) }, `Rough run — ${money(-result.net)} down. Next leg pays it back.`), 'bad'), 0);
+    }
+  }, [announceAchievements, buzz, click, markInteracted, trf]);
 
   const sellQty = useCallback((n) => {
     markInteracted();
@@ -738,13 +775,17 @@ export function useGame() {
       const here = CITIES[s.city];
       const entry = {
         icon: item.icon,
-        title: `Sold ${qty} × ${item.name}`,
-        sub: `${here.name} · ${fmtClock(cityMinutes(s.gameMin, s.city), s.opt24h)}`,
+        title: stF(s, 'log.sold', { n: qty, name: stT(s, `prod.${item.id}`, item.name) }, `Sold ${qty} × ${item.name}`),
+        sub: `${stT(s, `city.${s.city}`, here.name)} · ${fmtClock(cityMinutes(s.gameMin, s.city), s.opt24h, s.locale)}`,
         amount: `${net >= 0 ? '+' : '−'}${money(Math.abs(net))}`,
         color: net >= 0 ? '#3CB8A4' : '#E05555',
         t: s.gameMin,
       };
-      result = { net, msg: `Sold ${qty} × ${item.name} · ${money(gross)}`, kind: net >= 0 ? 'ok' : 'bad' };
+      result = {
+        net,
+        msg: stF(s, 'msg.sold', { n: qty, name: stT(s, `prod.${item.id}`, item.name), total: money(gross) }, `Sold ${qty} × ${item.name} · ${money(gross)}`),
+        kind: net >= 0 ? 'ok' : 'bad',
+      };
       const next = {
         ...s,
         cash: s.cash + gross,
@@ -759,7 +800,7 @@ export function useGame() {
         overweightNote: (() => {
           const over = Math.max(0, bagUsed(inv) - DEFAULT_BAG_LIMIT);
           return over > 0
-            ? `Carry-on over by ${over.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`
+            ? stF(s, 'msg.overweight_note', { n: over.toFixed(1) }, `Carry-on over by ${over.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`)
             : '';
         })(),
       };
@@ -778,12 +819,12 @@ export function useGame() {
     const item0 = s0.inv[idx0];
     const qty0 = Math.min(Math.max(1, n || s0.invQty), item0.n);
     Alert.alert(
-      'Discard goods?',
-      `Throw away ${qty0} × ${item0.name}? No refund.`,
+      tr('alert.discard_title', 'Discard goods?'),
+      trf('alert.discard_body', { n: qty0, name: tr(`prod.${item0.id}`, item0.name) }, `Throw away ${qty0} × ${item0.name}? No refund.`),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: tr('alert.cancel', 'Cancel'), style: 'cancel' },
         {
-          text: 'Discard',
+          text: tr('alert.discard', 'Discard'),
           style: 'destructive',
           onPress: () => {
             markInteracted();
@@ -803,16 +844,16 @@ export function useGame() {
                 selInv: null,
                 invQty: 1,
                 overweightNote: over > 0
-                  ? `Carry-on over by ${over.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`
+                  ? stF(s, 'msg.overweight_note', { n: over.toFixed(1) }, `Carry-on over by ${over.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`)
                   : '',
               };
             });
-            buzz(`Discarded ${qty0} × ${item0.name}`, 'bad');
+            buzz(trf('msg.discarded', { n: qty0, name: tr(`prod.${item0.id}`, item0.name) }, `Discarded ${qty0} × ${item0.name}`), 'bad');
           },
         },
       ],
     );
-  }, [buzz, markInteracted]);
+  }, [buzz, markInteracted, tr, trf]);
 
   const moveInvSlot = useCallback(() => {
     markInteracted();
@@ -829,7 +870,10 @@ export function useGame() {
       if (destUsed + wt > cap) {
         result = {
           ok: false,
-          msg: `Not enough ${dest === 'bag' ? 'carry-on' : 'cargo'} space (${(destUsed + wt - cap).toFixed(1)} kg over)`,
+          msg: stF(s, 'msg.no_space', {
+            slot: stT(s, dest === 'bag' ? 'slot.carry_on' : 'slot.cargo', dest === 'bag' ? 'carry-on' : 'cargo'),
+            n: (destUsed + wt - cap).toFixed(1),
+          }, `Not enough ${dest === 'bag' ? 'carry-on' : 'cargo'} space (${(destUsed + wt - cap).toFixed(1)} kg over)`),
           kind: 'bad',
         };
         return s;
@@ -859,7 +903,11 @@ export function useGame() {
       }
       result = {
         ok: true,
-        msg: `Moved ${qty} × ${item.name} to ${dest === 'bag' ? 'carry-on' : 'cargo'}`,
+        msg: stF(s, 'msg.moved', {
+          n: qty,
+          name: stT(s, `prod.${item.id}`, item.name),
+          slot: stT(s, dest === 'bag' ? 'slot.carry_on' : 'slot.cargo', dest === 'bag' ? 'carry-on' : 'cargo'),
+        }, `Moved ${qty} × ${item.name} to ${dest === 'bag' ? 'carry-on' : 'cargo'}`),
         kind: 'ok',
       };
       return {
@@ -880,8 +928,8 @@ export function useGame() {
     setState((s) => ({ ...s, savedAt }));
     const slice = serializeSave({ ...stateRef.current, savedAt });
     AsyncStorage.setItem(SAVE_KEY, JSON.stringify(slice)).catch(() => {});
-    buzz('Progress saved to slot 1', 'ok');
-  }, [buzz, markInteracted]);
+    buzz(tr('msg.saved', 'Progress saved to slot 1'), 'ok');
+  }, [buzz, markInteracted, tr]);
 
   const restart = useCallback(() => {
     markInteracted();
@@ -895,10 +943,11 @@ export function useGame() {
       optSound: s.optSound,
       opt24h: s.opt24h,
       optReduce: s.optReduce,
+      locale: s.locale,
     }));
     AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
-    buzz('New run — back in Istanbul', 'ok');
-  }, [buzz, markInteracted]);
+    buzz(tr('msg.new_run', 'New run — back in Istanbul'), 'ok');
+  }, [buzz, markInteracted, tr]);
 
   const productRows = useMemo(() => {
     const baseIds = state.seg === 'local' ? localIds : importIds;
@@ -906,25 +955,29 @@ export function useGame() {
     return ids.map((id) => {
       const q = PRODUCTS[id];
       const unit = priceAt(id, state.city);
-      const tag = intel(id, state.city, destId);
+      const tag = intel(id, state.city, destId, loc);
       const spark = priceSparkline(id, state.city, 5);
       const destPrice = destId ? priceAt(id, destId) : null;
+      const cat = i18nT(loc, `cat.${q.category}`, q.category);
+      const name = i18nT(loc, `prod.${id}`, q.name);
+      const isLocal = q.home === state.city;
       return {
         id,
-        name: q.name,
+        name,
+        isLocal,
         icon: q.icon,
         buy: money(unit),
-        weight: `${q.w.toFixed(1)} kg`,
+        weight: i18nF(loc, 'fmt.kg', { n: q.w.toFixed(1) }, `${q.w.toFixed(1)} kg`),
         meta: destPrice != null
-          ? `${q.category} · here ${money(unit)} · there ${money(destPrice)}`
-          : `${q.category} · local price ${money(unit)}`,
-        origin: q.home === state.city ? 'Local' : 'Import',
+          ? i18nF(loc, 'market.meta_dest', { cat, here: money(unit), there: money(destPrice) }, `${q.category} · here ${money(unit)} · there ${money(destPrice)}`)
+          : i18nF(loc, 'market.meta_local', { cat, here: money(unit) }, `${q.category} · local price ${money(unit)}`),
+        origin: isLocal ? i18nT(loc, 'market.origin_local', 'Local') : i18nT(loc, 'market.origin_import', 'Import'),
         tag: tag.text,
         tagKind: tag.kind,
         spark,
       };
     });
-  }, [state.seg, state.city, destId, localIds, importIds]);
+  }, [state.seg, state.city, destId, loc, localIds, importIds]);
 
   const sortedFlights = useMemo(() => {
     const localNow = ((cityMinutes(state.gameMin, state.city) % 1440) + 1440) % 1440;
@@ -957,27 +1010,46 @@ export function useGame() {
     return list.map((fl) => {
       const past = fl.depMin < localNow;
       const key = `${fl.no}-${fl.toId}-${fl.depMin}`;
+      const toCity = CITIES[fl.toId];
+      const h = Math.floor(fl.mins / 60);
+      const m = pad(fl.mins % 60);
       return {
         ...fl,
-        dep: fmtClock(fl.depMin, state.opt24h),
-        arr: fmtClock(fl.depMin + fl.mins + (CITIES[fl.toId].tz - city.tz) * 60, state.opt24h),
-        from: city.iata,
-        to: CITIES[fl.toId].iata,
-        toName: CITIES[fl.toId].name,
+        dep: fmtClock(fl.depMin, state.opt24h, loc),
+        arr: fmtClock(fl.depMin + fl.mins + (toCity.tz - baseCity.tz) * 60, state.opt24h, loc),
+        from: baseCity.iata,
+        to: toCity.iata,
+        toName: i18nT(loc, `city.${fl.toId}`, toCity.name),
+        dur: i18nF(loc, 'fmt.hm', { h, m }, `${h}h ${m}m`),
+        stops: fl.stops === 'Nonstop' ? i18nT(loc, 'fmt.nonstop', 'Nonstop') : (fl.stops || ''),
         unvisited: !state.visited.includes(fl.toId),
         focused: fl.toId === state.focusDest,
         past,
         isNext: key === nextId,
       };
     });
-  }, [routes, state.filter, state.visited, state.focusDest, state.opt24h, state.gameMin, state.city, city]);
+  }, [routes, state.filter, state.visited, state.focusDest, state.opt24h, state.gameMin, state.city, loc]);
 
   const q = state.query.trim().toLowerCase();
   const searchResults = q
     ? CIDS.filter((k) => k !== state.city)
-      .map((k) => CITIES[k])
-      .filter((c) => `${c.iata} ${c.icao} ${c.airport} ${c.name} ${c.country}`.toLowerCase().includes(q))
+      .filter((k) => {
+        const c = CITIES[k];
+        const cLocal = i18nT(loc, `city.${k}`, c.name);
+        const airportLocal = i18nT(loc, `city.${k}.airport`, c.airport);
+        const countryLocal = i18nT(loc, `city.${k}.country`, c.country);
+        return `${c.iata} ${c.icao} ${c.airport} ${c.name} ${c.country} ${cLocal} ${airportLocal} ${countryLocal}`.toLowerCase().includes(q);
+      })
       .slice(0, 6)
+      .map((k) => {
+        const c = CITIES[k];
+        return {
+          ...c,
+          name: i18nT(loc, `city.${k}`, c.name),
+          airport: i18nT(loc, `city.${k}.airport`, c.airport),
+          country: i18nT(loc, `city.${k}.country`, c.country),
+        };
+      })
     : [];
 
   const selProduct = state.selId ? PRODUCTS[state.selId] : null;
@@ -988,7 +1060,12 @@ export function useGame() {
   const slotCap = state.slot === 'bag' ? state.bagLimit : state.cargoCap;
   const over = slotUsed + wtTotal > slotCap;
   const canBuy = !!selProduct && !over && costTotal <= state.cash;
-  const add = ADDONS.find((a) => a.k === state.addon) || ADDONS[0];
+
+  const addons = useMemo(() => ADDONS.map((a) => ({
+    ...a,
+    label: i18nT(loc, `add.${a.k}`, a.label),
+  })), [loc]);
+  const add = addons.find((a) => a.k === state.addon) || addons[0];
   const addonKg = add.k === 'light' ? 10 : add.k === 'standard' ? 20 : add.k === 'heavy' ? 50 : 0;
   const bookingBagLimit = state.ticket ? state.bagLimit : DEFAULT_BAG_LIMIT + addonKg;
   const fareTotal = state.selFlight
@@ -1002,6 +1079,24 @@ export function useGame() {
   })();
   const invUnit = selInvItem ? priceAt(selInvItem.id, state.city) : 0;
   const invGross = selInvItem ? invUnit * state.invQty : 0;
+
+  const achievements = useMemo(() => ACHIEVEMENTS.map((a) => ({
+    ...a,
+    name: i18nT(loc, `ach.${a.id}`, a.name),
+    desc: i18nT(loc, `ach.${a.id}.desc`, a.desc),
+  })), [loc]);
+
+  const sources = useMemo(() => SOURCES.map((src, i) => ({
+    ...src,
+    license: i18nT(loc, `src.${i}.license`, src.license),
+    use: i18nT(loc, `src.${i}.use`, src.use),
+  })), [loc]);
+
+  const noteText = useMemo(() => {
+    const map = {};
+    CIDS.forEach((cid) => { map[cid] = i18nT(loc, `note.${cid}`, NOTE_TEXT[cid]); });
+    return map;
+  }, [loc]);
 
   return {
     state,
@@ -1018,13 +1113,20 @@ export function useGame() {
     routes,
     destinations,
     searchResults,
-    clockText: clockLabel(state.gameMin, state.opt24h),
-    localTime: fmtClock(cityMinutes(state.gameMin, state.city), state.opt24h),
+    clockText: clockLabel(state.gameMin, state.opt24h, loc),
+    localTime: fmtClock(cityMinutes(state.gameMin, state.city), state.opt24h, loc),
     locale: state.locale || 'en',
     t: (key, fallback) => i18nT(state.locale || 'en', key, fallback),
-    bagText: `${bagKg.toFixed(1)} / ${state.bagLimit} kg`,
-    cargoText: `${cargoKg.toFixed(1)} / ${state.cargoCap} kg`,
-    saveSub: `Last saved ${state.savedAt ? `${hm(state.gameMin - state.savedAt)} ago` : 'at takeoff'} · slot 1`,
+    tf: (key, vars, fallback) => i18nF(state.locale || 'en', key, vars, fallback),
+    bagText: i18nF(loc, 'bags.usage', { n: bagKg.toFixed(1), cap: state.bagLimit }, `${bagKg.toFixed(1)} / ${state.bagLimit} kg`),
+    cargoText: i18nF(loc, 'bags.usage', { n: cargoKg.toFixed(1), cap: state.cargoCap }, `${cargoKg.toFixed(1)} / ${state.cargoCap} kg`),
+    saveSub: state.savedAt
+      ? i18nF(loc, 'more.saved_ago', { time: hm(state.gameMin - state.savedAt, loc) }, `Last saved ${hm(state.gameMin - state.savedAt, loc)} ago · slot 1`)
+      : i18nF(loc, 'more.saved_takeoff', {}, 'Last saved at takeoff · slot 1'),
+    achievements,
+    sources,
+    addons,
+    noteText,
     selProduct,
     selInvItem,
     invUnit,
@@ -1039,7 +1141,7 @@ export function useGame() {
     slotCap,
     fareTotal,
     add,
-    hm,
+    hm: (m) => hm(m, loc),
     hhmm,
     money,
     priceAt,

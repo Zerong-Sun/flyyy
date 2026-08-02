@@ -32,6 +32,8 @@ export function GlobeScreen({ game }) {
     openFF,
     cancelTicket,
     setTab,
+    t,
+    tf,
   } = game;
 
   const ticket = state.ticket;
@@ -41,8 +43,11 @@ export function GlobeScreen({ game }) {
   const depLabel = !ticket
     ? ''
     : state.minsToDep <= 0
-      ? 'Boarding now'
-      : `${hm(state.minsToDep)} to departure`;
+      ? t('globe.boarding_now', 'Boarding now')
+      : tf('globe.to_departure', { t: hm(state.minsToDep) }, `${hm(state.minsToDep)} to departure`);
+  const cabinLabel = ticket
+    ? t(ticket.cabin === 'economy' ? 'globe.cabin_economy' : 'globe.cabin_business', ticket.cabin === 'economy' ? 'Economy' : 'Business')
+    : '';
 
   return (
     <View style={styles.wrap}>
@@ -52,14 +57,14 @@ export function GlobeScreen({ game }) {
           style={styles.searchInput}
           value={state.query}
           onChangeText={setQuery}
-          placeholder="Search airports, cities, IATA"
+          placeholder={t('globe.search_placeholder', 'Search airports, cities, IATA')}
           placeholderTextColor={COLORS.muted2}
           autoCorrect={false}
           returnKeyType="search"
         />
         {searching ? (
           <Pressable onPress={() => setQuery('')} hitSlop={10}>
-            <Text style={styles.searchClear}>Clear</Text>
+            <Text style={styles.searchClear}>{t('globe.clear', 'Clear')}</Text>
           </Pressable>
         ) : null}
       </View>
@@ -72,25 +77,25 @@ export function GlobeScreen({ game }) {
               {ticket.no} · {ticket.from} → {ticket.to}
             </Text>
             <Text style={styles.ticketSub}>
-              {depLabel} · {ticket.cabin}
+              {depLabel} · {cabinLabel}
             </Text>
           </View>
           <Pressable
             style={styles.speedBtn}
             onPress={openFF}
             accessibilityRole="button"
-            accessibilityLabel="Speed up to takeoff"
+            accessibilityLabel={t('globe.speed_up_a11y', 'Speed up to takeoff')}
           >
-            <Text style={styles.speedBtnText}>Speed up</Text>
+            <Text style={styles.speedBtnText}>{t('globe.speed_up', 'Speed up')}</Text>
           </Pressable>
           <Pressable
             style={styles.cancelBtn}
             onPress={cancelTicket}
             hitSlop={8}
             accessibilityRole="button"
-            accessibilityLabel="Cancel ticket"
+            accessibilityLabel={t('globe.cancel_ticket', 'Cancel ticket')}
           >
-            <Text style={styles.cancelBtnText}>Cancel</Text>
+            <Text style={styles.cancelBtnText}>{t('globe.cancel', 'Cancel')}</Text>
           </Pressable>
         </View>
       ) : null}
@@ -98,7 +103,9 @@ export function GlobeScreen({ game }) {
       {searching ? (
         <View style={styles.results}>
           {searchResults.length === 0 ? (
-            <Text style={styles.noResults}>No hub matches “{state.query.trim()}”.</Text>
+            <Text style={styles.noResults}>
+              {tf('globe.no_results', { q: state.query.trim() }, `No hub matches "${state.query.trim()}".`)}
+            </Text>
           ) : (
             searchResults.map((c) => (
               <Pressable
@@ -122,21 +129,23 @@ export function GlobeScreen({ game }) {
 
           {state.pinCity && CITIES[state.pinCity] ? (() => {
             const pin = CITIES[state.pinCity];
+            const pinName = t(`city.${state.pinCity}`, pin.name);
+            const pinCountry = t(`city.${state.pinCity}.country`, pin.country);
             const visited = state.visited.includes(state.pinCity);
             const km = gcKm(city, pin);
             return (
               <Card style={styles.pinCard}>
                 <View style={styles.pinCardTop}>
                   <View style={styles.pinCardBody}>
-                    <Text style={styles.pinCardName}>{pin.name}</Text>
+                    <Text style={styles.pinCardName}>{pinName}</Text>
                     <Text style={styles.pinCardMeta}>
-                      {pin.iata} · {pin.country} · {km.toLocaleString('en-US')} km
+                      {pin.iata} · {pinCountry} · {tf('fmt.km', { n: km.toLocaleString('en-US') }, `${km.toLocaleString('en-US')} km`)}
                     </Text>
                     <Text style={styles.pinCardVisit}>
-                      {visited ? 'Visited' : 'Not visited yet'}
+                      {visited ? t('globe.visited', 'Visited') : t('globe.not_visited', 'Not visited yet')}
                     </Text>
                   </View>
-                  <Pressable onPress={closePinCity} hitSlop={10} accessibilityRole="button" accessibilityLabel="Close">
+                  <Pressable onPress={closePinCity} hitSlop={10} accessibilityRole="button" accessibilityLabel={t('globe.close', 'Close')}>
                     <Text style={styles.pinCardClose}>✕</Text>
                   </Pressable>
                 </View>
@@ -146,14 +155,14 @@ export function GlobeScreen({ game }) {
                     style={styles.pinCardBtn}
                     onPress={() => setFocusDest(state.pinCity)}
                   >
-                    Find flights
+                    {t('globe.find_flights', 'Find flights')}
                   </Button>
                   <Button
                     variant="secondary"
                     style={styles.pinCardBtn}
                     onPress={() => watchDest(state.pinCity)}
                   >
-                    Watch in Market
+                    {t('globe.watch_market', 'Watch in Market')}
                   </Button>
                 </View>
               </Card>
@@ -176,49 +185,53 @@ export function GlobeScreen({ game }) {
                   </Text>
                 </View>
                 <View style={styles.hereBadge}>
-                  <Text style={styles.hereBadgeText}>You are here</Text>
+                  <Text style={styles.hereBadgeText}>{t('globe.you_are_here', 'You are here')}</Text>
                 </View>
               </View>
             </View>
 
             <View style={styles.statsRow}>
               <View style={styles.statCell}>
-                <Text style={styles.statLabel}>Local time</Text>
+                <Text style={styles.statLabel}>{t('globe.local_time', 'Local time')}</Text>
                 <Text style={styles.statValue}>{localTime}</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statCell}>
-                <Text style={styles.statLabel}>Carry-on</Text>
+                <Text style={styles.statLabel}>{t('globe.carry_on', 'Carry-on')}</Text>
                 <Text style={[styles.statValue, { color: bagColor }]}>{bagText}</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statCell}>
-                <Text style={styles.statLabel}>Cargo</Text>
+                <Text style={styles.statLabel}>{t('globe.cargo', 'Cargo')}</Text>
                 <Text style={styles.statValue}>{cargoText}</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statCell}>
-                <Text style={styles.statLabel}>Routes</Text>
-                <Text style={styles.statValue}>{destinations.length} cities</Text>
+                <Text style={styles.statLabel}>{t('globe.routes', 'Routes')}</Text>
+                <Text style={styles.statValue}>
+                  {tf('globe.cities_count', { n: destinations.length }, `${destinations.length} cities`)}
+                </Text>
               </View>
             </View>
 
             <View style={styles.elevRow}>
-              <Text style={styles.elevText}>Field elevation {city.elev} ft</Text>
+              <Text style={styles.elevText}>
+                {tf('globe.field_elev', { n: city.elev }, `Field elevation ${city.elev} ft`)}
+              </Text>
             </View>
           </Card>
 
           <View style={styles.actions}>
             <Button variant="primary" style={styles.actionBtn} onPress={() => setTab('market')}>
-              Trade here
+              {t('globe.trade_here', 'Trade here')}
             </Button>
             <Button variant="secondary" style={styles.actionBtn} onPress={() => setTab('flights')}>
-              Find a flight
+              {t('globe.find_flight', 'Find a flight')}
             </Button>
           </View>
 
           <Text style={styles.disclaimer}>
-            Flight network rebuilt from public aviation data. Not real ticketing information.
+            {t('globe.disclaimer', 'Flight network rebuilt from public aviation data. Not real ticketing information.')}
           </Text>
         </>
       )}

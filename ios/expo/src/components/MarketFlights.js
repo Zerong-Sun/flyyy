@@ -7,7 +7,7 @@ import {
   Pressable,
   StyleSheet,
 } from 'react-native';
-import { ADDONS, CITIES } from '../gameData';
+import { CITIES } from '../gameData';
 import { money, tagColor, intel } from '../gameLogic';
 import { assetSource } from '../assets';
 import { COLORS } from '../theme';
@@ -18,19 +18,6 @@ import {
   SegControl,
   Sheet,
 } from './ui';
-
-const MARKET_SEGS = [
-  { value: 'local', label: 'Local' },
-  { value: 'imported', label: 'Imported' },
-];
-
-const FLIGHT_FILTERS = [
-  { value: 'departure', label: 'Departure' },
-  { value: 'price', label: 'Price' },
-  { value: 'duration', label: 'Duration' },
-  { value: 'unvisited', label: 'New cities' },
-  { value: 'biz', label: 'Business' },
-];
 
 function MiniSpark({ points }) {
   if (!points || points.length < 2) return null;
@@ -48,8 +35,13 @@ function MiniSpark({ points }) {
 }
 
 export function MarketScreen({ game }) {
-  const { state, city, destId, productRows, setSeg, openProduct, setFocusDest, t } = game;
+  const { state, city, destId, productRows, setSeg, openProduct, setFocusDest, t, tf } = game;
   const sortCity = destId ? CITIES[destId] : null;
+  const sortCityName = destId ? t(`city.${destId}`, CITIES[destId].name) : '';
+  const marketSegs = [
+    { value: 'local', label: t('market.seg_local', 'Local') },
+    { value: 'imported', label: t('market.seg_imported', 'Imported') },
+  ];
 
   return (
     <View style={styles.screen}>
@@ -57,22 +49,26 @@ export function MarketScreen({ game }) {
         title={t('market_title', 'Market')}
         subtitle={
           sortCity
-            ? `${city.name} · sorted for ${sortCity.name}`
+            ? tf('market.sorted_for', { city: city.name, dest: sortCityName }, `${city.name} · sorted for ${sortCityName}`)
             : `${city.name} · ${state.seg === 'local' ? t('market_here', 'local goods') : t('market_import', 'imports')}`
         }
       />
       {state.ticket && sortCity ? (
         <View style={styles.focusChip}>
-          <Text style={styles.focusChipText}>Ticket → {sortCity.iata}</Text>
+          <Text style={styles.focusChipText}>
+            {tf('market.ticket_to', { iata: sortCity.iata }, `Ticket → ${sortCity.iata}`)}
+          </Text>
         </View>
       ) : state.focusDest && sortCity ? (
         <Pressable style={styles.focusChip} onPress={() => setFocusDest('')}>
-          <Text style={styles.focusChipText}>Watching {sortCity.iata} · Clear</Text>
+          <Text style={styles.focusChipText}>
+            {tf('market.watching', { iata: sortCity.iata }, `Watching ${sortCity.iata} · Clear`)}
+          </Text>
         </Pressable>
       ) : null}
       <SegControl
         style={styles.seg}
-        options={MARKET_SEGS}
+        options={marketSegs}
         value={state.seg}
         onChange={setSeg}
       />
@@ -89,8 +85,8 @@ export function MarketScreen({ game }) {
             <View style={styles.productBody}>
               <View style={styles.productTitleRow}>
                 <Text style={styles.productName} numberOfLines={1}>{p.name}</Text>
-                <View style={[styles.originChip, p.origin === 'Local' ? styles.originLocal : styles.originImport]}>
-                  <Text style={[styles.originText, p.origin === 'Local' ? styles.originLocalText : styles.originImportText]}>
+                <View style={[styles.originChip, p.isLocal ? styles.originLocal : styles.originImport]}>
+                  <Text style={[styles.originText, p.isLocal ? styles.originLocalText : styles.originImportText]}>
                     {p.origin}
                   </Text>
                 </View>
@@ -112,9 +108,9 @@ export function MarketScreen({ game }) {
         ))}
       </View>
       <View style={styles.tipCard}>
-        <Text style={styles.tipTitle}>Over the limit?</Text>
+        <Text style={styles.tipTitle}>{t('market.tip_title', 'Over the limit?')}</Text>
         <Text style={styles.tipBody}>
-          Buy baggage (+10 / +20 / +50 kg) when booking a flight.
+          {t('market.tip_body', 'Buy baggage (+10 / +20 / +50 kg) when booking a flight.')}
         </Text>
       </View>
     </View>
@@ -122,8 +118,16 @@ export function MarketScreen({ game }) {
 }
 
 export function FlightsScreen({ game }) {
-  const { state, city, sortedFlights, setFilter, openFlight, setFocusDest, t } = game;
+  const { state, city, sortedFlights, setFilter, openFlight, setFocusDest, t, tf } = game;
   const focusCity = state.focusDest ? CITIES[state.focusDest] : null;
+  const focusCityName = state.focusDest ? t(`city.${state.focusDest}`, CITIES[state.focusDest].name) : '';
+  const flightFilters = [
+    { value: 'departure', label: t('flight.filter_departure', 'Departure') },
+    { value: 'price', label: t('flight.filter_price', 'Price') },
+    { value: 'duration', label: t('flight.filter_duration', 'Duration') },
+    { value: 'unvisited', label: t('flight.filter_unvisited', 'New cities') },
+    { value: 'biz', label: t('flight.filter_biz', 'Business') },
+  ];
 
   return (
     <View style={styles.screen}>
@@ -131,13 +135,15 @@ export function FlightsScreen({ game }) {
         title={t('flights_title', 'Flights')}
         subtitle={
           focusCity
-            ? `Departing ${city.iata} · focused on ${focusCity.name}`
-            : `Departing ${city.iata} · next 24 h`
+            ? tf('flight.departing_focus', { iata: city.iata, name: focusCityName }, `Departing ${city.iata} · focused on ${focusCityName}`)
+            : tf('flight.departing', { iata: city.iata }, `Departing ${city.iata} · next 24 h`)
         }
       />
       {focusCity ? (
         <Pressable style={styles.focusChip} onPress={() => setFocusDest('')}>
-          <Text style={styles.focusChipText}>To {focusCity.iata} · Clear</Text>
+          <Text style={styles.focusChipText}>
+            {tf('flight.to_focus', { iata: focusCity.iata }, `To ${focusCity.iata} · Clear`)}
+          </Text>
         </Pressable>
       ) : null}
       <ScrollView
@@ -146,7 +152,7 @@ export function FlightsScreen({ game }) {
         nestedScrollEnabled
         contentContainerStyle={styles.filtersRow}
       >
-        {FLIGHT_FILTERS.map((f) => {
+        {flightFilters.map((f) => {
           const active = state.filter === f.value;
           return (
             <Pressable
@@ -162,8 +168,10 @@ export function FlightsScreen({ game }) {
       <View style={styles.list}>
         {sortedFlights.length === 0 ? (
           <View style={styles.emptyBox}>
-            <Text style={styles.emptyTitle}>No departures</Text>
-            <Text style={styles.emptySub}>Try another filter or clear the destination focus.</Text>
+            <Text style={styles.emptyTitle}>{t('flight.no_departures', 'No departures')}</Text>
+            <Text style={styles.emptySub}>
+              {t('flight.empty_sub', 'Try another filter or clear the destination focus.')}
+            </Text>
           </View>
         ) : null}
         {sortedFlights.map((f) => (
@@ -177,29 +185,35 @@ export function FlightsScreen({ game }) {
             ]}
             onPress={() => openFlight(f)}
             accessibilityRole="button"
-            accessibilityLabel={`${f.no} to ${f.toName}, departs ${f.dep}, economy ${money(f.econ)}${f.isNext ? ', next departure' : ''}`}
+            accessibilityLabel={tf('flight.a11y', {
+              no: f.no,
+              to: f.toName,
+              dep: f.dep,
+              price: money(f.econ),
+              extra: f.isNext ? t('flight.next', 'Next') : '',
+            }, `${f.no} to ${f.toName}, departs ${f.dep}, economy ${money(f.econ)}${f.isNext ? ', next departure' : ''}`)}
           >
             <View style={styles.flightHeader}>
               <Text style={[styles.flightNo, f.past && styles.flightTextPast]}>{f.no}</Text>
               <Text style={[styles.flightAirline, f.past && styles.flightTextPast]} numberOfLines={1}>{f.airline}</Text>
               {f.isNext ? (
                 <View style={styles.nextChip}>
-                  <Text style={styles.nextChipText}>Next</Text>
+                  <Text style={styles.nextChipText}>{t('flight.next', 'Next')}</Text>
                 </View>
               ) : null}
               {f.past ? (
                 <View style={styles.tomorrowChip}>
-                  <Text style={styles.tomorrowChipText}>Tomorrow</Text>
+                  <Text style={styles.tomorrowChipText}>{t('flight.tomorrow', 'Tomorrow')}</Text>
                 </View>
               ) : null}
               {f.focused ? (
                 <View style={styles.newCityChip}>
-                  <Text style={styles.newCityText}>Focus</Text>
+                  <Text style={styles.newCityText}>{t('flight.focus', 'Focus')}</Text>
                 </View>
               ) : null}
               {f.unvisited ? (
                 <View style={styles.newCityChip}>
-                  <Text style={styles.newCityText}>New city</Text>
+                  <Text style={styles.newCityText}>{t('flight.new_city', 'New city')}</Text>
                 </View>
               ) : null}
             </View>
@@ -219,9 +233,11 @@ export function FlightsScreen({ game }) {
               </View>
             </View>
             <View style={styles.flightFooter}>
-              <Text style={styles.econPrice}>Econ {money(f.econ)}</Text>
-              <Text style={styles.bizPrice}>Biz {money(f.biz)}</Text>
-              <Text style={styles.kmText}>{f.km.toLocaleString('en-US')} km</Text>
+              <Text style={styles.econPrice}>{tf('flight.econ', { price: money(f.econ) }, `Econ ${money(f.econ)}`)}</Text>
+              <Text style={styles.bizPrice}>{tf('flight.biz', { price: money(f.biz) }, `Biz ${money(f.biz)}`)}</Text>
+              <Text style={styles.kmText}>
+                {tf('fmt.km', { n: f.km.toLocaleString('en-US') }, `${f.km.toLocaleString('en-US')} km`)}
+              </Text>
             </View>
           </Pressable>
         ))}
@@ -256,13 +272,18 @@ export function MarketSheets({ game }) {
     buy,
     buyTicket,
     add,
+    addons,
+    locale,
+    t,
+    tf,
   } = game;
 
   const selFlight = state.selFlight;
   const forecast = selProduct
-    ? (destId ? money(priceAt(selProduct.id, destId)) : '— pick a destination')
+    ? (destId ? money(priceAt(selProduct.id, destId)) : t('sheet.pick_dest', '— pick a destination'))
     : '';
-  const selIntel = selProduct ? intel(selProduct.id, state.city, destId) : { kind: '' };
+  const selIntel = selProduct ? intel(selProduct.id, state.city, destId, locale) : { kind: '' };
+  const selCat = selProduct ? t(`cat.${selProduct.category}`, selProduct.category) : '';
 
   return (
     <>
@@ -274,24 +295,24 @@ export function MarketSheets({ game }) {
               <View style={styles.sheetHeaderText}>
                 <Text style={styles.sheetTitle}>{selProduct.name}</Text>
                 <Text style={styles.sheetSub}>
-                  {selProduct.category} · {selProduct.w.toFixed(1)} kg each
+                  {tf('sheet.sub_product', { cat: selCat, w: selProduct.w.toFixed(1) }, `${selProduct.category} · ${selProduct.w.toFixed(1)} kg each`)}
                 </Text>
               </View>
             </View>
 
             <View style={styles.priceGrid}>
               <View style={styles.priceCell}>
-                <Text style={styles.priceLabel}>Buy here</Text>
+                <Text style={styles.priceLabel}>{t('sheet.buy_here', 'Buy here')}</Text>
                 <Text style={styles.priceVal}>{money(unitHere)}</Text>
               </View>
               <View style={styles.priceCell}>
-                <Text style={styles.priceLabel}>Sells here</Text>
+                <Text style={styles.priceLabel}>{t('sheet.sells_here', 'Sells here')}</Text>
                 <Text style={[styles.priceVal, styles.priceMuted]}>
                   {money(unitHere)}
                 </Text>
               </View>
               <View style={[styles.priceCell, { flex: 1.2 }]}>
-                <Text style={styles.priceLabel}>At destination</Text>
+                <Text style={styles.priceLabel}>{t('sheet.at_dest', 'At destination')}</Text>
                 <Text style={[styles.priceVal, { color: tagColor(selIntel.kind) }]}>
                   {forecast}
                 </Text>
@@ -299,7 +320,7 @@ export function MarketSheets({ game }) {
             </View>
 
             <View style={styles.qtyRow}>
-              <Text style={styles.qtyLabel}>Quantity</Text>
+              <Text style={styles.qtyLabel}>{t('sheet.quantity', 'Quantity')}</Text>
               <View style={styles.qtyControl}>
                 <Pressable style={styles.qtyBtn} onPress={() => setQty(state.qty - 1)}>
                   <Text style={styles.qtyBtnText}>−</Text>
@@ -314,24 +335,24 @@ export function MarketSheets({ game }) {
             <SegControl
               style={styles.slotSeg}
               options={[
-                { value: 'bag', label: 'Carry-on' },
-                { value: 'cargo', label: 'Cargo hold' },
+                { value: 'bag', label: t('sheet.carry_on', 'Carry-on') },
+                { value: 'cargo', label: t('sheet.cargo_hold', 'Cargo hold') },
               ]}
               value={state.slot}
               onChange={setSlot}
             />
 
             <Text style={styles.costLine}>
-              Total {money(costTotal)} · {(slotUsed + wtTotal).toFixed(1)} / {slotCap} kg
-              {over ? ' · over limit' : ''}
+              {tf('sheet.total', { total: money(costTotal), wt: (slotUsed + wtTotal).toFixed(1), cap: slotCap }, `Total ${money(costTotal)} · ${(slotUsed + wtTotal).toFixed(1)} / ${slotCap} kg`)}
+              {over ? tf('sheet.over_limit', {}, ' · over limit') : ''}
             </Text>
 
             <Button variant="primary" onPress={buy} disabled={!canBuy}>
               {over
-                ? 'Over weight limit'
+                ? t('sheet.over_weight', 'Over weight limit')
                 : costTotal > state.cash
-                  ? 'Not enough cash'
-                  : `Buy ${state.qty} for ${money(costTotal)}`}
+                  ? t('sheet.no_cash', 'Not enough cash')
+                  : tf('sheet.buy_qty', { n: state.qty, total: money(costTotal) }, `Buy ${state.qty} for ${money(costTotal)}`)}
             </Button>
           </ScrollView>
         ) : null}
@@ -350,15 +371,15 @@ export function MarketSheets({ game }) {
                 <Text style={styles.sheetCity}>{city.name}</Text>
               </View>
               <Text style={styles.sheetMid}>
-                {selFlight.dur} · {selFlight.km.toLocaleString('en-US')} km
+                {selFlight.dur} · {tf('fmt.km', { n: selFlight.km.toLocaleString('en-US') }, `${selFlight.km.toLocaleString('en-US')} km`)}
               </Text>
               <View style={styles.flightArr}>
                 <Text style={styles.sheetTimeBig}>{selFlight.arr}</Text>
-                <Text style={styles.sheetCity}>{CITIES[selFlight.toId].name}</Text>
+                <Text style={styles.sheetCity}>{t(`city.${selFlight.toId}`, CITIES[selFlight.toId].name)}</Text>
               </View>
             </View>
 
-            <Text style={styles.sectionLabel}>Cabin</Text>
+            <Text style={styles.sectionLabel}>{t('sheet.cabin', 'Cabin')}</Text>
             {['economy', 'business'].map((cabin) => {
               const active = state.cabin === cabin;
               const price = cabin === 'economy' ? selFlight.econ : selFlight.biz;
@@ -375,10 +396,10 @@ export function MarketSheets({ game }) {
                   />
                   <View style={styles.cabinBody}>
                     <Text style={[styles.cabinLabel, active && styles.cabinLabelActive]}>
-                      {cabin === 'economy' ? 'Economy' : 'Business'}
+                      {cabin === 'economy' ? t('sheet.cabin_economy', 'Economy') : t('sheet.cabin_business', 'Business')}
                     </Text>
                     <Text style={styles.cabinSub}>
-                      {cabin === 'economy' ? 'Standard seat' : 'Extra legroom · lounge access'}
+                      {cabin === 'economy' ? t('sheet.seat_standard', 'Standard seat') : t('sheet.seat_biz', 'Extra legroom · lounge access')}
                     </Text>
                   </View>
                   <Text style={styles.cabinPrice}>{money(price)}</Text>
@@ -386,16 +407,16 @@ export function MarketSheets({ game }) {
               );
             })}
 
-            <Text style={styles.sectionLabel}>Extra weight</Text>
+            <Text style={styles.sectionLabel}>{t('sheet.extra_weight', 'Extra weight')}</Text>
             {bagOverKg > 0 ? (
               <View style={styles.warnBanner}>
                 <Text style={styles.warnBannerText}>
-                  Carry-on over by {bagOverKg.toFixed(1)} kg — you can still fly; add baggage or lighten in Bags.
+                  {tf('sheet.overweight_warn', { n: bagOverKg.toFixed(1) }, `Carry-on over by ${bagOverKg.toFixed(1)} kg — you can still fly; add baggage or lighten in Bags.`)}
                 </Text>
               </View>
             ) : null}
             <View style={styles.addonRow}>
-              {ADDONS.map((a) => {
+              {addons.map((a) => {
                 const active = state.addon === a.k;
                 return (
                   <Pressable
@@ -413,20 +434,22 @@ export function MarketSheets({ game }) {
             </View>
 
             <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Total</Text>
+              <Text style={styles.totalLabel}>{t('sheet.total_row', 'Total')}</Text>
               <Text style={styles.totalVal}>{money(fareTotal)}</Text>
             </View>
-            <Text style={styles.addonNote}>Includes {add.label} baggage</Text>
+            <Text style={styles.addonNote}>
+              {tf('sheet.includes_addon', { label: add.label }, `Includes ${add.label} baggage`)}
+            </Text>
 
             <Button variant="primary" onPress={buyTicket} disabled={!canBook}>
               {state.ticket
-                ? 'Ticket already booked'
+                ? t('sheet.ticket_booked', 'Ticket already booked')
                 : fareTotal > state.cash
-                  ? 'Not enough cash'
-                  : `Buy ticket · ${money(fareTotal)}`}
+                  ? t('sheet.no_cash', 'Not enough cash')
+                  : tf('sheet.buy_ticket', { total: money(fareTotal) }, `Buy ticket · ${money(fareTotal)}`)}
             </Button>
             <Text style={styles.boardingNote}>
-              Boarding is mandatory. Once the gate closes you fly, cargo and all.
+              {t('sheet.boarding_note', 'Boarding is mandatory. Once the gate closes you fly, cargo and all.')}
             </Text>
           </ScrollView>
         ) : null}

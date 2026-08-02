@@ -1,4 +1,5 @@
 import { AIRLINE, CIDS, CITIES, FLIGHTS, PRODUCTS, PRODUCT_IDS } from './gameData.js';
+import { f, t } from './i18n.js';
 
 const FACTORS = [1.58, 1.41, 1.24, 1.08, 0.95, 0.82];
 
@@ -28,19 +29,23 @@ export const hhmm = (m) => {
 };
 
 /** 24-hour or 12-hour wall clock, per the player's setting. */
-export function fmtClock(m, use24 = true) {
+export function fmtClock(m, use24 = true, locale = 'en') {
   const mins = ((Math.round(m) % 1440) + 1440) % 1440;
   const h = Math.floor(mins / 60);
   const mm = pad(mins % 60);
   if (use24) return `${pad(h)}:${mm}`;
-  const suffix = h < 12 ? 'AM' : 'PM';
+  const suffix = h < 12 ? t(locale, 'fmt.am', 'AM') : t(locale, 'fmt.pm', 'PM');
   const h12 = h % 12 === 0 ? 12 : h % 12;
   return `${h12}:${mm} ${suffix}`;
 }
 
-export function hm(m) {
+export function hm(m, locale = 'en') {
   const h = Math.floor(m / 60);
-  return h > 0 ? `${h}h ${pad(Math.round(m % 60))}m` : `${Math.round(m)}m`;
+  if (h > 0) {
+    const vars = { h, m: pad(Math.round(m % 60)) };
+    return f(locale, 'fmt.hm', vars, `${h}h ${pad(Math.round(m % 60))}m`);
+  }
+  return f(locale, 'fmt.mm', { m: Math.round(m) }, `${Math.round(m)}m`);
 }
 
 const one = (v) => (typeof v === 'number' && !Number.isNaN(v) ? v : 1);
@@ -160,7 +165,7 @@ export function imports(cityId) {
     .slice(0, 6);
 }
 
-export function sellData(inv, cityId) {
+export function sellData(inv, cityId, locale = 'en') {
   let gross = 0;
   let cost = 0;
   const rows = inv.map((i) => {
@@ -170,9 +175,10 @@ export function sellData(inv, cityId) {
     gross += g;
     cost += c;
     return {
+      id: i.id,
       icon: i.icon,
       name: i.name,
-      meta: `${i.n} × ${money(u)} · ${(i.w * i.n).toFixed(1)} kg`,
+      meta: `${i.n} × ${money(u)} · ${f(locale, 'fmt.kg', { n: (i.w * i.n).toFixed(1) }, `${(i.w * i.n).toFixed(1)} kg`)}`,
       gross: money(g),
       delta: `${g - c >= 0 ? '+' : '−'}${money(Math.abs(g - c))}`,
       color: g - c >= 0 ? '#3CB8A4' : '#E05555',
@@ -181,23 +187,23 @@ export function sellData(inv, cityId) {
   return { rows, gross, net: gross - cost };
 }
 
-export function intel(pid, cityId, destId) {
+export function intel(pid, cityId, destId, locale = 'en') {
   const here = priceAt(pid, cityId);
   if (destId) {
-    const t = priceAt(pid, destId);
-    const pct = Math.round((t / here - 1) * 100);
-    const cn = CITIES[destId].name;
-    if (pct >= 25) return { text: `+${pct}% in ${cn}`, kind: 'hot' };
-    if (pct >= 5) return { text: `${cn}: +${pct}%`, kind: 'ok' };
-    if (pct > -5) return { text: `${cn}: ${pct >= 0 ? '+' : ''}${pct}%`, kind: 'ok' };
-    return { text: `${cn}: ${pct}%`, kind: 'cold' };
+    const tp = priceAt(pid, destId);
+    const pct = Math.round((tp / here - 1) * 100);
+    const cn = t(locale, `city.${destId}`, CITIES[destId].name);
+    if (pct >= 25) return { text: f(locale, 'market.intel_hot', { pct, city: cn }, `+${pct}% in ${cn}`), kind: 'hot' };
+    if (pct >= 5) return { text: f(locale, 'market.intel_gain', { pct, city: cn }, `${cn}: +${pct}%`), kind: 'ok' };
+    if (pct > -5) return { text: f(locale, 'market.intel_flat', { pct, city: cn, sign: pct >= 0 ? '+' : '' }, `${cn}: ${pct >= 0 ? '+' : ''}${pct}%`), kind: 'ok' };
+    return { text: f(locale, 'market.intel_cold', { pct, city: cn }, `${cn}: ${pct}%`), kind: 'cold' };
   }
   let best = null;
   destinationsFrom(cityId).forEach((toId) => {
-    const t = priceAt(pid, toId);
-    if (!best || t > best.p) best = { p: t, c: CITIES[toId].name };
+    const tp = priceAt(pid, toId);
+    if (!best || tp > best.p) best = { p: tp, c: t(locale, `city.${toId}`, CITIES[toId].name) };
   });
-  if (best && best.p > here * 1.2) return { text: `Best: ${best.c} ${money(best.p)}`, kind: 'best' };
+  if (best && best.p > here * 1.2) return { text: f(locale, 'market.intel_best', { city: best.c, price: money(best.p) }, `Best: ${best.c} ${money(best.p)}`), kind: 'best' };
   return { text: '', kind: '' };
 }
 
@@ -240,9 +246,10 @@ export function cityMinutes(gameMin, cityId) {
   return utcMinutes(gameMin) + (CITIES[cityId].tz - 3) * 60;
 }
 
-export function clockLabel(gameMin, use24 = true) {
+export function clockLabel(gameMin, use24 = true, locale = 'en') {
   const m = utcMinutes(gameMin);
-  return `Mar ${12 + Math.floor(m / 1440)} · ${fmtClock(m, use24)}`;
+  const month = f(locale, 'fmt.mar', {}, 'Mar');
+  return `${month} ${12 + Math.floor(m / 1440)} · ${fmtClock(m, use24, locale)}`;
 }
 
 /** Minutes until depMin on the city's local clock (wraps past midnight). */

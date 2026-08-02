@@ -10,11 +10,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import {
-  ACHIEVEMENTS,
   CIDS,
   CITIES,
-  NOTE_TEXT,
-  SOURCES,
   STARTING_CASH,
 } from '../gameData';
 import { assetSource } from '../assets';
@@ -30,29 +27,29 @@ import {
 } from './ui';
 
 export function BagsScreen({ game }) {
-  const { state, bagText, cargoText, bagKg, openSell, openInvItem } = game;
+  const { state, bagText, cargoText, bagKg, openSell, openInvItem, t, tf } = game;
   const pct = state.bagLimit > 0
     ? Math.min(100, Math.round((bagKg / state.bagLimit) * 100))
     : 0;
 
   return (
     <View style={styles.screen}>
-      <ScreenTitle title="Baggage" subtitle="Weight decides what you can carry" />
+      <ScreenTitle title={t('bags.title', 'Baggage')} subtitle={t('bags.subtitle', 'Weight decides what you can carry')} />
 
       <Card style={styles.weightCard}>
         <View style={[styles.ring, { borderColor: pct >= 90 ? COLORS.red : COLORS.teal }]}>
           <View style={styles.ringInner}>
             <Text style={styles.ringPct}>{pct}%</Text>
-            <Text style={styles.ringLabel}>carry-on</Text>
+            <Text style={styles.ringLabel}>{t('bags.ring_label', 'carry-on')}</Text>
           </View>
         </View>
         <View style={styles.weightStats}>
           <View>
-            <Text style={styles.weightLabel}>Carry-on</Text>
+            <Text style={styles.weightLabel}>{t('carry_on', 'Carry-on')}</Text>
             <Text style={styles.weightVal}>{bagText}</Text>
           </View>
           <View>
-            <Text style={styles.weightLabel}>Cargo hold</Text>
+            <Text style={styles.weightLabel}>{t('bags.cargo_hold', 'Cargo hold')}</Text>
             <Text style={styles.weightVal}>{cargoText}</Text>
           </View>
         </View>
@@ -61,8 +58,8 @@ export function BagsScreen({ game }) {
       <View style={styles.list}>
         {state.inv.length === 0 ? (
           <View style={styles.emptyBox}>
-            <Text style={styles.emptyTitle}>Nothing on board</Text>
-            <Text style={styles.emptySub}>Buy goods in the market before you fly.</Text>
+            <Text style={styles.emptyTitle}>{t('bags.nothing', 'Nothing on board')}</Text>
+            <Text style={styles.emptySub}>{t('bags.nothing_sub', 'Buy goods in the market before you fly.')}</Text>
           </View>
         ) : (
           state.inv.map((item, idx) => (
@@ -71,13 +68,18 @@ export function BagsScreen({ game }) {
               style={styles.invRow}
               onPress={() => openInvItem(item)}
               accessibilityRole="button"
-              accessibilityLabel={`${item.name}, ${item.n} units, ${(item.w * item.n).toFixed(1)} kilograms, ${item.slot === 'cargo' ? 'cargo' : 'carry-on'}`}
+              accessibilityLabel={tf('bags.inv_a11y', {
+                name: t(`prod.${item.id}`, item.name),
+                n: item.n,
+                kg: (item.w * item.n).toFixed(1),
+                slot: item.slot === 'cargo' ? t('slot.cargo', 'cargo') : t('slot.carry_on', 'carry-on'),
+              }, `${item.name}, ${item.n} units, ${(item.w * item.n).toFixed(1)} kilograms, ${item.slot === 'cargo' ? 'cargo' : 'carry-on'}`)}
             >
               <Image source={assetSource(item.icon)} style={styles.invIcon} accessible={false} />
               <View style={styles.invBody}>
-                <Text style={styles.invName}>{item.name}</Text>
+                <Text style={styles.invName}>{t(`prod.${item.id}`, item.name)}</Text>
                 <Text style={styles.invMeta}>
-                  {item.n} × {money(item.cost)} · {(item.w * item.n).toFixed(1)} kg
+                  {item.n} × {money(item.cost)} · {tf('fmt.kg', { n: (item.w * item.n).toFixed(1) }, `${(item.w * item.n).toFixed(1)} kg`)}
                 </Text>
               </View>
               <View style={[styles.slotChip, item.slot === 'cargo' ? styles.slotCargo : styles.slotBag]}>
@@ -87,7 +89,7 @@ export function BagsScreen({ game }) {
                   tintColor={item.slot === 'cargo' ? COLORS.gold : COLORS.blue}
                 />
                 <Text style={[styles.slotText, item.slot === 'cargo' ? styles.slotCargoText : styles.slotBagText]}>
-                  {item.slot}
+                  {item.slot === 'cargo' ? t('slot.Cargo', 'Cargo') : t('slot.Carry_on', 'Carry-on')}
                 </Text>
               </View>
             </Pressable>
@@ -97,20 +99,20 @@ export function BagsScreen({ game }) {
 
       {state.inv.length > 0 ? (
         <Button variant="primary" style={styles.sellBtn} onPress={openSell}>
-          Review sale
+          {t('bags.review_sale', 'Review sale')}
         </Button>
       ) : null}
     </View>
   );
 }
 
-function BackButton({ onPress }) {
+function BackButton({ onPress, t }) {
   return (
     <Pressable
       style={styles.backBtn}
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel="Back"
+      accessibilityLabel={t('bags.back', 'Back')}
     >
       <Text style={styles.backArrow} accessible={false}>‹</Text>
     </Pressable>
@@ -118,33 +120,48 @@ function BackButton({ onPress }) {
 }
 
 export function MoreScreen({ game }) {
-  const { state, stats, city, setPage, restart, saveNow, saveSub, toggleOpt, setLocale, t } = game;
+  const {
+    state,
+    stats,
+    city,
+    setPage,
+    restart,
+    saveNow,
+    saveSub,
+    toggleOpt,
+    setLocale,
+    t,
+    tf,
+    achievements,
+    sources,
+    noteText,
+  } = game;
   const page = state.page;
 
   if (page === 'ach') {
     const unlockedList = state.unlockedAch || [];
-    const unlocked = ACHIEVEMENTS.filter(
+    const unlocked = achievements.filter(
       (a) => unlockedList.includes(a.id) || (stats[a.stat] || 0) >= a.goal,
     ).length;
-    const achPct = `${Math.round((unlocked / ACHIEVEMENTS.length) * 100)}%`;
+    const achPct = `${Math.round((unlocked / achievements.length) * 100)}%`;
 
     return (
       <View style={styles.screen}>
         <View style={styles.subHeader}>
-          <BackButton onPress={() => setPage(null)} />
-          <ScreenTitle title="Achievements" style={styles.subTitle} />
+          <BackButton onPress={() => setPage(null)} t={t} />
+          <ScreenTitle title={t('ach_title', 'Achievements')} style={styles.subTitle} />
         </View>
         <Card style={styles.achSummary}>
           <View style={styles.achSummaryRow}>
-            <Text style={styles.achSummaryLabel}>Unlocked</Text>
-            <Text style={styles.achScore}>{unlocked} / {ACHIEVEMENTS.length}</Text>
+            <Text style={styles.achSummaryLabel}>{t('bags.unlocked', 'Unlocked')}</Text>
+            <Text style={styles.achScore}>{unlocked} / {achievements.length}</Text>
           </View>
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: achPct }]} />
           </View>
         </Card>
         <View style={styles.list}>
-          {ACHIEVEMENTS.map((ac) => {
+          {achievements.map((ac) => {
             const val = stats[ac.stat] || 0;
             const done = unlockedList.includes(ac.id) || val >= ac.goal;
             const pct = `${Math.min(100, Math.round((val / ac.goal) * 100))}%`;
@@ -166,7 +183,7 @@ export function MoreScreen({ game }) {
                 </View>
                 <View style={[styles.achChip, done ? styles.achChipDone : styles.achChipPending]}>
                   <Text style={[styles.achChipText, done ? styles.achChipTextDone : styles.achChipTextPending]}>
-                    {done ? 'Done' : `${val}/${ac.goal}`}
+                    {done ? t('bags.done', 'Done') : `${val}/${ac.goal}`}
                   </Text>
                 </View>
               </View>
@@ -181,10 +198,10 @@ export function MoreScreen({ game }) {
     return (
       <View style={styles.screen}>
         <View style={styles.subHeader}>
-          <BackButton onPress={() => setPage(null)} />
+          <BackButton onPress={() => setPage(null)} t={t} />
           <ScreenTitle
-            title="Trader notes"
-            subtitle={`${state.visited.length} cities visited`}
+            title={t('notes_title', 'Trader notes')}
+            subtitle={tf('bags.cities_visited', { n: state.visited.length }, `${state.visited.length} cities visited`)}
             style={styles.subTitle}
           />
         </View>
@@ -199,18 +216,18 @@ export function MoreScreen({ game }) {
                   <View style={styles.noteHeroShade} />
                   <View style={styles.noteHeroLabels}>
                     <View style={styles.noteHeroText}>
-                      <Text style={styles.noteCity}>{c.name}</Text>
-                      <Text style={styles.noteCode}>{c.iata} · {c.country}</Text>
+                      <Text style={styles.noteCity}>{t(`city.${cid}`, c.name)}</Text>
+                      <Text style={styles.noteCode}>{c.iata} · {t(`city.${cid}.country`, c.country)}</Text>
                     </View>
                     <View style={[styles.noteChip, visited ? styles.noteChipVisited : styles.noteChipLocked]}>
                       <Text style={[styles.noteChipText, visited ? styles.noteChipTextVisited : styles.noteChipTextLocked]}>
-                        {visited ? 'Visited' : 'Locked'}
+                        {visited ? t('bags.visited', 'Visited') : t('bags.locked', 'Locked')}
                       </Text>
                     </View>
                   </View>
                 </View>
                 <Text style={styles.noteBody}>
-                  {visited ? NOTE_TEXT[cid] : 'Fly here to unlock trading notes for this hub.'}
+                  {visited ? (noteText[cid] ?? c.note) : t('bags.note_locked', 'Fly here to unlock trading notes for this hub.')}
                 </Text>
               </Card>
             );
@@ -225,37 +242,41 @@ export function MoreScreen({ game }) {
     return (
       <View style={styles.screen}>
         <View style={styles.subHeader}>
-          <BackButton onPress={() => setPage(null)} />
+          <BackButton onPress={() => setPage(null)} t={t} />
           <ScreenTitle
-            title="Trade log"
-            subtitle={`${state.legs} ${state.legs === 1 ? 'leg' : 'legs'} flown`}
+            title={t('log_title', 'Trade log')}
+            subtitle={state.legs === 1
+              ? tf('bags.leg_flown', { n: state.legs }, `${state.legs} leg flown`)
+              : tf('bags.legs_flown', { n: state.legs }, `${state.legs} legs flown`)}
             style={styles.subTitle}
           />
         </View>
 
         <Card style={styles.logSummary}>
           <View style={styles.logCell}>
-            <Text style={styles.logCellLabel}>Net profit</Text>
+            <Text style={styles.logCellLabel}>{t('bags.net_profit', 'Net profit')}</Text>
             <Text style={[styles.logCellVal, { color: net >= 0 ? COLORS.teal : COLORS.red }]}>
               {net >= 0 ? '+' : '−'}{money(Math.abs(net))}
             </Text>
           </View>
           <View style={styles.logDivider} />
           <View style={styles.logCell}>
-            <Text style={styles.logCellLabel}>Distance</Text>
-            <Text style={styles.logCellVal}>{state.km.toLocaleString('en-US')} km</Text>
+            <Text style={styles.logCellLabel}>{t('bags.distance', 'Distance')}</Text>
+            <Text style={styles.logCellVal}>
+              {tf('fmt.km', { n: state.km.toLocaleString('en-US') }, `${state.km.toLocaleString('en-US')} km`)}
+            </Text>
           </View>
           <View style={styles.logDivider} />
           <View style={styles.logCell}>
-            <Text style={styles.logCellLabel}>Legs</Text>
+            <Text style={styles.logCellLabel}>{t('bags.legs', 'Legs')}</Text>
             <Text style={styles.logCellVal}>{state.legs}</Text>
           </View>
         </Card>
 
         {state.log.length === 0 ? (
           <View style={[styles.emptyBox, styles.logEmpty]}>
-            <Text style={styles.emptyTitle}>No entries yet</Text>
-            <Text style={styles.emptySub}>Every buy, booking, landing and sale lands here.</Text>
+            <Text style={styles.emptyTitle}>{t('bags.no_entries', 'No entries yet')}</Text>
+            <Text style={styles.emptySub}>{t('bags.no_entries_sub', 'Every buy, booking, landing and sale lands here.')}</Text>
           </View>
         ) : (
           <View style={styles.list}>
@@ -281,17 +302,17 @@ export function MoreScreen({ game }) {
     return (
       <View style={styles.screen}>
         <View style={styles.subHeader}>
-          <BackButton onPress={() => setPage(null)} />
-          <ScreenTitle title="Data sources" style={styles.subTitle} />
+          <BackButton onPress={() => setPage(null)} t={t} />
+          <ScreenTitle title={t('sources_title', 'Data sources')} style={styles.subTitle} />
         </View>
         <View style={styles.warnBox}>
           <Text style={styles.warnText}>
-            The flight network is rebuilt from public aviation data. Schedules, fares and prices are simulated for play — this is not real ticketing information.
+            {t('bags.sources_warn', 'The flight network is rebuilt from public aviation data. Schedules, fares and prices are simulated for play — this is not real ticketing information.')}
           </Text>
         </View>
         <Card style={styles.sourcesCard}>
-          {SOURCES.map((src, i) => (
-            <View key={src.name} style={[styles.sourceRow, i < SOURCES.length - 1 && styles.sourceBorder]}>
+          {sources.map((src, i) => (
+            <View key={src.name} style={[styles.sourceRow, i < sources.length - 1 && styles.sourceBorder]}>
               <View style={styles.sourceHeader}>
                 <Text style={styles.sourceName}>{src.name}</Text>
                 <View style={styles.licenseChip}>
@@ -308,17 +329,17 @@ export function MoreScreen({ game }) {
 
   if (page === 'settings') {
     const toggles = [
-      ['optHaptics', 'Haptic feedback', 'A tap on every buy, sell and boarding call.'],
-      ['optSound', 'Sound', 'Short SFX on ticket, sell, takeoff, and achievements (haptic click if audio fails).'],
-      ['optPush', 'Boarding notifications', 'Alert you when the gate is about to close.'],
-      ['opt24h', '24-hour clock', 'Show all times as 00:00–23:59.'],
-      ['optReduce', 'Reduce motion', 'Shorten the flight cutscene.'],
+      ['optHaptics', t('bags.toggle_haptics', 'Haptic feedback'), t('bags.toggle_haptics_sub', 'A tap on every buy, sell and boarding call.')],
+      ['optSound', t('bags.toggle_sound', 'Sound'), t('bags.toggle_sound_sub', 'Short SFX on ticket, sell, takeoff, and achievements (haptic click if audio fails).')],
+      ['optPush', t('bags.toggle_push', 'Boarding notifications'), t('bags.toggle_push_sub', 'Alert you when the gate is about to close.')],
+      ['opt24h', t('bags.toggle_24h', '24-hour clock'), t('bags.toggle_24h_sub', 'Show all times as 00:00–23:59.')],
+      ['optReduce', t('bags.toggle_reduce', 'Reduce motion'), t('bags.toggle_reduce_sub', 'Shorten the flight cutscene.')],
     ];
 
     return (
       <View style={styles.screen}>
         <View style={styles.subHeader}>
-          <BackButton onPress={() => setPage(null)} />
+          <BackButton onPress={() => setPage(null)} t={t} />
           <ScreenTitle title={t('settings_title', 'Settings & save')} style={styles.subTitle} />
         </View>
 
@@ -360,17 +381,17 @@ export function MoreScreen({ game }) {
           <View style={styles.settingsRow}>
             <AssetIcon path="assets/ic_save.webp" size={22} tintColor={COLORS.text} />
             <View style={styles.settingsBody}>
-              <Text style={styles.settingsTitle}>Save slot 1</Text>
+              <Text style={styles.settingsTitle}>{t('bags.save_slot', 'Save slot 1')}</Text>
               <Text style={styles.settingsSub}>{saveSub}</Text>
             </View>
           </View>
           <View style={styles.settingsActions}>
             <Button variant="secondary" style={styles.settingsBtn} onPress={saveNow}>
-              Save now
+              {t('bags.save_now', 'Save now')}
             </Button>
           </View>
           <Text style={styles.settingsNote}>
-            The run also saves itself as you play, and comes back when you reopen the app.
+            {t('bags.save_note', 'The run also saves itself as you play, and comes back when you reopen the app.')}
           </Text>
         </Card>
 
@@ -378,9 +399,9 @@ export function MoreScreen({ game }) {
           <View style={styles.settingsRow}>
             <AssetIcon path="assets/ic_city.webp" size={22} tintColor={COLORS.text} />
             <View style={styles.settingsBody}>
-              <Text style={styles.settingsTitle}>New run</Text>
+              <Text style={styles.settingsTitle}>{t('bags.new_run', 'New run')}</Text>
               <Text style={styles.settingsSub}>
-                Restart in Istanbul with {money(STARTING_CASH)} cash
+                {tf('bags.restart_sub', { cash: money(STARTING_CASH) }, `Restart in Istanbul with ${money(STARTING_CASH)} cash`)}
               </Text>
             </View>
           </View>
@@ -390,39 +411,39 @@ export function MoreScreen({ game }) {
               style={styles.settingsBtn}
               onPress={() => {
                 Alert.alert(
-                  'Start a new run?',
-                  'This clears your save and returns you to Istanbul.',
+                  t('bags.alert_new_run_title', 'Start a new run?'),
+                  t('bags.alert_new_run_body', 'This clears your save and returns you to Istanbul.'),
                   [
-                    { text: 'Keep playing', style: 'cancel' },
-                    { text: 'Restart', style: 'destructive', onPress: restart },
+                    { text: t('bags.keep_playing', 'Keep playing'), style: 'cancel' },
+                    { text: t('bags.restart', 'Restart'), style: 'destructive', onPress: restart },
                   ],
                 );
               }}
             >
-              Restart game
+              {t('bags.restart_game', 'Restart game')}
             </Button>
           </View>
         </Card>
 
-        <Text style={styles.version}>Airborne Trader · Demo build 0.3</Text>
+        <Text style={styles.version}>{t('bags.version', 'Airborne Trader · Demo build 0.3')}</Text>
       </View>
     );
   }
 
-  const unlocked = ACHIEVEMENTS.filter(
+  const unlocked = achievements.filter(
     (a) => (state.unlockedAch || []).includes(a.id) || (stats[a.stat] || 0) >= a.goal,
   ).length;
   const menuRows = [
-    { key: 'notes', label: 'Trader notes', icon: 'assets/ach_cities_10.webp', value: `${state.visited.length} / ${CIDS.length}` },
-    { key: 'ach', label: 'Achievements', icon: 'assets/ach_legendary.webp', value: `${unlocked} / ${ACHIEVEMENTS.length}` },
-    { key: 'log', label: 'Trade log', icon: 'assets/ic_log.webp', value: state.log.length ? String(state.log.length) : '' },
-    { key: 'sources', label: 'Data sources', icon: 'assets/ic_attr.webp', value: '' },
-    { key: 'settings', label: 'Settings & save', icon: 'assets/ic_save.webp', value: '' },
+    { key: 'notes', label: t('bags.menu_notes', 'Trader notes'), icon: 'assets/ach_cities_10.webp', value: `${state.visited.length} / ${CIDS.length}` },
+    { key: 'ach', label: t('bags.menu_ach', 'Achievements'), icon: 'assets/ach_legendary.webp', value: `${unlocked} / ${achievements.length}` },
+    { key: 'log', label: t('bags.menu_log', 'Trade log'), icon: 'assets/ic_log.webp', value: state.log.length ? String(state.log.length) : '' },
+    { key: 'sources', label: t('bags.menu_sources', 'Data sources'), icon: 'assets/ic_attr.webp', value: '' },
+    { key: 'settings', label: t('bags.menu_settings', 'Settings & save'), icon: 'assets/ic_save.webp', value: '' },
   ];
 
   return (
     <View style={styles.screen}>
-      <ScreenTitle title="More" />
+      <ScreenTitle title={t('more_title', 'More')} />
       <Card style={styles.menuCard}>
         {menuRows.map((row, i) => (
           <Pressable
@@ -442,9 +463,11 @@ export function MoreScreen({ game }) {
         ))}
       </Card>
       <Text style={styles.moreHint}>
-        1 real second = 6 in-game minutes. A full trade run fits in about a minute.
+        {t('bags.more_hint', '1 real second = 6 in-game minutes. A full trade run fits in about a minute.')}
       </Text>
-      <Text style={styles.moreCity}>Currently in {city.name}</Text>
+      <Text style={styles.moreCity}>
+        {tf('bags.currently_in', { name: city.name }, `Currently in ${city.name}`)}
+      </Text>
     </View>
   );
 }
@@ -467,31 +490,35 @@ export function OverlaySheets({ game }) {
     discardQty,
     moveInvSlot,
     manageInBags,
+    t,
+    tf,
   } = game;
 
   const ticket = state.ticket;
   const cut = state.cut;
   const invMax = selInvItem ? selInvItem.n : 1;
-  const moveLabel = selInvItem?.slot === 'cargo' ? 'Move to carry-on' : 'Move to cargo';
+  const moveLabel = selInvItem?.slot === 'cargo'
+    ? t('sheet.move_to_carry', 'Move to carry-on')
+    : t('sheet.move_to_cargo', 'Move to cargo');
 
   return (
     <>
       <Sheet visible={state.sheet === 'ff'} onClose={closeSheet} center>
         <View style={styles.ffBody}>
-          <Text style={styles.ffTitle}>Speed up to takeoff?</Text>
+          <Text style={styles.ffTitle}>{t('sheet.ff_title', 'Speed up to takeoff?')}</Text>
           <Text style={styles.ffText}>
             {ticket
-              ? `Skip the wait (${hm(state.minsToDep)} left) and fly ${ticket.from} → ${ticket.to} now.`
-              : 'Skip the wait and board immediately.'}
+              ? tf('sheet.ff_body', { t: hm(state.minsToDep), from: ticket.from, to: ticket.to }, `Skip the wait (${hm(state.minsToDep)} left) and fly ${ticket.from} → ${ticket.to} now.`)
+              : t('sheet.ff_body_no_ticket', 'Skip the wait and board immediately.')}
           </Text>
         </View>
         <View style={styles.ffActions}>
           <Pressable style={styles.ffBtn} onPress={closeSheet}>
-            <Text style={styles.ffCancel}>Cancel</Text>
+            <Text style={styles.ffCancel}>{t('alert.cancel', 'Cancel')}</Text>
           </Pressable>
           <View style={styles.ffDivider} />
           <Pressable style={styles.ffBtn} onPress={() => runCutscene()}>
-            <Text style={styles.ffConfirm}>Speed up</Text>
+            <Text style={styles.ffConfirm}>{t('globe.speed_up', 'Speed up')}</Text>
           </Pressable>
         </View>
       </Sheet>
@@ -502,7 +529,7 @@ export function OverlaySheets({ game }) {
             <Image source={assetSource(city.hero)} style={styles.sellHero} accessible={false} />
             <View style={styles.sellHeroShade} />
             <View style={styles.sellHeroLabels}>
-              <Text style={styles.sellPhase}>Landed</Text>
+              <Text style={styles.sellPhase}>{t('sheet.sell_phase', 'Landed')}</Text>
               <Text style={styles.sellCity}>{city.name}</Text>
             </View>
           </View>
@@ -514,14 +541,14 @@ export function OverlaySheets({ game }) {
             ) : null}
             <Text style={styles.sellHeadline}>
               {sell.net >= 0
-                ? `Market looks good — ${money(sell.net)} net if you sell now.`
-                : `Tough market — ${money(-sell.net)} down if you sell now.`}
+                ? tf('sheet.sell_good', { net: money(sell.net) }, `Market looks good — ${money(sell.net)} net if you sell now.`)
+                : tf('sheet.sell_bad', { loss: money(-sell.net) }, `Tough market — ${money(-sell.net)} down if you sell now.`)}
             </Text>
             {sell.rows.map((row, idx) => (
               <View key={idx} style={styles.sellRow}>
                 <Image source={assetSource(row.icon)} style={styles.sellIcon} accessible={false} />
                 <View style={styles.sellRowBody}>
-                  <Text style={styles.sellRowName}>{row.name}</Text>
+                  <Text style={styles.sellRowName}>{t(`prod.${row.id}`, row.name)}</Text>
                   <Text style={styles.sellRowMeta}>{row.meta}</Text>
                 </View>
                 <View style={styles.sellRowPrice}>
@@ -531,7 +558,7 @@ export function OverlaySheets({ game }) {
               </View>
             ))}
             <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Net profit</Text>
+              <Text style={styles.totalLabel}>{t('bags.net_profit', 'Net profit')}</Text>
               <Text style={[styles.totalVal, { color: sell.net >= 0 ? COLORS.teal : COLORS.red }]}>
                 {sell.net >= 0 ? '+' : '−'}{money(Math.abs(sell.net))}
               </Text>
@@ -542,17 +569,17 @@ export function OverlaySheets({ game }) {
               style={styles.sellAllBtn}
               disabled={!state.inv.length}
             >
-              Sell everything
+              {t('sheet.sell_everything', 'Sell everything')}
             </Button>
             <Button
               variant="secondary"
               onPress={manageInBags}
               style={styles.manageBagsBtn}
             >
-              Manage in Bags
+              {t('sheet.manage_bags', 'Manage in Bags')}
             </Button>
             <Button variant="ghost" onPress={closeSheet}>
-              Hold and look for a better market
+              {t('sheet.hold', 'Hold and look for a better market')}
             </Button>
           </View>
         </ScrollView>
@@ -564,21 +591,25 @@ export function OverlaySheets({ game }) {
             <View style={styles.invSheetTop}>
               <Image source={assetSource(selInvItem.icon)} style={styles.invSheetIcon} accessible={false} />
               <View style={styles.invSheetBody}>
-                <Text style={styles.invSheetName}>{selInvItem.name}</Text>
+                <Text style={styles.invSheetName}>{t(`prod.${selInvItem.id}`, selInvItem.name)}</Text>
                 <Text style={styles.invSheetMeta}>
-                  {selInvItem.n} on hand · {selInvItem.slot === 'cargo' ? 'Cargo' : 'Carry-on'} · cost {money(selInvItem.cost)}
+                  {tf('sheet.inv_meta', {
+                    n: selInvItem.n,
+                    slot: selInvItem.slot === 'cargo' ? t('sheet.slot_cargo', 'Cargo') : t('sheet.slot_carry_on', 'Carry-on'),
+                    cost: money(selInvItem.cost),
+                  }, `${selInvItem.n} on hand · ${selInvItem.slot === 'cargo' ? 'Cargo' : 'Carry-on'} · cost ${money(selInvItem.cost)}`)}
                 </Text>
               </View>
             </View>
 
             <View style={styles.qtyRow}>
-              <Text style={styles.qtyLabel}>Quantity</Text>
+              <Text style={styles.qtyLabel}>{t('sheet.quantity', 'Quantity')}</Text>
               <View style={styles.qtyControl}>
                 <Pressable
                   style={styles.qtyBtn}
                   onPress={() => setInvQty(state.invQty - 1)}
                   accessibilityRole="button"
-                  accessibilityLabel="Decrease quantity"
+                  accessibilityLabel={t('sheet.decrease_qty', 'Decrease quantity')}
                 >
                   <Text style={styles.qtyBtnText}>−</Text>
                 </Pressable>
@@ -587,28 +618,28 @@ export function OverlaySheets({ game }) {
                   style={styles.qtyBtn}
                   onPress={() => setInvQty(state.invQty + 1)}
                   accessibilityRole="button"
-                  accessibilityLabel="Increase quantity"
+                  accessibilityLabel={t('sheet.increase_qty', 'Increase quantity')}
                 >
                   <Text style={styles.qtyBtnText}>+</Text>
                 </Pressable>
               </View>
             </View>
             <Pressable onPress={() => setInvQty(invMax)}>
-              <Text style={styles.qtyMaxHint}>Max {invMax}</Text>
+              <Text style={styles.qtyMaxHint}>{tf('sheet.max', { n: invMax }, `Max ${invMax}`)}</Text>
             </Pressable>
 
             <Text style={styles.invSheetPrice}>
-              Local price {money(invGross)} for {state.invQty}
+              {tf('sheet.local_price', { total: money(invGross), n: state.invQty }, `Local price ${money(invGross)} for ${state.invQty}`)}
             </Text>
 
             <Button variant="primary" onPress={() => sellQty(state.invQty)} style={styles.sellAllBtn}>
-              {`Sell ${state.invQty} · ${money(invGross)}`}
+              {tf('sheet.sell', { n: state.invQty, total: money(invGross) }, `Sell ${state.invQty} · ${money(invGross)}`)}
             </Button>
             <Button variant="secondary" onPress={moveInvSlot} style={styles.manageBagsBtn}>
               {moveLabel}
             </Button>
             <Button variant="ghost" onPress={() => discardQty(state.invQty)}>
-              Discard
+              {t('sheet.discard', 'Discard')}
             </Button>
           </ScrollView>
         ) : null}
@@ -630,7 +661,7 @@ export function OverlaySheets({ game }) {
             <View style={styles.cutTrack}>
               <View style={[styles.cutFill, { width: cut?.pct || '22%' }]} />
             </View>
-            <Text style={styles.cutHint}>Flight time is on the world clock</Text>
+            <Text style={styles.cutHint}>{t('sheet.cut_hint', 'Flight time is on the world clock')}</Text>
           </View>
         </View>
       </Modal>
@@ -646,14 +677,14 @@ export function OverlaySheets({ game }) {
           <View style={styles.introShade} />
           <View style={styles.introContent}>
             <Image source={assetSource('assets/logo_mark.webp')} style={styles.introLogo} accessible={false} />
-            <Text style={styles.introTitle}>Airborne Trader</Text>
+            <Text style={styles.introTitle}>{t('intro.title', 'Airborne Trader')}</Text>
             <Text style={styles.introLead}>
-              Twelve hub airports. Buy low where a thing is made, fly it somewhere it is scarce, sell high. Weight is the whole game.
+              {t('intro.lead', 'Twenty hub airports. Buy low where a thing is made, fly it somewhere it is scarce, sell high. Weight is the whole game.')}
             </Text>
             {[
-              { icon: 'assets/ic_market.webp', title: 'Buy where it is made', sub: 'Local goods price low at their origin.' },
-              { icon: 'assets/ic_flight.webp', title: 'Fly the network', sub: 'Book a real route, then speed up to land.' },
-              { icon: 'assets/ic_inventory.webp', title: 'Mind the kilos', sub: '23 kg carry-on. Buy more, or use the hold.' },
+              { icon: 'assets/ic_market.webp', title: t('intro.step1_title', 'Buy where it is made'), sub: t('intro.step1_sub', 'Local goods price low at their origin.') },
+              { icon: 'assets/ic_flight.webp', title: t('intro.step2_title', 'Fly the network'), sub: t('intro.step2_sub', 'Book a real route, then speed up to land.') },
+              { icon: 'assets/ic_inventory.webp', title: t('intro.step3_title', 'Mind the kilos'), sub: t('intro.step3_sub', '23 kg carry-on. Buy more, or use the hold.') },
             ].map((step) => (
               <View key={step.title} style={styles.introStep}>
                 <View style={styles.introStepIcon}>
@@ -666,10 +697,10 @@ export function OverlaySheets({ game }) {
               </View>
             ))}
             <Button variant="primary" onPress={startGame} style={styles.introBtn}>
-              Start in Istanbul
+              {t('intro.start', 'Start in Istanbul')}
             </Button>
             <Text style={styles.introFine}>
-              Flight network rebuilt from public aviation data. Not real ticketing information.
+              {t('intro.fine', 'Flight network rebuilt from public aviation data. Not real ticketing information.')}
             </Text>
           </View>
         </View>
