@@ -264,6 +264,25 @@ const PRODUCT_SEED = {
   bkk_spice: PR('bkk_spice', 'bangkok', 'Thai Spice Crate', 'Spices', 'assets/p_bkk_spice.webp', 3.6, 142),
   bkk_lacquer: PR('bkk_lacquer', 'bangkok', 'Lacquerware Set', 'Crafts', 'assets/p_bkk_lacquer.webp', 4.8, 228),
   bkk_silk: PR('bkk_silk', 'bangkok', 'Thai Silk Bolt', 'Textiles', 'assets/p_bkk_silk.webp', 3.4, 268),
+  atl_peach: PR('atl_peach', 'atlanta', 'Georgia Peach Crate', 'Food', 'assets/p_atl_peach.webp', 5.2, 84),
+  atl_cotton: PR('atl_cotton', 'atlanta', 'Cotton Bale Contract', 'Textiles', 'assets/p_atl_cotton.webp', 9.0, 300),
+  atl_logistics: PR('atl_logistics', 'atlanta', 'Logistics Components', 'Machinery', 'assets/p_atl_logistics.webp', 6.5, 620),
+  dfw_leather: PR('dfw_leather', 'dallas', 'Texas Leather Roll', 'Crafts', 'assets/p_dfw_leather.webp', 6.8, 300),
+  dfw_energy: PR('dfw_energy', 'dallas', 'Texas Energy Contract', 'Energy', 'assets/p_dfw_energy.webp', 1.2, 880),
+  dfw_aerospace: PR('dfw_aerospace', 'dallas', 'Aerospace Parts', 'Machinery', 'assets/p_dfw_aerospace.webp', 5.0, 1250),
+  den_mineral: PR('den_mineral', 'denver', 'Mountain Mineral Specimens', 'Crafts', 'assets/p_den_mineral.webp', 3.2, 380),
+  den_brew: PR('den_brew', 'denver', 'Craft Brew Keg', 'Food', 'assets/p_den_brew.webp', 9.5, 120),
+  ord_grain: PR('ord_grain', 'chicago', 'Great Lakes Grain Lot', 'Food', 'assets/p_ord_grain.webp', 11.0, 72),
+  ord_machinery: PR('ord_machinery', 'chicago', 'Farm Machinery Parts', 'Machinery', 'assets/p_ord_machinery.webp', 8.5, 540),
+  lax_avocado: PR('lax_avocado', 'los_angeles', 'Avocado Crate', 'Food', 'assets/p_lax_avocado.webp', 6.4, 88),
+  lax_film: PR('lax_film', 'los_angeles', 'Studio Film Props', 'Crafts', 'assets/p_lax_film.webp', 2.6, 460),
+  lax_tech: PR('lax_tech', 'los_angeles', 'Silicon Tech Kit', 'Electronics', 'assets/p_lax_tech.webp', 0.9, 950),
+  can_ceramic: PR('can_ceramic', 'guangzhou', 'Canton Ceramics', 'Crafts', 'assets/p_can_ceramic.webp', 5.0, 320),
+  can_tea: PR('can_tea', 'guangzhou', 'Guangdong Tea Set', 'Tea', 'assets/p_can_tea.webp', 2.4, 210),
+  icn_cosmetics: PR('icn_cosmetics', 'seoul', 'K-Beauty Cosmetics', 'Cosmetics', 'assets/p_icn_cosmetics.webp', 1.4, 380),
+  mia_citrus: PR('mia_citrus', 'miami', 'Florida Citrus Crate', 'Food', 'assets/p_mia_citrus.webp', 6.8, 66),
+  mia_seafood: PR('mia_seafood', 'miami', 'Caribbean Seafood Box', 'Food', 'assets/p_mia_seafood.webp', 7.2, 250),
+  mia_tobacco: PR('mia_tobacco', 'miami', 'Cuban Tobacco Lot', 'Daily goods', 'assets/p_mia_tobacco.webp', 3.6, 420),
 };
 
 Object.values(PRODUCT_SEED).forEach(defineProduct);
@@ -275,6 +294,14 @@ Object.values(PRODUCT_SEED).forEach(defineProduct);
   { id: 'fra_machinery', home: 'frankfurt', volatility: 0.8, demandIn: { bangkok: 1.3, shanghai: 1.2 } },
   { id: 'ams_flower', home: 'amsterdam', volatility: 1.5, demandIn: { london: 1.18, paris: 1.14 } },
   { id: 'hnd_elec', home: 'tokyo', volatility: 0.9, demandIn: { istanbul: 1.25, bangkok: 1.2 } },
+  { id: 'atl_peach', home: 'atlanta', volatility: 1.4, demandIn: { london: 1.25, paris: 1.18 } },
+  { id: 'atl_cotton', home: 'atlanta', volatility: 0.9, demandIn: { bangkok: 1.2 } },
+  { id: 'dfw_aerospace', home: 'dallas', volatility: 0.85, demandIn: { shanghai: 1.22, singapore: 1.15 } },
+  { id: 'den_brew', home: 'denver', volatility: 1.3, demandIn: { chicago: 1.15 } },
+  { id: 'lax_tech', home: 'los_angeles', volatility: 0.9, demandIn: { hong_kong: 1.25, tokyo: 1.2 } },
+  { id: 'can_tea', home: 'guangzhou', volatility: 1.1, demandIn: { singapore: 1.18 } },
+  { id: 'icn_cosmetics', home: 'seoul', volatility: 0.95, demandIn: { shanghai: 1.22, hong_kong: 1.15 } },
+  { id: 'mia_citrus', home: 'miami', volatility: 1.5, demandIn: { atlanta: 1.15 } },
 ].forEach(defineProduct);
 
 const AIRLINE_SEED = {

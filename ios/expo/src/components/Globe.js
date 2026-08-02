@@ -6,37 +6,37 @@ import {
   PanResponder,
   Pressable,
   StyleSheet,
+  useWindowDimensions,
 } from 'react-native';
 import { CIDS, CITIES } from '../gameData';
+import { globeSizeFor } from '../gameLogic';
 import { assetSource } from '../assets';
 import { COLORS } from '../theme';
 
-const SIZE = 268;
-const IMG_W = SIZE * 2;
 const R = Math.PI / 180;
 
-function projectPin(lon, lat, rot) {
+function projectPin(lon, lat, rot, size) {
   const rel = ((lon + rot + 540) % 360) - 180;
   const vis = Math.abs(rel) < 88;
   const edge = Math.cos(rel * R);
   return {
-    x: (50 + (rel / 90) * 50) / 100 * SIZE,
-    y: (50 - (lat / 90) * 50) / 100 * SIZE,
+    x: (50 + (rel / 90) * 50) / 100 * size,
+    y: (50 - (lat / 90) * 50) / 100 * size,
     vis,
     edge,
     opacity: vis ? 0.4 + edge * 0.6 : 0,
   };
 }
 
-function sampleArc(x0, y0, x1, y1, n = 28) {
+function sampleArc(x0, y0, x1, y1, n, size) {
   const mx = (x0 + x1) / 2;
   const my = (y0 + y1) / 2;
-  const cx = SIZE / 2;
-  const cy = SIZE / 2;
+  const cx = size / 2;
+  const cy = size / 2;
   const dx = mx - cx;
   const dy = my - cy;
   const len = Math.hypot(dx, dy) || 1;
-  const bulge = 32;
+  const bulge = Math.round(size * 0.12);
   const qx = mx + (dx / len) * bulge;
   const qy = my + (dy / len) * bulge;
   const pts = [];
@@ -53,6 +53,9 @@ function sampleArc(x0, y0, x1, y1, n = 28) {
 
 /** Draggable world globe with pins, optional ticket arc, and inertia. */
 export function Globe({ game }) {
+  const { height } = useWindowDimensions();
+  const SIZE = globeSizeFor(height);
+  const IMG_W = SIZE * 2;
   const { state, city, setRot, setDragging, openPinCity, buzz } = game;
   const rot = state.rot === null || state.rot === undefined ? -city.lon : state.rot;
   const rotRef = useRef(rot);
@@ -90,14 +93,14 @@ export function Globe({ game }) {
       inertiaRef.current = requestAnimationFrame(step);
     },
     onPanResponderTerminate: () => setDragging(false),
-  }), [setRot, setDragging]);
+  }), [setRot, setDragging, SIZE]);
 
   const raw = -((90 - rot) / 360) * IMG_W;
   const off = ((raw % IMG_W) + IMG_W) % IMG_W - IMG_W;
 
   const pins = CIDS.map((k) => {
     const c = CITIES[k];
-    const p = projectPin(c.lon, c.lat, rot);
+    const p = projectPin(c.lon, c.lat, rot, SIZE);
     const here = k === state.city;
     const seen = state.visited.includes(k);
     const ticketEnd = state.ticket && (k === state.city || k === state.ticket.toId);
@@ -119,10 +122,10 @@ export function Globe({ game }) {
   const arcPts = (() => {
     const t = state.ticket;
     if (!t || !CITIES[t.toId]) return [];
-    const a = projectPin(CITIES[state.city].lon, CITIES[state.city].lat, rot);
-    const b = projectPin(CITIES[t.toId].lon, CITIES[t.toId].lat, rot);
+    const a = projectPin(CITIES[state.city].lon, CITIES[state.city].lat, rot, SIZE);
+    const b = projectPin(CITIES[t.toId].lon, CITIES[t.toId].lat, rot, SIZE);
     if (!a.vis && !b.vis) return [];
-    return sampleArc(a.x, a.y, b.x, b.y).filter((pt) => {
+    return sampleArc(a.x, a.y, b.x, b.y, 28, SIZE).filter((pt) => {
       const dx = pt.x - SIZE / 2;
       const dy = pt.y - SIZE / 2;
       return dx * dx + dy * dy <= (SIZE / 2 - 2) ** 2;
@@ -157,18 +160,24 @@ export function Globe({ game }) {
   };
 
   return (
-    <View style={styles.stage} pointerEvents="box-none">
-      <View style={styles.glow} pointerEvents="none" />
-      <View style={styles.circle} {...pan.panHandlers}>
+    <View style={[styles.stage, { height: SIZE + 34 }]} pointerEvents="box-none">
+      <View
+        style={[styles.glow, { width: SIZE + 52, height: SIZE + 52, borderRadius: (SIZE + 52) / 2 }]}
+        pointerEvents="none"
+      />
+      <View
+        style={[styles.circle, { width: SIZE, height: SIZE, borderRadius: SIZE / 2 }]}
+        {...pan.panHandlers}
+      >
         <Image
-          source={assetSource('assets/earth.png')}
-          style={[styles.strip, { left: off }]}
+          source={assetSource('assets/earth.webp')}
+          style={[styles.strip, { left: off, width: IMG_W, height: SIZE }]}
           resizeMode="stretch"
           accessible={false}
         />
         <Image
-          source={assetSource('assets/earth.png')}
-          style={[styles.strip, { left: off + IMG_W }]}
+          source={assetSource('assets/earth.webp')}
+          style={[styles.strip, { left: off + IMG_W, width: IMG_W, height: SIZE }]}
           resizeMode="stretch"
           accessible={false}
         />
@@ -182,7 +191,7 @@ export function Globe({ game }) {
         ))}
       </View>
 
-      <View style={styles.pinLayer} pointerEvents="box-none">
+      <View style={[styles.pinLayer, { width: SIZE, height: SIZE }]} pointerEvents="box-none">
         {pins.map((p) => (
           p.vis && p.opacity > 0.05 ? (
             <Pressable
@@ -229,24 +238,17 @@ export function Globe({ game }) {
 
 const styles = StyleSheet.create({
   stage: {
-    height: 318,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 2,
     overflow: 'hidden',
     zIndex: 0,
   },
   glow: {
     position: 'absolute',
-    width: 320,
-    height: 320,
     borderRadius: 160,
     backgroundColor: 'rgba(96, 168, 214, 0.09)',
   },
   circle: {
-    width: SIZE,
-    height: SIZE,
-    borderRadius: SIZE / 2,
     overflow: 'hidden',
     backgroundColor: '#071722',
     borderWidth: StyleSheet.hairlineWidth,
@@ -255,8 +257,6 @@ const styles = StyleSheet.create({
   strip: {
     position: 'absolute',
     top: 0,
-    width: IMG_W,
-    height: SIZE,
   },
   shade: {
     ...StyleSheet.absoluteFillObject,
@@ -271,8 +271,6 @@ const styles = StyleSheet.create({
   },
   pinLayer: {
     position: 'absolute',
-    width: SIZE,
-    height: SIZE,
   },
   pinWrap: {
     position: 'absolute',
@@ -293,7 +291,7 @@ const styles = StyleSheet.create({
     color: COLORS.teal,
   },
   hint: {
-    marginTop: 14,
+    marginTop: 10,
     fontSize: 12,
     color: COLORS.muted2,
   },

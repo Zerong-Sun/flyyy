@@ -12,8 +12,10 @@ import {
   cityMinutes,
   sortByDestProfit,
   priceSparkline,
+  locals,
+  globeSizeFor,
 } from '../gameLogic.js';
-import { ACHIEVEMENTS, CITIES, STARTING_CITY } from '../gameData.js';
+import { ACHIEVEMENTS, CITIES, CIDS, PRODUCT_IDS, PRODUCTS, STARTING_CITY } from '../gameData.js';
 import { t, LOCALES, DICT } from '../i18n.js';
 import {
   SAVE_VERSION,
@@ -189,6 +191,54 @@ describe('market intel helpers', () => {
     const pts = priceSparkline('ist_lokum', 'istanbul', 5);
     assert.equal(pts.length, 5);
     assert.equal(pts[4], priceAt('ist_lokum', 'istanbul'));
+  });
+});
+
+describe('content completeness', () => {
+  it('every playable hub sells at least one local product', () => {
+    const empty = CIDS.filter((id) => locals(id).length === 0);
+    assert.deepEqual(empty, [], `hubs with no local goods: ${empty.join(', ')}`);
+  });
+
+  it('new hubs expose local specialties', () => {
+    assert.ok(locals('atlanta').length >= 3);
+    assert.ok(locals('dallas').length >= 3);
+    assert.ok(locals('denver').length >= 2);
+    assert.ok(locals('chicago').length >= 2);
+    assert.ok(locals('los_angeles').length >= 3);
+    assert.ok(locals('guangzhou').length >= 2);
+    assert.ok(locals('seoul').length >= 1);
+    assert.ok(locals('miami').length >= 3);
+  });
+
+  it('every hub has a local good that sells for a profit somewhere', () => {
+    const dead = CIDS.filter((cid) => {
+      const ids = locals(cid);
+      const profitable = ids.some((id) => {
+        const home = priceAt(id, cid);
+        return CIDS.some((d) => d !== cid && priceAt(id, d) > home);
+      });
+      return !profitable;
+    });
+    assert.deepEqual(dead, [], `hubs with no profitable local goods: ${dead.join(', ')}`);
+  });
+});
+
+describe('globe sizing', () => {
+  it('shrinks from the old fixed 268 on common phones', () => {
+    assert.ok(globeSizeFor(852) < 268, `852pt phone -> ${globeSizeFor(852)}`);
+    assert.ok(globeSizeFor(844) < 268);
+    assert.equal(globeSizeFor(844), 224);
+  });
+
+  it('clamps to the floor on very small screens', () => {
+    assert.equal(globeSizeFor(400), 216);
+    assert.equal(globeSizeFor(667), 216);
+  });
+
+  it('clamps to the ceiling on very large screens', () => {
+    assert.equal(globeSizeFor(1000), 244);
+    assert.equal(globeSizeFor(1366), 244);
   });
 });
 

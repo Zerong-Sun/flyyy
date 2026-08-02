@@ -142,6 +142,18 @@ export function locals(cityId) {
   return PRODUCT_IDS.filter((id) => PRODUCTS[id].home === cityId);
 }
 
+/**
+ * Globe diameter for a given window height. Sized so the whole 环球 page fits
+ * on common phones without scrolling (216–244pt, ~9% smaller than the old
+ * fixed 268). Clamped for very small (landscape) and very large (tablet)
+ * screens.
+ */
+export function globeSizeFor(windowHeight) {
+  const MIN = 216;
+  const MAX = 244;
+  return Math.min(MAX, Math.max(MIN, Math.round(windowHeight - 620)));
+}
+
 export function imports(cityId) {
   return PRODUCT_IDS.filter((id) => PRODUCTS[id].home !== cityId)
     .sort((a, b) => hsh(a + cityId) - hsh(b + cityId))

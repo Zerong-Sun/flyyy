@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   heroImageWrap: {
-    height: 132,
+    height: 124,
     position: 'relative',
   },
   heroImage: {
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
-    padding: 12,
+    padding: 10,
   },
   statCell: {
     flex: 1,
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
   },
   elevRow: {
     paddingHorizontal: 12,
-    paddingBottom: 11,
+    paddingBottom: 9,
   },
   elevText: {
     fontSize: 11,

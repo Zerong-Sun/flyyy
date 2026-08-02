@@ -7,12 +7,14 @@ import {
   StyleSheet,
   StatusBar,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useGame } from './src/hooks/useGame';
-import { TABS } from './src/gameData';
+import { TABS, CUTSCENE_ART } from './src/gameData';
 import { COLORS } from './src/theme';
 import { AssetIcon } from './src/components/ui';
+import { assetSource } from './src/assets';
 import { GlobeScreen } from './src/components/GlobeScreen';
 import { MarketScreen, FlightsScreen, MarketSheets } from './src/components/MarketFlights';
 import { BagsScreen, MoreScreen, OverlaySheets } from './src/components/BagsMore';
@@ -65,6 +67,17 @@ function GameApp() {
     else if (isNight) track = 'bgm_night';
     playBgm(track);
   }, [state.tab, state.localTime, state.optSound, loaded]);
+
+  // Warm the bitmap cache so the globe texture, the current city hero and the
+  // flight cutscenes paint immediately instead of popping in over the tunnel.
+  useEffect(() => {
+    if (!loaded) return;
+    const paths = ['assets/earth.webp', city.hero, ...CUTSCENE_ART.map((c) => c.art)];
+    paths.forEach((p) => {
+      const src = Image.resolveAssetSource(assetSource(p));
+      if (src && src.uri) Image.prefetch(src.uri).catch(() => {});
+    });
+  }, [loaded, state.city]);
 
   if (!loaded) {
     return (
