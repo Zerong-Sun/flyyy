@@ -970,7 +970,7 @@ func _show_market() -> void:
 	if city == _market_built_city and _market_container != null:
 		_update_market_rows(city)
 		_panel_host.visible = true
-		_selected_market_product_id = ""
+		_clear_market_selection()
 		return
 	_clear_panel()
 	_selected_market_product_id = ""
@@ -1110,8 +1110,8 @@ func _apply_market_row_values(row: HBoxContainer, p: Dictionary, is_local: bool,
 	var margin_label: Label = row.get_node_or_null("MarginLabel") as Label
 	if margin_label != null:
 		var margin := sell - buy
-		var sign := "+" if margin >= 0 else ""
-		margin_label.text = "%s$%.0f" % [sign, margin]
+		var sign := "+" if margin >= 0 else "-"
+		margin_label.text = "%s$%.0f" % [sign, absf(margin)]
 		margin_label.add_theme_color_override(
 			"font_color",
 			Color(0.45, 0.85, 0.55) if margin >= 0 else _Colors.WARN_RED
@@ -1276,6 +1276,13 @@ func _select_market_row(product_id: String) -> void:
 	if _market_row_panels.has(product_id):
 		var panel: PanelContainer = _market_row_panels[product_id]
 		panel.add_theme_stylebox_override("panel", _ThemeFactory.selected_row_style())
+
+
+func _clear_market_selection() -> void:
+	if _selected_market_product_id != "" and _market_row_panels.has(_selected_market_product_id):
+		var prev_panel: PanelContainer = _market_row_panels[_selected_market_product_id]
+		prev_panel.remove_theme_stylebox_override("panel")
+	_selected_market_product_id = ""
 
 
 func _get_intel_color(intel: String) -> Color:

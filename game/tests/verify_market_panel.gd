@@ -64,7 +64,22 @@ func _ready() -> void:
 		(row.get_node("MarginLabel") as Label).text,
 	])
 
-	# Reopen same city → should hit the cached _update_market_rows path
+	# Selection highlight applies on click, and reopening the same city must
+	# clear it (regression: previously the stylebox override stayed stale).
+	var cache: Array = MainHUD.get("_market_cache")
+	if cache.is_empty():
+		print("FAIL: market cache empty")
+		get_tree().quit(1)
+		return
+	var first_pid: String = str(cache[0])
+	MainHUD._select_market_row(first_pid)
+	await _frames(2)
+	if not first_panel.has_theme_stylebox_override("panel"):
+		print("FAIL: selected row has no highlight override")
+		get_tree().quit(1)
+		return
+
+	# Reopen same city → highlight must be cleared
 	MainHUD._show_market()
 	await _frames(5)
 	var container2: Control = MainHUD.get("_market_container")
@@ -72,7 +87,11 @@ func _ready() -> void:
 		print("FAIL: market reopen lost rows")
 		get_tree().quit(1)
 		return
-	print("OK: market reopen refreshed rows=%d" % container2.get_child_count())
+	if first_panel.has_theme_stylebox_override("panel"):
+		print("FAIL: stale selection highlight survived reopen")
+		get_tree().quit(1)
+		return
+	print("OK: market reopen refreshed rows=%d, selection highlight cleared" % container2.get_child_count())
 	get_tree().quit(0)
 
 
