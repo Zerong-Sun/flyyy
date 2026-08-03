@@ -8,12 +8,11 @@ const _FlightSearch = preload("res://scripts/systems/FlightSearch.gd")
 const _Colors = preload("res://themes/DemoColors.gd")
 const _ThemeFactory = preload("res://themes/ThemeFactory.gd")
 const _IconFactory = preload("res://themes/IconFactory.gd")
-const _FlightCarousel = preload("res://scripts/ui/FlightCarousel.gd")
 
 const PANEL_CENTER_POS := Vector2(260, 150)
 const PANEL_CENTER_SIZE := Vector2(720, 460)
-const PANEL_FLIGHT_POS := Vector2(40, 330)
-const PANEL_FLIGHT_SIZE := Vector2(1200, 300)
+const PANEL_WORK_POS := Vector2(90, 90)
+const PANEL_WORK_SIZE := Vector2(1100, 530)
 
 @onready var globe: Node3D = $"../Globe"
 @onready var flight_ops: Node = $"../FlightOps"
@@ -32,13 +31,23 @@ var _countdown: Label
 var _btn_ff: Button
 var _panel_host: Control
 var _flight_list: ItemList
-var _flight_carousel: Control = null  # FlightCarousel instance
+var _flight_tree: Tree
 var _flight_query: LineEdit
 var _dest_code_query: LineEdit
 var _flight_detail: RichTextLabel
 var _airport_card_panel: PanelContainer
 var _bottom_nav: HBoxContainer
 const INTEL_UPGRADE_COST := 200.0
+var _market_tabs: TabContainer
+var _market_buy_tree: Tree
+var _market_sell_tree: Tree
+var _market_search: LineEdit
+var _market_buy_detail: RichTextLabel
+var _market_sell_detail: RichTextLabel
+var _market_buy_page_label: Label
+var _market_buy_qty: SpinBox
+var _market_sell_qty: SpinBox
+# Legacy row state remains until the next UI cleanup; the new market uses Trees.
 var _market_container: VBoxContainer
 var _inv_list: ItemList
 var _city_text: RichTextLabel
@@ -62,6 +71,10 @@ var _last_hint_time := 0.0
 var _last_clock_s := 0.0
 var _last_countdown_s := 0.0
 var _market_built_city := ""
+var _market_arrival_sell_pending := false
+var _market_sell_index := -1
+var _market_buy_page := 0
+const MARKET_ROWS_PER_PAGE := 30
 var _ff_dialog: ConfirmationDialog
 var _replace_ticket_dialog: ConfirmationDialog
 var _pending_cabin: String = ""
@@ -504,10 +517,17 @@ func _dismiss_open_panel() -> void:
 	_panel_host.visible = false
 	_restore_panel_center()
 	_market_built_city = ""
-	_market_container = null
 	_selected_market_product_id = ""
 	_flight_list = null
-	_flight_carousel = null
+	_flight_tree = null
+	_market_tabs = null
+	_market_buy_tree = null
+	_market_sell_tree = null
+	_market_search = null
+	_market_buy_detail = null
+	_market_sell_detail = null
+	_market_buy_qty = null
+	_market_sell_qty = null
 	_flight_query = null
 	_dest_code_query = null
 	_flight_detail = null
@@ -522,9 +542,9 @@ func _restore_panel_center() -> void:
 		_bottom_nav.visible = true
 
 
-func _dock_panel_flights() -> void:
-	_panel_host.position = PANEL_FLIGHT_POS
-	_panel_host.size = PANEL_FLIGHT_SIZE
+func _dock_panel_work() -> void:
+	_panel_host.position = PANEL_WORK_POS
+	_panel_host.size = PANEL_WORK_SIZE
 	_panel_host.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	if _bottom_nav:
 		_bottom_nav.visible = false
@@ -788,6 +808,7 @@ func _on_arrived() -> void:
 		_discovery_triggered_in_city.clear()
 		_check_arrival_encounter(city_id)
 		_check_free_cargo(city_id)
+		_market_arrival_sell_pending = not AppState.inventory.is_empty()
 	AchievementSystem.check_all()
 	_set_panel_bgm("globe")
 
@@ -876,9 +897,16 @@ func _clear_panel() -> void:
 	_panel_host.visible = true
 	_restore_panel_center()
 	_market_built_city = ""
-	_market_container = null
 	_selected_market_product_id = ""
-	_flight_carousel = null
+	_flight_tree = null
+	_market_tabs = null
+	_market_buy_tree = null
+	_market_sell_tree = null
+	_market_search = null
+	_market_buy_detail = null
+	_market_sell_detail = null
+	_market_buy_qty = null
+	_market_sell_qty = null
 	_flight_list = null
 	AudioService.play_sfx("sfx_ui_open_panel")
 
@@ -919,7 +947,7 @@ func _get_intelligence_tag(p: Dictionary, ticket_dest_city: String) -> String:
 		return ""
 	else:
 		var hot_cities: Array = tags.get("hot", [])
-		if hot_cities.size() > 0 and str(p.get("product_id", "")) in _best_dest_sample:
+		if hot_cities.size() > 0:
 			var city := DataService.get_city(hot_cities[0])
 			var city_name := DataService.place_name(city, "name")
 			return "⭐最佳目的地：" + city_name
@@ -967,102 +995,343 @@ func _show_market() -> void:
 		return
 	_set_panel_bgm("market")
 	var city := AppState.current_city_id()
-	if city == _market_built_city and _market_container != null:
-		_update_market_rows(city)
-		_panel_host.visible = true
-		_clear_market_selection()
-		return
 	_clear_panel()
+	_dock_panel_work()
 	_selected_market_product_id = ""
-	_market_row_panels.clear()
 	_market_cache.clear()
 	_market_built_city = city
+	_market_sell_index = -1
 	var v := VBoxContainer.new()
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	v.add_theme_constant_override("separation", 8)
 	_panel_host.add_child(v)
+	var city_data: Dictionary = DataService.get_city(city)
+	var airport: Dictionary = AppState.current_airport()
 	var title := Label.new()
-	title.text = "市场 — %s（超重可就地加购行李/货运）" % city
+	title.text = "市场 — %s · %s · 资金 %s · 行李 %.1f/%.1fkg · 货运 %.1f/%.1fkg" % [
+		DataService.place_name(city_data, "name"),
+		GameClock.format_local(str(airport.get("timezone", ""))).substr(0, 16),
+		_Economy.format_money(AppState.cash_usd),
+		AppState.inventory_weight_kg(false, true), AppState.personal_baggage_limit_kg(),
+		AppState.inventory_weight_kg(true, false), AppState.cargo_kg_capacity,
+	]
+	title.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 	v.add_child(title)
-	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(700, 300)
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	v.add_child(scroll)
-	_market_container = VBoxContainer.new()
-	scroll.add_child(_market_container)
 	var ticket_dest_city := _get_ticket_dest_city_id()
-
-	var locals := DataService.products_for_city(city)
-
-	# When no ticket, randomly pick 3 products to show best-destination tips
-	_best_dest_sample.clear()
-	if ticket_dest_city == "":
-		var candidates: Array = []
-		for p in locals:
-			if _get_intelligence_tag(p, "") != "":
-				candidates.append(str(p.get("product_id", "")))
-		if candidates.size() > 0:
-			var seed_val := hash("market_tips|" + city + "|" + GameClock.game_date_string())
-			var rng := RandomNumberGenerator.new()
-			rng.seed = seed_val
-			candidates.shuffle()  # deterministic shuffle
-			var limit := mini(3, candidates.size())
-			for i in limit:
-				_best_dest_sample.append(candidates[i])
-
-	for p in locals:
-		_add_market_row(city, p, true, ticket_dest_city)
-	var count := 0
-	for p in DataService.world.get("products", []):
-		if p.origin_city_id == city:
-			continue
-		_add_market_row(city, p, false, ticket_dest_city)
-		count += 1
-		if count >= 25:
-			break
-	var qty_row := HBoxContainer.new()
-	v.add_child(qty_row)
-	var qty_label := Label.new()
-	qty_label.text = "数量"
-	qty_row.add_child(qty_label)
-	_trade_qty = SpinBox.new()
-	_trade_qty.min_value = 1
-	_trade_qty.max_value = 9999
-	_trade_qty.value = 1
-	_trade_qty.rounded = true
-	_trade_qty.custom_minimum_size = Vector2(100, 0)
-	qty_row.add_child(_trade_qty)
-	for n in [1, 10, 100]:
-		var qb := Button.new()
-		qb.text = str(n)
-		var qn: int = n
-		qb.pressed.connect(func (): _trade_qty.value = qn)
-		qty_row.add_child(qb)
-	var row := HBoxContainer.new()
-	v.add_child(row)
-	var b1 := Button.new()
-	b1.text = "买入（行李）"
-	b1.pressed.connect(func (): _buy_selected(false))
-	row.add_child(b1)
-	var b2 := Button.new()
-	b2.text = "买入（货运）"
-	b2.pressed.connect(func (): _buy_selected(true))
-	row.add_child(b2)
-	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
-		var bx := Button.new()
-		var tier: String = pair[1]
-		bx.text = "%s $%.0f" % [pair[0], _baggage_tier_price(tier)]
-		bx.pressed.connect(func (): _show_hint(_Inventory.expand_baggage(tier)); _refresh_bags())
-		row.add_child(bx)
-	var bc := Button.new()
-	bc.text = "+50kg货运 $%.0f" % _cargo_block_price()
-	bc.pressed.connect(func (): _show_hint(_Inventory.expand_cargo(1)); _refresh_bags())
-	row.add_child(bc)
+	if ticket_dest_city != "":
+		var dest := DataService.get_city(ticket_dest_city)
+		var ticket_chip := Label.new()
+		ticket_chip.text = "当前机票目的地：%s（采购页按此估算利润）" % DataService.place_name(dest, "name")
+		ticket_chip.add_theme_color_override("font_color", _Colors.ACCENT_TEAL)
+		v.add_child(ticket_chip)
+	_market_tabs = TabContainer.new()
+	_market_tabs.name = "MarketTabs"
+	_market_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	v.add_child(_market_tabs)
+	_build_market_buy_tab()
+	_build_market_sell_tab()
 	var close := Button.new()
 	close.text = "关闭"
 	close.pressed.connect(_close_panel)
-	row.add_child(close)
+	v.add_child(close)
+	var open_sell := _market_arrival_sell_pending and not AppState.inventory.is_empty()
+	_market_arrival_sell_pending = false
+	_market_tabs.current_tab = 1 if open_sell else 0
+	_refresh_market_buy()
+	_refresh_market_sell()
 
 
-## Updates cached market row labels without rebuilding nodes.
+func _build_market_buy_tab() -> void:
+	var page := HBoxContainer.new()
+	page.name = "采购"
+	page.add_theme_constant_override("separation", 10)
+	_market_tabs.add_child(page)
+	var left := VBoxContainer.new()
+	left.custom_minimum_size = Vector2(700, 0)
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page.add_child(left)
+	_market_search = LineEdit.new()
+	_market_search.name = "MarketSearch"
+	_market_search.placeholder_text = "搜索全部商品（空白时仅显示本地特产）"
+	_market_search.text_changed.connect(func (_text): _market_buy_page = 0; _refresh_market_buy())
+	left.add_child(_market_search)
+	_market_buy_tree = _make_table(["商品", "来源", "重量", "采购价", "目的地估价 / 情报"], [210, 85, 70, 100, 190])
+	_market_buy_tree.name = "MarketBuyTree"
+	_market_buy_tree.item_selected.connect(_on_market_buy_tree_selected)
+	left.add_child(_market_buy_tree)
+	var pager := HBoxContainer.new()
+	left.add_child(pager)
+	var prev := Button.new()
+	prev.text = "‹"
+	prev.pressed.connect(func (): _market_buy_page = maxi(0, _market_buy_page - 1); _refresh_market_buy())
+	pager.add_child(prev)
+	_market_buy_page_label = Label.new()
+	_market_buy_page_label.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+	pager.add_child(_market_buy_page_label)
+	var next := Button.new()
+	next.text = "›"
+	next.pressed.connect(func (): _market_buy_page += 1; _refresh_market_buy())
+	pager.add_child(next)
+	var right := VBoxContainer.new()
+	right.custom_minimum_size = Vector2(330, 0)
+	page.add_child(right)
+	_market_buy_detail = RichTextLabel.new()
+	_market_buy_detail.bbcode_enabled = true
+	_market_buy_detail.custom_minimum_size = Vector2(320, 220)
+	_market_buy_detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_market_buy_detail.text = "选择商品查看采购与目的地利润。"
+	right.add_child(_market_buy_detail)
+	_add_market_buy_actions(right)
+
+
+func _build_market_sell_tab() -> void:
+	var page := HBoxContainer.new()
+	page.name = "出售"
+	page.add_theme_constant_override("separation", 10)
+	_market_tabs.add_child(page)
+	var left := VBoxContainer.new()
+	left.custom_minimum_size = Vector2(700, 0)
+	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	page.add_child(left)
+	var help := Label.new()
+	help.text = "出售库存 · 品质和当地需求会影响最终售价"
+	help.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+	left.add_child(help)
+	_market_sell_tree = _make_table(["商品", "数量", "品质", "存放", "成本", "当地售价", "预计毛利"], [170, 55, 60, 60, 85, 95, 100])
+	_market_sell_tree.name = "MarketSellTree"
+	_market_sell_tree.item_selected.connect(_on_market_sell_tree_selected)
+	left.add_child(_market_sell_tree)
+	var right := VBoxContainer.new()
+	right.custom_minimum_size = Vector2(330, 0)
+	page.add_child(right)
+	_market_sell_detail = RichTextLabel.new()
+	_market_sell_detail.bbcode_enabled = true
+	_market_sell_detail.custom_minimum_size = Vector2(320, 220)
+	_market_sell_detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_market_sell_detail.text = "选择库存商品查看出售结果。"
+	right.add_child(_market_sell_detail)
+	_add_market_sell_actions(right)
+
+
+func _make_table(headers: Array, widths: Array) -> Tree:
+	var tree := Tree.new()
+	tree.columns = headers.size()
+	tree.column_titles_visible = true
+	tree.hide_root = true
+	tree.custom_minimum_size = Vector2(0, 340)
+	tree.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	for i in headers.size():
+		tree.set_column_title(i, str(headers[i]))
+		tree.set_column_custom_minimum_width(i, int(widths[i]))
+		tree.set_column_expand(i, i == 0 or i == headers.size() - 1)
+	return tree
+
+
+func _add_market_buy_actions(parent: VBoxContainer) -> void:
+	var qty_row := HBoxContainer.new()
+	parent.add_child(qty_row)
+	var qty_label := Label.new()
+	qty_label.text = "数量"
+	qty_row.add_child(qty_label)
+	_market_buy_qty = SpinBox.new()
+	_market_buy_qty.min_value = 1
+	_market_buy_qty.max_value = 9999
+	_market_buy_qty.value = 1
+	_market_buy_qty.rounded = true
+	_market_buy_qty.custom_minimum_size = Vector2(88, 0)
+	qty_row.add_child(_market_buy_qty)
+	for n in [1, 10, 100]:
+		var quick := Button.new()
+		quick.text = str(n)
+		var quick_n: int = n
+		quick.pressed.connect(func (): _market_buy_qty.value = quick_n)
+		qty_row.add_child(quick)
+	var actions := HBoxContainer.new()
+	parent.add_child(actions)
+	var buy_bag := Button.new()
+	buy_bag.text = "买入（行李）"
+	buy_bag.pressed.connect(func (): _buy_selected(false))
+	actions.add_child(buy_bag)
+	var buy_cargo := Button.new()
+	buy_cargo.text = "买入（货运）"
+	buy_cargo.pressed.connect(func (): _buy_selected(true))
+	actions.add_child(buy_cargo)
+	var capacity := HBoxContainer.new()
+	parent.add_child(capacity)
+	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
+		var extend := Button.new()
+		var tier: String = pair[1]
+		extend.text = "%s $%.0f" % [pair[0], _baggage_tier_price(tier)]
+		extend.pressed.connect(func (): _show_hint(_Inventory.expand_baggage(tier)); _refresh_bags())
+		capacity.add_child(extend)
+	var cargo := Button.new()
+	cargo.text = "+50kg货运 $%.0f" % _cargo_block_price()
+	cargo.pressed.connect(func (): _show_hint(_Inventory.expand_cargo(1)); _refresh_bags())
+	capacity.add_child(cargo)
+
+
+func _add_market_sell_actions(parent: VBoxContainer) -> void:
+	var qty_row := HBoxContainer.new()
+	parent.add_child(qty_row)
+	var qty_label := Label.new()
+	qty_label.text = "出售数量"
+	qty_row.add_child(qty_label)
+	_market_sell_qty = SpinBox.new()
+	_market_sell_qty.min_value = 1
+	_market_sell_qty.max_value = 9999
+	_market_sell_qty.value = 1
+	_market_sell_qty.rounded = true
+	_market_sell_qty.custom_minimum_size = Vector2(88, 0)
+	qty_row.add_child(_market_sell_qty)
+	for n in [1, 10, 100]:
+		var quick := Button.new()
+		quick.text = str(n)
+		var quick_n: int = n
+		quick.pressed.connect(func (): _market_sell_qty.value = quick_n)
+		qty_row.add_child(quick)
+	var sell := Button.new()
+	sell.text = "出售选中商品"
+	sell.pressed.connect(_sell_selected_market)
+	_style_cta_button(sell)
+	parent.add_child(sell)
+
+
+func _refresh_market_buy() -> void:
+	if _market_buy_tree == null:
+		return
+	_market_buy_tree.clear()
+	_market_cache.clear()
+	_selected_market_product_id = ""
+	var city := AppState.current_city_id()
+	var query := _market_search.text.strip_edges().to_lower() if _market_search else ""
+	var product_ids: Array = []
+	if query == "":
+		for p_v in DataService.products_for_city(city):
+			product_ids.append(str((p_v as Dictionary).get("product_id", "")))
+	else:
+		for product_id_v in DataService.market_product_ids(city):
+			var product_id := str(product_id_v)
+			var p := DataService.get_product(product_id)
+			var origin := DataService.get_city(str(p.get("origin_city_id", "")))
+			var haystack := "%s %s %s %s" % [p.get("name_zh", ""), p.get("name_en", ""), p.get("category", ""), DataService.place_name(origin, "name")]
+			if haystack.to_lower().find(query) >= 0:
+				product_ids.append(product_id)
+	var total := product_ids.size()
+	var start := _market_buy_page * MARKET_ROWS_PER_PAGE
+	if start >= total and _market_buy_page > 0:
+		_market_buy_page = maxi(0, int((total - 1) / float(MARKET_ROWS_PER_PAGE)))
+		start = _market_buy_page * MARKET_ROWS_PER_PAGE
+	var end := mini(total, start + MARKET_ROWS_PER_PAGE)
+	var root := _market_buy_tree.create_item()
+	var ticket_dest_city := _get_ticket_dest_city_id()
+	for i in range(start, end):
+		var product_id := str(product_ids[i])
+		var p := DataService.get_product(product_id)
+		var item := _market_buy_tree.create_item(root)
+		var is_local := str(p.get("origin_city_id", "")) == city
+		var origin := DataService.get_city(str(p.get("origin_city_id", "")))
+		item.set_text(0, str(p.get("name_zh", product_id)))
+		item.set_text(1, "本地" if is_local else DataService.place_name(origin, "name"))
+		item.set_text(2, "%.2fkg" % float(p.get("weight_kg", 0)))
+		item.set_text(3, _Economy.format_money(_Economy.buy_price(city, product_id)))
+		item.set_text(4, _market_buy_outlook(p, city, ticket_dest_city))
+		item.set_metadata(0, product_id)
+		if is_local:
+			item.set_custom_color(1, _Colors.ACCENT_AMBER)
+		_market_cache.append(product_id)
+	if _market_buy_page_label:
+		_market_buy_page_label.text = " %d–%d / %d（第 %d 页）" % [start + (1 if total > 0 else 0), end, total, _market_buy_page + 1]
+
+
+func _market_buy_outlook(p: Dictionary, city: String, ticket_dest_city: String) -> String:
+	var product_id := str(p.get("product_id", ""))
+	var buy := _Economy.buy_price(city, product_id)
+	if ticket_dest_city != "":
+		var estimate := _Economy.sell_price_estimate(product_id, ticket_dest_city)
+		var margin := estimate - buy
+		return "%s · %s$%.0f" % [_Economy.format_money(estimate), "+" if margin >= 0 else "-", absf(margin)]
+	return _get_intelligence_tag(p, "")
+
+
+func _on_market_buy_tree_selected() -> void:
+	var item := _market_buy_tree.get_selected()
+	if item == null:
+		return
+	_selected_market_product_id = str(item.get_metadata(0))
+	var product := DataService.get_product(_selected_market_product_id)
+	var city := AppState.current_city_id()
+	var outlook := _market_buy_outlook(product, city, _get_ticket_dest_city_id())
+	_market_buy_detail.text = "[b]%s[/b]\n%s\n\n重量：%.2fkg\n当前采购价：%s\n%s" % [
+		product.get("name_zh", _selected_market_product_id),
+		str(product.get("description", product.get("short_description", ""))),
+		float(product.get("weight_kg", 0)),
+		_Economy.format_money(_Economy.buy_price(city, _selected_market_product_id)),
+		outlook if outlook != "" else "请选择航班查看目的地估价",
+	]
+
+
+func _refresh_market_sell() -> void:
+	if _market_sell_tree == null:
+		return
+	_market_sell_tree.clear()
+	_market_sell_index = -1
+	var root := _market_sell_tree.create_item()
+	var city := AppState.current_city_id()
+	for i in AppState.inventory.size():
+		var stack: Dictionary = AppState.inventory[i]
+		var product_id := str(stack.get("product_id", ""))
+		var product := DataService.get_product(product_id)
+		var quality := _Economy.current_quality(stack)
+		var cost := float(stack.get("unit_cost", 0))
+		var sell := _Economy.sell_price(city, product_id, quality)
+		var item := _market_sell_tree.create_item(root)
+		item.set_text(0, str(product.get("name_zh", product_id)))
+		item.set_text(1, "×%d" % int(stack.get("qty", 0)))
+		item.set_text(2, "%.0f%%" % (quality * 100.0))
+		item.set_text(3, "货运" if bool(stack.get("in_cargo", false)) else "行李")
+		item.set_text(4, _Economy.format_money(cost))
+		item.set_text(5, _Economy.format_money(sell))
+		item.set_text(6, "%s$%.0f" % ["+" if sell >= cost else "-", absf(sell - cost)])
+		item.set_metadata(0, i)
+		item.set_custom_color(6, Color(0.45, 0.85, 0.55) if sell >= cost else _Colors.WARN_RED)
+	if AppState.inventory.is_empty() and _market_sell_detail:
+		_market_sell_detail.text = "库存为空。前往采购页购买当地特产。"
+
+
+func _on_market_sell_tree_selected() -> void:
+	var item := _market_sell_tree.get_selected()
+	if item == null:
+		return
+	_market_sell_index = int(item.get_metadata(0))
+	if _market_sell_index < 0 or _market_sell_index >= AppState.inventory.size():
+		return
+	var stack: Dictionary = AppState.inventory[_market_sell_index]
+	var product_id := str(stack.get("product_id", ""))
+	var product := DataService.get_product(product_id)
+	var quality := _Economy.current_quality(stack)
+	var cost := float(stack.get("unit_cost", 0))
+	var sell := _Economy.sell_price(AppState.current_city_id(), product_id, quality)
+	_market_sell_detail.text = "[b]%s[/b]\n\n数量：%d\n品质：%.0f%%\n存放：%s\n成本：%s / 件\n当地售价：%s / 件\n预计毛利：%s$%.0f / 件" % [
+		product.get("name_zh", product_id), int(stack.get("qty", 0)), quality * 100.0,
+		"货运" if bool(stack.get("in_cargo", false)) else "行李",
+		_Economy.format_money(cost), _Economy.format_money(sell),
+		"+" if sell >= cost else "-", absf(sell - cost),
+	]
+	_market_sell_qty.max_value = int(stack.get("qty", 0))
+	_market_sell_qty.value = mini(_market_sell_qty.value, _market_sell_qty.max_value)
+
+
+func _sell_selected_market() -> void:
+	if _market_sell_index < 0 or _market_sell_index >= AppState.inventory.size():
+		_show_hint("请先选择要出售的库存商品")
+		return
+	var stack: Dictionary = AppState.inventory[_market_sell_index]
+	var qty := int(_market_sell_qty.value) if _market_sell_qty else 1
+	_check_accidental_premium(str(stack.get("product_id", "")), _market_sell_index, qty)
+
+
+## Legacy market-row helpers remain for compatibility with old saves and tooling.
 func _update_market_rows(city: String) -> void:
 	var ticket_dest_city := _get_ticket_dest_city_id()
 	for product_id in _market_cache:
@@ -1343,8 +1612,9 @@ func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
 
 func _buy_selected(as_cargo: bool) -> void:
 	if _selected_market_product_id == "":
+		_show_hint("请先选择要采购的商品")
 		return
-	var qty: int = int(_trade_qty.value) if _trade_qty else 1
+	var qty: int = int(_market_buy_qty.value) if _market_buy_qty else 1
 	var discount_factor := 1.0
 	if (_active_arrival_discount.get("product_id", "") == _selected_market_product_id
 			and _active_arrival_discount.get("city_id", "") == AppState.current_city_id()):
@@ -1358,6 +1628,9 @@ func _buy_selected(as_cargo: bool) -> void:
 		_show_hint("购买成功")
 		_active_arrival_discount = {}
 	_refresh_bags()
+	if err == "":
+		_refresh_market_buy()
+		_refresh_market_sell()
 
 
 func _buy_market_item(product_id: String) -> void:
@@ -1370,7 +1643,7 @@ func _show_flights() -> void:
 		return
 	_set_panel_bgm("globe")
 	_clear_panel()
-	_dock_panel_flights()
+	_dock_panel_work()
 	_flight_auto_focus = true
 	_selected_connection = {}
 	var v := VBoxContainer.new()
@@ -1445,31 +1718,21 @@ func _show_flights() -> void:
 	v.add_child(_recommend_box)
 	_rebuild_recommendations()
 
-	# Row 2: carousel
-	_flight_carousel = _FlightCarousel.new() as Control
-	_flight_carousel.custom_minimum_size = Vector2(1160, 104)
-	_flight_carousel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_flight_carousel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_flight_carousel.focus_changed.connect(_on_flight_selected)
-	v.add_child(_flight_carousel)
+	# Fixed-height Tree rows replace the transformed coverflow cards.
+	_flight_tree = _make_table(["起飞", "航班 / 航司", "目的地", "到达", "时长 / 经停", "经济舱"], [100, 220, 145, 100, 145, 110])
+	_flight_tree.name = "FlightTree"
+	_flight_tree.custom_minimum_size = Vector2(0, 240)
+	_flight_tree.item_selected.connect(_on_flight_tree_selected)
+	v.add_child(_flight_tree)
 
-	# Row 3: detail (fixed-height scroll area so the carousel never reflows) + purchase
-	var detail_scroll := ScrollContainer.new()
-	detail_scroll.custom_minimum_size = Vector2(1160, 44)
-	detail_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	detail_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	detail_scroll.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	detail_scroll.clip_contents = true
-	v.add_child(detail_scroll)
+	# Detail is deliberately outside the scrolling list so choosing another row never reflows it.
 	_flight_detail = RichTextLabel.new()
 	_flight_detail.bbcode_enabled = true
-	# fit_content=true lets the label grow to its content so the parent
-	# ScrollContainer can scroll long details instead of clipping at 44px.
-	_flight_detail.fit_content = true
+	_flight_detail.fit_content = false
 	_flight_detail.scroll_active = false
-	_flight_detail.custom_minimum_size = Vector2(1160, 0)
+	_flight_detail.custom_minimum_size = Vector2(0, 52)
 	_flight_detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	detail_scroll.add_child(_flight_detail)
+	v.add_child(_flight_detail)
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 6)
 	v.add_child(row)
@@ -1609,7 +1872,7 @@ func _cargo_block_price() -> float:
 
 
 func _reload_flights(_q: String = "") -> void:
-	if _flight_carousel == null:
+	if _flight_tree == null:
 		return
 	_selected_flight = {}
 	_selected_connection = {}
@@ -1653,7 +1916,7 @@ func _reload_flights(_q: String = "") -> void:
 		_fill_flight_rows()
 		var local_idx: int = focus_idx - start_f
 		if local_idx >= 0 and local_idx < _flights_cache.size():
-			_flight_carousel.select_index(local_idx, false)
+			_select_flight_tree_index(local_idx)
 		_show_hint("航班 %d–%d / 共 %d（页 %d）· 已定位≥2小时后班次" % [
 			start_f + 1, start_f + _flights_cache.size(), all.size(), _flight_page + 1
 		])
@@ -1670,30 +1933,27 @@ func _reload_flights(_q: String = "") -> void:
 
 
 func _fill_flight_rows() -> void:
-	if _flight_carousel == null:
+	if _flight_tree == null:
 		return
-	var items: Array = []
+	_flight_tree.clear()
+	var root := _flight_tree.create_item()
 	for i in _flights_cache.size():
 		var fl: Dictionary = _flights_cache[i]
 		var stop_n := int(fl.get("stops", 0))
-		var stop_tag := "" if stop_n <= 0 else " 经停×%d" % stop_n
-		var al_id := str(fl.get("alliance_id", ""))
-		var al_tag := ""
-		if al_id != "" and al_id != "none":
-			al_tag = " ·%s" % DataService.alliance_name(al_id)
+		var item := _flight_tree.create_item(root)
+		item.set_text(0, _flight_local_time(str(fl.get("scheduled_departure_utc", "")), str(fl.get("origin_airport_id", ""))))
+		item.set_text(1, "%s · %s" % [fl.get("marketing_flight_number", ""), fl.get("airline_name", "")])
+		item.set_text(2, "%s %s" % [fl.get("destination_iata", ""), _flight_destination_name(fl)])
+		item.set_text(3, _flight_local_time(str(fl.get("scheduled_arrival_utc", "")), str(fl.get("destination_airport_id", ""))))
+		item.set_text(4, "%d分钟%s" % [int(fl.get("duration_minutes", 0)), " · 经停×%d" % stop_n if stop_n > 0 else ""])
+		item.set_text(5, _Economy.format_money(float(fl.get("ticket_base_price_economy", 0))))
+		item.set_metadata(0, i)
 		var muted := _FlightSearch.is_short_lead(fl)
-		items.append({
-			"title": "%s  %s→%s" % [fl.marketing_flight_number, fl.origin_iata, fl.destination_iata],
-			"subtitle": str(fl.scheduled_departure_utc).substr(0, 16),
-			"meta": "$%.0f · %dmin%s%s" % [
-				float(fl.ticket_base_price_economy), int(fl.duration_minutes), stop_tag, al_tag
-			],
-			"muted": muted,
-			"data": fl,
-		})
-	_flight_carousel.set_items(items)
-	if not items.is_empty():
-		_flight_carousel.select_index(0, false)
+		if muted:
+			for column in _flight_tree.columns:
+				item.set_custom_color(column, _Colors.TEXT_SECONDARY)
+	if not _flights_cache.is_empty():
+		_select_flight_tree_index(0)
 	elif _flight_detail:
 		_flight_detail.text = "无匹配航班"
 		_selected_flight = {}
@@ -1701,29 +1961,61 @@ func _fill_flight_rows() -> void:
 
 
 func _fill_connection_rows() -> void:
-	if _flight_carousel == null:
+	if _flight_tree == null:
 		return
-	var items: Array = []
+	_flight_tree.clear()
+	var root := _flight_tree.create_item()
 	for i in _connection_cache.size():
 		var c: Dictionary = _connection_cache[i]
-		items.append({
-			"title": "%s→%s→%s" % [c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", "")],
-			"subtitle": "经 %s 中转 · MCT %dmin" % [c.get("hub_iata", ""), int(c.get("mct_minutes", 90))],
-			"meta": "$%.0f · ~%dmin · %.0fkm" % [
-				float(c.get("ticket_base_price_economy", 0)),
-				int(c.get("duration_minutes", 0)),
-				float(c.get("total_distance_km", 0)),
-			],
-			"muted": false,
-			"data": c,
-		})
-	_flight_carousel.set_items(items)
-	if not items.is_empty():
-		_flight_carousel.select_index(0, false)
+		var item := _flight_tree.create_item(root)
+		item.set_text(0, "约 3小时后")
+		item.set_text(1, "联程 · %s→%s" % [c.get("origin_iata", ""), c.get("hub_iata", "")])
+		item.set_text(2, "%s 经 %s" % [c.get("destination_iata", ""), c.get("hub_iata", "")])
+		item.set_text(3, "两段行程")
+		item.set_text(4, "%d分钟 · MCT%d" % [int(c.get("duration_minutes", 0)), int(c.get("mct_minutes", 90))])
+		item.set_text(5, _Economy.format_money(float(c.get("ticket_base_price_economy", 0))))
+		item.set_metadata(0, i)
+	if not _connection_cache.is_empty():
+		_select_flight_tree_index(0)
 	elif _flight_detail:
 		_flight_detail.text = "无匹配联程"
 		_selected_flight = {}
 		_selected_connection = {}
+
+
+func _on_flight_tree_selected() -> void:
+	if _flight_tree == null:
+		return
+	var item := _flight_tree.get_selected()
+	if item != null:
+		_on_flight_selected(int(item.get_metadata(0)))
+
+
+func _select_flight_tree_index(index: int) -> void:
+	if _flight_tree == null:
+		return
+	var item := _flight_tree.get_root().get_first_child()
+	var cursor := 0
+	while item != null:
+		if cursor == index:
+			item.select(0)
+			_on_flight_selected(index)
+			return
+		cursor += 1
+		item = item.get_next()
+
+
+func _flight_destination_name(flight: Dictionary) -> String:
+	var airport := DataService.get_airport(str(flight.get("destination_airport_id", "")))
+	var city := DataService.get_city(str(airport.get("city_id", "")))
+	return DataService.place_name(city, "name")
+
+
+func _flight_local_time(iso: String, airport_id: String) -> String:
+	var airport := DataService.get_airport(airport_id)
+	var local_unix := GameClock.parse_iso_to_unix(iso) + GameClock.offset_hours_for(str(airport.get("timezone", ""))) * 3600.0
+	var d := Time.get_datetime_dict_from_unix_time(int(local_unix))
+	return "%02d:%02d" % [int(d.get("hour", 0)), int(d.get("minute", 0))]
 
 
 func _on_flight_selected(idx: int) -> void:
@@ -1853,58 +2145,60 @@ func _show_inventory() -> void:
 		return
 	_clear_panel()
 	var v := VBoxContainer.new()
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_panel_host.add_child(v)
-	_inv_list = ItemList.new()
-	_inv_list.custom_minimum_size = Vector2(700, 360)
-	_inv_list.fixed_icon_size = Vector2i(28, 28)
-	v.add_child(_inv_list)
-	for i in AppState.inventory.size():
-		var item: Dictionary = AppState.inventory[i]
-		var pid := str(item.get("product_id", ""))
-		var p: Dictionary = DataService.get_product(pid)
-		var q: float = _Economy.current_quality(item)
-		var unit_cost: float = float(item.get("unit_cost", 0))
-		var current_sell: float = _Economy.sell_price(AppState.current_city_id(), pid, q)
-		var spread: float = current_sell - unit_cost
-		var spread_sign := "+" if spread >= 0 else ""
-		var idx := _inv_list.add_item("%s ×%d  品质%.0f%%  成本%s  售价%s  %s%s  %s" % [
-			p.get("name_zh", pid), int(item.get("qty", 0)), q * 100.0,
-			_Economy.format_money(unit_cost),
-			_Economy.format_money(current_sell),
-			spread_sign, _Economy.format_money(spread),
-			"货运" if item.get("in_cargo", false) else "行李"
-		])
-		var ptex: Texture2D = _IconFactory.get_product_icon(pid)
-		if ptex != null:
-			_inv_list.set_item_icon(idx, ptex)
-	var qty_row := HBoxContainer.new()
-	v.add_child(qty_row)
-	var qty_label := Label.new()
-	qty_label.text = "数量"
-	qty_row.add_child(qty_label)
-	_trade_qty = SpinBox.new()
-	_trade_qty.min_value = 1
-	_trade_qty.max_value = 9999
-	_trade_qty.value = 1
-	_trade_qty.rounded = true
-	_trade_qty.custom_minimum_size = Vector2(100, 0)
-	qty_row.add_child(_trade_qty)
-	for n in [1, 10, 100]:
-		var qb := Button.new()
-		qb.text = str(n)
-		var qn: int = n
-		qb.pressed.connect(func (): _trade_qty.value = qn)
-		qty_row.add_child(qb)
+	var summary := Label.new()
+	summary.text = "库存整理 · 行李 %.1f/%.1fkg · 货运 %.1f/%.1fkg" % [
+		AppState.inventory_weight_kg(false, true), AppState.personal_baggage_limit_kg(),
+		AppState.inventory_weight_kg(true, false), AppState.cargo_kg_capacity,
+	]
+	summary.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+	v.add_child(summary)
+	_add_inventory_group(v, "随身 / 托运行李", false)
+	_add_inventory_group(v, "货运", true)
 	var row := HBoxContainer.new()
 	v.add_child(row)
-	var sell := Button.new()
-	sell.text = "出售"
-	sell.pressed.connect(_sell_one)
-	row.add_child(sell)
+	var market := Button.new()
+	market.text = "前往市场出售"
+	market.pressed.connect(func (): _market_arrival_sell_pending = true; _show_market())
+	row.add_child(market)
 	var close := Button.new()
 	close.text = "关闭"
 	close.pressed.connect(_close_panel)
 	row.add_child(close)
+
+
+func _add_inventory_group(parent: VBoxContainer, title_text: String, cargo: bool) -> void:
+	var title := Label.new()
+	title.text = title_text
+	title.add_theme_color_override("font_color", _Colors.ACCENT_TEAL)
+	parent.add_child(title)
+	var list := ItemList.new()
+	list.custom_minimum_size = Vector2(700, 130)
+	list.fixed_icon_size = Vector2i(28, 28)
+	list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	parent.add_child(list)
+	for item_v in AppState.inventory:
+		var item: Dictionary = item_v
+		if bool(item.get("in_cargo", false)) != cargo:
+			continue
+		var pid := str(item.get("product_id", ""))
+		var product := DataService.get_product(pid)
+		var quality := _Economy.current_quality(item)
+		var cost := float(item.get("unit_cost", 0))
+		var current := _Economy.sell_price(AppState.current_city_id(), pid, quality)
+		var spread := current - cost
+		var idx := list.add_item("%s ×%d · 品质 %.0f%% · 成本 %s · 当前价值 %s · %s$%.0f/件" % [
+			product.get("name_zh", pid), int(item.get("qty", 0)), quality * 100.0,
+			_Economy.format_money(cost), _Economy.format_money(current),
+			"+" if spread >= 0 else "-", absf(spread),
+		])
+		var texture := _IconFactory.get_product_icon(pid)
+		if texture != null:
+			list.set_item_icon(idx, texture)
+	if list.item_count == 0:
+		list.add_item("暂无%s库存" % ("货运" if cargo else "行李"))
 
 
 func _sell_one() -> void:
@@ -1981,7 +2275,7 @@ func _on_premium_accepted(index: int, qty: int, bonus_pct: int, original_revenue
 		AppState.log_stat("big_loss_count", 1.0)
 
 	_show_sell_result_card(result)
-	_show_inventory()
+	_refresh_market_after_sale()
 	_refresh_bags()
 	_after_sell_check_discovery(result["product_id"])
 
@@ -1992,7 +2286,7 @@ func _do_sell(index: int, qty: int) -> void:
 		_show_hint(str(result.get("msg", "")))
 		return
 	_show_sell_result_card(result)
-	_show_inventory()
+	_refresh_market_after_sale()
 	_refresh_bags()
 	_after_sell_check_discovery(result["product_id"])
 
@@ -2002,6 +2296,15 @@ func _player_has_more_of(product_id: String) -> bool:
 		if str(stack.get("product_id", "")) == product_id and int(stack.get("qty", 0)) > 0:
 			return true
 	return false
+
+
+func _refresh_market_after_sale() -> void:
+	if _market_tabs != null and is_instance_valid(_market_tabs):
+		_refresh_market_sell()
+		_market_tabs.current_tab = 1
+		return
+	_market_arrival_sell_pending = true
+	_show_market()
 
 
 func _after_sell_check_discovery(sold_product_id: String) -> void:
@@ -2085,7 +2388,7 @@ func _on_discovery_sell_all(_result: Dictionary, product_id: String, city_id: St
 		_Economy.format_money(margin),
 		int(margin_rate * 100),
 	])
-	_show_inventory()
+	_refresh_market_after_sale()
 	_refresh_bags()
 	AchievementSystem.check_all()
 
