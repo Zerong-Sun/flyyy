@@ -1,5 +1,6 @@
 .DS_Store
 **/.thumbnail
+.pytest_cache/
 etl/.venv/
 etl/raw/
 *.pyc
