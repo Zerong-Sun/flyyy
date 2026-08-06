@@ -54,6 +54,7 @@ var stats: Dictionary = {
 	"hot_streak_sells": 0,
 	"categories_sold": {},
 	"products_discovered": {},
+	"routes_flown": {},
 	"extreme_airports": {"north": "", "south": "", "east": "", "west": ""},
 	"discovery_triggered": 0,
 	"big_loss_count": 0,
@@ -80,6 +81,7 @@ func _default_stats() -> Dictionary:
 		"hot_streak_sells": 0,
 		"categories_sold": {},
 		"products_discovered": {},
+		"routes_flown": {},
 		"extreme_airports": {"north": "", "south": "", "east": "", "west": ""},
 		"discovery_triggered": 0,
 		"big_loss_count": 0,
@@ -231,6 +233,14 @@ func mark_product_discovered(product_id: String) -> void:
 	var found: Dictionary = stats.get("products_discovered", {})
 	found[product_id] = true
 	stats["products_discovered"] = found
+
+
+func mark_route_flown(origin_iata: String, dest_iata: String) -> void:
+	if origin_iata == "" or dest_iata == "":
+		return
+	var routes: Dictionary = stats.get("routes_flown", {})
+	routes["%s|%s" % [origin_iata, dest_iata]] = true
+	stats["routes_flown"] = routes
 
 
 func update_extreme_airport(airport_id: String) -> void:
