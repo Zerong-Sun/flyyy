@@ -176,4 +176,7 @@ ui.codex.progress,"{cur} / {total}"
 ui.codex.undiscovered,"未解锁"
 ui.codex.empty,"暂无内容"
 ui.codex.route_count,"{n} 次"
+ui.event.festival,"节日溢价：本地特色商品涨价"
+ui.event.weather_cold,"冷链波动：冷链商品买卖价受影响"
+ui.event.scarcity,"特产稀缺：本地特色商品紧俏"
 
