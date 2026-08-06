@@ -102,6 +102,7 @@ var _ach_filter_unlocked_only: bool = false
 var _recommend_box: VBoxContainer
 var _selected_mode: String = "sandbox"  # "sandbox" | "challenge" | "collector"
 var _mode_desc: Label
+var _mode_buttons: Array = []  # [Button, mode_string, ...]
 var _challenge_label: Label
 var _load_button: Button = null
 var _collector_panel = null  # CollectorPanel instance (loaded lazily)
@@ -175,8 +176,8 @@ func _build_ui() -> void:
 	_countdown.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_countdown.add_theme_font_size_override("font_size", 16)
 	_countdown.add_theme_color_override("font_color", _Colors.WARN_RED)
-	_challenge_label = _label(self, Vector2(350, 92), "")
-	_challenge_label.size = Vector2(580, 30)
+	_challenge_label = _label(self, Vector2(350, 106), "")
+	_challenge_label.size = Vector2(580, 28)
 	_challenge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_challenge_label.add_theme_font_size_override("font_size", 14)
 	_challenge_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
@@ -391,6 +392,7 @@ func _build_ui() -> void:
 		mb.pressed.connect(func (): _select_mode(m))
 		_wire_ui_sound(mb)
 		mode_row.add_child(mb)
+		_mode_buttons.append([mb, m])
 	_mode_desc = Label.new()
 	_mode_desc.text = I18nService.t("ui.mode.sandbox.desc")
 	_mode_desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -483,6 +485,10 @@ func _show_new_game() -> void:
 func _select_mode(mode: String) -> void:
 	_selected_mode = mode
 	_update_load_button()
+	for pair_v in _mode_buttons:
+		var pair: Array = pair_v
+		var b: Button = pair[0]
+		b.button_pressed = str(pair[1]) == mode
 	if _mode_desc != null:
 		_mode_desc.text = I18nService.t("ui.mode." + mode + ".desc")
 	AudioService.play_sfx("sfx_ui_click")
