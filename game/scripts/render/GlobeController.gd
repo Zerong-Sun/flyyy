@@ -27,6 +27,8 @@ var _routes_visible: bool = false
 var _grid_mi: MeshInstance3D
 var _plane_mi: MeshInstance3D
 var _plane_visible_for_trip: bool = false
+var _focus_tween: Tween = null
+const FOCUS_DURATION := 0.7
 
 # Earth texture is pre-rendered by tools/generate_earth_placeholder.py and loaded from disk.
 
@@ -334,11 +336,44 @@ func focus_airport(airport_id: String) -> void:
 	if a.is_empty():
 		return
 	var pos := latlon_to_vec(float(a.latitude), float(a.longitude), EARTH_RADIUS)
-	_yaw = atan2(pos.z, pos.x)
-	_pitch = asin(clampf(pos.y / EARTH_RADIUS, -1.0, 1.0))
-	_distance = 22.0
-	_update_camera()
+	var target_yaw := atan2(pos.z, pos.x)
+	var target_pitch := asin(clampf(pos.y / EARTH_RADIUS, -1.0, 1.0))
+	var target_distance := 22.0
 	EventBus.airport_selected.emit(airport_id)
+	_kill_focus_tween()
+	if AppState != null and AppState.reduced_animations:
+		_yaw = target_yaw
+		_pitch = target_pitch
+		_distance = target_distance
+		_update_camera()
+		return
+	var start_yaw := _yaw
+	var start_pitch := _pitch
+	var start_distance := _distance
+	var yaw_delta := wrapf(target_yaw - start_yaw, -PI, PI)
+	var tw := create_tween()
+	_focus_tween = tw
+	tw.tween_method(
+		func(t: float) -> void:
+			_yaw = start_yaw + yaw_delta * t
+			_pitch = lerpf(start_pitch, target_pitch, t)
+			_distance = lerpf(start_distance, target_distance, t)
+			_update_camera(),
+		0.0, 1.0, FOCUS_DURATION
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.finished.connect(func() -> void:
+		_focus_tween = null
+		_yaw = target_yaw
+		_pitch = target_pitch
+		_distance = target_distance
+		_update_camera()
+	)
+
+
+func _kill_focus_tween() -> void:
+	if _focus_tween and _focus_tween.is_valid():
+		_focus_tween.kill()
+	_focus_tween = null
 
 
 func _update_markers() -> void:
@@ -494,22 +529,21 @@ func _unhandled_input(event: InputEvent) -> void:
 			_dragging = mb.pressed
 			if mb.pressed:
 				var picked := _pick_nearest_airport_id()
-				if mb.double_click:
-					# Double-click: select + camera focus on the hit airport.
-					if picked != "":
-						focus_airport(picked)
-						airport_clicked.emit(picked)
-				elif picked != "":
-					EventBus.airport_selected.emit(picked)
+				if picked != "":
+					# Single click also rotates the globe to center the airport.
+					focus_airport(picked)
 					airport_clicked.emit(picked)
 		elif mb.button_index == MOUSE_BUTTON_WHEEL_UP and mb.pressed:
+			_kill_focus_tween()
 			_distance -= 1.5
 			_update_camera()
 		elif mb.button_index == MOUSE_BUTTON_WHEEL_DOWN and mb.pressed:
+			_kill_focus_tween()
 			_distance += 1.5
 			_update_camera()
 	elif event is InputEventMouseMotion and _dragging:
 		var mm := event as InputEventMouseMotion
+		_kill_focus_tween()
 		_yaw -= mm.relative.x * 0.005
 		_pitch -= mm.relative.y * 0.005
 		_update_camera()
