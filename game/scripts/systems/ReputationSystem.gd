@@ -53,6 +53,15 @@ func has_unlock(key: String) -> bool:
 	return AppState.level >= _level_for_key(key)
 
 
+## Lv3 cold-chain privilege: 20% off the cold baggage tier. Single source of
+## truth shared by the UI label (MainHUD._baggage_tier_price) and the actual
+## charge (TicketService._extra_cost / add_baggage_or_cargo).
+static func cold_baggage_discount() -> float:
+	if AppState.level >= _level_for_key(UNLOCK_LV3):
+		return 0.8
+	return 1.0
+
+
 func unlock_name(key: String) -> String:
 	match key:
 		UNLOCK_LV2:
@@ -68,7 +77,7 @@ func unlock_name(key: String) -> String:
 	return ""
 
 
-func _level_for_key(key: String) -> int:
+static func _level_for_key(key: String) -> int:
 	match key:
 		UNLOCK_LV2:
 			return 2

@@ -38,6 +38,8 @@ static func _extra_cost(extra_tier: String, cargo_blocks: int) -> Dictionary:
 		extra_kg = float(tier.get("extra_kg", 0))
 		extra_cost = float(tier.get("price_usd", 0))
 		enables_cold = bool(tier.get("enables_cold_chain", false))
+		if enables_cold:
+			extra_cost *= ReputationSystem.cold_baggage_discount()
 	var cargo_kg: float = 50.0 * float(maxi(0, cargo_blocks))
 	var cargo_cost: float = float(extras.get("cargo_per_50kg_usd", 168)) * float(maxi(0, cargo_blocks))
 	return {
@@ -259,7 +261,10 @@ static func add_baggage_or_cargo(extra_tier: String, add_cargo_blocks: int) -> S
 		var new_kg: float = float(tier.get("extra_kg", 0))
 		if new_kg <= extra_kg:
 			return "请选择更大的行李扩展档位"
-		cost += float(tier.get("price_usd", 0))
+		var tier_price := float(tier.get("price_usd", 0))
+		if bool(tier.get("enables_cold_chain", false)):
+			tier_price *= ReputationSystem.cold_baggage_discount()
+		cost += tier_price
 		extra_kg = new_kg
 	var blocks: int = int(t.get("cargo_blocks", 0)) + maxi(0, add_cargo_blocks)
 	if add_cargo_blocks > 0:

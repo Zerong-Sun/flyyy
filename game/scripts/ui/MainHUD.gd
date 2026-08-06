@@ -1668,7 +1668,7 @@ func _add_market_row(city: String, p: Dictionary, is_local: bool, ticket_dest_ci
 		var upgrade_btn := Button.new()
 		upgrade_btn.name = "IntelUpgradeBtn"
 		upgrade_btn.text = ""
-		upgrade_btn.tooltip_text = "精准预测 ($200)"
+		upgrade_btn.tooltip_text = "精准预测 ($%.0f)" % _intel_upgrade_cost()
 		upgrade_btn.custom_minimum_size = Vector2(28, 28)
 		_IconFactory.decorate_button(upgrade_btn, "ic_intel", 18.0)
 		upgrade_btn.pressed.connect(_on_upgrade_intel.bind(product_id, row))
@@ -2022,9 +2022,8 @@ func _baggage_tier_price(tier: String) -> float:
 	var extras: Dictionary = DataService.economy.get("baggage_extras", {})
 	if extras.has(tier):
 		var price := float(extras[tier].get("price_usd", 0))
-		if bool(extras[tier].get("enables_cold_chain", false)) \
-				and ReputationSystem.has_unlock(ReputationSystem.UNLOCK_LV3):
-			price *= 0.8
+		if bool(extras[tier].get("enables_cold_chain", false)):
+			price *= ReputationSystem.cold_baggage_discount()
 		return price
 	return 0.0
 
@@ -2034,8 +2033,12 @@ func _cargo_block_price() -> float:
 	return float(extras.get("cargo_per_50kg_usd", 0))
 
 
-## Lv2 privilege: one cargo block is free per purchase.
-func _refund_unlock_cargo() -> void:
+## Lv2 privilege: one cargo block is free per purchase. When the free-cargo
+## promo already refunded the block on this purchase (free_cargo_used), the
+## privilege must not refund the same block a second time.
+func _refund_unlock_cargo(free_cargo_used: bool = false) -> void:
+	if free_cargo_used:
+		return
 	if _cargo_blocks > 0 and ReputationSystem.has_unlock(ReputationSystem.UNLOCK_LV2):
 		AppState.add_cash(_cargo_block_price())
 		_refresh_top()
@@ -2250,13 +2253,15 @@ func _purchase(cabin: String) -> void:
 			AudioService.play_sfx("sfx_error")
 		_refresh_bags()
 		_refresh_countdown()
+		var free_cargo_used := false
 		if err_c == "" and _free_cargo_on_flight and _cargo_blocks > 0:
 			AppState.add_cash(_cargo_block_price())
 			_free_cargo_on_flight = false
+			free_cargo_used = true
 			_refresh_top()
 			_show_hint("免费货运额度已使用！")
 		if err_c == "":
-			_refund_unlock_cargo()
+			_refund_unlock_cargo(free_cargo_used)
 			_check_free_cargo(AppState.current_city_id())
 			AchievementSystem.check_all()
 		return
@@ -2278,13 +2283,15 @@ func _purchase(cabin: String) -> void:
 	_refresh_countdown()
 	if err == "" and _selected_flight.has("destination_airport_id"):
 		globe.draw_trip_route(AppState.current_airport_id, str(_selected_flight.destination_airport_id))
+	var free_cargo_used := false
 	if err == "" and _free_cargo_on_flight and _cargo_blocks > 0:
 		AppState.add_cash(_cargo_block_price())
 		_free_cargo_on_flight = false
+		free_cargo_used = true
 		_refresh_top()
 		_show_hint("免费货运额度已使用！")
 	if err == "":
-		_refund_unlock_cargo()
+		_refund_unlock_cargo(free_cargo_used)
 		_check_free_cargo(AppState.current_city_id())
 		AchievementSystem.check_all()
 
@@ -2303,13 +2310,15 @@ func _do_replace_purchase() -> void:
 		globe.draw_trip_route(AppState.current_airport_id, str(_selected_flight.destination_airport_id))
 	elif err == "" and not _selected_connection.is_empty() and _selected_connection.has("hub_airport_id"):
 		globe.draw_trip_route(AppState.current_airport_id, str(_selected_connection.hub_airport_id))
+	var free_cargo_used := false
 	if err == "" and _free_cargo_on_flight and _cargo_blocks > 0:
 		AppState.add_cash(_cargo_block_price())
 		_free_cargo_on_flight = false
+		free_cargo_used = true
 		_refresh_top()
 		_show_hint("免费货运额度已使用！")
 	if err == "":
-		_refund_unlock_cargo()
+		_refund_unlock_cargo(free_cargo_used)
 		_check_free_cargo(AppState.current_city_id())
 		AchievementSystem.check_all()
 

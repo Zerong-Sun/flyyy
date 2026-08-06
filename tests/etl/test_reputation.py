@@ -84,11 +84,41 @@ def test_unlock_effects_wired_in_source():
     rep_src = (GAME / "scripts" / "systems" / "ReputationSystem.gd").read_text(encoding="utf-8")
     app_src = (GAME / "scripts" / "autoload" / "AppState.gd").read_text(encoding="utf-8")
     hud_src = (GAME / "scripts" / "ui" / "MainHUD.gd").read_text(encoding="utf-8")
+    ticket_src = (GAME / "scripts" / "systems" / "TicketService.gd").read_text(encoding="utf-8")
     assert "func has_unlock" in rep_src
     assert "UNLOCK_LV5" in app_src, "Lv5 +10kg baggage must be applied in AppState"
     assert "UNLOCK_LV4" in hud_src, "Lv4 intel discount must be applied in MainHUD"
-    assert "UNLOCK_LV3" in hud_src, "Lv3 cold discount must be applied in MainHUD"
     assert "UNLOCK_LV2" in hud_src, "Lv2 free cargo block must be applied in MainHUD"
+
+
+def test_cold_discount_applied_to_actual_charge():
+    # Lv3 "冷链行李 8 折" must affect the real charge in TicketService, not
+    # just the UI label. Both paths must use the shared helper so label and
+    # charge never diverge.
+    rep_src = (GAME / "scripts" / "systems" / "ReputationSystem.gd").read_text(encoding="utf-8")
+    ticket_src = (GAME / "scripts" / "systems" / "TicketService.gd").read_text(encoding="utf-8")
+    hud_src = (GAME / "scripts" / "ui" / "MainHUD.gd").read_text(encoding="utf-8")
+    assert "static func cold_baggage_discount" in rep_src
+    assert "cold_baggage_discount" in ticket_src, "TicketService must apply the discount"
+    assert "cold_baggage_discount" in hud_src, "MainHUD label must use the shared helper"
+    # The helper must be used inside _extra_cost (the purchase charge) and
+    # add_baggage_or_cargo (the on-the-spot expand charge).
+    idx_extra = ticket_src.index("static func _extra_cost")
+    idx_add = ticket_src.index("static func add_baggage_or_cargo")
+    assert "cold_baggage_discount" in ticket_src[idx_extra:idx_add]
+    assert "cold_baggage_discount" in ticket_src[idx_add:]
+
+
+def test_lv2_free_cargo_not_double_refunded():
+    # Lv2 privilege refunds one cargo block per purchase; when the free-cargo
+    # promo already refunded the block on the same purchase, the privilege
+    # must not refund it a second time (would print money).
+    hud_src = (GAME / "scripts" / "ui" / "MainHUD.gd").read_text(encoding="utf-8")
+    assert "func _refund_unlock_cargo(free_cargo_used: bool" in hud_src
+    assert "free_cargo_used" in hud_src
+    # All three purchase success paths must thread the flag through.
+    assert hud_src.count("_refund_unlock_cargo(") >= 3
+    assert hud_src.count("_refund_unlock_cargo(free_cargo_used)") >= 3
 
 
 def test_reputation_persisted_with_defaults():
