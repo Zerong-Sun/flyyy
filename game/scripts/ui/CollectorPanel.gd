@@ -79,7 +79,7 @@ func _build() -> void:
 		v.add_child(done)
 
 	var close := Button.new()
-	close.text = "关闭"
+	close.text = I18nService.t("ui.common.close")
 	close.pressed.connect(func (): visible = false)
 	close.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	v.add_child(close)

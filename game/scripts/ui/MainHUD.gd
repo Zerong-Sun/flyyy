@@ -165,11 +165,11 @@ func _build_ui() -> void:
 	_configure_top_label(_cash_label, Vector2(220, 36))
 	_bag_label = _label(top, Vector2(828, 8), "行李")
 	_configure_top_label(_bag_label, Vector2(280, 36))
-	_airport_label = _label(top, Vector2(1110, 8), "机场")
-	_configure_top_label(_airport_label, Vector2(158, 36))
+	_airport_label = _label(top, Vector2(1090, 8), "机场")
+	_configure_top_label(_airport_label, Vector2(140, 36))
 	_airport_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_rep_label = _label(top, Vector2(1272, 8), "Lv1")
-	_configure_top_label(_rep_label, Vector2(120, 36))
+	_rep_label = _label(top, Vector2(1234, 8), "Lv1")
+	_configure_top_label(_rep_label, Vector2(42, 36))
 	_rep_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	top.add_child(_IconFactory.make("ic_clock", 22.0))
 	top.get_child(top.get_child_count() - 1).position = Vector2(10, 14)
@@ -1723,8 +1723,16 @@ func _intel_icon_id(intel: String) -> String:
 	return ""
 
 
+func _intel_upgrade_cost() -> float:
+	var cost := INTEL_UPGRADE_COST
+	if ReputationSystem.has_unlock(ReputationSystem.UNLOCK_LV4):
+		cost *= 0.7
+	return cost
+
+
 func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
-	if AppState.cash_usd < INTEL_UPGRADE_COST:
+	var cost := _intel_upgrade_cost()
+	if AppState.cash_usd < cost:
 		_show_hint("资金不足")
 		AudioService.play_sfx("sfx_error")
 		return
@@ -1735,7 +1743,7 @@ func _on_upgrade_intel(product_id: String, product_row: Node) -> void:
 		AudioService.play_sfx("sfx_error")
 		return
 
-	AppState.cash_usd -= INTEL_UPGRADE_COST
+	AppState.cash_usd -= cost
 	AppState.log_stat("intel_purchases", 1.0)
 	_refresh_top()
 
@@ -2013,13 +2021,25 @@ func _rebuild_recommendations() -> void:
 func _baggage_tier_price(tier: String) -> float:
 	var extras: Dictionary = DataService.economy.get("baggage_extras", {})
 	if extras.has(tier):
-		return float(extras[tier].get("price_usd", 0))
+		var price := float(extras[tier].get("price_usd", 0))
+		if bool(extras[tier].get("enables_cold_chain", false)) \
+				and ReputationSystem.has_unlock(ReputationSystem.UNLOCK_LV3):
+			price *= 0.8
+		return price
 	return 0.0
 
 
 func _cargo_block_price() -> float:
 	var extras: Dictionary = DataService.economy.get("baggage_extras", {})
 	return float(extras.get("cargo_per_50kg_usd", 0))
+
+
+## Lv2 privilege: one cargo block is free per purchase.
+func _refund_unlock_cargo() -> void:
+	if _cargo_blocks > 0 and ReputationSystem.has_unlock(ReputationSystem.UNLOCK_LV2):
+		AppState.add_cash(_cargo_block_price())
+		_refresh_top()
+		_show_hint("声望特权：免费货运 1 块")
 
 
 func _reload_flights(_q: String = "") -> void:
@@ -2236,6 +2256,7 @@ func _purchase(cabin: String) -> void:
 			_refresh_top()
 			_show_hint("免费货运额度已使用！")
 		if err_c == "":
+			_refund_unlock_cargo()
 			_check_free_cargo(AppState.current_city_id())
 			AchievementSystem.check_all()
 		return
@@ -2263,6 +2284,7 @@ func _purchase(cabin: String) -> void:
 		_refresh_top()
 		_show_hint("免费货运额度已使用！")
 	if err == "":
+		_refund_unlock_cargo()
 		_check_free_cargo(AppState.current_city_id())
 		AchievementSystem.check_all()
 
@@ -2287,6 +2309,7 @@ func _do_replace_purchase() -> void:
 		_refresh_top()
 		_show_hint("免费货运额度已使用！")
 	if err == "":
+		_refund_unlock_cargo()
 		_check_free_cargo(AppState.current_city_id())
 		AchievementSystem.check_all()
 

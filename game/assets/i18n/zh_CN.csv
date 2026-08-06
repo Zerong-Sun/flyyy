@@ -62,6 +62,7 @@ ui.game.total_flights,搭乘航班
 ui.common.ok,确定
 ui.common.cancel,取消
 ui.common.back,返回
+ui.common.close,关闭
 ui.common.price,价格
 ui.common.qty,数量
 ui.common.total,合计
@@ -182,6 +183,7 @@ ui.event.scarcity,"特产稀缺：本地特色商品紧俏"
 ui.reputation.title,"声望"
 ui.reputation.level,"Lv{level}"
 ui.reputation.xp,"{xp} / {next}"
+ui.reputation.max,"已满级"
 ui.reputation.unlocks,"解锁权益"
 ui.reputation.unlock.lv2,"货运额度 +1 块"
 ui.reputation.unlock.lv3,"冷链行李 8 折"

@@ -57,7 +57,10 @@ func _build() -> void:
 	var xp := AppState.reputation_points
 	var next := ReputationSystem.xp_to_next_level()
 	var xp_label := Label.new()
-	xp_label.text = I18nService.t("ui.reputation.xp", {"xp": xp, "next": next})
+	if next > 0:
+		xp_label.text = I18nService.t("ui.reputation.xp", {"xp": xp, "next": next})
+	else:
+		xp_label.text = I18nService.t("ui.reputation.max")
 	xp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	xp_label.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 	v.add_child(xp_label)
@@ -86,7 +89,7 @@ func _build() -> void:
 		v.add_child(row)
 
 	var close := Button.new()
-	close.text = "关闭"
+	close.text = I18nService.t("ui.common.close")
 	close.pressed.connect(func (): visible = false)
 	close.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	v.add_child(close)

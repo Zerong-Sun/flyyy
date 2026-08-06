@@ -163,7 +163,8 @@ func personal_baggage_limit_kg() -> float:
 	elif trip_cabin == "first":
 		base = float(ticket.get("baggage_first_kg", 100.0))
 	var carry := float(ticket.get("carry_on_kg", 5.0))
-	return base + carry + trip_baggage_extra_kg
+	var bonus := 10.0 if ReputationSystem.has_unlock(ReputationSystem.UNLOCK_LV5) else 0.0
+	return base + carry + trip_baggage_extra_kg + bonus
 
 
 func inventory_weight_kg(cargo_only: bool = false, personal_only: bool = false) -> float:

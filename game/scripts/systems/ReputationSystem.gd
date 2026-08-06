@@ -49,6 +49,10 @@ func active_unlocks() -> Array[String]:
 	return out
 
 
+func has_unlock(key: String) -> bool:
+	return AppState.level >= _level_for_key(key)
+
+
 func unlock_name(key: String) -> String:
 	match key:
 		UNLOCK_LV2:
@@ -62,6 +66,21 @@ func unlock_name(key: String) -> String:
 		UNLOCK_LV6:
 			return "ui.reputation.unlock.lv6"
 	return ""
+
+
+func _level_for_key(key: String) -> int:
+	match key:
+		UNLOCK_LV2:
+			return 2
+		UNLOCK_LV3:
+			return 3
+		UNLOCK_LV4:
+			return 4
+		UNLOCK_LV5:
+			return 5
+		UNLOCK_LV6:
+			return 6
+	return 99
 
 
 func add_points(n: int) -> void:
