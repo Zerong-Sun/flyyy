@@ -8,21 +8,37 @@ const FONT_UI := "res://assets/fonts/NotoSansSC-Regular.otf"
 const FONT_MONO := "res://assets/fonts/JetBrainsMono-Regular.ttf"
 
 
-static func build() -> Theme:
+static func build(font_scale: float = 1.0) -> Theme:
 	var theme := Theme.new()
 	var ui_font := _load_font(FONT_UI)
 	var mono_font := _load_font(FONT_MONO)
 	if ui_font:
 		theme.default_font = ui_font
-	theme.default_font_size = 15
+	theme.default_font_size = _scaled(15, font_scale)
 
 	_set_panel(theme)
-	_set_button(theme)
-	_set_line_edit(theme)
-	_set_item_list(theme)
-	_set_labels(theme, ui_font, mono_font)
-	_set_rich_text(theme, ui_font)
+	_set_button(theme, font_scale)
+	_set_line_edit(theme, font_scale)
+	_set_item_list(theme, font_scale)
+	_set_labels(theme, ui_font, mono_font, font_scale)
+	_set_rich_text(theme, ui_font, font_scale)
 	return theme
+
+
+## Accessibility font-size multiplier from AppState (1.0 / 1.25 / 1.5).
+static func ui_scale() -> float:
+	if AppState == null:
+		return 1.0
+	return float(AppState.font_scale)
+
+
+## Scale a base font size by the current accessibility multiplier.
+static func scaled(base: int) -> int:
+	return _scaled(base, ui_scale())
+
+
+static func _scaled(base: int, font_scale: float) -> int:
+	return int(round(float(base) * font_scale))
 
 
 ## Rounded card StyleBox with soft shadow (shared by airport / flight / market cards).
@@ -90,7 +106,7 @@ static func _set_panel(theme: Theme) -> void:
 	theme.set_stylebox("panel", "Panel", panel)
 
 
-static func _set_button(theme: Theme) -> void:
+static func _set_button(theme: Theme, font_scale: float = 1.0) -> void:
 	var normal := _flat(Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.95), _Colors.BORDER, 6.0)
 	var hover := _flat(Color(_Colors.ACCENT_TEAL.r, _Colors.ACCENT_TEAL.g, _Colors.ACCENT_TEAL.b, 0.35), _Colors.ACCENT_TEAL, 6.0)
 	var pressed := _flat(Color(_Colors.ACCENT_AMBER.r, _Colors.ACCENT_AMBER.g, _Colors.ACCENT_AMBER.b, 0.45), _Colors.ACCENT_AMBER, 6.0)
@@ -104,10 +120,10 @@ static func _set_button(theme: Theme) -> void:
 	theme.set_color("font_hover_color", "Button", _Colors.ICE)
 	theme.set_color("font_pressed_color", "Button", _Colors.TEXT_PRIMARY)
 	theme.set_color("font_disabled_color", "Button", _Colors.TEXT_SECONDARY)
-	theme.set_font_size("font_size", "Button", 15)
+	theme.set_font_size("font_size", "Button", _scaled(15, font_scale))
 
 
-static func _set_line_edit(theme: Theme) -> void:
+static func _set_line_edit(theme: Theme, font_scale: float = 1.0) -> void:
 	var normal := _flat(Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.9), _Colors.BORDER, 4.0)
 	var focus := _flat(Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.95), _Colors.ACCENT_TEAL, 4.0)
 	theme.set_stylebox("normal", "LineEdit", normal)
@@ -116,10 +132,10 @@ static func _set_line_edit(theme: Theme) -> void:
 	theme.set_color("font_color", "LineEdit", _Colors.TEXT_PRIMARY)
 	theme.set_color("font_placeholder_color", "LineEdit", _Colors.TEXT_SECONDARY)
 	theme.set_color("caret_color", "LineEdit", _Colors.ACCENT_AMBER)
-	theme.set_font_size("font_size", "LineEdit", 15)
+	theme.set_font_size("font_size", "LineEdit", _scaled(15, font_scale))
 
 
-static func _set_item_list(theme: Theme) -> void:
+static func _set_item_list(theme: Theme, font_scale: float = 1.0) -> void:
 	var bg := _flat(Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.75), _Colors.BORDER, 4.0)
 	var selected := _flat(Color(_Colors.ACCENT_TEAL.r, _Colors.ACCENT_TEAL.g, _Colors.ACCENT_TEAL.b, 0.4), _Colors.ACCENT_TEAL, 4.0)
 	theme.set_stylebox("panel", "ItemList", bg)
@@ -131,23 +147,23 @@ static func _set_item_list(theme: Theme) -> void:
 	theme.set_color("font_color", "ItemList", _Colors.TEXT_PRIMARY)
 	theme.set_color("font_selected_color", "ItemList", _Colors.ICE)
 	theme.set_color("font_hovered_color", "ItemList", _Colors.ACCENT_TEAL)
-	theme.set_font_size("font_size", "ItemList", 14)
+	theme.set_font_size("font_size", "ItemList", _scaled(14, font_scale))
 
 
-static func _set_labels(theme: Theme, ui_font: FontFile, mono_font: FontFile) -> void:
+static func _set_labels(theme: Theme, ui_font: FontFile, mono_font: FontFile, font_scale: float = 1.0) -> void:
 	theme.set_color("font_color", "Label", _Colors.TEXT_PRIMARY)
-	theme.set_font_size("font_size", "Label", 15)
+	theme.set_font_size("font_size", "Label", _scaled(15, font_scale))
 	if ui_font:
 		theme.set_font("font", "Label", ui_font)
 	# Optional mono for code-like labels via type variation name.
 	if mono_font:
 		theme.set_font("font", "MonoLabel", mono_font)
-		theme.set_font_size("font_size", "MonoLabel", 14)
+		theme.set_font_size("font_size", "MonoLabel", _scaled(14, font_scale))
 		theme.set_color("font_color", "MonoLabel", _Colors.TEXT_PRIMARY)
 
 
-static func _set_rich_text(theme: Theme, ui_font: FontFile) -> void:
+static func _set_rich_text(theme: Theme, ui_font: FontFile, font_scale: float = 1.0) -> void:
 	theme.set_color("default_color", "RichTextLabel", _Colors.TEXT_PRIMARY)
-	theme.set_font_size("normal_font_size", "RichTextLabel", 15)
+	theme.set_font_size("normal_font_size", "RichTextLabel", _scaled(15, font_scale))
 	if ui_font:
 		theme.set_font("normal_font", "RichTextLabel", ui_font)

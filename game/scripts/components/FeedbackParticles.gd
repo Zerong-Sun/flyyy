@@ -42,8 +42,8 @@ func _start() -> void:
 		tween.tween_property(dot, "position", start_pos + Vector2(randf_range(-100, 100), randf_range(200, 500)), duration)
 		tween.parallel().tween_property(dot, "modulate:a", 0.0, duration)
 
-	# Gold flash overlay for W2
-	if palette == "gold_rain":
+	# Gold flash overlay for W2 (skipped under reduced-motion)
+	if palette == "gold_rain" and (AppState == null or not AppState.reduced_animations):
 		var flash := ColorRect.new()
 		flash.color = Color(1.0, 0.84, 0.0, 0.3)
 		flash.size = get_viewport().get_visible_rect().size

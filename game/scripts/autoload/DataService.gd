@@ -207,6 +207,20 @@ func place_name(dict: Dictionary, field: String = "name") -> String:
 	return ""
 
 
+func city_content(c: Dictionary, key: String) -> String:
+	## Locale-aware city body text (Step 3 W5): ui_locale "en" reads `{key}_en`
+	## from the ETL-generated English fields, falling back to the Chinese value.
+	## ui_locale "zh" reads the Chinese field directly.
+	var use_en := false
+	if AppState:
+		use_en = str(AppState.get("ui_locale")) == "en"
+	if use_en:
+		var s := str(c.get(key + "_en", ""))
+		if not s.strip_edges().is_empty():
+			return s
+	return str(c.get(key, ""))
+
+
 func get_product(product_id: String) -> Dictionary:
 	return products_by_id.get(product_id, {})
 

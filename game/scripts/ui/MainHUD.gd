@@ -144,7 +144,7 @@ func _process(_d: float) -> void:
 		_refresh_countdown()
 		_refresh_challenge_label()
 		_last_countdown_s = t
-	if _hint_panel.visible and t - _last_hint_time >= 8.0:
+	if _hint_panel.visible and t - _last_hint_time >= (12.0 if AppState.subtitles_enabled else 8.0):
 		_hint_panel.visible = false
 		_countdown.visible = _countdown.text != ""
 
@@ -152,7 +152,7 @@ func _process(_d: float) -> void:
 func _build_ui() -> void:
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	theme = _ThemeFactory.build()
+	theme = _ThemeFactory.build(AppState.font_scale)
 
 	var top := _bar(_Colors.BG_DEEP)
 	top.set_anchors_preset(PRESET_TOP_WIDE)
@@ -455,7 +455,7 @@ func _configure_top_label(label: Label, label_size: Vector2) -> void:
 	label.clip_text = true
 	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_font_size_override("font_size", _ThemeFactory.scaled(14))
 
 
 func _style_cta_button(btn: Button) -> void:
@@ -845,6 +845,8 @@ func _run_transition_sequence(ticket: Dictionary) -> void:
 		if str(ph.sfx) != "":
 			AudioService.play_sfx(str(ph.sfx))
 		_overlay_label.text = "%s\n%s\n%s\n（过场动画，飞行时间已计入世界时钟）" % [ph.title, base, ph.bar]
+		if AppState.subtitles_enabled:
+			_show_hint(ph.title)
 		_play_transition_fx(str(ph.fx), dest_city)
 		# Advance plane along great-circle during phases
 		if globe and globe.has_method("set_plane_on_route") and not origin.is_empty() and not dest.is_empty():
@@ -865,6 +867,18 @@ func _play_transition_fx(phase: String, dest_city: String = "") -> void:
 		bg.modulate = Color(1, 1, 1, 0.85)
 		bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_overlay_fx.add_child(bg)
+	if AppState.reduced_animations:
+		# Reduced-motion: keep static art, skip all tween animations.
+		if phase == "land" and dest_city != "":
+			var city_lab := Label.new()
+			city_lab.text = dest_city
+			city_lab.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			city_lab.position = Vector2(340, 200)
+			city_lab.size = Vector2(600, 60)
+			city_lab.add_theme_font_size_override("font_size", 36)
+			city_lab.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+			_overlay_fx.add_child(city_lab)
+		return
 	match phase:
 		"takeoff":
 			# Rising runway-light bars from bottom
@@ -1121,14 +1135,30 @@ func _show_city() -> void:
 	_city_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	col.add_child(_city_text)
 	if c.is_empty():
-		_city_text.text = "无城市数据"
+		_city_text.text = I18nService.t("ui.city.no_data")
 		return
-	_city_text.text = "[b]%s[/b]\n\n%s\n\n[b]历史[/b]\n%s\n\n[b]地理[/b]\n%s\n\n[b]经济[/b]\n%s\n\n[b]饮食[/b]\n%s\n\n[b]旅行提示[/b]\n%s" % [
-		DataService.place_name(c, "name"), c.overview, c.history_summary, c.geography_summary, c.economy_summary, c.food_summary, c.travel_note
+	var sec := {
+		"history_summary": I18nService.t("ui.city.history"),
+		"geography_summary": I18nService.t("ui.city.geography"),
+		"economy_summary": I18nService.t("ui.city.economy"),
+		"food_summary": I18nService.t("ui.city.food"),
+		"travel_note": I18nService.t("ui.city.travel"),
+	}
+	var body := "[b]%s[/b]\n\n%s" % [
+		DataService.place_name(c, "name"),
+		DataService.city_content(c, "overview"),
 	]
+	for key in sec:
+		var txt := DataService.city_content(c, key)
+		if txt.strip_edges().is_empty():
+			continue
+		body += "\n\n[b]%s[/b]\n%s" % [sec[key], txt]
+	_city_text.text = body
 	# Low-content-confidence cities get an explicit disclaimer (content_confidence C).
 	if str(c.get("content_confidence", "")) == "C":
-		_city_text.text = "[color=#d9a441]⚠ 资料不足：该城市内容为低置信度自动生成，仅供参考。[/color]\n\n" + _city_text.text
+		_city_text.text = "[color=#d9a441]%s[/color]\n\n%s" % [
+			I18nService.t("ui.city.low_content"), _city_text.text
+		]
 
 
 func _show_market() -> void:
@@ -2905,6 +2935,10 @@ func _cash_roll_animation(delta_margin: float) -> void:
 	var cash_label := _find_cash_label()
 	if not cash_label:
 		return
+	if AppState.reduced_animations:
+		cash_label.text = "$" + str(int(AppState.cash_usd))
+		_refresh_top()
+		return
 
 	var old_value: float = AppState.cash_usd - delta_margin
 	var new_value: float = AppState.cash_usd
@@ -2994,6 +3028,40 @@ func _toggle_pause() -> void:
 		_set_panel_bgm("menu")
 	)
 	v.add_child(night)
+	var font_btn := Button.new()
+	var font_levels := [1.0, 1.25, 1.5]
+	font_btn.text = I18nService.t("ui.settings.font_scale", {"scale": "%d%%" % int(AppState.font_scale * 100.0)})
+	if font_btn.text == "" or font_btn.text.begins_with("ui."):
+		font_btn.text = "字号：%d%%" % int(AppState.font_scale * 100.0)
+	font_btn.pressed.connect(func ():
+		var cur: int = font_levels.find(AppState.font_scale)
+		var next: float = font_levels[(cur + 1) % font_levels.size()] if cur >= 0 else 1.0
+		AppState.font_scale = next
+		_show_hint(I18nService.t("ui.settings.font_scale_changed", {"scale": "%d%%" % int(next * 100.0)}))
+		get_tree().reload_current_scene()
+	)
+	v.add_child(font_btn)
+	var cb_btn := Button.new()
+	var cb_labels := {"off": "关闭", "deuteranopia": "绿盲", "protanopia": "红盲"}
+	var cb_mode := AppState.color_blind
+	cb_btn.text = I18nService.t("ui.settings.color_blind", {"mode": cb_labels.get(cb_mode, cb_mode)})
+	if cb_btn.text == "" or cb_btn.text.begins_with("ui."):
+		cb_btn.text = "色盲模式：%s" % cb_labels.get(cb_mode, cb_mode)
+	cb_btn.pressed.connect(func ():
+		var order := ["off", "deuteranopia", "protanopia"]
+		var idx := order.find(AppState.color_blind)
+		var nxt: String = order[(idx + 1) % order.size()]
+		AppState.color_blind = nxt
+		_toggle_pause()
+	)
+	v.add_child(cb_btn)
+	var subtitles := CheckButton.new()
+	subtitles.text = I18nService.t("ui.settings.subtitles")
+	if subtitles.text == "" or subtitles.text.begins_with("ui."):
+		subtitles.text = "字幕/提示"
+	subtitles.button_pressed = AppState.subtitles_enabled
+	subtitles.toggled.connect(func (on): AppState.subtitles_enabled = on)
+	v.add_child(subtitles)
 	var locale_btn := Button.new()
 	locale_btn.text = "地名语言：English" if AppState.place_locale == "zh" else "地名语言：中文"
 	locale_btn.pressed.connect(func ():

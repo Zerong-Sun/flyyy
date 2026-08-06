@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, NativeModules } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import {
@@ -98,12 +98,29 @@ const initialState = () => ({
   opt24h: true,
   optReduce: false,
   locale: 'en',
+  fontScale: 1,
+  colorBlind: 'off',
 });
 
 function unlockedIds(stats, unlocked = []) {
   return ACHIEVEMENTS
     .filter((a) => unlocked.includes(a.id) || (stats[a.stat] || 0) >= a.goal)
     .map((a) => a.id);
+}
+
+/** Best-effort device language without expo-localization. iOS: SettingsManager,
+ *  Android: I18nManager. Returns 'zh' or 'en'; never throws. */
+function systemLocale() {
+  try {
+    const sm = NativeModules.SettingsManager;
+    const settings = sm && sm.settings;
+    const locale = (settings && (settings.AppleLocale || (settings.AppleLanguages && settings.AppleLanguages[0])))
+      || (NativeModules.I18nManager && NativeModules.I18nManager.localeIdentifier)
+      || '';
+    return String(locale).toLowerCase().startsWith('zh') ? 'zh' : 'en';
+  } catch (err) {
+    return 'en';
+  }
 }
 
 function findInv(inv, selInv) {
@@ -180,7 +197,15 @@ export function useGame() {
     let alive = true;
     AsyncStorage.getItem(SAVE_KEY)
       .then(async (raw) => {
-        if (!alive || !raw) return;
+        if (!alive) return;
+        if (!raw) {
+          // First launch: follow the device language (Step 3 W5 i18n).
+          const sys = systemLocale();
+          if (sys === 'zh') {
+            setState((s) => (interactedRef.current ? s : { ...s, locale: 'zh' }));
+          }
+          return;
+        }
         if (interactedRef.current) return;
         let result;
         try {
@@ -512,6 +537,16 @@ export function useGame() {
   const toggleOpt = useCallback((key) => {
     markInteracted();
     setState((s) => ({ ...s, [key]: !s[key] }));
+  }, [markInteracted]);
+
+  const setFontScale = useCallback((scale) => {
+    markInteracted();
+    setState((s) => ({ ...s, fontScale: [1, 1.25, 1.5].includes(scale) ? scale : 1 }));
+  }, [markInteracted]);
+
+  const cycleColorBlind = useCallback((mode) => {
+    markInteracted();
+    setState((s) => ({ ...s, colorBlind: ['off', 'deuteranopia', 'protanopia'].includes(mode) ? mode : 'off' }));
   }, [markInteracted]);
 
   const setLocale = useCallback((lng) => {
@@ -1158,6 +1193,8 @@ export function useGame() {
     setDragging,
     toggleOpt,
     setLocale,
+    setFontScale,
+    cycleColorBlind,
     closeSheet,
     startGame,
     openProduct,

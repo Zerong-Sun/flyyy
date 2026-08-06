@@ -1,0 +1,44 @@
+{
+  "tutorials": [
+    {
+      "id": "tutorial.new_game",
+      "trigger": "new_game",
+      "title": "Welcome to Global Merchant",
+      "text": "Welcome to Global Merchant. Browse the local market first, then pick your next flight; follow real airline routes to buy local specialties and earn the spread.",
+      "can_skip": true,
+      "show_once": true
+    },
+    {
+      "id": "tutorial.first_buy",
+      "trigger": "first_buy",
+      "title": "Buying goods",
+      "text": "The goods are now in your baggage. Open the Flights tab to see all departing flights. Business class offers more baggage room — great for long-haul trading.",
+      "can_skip": true,
+      "show_once": true
+    },
+    {
+      "id": "tutorial.first_ticket",
+      "trigger": "first_ticket",
+      "title": "Heading to the gate",
+      "text": "Ticket booked. Use Skip to takeoff to jump ahead to boarding, or let game time pass naturally. Note: perishable goods degrade while you fast-forward.",
+      "can_skip": true,
+      "show_once": true
+    },
+    {
+      "id": "tutorial.first_arrive",
+      "trigger": "first_arrive",
+      "title": "Arriving in a new city",
+      "text": "Welcome to a new city. Open the Market tab to see local prices. Buy cheap at the origin, sell dear where it's scarce — that's the key to profit.",
+      "can_skip": true,
+      "show_once": true
+    },
+    {
+      "id": "tutorial.first_sell",
+      "trigger": "first_sell",
+      "title": "First sale",
+      "text": "First sale complete. Watch supply and price gaps between cities and plan a route that maximises your profit margin as you continue your journey.",
+      "can_skip": true,
+      "show_once": true
+    }
+  ]
+}

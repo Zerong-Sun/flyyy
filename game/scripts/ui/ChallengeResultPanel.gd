@@ -9,6 +9,7 @@ signal menu_requested
 const _Economy = preload("res://scripts/systems/EconomySystem.gd")
 const _Colors = preload("res://themes/DemoColors.gd")
 const _ThemeFactory = preload("res://themes/ThemeFactory.gd")
+const _CB = preload("res://themes/ColorBlindPalette.gd")
 
 var _result: Dictionary = {}
 
@@ -103,6 +104,8 @@ func _build() -> void:
 
 
 func _grade_color(grade: String) -> Color:
+	if _CB.active():
+		return _CB.grade_color(grade)
 	match grade:
 		"A":
 			return Color(0.9, 0.8, 0.2)

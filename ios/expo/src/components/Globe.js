@@ -11,7 +11,7 @@ import {
 import { CIDS, CITIES } from '../gameData';
 import { globeSizeFor } from '../gameLogic';
 import { assetSource } from '../assets';
-import { COLORS } from '../theme';
+import { COLORS, pinPaletteFor } from '../theme';
 
 const R = Math.PI / 180;
 
@@ -104,6 +104,9 @@ export function Globe({ game }) {
     const here = k === state.city;
     const seen = state.visited.includes(k);
     const ticketEnd = state.ticket && (k === state.city || k === state.ticket.toId);
+    const pal = pinPaletteFor(state.colorBlind);
+    const cb = !!(state.colorBlind && state.colorBlind !== 'off');
+    const color = here ? pal.here : ticketEnd ? pal.ticketEnd : seen ? pal.seen : pal.rest;
     return {
       id: k,
       iata: c.iata,
@@ -112,7 +115,11 @@ export function Globe({ game }) {
       y: p.y,
       opacity: p.vis ? (here || ticketEnd ? 1 : 0.4 + p.edge * 0.6) : 0,
       size: here || ticketEnd ? 10 : 6,
-      color: here ? COLORS.teal : ticketEnd ? COLORS.orange : seen ? COLORS.teal : COLORS.blue,
+      // Non-colour cues under colour-blind mode: here gets a ring + bigger dot.
+      border: cb && here ? COLORS.text : cb && ticketEnd ? COLORS.gold : null,
+      borderWidth: cb && (here || ticketEnd) ? 2 : 0,
+      scale: cb && here ? 1.3 : cb && ticketEnd ? 1.15 : 1,
+      color,
       label: p.vis && (here || ticketEnd || (seen && p.edge > 0.5)),
       here,
       vis: p.vis,
@@ -207,12 +214,14 @@ export function Globe({ game }) {
                 style={[
                   styles.pin,
                   {
-                    width: p.size,
-                    height: p.size,
-                    borderRadius: p.size / 2,
+                    width: p.size * p.scale,
+                    height: p.size * p.scale,
+                    borderRadius: (p.size * p.scale) / 2,
                     backgroundColor: p.color,
-                    marginLeft: -p.size / 2,
-                    marginTop: -p.size / 2,
+                    marginLeft: -(p.size * p.scale) / 2,
+                    marginTop: -(p.size * p.scale) / 2,
+                    borderWidth: p.borderWidth,
+                    borderColor: p.border || 'transparent',
                     shadowColor: p.here ? COLORS.teal : '#040E18',
                     shadowRadius: p.here ? 7 : 3,
                   },

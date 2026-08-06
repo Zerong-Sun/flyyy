@@ -76,4 +76,4 @@ def test_theme_fonts_and_colors_present():
     assert "0B1C2C" in colors  # bg-deep
     factory = (root / "game" / "themes" / "ThemeFactory.gd").read_text(encoding="utf-8")
     assert "NotoSansSC-Regular.otf" in factory
-    assert "build()" in factory
+    assert "static func build(" in factory

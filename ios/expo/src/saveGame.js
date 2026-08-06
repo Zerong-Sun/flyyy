@@ -12,6 +12,7 @@ export const PERSIST = [
   'profit', 'km', 'savedAt', 'intro', 'focusDest', 'unlockedAch',
   'optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce',
   'locale',
+  'fontScale', 'colorBlind',
   'rep', 'level',
 ];
 

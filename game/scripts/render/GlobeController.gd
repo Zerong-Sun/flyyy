@@ -5,6 +5,7 @@ class_name GlobeController
 const EARTH_RADIUS := 10.0
 const GRID_RADIUS := 10.08
 const PIN_HEIGHT := 0.34
+const _CB = preload("res://themes/ColorBlindPalette.gd")
 
 signal airport_clicked(airport_id: String)
 
@@ -341,6 +342,7 @@ func focus_airport(airport_id: String) -> void:
 
 
 func _update_markers() -> void:
+	var cb := _CB.active()
 	for id in _airport_nodes.keys():
 		var mi: MeshInstance3D = _airport_nodes[id]
 		var mat: StandardMaterial3D = mi.material_override
@@ -349,24 +351,43 @@ func _update_markers() -> void:
 		if lab:
 			lab.visible = show_label
 		if id == AppState.current_airport_id:
-			mat.albedo_color = Color(0.28, 0.88, 0.48)
-			mat.emission = Color(0.08, 0.42, 0.18)
-			mat.emission_energy_multiplier = 0.7
+			mi.scale = Vector3.ONE * (_CB.SCALE_CURRENT if cb else 1.0)
+			if cb:
+				mat.albedo_color = _CB.PIN_CURRENT
+				mat.emission = _CB.EMISSION_CURRENT
+				mat.emission_energy_multiplier = 0.9
+			else:
+				mat.albedo_color = Color(0.28, 0.88, 0.48)
+				mat.emission = Color(0.08, 0.42, 0.18)
+				mat.emission_energy_multiplier = 0.7
 			mat.metallic = 0.35
 			mat.roughness = 0.28
 		elif id == _selected_id:
-			mat.albedo_color = Color(0.92, 0.48, 0.26)
-			mat.emission = Color(0.5, 0.18, 0.06)
-			mat.emission_energy_multiplier = 0.75
+			mi.scale = Vector3.ONE * (_CB.SCALE_SELECTED if cb else 1.0)
+			if cb:
+				mat.albedo_color = _CB.PIN_SELECTED
+				mat.emission = _CB.EMISSION_SELECTED
+				mat.emission_energy_multiplier = 0.9
+			else:
+				mat.albedo_color = Color(0.92, 0.48, 0.26)
+				mat.emission = Color(0.5, 0.18, 0.06)
+				mat.emission_energy_multiplier = 0.75
 			mat.metallic = 0.35
 			mat.roughness = 0.28
 		elif AppState.visited_airports.has(id):
-			mat.albedo_color = Color(0.92, 0.78, 0.28)
-			mat.emission = Color(0.48, 0.34, 0.06)
-			mat.emission_energy_multiplier = 0.55
+			mi.scale = Vector3.ONE * (_CB.SCALE_VISITED if cb else 1.0)
+			if cb:
+				mat.albedo_color = _CB.PIN_VISITED
+				mat.emission = _CB.EMISSION_VISITED
+				mat.emission_energy_multiplier = 0.7
+			else:
+				mat.albedo_color = Color(0.92, 0.78, 0.28)
+				mat.emission = Color(0.48, 0.34, 0.06)
+				mat.emission_energy_multiplier = 0.55
 			mat.metallic = 0.3
 			mat.roughness = 0.32
 		else:
+			mi.scale = Vector3.ONE * (_CB.SCALE_UNVISITED if cb else 1.0)
 			mat.albedo_color = Color(0.58, 0.60, 0.64)
 			mat.emission = Color(0.12, 0.13, 0.15)
 			mat.emission_energy_multiplier = 0.45

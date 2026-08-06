@@ -21,6 +21,10 @@ OUT = ROOT / "out"
 CONTENT = ROOT / "content"
 GAME_DATA = ROOT.parents[0] / "game" / "data"
 
+# Allow `from etl.content...` imports when run as a plain script / via runpy.
+sys.path.insert(0, str(ROOT.parent))
+from etl.content.city_content_en import FIELD_EN_MAP, apply_en_fields
+
 EARTH_R_KM = 6371.0
 
 
@@ -1389,6 +1393,9 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
 
     GAME_DATA.mkdir(parents=True, exist_ok=True)
 
+    # English city-text fields (Step 3 W5): Demo 20 hubs authored, rest templated.
+    cities = apply_en_fields(cities)
+
     # ── world.json (lightweight core) ──
     economy_out = {
             "starting_cash_usd": eco["starting_cash_usd"],
@@ -1716,6 +1723,12 @@ def validate(airports, routes, flights, cities, products) -> None:
     authored = [c for c in cities if c.get("content_confidence") != "C"]
     for c in authored:
         assert len(c.get("short_description", "")) >= 60, f"{c['city_id']} short desc too short"
+    # i18n gate (Step 3 W5): every city must carry the full *_en set.
+    missing_en = [
+        c["city_id"] for c in cities
+        if any(not str(c.get(k, "")).strip() for k in FIELD_EN_MAP.values())
+    ]
+    assert not missing_en, f"cities missing *_en fields: {missing_en}"
     no_category_souvenir = any(p.get("category") == "纪念品" for p in products)
     if no_category_souvenir:
         print("WARN: souvenir ('纪念品') category still present")

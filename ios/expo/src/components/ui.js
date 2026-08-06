@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Modal,
   Pressable,
@@ -8,7 +8,11 @@ import {
   StyleSheet,
 } from 'react-native';
 import { assetSource } from '../assets';
-import { COLORS } from '../theme';
+import { COLORS, A11yContext } from '../theme';
+
+function useA11y() {
+  return useContext(A11yContext) || { fontScale: 1, colorBlind: 'off' };
+}
 
 export function Card({ children, style }) {
   return <View style={[styles.card, style]}>{children}</View>;
@@ -41,6 +45,7 @@ export function Button({
   disabled,
   accessibilityLabel,
 }) {
+  const { fontScale } = useA11y();
   const variantStyle = {
     primary: styles.btnPrimary,
     secondary: styles.btnSecondary,
@@ -75,7 +80,7 @@ export function Button({
         style,
       ]}
     >
-      <ButtonLabel style={[styles.btnText, variantText, textStyle]}>
+      <ButtonLabel style={[styles.btnText, variantText, { fontSize: 16 * fontScale }, textStyle]}>
         {children}
       </ButtonLabel>
     </Pressable>
@@ -98,10 +103,11 @@ export function AssetIcon({ path, size = 24, tintColor, style }) {
 }
 
 export function ScreenTitle({ title, subtitle, style }) {
+  const { fontScale } = useA11y();
   return (
     <View style={[styles.titleWrap, style]}>
-      <Text style={styles.title}>{title}</Text>
-      {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+      <Text style={[styles.title, { fontSize: 32 * fontScale, lineHeight: 34 * fontScale }]}>{title}</Text>
+      {subtitle ? <Text style={[styles.subtitle, { fontSize: 13 * fontScale }]}>{subtitle}</Text> : null}
     </View>
   );
 }
@@ -145,6 +151,7 @@ export function SegControl({ options, value, onChange, style }) {
 }
 
 export function Toggle({ label, sub, value, onToggle }) {
+  const { fontScale } = useA11y();
   return (
     <Pressable
       style={styles.toggleRow}
@@ -155,8 +162,8 @@ export function Toggle({ label, sub, value, onToggle }) {
       accessibilityHint={sub}
     >
       <View style={styles.toggleBody}>
-        <Text style={styles.toggleLabel}>{label}</Text>
-        {sub ? <Text style={styles.toggleSub}>{sub}</Text> : null}
+        <Text style={[styles.toggleLabel, { fontSize: 15 * fontScale }]}>{label}</Text>
+        {sub ? <Text style={[styles.toggleSub, { fontSize: 12 * fontScale, lineHeight: 16 * fontScale }]}>{sub}</Text> : null}
       </View>
       <View style={[styles.track, value && styles.trackOn]} accessible={false}>
         <View style={[styles.knob, value && styles.knobOn]} />

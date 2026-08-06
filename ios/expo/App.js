@@ -12,7 +12,7 @@ import {
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useGame } from './src/hooks/useGame';
 import { TABS, CUTSCENE_ART } from './src/gameData';
-import { COLORS } from './src/theme';
+import { COLORS, A11yContext } from './src/theme';
 import { AssetIcon } from './src/components/ui';
 import { assetSource } from './src/assets';
 import { GlobeScreen } from './src/components/GlobeScreen';
@@ -91,76 +91,78 @@ function GameApp() {
   }
 
   return (
-    <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
-      <StatusBar barStyle="light-content" />
+    <A11yContext.Provider value={{ fontScale: state.fontScale || 1, colorBlind: state.colorBlind || 'off' }}>
+      <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
+        <StatusBar barStyle="light-content" />
 
-      <View style={styles.header}>
-        <View style={styles.brandRow}>
-          <AssetIcon path="assets/logo_mark.webp" size={22} />
-          <Text style={styles.brand}>{t('brand', 'Airborne Trader')}</Text>
-        </View>
-        <View style={styles.headerMeta}>
-          <Text style={styles.cityLabel}>{city.iata}</Text>
-          <Text style={styles.clock}>{clockText}</Text>
-          <View style={styles.cashRow}>
-            <View style={styles.cashDot} />
-            <Text style={styles.cash}>{money(state.cash)}</Text>
+        <View style={styles.header}>
+          <View style={styles.brandRow}>
+            <AssetIcon path="assets/logo_mark.webp" size={22} />
+            <Text style={[styles.brand, { fontSize: 14 * (state.fontScale || 1) }]}>{t('brand', 'Airborne Trader')}</Text>
+          </View>
+          <View style={styles.headerMeta}>
+            <Text style={[styles.cityLabel, { fontSize: 13 * (state.fontScale || 1) }]}>{city.iata}</Text>
+            <Text style={[styles.clock, { fontSize: 13 * (state.fontScale || 1) }]}>{clockText}</Text>
+            <View style={styles.cashRow}>
+              <View style={styles.cashDot} />
+              <Text style={[styles.cash, { fontSize: 13 * (state.fontScale || 1) }]}>{money(state.cash)}</Text>
+            </View>
           </View>
         </View>
-      </View>
 
-      <ScrollView
-        ref={scrollRef}
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled
-      >
-        <TabContent game={game} />
-      </ScrollView>
+        <ScrollView
+          ref={scrollRef}
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled
+        >
+          <TabContent game={game} />
+        </ScrollView>
 
-      {state.toast ? (
-        <View style={styles.toast}>
-          <View
-            style={[
-              styles.toastDot,
-              { backgroundColor: state.toastKind === 'bad' ? COLORS.red : COLORS.teal },
-            ]}
-          />
-          <Text style={styles.toastText}>{state.toast}</Text>
-        </View>
-      ) : null}
+        {state.toast ? (
+          <View style={styles.toast}>
+            <View
+              style={[
+                styles.toastDot,
+                { backgroundColor: state.toastKind === 'bad' ? COLORS.red : COLORS.teal },
+              ]}
+            />
+            <Text style={[styles.toastText, { fontSize: 14 * (state.fontScale || 1) }]}>{state.toast}</Text>
+          </View>
+        ) : null}
 
-      <SafeAreaView edges={['bottom']} style={styles.tabBarSafe}>
-        <View style={styles.tabBar}>
-          {TABS.map((tab) => {
-            const active = state.tab === tab.k;
-            return (
-              <Pressable
-                key={tab.k}
-                onPress={() => setTab(tab.k)}
-                accessibilityRole="tab"
-                accessibilityState={{ selected: active }}
-                accessibilityLabel={t('tab_' + tab.k, tab.label)}
-                style={({ pressed }) => [styles.tabItem, pressed && styles.tabPressed]}
-              >
-                <AssetIcon
-                  path={tab.icon}
-                  size={25}
-                  tintColor={active ? COLORS.orange : COLORS.muted2}
-                />
-                <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
-                  {t('tab_' + tab.k, tab.label)}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
+        <SafeAreaView edges={['bottom']} style={styles.tabBarSafe}>
+          <View style={styles.tabBar}>
+            {TABS.map((tab) => {
+              const active = state.tab === tab.k;
+              return (
+                <Pressable
+                  key={tab.k}
+                  onPress={() => setTab(tab.k)}
+                  accessibilityRole="tab"
+                  accessibilityState={{ selected: active }}
+                  accessibilityLabel={t('tab_' + tab.k, tab.label)}
+                  style={({ pressed }) => [styles.tabItem, pressed && styles.tabPressed]}
+                >
+                  <AssetIcon
+                    path={tab.icon}
+                    size={25}
+                    tintColor={active ? COLORS.orange : COLORS.muted2}
+                  />
+                  <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
+                    {t('tab_' + tab.k, tab.label)}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </SafeAreaView>
+
+        <MarketSheets game={game} />
+        <OverlaySheets game={game} />
       </SafeAreaView>
-
-      <MarketSheets game={game} />
-      <OverlaySheets game={game} />
-    </SafeAreaView>
+    </A11yContext.Provider>
   );
 }
 

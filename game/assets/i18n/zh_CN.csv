@@ -143,6 +143,10 @@ ui.achievements.collect,"收集"
 ui.notify.achievement,"✨ 成就解锁：{name}"
 ui.settings.reduced_anims,"减少动态效果"
 ui.settings.night_bgm,"夜时 BGM 变奏"
+ui.settings.font_scale,"字号：{scale}"
+ui.settings.font_scale_changed,"字号已调整为 {scale}"
+ui.settings.color_blind,"色盲模式：{mode}"
+ui.settings.subtitles,"字幕/提示"
 ui.mode.title,"选择游戏模式"
 ui.mode.sandbox,"沙盒"
 ui.mode.challenge,"30日挑战"
@@ -177,6 +181,7 @@ ui.codex.progress,"{cur} / {total}"
 ui.codex.undiscovered,"未解锁"
 ui.codex.empty,"暂无内容"
 ui.codex.route_count,"{n} 次"
+ui.codex.low_content,"（资料不足）"
 ui.event.festival,"节日溢价：本地特色商品涨价"
 ui.event.weather_cold,"冷链波动：冷链商品买卖价受影响"
 ui.event.scarcity,"特产稀缺：本地特色商品紧俏"
@@ -190,4 +195,11 @@ ui.reputation.unlock.lv3,"冷链行李 8 折"
 ui.reputation.unlock.lv4,"情报预测 7 折"
 ui.reputation.unlock.lv5,"随身行李 +10kg"
 ui.reputation.unlock.lv6,"称号「环球航商」"
+ui.city.no_data,"无城市数据"
+ui.city.history,历史
+ui.city.geography,地理
+ui.city.economy,经济
+ui.city.food,饮食
+ui.city.travel,旅行提示
+ui.city.low_content,"⚠ 资料不足：该城市内容为低置信度自动生成，仅供参考。"
 

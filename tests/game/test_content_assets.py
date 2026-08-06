@@ -451,3 +451,58 @@ def test_achievement_icon_refs_resolve_to_files():
     )
 
 
+def _read_csv_keys(name: str) -> set[str]:
+    with (I18N / name).open(encoding="utf-8", newline="") as f:
+        return {r["keys"] for r in csv.DictReader(f)}
+
+
+def test_en_csv_key_set_mirrors_zh():
+    zh = _read_csv_keys("zh_CN.csv")
+    en = _read_csv_keys("en.csv")
+    assert en == zh, f"en.csv keys differ: only_en={sorted(en - zh)}, only_zh={sorted(zh - en)}"
+    # New i18n city-panel keys landed in both locales.
+    for k in (
+        "ui.city.no_data", "ui.city.history", "ui.city.geography",
+        "ui.city.economy", "ui.city.food", "ui.city.travel", "ui.city.low_content",
+    ):
+        assert k in zh, k
+
+
+def test_en_tutorial_and_attribution_exist():
+    zh_tut = json.loads((I18N / "tutorial_zh.json").read_text(encoding="utf-8"))
+    en_tut = json.loads((I18N / "tutorial_en.json").read_text(encoding="utf-8"))
+    zh_trig = {t["trigger"] for t in zh_tut["tutorials"]}
+    en_trig = {t["trigger"] for t in en_tut["tutorials"]}
+    assert zh_trig <= en_trig, f"en tutorial missing triggers: {zh_trig - en_trig}"
+    for t in en_tut["tutorials"]:
+        assert 20 <= len(t["text"]) <= 200
+    attr_en = (I18N / "attribution_en.txt").read_text(encoding="utf-8")
+    assert "OurAirports" in attr_en
+    assert "OpenFlights" in attr_en
+
+
+def test_all_cities_have_english_content_fields():
+    """Step 3 W5 i18n gate: every city ships the full *_en field set.
+
+    Demo 20 hubs carry hand-authored English; the rest use the ETL template.
+    A missing *_en field would blank the city panel under English UI.
+    """
+    world = json.loads((GAME / "data" / "world.json").read_text(encoding="utf-8"))
+    cities = world["cities"]
+    assert len(cities) >= 500
+    en_fields = (
+        "short_description_en", "overview_en", "history_summary_en",
+        "geography_summary_en", "economy_summary_en", "food_summary_en",
+        "travel_note_en",
+    )
+    missing = [
+        c["city_id"] for c in cities
+        if any(not str(c.get(k, "")).strip() for k in en_fields)
+    ]
+    assert not missing, f"cities missing *_en fields: {missing}"
+    # Hub corpus sanity: a couple of authored hubs carry real English.
+    by_id = {c["city_id"]: c for c in cities}
+    assert len(by_id["atlanta"]["overview_en"]) >= 100
+    assert "metro" in by_id["tokyo"]["overview_en"].lower()
+
+

@@ -138,7 +138,10 @@ func _build_city_tab() -> void:
 		var is_visited := visited.has(str(city_id))
 		var name := DataService.place_name(c, "name")
 		var country := str(c.get("country_zh", ""))
-		rows.append({"sort": name, "text": "%s · %s" % [name, country], "unlocked": is_visited})
+		var suffix := ""
+		if str(c.get("content_confidence", "")) == "C":
+			suffix = I18nService.t("ui.codex.low_content")
+		rows.append({"sort": name, "text": "%s · %s%s" % [name, country, suffix], "unlocked": is_visited})
 	rows.sort_custom(func (a, b): return str(a.sort) < str(b.sort))
 	for r in rows:
 		_row(str(r.text), bool(r.unlocked))

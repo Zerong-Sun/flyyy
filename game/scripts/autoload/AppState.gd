@@ -38,6 +38,10 @@ var last_baggage_cost: float = 0.0
 var reduced_animations: bool = false
 var night_bgm_enabled: bool = true
 var place_locale: String = "zh"  # "zh" or "en" — display language for place names only
+var ui_locale: String = "zh"  # "zh" or "en" — display language for the whole UI
+var font_scale: float = 1.0  # accessibility font multiplier (1.0 / 1.25 / 1.5)
+var color_blind: String = "off"  # "off" | "deuteranopia" | "protanopia"
+var subtitles_enabled: bool = false
 var unlocked_achievements: Dictionary = {}  # id -> true
 var stats: Dictionary = {
 	"total_flight_segments": 0,
@@ -315,7 +319,7 @@ func log_sell_transaction(sell_city: String, product_id: String, qty: int,
 
 
 func to_dict() -> Dictionary:
-	return {
+	var d := {
 		"save_version": SAVE_VERSION,
 		"saved_unix": Time.get_unix_time_from_system(),
 		"save_id": save_id,
@@ -348,9 +352,18 @@ func to_dict() -> Dictionary:
 		"reduced_animations": reduced_animations,
 		"night_bgm_enabled": night_bgm_enabled,
 		"place_locale": place_locale,
+		"ui_locale": ui_locale,
+		"font_scale": font_scale,
+		"color_blind": color_blind,
+		"subtitles_enabled": subtitles_enabled,
 		"unlocked_achievements": unlocked_achievements,
 		"stats": stats,
 	}
+	if AudioService != null:
+		d["audio_muted"] = AudioService.is_muted()
+		d["audio_bgm_volume"] = AudioService.get_bgm_volume()
+		d["audio_sfx_volume"] = AudioService.get_sfx_volume()
+	return d
 
 
 func from_dict(d: Dictionary) -> void:
@@ -389,6 +402,10 @@ func from_dict(d: Dictionary) -> void:
 	reduced_animations = bool(d.get("reduced_animations", false))
 	night_bgm_enabled = bool(d.get("night_bgm_enabled", true))
 	place_locale = str(d.get("place_locale", "zh"))
+	ui_locale = str(d.get("ui_locale", "zh"))
+	font_scale = float(d.get("font_scale", 1.0))
+	color_blind = str(d.get("color_blind", "off"))
+	subtitles_enabled = bool(d.get("subtitles_enabled", false))
 	unlocked_achievements = d.get("unlocked_achievements", {})
 	stats = _default_stats()
 	var loaded_stats: Dictionary = d.get("stats", {})
@@ -398,5 +415,9 @@ func from_dict(d: Dictionary) -> void:
 		_mark_visit(current_airport_id)
 	if game_started:
 		GameClock.start_clock()
+	if AudioService != null:
+		AudioService.set_muted(bool(d.get("audio_muted", false)))
+		AudioService.set_bus_volume("BGM", float(d.get("audio_bgm_volume", AudioService.get_bgm_volume())))
+		AudioService.set_bus_volume("SFX", float(d.get("audio_sfx_volume", AudioService.get_sfx_volume())))
 	EventBus.cash_changed.emit()
 	EventBus.inventory_changed.emit()

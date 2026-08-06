@@ -53,6 +53,12 @@ func _ensure_buses() -> void:
 	var bgm_i := AudioServer.get_bus_index("BGM")
 	if bgm_i >= 0:
 		_bgm_base_db = AudioServer.get_bus_volume_db(bgm_i)
+	# Master limiter: guard against clipped peaks after LUFS normalization.
+	var master_i := AudioServer.get_bus_index("Master")
+	if master_i >= 0 and AudioServer.get_bus_effect_count(master_i) == 0:
+		var limiter := AudioEffectLimiter.new()
+		limiter.ceiling_db = -0.1
+		AudioServer.add_bus_effect(master_i, limiter, 0)
 
 
 func _load_manifest() -> void:

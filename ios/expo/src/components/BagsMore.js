@@ -130,6 +130,8 @@ export function MoreScreen({ game }) {
     saveSub,
     toggleOpt,
     setLocale,
+    setFontScale,
+    cycleColorBlind,
     t,
     tf,
     achievements,
@@ -372,6 +374,39 @@ export function MoreScreen({ game }) {
                 onPress={() => setLocale(lng)}
               >
                 {lng === 'en' ? 'English' : '中文'}
+              </Button>
+            ))}
+          </View>
+        </Card>
+
+        <Card style={styles.settingsCard}>
+          <View style={styles.settingsRow}>
+            <View style={styles.settingsBody}>
+              <Text style={styles.settingsTitle}>{t('settings_a11y_title', 'Accessibility')}</Text>
+              <Text style={styles.settingsSub}>{t('settings_a11y_sub', 'Text size and colour-blind friendly markers.')}</Text>
+            </View>
+          </View>
+          <View style={styles.langRow}>
+            {([1, 1.25, 1.5]).map((scale) => (
+              <Button
+                key={scale}
+                variant={state.fontScale === scale ? 'primary' : 'secondary'}
+                style={styles.langBtn}
+                onPress={() => setFontScale(scale)}
+              >
+                {`${Math.round(scale * 100)}%`}
+              </Button>
+            ))}
+          </View>
+          <View style={styles.langRow}>
+            {(['off', 'deuteranopia', 'protanopia']).map((mode) => (
+              <Button
+                key={mode}
+                variant={state.colorBlind === mode ? 'primary' : 'secondary'}
+                style={styles.langBtn}
+                onPress={() => cycleColorBlind(mode)}
+              >
+                {mode === 'off' ? t('settings_cb_off', 'Standard') : mode === 'deuteranopia' ? t('settings_cb_deut', 'Green-blind') : t('settings_cb_prot', 'Red-blind')}
               </Button>
             ))}
           </View>

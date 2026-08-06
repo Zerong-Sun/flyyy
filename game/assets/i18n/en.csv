@@ -1,0 +1,204 @@
+keys,en
+ui.new_game.title,Choose starting airport
+ui.new_game.random,Random airport
+ui.new_game.start,Start at selected airport
+ui.new_game.search,Search airports
+ui.new_game.no_results,No matching airports
+ui.tab.city,City
+ui.tab.market,Market
+ui.tab.flights,Flights
+ui.tab.inventory,Inventory
+ui.tab.log,Travel Log
+ui.tab.attribution,Sources
+ui.ff.button,Skip to takeoff
+ui.ff.confirm,Jump about {hours} game-hours to takeoff. Perishable goods will decay and market prices refresh. Confirm?
+ui.ticket.economy,Economy ticket
+ui.ticket.business,Business ticket (10x)
+ui.ticket.refund,Refund ticket (30% fee)
+ui.ticket.no_ticket,No valid ticket held
+ui.boarding.title,Boarding in progress (cannot cancel)
+ui.boarding.countdown,Boarding in {minutes} min
+ui.notify.perishable_decay,Some goods are degrading — sell soon
+ui.notify.boarding_soon,{flight} boards in 30 minutes
+ui.notify.arrived,Arrived in {city} ({iata})
+ui.notify.left_boarding,Missed boarding for {flight} — please book another ticket
+ui.confirm.refund,Refund {flight}? A 30% fee will be charged; {amount} returned. This cannot be undone.
+ui.confirm.purchase,Buy {qty}×{product} for {amount}?
+ui.confirm.baggage_extend,Buy {type} baggage upgrade (+{kg}kg) for {amount}?
+ui.confirm.quit,Quit the game? Unsaved progress will be lost.
+ui.error.overweight,Baggage overweight: buy an upgrade or use cargo
+ui.error.insufficient_funds,Not enough funds: need {need}, have {have}
+ui.error.no_flights,No bookable scheduled flights from this airport
+ui.error.max_baggage,Maximum baggage capacity reached
+ui.error.expired_product,{product} has expired and cannot be sold
+ui.error.already_boarding,Boarding is in progress; cannot do that now
+ui.error.save_failed,Save failed: {reason}
+ui.empty.inventory,Inventory is empty. Shop for local specialties at the market.
+ui.empty.flights,No departing flights available
+ui.empty.market,No products on sale in this market
+ui.empty.log,No travels yet. Pick a starting airport to set off.
+ui.empty.save,No save found
+ui.settings.title,Settings
+ui.settings.volume_master,Master volume
+ui.settings.volume_bgm,Music
+ui.settings.volume_sfx,Sound effects
+ui.settings.back,Back
+ui.baggage.title,Baggage
+ui.baggage.weight_used,{used} / {max} kg used
+ui.baggage.extend,Extend baggage capacity
+ui.baggage.extend_light,Light +10kg ($70)
+ui.baggage.extend_standard,Standard +20kg ($125)
+ui.baggage.extend_heavy,Heavy +50kg ($280)
+ui.save.auto,Auto-saving...
+ui.save.complete,Saved
+ui.save.manual,Save now
+ui.save.load,Load save
+ui.game.bankrupt,Out of funds — you're bankrupt. The trading trip ends here.
+ui.game.start_new,New game
+ui.game.stats,Trip stats
+ui.game.total_cities,Cities visited
+ui.game.total_profit,Total profit
+ui.game.total_flights,Flights taken
+ui.common.ok,OK
+ui.common.cancel,Cancel
+ui.common.back,Back
+ui.common.close,Close
+ui.common.price,Price
+ui.common.qty,Qty
+ui.common.total,Total
+ui.common.buy,Buy
+ui.common.sell,Sell
+ui.common.loading,Loading...
+ui.disclaimer,The flight network is reconstructed from public aviation data and does not represent real ticket information.
+ui.notify.quality_decay,{product} quality dropped to {level} — sell soon.
+ui.notify.product_expiring,{product} expires in {hours}h — sell or discard soon.
+ui.notify.product_rotten,{product} fully expired; removed from inventory.
+ui.notify.flight_missed,Missed boarding for {flight}; ticket void. Please book again.
+ui.notify.last_call,{flight} final boarding call — head to the gate now.
+ui.notify.flight_departed,{flight} departed {origin} for {dest}.
+ui.notify.low_funds,Funds below {threshold} — spend carefully.
+ui.notify.profit_milestone,Cumulative profit passed {amount}!
+ui.save.reminder,{minutes} minutes since last save — consider saving manually.
+ui.save.before_flight,Boarding soon. Save manually first?
+ui.refund.refunded,{flight} refunded; {amount} returned.
+ui.refund.cannot_refund,Boarding has started; cannot refund.
+ui.transition.departing,Leaving {city}...
+ui.transition.arriving,Arriving at {city}...
+ui.transition.flight_info,{flight} | {origin} → {dest} | {distance}km | {cabin}
+ui.loading.tip_1,Around 100,000 commercial flights depart worldwide every day, linking over 17,000 city pairs.
+ui.loading.tip_2,Hartsfield-Jackson (ATL) has been the world's busiest airport nearly every year since 1998.
+ui.loading.tip_3,A Boeing 777 cruises at about 900 km/h — 250 metres every second.
+ui.loading.tip_4,Saffron is one of the most expensive spices on Earth; per gram it can cost more than gold.
+ui.loading.tip_5,Hong Kong International was built on reclaimed land. Until 1998, Kai Tak was one of the world's hardest airports to land at.
+ui.loading.tip_6,Amsterdam Schiphol sits about 3 m below sea level on reclaimed Dutch polder.
+ui.loading.tip_7,Singapore Changi has repeatedly been voted the world's best airport, with butterfly gardens and an indoor waterfall.
+ui.loading.tip_8,Flying Tokyo to London, the outbound leg is about 1h longer due to Earth's rotation and the jet stream.
+ui.loading.tip_9,OpenFlights contains 60,000+ airline city-pair routes.
+ui.loading.tip_10,Airliners cruise around 10,000 m where the air is thin, drag is low, and fuel efficiency peaks.
+ui.loading.tip_11,Beijing Capital T3 covers about 980,000 m² — among the largest single terminals in recent decades.
+ui.loading.tip_12,Tea is the second most consumed beverage after water, with origins traced to the Shang dynasty.
+ui.loading.tip_13,Istanbul is the only city spanning two continents; the Bosphorus separates Europe and Asia.
+ui.loading.tip_14,Dubai's duty-free sales exceed $2B a year — one of the largest airport retail spaces in the world.
+ui.loading.tip_15,O'Hare's IATA code ORD comes from its former name "Orchard Field".
+sell_console_1,It's just tuition
+sell_console_2,Make it back next trip
+sell_console_3,That's business
+sell_console_4,This city let me down
+sell_console_5,Cutting losses is a win too
+sell_console_big_loss,Big loss... but the trip itself was worth it
+celebration_w1_1,Nice one!
+celebration_w1_2,Good eye
+celebration_w1_3,Right path
+celebration_w2_1,Legendary trade!
+celebration_w2_2,You own this route
+celebration_w2_3,The competition is jealous
+sell_result_title_l2,Trade loss
+sell_result_title_l1,Trade loss
+sell_result_title_w0,Trade successful
+sell_result_title_w1,Big profit!
+sell_result_title_w2,Grand slam!
+sell_result_title_w2_discovery,✨ Discovery bonus — grand slam!
+sell_result_milestone,Wealth milestone!
+sell_result_continue,Continue
+ui.intel.upgrade,🔍 Precise forecast
+ui.intel.cost,$200
+ui.product.inherited_region,Regional specialty
+ui.product.inherited_country,National standard good
+ui.transfer.tab,Connecting
+ui.transfer.hub,via {hub}
+ui.transfer.price,Estimated ${price}
+ui.transfer.disclaimer,Connecting trips are reasonable assemblies on the rebuilt network, not real tickets
+ui.recommend.title,Recommended routes
+ui.recommend.hot_count,{n} hot sellers
+ui.recommend.direct,Direct
+ui.recommend.transfer,Connecting
+ui.tab.achievements,Achievements
+ui.achievements.all,All
+ui.achievements.unlocked,Unlocked
+ui.achievements.locked,Locked
+ui.achievements.explore,Explore
+ui.achievements.trade,Trade
+ui.achievements.flight,Flight
+ui.achievements.collect,Collect
+ui.notify.achievement,✨ Achievement unlocked: {name}
+ui.settings.reduced_anims,Reduce motion
+ui.settings.night_bgm,Night BGM variant
+ui.settings.font_scale,Text size: {scale}
+ui.settings.font_scale_changed,Text size set to {scale}
+ui.settings.color_blind,Colour-blind mode: {mode}
+ui.settings.subtitles,Subtitles / hints
+ui.mode.title,Choose game mode
+ui.mode.sandbox,Sandbox
+ui.mode.challenge,30-Day Challenge
+ui.mode.collector,Collector
+ui.mode.sandbox.desc,Free travel with no time limit. Best for learning the game.
+ui.mode.challenge.desc,Trade the globe within 30 days; 8 metrics settle into a score.
+ui.mode.collector.desc,Collect products and cities; unlock all collect achievements.
+ui.challenge.days_left,{days} days left
+ui.challenge.title,30-Day Challenge result
+ui.challenge.restart,Run it again
+ui.challenge.to_menu,Back to menu
+ui.challenge.metric.net_worth,Final net worth
+ui.challenge.metric.visited_cities,Cities visited
+ui.challenge.metric.visited_countries,Countries/regions visited
+ui.challenge.metric.products_discovered,Products discovered
+ui.challenge.metric.total_distance_km,Total distance flown
+ui.challenge.metric.on_time_rate,On-time boarding rate
+ui.challenge.metric.single_profit_max,Best single trade profit
+ui.challenge.metric.profit_per_hour,Profit per flight-hour
+ui.challenge.score,Score: {score} / 100
+ui.challenge.grade,Grade: {grade}
+ui.collector.title,Collection progress
+ui.collector.products,Products found {cur} / {total}
+ui.collector.cities,Cities visited {cur} / {total}
+ui.collector.achievements,Collect achievements {cur} / {total}
+ui.collector.complete,Congrats! All collection goals reached.
+ui.codex.title,Codex
+ui.codex.city,Cities
+ui.codex.product,Products
+ui.codex.route,Routes
+ui.codex.progress,{cur} / {total}
+ui.codex.undiscovered,Locked
+ui.codex.empty,Nothing here yet
+ui.codex.route_count,{n} times
+ui.codex.low_content,(limited data)
+ui.event.festival,Festival premium: local specialties rise in price
+ui.event.weather_cold,Cold-chain swing: cold-chain goods prices affected
+ui.event.scarcity,Scarcity: local specialties in short supply
+ui.reputation.title,Reputation
+ui.reputation.level,Lv{level}
+ui.reputation.xp,{xp} / {next}
+ui.reputation.max,Maxed out
+ui.reputation.unlocks,Unlocks
+ui.reputation.unlock.lv2,Cargo slot +1
+ui.reputation.unlock.lv3,20% off cold-chain baggage
+ui.reputation.unlock.lv4,30% off intel forecast
+ui.reputation.unlock.lv5,Carry-on +10kg
+ui.reputation.unlock.lv6,Title "Global Merchant"
+ui.city.no_data,No city data
+ui.city.history,History
+ui.city.geography,Geography
+ui.city.economy,Economy
+ui.city.food,Food
+ui.city.travel,Travel tips
+ui.city.low_content,"Warning: limited info. This entry is auto-generated with low confidence and is for reference only."

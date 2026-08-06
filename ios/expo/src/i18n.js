@@ -38,6 +38,11 @@ const EN = {
   speed_up: 'Speed up',
   settings_lang: 'Language',
   settings_lang_sub: 'Switch UI between English and 中文.',
+  settings_a11y_title: 'Accessibility',
+  settings_a11y_sub: 'Text size and colour-blind friendly markers.',
+  settings_cb_off: 'Standard',
+  settings_cb_deut: 'Green-blind',
+  settings_cb_prot: 'Red-blind',
 
   /* ---- format fragments ---------------------------------------- */
   'fmt.am': 'AM',
@@ -538,6 +543,11 @@ const ZH = {
   speed_up: '加速',
   settings_lang: '语言',
   settings_lang_sub: '在英文与中文之间切换界面。',
+  settings_a11y_title: '无障碍',
+  settings_a11y_sub: '文本大小与色盲友好标记。',
+  settings_cb_off: '标准',
+  settings_cb_deut: '绿色盲',
+  settings_cb_prot: '红色盲',
 
   'fmt.am': '上午',
   'fmt.pm': '下午',

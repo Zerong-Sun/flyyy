@@ -174,6 +174,10 @@ $GODOT --headless --path game -s res://scripts/dev/SmokeCodex.gd      # 图鉴�
 $GODOT --headless --path game -s res://scripts/dev/SmokeReputation.gd # 声望/解锁树
 $GODOT --headless --path game -s res://scripts/dev/SmokeV3Loop.gd     # v0.3 完整贸易闭环
 $GODOT --headless --path game -s res://scripts/dev/SmokeContent.gd    # 内容抽检
+$GODOT --headless --path game -s res://scripts/dev/SmokeAudio.gd      # 音频清单全表可播
+$GODOT --headless --path game -s res://scripts/dev/SmokePerf.gd       # 地球场景性能基线
+# 城市正文 en 由 ETL 生成（Demo 20 手写 + 其余模板），已挂入 run_pipeline：
+python -m etl.content.city_content_en      # 单独重打 game/data/world.json 的 *_en 字段
 ```
 
 手工剧本与 §27 二十二条见 [demo-acceptance.md](docs/superpowers/plans/2026-07-26-demo-acceptance.md)。
