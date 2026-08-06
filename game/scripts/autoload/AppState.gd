@@ -316,6 +316,7 @@ func log_sell_transaction(sell_city: String, product_id: String, qty: int,
 func to_dict() -> Dictionary:
 	return {
 		"save_version": SAVE_VERSION,
+		"saved_unix": Time.get_unix_time_from_system(),
 		"save_id": save_id,
 		"cash_usd": cash_usd,
 		"current_airport_id": current_airport_id,
