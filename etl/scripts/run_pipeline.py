@@ -1404,6 +1404,8 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
         economy_out["reliability"] = eco["reliability"]
     if eco.get("cold_chain"):
         economy_out["cold_chain"] = eco["cold_chain"]
+    if eco.get("dynamics"):
+        economy_out["dynamics"] = eco["dynamics"]
 
     airlines_out = _AIRLINE_ROWS or [{"id": a, "name": n, "alliance_id": "none"} for a, n in AIRLINES]
     payload = {

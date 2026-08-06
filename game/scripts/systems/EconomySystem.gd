@@ -19,6 +19,17 @@ static func daily_factor(save_id: String, city_id: String, game_date: String, pr
 	return 1.0 + (u - 0.5) * 2.0 * amp
 
 
+static func seasonal_factor(game_date: String) -> float:
+	## Monthly sell-price multiplier from economy.dynamics.seasonal (01..12).
+	var parts := game_date.split("-")
+	if parts.size() < 2:
+		return 1.0
+	var month := parts[1]
+	var dyn: Dictionary = DataService.economy.get("dynamics", {})
+	var seasonal: Dictionary = dyn.get("seasonal", {})
+	return float(seasonal.get(month, 1.0))
+
+
 static func buy_price(city_id: String, product_id: String) -> float:
 	var row: Dictionary = DataService.market_row(city_id, product_id)
 	if row.is_empty():
@@ -33,7 +44,7 @@ static func sell_price(city_id: String, product_id: String, quality: float) -> f
 	if row.is_empty():
 		return 0.0
 	var f: float = daily_factor(AppState.save_id, city_id, GameClock.game_date_string(), product_id)
-	var base: float = float(row.get("sell_base_usd", 0)) * f
+	var base: float = float(row.get("sell_base_usd", 0)) * f * seasonal_factor(GameClock.game_date_string())
 	var qmul: float = quality_multiplier(quality)
 	var key: String = "%s|%s" % [city_id, product_id]
 	var pressure: float = float(AppState.demand_pressure.get(key, 0.0))

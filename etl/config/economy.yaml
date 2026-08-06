@@ -73,3 +73,22 @@ market:
 cold_chain:
   unprotected_decay_mult: 2.0
   protected_decay_mult: 0.35
+
+# Seasonal demand / scarcity dynamics (materialized into world.json economy.dynamics)
+dynamics:
+  seasonal:                     # monthly sell-price multiplier (01=Jan .. 12=Dec)
+    "01": 1.0
+    "02": 1.02
+    "03": 1.0
+    "04": 1.0
+    "05": 1.03
+    "06": 1.05
+    "07": 1.08
+    "08": 1.06
+    "09": 1.0
+    "10": 1.02
+    "11": 1.05
+    "12": 1.15                  # holiday season demand peak
+  scarcity:
+    weight_kg_over: 50.0        # goods heavier than this get the premium
+    mult: 1.08
