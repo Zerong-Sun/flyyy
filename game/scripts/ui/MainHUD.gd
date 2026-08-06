@@ -100,6 +100,12 @@ var _selected_connection: Dictionary = {}
 var _ach_filter_category: String = "all"
 var _ach_filter_unlocked_only: bool = false
 var _recommend_box: VBoxContainer
+var _selected_mode: String = "sandbox"  # "sandbox" | "challenge" | "collector"
+var _mode_desc: Label
+var _challenge_label: Label
+var _load_button: Button = null
+var _collector_panel = null  # CollectorPanel instance (loaded lazily)
+var _result_panel = null  # ChallengeResultPanel instance (loaded lazily)
 
 # Five-tier sell feedback copy now lives in zh_CN.csv (REQ §5.5):
 # sell_console_*, celebration_w*_*, sell_result_title_*.
@@ -114,6 +120,7 @@ func _ready() -> void:
 	EventBus.arrived.connect(_on_arrived)
 	EventBus.tutorial_hint.connect(_show_hint)
 	EventBus.game_started.connect(_on_game_started)
+	EventBus.challenge_ended.connect(_on_challenge_ended)
 	flight_ops.transition_started.connect(_on_transition_started)
 	flight_ops.transition_finished.connect(_on_transition_finished)
 	_load_market_tags()
@@ -129,6 +136,7 @@ func _process(_d: float) -> void:
 		_last_clock_s = t
 	if t - _last_countdown_s >= 0.5:
 		_refresh_countdown()
+		_refresh_challenge_label()
 		_last_countdown_s = t
 	if _hint_panel.visible and t - _last_hint_time >= 8.0:
 		_hint_panel.visible = false
@@ -167,6 +175,11 @@ func _build_ui() -> void:
 	_countdown.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_countdown.add_theme_font_size_override("font_size", 16)
 	_countdown.add_theme_color_override("font_color", _Colors.WARN_RED)
+	_challenge_label = _label(self, Vector2(350, 92), "")
+	_challenge_label.size = Vector2(580, 30)
+	_challenge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_challenge_label.add_theme_font_size_override("font_size", 14)
+	_challenge_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 	_btn_ff = Button.new()
 	_btn_ff.text = I18nService.t("ui.ff.button")
 	_btn_ff.position = Vector2(940, 60)
@@ -363,7 +376,30 @@ func _build_ui() -> void:
 	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 	ngv.add_child(info)
+	var mode_row := HBoxContainer.new()
+	mode_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	mode_row.add_theme_constant_override("separation", 8)
+	ngv.add_child(mode_row)
+	for pair in [["sandbox", I18nService.t("ui.mode.sandbox")],
+			["challenge", I18nService.t("ui.mode.challenge")],
+			["collector", I18nService.t("ui.mode.collector")]]:
+		var mb := Button.new()
+		mb.text = str(pair[1])
+		mb.toggle_mode = true
+		var m: String = str(pair[0])
+		mb.button_pressed = m == _selected_mode
+		mb.pressed.connect(func (): _select_mode(m))
+		_wire_ui_sound(mb)
+		mode_row.add_child(mb)
+	_mode_desc = Label.new()
+	_mode_desc.text = I18nService.t("ui.mode.sandbox.desc")
+	_mode_desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_mode_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_mode_desc.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+	ngv.add_child(_mode_desc)
 	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 8)
 	ngv.add_child(row)
 	var b1 := Button.new()
 	b1.text = I18nService.t("ui.new_game.start")
@@ -377,13 +413,13 @@ func _build_ui() -> void:
 	_IconFactory.decorate_button(b2, "ic_random", 18.0)
 	_wire_ui_sound(b2)
 	row.add_child(b2)
-	if SaveSystem.has_save():
-		var b3 := Button.new()
-		b3.text = I18nService.t("ui.save.load")
-		b3.pressed.connect(_load)
-		_IconFactory.decorate_button(b3, "ic_load", 18.0)
-		_wire_ui_sound(b3)
-		row.add_child(b3)
+	_load_button = Button.new()
+	_load_button.text = I18nService.t("ui.save.load")
+	_load_button.pressed.connect(_load)
+	_IconFactory.decorate_button(_load_button, "ic_load", 18.0)
+	_wire_ui_sound(_load_button)
+	row.add_child(_load_button)
+	_update_load_button()
 
 
 func _bar(c: Color) -> ColorRect:
@@ -435,9 +471,64 @@ func _wire_ui_sound(btn: Button) -> void:
 
 
 func _show_new_game() -> void:
+	if _result_panel != null:
+		_result_panel.visible = false
+	if _collector_panel != null:
+		_collector_panel.visible = false
 	_new_game_panel.visible = true
 	GameClock.set_paused(true)
 	AudioService.set_bgm("bgm_menu")
+
+
+func _select_mode(mode: String) -> void:
+	_selected_mode = mode
+	_update_load_button()
+	if _mode_desc != null:
+		_mode_desc.text = I18nService.t("ui.mode." + mode + ".desc")
+	AudioService.play_sfx("sfx_ui_click")
+
+
+func _update_load_button() -> void:
+	if _load_button != null:
+		_load_button.visible = SaveSystem.has_save(_selected_mode)
+
+
+func _refresh_challenge_label() -> void:
+	if _challenge_label == null:
+		return
+	if AppState.game_mode == "challenge":
+		var days := ChallengeSystem.remaining_days()
+		_challenge_label.text = I18nService.t("ui.challenge.days_left", {"days": "%.1f" % days})
+		_challenge_label.visible = true
+	else:
+		_challenge_label.text = ""
+		_challenge_label.visible = false
+
+
+func _on_challenge_ended(result: Dictionary) -> void:
+	if _result_panel == null:
+		_result_panel = load("res://scripts/ui/ChallengeResultPanel.gd").new()
+		add_child(_result_panel)
+		_result_panel.restart_requested.connect(_on_challenge_restart)
+		_result_panel.menu_requested.connect(_show_new_game)
+	_result_panel.show_result(result)
+	AudioService.play_sfx("sfx_grand_slam")
+
+
+func _on_challenge_restart() -> void:
+	if _result_panel != null:
+		_result_panel.visible = false
+	AppState.reset_new_game(AppState.current_airport_id, "challenge")
+	globe.focus_airport(AppState.current_airport_id)
+	_refresh_top()
+	_refresh_bags()
+
+
+func _show_collector_progress() -> void:
+	if _collector_panel == null:
+		_collector_panel = load("res://scripts/ui/CollectorPanel.gd").new()
+		add_child(_collector_panel)
+	_collector_panel.refresh()
 
 
 func _on_search_changed(q: String) -> void:
@@ -484,7 +575,7 @@ func _start_selected() -> void:
 	var id := _selected_or_first()
 	if id == "":
 		return
-	AppState.reset_new_game(id)
+	AppState.reset_new_game(id, _selected_mode)
 	_new_game_panel.visible = false
 	globe.focus_airport(id)
 	_refresh_top()
@@ -509,6 +600,8 @@ func _on_game_started() -> void:
 	globe.focus_airport(AppState.current_airport_id)
 	_set_panel_bgm("globe")
 	AudioService.play_sfx("sfx_ui_click")
+	if AppState.game_mode == "challenge" and bool(AppState.challenge.get("ended", false)):
+		_on_challenge_ended(AppState.challenge.get("result", {}))
 
 
 func _dismiss_open_panel() -> void:
@@ -2487,6 +2580,11 @@ func _show_achievements() -> void:
 	bun.text = "仅已解锁" if not _ach_filter_unlocked_only else "显示全部"
 	bun.pressed.connect(func (): _ach_filter_unlocked_only = not _ach_filter_unlocked_only; _show_achievements())
 	filters.add_child(bun)
+	if AppState.game_mode == "collector":
+		var collector_btn := Button.new()
+		collector_btn.text = I18nService.t("ui.collector.title")
+		collector_btn.pressed.connect(_show_collector_progress)
+		filters.add_child(collector_btn)
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(700, 360)
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -2763,6 +2861,8 @@ func _save() -> void:
 
 func _load() -> void:
 	GameClock.set_paused(true)
+	if not AppState.game_started:
+		AppState.game_mode = _selected_mode
 	if SaveSystem.load_game():
 		_show_hint("已读档")
 	else:
