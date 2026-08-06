@@ -7,8 +7,10 @@ import hashlib
 import json
 import math
 import random
+import re
 import sqlite3
 import sys
+from collections import Counter
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -200,6 +202,283 @@ def read_openflights_routes(path: Path, hub_iatas: set[str]) -> set[tuple[str, s
     return edges
 
 
+# country name (airlines.dat) → ISO-3166-1 alpha-2 (matches airport.country_id).
+_COUNTRY_NAME_OVERRIDES = {
+    "Russia": "RU",
+    "Russian Federation": "RU",
+    "Russia]]": "RU",
+    "Republic of Korea": "KR",
+    "South Korea": "KR",
+    "Democratic People's Republic of Korea": "KP",
+    "Hong Kong SAR of China": "HK",
+    "Hong Kong": "HK",
+    "Macao": "MO",
+    "Macau": "MO",
+    "Taiwan": "TW",
+    "Ivory Coast": "CI",
+    "Cote d'Ivoire": "CI",
+    "Congo (Brazzaville)": "CG",
+    "Congo (Kinshasa)": "CD",
+    "Democratic Republic of Congo": "CD",
+    "Burma": "MM",
+    "Netherland": "NL",
+    "Macedonia": "MK",
+    "Lao Peoples Democratic Republic": "LA",
+    "Reunion": "RE",
+    "Swaziland": "SZ",
+    "Syrian Arab Republic": "SY",
+    "Somali Republic": "SO",
+    "UNited Kingdom": "GB",
+    "Canadian Territories": "CA",
+    "Netherlands Antilles": "AN",
+}
+
+_COUNTRY_NAME_TO_ISO: dict[str, str] | None = None
+_COUNTRY_CONTINENT: dict[str, str] | None = None
+_IATA_RE = re.compile(r"^[A-Z0-9]{2,3}$")
+
+
+def country_name_to_iso(name: str) -> str:
+    global _COUNTRY_NAME_TO_ISO
+    name = (name or "").strip()
+    if not name or name == r"\N":
+        return ""
+    if _COUNTRY_NAME_TO_ISO is None:
+        mapping: dict[str, str] = {}
+        cc_path = RAW / "countries.csv"
+        if cc_path.exists():
+            with cc_path.open(encoding="utf-8", newline="") as f:
+                for row in csv.DictReader(f):
+                    mapping[(row.get("name") or "").strip()] = (row.get("code") or "").strip()
+        mapping.update(_COUNTRY_NAME_OVERRIDES)
+        _COUNTRY_NAME_TO_ISO = mapping
+    return _COUNTRY_NAME_TO_ISO.get(name, "")
+
+
+def country_continent(country_id: str) -> str:
+    """country_id (ISO alpha-2) → continent code (AF/AS/EU/NA/OC/SA/AN)."""
+    global _COUNTRY_CONTINENT
+    if _COUNTRY_CONTINENT is None:
+        mapping: dict[str, str] = {}
+        cc_path = RAW / "countries.csv"
+        if cc_path.exists():
+            with cc_path.open(encoding="utf-8", newline="") as f:
+                for row in csv.DictReader(f):
+                    mapping[(row.get("code") or "").strip()] = (row.get("continent") or "").strip()
+        _COUNTRY_CONTINENT = mapping
+    return _COUNTRY_CONTINENT.get(country_id or "", "")
+
+
+def read_real_airlines(path: Path) -> dict[str, list[dict]]:
+    """Parse OpenFlights airlines.dat → {IATA: [possible airlines]}.
+
+    airlines.dat columns: id, name, alias, iata, icao, callsign, country, active.
+    Names may contain quoted commas so we parse with csv.reader. Only rows with a
+    usable IATA code are indexed because routes.dat references airlines by IATA.
+
+    An IATA can be reused by different airlines over time (e.g. G3 = Gol + Sky
+    Express), so each IATA maps to a list; the route country disambiguates.
+    """
+    out: dict[str, list[dict]] = {}
+    if not path.exists():
+        return out
+    with path.open(encoding="utf-8", newline="") as f:
+        for row in csv.reader(f):
+            if len(row) < 8:
+                continue
+            iata = (row[3] or "").strip()
+            name = (row[1] or "").strip()
+            active = (row[7] or "").strip()
+            if not _IATA_RE.match(iata) or not name or name in (r"\N", ""):
+                continue
+            out.setdefault(iata, []).append(
+                {
+                    "name": name,
+                    "home_country": country_name_to_iso(row[6]),
+                    "active": active,
+                }
+            )
+    return out
+
+
+def read_route_airlines(
+    path: Path, hub_iatas: set[str], active_iatas: set[str] | None = None
+) -> dict[tuple[str, str], set[str]]:
+    """Parse routes.dat → {(src, dst): {operator IATA codes}}.
+
+    routes.dat columns: airline, airline_id, src, src_id, dst, dst_id, codeshare,
+    stops, equipment. Keeps the REAL operator set per directed route so flight
+    synthesis never fabricates an airline-route pair.
+    """
+    out: dict[tuple[str, str], set[str]] = {}
+    if not path.exists():
+        return out
+    with path.open(encoding="utf-8", newline="") as f:
+        for line in f:
+            parts = line.strip().split(",")
+            if len(parts) < 6:
+                continue
+            al = parts[0].strip()
+            src, dst = parts[2].strip(), parts[4].strip()
+            if not _IATA_RE.match(al) or not src or not dst or src == dst:
+                continue
+            if src not in hub_iatas or dst not in hub_iatas:
+                continue
+            if active_iatas is not None and al not in active_iatas:
+                continue
+            out.setdefault((src, dst), set()).add(al)
+    return out
+
+
+def _resolve_airline_row(
+    iata: str,
+    real_airlines: dict[str, list[dict]],
+    curated_alliance: dict[str, str],
+    country_hints: tuple[str, ...] = (),
+    continent_hints: tuple[str, ...] = (),
+) -> dict:
+    """Resolve an IATA to a concrete airline row.
+
+    IATA codes are reused across airlines/time (e.g. G3 = Gol + Sky Express), so
+    prefer an ACTIVE entry matching a route endpoint country, then one matching
+    an endpoint continent, then any active entry, then the first entry.
+    """
+    entries = real_airlines.get(iata, [])
+    chosen = None
+    for e in entries:
+        if e.get("active") == "Y" and e["home_country"] in country_hints:
+            chosen = e
+            break
+    if chosen is None:
+        for e in entries:
+            if e.get("active") == "Y" and country_continent(e["home_country"]) in continent_hints:
+                chosen = e
+                break
+    if chosen is None:
+        for e in entries:
+            if e.get("active") == "Y":
+                chosen = e
+                break
+    if chosen is None and entries:
+        chosen = entries[0]
+    return {
+        "id": iata,
+        "name": chosen["name"] if chosen else iata,
+        "alliance_id": curated_alliance.get(iata, "none"),
+        "home_country": chosen["home_country"] if chosen else "",
+    }
+
+
+def _resolved_country(iata: str, real_airlines: dict[str, list[dict]], country_hints: tuple[str, ...] = ()) -> str:
+    """Home country of the resolved entry for an IATA (mirrors _resolve_airline_row)."""
+    return _resolve_airline_row(iata, real_airlines, {}, country_hints).get("home_country", "")
+
+
+def _entry_countries(iata: str, real_airlines: dict[str, list[dict]]) -> set[str]:
+    return {e["home_country"] for e in real_airlines.get(iata, [])}
+
+
+def _active_entry_countries(iata: str, real_airlines: dict[str, list[dict]]) -> set[str]:
+    return {e["home_country"] for e in real_airlines.get(iata, []) if e.get("active") == "Y"}
+
+
+def _active_entry_continents(iata: str, real_airlines: dict[str, list[dict]]) -> set[str]:
+    out: set[str] = set()
+    for e in real_airlines.get(iata, []):
+        if e.get("active") == "Y" and e["home_country"]:
+            out.add(country_continent(e["home_country"]))
+    return out
+
+
+def _active_entry_regions(iata: str, real_airlines: dict[str, list[dict]]) -> set[str]:
+    out: set[str] = set()
+    for e in real_airlines.get(iata, []):
+        if e.get("active") == "Y" and e["home_country"]:
+            out.add(COUNTRY_REGION.get(e["home_country"], ""))
+    return out
+
+
+def pick_airline(
+    rng: random.Random,
+    origin: str,
+    dest: str,
+    airports_by_iata: dict[str, dict],
+    route_airlines: dict[tuple[str, str], set[str]],
+    active_iatas: set[str],
+    real_airlines: dict[str, list[dict]],
+    curated_alliance: dict[str, str],
+) -> dict:
+    """Choose a REAL operating airline for a route (PRD §24 plan A).
+
+    Priority:
+      1. Active operators actually recorded for the route in routes.dat.
+         For domestic routes, prefer the operators based in the route's country
+         (avoids defunct/foreign carriers on domestic lines while keeping real
+         cross-border operators like Ryanair on ES/IT domestic when no domestic
+         operator exists).
+      2. Active real airline from the origin country (fallback for synthetic routes).
+      3. Active real airline from the destination country.
+      4. Active real airline from the same continent / region.
+      5. Any active real airline (deterministic pick).
+    """
+    o_country = str(airports_by_iata[origin].get("country_id", ""))
+    d_country = str(airports_by_iata[dest].get("country_id", ""))
+    o_cont = country_continent(o_country)
+    d_cont = country_continent(d_country)
+    hints = (o_country, d_country)
+    conts = (o_cont, d_cont)
+    ops = route_airlines.get((origin, dest), set())
+    active_ops = sorted(ops & active_iatas)
+    if active_ops:
+        if o_country == d_country:
+            domestic_ops = [
+                a for a in active_ops
+                if o_country in _active_entry_countries(a, real_airlines)
+            ]
+            if domestic_ops:
+                active_ops = domestic_ops
+        chosen = active_ops[rng.randrange(len(active_ops))]
+        return _resolve_airline_row(chosen, real_airlines, curated_alliance, hints, conts)
+
+    def by_country(c: str) -> list[str]:
+        return sorted(a for a in active_iatas if c in _active_entry_countries(a, real_airlines))
+
+    pool = by_country(o_country)
+    if not pool and o_country != d_country:
+        pool = by_country(d_country)
+    if not pool:
+        if o_cont:
+            pool = sorted(
+                a for a in active_iatas
+                if o_cont in _active_entry_continents(a, real_airlines)
+            )
+        if not pool and d_cont and d_cont != o_cont:
+            pool = sorted(
+                a for a in active_iatas
+                if d_cont in _active_entry_continents(a, real_airlines)
+            )
+    if not pool:
+        o_region = COUNTRY_REGION.get(o_country, "")
+        d_region = COUNTRY_REGION.get(d_country, "")
+        if o_region:
+            pool = sorted(
+                a for a in active_iatas
+                if o_region in _active_entry_regions(a, real_airlines)
+            )
+        if not pool and d_region and d_region != o_region:
+            pool = sorted(
+                a for a in active_iatas
+                if d_region in _active_entry_regions(a, real_airlines)
+            )
+    if not pool:
+        pool = sorted(active_iatas)
+    if not pool:
+        rows = _AIRLINE_ROWS or [{"id": a, "name": n, "alliance_id": "none"} for a, n in AIRLINES]
+        return dict(rows[rng.randrange(len(rows))])
+    chosen = pool[rng.randrange(len(pool))]
+    return _resolve_airline_row(chosen, real_airlines, curated_alliance, hints, conts)
+
+
 # Minimal airline pool for synthetic flights
 AIRLINES = [
     ("DL", "Delta Air Lines"),
@@ -243,6 +522,7 @@ def load_aviation_config() -> tuple[list[dict], list[dict], dict]:
                     "id": row["id"],
                     "name": row["name"],
                     "alliance_id": row.get("alliance_id", "none"),
+                    "home_country": row.get("home_country", ""),
                 }
             )
     if not airlines:
@@ -849,16 +1129,81 @@ def ensure_route_degree(
     return out
 
 
+def ensure_intl_routes(
+    routes: set[tuple[str, str]],
+    iatas: list[str],
+    airports_by_iata: dict[str, dict],
+    route_airlines: dict[tuple[str, str], set[str]],
+    active_iatas: set[str],
+) -> set[tuple[str, str]]:
+    """Guarantee every airport has at least one direct international route.
+
+    Prefer real edges from routes.dat (they carry real operators); fall back to
+    the nearest international airport when the snapshot lacks one. This is the
+    PRD §24 plan-A 补齐 for small domestic-only airports (e.g. ANC/ALB/BUF).
+    """
+    def is_intl(a: str, b: str) -> bool:
+        return airports_by_iata[a]["country_id"] != airports_by_iata[b]["country_id"]
+
+    # Real international edges (with an active operator) from routes.dat.
+    real_intl: dict[str, list[tuple[float, str]]] = {}
+    for (o, d), ops in route_airlines.items():
+        if ops & active_iatas and is_intl(o, d):
+            oa = airports_by_iata[o]
+            da = airports_by_iata[d]
+            real_intl.setdefault(o, []).append(
+                (haversine_km(oa["latitude"], oa["longitude"], da["latitude"], da["longitude"]), d)
+            )
+            real_intl.setdefault(d, []).append(
+                (haversine_km(oa["latitude"], oa["longitude"], da["latitude"], da["longitude"]), o)
+            )
+    for lst in real_intl.values():
+        lst.sort()
+
+    out = set(routes)
+    for a in iatas:
+        if any(is_intl(a, d) for o, d in out if o == a):
+            continue
+        added = False
+        for _, d in real_intl.get(a, []):
+            if (a, d) not in out and (d, a) not in out:
+                out.add((a, d))
+                out.add((d, a))
+                added = True
+                break
+        if added:
+            continue
+        aa = airports_by_iata[a]
+        candidates = sorted(
+            (
+                haversine_km(aa["latitude"], aa["longitude"],
+                             airports_by_iata[b]["latitude"], airports_by_iata[b]["longitude"]),
+                b,
+            )
+            for b in iatas
+            if b != a and is_intl(a, b)
+        )
+        for _, b in candidates:
+            if (a, b) not in out and (b, a) not in out:
+                out.add((a, b))
+                out.add((b, a))
+                break
+    return out
+
+
 def synth_flights(
     routes: set[tuple[str, str]],
     airports_by_iata: dict[str, dict],
     eco: dict,
+    route_airlines: dict[tuple[str, str], set[str]],
+    active_iatas: set[str],
+    real_airlines: dict[str, dict],
+    curated_alliance: dict[str, str],
 ) -> list[dict]:
     tcfg = eco["ticket"]
     fcfg = eco["flight_synth"]
     start = date.fromisoformat(fcfg["schedule_start"])
     days = int(fcfg["schedule_days"])
-    airline_pool = _AIRLINE_ROWS or [{"id": a, "name": n, "alliance_id": "none"} for a, n in AIRLINES]
     first_mult = float(tcfg.get("first_multiplier", 25.0))
     bag_first = float(tcfg.get("baggage_first_kg", 100.0))
     flights: list[dict] = []
@@ -871,15 +1216,21 @@ def synth_flights(
         duration = max(fcfg["duration_min_floor"], min(fcfg["duration_min_ceil"], duration))
         rr = stable_rand("route", origin, dest)
         per_day = rr.randint(fcfg["flights_per_day_min"], fcfg["flights_per_day_max"])
-        airline = airline_pool[rr.randrange(len(airline_pool))]
         demand = rr.uniform(tcfg["demand_factor_min"], tcfg["demand_factor_max"])
         base = (
             tcfg["c_route"]
             + dist * tcfg["c_km"]
             + tcfg["airport_fee_default"] * 2
         ) * tcfg["airline_factor_default"] * demand
+        real_route = (origin, dest) in route_airlines
         for day_i in range(days):
             day = start + timedelta(days=day_i)
+            # Rotate through the route's real operators across days deterministically.
+            airline = pick_airline(
+                stable_rand("route_airline", origin, dest, day_i),
+                origin, dest, airports_by_iata, route_airlines,
+                active_iatas, real_airlines, curated_alliance,
+            )
             for slot in range(per_day):
                 rng = stable_rand("flight", origin, dest, day.isoformat(), slot)
                 hour = 6 + (slot * (14 // max(1, per_day))) + rng.randint(0, 2)
@@ -901,6 +1252,7 @@ def synth_flights(
                         "operating_airline_id": airline["id"],
                         "marketing_airline_id": airline["id"],
                         "airline_name": airline["name"],
+                        "airline_home_country": airline.get("home_country", ""),
                         "alliance_id": airline.get("alliance_id", "none"),
                         "origin_airport_id": oa["airport_id"],
                         "destination_airport_id": da["airport_id"],
@@ -921,12 +1273,15 @@ def synth_flights(
                         "cabin_first_available": dist >= 2500,
                         "stops": 0,
                         "stop_airports": [],
-                        "data_source": "synthetic_openflights",
+                        "data_source": "synthetic_openflights" if real_route else "synthetic_route_fill",
                         "data_confidence": "C",
                     }
                 )
     # One-stop marketed flights on a fraction of long-haul OD pairs (v0.3)
-    flights.extend(_synth_stopover_flights(routes, airports_by_iata, eco, airline_pool, fid))
+    flights.extend(
+        _synth_stopover_flights(routes, airports_by_iata, eco, route_airlines,
+                                active_iatas, real_airlines, curated_alliance, fid)
+    )
     return flights
 
 
@@ -934,7 +1289,10 @@ def _synth_stopover_flights(
     routes: set[tuple[str, str]],
     airports_by_iata: dict[str, dict],
     eco: dict,
-    airline_pool: list[dict],
+    route_airlines: dict[tuple[str, str], set[str]],
+    active_iatas: set[str],
+    real_airlines: dict[str, dict],
+    curated_alliance: dict[str, str],
     start_fid: int,
 ) -> list[dict]:
     """Add a small set of one-stop marketed flights (player stays aboard)."""
@@ -985,16 +1343,21 @@ def _synth_stopover_flights(
         dur2 = int(d2 / fcfg["cruise_km_per_min"] + fcfg["taxi_pad_min"])
         duration = dur1 + ground + dur2
         dist = d1 + d2
-        airline = airline_pool[rr.randrange(len(airline_pool))]
         demand = rr.uniform(tcfg["demand_factor_min"], tcfg["demand_factor_max"])
         base = (
             tcfg["c_route"]
             + dist * tcfg["c_km"] * 0.92
             + tcfg["airport_fee_default"] * 2
         ) * demand
+        real_route = (origin, dest) in route_airlines
         for day_i in range(0, days, 2):  # every other day to limit volume
             day = start + timedelta(days=day_i)
             rng = stable_rand("stopflight", origin, hub, dest, day.isoformat())
+            airline = pick_airline(
+                stable_rand("stop_airline", origin, dest, day_i),
+                origin, dest, airports_by_iata, route_airlines,
+                active_iatas, real_airlines, curated_alliance,
+            )
             hour = rng.randint(7, 18)
             minute = rng.choice([0, 15, 30, 45])
             dep_local = datetime(day.year, day.month, day.day, hour, minute)
@@ -1010,6 +1373,7 @@ def _synth_stopover_flights(
                     "operating_airline_id": airline["id"],
                     "marketing_airline_id": airline["id"],
                     "airline_name": airline["name"],
+                    "airline_home_country": airline.get("home_country", ""),
                     "alliance_id": airline.get("alliance_id", "none"),
                     "origin_airport_id": oa["airport_id"],
                     "destination_airport_id": da["airport_id"],
@@ -1031,7 +1395,7 @@ def _synth_stopover_flights(
                     "stops": 1,
                     "stop_airports": [hub],
                     "stop_minutes": [ground],
-                    "data_source": "synthetic_stopover",
+                    "data_source": "synthetic_stopover" if real_route else "synthetic_route_fill",
                     "data_confidence": "C",
                 }
             )
@@ -1388,7 +1752,7 @@ def write_sqlite(airports, routes, flights, cities, products, markets, eco, meta
 
 def export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta,
                          tz_offsets, product_market_tags, transfer_edges,
-                         coverage_report):
+                         coverage_report, real_airlines=None):
     import shutil
 
     GAME_DATA.mkdir(parents=True, exist_ok=True)
@@ -1414,7 +1778,32 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
     if eco.get("dynamics"):
         economy_out["dynamics"] = eco["dynamics"]
 
-    airlines_out = _AIRLINE_ROWS or [{"id": a, "name": n, "alliance_id": "none"} for a, n in AIRLINES]
+    # Curated airlines first (known alliance metadata), then every real operator
+    # used by the generated flights. Resolve name/home_country from the flights
+    # themselves (majority vote) so reused IATA codes (e.g. G3 = Gol + Sky
+    # Express) match what players actually see in the schedule.
+    airlines_out: list[dict] = []
+    seen: set[str] = set()
+    for row in _AIRLINE_ROWS or [{"id": a, "name": n, "alliance_id": "none"} for a, n in AIRLINES]:
+        airlines_out.append({**row, "home_country": row.get("home_country", "")})
+        seen.add(row["id"])
+    flight_airlines: dict[str, Counter] = {}
+    for fl in flights:
+        flight_airlines.setdefault(str(fl.get("operating_airline_id", "")), Counter())[
+            (str(fl.get("airline_name", "")), str(fl.get("airline_home_country", "")))
+        ] += 1
+    used_iatas = sorted(flight_airlines)
+    for iata in used_iatas:
+        if not iata or iata in seen:
+            continue
+        (name, home), _ = flight_airlines[iata].most_common(1)[0]
+        airlines_out.append({
+            "id": iata,
+            "name": name or iata,
+            "alliance_id": "none",
+            "home_country": home,
+        })
+        seen.add(iata)
     payload = {
         "meta": meta,
         "economy": economy_out,
@@ -1692,7 +2081,12 @@ def _check_hot_win_rate(product_market_tags: dict, market_index: dict, samples: 
     print(f"HOT-WIN sampled {n}/{len(hot_pairs)} hot pairs, {len(hot_pairs)} total hot dests")
 
 
-def validate(airports, routes, flights, cities, products) -> None:
+def validate(
+    airports, routes, flights, cities, products,
+    route_airlines: dict[tuple[str, str], set[str]] | None = None,
+    active_iatas: set[str] | None = None,
+    real_airlines: dict[str, dict] | None = None,
+) -> None:
     iatas = {a["iata"] for a in airports}
     assert len(iatas) >= 20, f"Expected >=20 airports, got {len(iatas)}"
     for a in airports:
@@ -1701,8 +2095,8 @@ def validate(airports, routes, flights, cities, products) -> None:
         if a["latitude"] == 0 and a["longitude"] == 0:
             print(f"WARN: {a['iata']} at (0,0)")
     # degree check only for airports used in routes
-    active_iatas = {o for o, d in routes}
-    for a in active_iatas:
+    active_iatas_r = {o for o, d in routes}
+    for a in active_iatas_r:
         deg = sum(1 for o, d in routes if o == a)
         if deg < 3:
             print(f"WARN: {a} low degree {deg}")
@@ -1732,7 +2126,95 @@ def validate(airports, routes, flights, cities, products) -> None:
     no_category_souvenir = any(p.get("category") == "纪念品" for p in products)
     if no_category_souvenir:
         print("WARN: souvenir ('纪念品') category still present")
-    print(f"VALIDATION OK: {len(airports)} airports ({len(active_iatas)} active), "
+
+    by_iata_v = {a["iata"]: a for a in airports}
+
+    # Real-airline gates (fail hard — the whole point of the aviation overhaul):
+    if route_airlines and active_iatas and real_airlines:
+        # 1) Every flight on a real route must be operated by a real operator.
+        fabricated: list[str] = []
+        for fl in flights:
+            ops = route_airlines.get((fl["origin_iata"], fl["destination_iata"]), set())
+            if not ops or not (ops & active_iatas):
+                continue  # no active real operator → documented fallback allowed
+            if fl["operating_airline_id"] not in ops:
+                fabricated.append(
+                    f"{fl['marketing_flight_number']} {fl['origin_iata']}→{fl['destination_iata']} "
+                    f"by {fl['operating_airline_id']} (real: {sorted(ops)})"
+                )
+        assert not fabricated, (
+            f"{len(fabricated)} flights use an airline not recorded on the route in routes.dat, e.g.:\n  "
+            + "\n  ".join(fabricated[:8])
+        )
+        # 2) Fallback/synthetic routes: operating airline must be a real active
+        #    airline based on the same continent as an endpoint (regional carrier).
+        bad_fill: list[str] = []
+        for fl in flights:
+            ops = route_airlines.get((fl["origin_iata"], fl["destination_iata"]), set())
+            if ops & active_iatas:
+                continue
+            o_c = by_iata_v[fl["origin_iata"]]["country_id"]
+            d_c = by_iata_v[fl["destination_iata"]]["country_id"]
+            airline_iso = str(fl.get("airline_home_country", "")) or _resolved_country(
+                fl["operating_airline_id"], real_airlines, (o_c, d_c)
+            )
+            airline_cont = country_continent(airline_iso)
+            o_cont = country_continent(o_c)
+            d_cont = country_continent(d_c)
+            if not airline_cont or airline_cont not in (o_cont, d_cont):
+                bad_fill.append(
+                    f"{fl['marketing_flight_number']} {fl['origin_iata']}→{fl['destination_iata']} "
+                    f"by {fl['operating_airline_id']}({airline_cont}) not in {o_cont}/{d_cont}"
+                )
+        assert not bad_fill, (
+            f"{len(bad_fill)} fallback flights use an airline from a third continent, e.g.:\n  "
+            + "\n  ".join(bad_fill[:8])
+        )
+        # 3) Domestic routes: when a real operator from the route country exists,
+        #    the flight must use one of them (blocks defunct/foreign fillers such
+        #    as JAS on CN domestic). Foreign operators are only allowed when the
+        #    route has no domestic operator in routes.dat.
+        foreign_domestic: list[str] = []
+        for fl in flights:
+            o, d = fl["origin_iata"], fl["destination_iata"]
+            route_country = by_iata_v[o]["country_id"]
+            if route_country != by_iata_v[d]["country_id"]:
+                continue
+            ops = route_airlines.get((o, d), set())
+            domestic_ops = [a for a in (ops & active_iatas) if route_country in _entry_countries(a, real_airlines)]
+            if not domestic_ops:
+                continue  # no domestic operator on this real route → foreign allowed
+            if fl["operating_airline_id"] not in domestic_ops:
+                foreign_domestic.append(
+                    f"{fl['marketing_flight_number']} {o}→{d} by {fl['operating_airline_id']} "
+                    f"(domestic ops: {sorted(domestic_ops)})"
+                )
+        assert not foreign_domestic, (
+            f"{len(foreign_domestic)} domestic flights use a foreign airline although a "
+            f"domestic operator exists, e.g.:\n  " + "\n  ".join(foreign_domestic[:8])
+        )
+        # 4) Every passenger airport must have a direct international route.
+        no_intl = [
+            a["iata"] for a in airports
+            if a.get("has_passenger_service", False)
+            and not any(
+                by_iata_v[o]["country_id"] != by_iata_v[d]["country_id"]
+                for o, d in routes if o == a["iata"]
+            )
+        ]
+        assert not no_intl, f"airports without any international route: {sorted(no_intl)}"
+
+        real_route_flights = sum(
+            1 for fl in flights
+            if fl["operating_airline_id"] in (route_airlines.get((fl["origin_iata"], fl["destination_iata"]), set()) & active_iatas)
+        )
+        print(
+            f"VALIDATION OK (aviation): {real_route_flights}/{len(flights)} "
+            f"flights operated by real route operators "
+            f"({100.0 * real_route_flights / len(flights):.1f}%)"
+        )
+
+    print(f"VALIDATION OK: {len(airports)} airports ({len(active_iatas_r)} active), "
           f"{len(routes)} directed routes, {len(flights)} flights, "
           f"{len(cities)} cities, {len(products)} products")
 
@@ -1780,7 +2262,17 @@ def main() -> int:
     # For expanded sets, limit route degree and flight count
     min_deg = max(2, min(6, len(iatas) // 10))
     edges = read_openflights_routes(rf_path, set(iatas))
+    # Real airline/route data (OpenFlights) — replaces the 18-airline random pool.
+    real_airlines = read_real_airlines(RAW / "airlines.dat")
+    active_iatas = {
+        i for i, entries in real_airlines.items()
+        if any(e.get("active") == "Y" for e in entries)
+    }
+    curated_alliance = {r["id"]: r.get("alliance_id", "none") for r in _AIRLINE_ROWS}
+    route_airlines = read_route_airlines(rf_path, set(iatas), active_iatas)
     routes = ensure_route_degree(edges, iatas, min_deg, by_iata)
+    # Guarantee every airport has a direct international route (PRD plan-A 补齐).
+    routes = ensure_intl_routes(routes, iatas, by_iata, route_airlines, active_iatas)
 
     # For expanded sets, reduce flight density
     if len(additional) > 0:
@@ -1788,8 +2280,11 @@ def main() -> int:
         eco["flight_synth"] = dict(eco["flight_synth"])
         eco["flight_synth"]["flights_per_day_min"] = 1
         eco["flight_synth"]["flights_per_day_max"] = 2
-    flights = synth_flights(routes, by_iata, eco)
+    flights = synth_flights(routes, by_iata, eco, route_airlines, active_iatas,
+                            real_airlines, curated_alliance)
     cities, products, markets = build_cities_products(hubs_cfg_expanded, eco)
+    # *_en fields are required by validate() and the export; apply before both.
+    cities = apply_en_fields(cities)
 
     # Build product_market_tags: only origin-city products (O(n*m) vs O(n*n*m))
     product_market_tags: dict[str, dict] = {}
@@ -1851,9 +2346,9 @@ def main() -> int:
         "city_count": len(cities),
         "product_count": len(products),
         "transfer_edge_pairs": len(transfer_edges),
-        "disclaimer": "synthetic schedules from open route data",
+        "disclaimer": "real airlines/routes from OpenFlights; synthesized schedules",
     }
-    validate(airports, routes, flights, cities, products)
+    validate(airports, routes, flights, cities, products, route_airlines, active_iatas, real_airlines)
     write_sqlite(airports, routes, flights, cities, products, markets, eco, meta)
 
     # Write coverage report
@@ -1863,7 +2358,8 @@ def main() -> int:
     print(f"Coverage report: {json.dumps(coverage_report, ensure_ascii=False)}")
 
     export_json_for_godot(airports, routes, flights, cities, products, markets, eco, meta,
-                          tz_offsets, product_market_tags, transfer_edges, coverage_report)
+                          tz_offsets, product_market_tags, transfer_edges, coverage_report,
+                          real_airlines)
     digest = hashlib.sha256((OUT / "world.sqlite").read_bytes()).hexdigest()
     print(f"Wrote {OUT}/world.sqlite and flights; world hash={digest[:16]}...")
     print(f"Godot data -> {GAME_DATA}")

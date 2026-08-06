@@ -15,22 +15,26 @@ alliances:
     name_zh: 独立承运
     name_en: Independent
 
+# Curated airline metadata (alliance membership + home country). The authoritative
+# airline catalog for flight synthesis is derived from OpenFlights airlines.dat;
+# this file only layers alliance/hub metadata on top of the real operators.
+# home_country uses ISO-3166-1 alpha-2 codes (matches airport.country_id).
 airlines:
-  - {id: DL, name: Delta Air Lines, alliance_id: skyteam}
-  - {id: AA, name: American Airlines, alliance_id: oneworld}
-  - {id: UA, name: United Airlines, alliance_id: star}
-  - {id: BA, name: British Airways, alliance_id: oneworld}
-  - {id: EK, name: Emirates, alliance_id: none}
-  - {id: TK, name: Turkish Airlines, alliance_id: star}
-  - {id: AF, name: Air France, alliance_id: skyteam}
-  - {id: KL, name: KLM, alliance_id: skyteam}
-  - {id: LH, name: Lufthansa, alliance_id: star}
-  - {id: CA, name: Air China, alliance_id: star}
-  - {id: MU, name: China Eastern, alliance_id: skyteam}
-  - {id: CZ, name: China Southern, alliance_id: none}
-  - {id: NH, name: ANA, alliance_id: star}
-  - {id: SQ, name: Singapore Airlines, alliance_id: star}
-  - {id: KE, name: Korean Air, alliance_id: skyteam}
-  - {id: CX, name: Cathay Pacific, alliance_id: oneworld}
-  - {id: TG, name: Thai Airways, alliance_id: star}
-  - {id: QR, name: Qatar Airways, alliance_id: oneworld}
+  - {id: DL, name: Delta Air Lines, alliance_id: skyteam, home_country: US}
+  - {id: AA, name: American Airlines, alliance_id: oneworld, home_country: US}
+  - {id: UA, name: United Airlines, alliance_id: star, home_country: US}
+  - {id: BA, name: British Airways, alliance_id: oneworld, home_country: GB}
+  - {id: EK, name: Emirates, alliance_id: none, home_country: AE}
+  - {id: TK, name: Turkish Airlines, alliance_id: star, home_country: TR}
+  - {id: AF, name: Air France, alliance_id: skyteam, home_country: FR}
+  - {id: KL, name: KLM, alliance_id: skyteam, home_country: NL}
+  - {id: LH, name: Lufthansa, alliance_id: star, home_country: DE}
+  - {id: CA, name: Air China, alliance_id: star, home_country: CN}
+  - {id: MU, name: China Eastern, alliance_id: skyteam, home_country: CN}
+  - {id: CZ, name: China Southern, alliance_id: none, home_country: CN}
+  - {id: NH, name: ANA, alliance_id: star, home_country: JP}
+  - {id: SQ, name: Singapore Airlines, alliance_id: star, home_country: SG}
+  - {id: KE, name: Korean Air, alliance_id: skyteam, home_country: KR}
+  - {id: CX, name: Cathay Pacific, alliance_id: oneworld, home_country: HK}
+  - {id: TG, name: Thai Airways, alliance_id: star, home_country: TH}
+  - {id: QR, name: Qatar Airways, alliance_id: oneworld, home_country: QA}

@@ -119,3 +119,158 @@ def test_transfer_edge_includes_mct_when_built():
     assert key in edges
     assert edges[key][0]["hub"] == "HHH"
     assert edges[key][0]["mct_minutes"] == 100
+
+
+def _load_generated_world_and_flights():
+    """Load the regenerated world.json and per-airport flight files."""
+    world_path = GAME_DATA / "world.json"
+    if not world_path.exists():
+        pytest.skip("world.json missing — run ETL first")
+    world = json.loads(world_path.read_text(encoding="utf-8"))
+    flights: list[dict] = []
+    for p in sorted((GAME_DATA / "flights").glob("*.json")):
+        if p.name.endswith("_manifest.json"):
+            continue
+        flights.extend(json.loads(p.read_text(encoding="utf-8")))
+    return world, flights
+
+
+def _load_real_route_airlines():
+    """Parse routes.dat preserving real (airline, src, dst) triples."""
+    from collections import defaultdict
+
+    from etl.scripts.run_pipeline import _IATA_RE
+
+    route_airlines: dict[tuple[str, str], set[str]] = defaultdict(set)
+    path = ROOT / "etl" / "raw" / "routes.dat"
+    with path.open(encoding="utf-8", newline="") as f:
+        for line in f:
+            parts = line.strip().split(",")
+            if len(parts) < 6:
+                continue
+            al, src, dst = parts[0].strip(), parts[2].strip(), parts[4].strip()
+            if not _IATA_RE.match(al) or not src or not dst or src == dst:
+                continue
+            route_airlines[(src, dst)].add(al)
+    return route_airlines
+
+
+def _load_real_airlines():
+    """Parse airlines.dat → {IATA: [entries]} with resolved home countries."""
+    from functools import lru_cache
+
+    from etl.scripts.run_pipeline import read_real_airlines
+
+    @lru_cache(maxsize=1)
+    def _cached() -> dict[str, list[dict]]:
+        path = ROOT / "etl" / "raw" / "airlines.dat"
+        return read_real_airlines(path) if path.exists() else {}
+
+    return _cached()
+
+
+def _active_iatas() -> set[str]:
+    return {i for i, entries in _load_real_airlines().items() if any(e["active"] == "Y" for e in entries)}
+
+
+def test_flight_airlines_match_real_route_operators():
+    """On routes with an ACTIVE real operator in routes.dat, flights must use one.
+
+    OpenFlights routes.dat is a 2014 snapshot: some operators are defunct (marked
+    inactive in airlines.dat) and some routes are noise. pick_airline only commits
+    to routes.dat operators when at least one is active; otherwise it falls back to
+    a real active airline from an endpoint country (checked by the continent test).
+    """
+    world, flights = _load_generated_world_and_flights()
+    route_airlines = _load_real_route_airlines()
+    active = _active_iatas()
+    fabricated = []
+    for fl in flights:
+        ops = route_airlines.get((fl["origin_iata"], fl["destination_iata"]), set())
+        active_ops = ops & active
+        if active_ops and fl["operating_airline_id"] not in active_ops:
+            fabricated.append(fl["marketing_flight_number"])
+    assert not fabricated, f"{len(fabricated)} flights ignore an active real operator: {fabricated[:5]}"
+
+
+def test_no_third_continent_airline_on_fallback_routes():
+    """Synthetic/filled routes must use a real airline from an endpoint continent."""
+    from etl.scripts.run_pipeline import country_continent
+
+    world, flights = _load_generated_world_and_flights()
+    by_iata = {a["iata"]: a for a in world["airports"]}
+    route_airlines = _load_real_route_airlines()
+    active = _active_iatas()
+    bad = []
+    for fl in flights:
+        ops = route_airlines.get((fl["origin_iata"], fl["destination_iata"]), set())
+        if ops & active:
+            continue
+        airline_cont = country_continent(str(fl.get("airline_home_country", "")))
+        o_cont = country_continent(by_iata[fl["origin_iata"]]["country_id"])
+        d_cont = country_continent(by_iata[fl["destination_iata"]]["country_id"])
+        if not airline_cont or airline_cont not in (o_cont, d_cont):
+            bad.append(fl["marketing_flight_number"])
+    assert not bad, f"{len(bad)} fallback flights use a third-continent airline: {bad[:5]}"
+
+
+def test_domestic_routes_prefer_domestic_operator_when_available():
+    """On domestic routes, when a real ACTIVE domestic operator exists, use it.
+
+    Uses the per-flight resolved airline_home_country (the actual entry picked for
+    that route) rather than the world.json catalog label, which can only hold one
+    home country per reused IATA (e.g. G3 = Gol + Sky Express).
+    """
+    world, flights = _load_generated_world_and_flights()
+    by_iata = {a["iata"]: a for a in world["airports"]}
+    real = _load_real_airlines()
+    route_airlines = _load_real_route_airlines()
+    active = _active_iatas()
+
+    def active_countries(al: str) -> set[str]:
+        return {e["home_country"] for e in real.get(al, []) if e["active"] == "Y"}
+
+    # Real active domestic operator exists on the route.
+    route_has_domestic_operator: set[tuple[str, str]] = set()
+    for (o, d), ops in route_airlines.items():
+        if o not in by_iata or d not in by_iata:
+            continue
+        country = by_iata[o]["country_id"]
+        if by_iata[d]["country_id"] != country:
+            continue
+        if any(country in active_countries(al) for al in ops & active):
+            route_has_domestic_operator.add((o, d))
+
+    bad = []
+    for fl in flights:
+        o, d = fl["origin_iata"], fl["destination_iata"]
+        country = by_iata[o]["country_id"]
+        if country != by_iata[d]["country_id"]:
+            continue
+        if fl.get("airline_home_country") == country:
+            continue
+        if (o, d) in route_has_domestic_operator:
+            bad.append(fl["marketing_flight_number"])
+    assert not bad, f"{len(bad)} domestic flights use a foreign airline despite a domestic operator: {bad[:5]}"
+
+
+def test_every_airport_has_international_route():
+    """Each airport must have at least one direct international route."""
+    world, _ = _load_generated_world_and_flights()
+    by_iata = {a["iata"]: a for a in world["airports"]}
+    routes = [(r["origin"], r["destination"]) for r in world["routes"]]
+    no_intl = [
+        iata for iata, a in by_iata.items()
+        if a.get("has_passenger_service", False)
+        and not any(by_iata[o]["country_id"] != by_iata[d]["country_id"] for o, d in routes if o == iata)
+    ]
+    assert not no_intl, f"airports without an international route: {sorted(no_intl)}"
+
+
+def test_world_airlines_catalog_covers_all_operators():
+    """Every operating airline must be present in world.json airlines."""
+    world, flights = _load_generated_world_and_flights()
+    catalog = {a["id"] for a in world["airlines"]}
+    operators = {fl["operating_airline_id"] for fl in flights}
+    assert operators <= catalog, f"missing airlines in catalog: {sorted(operators - catalog)}"
+    assert len(catalog) > 100, "airline catalog not expanded to real operators"

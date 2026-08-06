@@ -51,7 +51,6 @@ var _market_buy_qty: SpinBox
 var _market_sell_qty: SpinBox
 # Legacy row state remains until the next UI cleanup; the new market uses Trees.
 var _market_container: VBoxContainer
-var _inv_list: ItemList
 var _city_text: RichTextLabel
 var _log_text: RichTextLabel
 var _attr_text: RichTextLabel
@@ -91,9 +90,9 @@ var _cash_rolling: bool = false
 var _search_sfx_at: float = 0.0
 var _transition_running: bool = false
 var _transition_ticket: Dictionary = {}
-var _trade_qty: SpinBox
 var _flight_auto_focus: bool = false
 var _active_arrival_discount: Dictionary = {}
+var _pinned_market_product_id: String = ""
 var _free_cargo_on_flight: bool = false
 var _discovery_triggered_in_city: Dictionary = {}  # "city_id|product_id" -> true
 var _show_connections: bool = false
@@ -591,6 +590,7 @@ func _close_panel() -> void:
 	_flight_auto_focus = false
 	_selected_flight = {}
 	_selected_connection = {}
+	_pinned_market_product_id = ""
 	_restore_panel_center()
 	AudioService.play_sfx("sfx_ui_close_panel")
 	_set_panel_bgm("globe")
@@ -994,6 +994,7 @@ func _check_arrival_encounter(city_id: String) -> void:
 		return
 	var product_idx := rng.randi() % market_products.size()
 	var product_id: String = market_products[product_idx]
+	var product_name := str(DataService.get_product(product_id).get("name_zh", product_id))
 	var discount_pct := rng.randi_range(20, 40)
 
 	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
@@ -1001,7 +1002,7 @@ func _check_arrival_encounter(city_id: String) -> void:
 	popup.event_cancelled.connect(_on_arrival_discount_declined.bind())
 	add_child(popup)
 	popup.show_event("arrival_discount", {
-		"product_name": product_id,
+		"product_name": product_name,
 		"discount_pct": discount_pct,
 		"product_id": product_id,
 	})
@@ -1013,9 +1014,26 @@ func _check_arrival_encounter(city_id: String) -> void:
 	}
 
 
-func _on_arrival_discount_accepted(result: Dictionary, product_id: String, discount_pct: int) -> void:
+func _on_arrival_discount_accepted(_result: Dictionary, product_id: String, discount_pct: int) -> void:
 	AudioService.play_sfx("sfx_ui_click")
-	_show_hint("已接受 %s 折扣！买入时自动应用 %d%% 优惠" % [product_id, discount_pct])
+	_active_arrival_discount = {
+		"product_id": product_id,
+		"discount_pct": discount_pct,
+		"city_id": AppState.current_city_id(),
+	}
+	_pinned_market_product_id = product_id
+	if _market_buy_tree == null:
+		_show_market()
+	else:
+		_refresh_market_buy()
+	var qty_before := _inventory_qty(product_id)
+	_buy_market_item(product_id)
+	if _inventory_qty(product_id) <= qty_before:
+		# 行李超重/受限时改走货运重试；仍失败则保留折扣并给出可读提示。
+		_select_market_row(product_id)
+		_buy_selected(true)
+	if _inventory_qty(product_id) > qty_before:
+		_show_hint("已以 %d%% 折扣买入 %s！采购页已置顶该商品，可继续追加购买" % [discount_pct, product_id])
 
 
 func _on_arrival_discount_declined(_result: Dictionary) -> void:
@@ -1388,10 +1406,16 @@ func _refresh_market_buy() -> void:
 	_selected_market_product_id = ""
 	var city := AppState.current_city_id()
 	var query := _market_search.text.strip_edges().to_lower() if _market_search else ""
+	var pinned := _pinned_market_product_id
 	var product_ids: Array = []
 	if query == "":
 		for p_v in DataService.products_for_city(city):
 			product_ids.append(str((p_v as Dictionary).get("product_id", "")))
+		# 热卖折扣商品即使非本地也出现在空白搜索列表（置顶）。
+		if pinned != "" and not product_ids.has(pinned):
+			var p := DataService.get_product(pinned)
+			if not p.is_empty() and DataService.market_product_ids(city).has(pinned):
+				product_ids.insert(0, pinned)
 	else:
 		for product_id_v in DataService.market_product_ids(city):
 			var product_id := str(product_id_v)
@@ -1400,6 +1424,11 @@ func _refresh_market_buy() -> void:
 			var haystack := "%s %s %s %s" % [p.get("name_zh", ""), p.get("name_en", ""), p.get("category", ""), DataService.place_name(origin, "name")]
 			if haystack.to_lower().find(query) >= 0:
 				product_ids.append(product_id)
+	if pinned != "":
+		var pin_idx := product_ids.find(pinned)
+		if pin_idx > 0:
+			product_ids.remove_at(pin_idx)
+			product_ids.insert(0, pinned)
 	var total := product_ids.size()
 	var start := _market_buy_page * MARKET_ROWS_PER_PAGE
 	if start >= total and _market_buy_page > 0:
@@ -2416,19 +2445,6 @@ func _add_inventory_group(parent: VBoxContainer, title_text: String, cargo: bool
 		list.add_item("暂无%s库存" % ("货运" if cargo else "行李"))
 
 
-func _sell_one() -> void:
-	var idxs := _inv_list.get_selected_items()
-	if idxs.is_empty():
-		return
-	var qty: int = int(_trade_qty.value) if _trade_qty else 1
-	var index: int = idxs[0]
-	if index < 0 or index >= AppState.inventory.size():
-		return
-	var item: Dictionary = AppState.inventory[index]
-	var product_id: String = str(item.get("product_id", ""))
-	_check_accidental_premium(product_id, index, qty)
-
-
 func _check_accidental_premium(product_id: String, index: int, qty: int) -> void:
 	var city_id := AppState.current_city_id()
 	var date_hour := int(GameClock.unix_time / 3600.0)
@@ -2511,6 +2527,14 @@ func _player_has_more_of(product_id: String) -> bool:
 		if str(stack.get("product_id", "")) == product_id and int(stack.get("qty", 0)) > 0:
 			return true
 	return false
+
+
+func _inventory_qty(product_id: String) -> int:
+	var total := 0
+	for stack in AppState.inventory:
+		if str(stack.get("product_id", "")) == product_id:
+			total += int(stack.get("qty", 0))
+	return total
 
 
 func _refresh_market_after_sale() -> void:
@@ -2906,9 +2930,9 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 
 	popup.dialog_text = body
 	popup.add_button(I18nService.t("sell_result_continue"), true)
-	popup.popup_centered()
 
 	add_child(popup)
+	popup.popup_centered()
 
 	# Cash roll animation (Task 14 will wire this)
 	popup.event_confirmed.connect(func(_r):
