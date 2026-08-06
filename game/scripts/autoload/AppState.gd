@@ -16,6 +16,8 @@ var travel_log: Array = []
 var demand_pressure: Dictionary = {}  # "city|product" -> float 0..1
 var tutorial_flags: Dictionary = {}
 var game_started: bool = false
+var game_mode: String = "sandbox"  # "sandbox" | "challenge" | "collector"
+var challenge: Dictionary = {}  # {start_unix, deadline_unix, ended, result}
 var sell_transactions: Array[Dictionary] = []
 
 # Per-ticket trip baggage (cleared on arrival)
@@ -38,6 +40,7 @@ var unlocked_achievements: Dictionary = {}  # id -> true
 var stats: Dictionary = {
 	"total_flight_segments": 0,
 	"total_distance_km": 0.0,
+	"total_flight_hours": 0.0,
 	"business_flights": 0,
 	"first_flights": 0,
 	"cargo_flights": 0,
@@ -63,6 +66,7 @@ func _default_stats() -> Dictionary:
 	return {
 		"total_flight_segments": 0,
 		"total_distance_km": 0.0,
+		"total_flight_hours": 0.0,
 		"business_flights": 0,
 		"first_flights": 0,
 		"cargo_flights": 0,
@@ -84,8 +88,10 @@ func _default_stats() -> Dictionary:
 	}
 
 
-func reset_new_game(airport_id: String) -> void:
+func reset_new_game(airport_id: String, mode: String = "sandbox") -> void:
 	save_id = "S%s_%d" % [Time.get_unix_time_from_system(), randi() % 10000]
+	game_mode = mode
+	challenge = {}
 	cash_usd = float(DataService.economy.get("starting_cash_usd", 50000.0))
 	current_airport_id = airport_id
 	visited_airports = {}
@@ -308,6 +314,8 @@ func to_dict() -> Dictionary:
 		"reliability_events_enabled": reliability_events_enabled,
 		"last_market_date": last_market_date,
 		"game_started": game_started,
+		"game_mode": game_mode,
+		"challenge": challenge,
 		"sell_transactions": sell_transactions,
 		"last_flight_price": last_flight_price,
 		"last_baggage_cost": last_baggage_cost,
@@ -340,6 +348,10 @@ func from_dict(d: Dictionary) -> void:
 	reliability_events_enabled = bool(d.get("reliability_events_enabled", true))
 	last_market_date = str(d.get("last_market_date", GameClock.game_date_string()))
 	game_started = bool(d.get("game_started", false))
+	game_mode = str(d.get("game_mode", "sandbox"))
+	challenge = d.get("challenge", {})
+	if typeof(challenge) != TYPE_DICTIONARY:
+		challenge = {}
 	sell_transactions = []
 	for tx_v in d.get("sell_transactions", []):
 		if typeof(tx_v) == TYPE_DICTIONARY:

@@ -192,6 +192,7 @@ func _arrive(ticket: Dictionary, on_time: bool = true) -> void:
 	# Achievement / stats tracking
 	AppState.log_stat("total_flight_segments", 1.0)
 	AppState.log_stat("total_distance_km", float(ticket.get("distance_km", 0)))
+	AppState.log_stat("total_flight_hours", float(ticket.get("duration_minutes", 0)) / 60.0)
 	var is_cnx_leg2 := bool(ticket.get("is_connection_leg", false)) and int(ticket.get("connection_leg", 0)) != 1
 	var cabin := str(ticket.get("cabin", ""))
 	if cabin == "business" and not is_cnx_leg2:
