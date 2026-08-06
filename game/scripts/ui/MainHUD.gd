@@ -107,6 +107,7 @@ var _challenge_label: Label
 var _load_button: Button = null
 var _collector_panel = null  # CollectorPanel instance (loaded lazily)
 var _result_panel = null  # ChallengeResultPanel instance (loaded lazily)
+var _codex_panel = null  # CodexPanel instance (loaded lazily)
 
 # Five-tier sell feedback copy now lives in zh_CN.csv (REQ §5.5):
 # sell_console_*, celebration_w*_*, sell_result_title_*.
@@ -270,6 +271,7 @@ func _build_ui() -> void:
 		[I18nService.t("ui.tab.flights"), "_show_flights", "ic_flight"],
 		[I18nService.t("ui.tab.inventory"), "_show_inventory", "ic_inventory"],
 		["笔记", "_show_notes", "ic_notes"],
+		[I18nService.t("ui.codex.title"), "_show_codex", "ic_notes"],
 		[I18nService.t("ui.tab.achievements"), "_show_achievements", "ic_log"],
 		[I18nService.t("ui.tab.log"), "_show_log", "ic_log"],
 		[I18nService.t("ui.tab.attribution"), "_show_attr", "ic_attr"],
@@ -477,6 +479,8 @@ func _show_new_game() -> void:
 		_result_panel.visible = false
 	if _collector_panel != null:
 		_collector_panel.visible = false
+	if _codex_panel != null:
+		_codex_panel.visible = false
 	_new_game_panel.visible = true
 	GameClock.set_paused(true)
 	AudioService.set_bgm("bgm_menu")
@@ -535,6 +539,17 @@ func _show_collector_progress() -> void:
 		_collector_panel = load("res://scripts/ui/CollectorPanel.gd").new()
 		add_child(_collector_panel)
 	_collector_panel.refresh()
+
+
+func _show_codex() -> void:
+	if not _require_started():
+		return
+	_set_panel_bgm("menu")
+	if _codex_panel == null:
+		_codex_panel = load("res://scripts/ui/CodexPanel.gd").new()
+		add_child(_codex_panel)
+	_codex_panel.refresh()
+	AudioService.play_sfx("sfx_ui_click")
 
 
 func _on_search_changed(q: String) -> void:
