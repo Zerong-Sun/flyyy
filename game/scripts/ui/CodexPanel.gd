@@ -26,6 +26,7 @@ func refresh() -> void:
 
 
 func _build() -> void:
+	_tab_buttons = []
 	var panel := PanelContainer.new()
 	panel.set_anchors_preset(PRESET_CENTER)
 	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
