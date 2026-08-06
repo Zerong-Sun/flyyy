@@ -56,20 +56,30 @@ static func factor_for(city_id: String, product_id: String, is_buy: bool) -> Dic
 
 ## All city-level events active today, for the market panel hint line.
 ## Roll seeds must match factor_for so hints always mirror actual pricing.
-## Weather is gated on the city actually carrying at least one cold-chain
-## product, otherwise the hint would claim a price impact on nothing.
+## Each event is gated on the city having products it could actually affect:
+## weather needs a cold-chain product, festival/scarcity need a local
+## specialty product, otherwise the hint would claim a price impact on nothing.
 static func city_events(city_id: String) -> Array[Dictionary]:
 	var date := _day()
 	var save_id := AppState.save_id
 	var out: Array[Dictionary] = []
-	if _roll("%s|%s|festival|%s" % [save_id, city_id, date], FESTIVAL_PROB):
+	var has_local := _city_has_local_product(city_id)
+	if has_local and _roll("%s|%s|festival|%s" % [save_id, city_id, date], FESTIVAL_PROB):
 		out.append({"event_id": EVENT_FESTIVAL, "label": "ui.event.festival"})
 	var has_cold := _city_has_cold_product(city_id)
 	if has_cold and _roll("%s|%s|weather|%s" % [save_id, city_id, date], WEATHER_PROB):
 		out.append({"event_id": EVENT_WEATHER, "label": "ui.event.weather_cold"})
-	if _roll("%s|%s|scarcity|%s" % [save_id, city_id, date], SCARCITY_PROB):
+	if has_local and _roll("%s|%s|scarcity|%s" % [save_id, city_id, date], SCARCITY_PROB):
 		out.append({"event_id": EVENT_SCARCITY, "label": "ui.event.scarcity"})
 	return out
+
+
+static func _city_has_local_product(city_id: String) -> bool:
+	for pid_v in DataService.market_product_ids(city_id):
+		var p: Dictionary = DataService.get_product(str(pid_v))
+		if not p.is_empty() and str(p.get("origin_city_id", "")) == city_id:
+			return true
+	return false
 
 
 static func _city_has_cold_product(city_id: String) -> bool:

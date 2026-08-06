@@ -78,19 +78,26 @@ def test_event_factor_save_id_isolation():
 
 
 def test_city_events_idempotent_and_weather_gated():
-    def city_events(save_id, has_cold):
+    def city_events(save_id, has_local, has_cold):
         out = []
-        if _roll(f"{save_id}|{_FIX_CITY}|festival|{_FIX_DATE}", 0.04):
+        if has_local and _roll(f"{save_id}|{_FIX_CITY}|festival|{_FIX_DATE}", 0.04):
             out.append("festival")
         if has_cold and _roll(f"{save_id}|{_FIX_CITY}|weather|{_FIX_DATE}", 0.03):
             out.append("weather_cold")
-        if _roll(f"{save_id}|{_FIX_CITY}|scarcity|{_FIX_DATE}", 0.05):
+        if has_local and _roll(f"{save_id}|{_FIX_CITY}|scarcity|{_FIX_DATE}", 0.05):
             out.append("scarcity")
         return tuple(sorted(out))
 
-    assert city_events("S1", True) == city_events("S1", True), "city_events idempotent"
+    assert city_events("S1", True, True) == city_events("S1", True, True), "city_events idempotent"
     # Weather only fires when the city actually carries cold-chain products.
-    assert "weather_cold" not in city_events("S1", False)
+    assert "weather_cold" not in city_events("S1", True, False)
+    # Festival/scarcity only fire when the city actually has local specialty
+    # products (they raise local-product sell prices in factor_for).
+    assert "festival" not in city_events("S1", False, True)
+    assert "scarcity" not in city_events("S1", False, True)
+    # _FIX_CITY (atlanta) produces its own product, so the local gate holds.
+    assert _FIX_PRODUCT is not None
+    assert _FIX_PRODUCT["origin_city_id"] == _FIX_CITY
 
 
 # --- seasonal / scarcity formulas ---
