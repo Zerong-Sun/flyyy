@@ -167,7 +167,13 @@ cd ios/expo && npm test                    # 逻辑单测
 source etl/.venv/bin/activate
 pytest tests/etl tests/game -q
 python tools/demo_smoke_logic.py
-/Applications/Godot.app/Contents/MacOS/Godot --headless --path game -s res://scripts/dev/SmokeContent.gd
+GODOT=/Applications/Godot.app/Contents/MacOS/Godot
+$GODOT --headless --path game -s res://scripts/dev/SmokeChallenge.gd   # 30日挑战全生命周期
+$GODOT --headless --path game -s res://scripts/dev/SmokeCollector.gd  # 收藏家模式进度面板
+$GODOT --headless --path game -s res://scripts/dev/SmokeCodex.gd      # 图鉴三页签
+$GODOT --headless --path game -s res://scripts/dev/SmokeReputation.gd # 声望/解锁树
+$GODOT --headless --path game -s res://scripts/dev/SmokeV3Loop.gd     # v0.3 完整贸易闭环
+$GODOT --headless --path game -s res://scripts/dev/SmokeContent.gd    # 内容抽检
 ```
 
 手工剧本与 §27 二十二条见 [demo-acceptance.md](docs/superpowers/plans/2026-07-26-demo-acceptance.md)。

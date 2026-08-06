@@ -118,7 +118,11 @@ func _run() -> void:
 	for key in ["net_worth", "visited_cities", "visited_countries", "products_discovered",
 			"total_distance_km", "on_time_rate", "single_profit_max", "profit_per_hour"]:
 		ok = _check(metrics.has(key), "compute_metrics missing key: %s" % key) and ok
+		ok = _check(result.has(key), "settled result missing key: %s" % key) and ok
 	ok = _check(metrics.has("score") and metrics.has("grade"), "metrics missing score/grade") and ok
+	ok = _check(result.has("score") and result.has("grade"), "settled result missing score/grade") and ok
+	ok = _check(JSON.stringify(result) == JSON.stringify(metrics),
+			"settled result diverges from compute_metrics()") and ok
 	var on_time: float = float(metrics.get("on_time_rate", -1.0))
 	ok = _check(on_time >= 0.0 and on_time <= 1.0,
 			"on_time_rate out of range: %.2f" % on_time) and ok
@@ -126,7 +130,6 @@ func _run() -> void:
 	ok = _check(score >= 0 and score <= 100, "score out of range: %d" % score) and ok
 	ok = _check(str(metrics.get("grade", "")) in ["A", "B", "C", "D"],
 			"invalid grade: %s" % str(metrics.get("grade", ""))) and ok
-	ok = _check(not result.is_empty() or true, "settlement result recorded") and ok
 
 	# ═══ PART C: restart resets the challenge ═══
 	app_state.call("reset_new_game", "pvg", "challenge")
