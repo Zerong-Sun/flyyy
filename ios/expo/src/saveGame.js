@@ -67,6 +67,10 @@ export function hydrateSave(baseState, migrated, cities, startingCity) {
   }
   next.visited = next.visited.filter((id) => cities[id]);
   if (!next.visited.length) next.visited = [startingCity];
+  // Accessibility / locale sanity from possibly hand-edited or corrupt saves.
+  if (![1, 1.25, 1.5].includes(next.fontScale)) next.fontScale = 1;
+  if (!['off', 'deuteranopia', 'protanopia'].includes(next.colorBlind)) next.colorBlind = 'off';
+  if (!['en', 'zh'].includes(next.locale)) next.locale = 'en';
   return next;
 }
 

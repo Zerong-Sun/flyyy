@@ -147,6 +147,26 @@ ui.settings.font_scale,Text size: {scale}
 ui.settings.font_scale_changed,Text size set to {scale}
 ui.settings.color_blind,Colour-blind mode: {mode}
 ui.settings.subtitles,Subtitles / hints
+ui.settings.language,Language: {lang}
+ui.settings.language_changed,UI language switched
+ui.settings.lang.zh,中文
+ui.settings.lang.en,English
+ui.settings.pause,Pause time
+ui.settings.resume,Resume time
+ui.settings.mute,Mute
+ui.settings.place_locale,Place names: {lang}
+ui.settings.place_locale_changed,Place-name language switched
+ui.settings.cb.off,Off
+ui.settings.cb.deuteranopia,Green-blind
+ui.settings.cb.protanopia,Red-blind
+ui.transition.takeoff,"Final boarding · takeoff"
+ui.transition.cruise,Cruising
+ui.transition.landing,"Landing approach · {city}"
+ui.transition.note,"(Cutscene; flight time is already counted in the world clock)"
+ui.transition.distance,"Distance {km} km · {cabin} class"
+ui.attr.baseline,Baseline date: {v}
+ui.attr.etl,ETL: {v}
+ui.attr.generated,Generated: {v}
 ui.mode.title,Choose game mode
 ui.mode.sandbox,Sandbox
 ui.mode.challenge,30-Day Challenge

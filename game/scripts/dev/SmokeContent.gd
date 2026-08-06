@@ -39,6 +39,32 @@ func _run() -> void:
 		if str(i18n.get("attribution_body")).is_empty():
 			ok = false
 			errors.append("attribution empty")
+		# Step 3 W5: attribution must follow ui_locale at runtime (en fallback to zh).
+		var app_state := root.get_node_or_null("AppState")
+		if app_state == null:
+			ok = false
+			errors.append("AppState autoload missing")
+		else:
+			var attr_zh: String = i18n.call("attribution")
+			if attr_zh.is_empty():
+				ok = false
+				errors.append("attribution() empty in zh")
+			app_state.set("ui_locale", "en")
+			var attr_en: String = i18n.call("attribution")
+			if attr_en.is_empty() or attr_en == attr_zh:
+				ok = false
+				errors.append("attribution() did not switch to en: %s" % attr_en.substr(0, 40))
+			# New i18n keys for language toggle / transition / attribution labels.
+			for key in ["ui.settings.language", "ui.settings.lang.zh", "ui.settings.lang.en",
+					"ui.settings.pause", "ui.settings.resume", "ui.settings.mute",
+					"ui.settings.place_locale", "ui.settings.cb.off", "ui.settings.cb.deuteranopia",
+					"ui.transition.takeoff", "ui.transition.cruise", "ui.transition.landing",
+					"ui.transition.note", "ui.transition.distance",
+					"ui.attr.baseline", "ui.attr.etl", "ui.attr.generated"]:
+				if not bool(i18n.call("has_key", key)):
+					ok = false
+					errors.append("i18n key missing: %s" % key)
+			app_state.set("ui_locale", "zh")
 		var disc: String = i18n.call("disclaimer")
 		if disc.find("公开航空数据重建") < 0:
 			ok = false

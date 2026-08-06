@@ -828,14 +828,14 @@ func _run_transition_sequence(ticket: Dictionary) -> void:
 			dest_city = DataService.place_name(DataService.cities_by_id[cid], "name")
 		elif str(dest.get("city_name_zh", "")) != "":
 			dest_city = str(dest.get("city_name_zh"))
-	var base: String = "%s  %s → %s\n距离 %.0f km · %s舱\n" % [
+	var base: String = "%s  %s → %s\n%s\n" % [
 		ticket.get("marketing_flight_number", ""), ticket.get("origin_iata", ""), ticket.get("destination_iata", ""),
-		float(ticket.get("distance_km", 0)), ticket.get("cabin", "")
+		I18nService.t("ui.transition.distance", {"km": "%.0f" % float(ticket.get("distance_km", 0)), "cabin": str(ticket.get("cabin", ""))})
 	]
 	var phases: Array = [
-		{"t": 0.0, "title": "强制登机 · 起飞", "bar": "■■■□□□□□□□", "sfx": "", "fx": "takeoff"},
-		{"t": 1.6, "title": "巡航中", "bar": "□□■■■■■□□□", "sfx": "sfx_cruise", "fx": "cruise"},
-		{"t": 3.4, "title": "降落进近 · %s" % dest_city, "bar": "□□□□□□■■■■", "sfx": "sfx_landing", "fx": "land"},
+		{"t": 0.0, "title": I18nService.t("ui.transition.takeoff"), "bar": "■■■□□□□□□□", "sfx": "", "fx": "takeoff"},
+		{"t": 1.6, "title": I18nService.t("ui.transition.cruise"), "bar": "□□■■■■■□□□", "sfx": "sfx_cruise", "fx": "cruise"},
+		{"t": 3.4, "title": I18nService.t("ui.transition.landing", {"city": dest_city}), "bar": "□□□□□□■■■■", "sfx": "sfx_landing", "fx": "land"},
 	]
 	var origin := DataService.get_airport(str(ticket.get("origin_airport_id", "")))
 	for i in phases.size():
@@ -844,7 +844,7 @@ func _run_transition_sequence(ticket: Dictionary) -> void:
 			return
 		if str(ph.sfx) != "":
 			AudioService.play_sfx(str(ph.sfx))
-		_overlay_label.text = "%s\n%s\n%s\n（过场动画，飞行时间已计入世界时钟）" % [ph.title, base, ph.bar]
+		_overlay_label.text = "%s\n%s\n%s\n%s" % [ph.title, base, ph.bar, I18nService.t("ui.transition.note")]
 		if AppState.subtitles_enabled:
 			_show_hint(ph.title)
 		_play_transition_fx(str(ph.fx), dest_city)
@@ -2788,18 +2788,18 @@ func _show_attr() -> void:
 	_attr_text.custom_minimum_size = Vector2(700, 440)
 	_attr_text.scroll_active = true
 	_panel_host.add_child(_attr_text)
-	var body := I18nService.attribution_body
+	var body := I18nService.attribution()
 	if body.is_empty():
 		body = I18nService.disclaimer()
 		for a in DataService.world.get("attributions", []):
 			body += "\n• %s — %s\n  %s" % [a.get("name", ""), a.get("license", ""), a.get("note", "")]
 	var meta: Dictionary = DataService.world.get("meta", {})
-	_attr_text.text = "[b]%s[/b]\n\n%s\n\n基准日：%s\nETL：%s\n生成：%s\n" % [
+	_attr_text.text = "[b]%s[/b]\n\n%s\n\n%s\n%s\n%s\n" % [
 		I18nService.t("ui.tab.attribution"),
 		body,
-		meta.get("baseline_date", ""),
-		meta.get("etl_version", ""),
-		meta.get("generated_at", ""),
+		I18nService.t("ui.attr.baseline", {"v": str(meta.get("baseline_date", ""))}),
+		I18nService.t("ui.attr.etl", {"v": str(meta.get("etl_version", ""))}),
+		I18nService.t("ui.attr.generated", {"v": str(meta.get("generated_at", ""))}),
 	]
 
 
@@ -3004,10 +3004,10 @@ func _toggle_pause() -> void:
 	title.add_theme_font_size_override("font_size", 18)
 	v.add_child(title)
 	var pause_btn := Button.new()
-	pause_btn.text = "继续时间" if GameClock.paused else "暂停时间"
+	pause_btn.text = I18nService.t("ui.settings.resume") if GameClock.paused else I18nService.t("ui.settings.pause")
 	pause_btn.pressed.connect(func ():
 		GameClock.set_paused(not GameClock.paused)
-		_show_hint("时间暂停" if GameClock.paused else "时间继续")
+		_show_hint(I18nService.t("ui.settings.pause") if GameClock.paused else I18nService.t("ui.settings.resume"))
 		_toggle_pause()
 	)
 	v.add_child(pause_btn)
@@ -3042,11 +3042,10 @@ func _toggle_pause() -> void:
 	)
 	v.add_child(font_btn)
 	var cb_btn := Button.new()
-	var cb_labels := {"off": "关闭", "deuteranopia": "绿盲", "protanopia": "红盲"}
 	var cb_mode := AppState.color_blind
-	cb_btn.text = I18nService.t("ui.settings.color_blind", {"mode": cb_labels.get(cb_mode, cb_mode)})
+	cb_btn.text = I18nService.t("ui.settings.color_blind", {"mode": I18nService.t("ui.settings.cb." + cb_mode)})
 	if cb_btn.text == "" or cb_btn.text.begins_with("ui."):
-		cb_btn.text = "色盲模式：%s" % cb_labels.get(cb_mode, cb_mode)
+		cb_btn.text = "色盲模式：%s" % cb_mode
 	cb_btn.pressed.connect(func ():
 		var order := ["off", "deuteranopia", "protanopia"]
 		var idx := order.find(AppState.color_blind)
@@ -3062,16 +3061,26 @@ func _toggle_pause() -> void:
 	subtitles.button_pressed = AppState.subtitles_enabled
 	subtitles.toggled.connect(func (on): AppState.subtitles_enabled = on)
 	v.add_child(subtitles)
+	var ui_locale_btn := Button.new()
+	ui_locale_btn.text = I18nService.t("ui.settings.language", {"lang": I18nService.t("ui.settings.lang." + AppState.ui_locale)})
+	ui_locale_btn.pressed.connect(func ():
+		AppState.ui_locale = "zh" if AppState.ui_locale == "en" else "en"
+		_show_hint(I18nService.t("ui.settings.language_changed"))
+		get_tree().reload_current_scene()
+	)
+	v.add_child(ui_locale_btn)
 	var locale_btn := Button.new()
-	locale_btn.text = "地名语言：English" if AppState.place_locale == "zh" else "地名语言：中文"
+	locale_btn.text = I18nService.t("ui.settings.place_locale", {"lang": I18nService.t("ui.settings.lang." + AppState.place_locale)})
 	locale_btn.pressed.connect(func ():
 		AppState.place_locale = "en" if AppState.place_locale == "zh" else "zh"
-		locale_btn.text = "地名语言：English" if AppState.place_locale == "zh" else "地名语言：中文"
-		_show_hint("地名语言已切换")
+		locale_btn.text = I18nService.t("ui.settings.place_locale", {"lang": I18nService.t("ui.settings.lang." + AppState.place_locale)})
+		_show_hint(I18nService.t("ui.settings.place_locale_changed"))
 	)
 	v.add_child(locale_btn)
 	var mute := CheckButton.new()
-	mute.text = "静音"
+	mute.text = I18nService.t("ui.settings.mute")
+	if mute.text == "" or mute.text.begins_with("ui."):
+		mute.text = "静音"
 	mute.button_pressed = AudioService.is_muted()
 	mute.toggled.connect(func (on): AudioService.set_muted(on))
 	v.add_child(mute)
@@ -3112,7 +3121,9 @@ func _toggle_pause() -> void:
 	)
 	sfx_row.add_child(sfx_slider)
 	var close := Button.new()
-	close.text = "关闭"
+	close.text = I18nService.t("ui.settings.back")
+	if close.text == "" or close.text.begins_with("ui."):
+		close.text = "关闭"
 	close.pressed.connect(_close_panel)
 	v.add_child(close)
 

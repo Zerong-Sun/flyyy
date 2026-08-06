@@ -147,6 +147,26 @@ ui.settings.font_scale,"字号：{scale}"
 ui.settings.font_scale_changed,"字号已调整为 {scale}"
 ui.settings.color_blind,"色盲模式：{mode}"
 ui.settings.subtitles,"字幕/提示"
+ui.settings.language,"界面语言：{lang}"
+ui.settings.language_changed,"界面语言已切换"
+ui.settings.lang.zh,中文
+ui.settings.lang.en,English
+ui.settings.pause,暂停时间
+ui.settings.resume,继续时间
+ui.settings.mute,静音
+ui.settings.place_locale,"地名语言：{lang}"
+ui.settings.place_locale_changed,地名语言已切换
+ui.settings.cb.off,关闭
+ui.settings.cb.deuteranopia,绿盲
+ui.settings.cb.protanopia,红盲
+ui.transition.takeoff,"强制登机 · 起飞"
+ui.transition.cruise,巡航中
+ui.transition.landing,"降落进近 · {city}"
+ui.transition.note,"（过场动画，飞行时间已计入世界时钟）"
+ui.transition.distance,"距离 {km} km · {cabin}舱"
+ui.attr.baseline,"基准日：{v}"
+ui.attr.etl,"ETL：{v}"
+ui.attr.generated,"生成：{v}"
 ui.mode.title,"选择游戏模式"
 ui.mode.sandbox,"沙盒"
 ui.mode.challenge,"30日挑战"

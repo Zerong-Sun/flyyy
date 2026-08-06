@@ -466,6 +466,44 @@ def test_en_csv_key_set_mirrors_zh():
         "ui.city.economy", "ui.city.food", "ui.city.travel", "ui.city.low_content",
     ):
         assert k in zh, k
+    # Step 3 W5 follow-up: language toggle / transition / attribution keys.
+    for k in (
+        "ui.settings.language", "ui.settings.lang.zh", "ui.settings.lang.en",
+        "ui.settings.pause", "ui.settings.resume", "ui.settings.mute",
+        "ui.settings.place_locale", "ui.settings.cb.off", "ui.settings.cb.deuteranopia",
+        "ui.transition.takeoff", "ui.transition.cruise", "ui.transition.landing",
+        "ui.transition.note", "ui.transition.distance",
+        "ui.attr.baseline", "ui.attr.etl", "ui.attr.generated",
+    ):
+        assert k in zh, k
+
+
+def test_i18n_runtime_switch_wiring():
+    """W5 runtime switch is reachable: a settings toggle exists and the
+    attribution service exposes a locale-aware accessor (not just a one-shot
+    Chinese body loaded in _ready)."""
+    i18n_src = (I18N / ".." / ".." / "scripts" / "autoload" / "I18nService.gd").resolve()
+    src = i18n_src.read_text(encoding="utf-8")
+    assert "func attribution()" in src
+    assert "_attributions" in src  # per-locale bodies cached for runtime switch
+
+    main = (GAME / "scripts" / "ui" / "MainHUD.gd").read_text(encoding="utf-8")
+    assert "ui.settings.language" in main  # ui_locale toggle wired in settings
+    assert "ui_locale" in main
+    assert "ui.transition.takeoff" in main
+    assert "I18nService.attribution()" in main
+
+
+def test_appstate_and_expo_sanitize_a11y_values():
+    """Corrupt/hand-edited saves must not produce extreme fontScale or invalid
+    color-blind modes on load."""
+    app = (GAME / "scripts" / "autoload" / "AppState.gd").read_text(encoding="utf-8")
+    assert 'font_scale = fs if fs in [1.0, 1.25, 1.5] else 1.0' in app
+    assert 'color_blind = cb if cb in ["off", "deuteranopia", "protanopia"] else "off"' in app
+
+    save = (ROOT / "ios" / "expo" / "src" / "saveGame.js").read_text(encoding="utf-8")
+    assert "[1, 1.25, 1.5].includes(next.fontScale)" in save
+    assert "['off', 'deuteranopia', 'protanopia'].includes(next.colorBlind)" in save
 
 
 def test_en_tutorial_and_attribution_exist():

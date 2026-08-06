@@ -12,7 +12,8 @@ const ATTRIBUTION_TXT_EN := "res://assets/i18n/attribution_en.txt"
 
 var _ui: Dictionary = {}  # locale -> {key -> text}
 var _tutorials: Dictionary = {}  # locale -> {trigger -> {id, title, text, ...}}
-var attribution_body: String = ""
+var _attributions: Dictionary = {}  # locale -> attribution body
+var attribution_body: String = ""  # current-locale body (kept for callers)
 var loaded: bool = false
 
 
@@ -21,7 +22,9 @@ func _ready() -> void:
 	_ui["en"] = _load_ui_csv(UI_CSV_EN)
 	_tutorials["zh"] = _load_tutorials(TUTORIAL_JSON_ZH)
 	_tutorials["en"] = _load_tutorials(TUTORIAL_JSON_EN)
-	attribution_body = _load_attribution(ATTRIBUTION_TXT_ZH)
+	_attributions["zh"] = _load_attribution(ATTRIBUTION_TXT_ZH)
+	_attributions["en"] = _load_attribution(ATTRIBUTION_TXT_EN)
+	attribution_body = attribution()
 	loaded = true
 	print("I18nService loaded: zh=%d en=%d ui keys, tutorials zh=%d en=%d" % [
 		_ui["zh"].size(), _ui["en"].size(),
@@ -134,3 +137,12 @@ func disclaimer() -> String:
 	if DataService != null and str(DataService.disclaimer) != "":
 		return DataService.disclaimer
 	return "航班网络基于公开航空数据重建，不代表真实购票信息。"
+
+
+## Attribution body for the current UI locale, falling back to Chinese.
+## Refreshes at runtime so a language switch (scene reload) shows the right text.
+func attribution() -> String:
+	var body := str(_attributions.get(current_locale(), ""))
+	if body.is_empty():
+		body = str(_attributions.get("zh", ""))
+	return body
