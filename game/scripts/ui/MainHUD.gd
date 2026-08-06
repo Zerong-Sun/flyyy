@@ -22,6 +22,7 @@ var _clock_label: Label
 var _cash_label: Label
 var _bag_label: Label
 var _airport_label: Label
+var _rep_label: Label
 var _disclaimer: Label
 var _search: LineEdit
 var _airport_list: ItemList
@@ -109,6 +110,7 @@ var _load_button: Button = null
 var _collector_panel = null  # CollectorPanel instance (loaded lazily)
 var _result_panel = null  # ChallengeResultPanel instance (loaded lazily)
 var _codex_panel = null  # CodexPanel instance (loaded lazily)
+var _rep_panel = null  # ReputationPanel instance (loaded lazily)
 
 # Five-tier sell feedback copy now lives in zh_CN.csv (REQ §5.5):
 # sell_console_*, celebration_w*_*, sell_result_title_*.
@@ -124,6 +126,7 @@ func _ready() -> void:
 	EventBus.tutorial_hint.connect(_show_hint)
 	EventBus.game_started.connect(_on_game_started)
 	EventBus.challenge_ended.connect(_on_challenge_ended)
+	EventBus.reputation_changed.connect(_on_reputation_changed)
 	flight_ops.transition_started.connect(_on_transition_started)
 	flight_ops.transition_finished.connect(_on_transition_finished)
 	_load_market_tags()
@@ -165,6 +168,9 @@ func _build_ui() -> void:
 	_airport_label = _label(top, Vector2(1110, 8), "机场")
 	_configure_top_label(_airport_label, Vector2(158, 36))
 	_airport_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_rep_label = _label(top, Vector2(1272, 8), "Lv1")
+	_configure_top_label(_rep_label, Vector2(120, 36))
+	_rep_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	top.add_child(_IconFactory.make("ic_clock", 22.0))
 	top.get_child(top.get_child_count() - 1).position = Vector2(10, 14)
 	top.add_child(_IconFactory.make("ic_money", 22.0))
@@ -279,6 +285,7 @@ func _build_ui() -> void:
 		[I18nService.t("ui.save.manual"), "_save", "ic_save"],
 		[I18nService.t("ui.save.load"), "_load", "ic_load"],
 		[I18nService.t("ui.settings.title"), "_toggle_pause", "ic_settings"],
+		[I18nService.t("ui.reputation.title"), "_show_reputation", "ic_log"],
 	]:
 		var b := Button.new()
 		b.text = pair[0]
@@ -482,6 +489,8 @@ func _show_new_game() -> void:
 		_collector_panel.visible = false
 	if _codex_panel != null:
 		_codex_panel.visible = false
+	if _rep_panel != null:
+		_rep_panel.visible = false
 	_new_game_panel.visible = true
 	GameClock.set_paused(true)
 	AudioService.set_bgm("bgm_menu")
@@ -551,6 +560,21 @@ func _show_codex() -> void:
 		add_child(_codex_panel)
 	_codex_panel.refresh()
 	AudioService.play_sfx("sfx_ui_click")
+
+
+func _show_reputation() -> void:
+	if not _require_started():
+		return
+	_set_panel_bgm("menu")
+	if _rep_panel == null:
+		_rep_panel = load("res://scripts/ui/ReputationPanel.gd").new()
+		add_child(_rep_panel)
+	_rep_panel.refresh()
+	AudioService.play_sfx("sfx_ui_click")
+
+
+func _on_reputation_changed(_level: int) -> void:
+	_refresh_top()
 
 
 func _on_search_changed(q: String) -> void:
@@ -725,6 +749,8 @@ func _refresh_top() -> void:
 	_cash_label.text = "资金 " + _Economy.format_money(AppState.cash_usd)
 	var a := AppState.current_airport()
 	_airport_label.text = "当前位置 %s" % (a.get("iata", "-"))
+	if _rep_label != null:
+		_rep_label.text = I18nService.t("ui.reputation.level", {"level": AppState.level})
 
 
 func _refresh_bags() -> void:

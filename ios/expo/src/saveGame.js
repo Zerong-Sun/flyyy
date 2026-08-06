@@ -12,6 +12,7 @@ export const PERSIST = [
   'profit', 'km', 'savedAt', 'intro', 'focusDest', 'unlockedAch',
   'optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce',
   'locale',
+  'rep', 'level',
 ];
 
 /** Chain upgrades from stored version up to SAVE_VERSION. */
@@ -51,6 +52,8 @@ export function hydrateSave(baseState, migrated, cities, startingCity) {
   if (!Array.isArray(next.visited)) next.visited = [startingCity];
   if (!Array.isArray(next.log)) next.log = [];
   if (!Array.isArray(next.unlockedAch)) next.unlockedAch = [];
+  if (next.rep == null) next.rep = 0;
+  if (next.level == null) next.level = 1;
   // Drop focus / ticket legs that point at unknown hubs (corrupt or downsized saves).
   if (next.focusDest && !cities[next.focusDest]) next.focusDest = '';
   if (next.ticket) {

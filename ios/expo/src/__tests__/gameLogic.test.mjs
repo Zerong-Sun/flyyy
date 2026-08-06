@@ -166,6 +166,20 @@ describe('save migrate round-trip', () => {
     assert.equal(h.cash, 50);
   });
 
+  it('rep and level keys round-trip with defaults for old saves', () => {
+    const base = { cash: 500, city: 'istanbul', rep: 120, level: 3 };
+    const slice = serializeSave(base);
+    const loaded = loadSavePayload(JSON.stringify(slice), { cash: 0, city: STARTING_CITY, inv: [] }, CITIES, STARTING_CITY);
+    assert.equal(loaded.ok, true);
+    assert.equal(loaded.data.rep, 120);
+    assert.equal(loaded.data.level, 3);
+    // Old save without rep/level defaults to 0 / 1
+    const legacy = migrateSave({ saveVersion: 1, cash: 50, city: 'istanbul' });
+    const hyd = hydrateSave({ cash: 0, city: STARTING_CITY, inv: [] }, legacy, CITIES, STARTING_CITY);
+    assert.equal(hyd.rep, 0);
+    assert.equal(hyd.level, 1);
+  });
+
   it('drops invalid ticket.toId and focusDest on hydrate', () => {
     const m = migrateSave({
       saveVersion: 1,
