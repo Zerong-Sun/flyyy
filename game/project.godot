@@ -36,6 +36,7 @@ I18nService="*res://scripts/autoload/I18nService.gd"
 AudioService="*res://scripts/autoload/AudioService.gd"
 AchievementSystem="*res://scripts/systems/AchievementSystem.gd"
 ChallengeSystem="*res://scripts/systems/ChallengeSystem.gd"
+ReputationSystem="*res://scripts/systems/ReputationSystem.gd"
 
 [debug]
 

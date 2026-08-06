@@ -31,6 +31,8 @@ var trip_cold_chain: bool = false
 var cold_chain_start_unix: float = -1.0
 var reliability_events_enabled: bool = true
 var last_market_date: String = ""
+var reputation_points: int = 0
+var level: int = 1
 var last_flight_price: float = 0.0
 var last_baggage_cost: float = 0.0
 var reduced_animations: bool = false
@@ -111,6 +113,8 @@ func reset_new_game(airport_id: String, mode: String = "sandbox") -> void:
 	trip_cold_chain = false
 	cold_chain_start_unix = -1.0
 	last_market_date = "2025-03-01"
+	reputation_points = 0
+	level = 1
 	last_flight_price = 0.0
 	last_baggage_cost = 0.0
 	unlocked_achievements = {}
@@ -134,9 +138,13 @@ func _mark_visit(airport_id: String) -> void:
 	var a: Dictionary = DataService.get_airport(airport_id)
 	if a.is_empty():
 		return
+	var city_id := str(a.get("city_id", ""))
+	var is_new_city := not visited_cities.has(city_id)
 	visited_airports[airport_id] = true
-	visited_cities[str(a.get("city_id", ""))] = true
+	visited_cities[city_id] = true
 	visited_countries[str(a.get("country_id", ""))] = true
+	if is_new_city:
+		ReputationSystem.add_points(5)
 
 
 func current_airport() -> Dictionary:
@@ -231,6 +239,8 @@ func mark_product_discovered(product_id: String) -> void:
 	if product_id == "":
 		return
 	var found: Dictionary = stats.get("products_discovered", {})
+	if not found.has(product_id):
+		ReputationSystem.add_points(3)
 	found[product_id] = true
 	stats["products_discovered"] = found
 
@@ -297,6 +307,8 @@ func log_sell_transaction(sell_city: String, product_id: String, qty: int,
 	var margin: float = total_revenue - total_unit_cost
 	if margin > float(stats.get("single_profit_max", 0.0)):
 		stats["single_profit_max"] = margin
+	if margin > 0.0:
+		ReputationSystem.add_points(int(margin / 1000.0))
 	if margin < 0.0 and total_unit_cost > 0.0 and margin / total_unit_cost < -0.20:
 		log_stat("big_loss_count", 1.0)
 
@@ -323,6 +335,8 @@ func to_dict() -> Dictionary:
 		"cold_chain_start_unix": cold_chain_start_unix,
 		"reliability_events_enabled": reliability_events_enabled,
 		"last_market_date": last_market_date,
+		"reputation_points": reputation_points,
+		"level": level,
 		"game_started": game_started,
 		"game_mode": game_mode,
 		"challenge": challenge,
@@ -357,6 +371,8 @@ func from_dict(d: Dictionary) -> void:
 	cold_chain_start_unix = float(d.get("cold_chain_start_unix", -1.0))
 	reliability_events_enabled = bool(d.get("reliability_events_enabled", true))
 	last_market_date = str(d.get("last_market_date", GameClock.game_date_string()))
+	reputation_points = int(d.get("reputation_points", 0))
+	level = int(d.get("level", 1))
 	game_started = bool(d.get("game_started", false))
 	game_mode = str(d.get("game_mode", "sandbox"))
 	challenge = d.get("challenge", {})

@@ -14,3 +14,4 @@ signal cash_changed
 signal clock_paused_changed(paused: bool)
 signal tutorial_hint(text: String)
 signal challenge_ended(result: Dictionary)
+signal reputation_changed(level: int)

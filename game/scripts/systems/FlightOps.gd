@@ -194,6 +194,7 @@ func _arrive(ticket: Dictionary, on_time: bool = true) -> void:
 	AppState.log_stat("total_distance_km", float(ticket.get("distance_km", 0)))
 	AppState.log_stat("total_flight_hours", float(ticket.get("duration_minutes", 0)) / 60.0)
 	AppState.mark_route_flown(str(ticket.get("origin_iata", "")), str(ticket.get("destination_iata", "")))
+	ReputationSystem.add_points(2)
 	var is_cnx_leg2 := bool(ticket.get("is_connection_leg", false)) and int(ticket.get("connection_leg", 0)) != 1
 	var cabin := str(ticket.get("cabin", ""))
 	if cabin == "business" and not is_cnx_leg2:
