@@ -4,6 +4,7 @@ extends Control
 const _Economy = preload("res://scripts/systems/EconomySystem.gd")
 const _Inventory = preload("res://scripts/systems/InventorySystem.gd")
 const _Tickets = preload("res://scripts/systems/TicketService.gd")
+const _MarketEvents = preload("res://scripts/systems/MarketEvents.gd")
 const _FlightSearch = preload("res://scripts/systems/FlightSearch.gd")
 const _Colors = preload("res://themes/DemoColors.gd")
 const _ThemeFactory = preload("res://themes/ThemeFactory.gd")
@@ -1132,6 +1133,16 @@ func _show_market() -> void:
 	]
 	title.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 	v.add_child(title)
+	var evs := _MarketEvents.city_events(city)
+	if not evs.is_empty():
+		var ev_label := Label.new()
+		var texts := PackedStringArray()
+		for ev in evs:
+			texts.append(I18nService.t(str((ev as Dictionary).get("label", ""))))
+		ev_label.text = "📌 " + "；".join(texts)
+		ev_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		ev_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+		v.add_child(ev_label)
 	var ticket_dest_city := _get_ticket_dest_city_id()
 	if ticket_dest_city != "":
 		var dest := DataService.get_city(ticket_dest_city)
