@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from collections import Counter
 from pathlib import Path
 
 from tests.helpers import load_markets_flat, load_product_market_tags
@@ -163,3 +164,21 @@ def test_sell_buy_ratio_no_city_duplicates():
         assert cities_seen == all_city_ids, (
             f"{key}: missing cities: {all_city_ids - cities_seen}"
         )
+
+
+def test_best_market_destinations_vary():
+    """Regression: best (hot[0]) destination must vary across products.
+
+    Before per-(product, city) remote demand was baked into sell prices, every
+    product's best market was london because GB=1.20 was the highest country
+    price level — making "⭐最佳目的地" always point to the same city. This guard
+    keeps the free-intel hint meaningful.
+    """
+    tags = PRODUCT_MARKET_TAGS
+    best = [entry["hot"][0] for entry in tags.values() if entry.get("hot")]
+    assert best, "no product has a hot destination"
+    distinct = set(best)
+    assert len(distinct) >= 5, (
+        f"best-selling destinations too concentrated: only {len(distinct)} "
+        f"distinct cities; top 3 = {Counter(best).most_common(3)}"
+    )

@@ -169,13 +169,13 @@ ui.attr.etl,ETL: {v}
 ui.attr.generated,Generated: {v}
 ui.mode.title,Choose game mode
 ui.mode.sandbox,Sandbox
-ui.mode.challenge,30-Day Challenge
+ui.mode.challenge,15-Day Challenge
 ui.mode.collector,Collector
 ui.mode.sandbox.desc,Free travel with no time limit. Best for learning the game.
-ui.mode.challenge.desc,Trade the globe within 30 days; 8 metrics settle into a score.
+ui.mode.challenge.desc,Trade the globe within 15 days; 8 metrics settle into a score.
 ui.mode.collector.desc,Collect products and cities; unlock all collect achievements.
 ui.challenge.days_left,{days} days left
-ui.challenge.title,30-Day Challenge result
+ui.challenge.title,15-Day Challenge result
 ui.challenge.restart,Run it again
 ui.challenge.to_menu,Back to menu
 ui.challenge.metric.net_worth,Final net worth

@@ -1,6 +1,6 @@
 extends SceneTree
-## Headless 30-day challenge lifecycle regression — the automated equivalent of
-## "开 30日挑战 → 跑 3 段航班积累指标 → 快进到截止 → 结算 → 重启复位".
+## Headless 15-day challenge lifecycle regression — the automated equivalent of
+## "开 15日挑战 → 跑 3 段航班积累指标 → 快进到截止 → 结算 → 重启复位".
 ## Covers: mode state, ChallengeSystem start/deadline/settlement, the eight
 ## PRD §6.2 metrics + score/grade, and restart reset.
 ## Run:
@@ -51,7 +51,7 @@ func _run() -> void:
 	if _ticket_script == null or ops_script == null:
 		_finish()
 
-	# ── start a fresh 30-day challenge at PVG hub ──
+	# ── start a fresh 15-day challenge at PVG hub ──
 	app_state.call("reset_new_game", "pvg", "challenge")
 	ok = _check(str(app_state.get("game_mode")) == "challenge", "game_mode != challenge") and ok
 	ok = _check(bool(challenge.call("is_active")), "challenge not active after start") and ok

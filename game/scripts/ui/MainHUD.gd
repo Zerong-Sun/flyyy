@@ -67,7 +67,6 @@ var _market_cache: Array = []
 var _product_market_tags: Dictionary = {}
 var _selected_market_product_id: String = ""
 var _market_row_panels: Dictionary = {}
-var _best_dest_sample: Array = []  # product_ids that show best-destination when no ticket
 var _last_hint_time := 0.0
 var _last_clock_s := 0.0
 var _last_countdown_s := 0.0
@@ -1123,6 +1122,16 @@ func _get_intelligence_tag(p: Dictionary, ticket_dest_city: String) -> String:
 	else:
 		var hot_cities: Array = tags.get("hot", [])
 		if hot_cities.size() > 0:
+			# Best-destination intel is shown for this product only ~20% of the
+			# time per day, seeded by save_id + product + game date so the same
+			# save on the same day always shows the same hints (replayable).
+			var gate_seed := hash("%s|%s|%s|%s" % [
+				AppState.save_id, origin_city, product_id, GameClock.game_date_string()
+			])
+			var rng := RandomNumberGenerator.new()
+			rng.seed = gate_seed if gate_seed != 0 else 1
+			if rng.randf() > 0.20:
+				return ""
 			var city := DataService.get_city(hot_cities[0])
 			var city_name := DataService.place_name(city, "name")
 			return "⭐最佳目的地：" + city_name

@@ -1,11 +1,11 @@
 extends Node
-## 30-day challenge lifecycle: start, deadline detection, and settlement.
-## PRD_01.md §6.2 — world runs 2025-03-01 → 2025-03-31 (inclusive) with eight
+## 15-day challenge lifecycle: start, deadline detection, and settlement.
+## PRD_01.md §6.2 — world runs 2025-03-01 → 2025-03-15 (inclusive) with eight
 ## settlement metrics plus a normalized score and A/B/C/D grade.
 
 const _Economy = preload("res://scripts/systems/EconomySystem.gd")
 
-const CHALLENGE_DAYS := 30
+const CHALLENGE_DAYS := 15
 const DAY_SECONDS := 86400.0
 
 # Metric normalization caps (value ÷ cap, clamped to 0..1).

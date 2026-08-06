@@ -10,6 +10,7 @@ import random
 import re
 import sqlite3
 import sys
+import zlib
 from collections import Counter
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -950,6 +951,15 @@ COUNTRY_PRICE_LEVEL = {
     "TH": 0.70,
 }
 
+# Deterministic per-(product, destination) remote demand multiplier.
+# Uses zlib.crc32 (NOT the builtin hash(), which is salted per process) so the
+# materialized prices are stable across pipeline runs. Without this term every
+# product's best market would be the highest COUNTRY_PRICE_LEVEL city (GB=1.20),
+# making "⭐最佳目的地" always London.
+def _remote_demand(product_id: str, dest_city: str, lo: float = 0.75, hi: float = 1.30) -> float:
+    u = (zlib.crc32(f"{product_id}|{dest_city}".encode("utf-8")) % 10000) / 10000.0
+    return lo + u * (hi - lo)
+
 # Country code → Chinese name lookup (ISO 3166-1 alpha-2)
 # ── City Chinese name lookup ─────────────────────────────────────────
 _CITY_NAME_ZH: dict[str, str] = {}
@@ -1579,6 +1589,10 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
             if is_origin:
                 sell = buy * (1.0 - mcfg["buy_sell_spread"])
             else:
+                # Per-(product, destination) demand factor so best markets vary
+                # across cities instead of always being the highest price-level
+                # country (GB). Keeps "⭐最佳目的地" meaningful per product.
+                sell *= _remote_demand(prod["product_id"], city_id)
                 sell = max(sell, buy * 0.95)
                 buy = prod["base_reference_price"] * cpl * 1.05 * mcfg["retail_markup"]
             markets.append(
@@ -1978,7 +1992,11 @@ def build_transfer_edges(routes: set[tuple[str, str]], airports_by_iata: dict[st
                     "mct_minutes": mct,
                 })
             if edges:
-                edges.sort(key=lambda e: e["total_distance_km"])
+                # Deterministic ordering: distance first, then hub IATA as tie-break.
+                # Without the hub key, equal-distance hubs (e.g. HAM/DUS both 3625.7 km)
+                # keep their set-iteration order, which is randomized per process and
+                # makes every pipeline run dirty every tracked transfer file.
+                edges.sort(key=lambda e: (e["total_distance_km"], e["hub"]))
                 key = f"{origin}|{dest}"
                 transfer_edges[key] = edges[:5]
     return transfer_edges

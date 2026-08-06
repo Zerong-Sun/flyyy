@@ -1,4 +1,4 @@
-"""Rule-level tests for the 30-day challenge settlement (PRD_01.md §6.2).
+"""Rule-level tests for the 15-day challenge settlement (PRD_01.md §6.2).
 
 These mirror the formulas implemented in game/scripts/systems/ChallengeSystem.gd
 in pure Python (no Godot). They also act as a drift guard on the stat keys

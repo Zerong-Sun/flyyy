@@ -11,6 +11,13 @@ signal event_cancelled(result: Dictionary)
 var _event_type: String = ""
 var _event_data: Dictionary = {}
 
+func _ready() -> void:
+	# AcceptDialog always shows a default OK button that also fires `confirmed`,
+	# duplicating the explicit confirm buttons added by each event variant
+	# (趁机买入 / 成交！ / 继续 / 全部溢价卖出). Hide it so every popup shows
+	# exactly one set of choices.
+	get_ok_button().visible = false
+
 func show_event(event_type: String, data: Dictionary = {}) -> void:
 	_event_type = event_type
 	_event_data = data

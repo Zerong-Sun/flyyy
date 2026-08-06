@@ -52,6 +52,25 @@ func _ready() -> void:
 		return
 	AppState.held_tickets.clear()
 
+	# Best-destination intel gate: the "⭐最佳目的地：{城}" free label should show
+	# for roughly 20% of products per day (seeded by save_id+product+date).
+	var shown := 0
+	var sampled := 0
+	for product_v in DataService.world.get("products", []):
+		var product: Dictionary = product_v
+		var tag: String = MainHUD._get_intelligence_tag(product, "")
+		sampled += 1
+		if tag != "":
+			shown += 1
+			if not tag.begins_with("⭐最佳目的地："):
+				_fail("unexpected intel tag: " + tag)
+				return
+	var rate := float(shown) / float(sampled) if sampled > 0 else 0.0
+	print("OK: best-destination gate shown=%d/%d (%.0f%%)" % [shown, sampled, rate * 100.0])
+	if rate < 0.10 or rate > 0.30:
+		_fail("best-destination gate rate %.2f outside [0.10, 0.30]" % rate)
+		return
+
 	var external: Dictionary = {}
 	for product_v in DataService.world.get("products", []):
 		var product: Dictionary = product_v

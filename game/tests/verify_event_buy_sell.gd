@@ -105,11 +105,24 @@ func _ready() -> void:
 		_check(_inventory_qty(product_id) == qty_before_sell - 1, "sell did not reduce inventory")
 		_check(AppState.cash_usd > cash_mid, "sell did not add cash")
 	var popup_seen := false
+	var sell_popup = null
 	for child in hud.get_children():
 		if child is PopupEvent and child.visible:
 			popup_seen = true
+			sell_popup = child
 			break
 	_check(popup_seen, "sell result card did not show (BUG: add_child/popup_centered order)")
+	if sell_popup != null:
+		var ok_btn: Button = sell_popup.get_ok_button()
+		_check(ok_btn != null and not ok_btn.visible,
+			"default OK button must be hidden on sell result card (BUG: duplicate OK/继续)")
+		var visible_buttons := 0
+		for b_v in sell_popup.find_children("*", "Button", true, false):
+			var b: Button = b_v
+			if b.visible:
+				visible_buttons += 1
+		_check(visible_buttons == 1,
+			"sell result card must show exactly one visible button, got %d" % visible_buttons)
 
 	_finish()
 

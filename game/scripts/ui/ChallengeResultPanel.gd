@@ -1,5 +1,5 @@
 extends Control
-## 30-day challenge settlement screen. Shows the eight PRD §6.2 metrics,
+## 15-day challenge settlement screen. Shows the eight PRD §6.2 metrics,
 ## a normalized score and A/B/C/D grade, plus restart / back-to-menu actions.
 ## Built in code to match the project's UI conventions.
 
