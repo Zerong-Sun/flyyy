@@ -597,9 +597,9 @@ func _close_panel() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not _panel_host.visible:
+	if _panel_host == null or not _panel_host.visible:
 		return
-	if _overlay.visible:
+	if _overlay == null or _overlay.visible:
 		return
 	if _ff_dialog != null and _ff_dialog.visible:
 		return
@@ -809,7 +809,9 @@ func _do_fast_forward() -> void:
 
 
 func _on_transition_started(ticket: Dictionary) -> void:
-	_panel_host.visible = false
+	# Reset any docked workbench (flights/market) so the panel is cleared and the
+	# bottom nav is restored before the travel overlay covers the screen.
+	_dismiss_open_panel()
 	_overlay.visible = true
 	_transition_running = true
 	_transition_ticket = ticket

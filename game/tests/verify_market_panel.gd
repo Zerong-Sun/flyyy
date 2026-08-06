@@ -10,6 +10,12 @@ func _ready() -> void:
 	AppState.reset_new_game(airports[0].airport_id)
 	await _frames(5)
 	var MainHUD: Control = get_node("../Main/UI")
+	# This test injects a bare held_tickets dict (no departure time) to drive the
+	# purchase-estimate UI; disable FlightOps auto-boarding so the fake ticket
+	# cannot trigger a travel transition that clears the workbench mid-test.
+	var flight_ops: Node = get_node("../Main/FlightOps")
+	if flight_ops != null:
+		flight_ops.set_process(false)
 	MainHUD._show_market()
 	await _frames(5)
 	var tabs: TabContainer = MainHUD.get("_market_tabs") as TabContainer
