@@ -26,7 +26,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not is_active():
 		return
-	if GameClock.unix_time >= float(challenge.get("deadline_unix", 0.0)):
+	if GameClock.unix_time >= float(AppState.challenge.get("deadline_unix", 0.0)):
 		end_challenge()
 
 
