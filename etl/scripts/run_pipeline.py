@@ -11,6 +11,7 @@ import re
 import sqlite3
 import sys
 import zlib
+from bisect import bisect_left
 from collections import Counter
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -1209,6 +1210,8 @@ def synth_flights(
     active_iatas: set[str],
     real_airlines: dict[str, dict],
     curated_alliance: dict[str, str],
+    freq_map: dict[tuple[str, str], int] | None = None,
+    bts_routes: set[tuple[str, str]] | None = None,
 ) -> list[dict]:
     tcfg = eco["ticket"]
     fcfg = eco["flight_synth"]
@@ -1216,16 +1219,25 @@ def synth_flights(
     days = int(fcfg["schedule_days"])
     first_mult = float(tcfg.get("first_multiplier", 25.0))
     bag_first = float(tcfg.get("baggage_first_kg", 100.0))
+    freq_map = freq_map or {}
+    bts_routes = bts_routes or set()
     flights: list[dict] = []
     fid = 0
     for origin, dest in sorted(routes):
+        if (origin, dest) in bts_routes:
+            continue  # replaced by real BTS schedules in main()
         oa = airports_by_iata[origin]
         da = airports_by_iata[dest]
         dist = haversine_km(oa["latitude"], oa["longitude"], da["latitude"], da["longitude"])
         duration = int(dist / fcfg["cruise_km_per_min"] + fcfg["taxi_pad_min"])
         duration = max(fcfg["duration_min_floor"], min(fcfg["duration_min_ceil"], duration))
         rr = stable_rand("route", origin, dest)
-        per_day = rr.randint(fcfg["flights_per_day_min"], fcfg["flights_per_day_max"])
+        if (origin, dest) in freq_map:
+            per_day = freq_map[(origin, dest)]
+            aero_driven = True
+        else:
+            per_day = rr.randint(fcfg["flights_per_day_min"], fcfg["flights_per_day_max"])
+            aero_driven = False
         demand = rr.uniform(tcfg["demand_factor_min"], tcfg["demand_factor_max"])
         base = (
             tcfg["c_route"]
@@ -1283,14 +1295,18 @@ def synth_flights(
                         "cabin_first_available": dist >= 2500,
                         "stops": 0,
                         "stop_airports": [],
-                        "data_source": "synthetic_openflights" if real_route else "synthetic_route_fill",
-                        "data_confidence": "C",
+                        "data_source": (
+                            "aeroscope_2019" if aero_driven
+                            else ("synthetic_openflights" if real_route else "synthetic_route_fill")
+                        ),
+                        "data_confidence": "B" if aero_driven else "C",
                     }
                 )
     # One-stop marketed flights on a fraction of long-haul OD pairs (v0.3)
     flights.extend(
         _synth_stopover_flights(routes, airports_by_iata, eco, route_airlines,
-                                active_iatas, real_airlines, curated_alliance, fid)
+                                active_iatas, real_airlines, curated_alliance, fid,
+                                bts_routes=bts_routes)
     )
     return flights
 
@@ -1304,6 +1320,7 @@ def _synth_stopover_flights(
     real_airlines: dict[str, dict],
     curated_alliance: dict[str, str],
     start_fid: int,
+    bts_routes: set[tuple[str, str]] | None = None,
 ) -> list[dict]:
     """Add a small set of one-stop marketed flights (player stays aboard)."""
     fcfg = eco["flight_synth"]
@@ -1314,6 +1331,7 @@ def _synth_stopover_flights(
     bag_first = float(tcfg.get("baggage_first_kg", 100.0))
     start = date.fromisoformat(fcfg["schedule_start"])
     days = int(fcfg["schedule_days"])
+    bts_routes = bts_routes or set()
 
     neighbor_of: dict[str, set[str]] = {}
     for o, d in routes:
@@ -1322,7 +1340,8 @@ def _synth_stopover_flights(
     long_haul = [
         (o, d)
         for o, d in sorted(routes)
-        if haversine_km(
+        if (o, d) not in bts_routes
+        and haversine_km(
             airports_by_iata[o]["latitude"],
             airports_by_iata[o]["longitude"],
             airports_by_iata[d]["latitude"],
@@ -1409,6 +1428,232 @@ def _synth_stopover_flights(
                     "data_confidence": "C",
                 }
             )
+    return out
+
+
+BTS_DT_FORMAT = "%Y-%m-%d"
+
+
+def read_bts_schedule(
+    path: Path,
+    by_iata: dict[str, dict],
+    iatas: set[str],
+) -> list[dict]:
+    """Parse BTS 2025-03 Marketing Carrier On-Time CSV → filtered US domestic rows.
+
+    Keeps flights whose Origin/Dest are both in the game airport set and located
+    in the US, not cancelled, with a usable CRSDepTime/CRSElapsedTime. Returns raw
+    rows (no flight dict yet) so build_bts_flights can group + cap them.
+    """
+    out: list[dict] = []
+    if not path.exists():
+        print("WARN: BTS 2025-03 file missing; skipping US real-schedule layer")
+        return out
+    with path.open(encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            origin = (row.get("Origin") or "").strip().upper()
+            dest = (row.get("Dest") or "").strip().upper()
+            if origin not in iatas or dest not in iatas:
+                continue
+            if origin == dest:
+                continue
+            if by_iata[origin].get("country_id") != "US" or by_iata[dest].get("country_id") != "US":
+                continue
+            if (row.get("Cancelled") or "").strip() in ("1", "1.00"):
+                continue
+            crs_dep = (row.get("CRSDepTime") or "").strip()
+            crs_el = (row.get("CRSElapsedTime") or "").strip()
+            dist = (row.get("Distance") or "").strip()
+            if not crs_dep or not crs_el or not dist:
+                continue
+            try:
+                crs_elapsed = float(crs_el)
+                distance_miles = float(dist)
+            except ValueError:
+                continue
+            if crs_elapsed <= 0 or distance_miles <= 0:
+                continue
+            fdate = (row.get("FlightDate") or "").strip()
+            if not fdate:
+                continue
+            al = (row.get("Marketing_Airline_Network") or "").strip().upper()
+            fn = (row.get("Flight_Number_Marketing_Airline") or "").strip()
+            if not _IATA_RE.match(al) or not fn:
+                continue
+            out.append({
+                "flight_date": fdate,
+                "origin_iata": origin,
+                "destination_iata": dest,
+                "marketing_airline": al,
+                "flight_number": fn,
+                "crs_dep_time": crs_dep,
+                "crs_elapsed_min": crs_elapsed,
+                "distance_miles": distance_miles,
+            })
+    return out
+
+
+def _uniform_sample_indices(n: int, cap: int) -> list[int]:
+    """Evenly-spaced indices over [0, n) keeping a good time-of-day spread."""
+    if n <= cap:
+        return list(range(n))
+    if cap <= 1:
+        return [0]
+    return sorted({round(i * (n - 1) / (cap - 1)) for i in range(cap)})
+
+
+def build_bts_flights(
+    rows: list[dict],
+    airports_by_iata: dict[str, dict],
+    eco: dict,
+    cap: int,
+    real_airlines: dict[str, list[dict]],
+    curated_alliance: dict[str, str],
+    start_fid: int,
+) -> list[dict]:
+    """Convert filtered BTS rows into flight dicts with the exact synth_flights shape.
+
+    - Groups by (origin, dest, date), sorts by CRSDepTime, keeps ≤ cap evenly
+      spaced departures so the daily time distribution is preserved.
+    - scheduled_departure_utc: BTS local CRS time via localize_to_utc (DST-aware).
+    - scheduled_arrival_utc = dep + CRSElapsedTime (real planned block time).
+    - distance_km = Distance(miles) * 1.60934; prices reuse the existing model.
+    """
+    tcfg = eco["ticket"]
+    fcfg = eco["flight_synth"]
+    first_mult = float(tcfg.get("first_multiplier", 25.0))
+    bag_first = float(tcfg.get("baggage_first_kg", 100.0))
+    groups: dict[tuple[str, str, str], list[dict]] = {}
+    for r in rows:
+        groups.setdefault((r["origin_iata"], r["destination_iata"], r["flight_date"]), []).append(r)
+    flights: list[dict] = []
+    fid = start_fid
+    for (origin, dest, fdate), group in groups.items():
+        oa = airports_by_iata[origin]
+        da = airports_by_iata[dest]
+        airline = _resolve_airline_row(
+            group[0]["marketing_airline"], real_airlines, curated_alliance,
+            ("US",), ("North America",),
+        )
+        if not real_airlines.get(group[0]["marketing_airline"]):
+            continue  # BTS carrier not in our airlines.dat catalog
+        if not airline.get("home_country"):
+            # airlines.dat has some rows with a US state instead of a country
+            # (e.g. AS "Alaska Airlines" country="ALASKA"); BTS rows are already
+            # filtered to US-domestic, so the carrier is US-based by definition.
+            airline["home_country"] = "US"
+        group.sort(key=lambda r: (r["crs_dep_time"], r["flight_number"]))
+        sample = [group[i] for i in _uniform_sample_indices(len(group), max(1, cap))]
+        dist_km = sample[0]["distance_miles"] * 1.60934
+        # Price model identical to synth_flights so economy gates stay valid.
+        rr = stable_rand("bts_route", origin, dest)
+        demand = rr.uniform(tcfg["demand_factor_min"], tcfg["demand_factor_max"])
+        base = (
+            tcfg["c_route"] + dist_km * tcfg["c_km"] + tcfg["airport_fee_default"] * 2
+        ) * tcfg["airline_factor_default"] * demand
+        for r in sample:
+            crs = r["crs_dep_time"].zfill(4)
+            hour = int(crs[:2]) if len(crs) >= 4 else 0
+            minute = int(crs[2:4]) if len(crs) >= 4 else 0
+            if hour >= 24:
+                hour = hour % 24
+            day = date.fromisoformat(r["flight_date"])
+            dep_local_naive = datetime(day.year, day.month, day.day, hour, minute)
+            dep_utc = localize_to_utc(dep_local_naive, oa["timezone"])
+            arr_utc = dep_utc + timedelta(minutes=r["crs_elapsed_min"])
+            duration = max(int(round(r["crs_elapsed_min"])), fcfg["duration_min_floor"])
+            rnd = rr.uniform(tcfg["random_factor_min"], tcfg["random_factor_max"])
+            p_eco = round(base * rnd, 2)
+            p_biz = round(p_eco * tcfg["business_multiplier"], 2)
+            p_first = round(p_eco * first_mult, 2)
+            fn = f"{airline['id']}{r['flight_number']}"
+            fid += 1
+            flights.append({
+                "flight_instance_id": f"B{fid:07d}",
+                "marketing_flight_number": fn,
+                "operating_airline_id": airline["id"],
+                "marketing_airline_id": airline["id"],
+                "airline_name": airline["name"],
+                "airline_home_country": airline.get("home_country", ""),
+                "alliance_id": airline.get("alliance_id", "none"),
+                "origin_airport_id": oa["airport_id"],
+                "destination_airport_id": da["airport_id"],
+                "origin_iata": origin,
+                "destination_iata": dest,
+                "scheduled_departure_utc": dep_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "scheduled_arrival_utc": arr_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "distance_km": round(dist_km, 1),
+                "duration_minutes": duration,
+                "aircraft_type": "A321" if dist_km < 4000 else "B777",
+                "ticket_base_price_economy": p_eco,
+                "ticket_base_price_business": p_biz,
+                "ticket_base_price_first": p_first,
+                "baggage_allowance_economy": tcfg["baggage_economy_kg"],
+                "baggage_allowance_business": tcfg["baggage_business_kg"],
+                "baggage_allowance_first": bag_first,
+                "cabin_business_available": True,
+                "cabin_first_available": dist_km >= 2500,
+                "stops": 0,
+                "stop_airports": [],
+                "data_source": "bts_2025_03",
+                "data_confidence": "A",
+            })
+    return flights
+
+
+def read_aeroscope_frequency(path: Path) -> dict[tuple[str, str], int]:
+    """Aggregate AeroSCOPE 2019 n_flights → {(src, dst): annual flight count}.
+
+    AeroSCOPE rows are (airline, aircraft, route); summing n_flights across all
+    carriers/aircraft gives the route's annual frequency. 'NA' cells are literal
+    strings in this CSV (Namibia / North America), so raw csv.DictReader is safe.
+    """
+    out: dict[tuple[str, str], int] = {}
+    if not path.exists():
+        print("WARN: AeroSCOPE 2019 file missing; skipping frequency layer")
+        return out
+    with path.open(encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            src = (row.get("iata_departure") or "").strip().upper()
+            dst = (row.get("iata_arrival") or "").strip().upper()
+            nf = (row.get("n_flights") or "").strip()
+            if not src or not dst or src == dst or not nf:
+                continue
+            try:
+                n = float(nf)
+            except ValueError:
+                continue
+            if n <= 0:
+                continue
+            out[(src, dst)] = out.get((src, dst), 0) + int(round(n))
+    return out
+
+
+def build_aeroscope_freq_map(
+    annual: dict[tuple[str, str], int],
+    routes: set[tuple[str, str]],
+    freq_min: int,
+    freq_max: int,
+) -> dict[tuple[str, str], int]:
+    """Map AeroSCOPE annual counts to per-day flights via relative normalization.
+
+    Only routes in `routes` with AeroSCOPE data participate. The percentile rank
+    of each route's annual count among matched routes maps onto [freq_min,
+    freq_max] (1-4 default, 1-2 under --full), preserving the real relative
+    frequency structure while keeping the game rhythm.
+    """
+    matched = {k: v for k, v in annual.items() if k in routes}
+    if not matched:
+        return {}
+    values = sorted(matched.values())
+    n = len(values)
+    out: dict[tuple[str, str], int] = {}
+    for k, annual_n in matched.items():
+        # percentile rank (0.0 .. 1.0) among matched routes (bisect: O(log n))
+        rank = bisect_left(values, annual_n) / max(1, n - 1)
+        per_day = int(round(freq_min + rank * (freq_max - freq_min)))
+        per_day = max(freq_min, min(freq_max, per_day))
+        out[k] = per_day
     return out
 
 
@@ -1895,6 +2140,10 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
     # ── flights/ (per-origin files, lazy-loadable) ──
     flights_dir = GAME_DATA / "flights"
     flights_dir.mkdir(parents=True, exist_ok=True)
+    # Clear stale per-origin files (airport sets shrink between --full runs)
+    for old in flights_dir.glob("*.json"):
+        if old.name != "_manifest.json":
+            old.unlink()
     by_origin: dict[str, list] = {}
     for fl in flights:
         by_origin.setdefault(fl["origin_airport_id"], []).append(fl)
@@ -2036,7 +2285,7 @@ def build_coverage_report(cities, airports, products, product_market_tags, trans
         "cold_chain_products": cold_products,
         "hazmat_restricted_products": hazmat_restricted,
         "mct_override_airports": mct_overrides,
-        "etl_version": "0.3.0",
+        "etl_version": "0.3.1",
     }
     return report
 
@@ -2119,11 +2368,18 @@ def validate(
         if deg < 3:
             print(f"WARN: {a} low degree {deg}")
     assert len(flights) > 0, "No flights generated"
+    allowed_sources = {
+        "bts_2025_03", "aeroscope_2019",
+        "synthetic_openflights", "synthetic_route_fill", "synthetic_stopover",
+    }
     for fl in flights:
         assert fl["origin_iata"] != fl["destination_iata"]
         assert fl["scheduled_arrival_utc"] > fl["scheduled_departure_utc"]
         assert fl["ticket_base_price_economy"] > 0
         assert abs(fl["ticket_base_price_business"] - fl["ticket_base_price_economy"] * 10) < 0.02
+        assert fl.get("data_source") in allowed_sources, (
+            f"unknown data_source {fl.get('data_source')} on {fl['flight_instance_id']}"
+        )
     assert len(cities) >= 20, f"Expected >=20 cities, got {len(cities)}"
     by_city: dict[str, int] = {}
     for p in products:
@@ -2150,8 +2406,12 @@ def validate(
     # Real-airline gates (fail hard — the whole point of the aviation overhaul):
     if route_airlines and active_iatas and real_airlines:
         # 1) Every flight on a real route must be operated by a real operator.
+        #    BTS 2025-03 is a newer, authoritative schedule than routes.dat (2014),
+        #    so those flights are exempt from the routes.dat operator membership.
         fabricated: list[str] = []
         for fl in flights:
+            if fl.get("data_source") == "bts_2025_03":
+                continue
             ops = route_airlines.get((fl["origin_iata"], fl["destination_iata"]), set())
             if not ops or not (ops & active_iatas):
                 continue  # no active real operator → documented fallback allowed
@@ -2168,6 +2428,8 @@ def validate(
         #    airline based on the same continent as an endpoint (regional carrier).
         bad_fill: list[str] = []
         for fl in flights:
+            if fl.get("data_source") == "bts_2025_03":
+                continue
             ops = route_airlines.get((fl["origin_iata"], fl["destination_iata"]), set())
             if ops & active_iatas:
                 continue
@@ -2192,8 +2454,11 @@ def validate(
         #    the flight must use one of them (blocks defunct/foreign fillers such
         #    as JAS on CN domestic). Foreign operators are only allowed when the
         #    route has no domestic operator in routes.dat.
+        #    BTS flights are real US schedules (newer than routes.dat), exempt.
         foreign_domestic: list[str] = []
         for fl in flights:
+            if fl.get("data_source") == "bts_2025_03":
+                continue
             o, d = fl["origin_iata"], fl["destination_iata"]
             route_country = by_iata_v[o]["country_id"]
             if route_country != by_iata_v[d]["country_id"]:
@@ -2292,14 +2557,37 @@ def main() -> int:
     # Guarantee every airport has a direct international route (PRD plan-A 补齐).
     routes = ensure_intl_routes(routes, iatas, by_iata, route_airlines, active_iatas)
 
-    # For expanded sets, reduce flight density
+    # For expanded sets, reduce flight density (also tightens AeroSCOPE mapping)
     if len(additional) > 0:
         eco = dict(eco)
         eco["flight_synth"] = dict(eco["flight_synth"])
         eco["flight_synth"]["flights_per_day_min"] = 1
         eco["flight_synth"]["flights_per_day_max"] = 2
+        eco["flight_synth"]["aeroscope_freq_min"] = 1
+        eco["flight_synth"]["aeroscope_freq_max"] = 2
+
+    # ── v0.3.1 real-schedule layers ──
+    # US domestic flights: BTS 2025-03 real flight numbers + CRS planned times.
+    bts_rows = read_bts_schedule(RAW / "bts_on_time_2025_3.csv", by_iata, set(iatas))
+    bts_routes = {(r["origin_iata"], r["destination_iata"]) for r in bts_rows}
+    # Global non-US frequency: AeroSCOPE 2019 annual n_flights relative-normalized.
+    aeroscope_annual = read_aeroscope_frequency(RAW / "AeroSCOPE_2019.csv")
+    freq_min = int(eco["flight_synth"].get("aeroscope_freq_min", 1))
+    freq_max = int(eco["flight_synth"].get("aeroscope_freq_max", 4))
+    freq_map = build_aeroscope_freq_map(aeroscope_annual, routes - bts_routes, freq_min, freq_max)
+    print(f"BTS routes: {len(bts_routes)} ({len(bts_rows)} raw rows); "
+          f"AeroSCOPE-driven routes: {len(freq_map)}")
+
     flights = synth_flights(routes, by_iata, eco, route_airlines, active_iatas,
-                            real_airlines, curated_alliance)
+                            real_airlines, curated_alliance, freq_map=freq_map,
+                            bts_routes=bts_routes)
+    bts_flights = build_bts_flights(
+        bts_rows, by_iata, eco,
+        int(eco["flight_synth"].get("bts_max_flights_per_route_per_day", 8)),
+        real_airlines, curated_alliance, len(flights),
+    )
+    flights.extend(bts_flights)
+    print(f"Flights after BTS merge: {len(flights)} ({len(bts_flights)} BTS real)")
     cities, products, markets = build_cities_products(hubs_cfg_expanded, eco)
     # *_en fields are required by validate() and the export; apply before both.
     cities = apply_en_fields(cities)
@@ -2355,7 +2643,7 @@ def main() -> int:
 
     tz_offsets = build_tz_offsets(hubs_cfg_expanded, int(eco["flight_synth"]["schedule_days"]))
     meta = {
-        "etl_version": "0.3.0",
+        "etl_version": "0.3.1",
         "baseline_date": "2025-03-01",
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "flight_count": len(flights),
@@ -2364,7 +2652,8 @@ def main() -> int:
         "city_count": len(cities),
         "product_count": len(products),
         "transfer_edge_pairs": len(transfer_edges),
-        "disclaimer": "real airlines/routes from OpenFlights; synthesized schedules",
+        "disclaimer": "US domestic schedules from BTS On-Time (2025-03); global routes from OpenFlights; "
+                      "frequencies from AeroSCOPE 2019; synthesized times elsewhere",
     }
     validate(airports, routes, flights, cities, products, route_airlines, active_iatas, real_airlines)
     write_sqlite(airports, routes, flights, cities, products, markets, eco, meta)
