@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 9587
   fragility: 0.0
   rarity: 0.38
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 高雄矿产合约。矿产品价格与全球大宗商品行情联动。单件约39.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自中国台湾。
 - product_id: kaohsiung_(xiaogang)_食品_B
   name_zh: 高雄食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 917
   fragility: 0.2
   rarity: 0.23
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 高雄食品合约。单件约15.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$117.89，入手门槛不高。产自中国台湾。食品类货物对仓储条件与保质期敏感。
 - product_id: kaohsiung_(xiaogang)_日用品_B
   name_zh: 高雄日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 9970
   fragility: 0.0
   rarity: 0.1
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 高雄日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$61.39，入手门槛不高。产自中国台湾。日用品需求平稳，适合作为常备贸易品。单件约14.8kg，分量较重，占行李配额多。
 - product_id: kaohsiung_(xiaogang)_糖果_B
   name_zh: 高雄糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1691
   fragility: 0.1
   rarity: 0.27
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 高雄糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约5.5kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$78.44，入手门槛不高。产自中国台湾。
 - product_id: kaohsiung_(xiaogang)_纺织品_B
   name_zh: 高雄纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 40233
   fragility: 0.0
   rarity: 0.35
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 高雄纺织品合约。单件约12.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$376.53，入手门槛不高。产自中国台湾。纺织与服装是国际贸易的传统大宗品类。

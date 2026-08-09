@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.55
-  description: 标准胶远期合约。实物在仓，随身仅合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 橡胶原料合约。矿产品价格与全球大宗商品行情联动。单件约1.5kg，轻便易携。性质耐久，长途运输不易变质。单件报价$420，入手门槛不高。产自泰国曼谷。
 - product_id: bkk_textile_contract
   name_zh: 泰丝面料合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.55
-  description: 蚕丝家纺合约单据。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 泰丝面料合约。性质耐久，长途运输不易变质。产自泰国曼谷。纺织与服装是国际贸易的传统大宗品类。单件约1kg，轻便易携。
 - product_id: bkk_electronics_sample
   name_zh: 电子组装样品
   category: 电子
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.5
-  description: 硬盘与消费电子半成品样品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 电子组装样品。单件约5kg，分量适中。性质耐久，长途运输不易变质。产自泰国曼谷。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: bkk_gem_proxy
   name_zh: 彩色宝石代购
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.1
   rarity: 0.75
-  description: 切割成品小件代购。轻量高价值。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 彩色宝石代购。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$3100，属高值商品。产自泰国曼谷。工艺品带有鲜明的地方工艺与审美传统。单件约0.3kg，轻便易携。
 - product_id: bkk_mcu_core
   name_zh: 嵌入式核心器件
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.7
-  description: 嵌入式控制与电源模块。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 嵌入式核心器件。单件约0.6kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$3600，属高值商品。产自泰国曼谷。电子元件与消费电子是贸易量最大的品类之一。

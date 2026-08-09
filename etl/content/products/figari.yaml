@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 40718
   fragility: 0.2
   rarity: 0.6
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 菲加里机械合约。机械设备与工业部件是跨境物流的重要品类。单件约42.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自法国。
 - product_id: figari_工艺品_B
   name_zh: 菲加里工艺品合约
   category: 工艺品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 63645
   fragility: 0.5
   rarity: 0.42
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 菲加里工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约9.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。产自法国。
 - product_id: figari_食品_B
   name_zh: 菲加里食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 777
   fragility: 0.2
   rarity: 0.39
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 菲加里食品合约。食品类货物对仓储条件与保质期敏感。单件约22.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$120.71，入手门槛不高。产自法国。
 - product_id: figari_日用品_B
   name_zh: 菲加里日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 90367
   fragility: 0.0
   rarity: 0.08
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 菲加里日用品合约。单件约11.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$74，入手门槛不高。产自法国。日用品需求平稳，适合作为常备贸易品。
 - product_id: figari_香料_B
   name_zh: 菲加里香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 7188
   fragility: 0.0
   rarity: 0.42
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 菲加里香料合约。单件约0.9kg，轻便易携。性质耐久，长途运输不易变质。单件报价$295.85，入手门槛不高。产自法国。香料贸易历史悠久，单价与风味并重。

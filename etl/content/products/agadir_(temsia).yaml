@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 19775
   fragility: 0.0
   rarity: 0.45
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 阿加迪尔纺织品合约。性质耐久，长途运输不易变质。单件报价$220.73，入手门槛不高。产自摩洛哥。纺织与服装是国际贸易的传统大宗品类。单件约19.4kg，分量较重，占行李配额多。
 - product_id: agadir_(temsia)_矿产_B
   name_zh: 阿加迪尔矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 22637
   fragility: 0.0
   rarity: 0.36
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 阿加迪尔矿产合约。性质耐久，长途运输不易变质。单件报价$213.75，入手门槛不高。产自摩洛哥。矿产品价格与全球大宗商品行情联动。单件约22.4kg，分量较重，占行李配额多。
 - product_id: agadir_(temsia)_陶瓷_B
   name_zh: 阿加迪尔陶瓷合约
   category: 陶瓷
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 59532
   fragility: 0.7
   rarity: 0.54
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 阿加迪尔陶瓷合约。单件约19.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$122.43，入手门槛不高。产自摩洛哥。陶瓷制品易碎，包装与搬运需小心。
 - product_id: agadir_(temsia)_食品_B
   name_zh: 阿加迪尔食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 726
   fragility: 0.2
   rarity: 0.23
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 阿加迪尔食品合约。食品类货物对仓储条件与保质期敏感。单件约21.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$97.33，入手门槛不高。产自摩洛哥。
 - product_id: agadir_(temsia)_香料_B
   name_zh: 阿加迪尔香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 6381
   fragility: 0.0
   rarity: 0.56
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 阿加迪尔香料合约。香料贸易历史悠久，单价与风味并重。单件约0.9kg，轻便易携。性质耐久，长途运输不易变质。单件报价$145.63，入手门槛不高。产自摩洛哥。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1395
   fragility: 0.2
   rarity: 0.3
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 檀香山食品合约。食品类货物对仓储条件与保质期敏感。单件约21.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$270.38，入手门槛不高。产自美国。
 - product_id: honolulu,_oahu_电子_B
   name_zh: 檀香山电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 76027
   fragility: 0.3
   rarity: 0.65
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 檀香山电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约2.8kg，分量适中。性质耐久，长途运输不易变质。产自美国。
 - product_id: honolulu,_oahu_能源_B
   name_zh: 檀香山能源合约
   category: 能源
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 33376
   fragility: 0.0
   rarity: 0.57
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 檀香山能源合约。单件约6.7kg，分量适中。性质耐久，长途运输不易变质。产自美国。能源类合约跟踪油气与电力等大宗商品行情。
 - product_id: honolulu,_oahu_日用品_B
   name_zh: 檀香山日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 78290
   fragility: 0.0
   rarity: 0.1
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 檀香山日用品合约。单件约8.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$133.02，入手门槛不高。产自美国。日用品需求平稳，适合作为常备贸易品。
 - product_id: honolulu,_oahu_机械_B
   name_zh: 檀香山机械合约
   category: 机械
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 35242
   fragility: 0.2
   rarity: 0.61
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 檀香山机械合约。单件约43.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自美国。机械设备与工业部件是跨境物流的重要品类。

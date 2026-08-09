@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 85144
   fragility: 0.0
   rarity: 0.35
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 伊维萨纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约14.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$390.14，入手门槛不高。产自西班牙。
 - product_id: ibiza_(eivissa)_食品_B
   name_zh: 伊维萨食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 834
   fragility: 0.2
   rarity: 0.29
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 伊维萨食品合约。单件约23.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$113.79，入手门槛不高。产自西班牙。食品类货物对仓储条件与保质期敏感。
 - product_id: ibiza_(eivissa)_陶瓷_B
   name_zh: 伊维萨陶瓷合约
   category: 陶瓷
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 61407
   fragility: 0.7
   rarity: 0.59
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 伊维萨陶瓷合约。陶瓷制品易碎，包装与搬运需小心。单件约14.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$219.44，入手门槛不高。产自西班牙。
 - product_id: ibiza_(eivissa)_糖果_B
   name_zh: 伊维萨糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2147
   fragility: 0.1
   rarity: 0.33
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 伊维萨糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$104.88，入手门槛不高。产自西班牙。糖果点心类商品包装轻巧，礼品属性强。单件约6kg，分量适中。
 - product_id: ibiza_(eivissa)_日用品_B
   name_zh: 伊维萨日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 84450
   fragility: 0.0
   rarity: 0.06
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 伊维萨日用品合约。单件约7kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$79.43，入手门槛不高。产自西班牙。日用品需求平稳，适合作为常备贸易品。

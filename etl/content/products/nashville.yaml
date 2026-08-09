@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 95455
   fragility: 0.0
   rarity: 0.19
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 纳什维尔日用品合约。单件约10.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$113.09，入手门槛不高。产自美国。日用品需求平稳，适合作为常备贸易品。
 - product_id: nashville_食品_B
   name_zh: 纳什维尔食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 695
   fragility: 0.2
   rarity: 0.39
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 纳什维尔食品合约。单件约26.5kg，分量较重，占行李配额多。保质期约695小时。单件报价$263.25，入手门槛不高。产自美国。食品类货物对仓储条件与保质期敏感。
 - product_id: nashville_能源_B
   name_zh: 纳什维尔能源合约
   category: 能源
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 35558
   fragility: 0.0
   rarity: 0.63
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 纳什维尔能源合约。性质耐久，长途运输不易变质。产自美国。能源类合约跟踪油气与电力等大宗商品行情。单件约6.6kg，分量适中。
 - product_id: nashville_机械_B
   name_zh: 纳什维尔机械合约
   category: 机械
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 36373
   fragility: 0.2
   rarity: 0.54
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 纳什维尔机械合约。机械设备与工业部件是跨境物流的重要品类。单件约27.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自美国。
 - product_id: nashville_电子_B
   name_zh: 纳什维尔电子合约
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 46029
   fragility: 0.3
   rarity: 0.63
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 纳什维尔电子合约。性质耐久，长途运输不易变质。单件报价$3007.73，属高值商品。产自美国。电子元件与消费电子是贸易量最大的品类之一。单件约3.9kg，分量适中。

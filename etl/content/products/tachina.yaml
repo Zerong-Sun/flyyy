@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 5215
   fragility: 0.0
   rarity: 0.44
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 塔奇纳香料合约。性质耐久，长途运输不易变质。单件报价$194.22，入手门槛不高。产自厄瓜多尔。香料贸易历史悠久，单价与风味并重。单件约0.6kg，轻便易携。
 - product_id: tachina_纺织品_B
   name_zh: 塔奇纳纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 13991
   fragility: 0.0
   rarity: 0.31
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 塔奇纳纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$495.68，入手门槛不高。产自厄瓜多尔。纺织与服装是国际贸易的传统大宗品类。单件约9.9kg，分量较重，占行李配额多。
 - product_id: tachina_咖啡_B
   name_zh: 塔奇纳咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 3404
   fragility: 0.0
   rarity: 0.42
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 塔奇纳咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约12.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$143.74，入手门槛不高。产自厄瓜多尔。
 - product_id: tachina_日用品_B
   name_zh: 塔奇纳日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 79851
   fragility: 0.0
   rarity: 0.11
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 塔奇纳日用品合约。日用品需求平稳，适合作为常备贸易品。单件约8.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$51.55，入手门槛不高。产自厄瓜多尔。
 - product_id: tachina_工艺品_B
   name_zh: 塔奇纳工艺品合约
   category: 工艺品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 18426
   fragility: 0.5
   rarity: 0.53
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 塔奇纳工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$178.86，入手门槛不高。产自厄瓜多尔。工艺品带有鲜明的地方工艺与审美传统。单件约5.9kg，分量适中。

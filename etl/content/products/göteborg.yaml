@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 46100
   fragility: 0.2
   rarity: 0.6
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 哥德堡机械合约。性质耐久，长途运输不易变质。产自瑞典。机械设备与工业部件是跨境物流的重要品类。单件约22.4kg，分量较重，占行李配额多。
 - product_id: göteborg_电子_B
   name_zh: 哥德堡电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 51666
   fragility: 0.3
   rarity: 0.74
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 哥德堡电子合约。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$2845.17，属高值商品。产自瑞典。电子元件与消费电子是贸易量最大的品类之一。单件约1.5kg，轻便易携。
 - product_id: göteborg_能源_B
   name_zh: 哥德堡能源合约
   category: 能源
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 21442
   fragility: 0.0
   rarity: 0.55
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 哥德堡能源合约。单件约9.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自瑞典。能源类合约跟踪油气与电力等大宗商品行情。
 - product_id: göteborg_日用品_B
   name_zh: 哥德堡日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 26675
   fragility: 0.0
   rarity: 0.08
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 哥德堡日用品合约。日用品需求平稳，适合作为常备贸易品。单件约8.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$61.4，入手门槛不高。产自瑞典。
 - product_id: göteborg_食品_B
   name_zh: 哥德堡食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 948
   fragility: 0.2
   rarity: 0.35
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 哥德堡食品合约。食品类货物对仓储条件与保质期敏感。单件约22kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$177.36，入手门槛不高。产自瑞典。

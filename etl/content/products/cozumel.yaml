@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 40334
   fragility: 0.0
   rarity: 0.16
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 科苏梅尔日用品合约。日用品需求平稳，适合作为常备贸易品。单件约7.7kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$68.82，入手门槛不高。产自墨西哥。
 - product_id: cozumel_矿产_B
   name_zh: 科苏梅尔矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 27642
   fragility: 0.0
   rarity: 0.51
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 科苏梅尔矿产合约。单件约18.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自墨西哥。矿产品价格与全球大宗商品行情联动。
 - product_id: cozumel_电子_B
   name_zh: 科苏梅尔电子合约
   category: 电子
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 88247
   fragility: 0.3
   rarity: 0.61
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 科苏梅尔电子合约。性质耐久，长途运输不易变质。产自墨西哥。电子元件与消费电子是贸易量最大的品类之一。单件约2kg，轻便易携。
 - product_id: cozumel_食品_B
   name_zh: 科苏梅尔食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1161
   fragility: 0.2
   rarity: 0.4
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 科苏梅尔食品合约。性质耐久，长途运输不易变质。单件报价$193.7，入手门槛不高。产自墨西哥。食品类货物对仓储条件与保质期敏感。单件约29kg，分量较重，占行李配额多。
 - product_id: cozumel_玩具_B
   name_zh: 科苏梅尔玩具合约
   category: 玩具
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 47577
   fragility: 0.1
   rarity: 0.28
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 科苏梅尔玩具合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$111.52，入手门槛不高。产自墨西哥。玩具类商品批量贸易活跃，季节性强。单件约7.1kg，分量适中。

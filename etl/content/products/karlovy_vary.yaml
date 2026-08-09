@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 19856
   fragility: 0.0
   rarity: 0.08
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 卡罗维发利日用品合约。单件约8.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$91.52，入手门槛不高。产自捷克。日用品需求平稳，适合作为常备贸易品。
 - product_id: karlovy_vary_食品_B
   name_zh: 卡罗维发利食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1241
   fragility: 0.2
   rarity: 0.37
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 卡罗维发利食品合约。单件约21.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$244.75，入手门槛不高。产自捷克。食品类货物对仓储条件与保质期敏感。
 - product_id: karlovy_vary_咖啡_B
   name_zh: 卡罗维发利咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 3377
   fragility: 0.0
   rarity: 0.33
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 卡罗维发利咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约8.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$117.44，入手门槛不高。产自捷克。
 - product_id: karlovy_vary_工艺品_B
   name_zh: 卡罗维发利工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 92144
   fragility: 0.5
   rarity: 0.56
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 卡罗维发利工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$370.29，入手门槛不高。产自捷克。工艺品带有鲜明的地方工艺与审美传统。单件约13.5kg，分量较重，占行李配额多。
 - product_id: karlovy_vary_香料_B
   name_zh: 卡罗维发利香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 5561
   fragility: 0.0
   rarity: 0.49
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 卡罗维发利香料合约。香料贸易历史悠久，单价与风味并重。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$283.98，入手门槛不高。产自捷克。

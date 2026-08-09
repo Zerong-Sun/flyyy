@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 55957
   fragility: 0.0
   rarity: 0.43
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 清州纺织品合约。性质耐久，长途运输不易变质。单件报价$445.84，入手门槛不高。产自韩国。纺织与服装是国际贸易的传统大宗品类。单件约9.7kg，分量较重，占行李配额多。
 - product_id: cheongju_化妆品_B
   name_zh: 清州化妆品合约
   category: 化妆品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 7975
   fragility: 0.2
   rarity: 0.46
-  description: 化妆品样品合约，轻便高价值跨境贸易品。
+  description: 清州化妆品合约。化妆品属高价值轻量品类，对包装要求高。单件约1.5kg，轻便易携。性质耐久，长途运输不易变质。单件报价$235.62，入手门槛不高。产自韩国。
 - product_id: cheongju_文具_B
   name_zh: 清州文具合约
   category: 文具
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 25161
   fragility: 0.0
   rarity: 0.12
-  description: 当地特色文具纸品合约，轻便易携带。
+  description: 清州文具合约。文具用品需求稳定，轻便易携带。单件约3.5kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$49.59，入手门槛不高。产自韩国。
 - product_id: cheongju_食品_B
   name_zh: 清州食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 828
   fragility: 0.2
   rarity: 0.32
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 清州食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$103.22，入手门槛不高。产自韩国。食品类货物对仓储条件与保质期敏感。单件约28.7kg，分量较重，占行李配额多。
 - product_id: cheongju_电子_B
   name_zh: 清州电子合约
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 31122
   fragility: 0.3
   rarity: 0.6
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 清州电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约4.5kg，分量适中。性质耐久，长途运输不易变质。单件报价$2779.9，属高值商品。产自韩国。

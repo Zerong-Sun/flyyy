@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 69210
   fragility: 0.0
   rarity: 0.52
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 奥尔堡矿产合约。性质耐久，长途运输不易变质。产自丹麦。矿产品价格与全球大宗商品行情联动。单件约34.4kg，分量较重，占行李配额多。
 - product_id: aalborg_纺织品_B
   name_zh: 奥尔堡纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 53835
   fragility: 0.0
   rarity: 0.43
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 奥尔堡纺织品合约。性质耐久，长途运输不易变质。单件报价$299.17，入手门槛不高。产自丹麦。纺织与服装是国际贸易的传统大宗品类。单件约8.2kg，分量较重，占行李配额多。
 - product_id: aalborg_日用品_B
   name_zh: 奥尔堡日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 92103
   fragility: 0.0
   rarity: 0.12
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 奥尔堡日用品合约。日用品需求平稳，适合作为常备贸易品。单件约13.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$62.25，入手门槛不高。产自丹麦。
 - product_id: aalborg_糖果_B
   name_zh: 奥尔堡糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2617
   fragility: 0.1
   rarity: 0.29
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 奥尔堡糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$61.24，入手门槛不高。产自丹麦。糖果点心类商品包装轻巧，礼品属性强。单件约6kg，分量适中。
 - product_id: aalborg_咖啡_B
   name_zh: 奥尔堡咖啡合约
   category: 咖啡
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 3638
   fragility: 0.0
   rarity: 0.42
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 奥尔堡咖啡合约。单件约8.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$131.3，入手门槛不高。产自丹麦。咖啡是国际大宗农产品，产地风味差异明显。

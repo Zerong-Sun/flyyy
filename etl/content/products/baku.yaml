@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 29091
   fragility: 0.3
   rarity: 0.69
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 巴库电子合约。单件约1.8kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2562.26，属高值商品。产自阿塞拜疆。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: baku_矿产_B
   name_zh: 巴库矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 83355
   fragility: 0.0
   rarity: 0.53
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 巴库矿产合约。矿产品价格与全球大宗商品行情联动。单件约0.6kg，轻便易携。性质耐久，长途运输不易变质。单件报价$373.99，入手门槛不高。产自阿塞拜疆。
 - product_id: baku_工艺品_C
   name_zh: 巴库工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 59660
   fragility: 0.5
   rarity: 0.58
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 巴库工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约10kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$472.58，入手门槛不高。产自阿塞拜疆。
 - product_id: baku_日用品_D
   name_zh: 巴库日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 23208
   fragility: 0.0
   rarity: 0.17
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 巴库日用品合约。日用品需求平稳，适合作为常备贸易品。单件约11.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自阿塞拜疆。
 - product_id: baku_香料_E
   name_zh: 巴库香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 5678
   fragility: 0.0
   rarity: 0.46
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 巴库香料合约。香料贸易历史悠久，单价与风味并重。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$230.82，入手门槛不高。产自阿塞拜疆。

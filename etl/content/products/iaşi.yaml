@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 4206
   fragility: 0.0
   rarity: 0.45
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 雅西咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约10.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$116.04，入手门槛不高。产自罗马尼亚。
 - product_id: iaşi_工艺品_B
   name_zh: 雅西工艺品合约
   category: 工艺品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 96495
   fragility: 0.5
   rarity: 0.47
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 雅西工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$444.31，入手门槛不高。产自罗马尼亚。工艺品带有鲜明的地方工艺与审美传统。单件约8.1kg，分量较重，占行李配额多。
 - product_id: iaşi_糖果_B
   name_zh: 雅西糖果合约
   category: 糖果
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 2831
   fragility: 0.1
   rarity: 0.27
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 雅西糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$57.51，入手门槛不高。产自罗马尼亚。糖果点心类商品包装轻巧，礼品属性强。单件约7.9kg，分量适中。
 - product_id: iaşi_纺织品_B
   name_zh: 雅西纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 85719
   fragility: 0.0
   rarity: 0.42
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 雅西纺织品合约。性质耐久，长途运输不易变质。单件报价$214，入手门槛不高。产自罗马尼亚。纺织与服装是国际贸易的传统大宗品类。单件约13.3kg，分量较重，占行李配额多。
 - product_id: iaşi_食品_B
   name_zh: 雅西食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 978
   fragility: 0.2
   rarity: 0.36
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 雅西食品合约。食品类货物对仓储条件与保质期敏感。单件约29.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$123.28，入手门槛不高。产自罗马尼亚。

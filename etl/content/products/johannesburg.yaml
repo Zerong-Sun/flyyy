@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1497
   fragility: 0.2
   rarity: 0.25
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 约翰内斯堡食品合约。单件约26.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$174.49，入手门槛不高。产自南非。食品类货物对仓储条件与保质期敏感。
 - product_id: johannesburg_机械_B
   name_zh: 约翰内斯堡机械合约
   category: 机械
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 26454
   fragility: 0.2
   rarity: 0.64
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 约翰内斯堡机械合约。单件约35.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自南非。机械设备与工业部件是跨境物流的重要品类。
 - product_id: johannesburg_日用品_B
   name_zh: 约翰内斯堡日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 23107
   fragility: 0.0
   rarity: 0.07
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 约翰内斯堡日用品合约。日用品需求平稳，适合作为常备贸易品。单件约13.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$57.75，入手门槛不高。产自南非。
 - product_id: johannesburg_矿产_B
   name_zh: 约翰内斯堡矿产合约
   category: 矿产
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 44742
   fragility: 0.0
   rarity: 0.41
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 约翰内斯堡矿产合约。性质耐久，长途运输不易变质。单件报价$409.74，入手门槛不高。产自南非。矿产品价格与全球大宗商品行情联动。单件约31.5kg，分量较重，占行李配额多。
 - product_id: johannesburg_纺织品_B
   name_zh: 约翰内斯堡纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 83487
   fragility: 0.0
   rarity: 0.43
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 约翰内斯堡纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约13.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$349.51，入手门槛不高。产自南非。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 22915
   fragility: 0.2
   rarity: 0.62
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 布雷斯特机械合约。性质耐久，长途运输不易变质。产自法国。机械设备与工业部件是跨境物流的重要品类。单件约42.1kg，分量较重，占行李配额多。
 - product_id: brest_食品_B
   name_zh: 布雷斯特食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 709
   fragility: 0.2
   rarity: 0.34
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 布雷斯特食品合约。保质期约709小时。货源常见，走量为主。单件报价$141.77，入手门槛不高。产自法国。食品类货物对仓储条件与保质期敏感。单件约24.8kg，分量较重，占行李配额多。
 - product_id: brest_日用品_B
   name_zh: 布雷斯特日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 9580
   fragility: 0.0
   rarity: 0.15
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 布雷斯特日用品合约。单件约12.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$52.9，入手门槛不高。产自法国。日用品需求平稳，适合作为常备贸易品。
 - product_id: brest_香料_B
   name_zh: 布雷斯特香料合约
   category: 香料
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 6050
   fragility: 0.0
   rarity: 0.41
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 布雷斯特香料合约。香料贸易历史悠久，单价与风味并重。单件约1kg，轻便易携。性质耐久，长途运输不易变质。单件报价$310.54，入手门槛不高。产自法国。
 - product_id: brest_工艺品_B
   name_zh: 布雷斯特工艺品合约
   category: 工艺品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 96745
   fragility: 0.5
   rarity: 0.61
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 布雷斯特工艺品合约。单件约6.2kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$373.4，入手门槛不高。产自法国。工艺品带有鲜明的地方工艺与审美传统。

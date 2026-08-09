@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 67044
   fragility: 0.3
   rarity: 0.59
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 基加利电子合约。单件约1.2kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2825.34，属高值商品。产自卢旺达。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: kigali_咖啡_B
   name_zh: 基加利咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 3632
   fragility: 0.0
   rarity: 0.31
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 基加利咖啡合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$273.41，入手门槛不高。产自卢旺达。咖啡是国际大宗农产品，产地风味差异明显。单件约0.9kg，轻便易携。
 - product_id: kigali_工艺品_C
   name_zh: 基加利工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 26485
   fragility: 0.5
   rarity: 0.41
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 基加利工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约5.8kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$264.69，入手门槛不高。产自卢旺达。
 - product_id: kigali_香料_D
   name_zh: 基加利香料合约
   category: 香料
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 8011
   fragility: 0.0
   rarity: 0.41
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 基加利香料合约。香料贸易历史悠久，单价与风味并重。单件约0.5kg，轻便易携。性质耐久，长途运输不易变质。单件报价$330.81，入手门槛不高。产自卢旺达。
 - product_id: kigali_食品_E
   name_zh: 基加利食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1665
   fragility: 0.2
   rarity: 0.36
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 基加利食品合约。性质耐久，长途运输不易变质。单件报价$219.71，入手门槛不高。产自卢旺达。食品类货物对仓储条件与保质期敏感。单件约12kg，分量较重，占行李配额多。

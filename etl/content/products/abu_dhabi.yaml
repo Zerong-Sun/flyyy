@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 24151
   fragility: 0.3
   rarity: 0.64
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 阿布扎比电子合约。单件约1kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2522.23，属高值商品。产自阿联酋。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: abu_dhabi_矿产_B
   name_zh: 阿布扎比矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 39859
   fragility: 0.0
   rarity: 0.37
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 阿布扎比矿产合约。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$459.76，入手门槛不高。产自阿联酋。矿产品价格与全球大宗商品行情联动。
 - product_id: abu_dhabi_糖果_C
   name_zh: 阿布扎比糖果合约
   category: 糖果
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 980
   fragility: 0.1
   rarity: 0.33
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 阿布扎比糖果合约。单件约6.2kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自阿联酋。糖果点心类商品包装轻巧，礼品属性强。
 - product_id: abu_dhabi_工艺品_D
   name_zh: 阿布扎比工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 89700
   fragility: 0.5
   rarity: 0.61
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 阿布扎比工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$304.15，入手门槛不高。产自阿联酋。工艺品带有鲜明的地方工艺与审美传统。单件约5.6kg，分量适中。
 - product_id: abu_dhabi_日用品_E
   name_zh: 阿布扎比日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 32511
   fragility: 0.0
   rarity: 0.09
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 阿布扎比日用品合约。日用品需求平稳，适合作为常备贸易品。单件约8.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自阿联酋。

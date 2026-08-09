@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 16662
   fragility: 0.5
   rarity: 0.42
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 哈达卢环礁工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$471.23，入手门槛不高。产自马尔代夫。工艺品带有鲜明的地方工艺与审美传统。单件约13kg，分量较重，占行李配额多。
 - product_id: haa_dhaalu_atoll_纺织品_B
   name_zh: 哈达卢环礁纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 26544
   fragility: 0.0
   rarity: 0.4
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 哈达卢环礁纺织品合约。性质耐久，长途运输不易变质。单件报价$384.3，入手门槛不高。产自马尔代夫。纺织与服装是国际贸易的传统大宗品类。单件约9.6kg，分量较重，占行李配额多。
 - product_id: haa_dhaalu_atoll_矿产_B
   name_zh: 哈达卢环礁矿产合约
   category: 矿产
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 82389
   fragility: 0.0
   rarity: 0.49
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 哈达卢环礁矿产合约。矿产品价格与全球大宗商品行情联动。单件约16.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$285.18，入手门槛不高。产自马尔代夫。
 - product_id: haa_dhaalu_atoll_日用品_B
   name_zh: 哈达卢环礁日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 97455
   fragility: 0.0
   rarity: 0.08
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 哈达卢环礁日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$85.47，入手门槛不高。产自马尔代夫。日用品需求平稳，适合作为常备贸易品。单件约13.3kg，分量较重，占行李配额多。
 - product_id: haa_dhaalu_atoll_糖果_B
   name_zh: 哈达卢环礁糖果合约
   category: 糖果
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 2679
   fragility: 0.1
   rarity: 0.16
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 哈达卢环礁糖果合约。单件约5.8kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$75.63，入手门槛不高。产自马尔代夫。糖果点心类商品包装轻巧，礼品属性强。

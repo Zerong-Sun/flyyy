@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 28558
   fragility: 0.3
   rarity: 0.7
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 拉比尔电子合约。单件约0.6kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$2648.69，属高值商品。产自佛得角。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: rabil_纺织品_B
   name_zh: 拉比尔纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 74259
   fragility: 0.0
   rarity: 0.37
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 拉比尔纺织品合约。性质耐久，长途运输不易变质。单件报价$244.5，入手门槛不高。产自佛得角。纺织与服装是国际贸易的传统大宗品类。单件约0.7kg，轻便易携。
 - product_id: rabil_香料_C
   name_zh: 拉比尔香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 8387
   fragility: 0.0
   rarity: 0.44
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 拉比尔香料合约。单件约0.3kg，轻便易携。性质耐久，长途运输不易变质。单件报价$313.39，入手门槛不高。产自佛得角。香料贸易历史悠久，单价与风味并重。
 - product_id: rabil_矿产_D
   name_zh: 拉比尔矿产合约
   category: 矿产
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 51628
   fragility: 0.0
   rarity: 0.52
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 拉比尔矿产合约。性质耐久，长途运输不易变质。单件报价$277.82，入手门槛不高。产自佛得角。矿产品价格与全球大宗商品行情联动。单件约12kg，分量较重，占行李配额多。
 - product_id: rabil_工艺品_E
   name_zh: 拉比尔工艺品合约
   category: 工艺品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 83580
   fragility: 0.5
   rarity: 0.53
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 拉比尔工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$465.15，入手门槛不高。产自佛得角。工艺品带有鲜明的地方工艺与审美传统。单件约7.1kg，分量适中。

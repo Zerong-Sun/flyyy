@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 19788
   fragility: 0.3
   rarity: 0.68
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 阿克拉电子合约。性质耐久，长途运输不易变质。单件报价$2925.89，属高值商品。产自加纳。电子元件与消费电子是贸易量最大的品类之一。单件约0.6kg，轻便易携。
 - product_id: accra_日用品_B
   name_zh: 阿克拉日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 81735
   fragility: 0.0
   rarity: 0.15
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 阿克拉日用品合约。日用品需求平稳，适合作为常备贸易品。单件约0.7kg，轻便易携。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自加纳。
 - product_id: accra_香料_C
   name_zh: 阿克拉香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 6140
   fragility: 0.0
   rarity: 0.46
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 阿克拉香料合约。性质耐久，长途运输不易变质。单件报价$221.74，入手门槛不高。产自加纳。香料贸易历史悠久，单价与风味并重。单件约0.4kg，轻便易携。
 - product_id: accra_咖啡_D
   name_zh: 阿克拉咖啡合约
   category: 咖啡
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2371
   fragility: 0.0
   rarity: 0.44
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 阿克拉咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约10.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$217.07，入手门槛不高。产自加纳。
 - product_id: accra_食品_E
   name_zh: 阿克拉食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1566
   fragility: 0.2
   rarity: 0.35
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 阿克拉食品合约。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$240.57，入手门槛不高。产自加纳。食品类货物对仓储条件与保质期敏感。

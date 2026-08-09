@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 65787
   fragility: 0.3
   rarity: 0.65
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 斯里巴加湾电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约0.5kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2239.38，属高值商品。产自文莱。
 - product_id: bandar_seri_begawan_香料_B
   name_zh: 斯里巴加湾香料合约
   category: 香料
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 7789
   fragility: 0.0
   rarity: 0.48
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 斯里巴加湾香料合约。性质耐久，长途运输不易变质。单件报价$393.25，入手门槛不高。产自文莱。香料贸易历史悠久，单价与风味并重。单件约1.5kg，轻便易携。
 - product_id: bandar_seri_begawan_糖果_C
   name_zh: 斯里巴加湾糖果合约
   category: 糖果
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 2033
   fragility: 0.1
   rarity: 0.32
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 斯里巴加湾糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约3.5kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自文莱。
 - product_id: bandar_seri_begawan_日用品_D
   name_zh: 斯里巴加湾日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 55185
   fragility: 0.0
   rarity: 0.11
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 斯里巴加湾日用品合约。日用品需求平稳，适合作为常备贸易品。单件约11.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自文莱。
 - product_id: bandar_seri_begawan_咖啡_E
   name_zh: 斯里巴加湾咖啡合约
   category: 咖啡
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1456
   fragility: 0.0
   rarity: 0.43
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 斯里巴加湾咖啡合约。性质耐久，长途运输不易变质。单件报价$213.13，入手门槛不高。产自文莱。咖啡是国际大宗农产品，产地风味差异明显。单件约10kg，分量较重，占行李配额多。

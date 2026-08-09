@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 69691
   fragility: 0.3
   rarity: 0.65
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 金沙萨电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约1.2kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2437.01，属高值商品。产自刚果（金）。
 - product_id: kinshasa_食品_B
   name_zh: 金沙萨食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 927
   fragility: 0.2
   rarity: 0.36
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 金沙萨食品合约。单件约1.6kg，轻便易携。性质耐久，长途运输不易变质。单件报价$212.15，入手门槛不高。产自刚果（金）。食品类货物对仓储条件与保质期敏感。
 - product_id: kinshasa_咖啡_C
   name_zh: 金沙萨咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1888
   fragility: 0.0
   rarity: 0.34
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 金沙萨咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约6.3kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$201.82，入手门槛不高。产自刚果（金）。
 - product_id: kinshasa_纺织品_D
   name_zh: 金沙萨纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 62935
   fragility: 0.0
   rarity: 0.35
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 金沙萨纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约8.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$478.65，入手门槛不高。产自刚果（金）。
 - product_id: kinshasa_日用品_E
   name_zh: 金沙萨日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 31558
   fragility: 0.0
   rarity: 0.06
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 金沙萨日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自刚果（金）。日用品需求平稳，适合作为常备贸易品。单件约9.9kg，分量较重，占行李配额多。

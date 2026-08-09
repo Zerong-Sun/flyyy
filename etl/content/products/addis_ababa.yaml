@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 17749
   fragility: 0.3
   rarity: 0.58
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 亚的斯亚贝巴电子合约。性质耐久，长途运输不易变质。单件报价$2872.24，属高值商品。产自埃塞俄比亚。电子元件与消费电子是贸易量最大的品类之一。单件约1kg，轻便易携。
 - product_id: addis_ababa_日用品_B
   name_zh: 亚的斯亚贝巴日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 16212
   fragility: 0.0
   rarity: 0.19
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 亚的斯亚贝巴日用品合约。单件约1.5kg，轻便易携。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自埃塞俄比亚。日用品需求平稳，适合作为常备贸易品。
 - product_id: addis_ababa_食品_C
   name_zh: 亚的斯亚贝巴食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1901
   fragility: 0.2
   rarity: 0.26
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 亚的斯亚贝巴食品合约。食品类货物对仓储条件与保质期敏感。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$249.03，入手门槛不高。产自埃塞俄比亚。
 - product_id: addis_ababa_香料_D
   name_zh: 亚的斯亚贝巴香料合约
   category: 香料
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 7644
   fragility: 0.0
   rarity: 0.54
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 亚的斯亚贝巴香料合约。性质耐久，长途运输不易变质。单件报价$202.27，入手门槛不高。产自埃塞俄比亚。香料贸易历史悠久，单价与风味并重。单件约0.6kg，轻便易携。
 - product_id: addis_ababa_纺织品_E
   name_zh: 亚的斯亚贝巴纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 81014
   fragility: 0.0
   rarity: 0.27
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 亚的斯亚贝巴纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约8.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$360.24，入手门槛不高。产自埃塞俄比亚。

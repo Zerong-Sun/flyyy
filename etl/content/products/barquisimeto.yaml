@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 3332
   fragility: 0.0
   rarity: 0.44
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 巴基西梅托咖啡合约。单件约9.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$234.88，入手门槛不高。产自委内瑞拉。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: barquisimeto_香料_B
   name_zh: 巴基西梅托香料合约
   category: 香料
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 7996
   fragility: 0.0
   rarity: 0.56
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 巴基西梅托香料合约。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$349，入手门槛不高。产自委内瑞拉。香料贸易历史悠久，单价与风味并重。
 - product_id: barquisimeto_工艺品_B
   name_zh: 巴基西梅托工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 91139
   fragility: 0.5
   rarity: 0.54
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 巴基西梅托工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$480.82，入手门槛不高。产自委内瑞拉。
 - product_id: barquisimeto_食品_B
   name_zh: 巴基西梅托食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2133
   fragility: 0.2
   rarity: 0.26
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 巴基西梅托食品合约。单件约29kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$148.19，入手门槛不高。产自委内瑞拉。食品类货物对仓储条件与保质期敏感。
 - product_id: barquisimeto_日用品_B
   name_zh: 巴基西梅托日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 55294
   fragility: 0.0
   rarity: 0.05
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 巴基西梅托日用品合约。日用品需求平稳，适合作为常备贸易品。单件约12.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$48.08，入手门槛不高。产自委内瑞拉。

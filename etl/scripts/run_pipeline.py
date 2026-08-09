@@ -189,6 +189,35 @@ def _guess_timezone(continent: str, country_id: str) -> str:
     return cont.get(country_id, "UTC")
 
 
+# Real IANA timezones for US airports in the game set. The continent guess above
+# maps every US airport to America/Chicago, which would shift BTS 2025-03 real
+# departure times by up to 3h (ET/PT) or 10h (Hawaii) — breaking the verifiability
+# requirement for US domestic schedules. Keyed by IATA (see build_airports).
+US_AP_TIMEZONE = {
+    # Eastern
+    "ALB": "America/New_York", "ATL": "America/New_York", "BDL": "America/New_York",
+    "BOS": "America/New_York", "BUF": "America/New_York", "BWI": "America/New_York",
+    "CHS": "America/New_York", "CLE": "America/New_York", "CLT": "America/New_York",
+    "CMH": "America/New_York", "CVG": "America/New_York", "DCA": "America/New_York",
+    "DTW": "America/New_York", "EWR": "America/New_York", "FLL": "America/New_York",
+    "GRR": "America/New_York", "GSO": "America/New_York", "IAD": "America/New_York",
+    "IND": "America/New_York", "JAX": "America/New_York", "JFK": "America/New_York",
+    "MIA": "America/New_York",
+    # Central
+    "AUS": "America/Chicago", "BHM": "America/Chicago", "BNA": "America/Chicago",
+    "DFW": "America/Chicago", "DSM": "America/Chicago", "HOU": "America/Chicago",
+    "ORD": "America/Chicago",
+    # Mountain
+    "ABQ": "America/Denver", "COS": "America/Denver", "DEN": "America/Denver",
+    "ELP": "America/Denver", "BOI": "America/Boise",
+    # Pacific
+    "BUR": "America/Los_Angeles", "FAT": "America/Los_Angeles",
+    "GEG": "America/Los_Angeles", "LAX": "America/Los_Angeles",
+    # Alaska / Hawaii (no DST)
+    "ANC": "America/Anchorage", "HNL": "Pacific/Honolulu", "KOA": "Pacific/Honolulu",
+}
+
+
 def read_openflights_routes(path: Path, hub_iatas: set[str]) -> set[tuple[str, str]]:
     edges: set[tuple[str, str]] = set()
     if not path.exists():
@@ -562,12 +591,25 @@ def product_requires_cold(category: str, shelf_life_hours: int, hazmat_class: st
     return False
 
 
+def _airport_timezone(h: dict) -> str:
+    """Effective IANA timezone for an airport dict (applies US overrides).
+
+    Both build_airports (flight UTC conversion, world.json) and build_tz_offsets
+    (in-game local-time display) must agree; otherwise BTS times and the on-screen
+    clock would drift apart.
+    """
+    tz = h.get("timezone", "UTC")
+    if h.get("country_id") == "US" and h.get("iata") in US_AP_TIMEZONE:
+        return US_AP_TIMEZONE[h["iata"]]
+    return tz
+
+
 def build_tz_offsets(hubs_cfg: dict, days: int = 31) -> dict:
     """Per-timezone UTC offsets for each calendar day in March 2025 (handles DST)."""
     start = date(2025, 3, 1)
     out: dict[str, dict[str, float]] = {}
     for h in hubs_cfg["hubs"]:
-        tz_name = h["timezone"]
+        tz_name = _airport_timezone(h)
         if tz_name in out:
             continue
         day_map: dict[str, float] = {}
@@ -1066,6 +1108,10 @@ def build_airports(hubs_cfg: dict, oa: dict[str, dict], passenger_iatas: set[str
         if abs(lat) < 1e-6 and abs(lon) < 1e-6:
             lat, lon, elev = fb.get("lat", 0), fb.get("lon", 0), fb.get("elev_ft", 0)
         has_svc = iata in passenger_iatas
+        # Real IANA timezone for US airports (BTS schedules must convert exactly);
+        # authored hubs keep their hand-written timezone, only the continent guess
+        # (America/Chicago for all of the US) is overridden.
+        tz = _airport_timezone({**h, "iata": iata})
         # Demo / authored hubs get a slightly tighter MCT override.
         mct_override = 75 if bool(h.get("has_content_file", h.get("authored", False))) else None
         if mct_override is None and h.get("city_id") in (
@@ -1086,7 +1132,7 @@ def build_airports(hubs_cfg: dict, oa: dict[str, dict], passenger_iatas: set[str
                 "city_en": h.get("city_en", h.get("name_en", "")),
                 "country_id": h.get("country_id", "XX"),
                 "country_zh": h.get("country_zh", h.get("name_zh", "")),
-                "timezone": h["timezone"],
+                "timezone": tz,
                 "latitude": lat,
                 "longitude": lon,
                 "elevation_ft": elev,
@@ -1431,9 +1477,6 @@ def _synth_stopover_flights(
     return out
 
 
-BTS_DT_FORMAT = "%Y-%m-%d"
-
-
 def read_bts_schedule(
     path: Path,
     by_iata: dict[str, dict],
@@ -1517,87 +1560,93 @@ def build_bts_flights(
       spaced departures so the daily time distribution is preserved.
     - scheduled_departure_utc: BTS local CRS time via localize_to_utc (DST-aware).
     - scheduled_arrival_utc = dep + CRSElapsedTime (real planned block time).
-    - distance_km = Distance(miles) * 1.60934; prices reuse the existing model.
+    - distance_km = Distance(miles) * 1.60934; prices reuse the existing model,
+      computed once per (origin, dest) like synth_flights.
     """
     tcfg = eco["ticket"]
-    fcfg = eco["flight_synth"]
     first_mult = float(tcfg.get("first_multiplier", 25.0))
     bag_first = float(tcfg.get("baggage_first_kg", 100.0))
-    groups: dict[tuple[str, str, str], list[dict]] = {}
+    by_route: dict[tuple[str, str], list[dict]] = {}
     for r in rows:
-        groups.setdefault((r["origin_iata"], r["destination_iata"], r["flight_date"]), []).append(r)
+        by_route.setdefault((r["origin_iata"], r["destination_iata"]), []).append(r)
     flights: list[dict] = []
     fid = start_fid
-    for (origin, dest, fdate), group in groups.items():
+    for (origin, dest), route_rows in by_route.items():
         oa = airports_by_iata[origin]
         da = airports_by_iata[dest]
+        carrier = route_rows[0]["marketing_airline"]
+        if not real_airlines.get(carrier):
+            continue  # BTS carrier not in our airlines.dat catalog
         airline = _resolve_airline_row(
-            group[0]["marketing_airline"], real_airlines, curated_alliance,
+            carrier, real_airlines, curated_alliance,
             ("US",), ("North America",),
         )
-        if not real_airlines.get(group[0]["marketing_airline"]):
-            continue  # BTS carrier not in our airlines.dat catalog
         if not airline.get("home_country"):
             # airlines.dat has some rows with a US state instead of a country
             # (e.g. AS "Alaska Airlines" country="ALASKA"); BTS rows are already
             # filtered to US-domestic, so the carrier is US-based by definition.
             airline["home_country"] = "US"
-        group.sort(key=lambda r: (r["crs_dep_time"], r["flight_number"]))
-        sample = [group[i] for i in _uniform_sample_indices(len(group), max(1, cap))]
-        dist_km = sample[0]["distance_miles"] * 1.60934
-        # Price model identical to synth_flights so economy gates stay valid.
+        # Price/distance model identical to synth_flights: one base per route.
         rr = stable_rand("bts_route", origin, dest)
         demand = rr.uniform(tcfg["demand_factor_min"], tcfg["demand_factor_max"])
+        dist_km = route_rows[0]["distance_miles"] * 1.60934
         base = (
             tcfg["c_route"] + dist_km * tcfg["c_km"] + tcfg["airport_fee_default"] * 2
         ) * tcfg["airline_factor_default"] * demand
-        for r in sample:
-            crs = r["crs_dep_time"].zfill(4)
-            hour = int(crs[:2]) if len(crs) >= 4 else 0
-            minute = int(crs[2:4]) if len(crs) >= 4 else 0
-            if hour >= 24:
-                hour = hour % 24
-            day = date.fromisoformat(r["flight_date"])
-            dep_local_naive = datetime(day.year, day.month, day.day, hour, minute)
-            dep_utc = localize_to_utc(dep_local_naive, oa["timezone"])
-            arr_utc = dep_utc + timedelta(minutes=r["crs_elapsed_min"])
-            duration = max(int(round(r["crs_elapsed_min"])), fcfg["duration_min_floor"])
-            rnd = rr.uniform(tcfg["random_factor_min"], tcfg["random_factor_max"])
-            p_eco = round(base * rnd, 2)
-            p_biz = round(p_eco * tcfg["business_multiplier"], 2)
-            p_first = round(p_eco * first_mult, 2)
-            fn = f"{airline['id']}{r['flight_number']}"
-            fid += 1
-            flights.append({
-                "flight_instance_id": f"B{fid:07d}",
-                "marketing_flight_number": fn,
-                "operating_airline_id": airline["id"],
-                "marketing_airline_id": airline["id"],
-                "airline_name": airline["name"],
-                "airline_home_country": airline.get("home_country", ""),
-                "alliance_id": airline.get("alliance_id", "none"),
-                "origin_airport_id": oa["airport_id"],
-                "destination_airport_id": da["airport_id"],
-                "origin_iata": origin,
-                "destination_iata": dest,
-                "scheduled_departure_utc": dep_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                "scheduled_arrival_utc": arr_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                "distance_km": round(dist_km, 1),
-                "duration_minutes": duration,
-                "aircraft_type": "A321" if dist_km < 4000 else "B777",
-                "ticket_base_price_economy": p_eco,
-                "ticket_base_price_business": p_biz,
-                "ticket_base_price_first": p_first,
-                "baggage_allowance_economy": tcfg["baggage_economy_kg"],
-                "baggage_allowance_business": tcfg["baggage_business_kg"],
-                "baggage_allowance_first": bag_first,
-                "cabin_business_available": True,
-                "cabin_first_available": dist_km >= 2500,
-                "stops": 0,
-                "stop_airports": [],
-                "data_source": "bts_2025_03",
-                "data_confidence": "A",
-            })
+        # Sub-group by date so the daily cap applies per (route, local day).
+        by_date: dict[str, list[dict]] = {}
+        for r in route_rows:
+            by_date.setdefault(r["flight_date"], []).append(r)
+        for fdate, day_rows in by_date.items():
+            day_rows.sort(key=lambda r: (r["crs_dep_time"], r["flight_number"]))
+            sample = [day_rows[i] for i in _uniform_sample_indices(len(day_rows), max(1, cap))]
+            for r in sample:
+                crs = r["crs_dep_time"].zfill(4)
+                hour = int(crs[:2]) if len(crs) >= 4 else 0
+                minute = int(crs[2:4]) if len(crs) >= 4 else 0
+                if hour >= 24:
+                    hour = hour % 24
+                day = date.fromisoformat(r["flight_date"])
+                dep_local_naive = datetime(day.year, day.month, day.day, hour, minute)
+                dep_utc = localize_to_utc(dep_local_naive, oa["timezone"])
+                duration = int(round(r["crs_elapsed_min"]))
+                arr_utc = dep_utc + timedelta(minutes=duration)
+                rnd = rr.uniform(tcfg["random_factor_min"], tcfg["random_factor_max"])
+                p_eco = round(base * rnd, 2)
+                p_biz = round(p_eco * tcfg["business_multiplier"], 2)
+                p_first = round(p_eco * first_mult, 2)
+                fn = f"{airline['id']}{r['flight_number']}"
+                fid += 1
+                flights.append({
+                    "flight_instance_id": f"B{fid:07d}",
+                    "marketing_flight_number": fn,
+                    "operating_airline_id": airline["id"],
+                    "marketing_airline_id": airline["id"],
+                    "airline_name": airline["name"],
+                    "airline_home_country": airline.get("home_country", ""),
+                    "alliance_id": airline.get("alliance_id", "none"),
+                    "origin_airport_id": oa["airport_id"],
+                    "destination_airport_id": da["airport_id"],
+                    "origin_iata": origin,
+                    "destination_iata": dest,
+                    "scheduled_departure_utc": dep_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "scheduled_arrival_utc": arr_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "distance_km": round(dist_km, 1),
+                    "duration_minutes": duration,
+                    "aircraft_type": "A321" if dist_km < 4000 else "B777",
+                    "ticket_base_price_economy": p_eco,
+                    "ticket_base_price_business": p_biz,
+                    "ticket_base_price_first": p_first,
+                    "baggage_allowance_economy": tcfg["baggage_economy_kg"],
+                    "baggage_allowance_business": tcfg["baggage_business_kg"],
+                    "baggage_allowance_first": bag_first,
+                    "cabin_business_available": True,
+                    "cabin_first_available": dist_km >= 2500,
+                    "stops": 0,
+                    "stop_airports": [],
+                    "data_source": "bts_2025_03",
+                    "data_confidence": "A",
+                })
     return flights
 
 
@@ -1951,6 +2000,12 @@ def write_sqlite(airports, routes, flights, cities, products, markets, eco, meta
     attributions = [
         ("OurAirports", "Unlicense / public domain", "Airport coordinates and metadata"),
         ("OpenFlights", "ODbL", "Route adjacency used to seed synthetic schedules"),
+        ("BTS On-Time", "US federal public data",
+         "US domestic flight numbers and planned times (March 2025)"),
+        ("AeroSCOPE 2019", "research use",
+         "Global route annual frequencies (relative normalization; contact authors before commercial use)"),
+        ("Wikidata", "CC0 1.0",
+         "Structured city facts used by the authored city summaries"),
         ("Natural Earth", "public domain", "Globe visual inspiration; simplified procedural earth in Demo"),
         ("Airborne Trader Demo", "game content", "City blurbs and products are original game content"),
     ]
@@ -2080,6 +2135,12 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
         "attributions": [
             {"name": "OurAirports", "license": "Unlicense", "note": "Airport coordinates"},
             {"name": "OpenFlights", "license": "ODbL", "note": "Route seed for synthetic schedules"},
+            {"name": "BTS On-Time", "license": "US federal public data",
+             "note": "US domestic flight numbers and planned times (March 2025)"},
+            {"name": "AeroSCOPE 2019", "license": "research use",
+             "note": "Global route annual frequencies (contact authors before commercial use)"},
+            {"name": "Wikidata", "license": "CC0 1.0",
+             "note": "Structured city facts used by the authored city summaries"},
             {"name": "Game content", "license": "original", "note": "City and product texts"},
         ],
         "disclaimer": "航班网络基于公开航空数据重建，不代表真实购票信息。",

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 26677
   fragility: 0.1
   rarity: 0.18
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 宿务玩具合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$44.81，入手门槛不高。产自菲律宾。玩具类商品批量贸易活跃，季节性强。单件约6kg，分量适中。
 - product_id: cebu_city_lapu_lapu_city_食品_B
   name_zh: 宿务食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1066
   fragility: 0.2
   rarity: 0.36
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 宿务食品合约。性质耐久，长途运输不易变质。单件报价$123.66，入手门槛不高。产自菲律宾。食品类货物对仓储条件与保质期敏感。单件约18.2kg，分量较重，占行李配额多。
 - product_id: cebu_city_lapu_lapu_city_电子_B
   name_zh: 宿务电子合约
   category: 电子
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 32842
   fragility: 0.3
   rarity: 0.73
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 宿务电子合约。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。产自菲律宾。电子元件与消费电子是贸易量最大的品类之一。单件约3.6kg，分量适中。
 - product_id: cebu_city_lapu_lapu_city_日用品_B
   name_zh: 宿务日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 59242
   fragility: 0.0
   rarity: 0.12
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 宿务日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$42.03，入手门槛不高。产自菲律宾。日用品需求平稳，适合作为常备贸易品。单件约5.3kg，分量适中。
 - product_id: cebu_city_lapu_lapu_city_纺织品_B
   name_zh: 宿务纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 28885
   fragility: 0.0
   rarity: 0.28
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 宿务纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$267.94，入手门槛不高。产自菲律宾。纺织与服装是国际贸易的传统大宗品类。单件约14.3kg，分量较重，占行李配额多。

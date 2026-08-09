@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 69162
   fragility: 0.3
   rarity: 0.56
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 伯明翰电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约3.8kg，分量适中。性质耐久，长途运输不易变质。单件报价$3108.42，属高值商品。产自英国。
 - product_id: birmingham,_west_midlands_机械_B
   name_zh: 伯明翰机械合约
   category: 机械
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 17256
   fragility: 0.2
   rarity: 0.48
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 伯明翰机械合约。单件约30.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自英国。机械设备与工业部件是跨境物流的重要品类。
 - product_id: birmingham,_west_midlands_纺织品_B
   name_zh: 伯明翰纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 50728
   fragility: 0.0
   rarity: 0.4
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 伯明翰纺织品合约。单件约16.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$316.8，入手门槛不高。产自英国。纺织与服装是国际贸易的传统大宗品类。
 - product_id: birmingham,_west_midlands_茶叶_B
   name_zh: 伯明翰茶叶合约
   category: 茶叶
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 4685
   fragility: 0.1
   rarity: 0.47
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 伯明翰茶叶合约。单件约9.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$293.53，入手门槛不高。产自英国。茶叶是历史悠久的国际饮品贸易品。
 - product_id: birmingham,_west_midlands_食品_B
   name_zh: 伯明翰食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 498
   fragility: 0.2
   rarity: 0.33
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 伯明翰食品合约。食品类货物对仓储条件与保质期敏感。单件约17.6kg，分量较重，占行李配额多。保质期约498小时。货源常见，走量为主。单件报价$199.57，入手门槛不高。产自英国。

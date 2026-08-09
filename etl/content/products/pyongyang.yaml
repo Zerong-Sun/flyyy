@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 82834
   fragility: 0.3
   rarity: 0.61
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 平壤电子合约。性质耐久，长途运输不易变质。单件报价$2704.86，属高值商品。产自朝鲜。电子元件与消费电子是贸易量最大的品类之一。单件约0.3kg，轻便易携。
 - product_id: pyongyang_纺织品_B
   name_zh: 平壤纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 16245
   fragility: 0.0
   rarity: 0.41
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 平壤纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约0.8kg，轻便易携。性质耐久，长途运输不易变质。单件报价$433.28，入手门槛不高。产自朝鲜。
 - product_id: pyongyang_糖果_C
   name_zh: 平壤糖果合约
   category: 糖果
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 2426
   fragility: 0.1
   rarity: 0.16
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 平壤糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自朝鲜。糖果点心类商品包装轻巧，礼品属性强。单件约7.6kg，分量适中。
 - product_id: pyongyang_食品_D
   name_zh: 平壤食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1058
   fragility: 0.2
   rarity: 0.33
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 平壤食品合约。食品类货物对仓储条件与保质期敏感。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$210.44，入手门槛不高。产自朝鲜。
 - product_id: pyongyang_矿产_E
   name_zh: 平壤矿产合约
   category: 矿产
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 94240
   fragility: 0.0
   rarity: 0.48
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 平壤矿产合约。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自朝鲜。矿产品价格与全球大宗商品行情联动。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 94254
   fragility: 0.5
   rarity: 0.47
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 福冈工艺品合约。单件约8.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$276.27，入手门槛不高。产自日本。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: fukuoka_电子_B
   name_zh: 福冈电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 29703
   fragility: 0.3
   rarity: 0.66
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 福冈电子合约。单件约2kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2497.22，属高值商品。产自日本。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: fukuoka_玩具_B
   name_zh: 福冈玩具合约
   category: 玩具
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 92766
   fragility: 0.1
   rarity: 0.28
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 福冈玩具合约。单件约8.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$85.18，入手门槛不高。产自日本。玩具类商品批量贸易活跃，季节性强。
 - product_id: fukuoka_食品_B
   name_zh: 福冈食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1064
   fragility: 0.2
   rarity: 0.39
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 福冈食品合约。性质耐久，长途运输不易变质。单件报价$155.42，入手门槛不高。产自日本。食品类货物对仓储条件与保质期敏感。单件约26.7kg，分量较重，占行李配额多。
 - product_id: fukuoka_文具_B
   name_zh: 福冈文具合约
   category: 文具
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 14251
   fragility: 0.0
   rarity: 0.16
-  description: 当地特色文具纸品合约，轻便易携带。
+  description: 福冈文具合约。单件约4.6kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$84.37，入手门槛不高。产自日本。文具用品需求稳定，轻便易携带。

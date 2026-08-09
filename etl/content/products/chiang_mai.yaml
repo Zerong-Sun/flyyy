@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 64213
   fragility: 0.0
   rarity: 0.08
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 清迈日用品合约。单件约8.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$74.15，入手门槛不高。产自泰国。日用品需求平稳，适合作为常备贸易品。
 - product_id: chiang_mai_纺织品_B
   name_zh: 清迈纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 65375
   fragility: 0.0
   rarity: 0.31
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 清迈纺织品合约。单件约17.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$166.56，入手门槛不高。产自泰国。纺织与服装是国际贸易的传统大宗品类。
 - product_id: chiang_mai_香料_B
   name_zh: 清迈香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 5467
   fragility: 0.0
   rarity: 0.59
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 清迈香料合约。性质耐久，长途运输不易变质。单件报价$117.98，入手门槛不高。产自泰国。香料贸易历史悠久，单价与风味并重。单件约1kg，轻便易携。
 - product_id: chiang_mai_玩具_B
   name_zh: 清迈玩具合约
   category: 玩具
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 54728
   fragility: 0.1
   rarity: 0.16
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 清迈玩具合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$105.34，入手门槛不高。产自泰国。玩具类商品批量贸易活跃，季节性强。单件约7.3kg，分量适中。
 - product_id: chiang_mai_食品_B
   name_zh: 清迈食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 702
   fragility: 0.2
   rarity: 0.34
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 清迈食品合约。食品类货物对仓储条件与保质期敏感。单件约21.7kg，分量较重，占行李配额多。保质期约702小时。货源常见，走量为主。单件报价$158.15，入手门槛不高。产自泰国。

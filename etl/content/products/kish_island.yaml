@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 2444
   fragility: 0.0
   rarity: 0.36
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 基什岛咖啡合约。单件约9.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$101.62，入手门槛不高。产自伊朗。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: kish_island_工艺品_B
   name_zh: 基什岛工艺品合约
   category: 工艺品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 99093
   fragility: 0.5
   rarity: 0.47
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 基什岛工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约5.8kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$300.11，入手门槛不高。产自伊朗。
 - product_id: kish_island_日用品_B
   name_zh: 基什岛日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 40768
   fragility: 0.0
   rarity: 0.18
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 基什岛日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$61.73，入手门槛不高。产自伊朗。日用品需求平稳，适合作为常备贸易品。单件约11.9kg，分量较重，占行李配额多。
 - product_id: kish_island_糖果_B
   name_zh: 基什岛糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2179
   fragility: 0.1
   rarity: 0.18
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 基什岛糖果合约。单件约4.9kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$62.88，入手门槛不高。产自伊朗。糖果点心类商品包装轻巧，礼品属性强。
 - product_id: kish_island_纺织品_B
   name_zh: 基什岛纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 49743
   fragility: 0.0
   rarity: 0.3
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 基什岛纺织品合约。单件约15.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$320.4，入手门槛不高。产自伊朗。纺织与服装是国际贸易的传统大宗品类。

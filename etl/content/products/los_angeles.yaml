@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.5
-  description: 成衣半成品合约。时尚季溢价。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 成衣半成品合约。单件约1kg，轻便易携。性质耐久，长途运输不易变质。产自美国洛杉矶。纺织与服装是国际贸易的传统大宗品类。
 - product_id: lax_chem_contract
   name_zh: 化工品合约
   category: 能源
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.45
-  description: 塑料涂料原料合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 化工品合约。性质耐久，长途运输不易变质。产自美国洛杉矶。能源类合约跟踪油气与电力等大宗商品行情。单件约1.1kg，轻便易携。
 - product_id: lax_auto_sample
   name_zh: 汽车配件样品
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.5
-  description: 进口车售后件样品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 汽车配件样品。性质耐久，长途运输不易变质。产自美国洛杉矶。机械设备与工业部件是跨境物流的重要品类。单件约6kg，分量适中。
 - product_id: lax_film_proxy
   name_zh: 影视道具珠宝代购
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.1
   rarity: 0.65
-  description: 影视用珠宝道具级代购（合法民用）。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 影视道具珠宝代购。工艺品带有鲜明的地方工艺与审美传统。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2700，属高值商品。产自美国洛杉矶。
 - product_id: lax_pacific_core
   name_zh: 太平洋电子核心
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.75
-  description: 亚太转口电子精品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 太平洋电子核心。电子元件与消费电子是贸易量最大的品类之一。单件约0.75kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$4200，属高值商品。产自美国洛杉矶。

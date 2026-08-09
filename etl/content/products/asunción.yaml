@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 9451
   fragility: 0.3
   rarity: 0.56
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 亚松森电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约0.7kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2974.61，属高值商品。产自巴拉圭。
 - product_id: asunción_食品_B
   name_zh: 亚松森食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 820
   fragility: 0.2
   rarity: 0.26
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 亚松森食品合约。食品类货物对仓储条件与保质期敏感。单件约0.7kg，轻便易携。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$240.49，入手门槛不高。产自巴拉圭。
 - product_id: asunción_工艺品_C
   name_zh: 亚松森工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 15105
   fragility: 0.5
   rarity: 0.55
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 亚松森工艺品合约。单件约7.8kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$362.04，入手门槛不高。产自巴拉圭。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: asunción_日用品_D
   name_zh: 亚松森日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 91202
   fragility: 0.0
   rarity: 0.13
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 亚松森日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自巴拉圭。日用品需求平稳，适合作为常备贸易品。单件约11.8kg，分量较重，占行李配额多。
 - product_id: asunción_纺织品_E
   name_zh: 亚松森纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 56175
   fragility: 0.0
   rarity: 0.3
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 亚松森纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约11.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$431.56，入手门槛不高。产自巴拉圭。

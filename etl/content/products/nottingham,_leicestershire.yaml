@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 7503
   fragility: 0.1
   rarity: 0.47
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 诺丁汉茶叶合约。茶叶是历史悠久的国际饮品贸易品。单件约8.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$255.04，入手门槛不高。产自英国。
 - product_id: nottingham,_leicestershire_电子_B
   name_zh: 诺丁汉电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 12858
   fragility: 0.3
   rarity: 0.61
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 诺丁汉电子合约。单件约1.8kg，轻便易携。性质耐久，长途运输不易变质。单件报价$3545.06，属高值商品。产自英国。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: nottingham,_leicestershire_食品_B
   name_zh: 诺丁汉食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 928
   fragility: 0.2
   rarity: 0.29
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 诺丁汉食品合约。食品类货物对仓储条件与保质期敏感。单件约24.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$276.3，入手门槛不高。产自英国。
 - product_id: nottingham,_leicestershire_纺织品_B
   name_zh: 诺丁汉纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 23523
   fragility: 0.0
   rarity: 0.31
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 诺丁汉纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$346.07，入手门槛不高。产自英国。纺织与服装是国际贸易的传统大宗品类。单件约11.4kg，分量较重，占行李配额多。
 - product_id: nottingham,_leicestershire_机械_B
   name_zh: 诺丁汉机械合约
   category: 机械
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 52982
   fragility: 0.2
   rarity: 0.54
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 诺丁汉机械合约。机械设备与工业部件是跨境物流的重要品类。单件约49.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自英国。

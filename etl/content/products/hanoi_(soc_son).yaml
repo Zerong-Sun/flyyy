@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 53374
   fragility: 0.3
   rarity: 0.65
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 河内电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约1.3kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2523.94，属高值商品。产自越南。
 - product_id: hanoi_(soc_son)_玩具_B
   name_zh: 河内玩具合约
   category: 玩具
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 77081
   fragility: 0.1
   rarity: 0.28
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 河内玩具合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自越南。玩具类商品批量贸易活跃，季节性强。单件约1.4kg，轻便易携。
 - product_id: hanoi_(soc_son)_香料_C
   name_zh: 河内香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 5217
   fragility: 0.0
   rarity: 0.41
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 河内香料合约。单件约0.5kg，轻便易携。性质耐久，长途运输不易变质。单件报价$357.94，入手门槛不高。产自越南。香料贸易历史悠久，单价与风味并重。
 - product_id: hanoi_(soc_son)_咖啡_D
   name_zh: 河内咖啡合约
   category: 咖啡
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 4293
   fragility: 0.0
   rarity: 0.46
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 河内咖啡合约。性质耐久，长途运输不易变质。单件报价$233.51，入手门槛不高。产自越南。咖啡是国际大宗农产品，产地风味差异明显。单件约10.1kg，分量较重，占行李配额多。
 - product_id: hanoi_(soc_son)_食品_E
   name_zh: 河内食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 675
   fragility: 0.2
   rarity: 0.24
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 河内食品合约。保质期约675小时。货源常见，走量为主。单件报价$225.32，入手门槛不高。产自越南。食品类货物对仓储条件与保质期敏感。单件约12kg，分量较重，占行李配额多。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 2383
   fragility: 0.1
   rarity: 0.3
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 阿尤恩糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约4.6kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$100.03，入手门槛不高。产自西撒哈拉。
 - product_id: el_aaiún_香料_B
   name_zh: 阿尤恩香料合约
   category: 香料
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 7548
   fragility: 0.0
   rarity: 0.6
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 阿尤恩香料合约。单件约0.7kg，轻便易携。性质耐久，长途运输不易变质。单件报价$274.78，入手门槛不高。产自西撒哈拉。香料贸易历史悠久，单价与风味并重。
 - product_id: el_aaiún_纺织品_B
   name_zh: 阿尤恩纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 22184
   fragility: 0.0
   rarity: 0.32
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 阿尤恩纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约14.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$378.41，入手门槛不高。产自西撒哈拉。
 - product_id: el_aaiún_日用品_B
   name_zh: 阿尤恩日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 77072
   fragility: 0.0
   rarity: 0.15
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 阿尤恩日用品合约。日用品需求平稳，适合作为常备贸易品。单件约10.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$92.52，入手门槛不高。产自西撒哈拉。
 - product_id: el_aaiún_工艺品_B
   name_zh: 阿尤恩工艺品合约
   category: 工艺品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 28060
   fragility: 0.5
   rarity: 0.54
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 阿尤恩工艺品合约。单件约5.6kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$373.05，入手门槛不高。产自西撒哈拉。工艺品带有鲜明的地方工艺与审美传统。

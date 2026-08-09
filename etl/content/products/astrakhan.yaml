@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 42702
   fragility: 0.0
   rarity: 0.68
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 阿斯特拉罕能源合约。能源类合约跟踪油气与电力等大宗商品行情。单件约4.7kg，分量适中。性质耐久，长途运输不易变质。单件报价$487.23，入手门槛不高。产自俄罗斯。
 - product_id: astrakhan_日用品_B
   name_zh: 阿斯特拉罕日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 74372
   fragility: 0.0
   rarity: 0.1
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 阿斯特拉罕日用品合约。日用品需求平稳，适合作为常备贸易品。单件约7.4kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$45.22，入手门槛不高。产自俄罗斯。
 - product_id: astrakhan_机械_B
   name_zh: 阿斯特拉罕机械合约
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 26010
   fragility: 0.2
   rarity: 0.47
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 阿斯特拉罕机械合约。性质耐久，长途运输不易变质。产自俄罗斯。机械设备与工业部件是跨境物流的重要品类。单件约33.1kg，分量较重，占行李配额多。
 - product_id: astrakhan_食品_B
   name_zh: 阿斯特拉罕食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1614
   fragility: 0.2
   rarity: 0.34
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 阿斯特拉罕食品合约。单件约23.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$135.44，入手门槛不高。产自俄罗斯。食品类货物对仓储条件与保质期敏感。
 - product_id: astrakhan_矿产_B
   name_zh: 阿斯特拉罕矿产合约
   category: 矿产
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 54278
   fragility: 0.0
   rarity: 0.52
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 阿斯特拉罕矿产合约。性质耐久，长途运输不易变质。单件报价$389.29，入手门槛不高。产自俄罗斯。矿产品价格与全球大宗商品行情联动。单件约36.6kg，分量较重，占行李配额多。

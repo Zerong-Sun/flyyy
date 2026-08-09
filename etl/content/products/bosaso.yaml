@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 33566
   fragility: 0.0
   rarity: 0.4
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 博萨索纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约13.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$484.44，入手门槛不高。产自索马里。
 - product_id: bosaso_糖果_B
   name_zh: 博萨索糖果合约
   category: 糖果
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1109
   fragility: 0.1
   rarity: 0.2
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 博萨索糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约6.4kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$115.55，入手门槛不高。产自索马里。
 - product_id: bosaso_咖啡_B
   name_zh: 博萨索咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1908
   fragility: 0.0
   rarity: 0.48
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 博萨索咖啡合约。性质耐久，长途运输不易变质。单件报价$135.65，入手门槛不高。产自索马里。咖啡是国际大宗农产品，产地风味差异明显。单件约11.5kg，分量较重，占行李配额多。
 - product_id: bosaso_日用品_B
   name_zh: 博萨索日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 97916
   fragility: 0.0
   rarity: 0.13
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 博萨索日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$105.21，入手门槛不高。产自索马里。日用品需求平稳，适合作为常备贸易品。单件约11.3kg，分量较重，占行李配额多。
 - product_id: bosaso_香料_B
   name_zh: 博萨索香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 5066
   fragility: 0.0
   rarity: 0.57
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 博萨索香料合约。香料贸易历史悠久，单价与风味并重。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$226.73，入手门槛不高。产自索马里。

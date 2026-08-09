@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 67040
   fragility: 0.0
   rarity: 0.56
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 沙勒罗瓦矿产合约。矿产品价格与全球大宗商品行情联动。单件约18.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$370.5，入手门槛不高。产自比利时。
 - product_id: charleroi_食品_B
   name_zh: 沙勒罗瓦食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1535
   fragility: 0.2
   rarity: 0.24
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 沙勒罗瓦食品合约。单件约29.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$139.89，入手门槛不高。产自比利时。食品类货物对仓储条件与保质期敏感。
 - product_id: charleroi_机械_B
   name_zh: 沙勒罗瓦机械合约
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 21905
   fragility: 0.2
   rarity: 0.56
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 沙勒罗瓦机械合约。性质耐久，长途运输不易变质。产自比利时。机械设备与工业部件是跨境物流的重要品类。单件约23.1kg，分量较重，占行李配额多。
 - product_id: charleroi_日用品_B
   name_zh: 沙勒罗瓦日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 17228
   fragility: 0.0
   rarity: 0.17
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 沙勒罗瓦日用品合约。单件约12.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$117.78，入手门槛不高。产自比利时。日用品需求平稳，适合作为常备贸易品。
 - product_id: charleroi_电子_B
   name_zh: 沙勒罗瓦电子合约
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 10232
   fragility: 0.3
   rarity: 0.58
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 沙勒罗瓦电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约4.2kg，分量适中。性质耐久，长途运输不易变质。单件报价$2386.53，属高值商品。产自比利时。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1685
   fragility: 0.2
   rarity: 0.33
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 科斯岛食品合约。单件约26.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$113.86，入手门槛不高。产自希腊。食品类货物对仓储条件与保质期敏感。
 - product_id: kos_island_陶瓷_B
   name_zh: 科斯岛陶瓷合约
   category: 陶瓷
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 14523
   fragility: 0.7
   rarity: 0.51
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 科斯岛陶瓷合约。陶瓷制品易碎，包装与搬运需小心。单件约24.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$237.74，入手门槛不高。产自希腊。
 - product_id: kos_island_工艺品_B
   name_zh: 科斯岛工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 89949
   fragility: 0.5
   rarity: 0.4
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 科斯岛工艺品合约。单件约9.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$269.76，入手门槛不高。产自希腊。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: kos_island_茶叶_B
   name_zh: 科斯岛茶叶合约
   category: 茶叶
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 7710
   fragility: 0.1
   rarity: 0.45
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 科斯岛茶叶合约。单件约9.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$240.8，入手门槛不高。产自希腊。茶叶是历史悠久的国际饮品贸易品。
 - product_id: kos_island_香料_B
   name_zh: 科斯岛香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 4961
   fragility: 0.0
   rarity: 0.55
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 科斯岛香料合约。香料贸易历史悠久，单价与风味并重。单件约0.5kg，轻便易携。性质耐久，长途运输不易变质。单件报价$319.3，入手门槛不高。产自希腊。

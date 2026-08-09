@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 46830
   fragility: 0.3
   rarity: 0.65
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 布拉迪斯拉发电子合约。性质耐久，长途运输不易变质。单件报价$2925.34，属高值商品。产自斯洛伐克。电子元件与消费电子是贸易量最大的品类之一。单件约0.4kg，轻便易携。
 - product_id: bratislava_纺织品_B
   name_zh: 布拉迪斯拉发纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 37704
   fragility: 0.0
   rarity: 0.36
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 布拉迪斯拉发纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约1.9kg，轻便易携。性质耐久，长途运输不易变质。单件报价$476.43，入手门槛不高。产自斯洛伐克。
 - product_id: bratislava_日用品_C
   name_zh: 布拉迪斯拉发日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 98820
   fragility: 0.0
   rarity: 0.13
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 布拉迪斯拉发日用品合约。日用品需求平稳，适合作为常备贸易品。单件约11.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自斯洛伐克。
 - product_id: bratislava_糖果_D
   name_zh: 布拉迪斯拉发糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1068
   fragility: 0.1
   rarity: 0.26
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 布拉迪斯拉发糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约7.7kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自斯洛伐克。
 - product_id: bratislava_咖啡_E
   name_zh: 布拉迪斯拉发咖啡合约
   category: 咖啡
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 4030
   fragility: 0.0
   rarity: 0.45
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 布拉迪斯拉发咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约7.6kg，分量适中。性质耐久，长途运输不易变质。单件报价$266.47，入手门槛不高。产自斯洛伐克。

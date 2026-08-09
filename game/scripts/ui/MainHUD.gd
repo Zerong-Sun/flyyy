@@ -2197,6 +2197,14 @@ func _show_flights() -> void:
 	br.pressed.connect(func (): _show_hint(_Tickets.refund_current()); _refresh_bags())
 	row.add_child(br)
 	_add_panel_close(row)
+	var disc := Label.new()
+	disc.text = I18nService.disclaimer()
+	disc.add_theme_font_size_override("font_size", 11)
+	disc.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+	disc.modulate = Color(1, 1, 1, 0.7)
+	disc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	disc.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	v.add_child(disc)
 	_extra_tier = ""
 	_cargo_blocks = 0
 	_flight_page = 0

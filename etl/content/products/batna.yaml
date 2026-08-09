@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 43593
   fragility: 0.0
   rarity: 0.34
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 巴特纳纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$155.64，入手门槛不高。产自阿尔及利亚。纺织与服装是国际贸易的传统大宗品类。单件约17.7kg，分量较重，占行李配额多。
 - product_id: batna_食品_B
   name_zh: 巴特纳食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1225
   fragility: 0.2
   rarity: 0.38
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 巴特纳食品合约。单件约29kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$52.07，入手门槛不高。产自阿尔及利亚。食品类货物对仓储条件与保质期敏感。
 - product_id: batna_能源_B
   name_zh: 巴特纳能源合约
   category: 能源
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 64435
   fragility: 0.0
   rarity: 0.63
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 巴特纳能源合约。能源类合约跟踪油气与电力等大宗商品行情。单件约3.8kg，分量适中。性质耐久，长途运输不易变质。单件报价$305.94，入手门槛不高。产自阿尔及利亚。
 - product_id: batna_矿产_B
   name_zh: 巴特纳矿产合约
   category: 矿产
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 87356
   fragility: 0.0
   rarity: 0.51
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 巴特纳矿产合约。性质耐久，长途运输不易变质。单件报价$379.81，入手门槛不高。产自阿尔及利亚。矿产品价格与全球大宗商品行情联动。单件约25.1kg，分量较重，占行李配额多。
 - product_id: batna_日用品_B
   name_zh: 巴特纳日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 78082
   fragility: 0.0
   rarity: 0.12
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 巴特纳日用品合约。单件约12.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$63.65，入手门槛不高。产自阿尔及利亚。日用品需求平稳，适合作为常备贸易品。

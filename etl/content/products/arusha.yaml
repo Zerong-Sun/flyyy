@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1026
   fragility: 0.2
   rarity: 0.27
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 阿鲁沙食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$101.11，入手门槛不高。产自坦桑尼亚。食品类货物对仓储条件与保质期敏感。单件约28.5kg，分量较重，占行李配额多。
 - product_id: arusha_日用品_B
   name_zh: 阿鲁沙日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 15238
   fragility: 0.0
   rarity: 0.13
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 阿鲁沙日用品合约。日用品需求平稳，适合作为常备贸易品。单件约11.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$56.99，入手门槛不高。产自坦桑尼亚。
 - product_id: arusha_咖啡_B
   name_zh: 阿鲁沙咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1549
   fragility: 0.0
   rarity: 0.35
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 阿鲁沙咖啡合约。单件约14.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$67.73，入手门槛不高。产自坦桑尼亚。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: arusha_矿产_B
   name_zh: 阿鲁沙矿产合约
   category: 矿产
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 94986
   fragility: 0.0
   rarity: 0.52
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 阿鲁沙矿产合约。性质耐久，长途运输不易变质。单件报价$299.74，入手门槛不高。产自坦桑尼亚。矿产品价格与全球大宗商品行情联动。单件约19kg，分量较重，占行李配额多。
 - product_id: arusha_香料_B
   name_zh: 阿鲁沙香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 8061
   fragility: 0.0
   rarity: 0.58
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 阿鲁沙香料合约。香料贸易历史悠久，单价与风味并重。单件约0.6kg，轻便易携。性质耐久，长途运输不易变质。单件报价$84.66，入手门槛不高。产自坦桑尼亚。

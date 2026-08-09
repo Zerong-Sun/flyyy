@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1534
   fragility: 0.2
   rarity: 0.31
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 贝洛奥里藏特食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$107.3，入手门槛不高。产自巴西。食品类货物对仓储条件与保质期敏感。单件约28kg，分量较重，占行李配额多。
 - product_id: belo_horizonte_咖啡_B
   name_zh: 贝洛奥里藏特咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 3634
   fragility: 0.0
   rarity: 0.36
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 贝洛奥里藏特咖啡合约。单件约11.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$114.39，入手门槛不高。产自巴西。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: belo_horizonte_能源_B
   name_zh: 贝洛奥里藏特能源合约
   category: 能源
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 77028
   fragility: 0.0
   rarity: 0.59
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 贝洛奥里藏特能源合约。性质耐久，长途运输不易变质。单件报价$340.33，入手门槛不高。产自巴西。能源类合约跟踪油气与电力等大宗商品行情。单件约9kg，分量较重，占行李配额多。
 - product_id: belo_horizonte_矿产_B
   name_zh: 贝洛奥里藏特矿产合约
   category: 矿产
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 23823
   fragility: 0.0
   rarity: 0.35
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 贝洛奥里藏特矿产合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$234.02，入手门槛不高。产自巴西。矿产品价格与全球大宗商品行情联动。单件约16.1kg，分量较重，占行李配额多。
 - product_id: belo_horizonte_日用品_B
   name_zh: 贝洛奥里藏特日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 85569
   fragility: 0.0
   rarity: 0.06
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 贝洛奥里藏特日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$65.57，入手门槛不高。产自巴西。日用品需求平稳，适合作为常备贸易品。单件约13.4kg，分量较重，占行李配额多。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 14319
   fragility: 0.0
   rarity: 0.56
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 胡利亚卡矿产合约。单件约37.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$319.42，入手门槛不高。产自秘鲁。矿产品价格与全球大宗商品行情联动。
 - product_id: juliaca_咖啡_B
   name_zh: 胡利亚卡咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1620
   fragility: 0.0
   rarity: 0.33
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 胡利亚卡咖啡合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$128.65，入手门槛不高。产自秘鲁。咖啡是国际大宗农产品，产地风味差异明显。单件约6.3kg，分量适中。
 - product_id: juliaca_食品_B
   name_zh: 胡利亚卡食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 767
   fragility: 0.2
   rarity: 0.21
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 胡利亚卡食品合约。单件约20.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$99.9，入手门槛不高。产自秘鲁。食品类货物对仓储条件与保质期敏感。
 - product_id: juliaca_纺织品_B
   name_zh: 胡利亚卡纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 76929
   fragility: 0.0
   rarity: 0.31
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 胡利亚卡纺织品合约。单件约19.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$235.77，入手门槛不高。产自秘鲁。纺织与服装是国际贸易的传统大宗品类。
 - product_id: juliaca_日用品_B
   name_zh: 胡利亚卡日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 16964
   fragility: 0.0
   rarity: 0.17
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 胡利亚卡日用品合约。单件约9.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$62.36，入手门槛不高。产自秘鲁。日用品需求平稳，适合作为常备贸易品。

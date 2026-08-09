@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 5942
   fragility: 0.1
   rarity: 0.52
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 成都（双流）茶叶合约。性质耐久，长途运输不易变质。单件报价$270.14，入手门槛不高。产自中国。茶叶是历史悠久的国际饮品贸易品。单件约9.9kg，分量较重，占行李配额多。
 - product_id: chengdu_(shuangliu)_陶瓷_B
   name_zh: 成都（双流）陶瓷合约
   category: 陶瓷
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 15497
   fragility: 0.7
   rarity: 0.58
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 成都（双流）陶瓷合约。单件约27.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$178.19，入手门槛不高。产自中国。陶瓷制品易碎，包装与搬运需小心。
 - product_id: chengdu_(shuangliu)_电子_B
   name_zh: 成都（双流）电子合约
   category: 电子
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 33060
   fragility: 0.3
   rarity: 0.6
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 成都（双流）电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约3.3kg，分量适中。性质耐久，长途运输不易变质。产自中国。
 - product_id: chengdu_(shuangliu)_纺织品_B
   name_zh: 成都（双流）纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 67402
   fragility: 0.0
   rarity: 0.43
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 成都（双流）纺织品合约。单件约18.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$320.88，入手门槛不高。产自中国。纺织与服装是国际贸易的传统大宗品类。
 - product_id: chengdu_(shuangliu)_机械_B
   name_zh: 成都（双流）机械合约
   category: 机械
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 93106
   fragility: 0.2
   rarity: 0.64
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 成都（双流）机械合约。机械设备与工业部件是跨境物流的重要品类。单件约31kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自中国。

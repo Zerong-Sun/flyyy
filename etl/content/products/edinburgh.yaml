@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1766
   fragility: 0.2
   rarity: 0.23
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 爱丁堡食品合约。单件约25.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$179.6，入手门槛不高。产自英国。食品类货物对仓储条件与保质期敏感。
 - product_id: edinburgh_电子_B
   name_zh: 爱丁堡电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 70144
   fragility: 0.3
   rarity: 0.56
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 爱丁堡电子合约。性质耐久，长途运输不易变质。产自英国。电子元件与消费电子是贸易量最大的品类之一。单件约2.3kg，分量适中。
 - product_id: edinburgh_茶叶_B
   name_zh: 爱丁堡茶叶合约
   category: 茶叶
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 5966
   fragility: 0.1
   rarity: 0.42
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 爱丁堡茶叶合约。性质耐久，长途运输不易变质。单件报价$148.57，入手门槛不高。产自英国。茶叶是历史悠久的国际饮品贸易品。单件约7.9kg，分量适中。
 - product_id: edinburgh_机械_B
   name_zh: 爱丁堡机械合约
   category: 机械
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 93068
   fragility: 0.2
   rarity: 0.59
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 爱丁堡机械合约。性质耐久，长途运输不易变质。产自英国。机械设备与工业部件是跨境物流的重要品类。单件约41kg，分量较重，占行李配额多。
 - product_id: edinburgh_纺织品_B
   name_zh: 爱丁堡纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 40238
   fragility: 0.0
   rarity: 0.29
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 爱丁堡纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。产自英国。纺织与服装是国际贸易的传统大宗品类。单件约11.7kg，分量较重，占行李配额多。

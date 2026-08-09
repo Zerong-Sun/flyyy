@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 41230
   fragility: 0.0
   rarity: 0.58
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 因帕尔矿产合约。性质耐久，长途运输不易变质。单件报价$239.12，入手门槛不高。产自印度。矿产品价格与全球大宗商品行情联动。单件约26.3kg，分量较重，占行李配额多。
 - product_id: imphal_电子_B
   name_zh: 因帕尔电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 67022
   fragility: 0.3
   rarity: 0.7
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 因帕尔电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约1.6kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。产自印度。
 - product_id: imphal_纺织品_B
   name_zh: 因帕尔纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 72376
   fragility: 0.0
   rarity: 0.3
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 因帕尔纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$242.98，入手门槛不高。产自印度。纺织与服装是国际贸易的传统大宗品类。单件约9.9kg，分量较重，占行李配额多。
 - product_id: imphal_茶叶_B
   name_zh: 因帕尔茶叶合约
   category: 茶叶
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 5890
   fragility: 0.1
   rarity: 0.53
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 因帕尔茶叶合约。性质耐久，长途运输不易变质。单件报价$89.58，入手门槛不高。产自印度。茶叶是历史悠久的国际饮品贸易品。单件约7.7kg，分量适中。
 - product_id: imphal_香料_B
   name_zh: 因帕尔香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 7599
   fragility: 0.0
   rarity: 0.5
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 因帕尔香料合约。香料贸易历史悠久，单价与风味并重。单件约0.6kg，轻便易携。性质耐久，长途运输不易变质。单件报价$162.54，入手门槛不高。产自印度。

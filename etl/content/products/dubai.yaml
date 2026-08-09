@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.7
-  description: 成品油与石化合约单据。海湾能源贸易核心。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 迪拜石油合约。能源类合约跟踪油气与电力等大宗商品行情。单件约1kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。产自阿联酋。
 - product_id: dxb_textile_contract
   name_zh: 纺织转口合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.5
-  description: 面料再出口合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 纺织转口合约。单件约1kg，轻便易携。性质耐久，长途运输不易变质。产自阿联酋迪拜。纺织与服装是国际贸易的传统大宗品类。
 - product_id: dxb_aluminum_sample
   name_zh: 铝锭样品合约
   category: 矿产
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.55
-  description: 小规格铝样与合约。中等重量。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 铝锭样品合约。性质耐久，长途运输不易变质。产自阿联酋迪拜。矿产品价格与全球大宗商品行情联动。单件约8kg，分量适中。
 - product_id: dxb_gold_proxy
   name_zh: 金饰代购
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.1
   rarity: 0.85
-  description: 金饰小件代购。体积小利润高。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 金饰代购。单件约0.28kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$5800，属高值商品。产自阿联酋迪拜。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: dxb_avionics_core
   name_zh: 航电核心器件
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.8
-  description: 民用航电模块小批量。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 航电核心器件。单件约0.75kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$5000，属高值商品。产自阿联酋迪拜。电子元件与消费电子是贸易量最大的品类之一。

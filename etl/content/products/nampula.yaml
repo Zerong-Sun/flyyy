@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 82367
   fragility: 0.0
   rarity: 0.45
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 楠普拉矿产合约。性质耐久，长途运输不易变质。单件报价$278.65，入手门槛不高。产自莫桑比克。矿产品价格与全球大宗商品行情联动。单件约24.3kg，分量较重，占行李配额多。
 - product_id: nampula_纺织品_B
   name_zh: 楠普拉纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 57319
   fragility: 0.0
   rarity: 0.27
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 楠普拉纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约15.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$283.31，入手门槛不高。产自莫桑比克。
 - product_id: nampula_咖啡_B
   name_zh: 楠普拉咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 3565
   fragility: 0.0
   rarity: 0.43
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 楠普拉咖啡合约。单件约8.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$233.98，入手门槛不高。产自莫桑比克。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: nampula_糖果_B
   name_zh: 楠普拉糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2390
   fragility: 0.1
   rarity: 0.32
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 楠普拉糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约5.8kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$63.82，入手门槛不高。产自莫桑比克。
 - product_id: nampula_日用品_B
   name_zh: 楠普拉日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 55551
   fragility: 0.0
   rarity: 0.08
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 楠普拉日用品合约。日用品需求平稳，适合作为常备贸易品。单件约10.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$100.28，入手门槛不高。产自莫桑比克。

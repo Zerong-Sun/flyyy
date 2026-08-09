@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.6
-  description: 化工转口合约。欧洲枢纽品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 港区化工合约。性质耐久，长途运输不易变质。产自荷兰阿姆斯特丹。能源类合约跟踪油气与电力等大宗商品行情。单件约1.2kg，轻便易携。
 - product_id: ams_electronics_contract
   name_zh: 电子转口合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.55
-  description: 消费与工业电子转口合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 电子转口合约。单件约0.9kg，轻便易携。性质耐久，长途运输不易变质。产自荷兰阿姆斯特丹。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: ams_metal_sample
   name_zh: 有色金属样品
   category: 矿产
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.45
-  description: 再生有色金属样品包。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 有色金属样品。单件约7.5kg，分量适中。性质耐久，长途运输不易变质。产自荷兰阿姆斯特丹。矿产品价格与全球大宗商品行情联动。
 - product_id: ams_diamond_proxy
   name_zh: 切割钻石代购
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.1
   rarity: 0.9
-  description: 工业/首饰级切割石代购。极轻。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 切割钻石代购。单件约0.12kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$7800，属高值商品。产自荷兰阿姆斯特丹。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: ams_sensor_core
   name_zh: 环境传感核心
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.7
-  description: 环境与工业传感器精品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 环境传感核心。单件约0.55kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$3800，属高值商品。产自荷兰阿姆斯特丹。电子元件与消费电子是贸易量最大的品类之一。

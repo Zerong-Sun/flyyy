@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 79923
   fragility: 0.0
   rarity: 0.15
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 古兰达尼日用品合约。单件约11.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$28.27，入手门槛不高。产自巴基斯坦。日用品需求平稳，适合作为常备贸易品。
 - product_id: gurandani_玩具_B
   name_zh: 古兰达尼玩具合约
   category: 玩具
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 89798
   fragility: 0.1
   rarity: 0.16
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 古兰达尼玩具合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$60.82，入手门槛不高。产自巴基斯坦。玩具类商品批量贸易活跃，季节性强。单件约5.2kg，分量适中。
 - product_id: gurandani_纺织品_B
   name_zh: 古兰达尼纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 65093
   fragility: 0.0
   rarity: 0.37
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 古兰达尼纺织品合约。性质耐久，长途运输不易变质。单件报价$106.02，入手门槛不高。产自巴基斯坦。纺织与服装是国际贸易的传统大宗品类。单件约10.7kg，分量较重，占行李配额多。
 - product_id: gurandani_茶叶_B
   name_zh: 古兰达尼茶叶合约
   category: 茶叶
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 8403
   fragility: 0.1
   rarity: 0.45
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 古兰达尼茶叶合约。茶叶是历史悠久的国际饮品贸易品。单件约6.2kg，分量适中。性质耐久，长途运输不易变质。单件报价$122.67，入手门槛不高。产自巴基斯坦。
 - product_id: gurandani_食品_B
   name_zh: 古兰达尼食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1564
   fragility: 0.2
   rarity: 0.21
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 古兰达尼食品合约。单件约29.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$45.12，入手门槛不高。产自巴基斯坦。食品类货物对仓储条件与保质期敏感。

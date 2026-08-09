@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 89217
   fragility: 0.2
   rarity: 0.51
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 乔治机械合约。单件约40.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自南非。机械设备与工业部件是跨境物流的重要品类。
 - product_id: george_矿产_B
   name_zh: 乔治矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 67476
   fragility: 0.0
   rarity: 0.38
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 乔治矿产合约。性质耐久，长途运输不易变质。单件报价$407.63，入手门槛不高。产自南非。矿产品价格与全球大宗商品行情联动。单件约16.3kg，分量较重，占行李配额多。
 - product_id: george_日用品_B
   name_zh: 乔治日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 71371
   fragility: 0.0
   rarity: 0.17
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 乔治日用品合约。日用品需求平稳，适合作为常备贸易品。单件约7.7kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$40.11，入手门槛不高。产自南非。
 - product_id: george_纺织品_B
   name_zh: 乔治纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 50451
   fragility: 0.0
   rarity: 0.38
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 乔治纺织品合约。单件约14.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$171.84，入手门槛不高。产自南非。纺织与服装是国际贸易的传统大宗品类。
 - product_id: george_食品_B
   name_zh: 乔治食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1124
   fragility: 0.2
   rarity: 0.26
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 乔治食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$131.46，入手门槛不高。产自南非。食品类货物对仓储条件与保质期敏感。单件约26.5kg，分量较重，占行李配额多。

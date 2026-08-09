@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 20019
   fragility: 0.3
   rarity: 0.61
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 金泽电子合约。性质耐久，长途运输不易变质。产自日本。电子元件与消费电子是贸易量最大的品类之一。单件约3.7kg，分量适中。
 - product_id: kanazawa_文具_B
   name_zh: 金泽文具合约
   category: 文具
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 7945
   fragility: 0.0
   rarity: 0.22
-  description: 当地特色文具纸品合约，轻便易携带。
+  description: 金泽文具合约。单件约4.3kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$67.37，入手门槛不高。产自日本。文具用品需求稳定，轻便易携带。
 - product_id: kanazawa_食品_B
   name_zh: 金泽食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 985
   fragility: 0.2
   rarity: 0.39
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 金泽食品合约。性质耐久，长途运输不易变质。单件报价$219.2，入手门槛不高。产自日本。食品类货物对仓储条件与保质期敏感。单件约20.4kg，分量较重，占行李配额多。
 - product_id: kanazawa_工艺品_B
   name_zh: 金泽工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 73321
   fragility: 0.5
   rarity: 0.56
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 金泽工艺品合约。单件约11.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$404.59，入手门槛不高。产自日本。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: kanazawa_玩具_B
   name_zh: 金泽玩具合约
   category: 玩具
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 45484
   fragility: 0.1
   rarity: 0.3
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 金泽玩具合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$168.09，入手门槛不高。产自日本。玩具类商品批量贸易活跃，季节性强。单件约6.1kg，分量适中。

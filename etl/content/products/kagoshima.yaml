@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 89290
   fragility: 0.1
   rarity: 0.19
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 鹿儿岛玩具合约。玩具类商品批量贸易活跃，季节性强。单件约7.7kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$148.74，入手门槛不高。产自日本。
 - product_id: kagoshima_文具_B
   name_zh: 鹿儿岛文具合约
   category: 文具
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 71018
   fragility: 0.0
   rarity: 0.17
-  description: 当地特色文具纸品合约，轻便易携带。
+  description: 鹿儿岛文具合约。单件约1.7kg，轻便易携。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$31.65，入手门槛不高。产自日本。文具用品需求稳定，轻便易携带。
 - product_id: kagoshima_工艺品_B
   name_zh: 鹿儿岛工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 98935
   fragility: 0.5
   rarity: 0.6
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 鹿儿岛工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约9.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$451.1，入手门槛不高。产自日本。
 - product_id: kagoshima_电子_B
   name_zh: 鹿儿岛电子合约
   category: 电子
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 23684
   fragility: 0.3
   rarity: 0.65
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 鹿儿岛电子合约。单件约2kg，轻便易携。性质耐久，长途运输不易变质。产自日本。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: kagoshima_食品_B
   name_zh: 鹿儿岛食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1742
   fragility: 0.2
   rarity: 0.24
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 鹿儿岛食品合约。单件约22.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$186.43，入手门槛不高。产自日本。食品类货物对仓储条件与保质期敏感。

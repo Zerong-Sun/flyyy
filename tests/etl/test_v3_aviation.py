@@ -337,29 +337,13 @@ def test_aeroscope_frequency_drives_schedule():
     eco = yaml.safe_load((CFG / "economy.yaml").read_text(encoding="utf-8"))
     fmin = int(eco["flight_synth"].get("aeroscope_freq_min", 1))
     fmax = int(eco["flight_synth"].get("aeroscope_freq_max", 4))
-    # Convert UTC dep back to origin-local date using the per-day offset table
-    # (exact DST handling), then count flights per (route, local day).
-    from datetime import datetime, timedelta
-
-    tz_offsets = world.get("tz_offsets", {})
-    by_airport = {a["iata"]: a for a in world["airports"]}
-
-    def local_date(iso: str, iata: str) -> str:
-        dep = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%SZ")
-        table = tz_offsets.get(by_airport[iata].get("timezone", ""), {})
-        off = 0.0
-        if table:
-            day = dep.strftime("%Y-%m-%d")
-            if day in table:
-                off = float(table[day])
-            else:
-                keys = sorted(table.keys())
-                off = float(table[keys[0]]) if day < keys[0] else float(table[keys[-1]])
-        return (dep + timedelta(hours=off)).strftime("%Y-%m-%d")
-
+    # synth_flights emits `per_day` flights per UTC day (the day loop in the ETL
+    # iterates UTC calendar days), so counting by UTC date is exact. Counting by
+    # origin-local date would split/merge days across the timezone boundary and
+    # could false-positive on the upper bound.
     counts: dict[tuple[str, str, str], int] = {}
     for f in aero:
-        key = (f["origin_iata"], f["destination_iata"], local_date(f["scheduled_departure_utc"], f["origin_iata"]))
+        key = (f["origin_iata"], f["destination_iata"], f["scheduled_departure_utc"][:10])
         counts[key] = counts.get(key, 0) + 1
     worst = max(counts.values())
     assert worst <= fmax, f"aero route/day exceeds freq_max: max {worst} > {fmax}"

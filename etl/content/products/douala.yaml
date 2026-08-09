@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 2740
   fragility: 0.0
   rarity: 0.45
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 杜阿拉咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约9.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$172.41，入手门槛不高。产自喀麦隆。
 - product_id: douala_日用品_B
   name_zh: 杜阿拉日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 70703
   fragility: 0.0
   rarity: 0.11
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 杜阿拉日用品合约。单件约13.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$90.62，入手门槛不高。产自喀麦隆。日用品需求平稳，适合作为常备贸易品。
 - product_id: douala_工艺品_B
   name_zh: 杜阿拉工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 93381
   fragility: 0.5
   rarity: 0.5
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 杜阿拉工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约5kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$382，入手门槛不高。产自喀麦隆。
 - product_id: douala_香料_B
   name_zh: 杜阿拉香料合约
   category: 香料
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 7813
   fragility: 0.0
   rarity: 0.52
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 杜阿拉香料合约。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$256.81，入手门槛不高。产自喀麦隆。香料贸易历史悠久，单价与风味并重。
 - product_id: douala_矿产_B
   name_zh: 杜阿拉矿产合约
   category: 矿产
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 77249
   fragility: 0.0
   rarity: 0.41
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 杜阿拉矿产合约。矿产品价格与全球大宗商品行情联动。单件约17.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自喀麦隆。

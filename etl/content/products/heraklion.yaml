@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 5293
   fragility: 0.1
   rarity: 0.49
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 伊拉克利翁茶叶合约。性质耐久，长途运输不易变质。单件报价$214.53，入手门槛不高。产自希腊。茶叶是历史悠久的国际饮品贸易品。单件约7.8kg，分量适中。
 - product_id: heraklion_香料_B
   name_zh: 伊拉克利翁香料合约
   category: 香料
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 4443
   fragility: 0.0
   rarity: 0.52
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 伊拉克利翁香料合约。单件约0.7kg，轻便易携。性质耐久，长途运输不易变质。单件报价$165.03，入手门槛不高。产自希腊。香料贸易历史悠久，单价与风味并重。
 - product_id: heraklion_食品_B
   name_zh: 伊拉克利翁食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1496
   fragility: 0.2
   rarity: 0.38
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 伊拉克利翁食品合约。单件约27.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$80.84，入手门槛不高。产自希腊。食品类货物对仓储条件与保质期敏感。
 - product_id: heraklion_工艺品_B
   name_zh: 伊拉克利翁工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 69297
   fragility: 0.5
   rarity: 0.43
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 伊拉克利翁工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$181.91，入手门槛不高。产自希腊。工艺品带有鲜明的地方工艺与审美传统。单件约9kg，分量较重，占行李配额多。
 - product_id: heraklion_陶瓷_B
   name_zh: 伊拉克利翁陶瓷合约
   category: 陶瓷
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 40190
   fragility: 0.7
   rarity: 0.47
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 伊拉克利翁陶瓷合约。陶瓷制品易碎，包装与搬运需小心。单件约27.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$414.89，入手门槛不高。产自希腊。

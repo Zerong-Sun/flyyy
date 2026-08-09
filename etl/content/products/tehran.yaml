@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 67294
   fragility: 0.3
   rarity: 0.6
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 德黑兰电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约0.8kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2336.14，属高值商品。产自伊朗。
 - product_id: tehran_矿产_B
   name_zh: 德黑兰矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 25975
   fragility: 0.0
   rarity: 0.59
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 德黑兰矿产合约。矿产品价格与全球大宗商品行情联动。单件约0.7kg，轻便易携。性质耐久，长途运输不易变质。产自伊朗。
 - product_id: tehran_咖啡_C
   name_zh: 德黑兰咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 4271
   fragility: 0.0
   rarity: 0.35
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 德黑兰咖啡合约。单件约6.5kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$216.4，入手门槛不高。产自伊朗。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: tehran_食品_D
   name_zh: 德黑兰食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1391
   fragility: 0.2
   rarity: 0.34
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 德黑兰食品合约。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$201.19，入手门槛不高。产自伊朗。食品类货物对仓储条件与保质期敏感。
 - product_id: tehran_香料_E
   name_zh: 德黑兰香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 6674
   fragility: 0.0
   rarity: 0.45
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 德黑兰香料合约。单件约0.8kg，轻便易携。性质耐久，长途运输不易变质。单件报价$273.17，入手门槛不高。产自伊朗。香料贸易历史悠久，单价与风味并重。

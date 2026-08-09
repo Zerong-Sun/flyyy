@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 98541
   fragility: 0.0
   rarity: 0.36
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 阿达纳纺织品合约。性质耐久，长途运输不易变质。单件报价$333.63，入手门槛不高。产自土耳其。纺织与服装是国际贸易的传统大宗品类。单件约19.5kg，分量较重，占行李配额多。
 - product_id: seyhan_矿产_B
   name_zh: 阿达纳矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 13602
   fragility: 0.0
   rarity: 0.46
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 阿达纳矿产合约。性质耐久，长途运输不易变质。单件报价$412.78，入手门槛不高。产自土耳其。矿产品价格与全球大宗商品行情联动。单件约15.6kg，分量较重，占行李配额多。
 - product_id: seyhan_陶瓷_B
   name_zh: 阿达纳陶瓷合约
   category: 陶瓷
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 67366
   fragility: 0.7
   rarity: 0.6
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 阿达纳陶瓷合约。陶瓷制品易碎，包装与搬运需小心。单件约14.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$237.32，入手门槛不高。产自土耳其。
 - product_id: seyhan_食品_B
   name_zh: 阿达纳食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1523
   fragility: 0.2
   rarity: 0.34
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 阿达纳食品合约。食品类货物对仓储条件与保质期敏感。单件约27.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$131.96，入手门槛不高。产自土耳其。
 - product_id: seyhan_机械_B
   name_zh: 阿达纳机械合约
   category: 机械
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 76013
   fragility: 0.2
   rarity: 0.46
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 阿达纳机械合约。性质耐久，长途运输不易变质。产自土耳其。机械设备与工业部件是跨境物流的重要品类。单件约48.8kg，分量较重，占行李配额多。

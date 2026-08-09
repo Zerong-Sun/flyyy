@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 52591
   fragility: 0.7
   rarity: 0.45
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 福州陶瓷合约。单件约14.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$332.23，入手门槛不高。产自中国。陶瓷制品易碎，包装与搬运需小心。
 - product_id: fuzhou_(changle)_机械_B
   name_zh: 福州机械合约
   category: 机械
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 42559
   fragility: 0.2
   rarity: 0.64
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 福州机械合约。单件约22.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自中国。机械设备与工业部件是跨境物流的重要品类。
 - product_id: fuzhou_(changle)_电子_B
   name_zh: 福州电子合约
   category: 电子
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 61802
   fragility: 0.3
   rarity: 0.56
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 福州电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约3.7kg，分量适中。性质耐久，长途运输不易变质。产自中国。
 - product_id: fuzhou_(changle)_茶叶_B
   name_zh: 福州茶叶合约
   category: 茶叶
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 6375
   fragility: 0.1
   rarity: 0.42
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 福州茶叶合约。单件约4kg，分量适中。性质耐久，长途运输不易变质。单件报价$270.35，入手门槛不高。产自中国。茶叶是历史悠久的国际饮品贸易品。
 - product_id: fuzhou_(changle)_纺织品_B
   name_zh: 福州纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 98629
   fragility: 0.0
   rarity: 0.32
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 福州纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约13.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$211.08，入手门槛不高。产自中国。

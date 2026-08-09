@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 4855
   fragility: 0.0
   rarity: 0.54
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 格拉茨香料合约。单件约0.8kg，轻便易携。性质耐久，长途运输不易变质。单件报价$215.63，入手门槛不高。产自奥地利。香料贸易历史悠久，单价与风味并重。
 - product_id: feldkirchen_bei_graz_日用品_B
   name_zh: 格拉茨日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 30332
   fragility: 0.0
   rarity: 0.11
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 格拉茨日用品合约。日用品需求平稳，适合作为常备贸易品。单件约10.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$71.68，入手门槛不高。产自奥地利。
 - product_id: feldkirchen_bei_graz_纺织品_B
   name_zh: 格拉茨纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 44645
   fragility: 0.0
   rarity: 0.3
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 格拉茨纺织品合约。单件约19.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$485.36，入手门槛不高。产自奥地利。纺织与服装是国际贸易的传统大宗品类。
 - product_id: feldkirchen_bei_graz_矿产_B
   name_zh: 格拉茨矿产合约
   category: 矿产
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 34629
   fragility: 0.0
   rarity: 0.42
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 格拉茨矿产合约。矿产品价格与全球大宗商品行情联动。单件约37.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$340.77，入手门槛不高。产自奥地利。
 - product_id: feldkirchen_bei_graz_咖啡_B
   name_zh: 格拉茨咖啡合约
   category: 咖啡
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 2209
   fragility: 0.0
   rarity: 0.36
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 格拉茨咖啡合约。性质耐久，长途运输不易变质。单件报价$157.34，入手门槛不高。产自奥地利。咖啡是国际大宗农产品，产地风味差异明显。单件约7.5kg，分量适中。

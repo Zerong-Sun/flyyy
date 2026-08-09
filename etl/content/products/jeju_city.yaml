@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 5574
   fragility: 0.2
   rarity: 0.44
-  description: 化妆品样品合约，轻便高价值跨境贸易品。
+  description: 济州化妆品合约。性质耐久，长途运输不易变质。单件报价$353.63，入手门槛不高。产自韩国。化妆品属高价值轻量品类，对包装要求高。单件约1.2kg，轻便易携。
 - product_id: jeju_city_食品_B
   name_zh: 济州食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1460
   fragility: 0.2
   rarity: 0.22
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 济州食品合约。食品类货物对仓储条件与保质期敏感。单件约18.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$91.25，入手门槛不高。产自韩国。
 - product_id: jeju_city_文具_B
   name_zh: 济州文具合约
   category: 文具
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 10155
   fragility: 0.0
   rarity: 0.11
-  description: 当地特色文具纸品合约，轻便易携带。
+  description: 济州文具合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$75.69，入手门槛不高。产自韩国。文具用品需求稳定，轻便易携带。单件约4.3kg，分量适中。
 - product_id: jeju_city_电子_B
   name_zh: 济州电子合约
   category: 电子
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 38368
   fragility: 0.3
   rarity: 0.58
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 济州电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约1.8kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2178.18，属高值商品。产自韩国。
 - product_id: jeju_city_纺织品_B
   name_zh: 济州纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 44598
   fragility: 0.0
   rarity: 0.3
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 济州纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约19.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$351.61，入手门槛不高。产自韩国。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 84545
   fragility: 0.7
   rarity: 0.44
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 贝加莫陶瓷合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$355.56，入手门槛不高。产自意大利。陶瓷制品易碎，包装与搬运需小心。单件约19.1kg，分量较重，占行李配额多。
 - product_id: orio_al_serio_(bg)_工艺品_B
   name_zh: 贝加莫工艺品合约
   category: 工艺品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 63412
   fragility: 0.5
   rarity: 0.56
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 贝加莫工艺品合约。单件约5.6kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$321.12，入手门槛不高。产自意大利。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: orio_al_serio_(bg)_纺织品_B
   name_zh: 贝加莫纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 67437
   fragility: 0.0
   rarity: 0.25
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 贝加莫纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。产自意大利。纺织与服装是国际贸易的传统大宗品类。单件约12.7kg，分量较重，占行李配额多。
 - product_id: orio_al_serio_(bg)_机械_B
   name_zh: 贝加莫机械合约
   category: 机械
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 55552
   fragility: 0.2
   rarity: 0.47
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 贝加莫机械合约。机械设备与工业部件是跨境物流的重要品类。单件约49.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自意大利。
 - product_id: orio_al_serio_(bg)_食品_B
   name_zh: 贝加莫食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1370
   fragility: 0.2
   rarity: 0.38
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 贝加莫食品合约。食品类货物对仓储条件与保质期敏感。单件约29.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$268.23，入手门槛不高。产自意大利。

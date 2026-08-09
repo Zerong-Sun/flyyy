@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 22394
   fragility: 0.0
   rarity: 0.29
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 吉吉加纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$110.73，入手门槛不高。产自埃塞俄比亚。纺织与服装是国际贸易的传统大宗品类。单件约16.4kg，分量较重，占行李配额多。
 - product_id: jijiga_咖啡_B
   name_zh: 吉吉加咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 2649
   fragility: 0.0
   rarity: 0.37
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 吉吉加咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约14.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$86.2，入手门槛不高。产自埃塞俄比亚。
 - product_id: jijiga_食品_B
   name_zh: 吉吉加食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 533
   fragility: 0.2
   rarity: 0.22
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 吉吉加食品合约。保质期约533小时。货源常见，走量为主。单件报价$41.72，入手门槛不高。产自埃塞俄比亚。食品类货物对仓储条件与保质期敏感。单件约21.3kg，分量较重，占行李配额多。
 - product_id: jijiga_日用品_B
   name_zh: 吉吉加日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 49752
   fragility: 0.0
   rarity: 0.19
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 吉吉加日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$52.62，入手门槛不高。产自埃塞俄比亚。日用品需求平稳，适合作为常备贸易品。单件约6.9kg，分量适中。
 - product_id: jijiga_香料_B
   name_zh: 吉吉加香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 5578
   fragility: 0.0
   rarity: 0.42
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 吉吉加香料合约。单件约0.8kg，轻便易携。性质耐久，长途运输不易变质。单件报价$121.93，入手门槛不高。产自埃塞俄比亚。香料贸易历史悠久，单价与风味并重。

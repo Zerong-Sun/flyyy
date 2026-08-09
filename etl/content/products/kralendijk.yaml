@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 16319
   fragility: 0.0
   rarity: 0.25
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 克拉伦代克纺织品合约。单件约17.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$317.32，入手门槛不高。产自荷兰加勒比区。纺织与服装是国际贸易的传统大宗品类。
 - product_id: kralendijk_日用品_B
   name_zh: 克拉伦代克日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 54611
   fragility: 0.0
   rarity: 0.16
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 克拉伦代克日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$55.32，入手门槛不高。产自荷兰加勒比区。日用品需求平稳，适合作为常备贸易品。单件约12.5kg，分量较重，占行李配额多。
 - product_id: kralendijk_工艺品_B
   name_zh: 克拉伦代克工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 89434
   fragility: 0.5
   rarity: 0.58
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 克拉伦代克工艺品合约。单件约11.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$227.46，入手门槛不高。产自荷兰加勒比区。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: kralendijk_咖啡_B
   name_zh: 克拉伦代克咖啡合约
   category: 咖啡
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 4301
   fragility: 0.0
   rarity: 0.44
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 克拉伦代克咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约12.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$195.07，入手门槛不高。产自荷兰加勒比区。
 - product_id: kralendijk_糖果_B
   name_zh: 克拉伦代克糖果合约
   category: 糖果
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 854
   fragility: 0.1
   rarity: 0.17
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 克拉伦代克糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$68.4，入手门槛不高。产自荷兰加勒比区。糖果点心类商品包装轻巧，礼品属性强。单件约4kg，分量适中。

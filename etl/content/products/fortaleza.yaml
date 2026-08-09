@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 35204
   fragility: 0.0
   rarity: 0.13
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 福塔莱萨日用品合约。单件约9.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$81.99，入手门槛不高。产自巴西。日用品需求平稳，适合作为常备贸易品。
 - product_id: fortaleza_咖啡_B
   name_zh: 福塔莱萨咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1489
   fragility: 0.0
   rarity: 0.34
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 福塔莱萨咖啡合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$167.73，入手门槛不高。产自巴西。咖啡是国际大宗农产品，产地风味差异明显。单件约9.9kg，分量较重，占行李配额多。
 - product_id: fortaleza_能源_B
   name_zh: 福塔莱萨能源合约
   category: 能源
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 79360
   fragility: 0.0
   rarity: 0.51
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 福塔莱萨能源合约。性质耐久，长途运输不易变质。产自巴西。能源类合约跟踪油气与电力等大宗商品行情。单件约9.1kg，分量较重，占行李配额多。
 - product_id: fortaleza_食品_B
   name_zh: 福塔莱萨食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1177
   fragility: 0.2
   rarity: 0.26
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 福塔莱萨食品合约。单件约19.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$86.27，入手门槛不高。产自巴西。食品类货物对仓储条件与保质期敏感。
 - product_id: fortaleza_矿产_B
   name_zh: 福塔莱萨矿产合约
   category: 矿产
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 67783
   fragility: 0.0
   rarity: 0.4
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 福塔莱萨矿产合约。性质耐久，长途运输不易变质。单件报价$281.98，入手门槛不高。产自巴西。矿产品价格与全球大宗商品行情联动。单件约30.2kg，分量较重，占行李配额多。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 56365
   fragility: 0.0
   rarity: 0.47
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 格罗宁根矿产合约。矿产品价格与全球大宗商品行情联动。单件约16.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自荷兰。
 - product_id: groningen_能源_B
   name_zh: 格罗宁根能源合约
   category: 能源
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 25925
   fragility: 0.0
   rarity: 0.62
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 格罗宁根能源合约。单件约7.1kg，分量适中。性质耐久，长途运输不易变质。产自荷兰。能源类合约跟踪油气与电力等大宗商品行情。
 - product_id: groningen_电子_B
   name_zh: 格罗宁根电子合约
   category: 电子
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 91367
   fragility: 0.3
   rarity: 0.66
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 格罗宁根电子合约。单件约1.6kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2354.57，属高值商品。产自荷兰。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: groningen_日用品_B
   name_zh: 格罗宁根日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 12473
   fragility: 0.0
   rarity: 0.18
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 格罗宁根日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$82.65，入手门槛不高。产自荷兰。日用品需求平稳，适合作为常备贸易品。单件约13.6kg，分量较重，占行李配额多。
 - product_id: groningen_食品_B
   name_zh: 格罗宁根食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1838
   fragility: 0.2
   rarity: 0.27
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 格罗宁根食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$247.49，入手门槛不高。产自荷兰。食品类货物对仓储条件与保质期敏感。单件约15.2kg，分量较重，占行李配额多。
