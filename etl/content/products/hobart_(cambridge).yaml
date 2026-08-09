@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 2069
   fragility: 0.2
   rarity: 0.23
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 霍巴特食品合约。食品类货物对仓储条件与保质期敏感。单件约15.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$230.27，入手门槛不高。产自澳大利亚。
 - product_id: hobart_(cambridge)_咖啡_B
   name_zh: 霍巴特咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 4175
   fragility: 0.0
   rarity: 0.38
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 霍巴特咖啡合约。性质耐久，长途运输不易变质。单件报价$211.52，入手门槛不高。产自澳大利亚。咖啡是国际大宗农产品，产地风味差异明显。单件约11.5kg，分量较重，占行李配额多。
 - product_id: hobart_(cambridge)_能源_B
   name_zh: 霍巴特能源合约
   category: 能源
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 85100
   fragility: 0.0
   rarity: 0.51
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 霍巴特能源合约。单件约8.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自澳大利亚。能源类合约跟踪油气与电力等大宗商品行情。
 - product_id: hobart_(cambridge)_矿产_B
   name_zh: 霍巴特矿产合约
   category: 矿产
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 53033
   fragility: 0.0
   rarity: 0.5
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 霍巴特矿产合约。性质耐久，长途运输不易变质。产自澳大利亚。矿产品价格与全球大宗商品行情联动。单件约17.3kg，分量较重，占行李配额多。
 - product_id: hobart_(cambridge)_日用品_B
   name_zh: 霍巴特日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 65150
   fragility: 0.0
   rarity: 0.12
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 霍巴特日用品合约。日用品需求平稳，适合作为常备贸易品。单件约7.2kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$96.51，入手门槛不高。产自澳大利亚。

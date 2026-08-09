@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 50873
   fragility: 0.0
   rarity: 0.43
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 景洪纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约17.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$281.18，入手门槛不高。产自中国。
 - product_id: jinghong_(gasa)_陶瓷_B
   name_zh: 景洪陶瓷合约
   category: 陶瓷
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 19598
   fragility: 0.7
   rarity: 0.54
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 景洪陶瓷合约。单件约12.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$356.69，入手门槛不高。产自中国。陶瓷制品易碎，包装与搬运需小心。
 - product_id: jinghong_(gasa)_机械_B
   name_zh: 景洪机械合约
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 61949
   fragility: 0.2
   rarity: 0.54
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 景洪机械合约。性质耐久，长途运输不易变质。产自中国。机械设备与工业部件是跨境物流的重要品类。单件约34.5kg，分量较重，占行李配额多。
 - product_id: jinghong_(gasa)_电子_B
   name_zh: 景洪电子合约
   category: 电子
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 16782
   fragility: 0.3
   rarity: 0.72
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 景洪电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约1.4kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。产自中国。
 - product_id: jinghong_(gasa)_茶叶_B
   name_zh: 景洪茶叶合约
   category: 茶叶
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 6059
   fragility: 0.1
   rarity: 0.43
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 景洪茶叶合约。性质耐久，长途运输不易变质。单件报价$104.78，入手门槛不高。产自中国。茶叶是历史悠久的国际饮品贸易品。单件约7.4kg，分量适中。

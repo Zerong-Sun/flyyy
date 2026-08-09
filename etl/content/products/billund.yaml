@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 42396
   fragility: 0.0
   rarity: 0.45
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 比隆矿产合约。矿产品价格与全球大宗商品行情联动。单件约17.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自丹麦。
 - product_id: billund_日用品_B
   name_zh: 比隆日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 46083
   fragility: 0.0
   rarity: 0.11
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 比隆日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$51.3，入手门槛不高。产自丹麦。日用品需求平稳，适合作为常备贸易品。单件约5.2kg，分量适中。
 - product_id: billund_咖啡_B
   name_zh: 比隆咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 3642
   fragility: 0.0
   rarity: 0.31
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 比隆咖啡合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$211.4，入手门槛不高。产自丹麦。咖啡是国际大宗农产品，产地风味差异明显。单件约14.5kg，分量较重，占行李配额多。
 - product_id: billund_纺织品_B
   name_zh: 比隆纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 23090
   fragility: 0.0
   rarity: 0.32
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 比隆纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$301.54，入手门槛不高。产自丹麦。纺织与服装是国际贸易的传统大宗品类。单件约19.4kg，分量较重，占行李配额多。
 - product_id: billund_食品_B
   name_zh: 比隆食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1106
   fragility: 0.2
   rarity: 0.25
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 比隆食品合约。食品类货物对仓储条件与保质期敏感。单件约17.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$211.44，入手门槛不高。产自丹麦。

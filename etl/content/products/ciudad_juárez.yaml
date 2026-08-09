@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1179
   fragility: 0.2
   rarity: 0.36
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 华雷斯城食品合约。性质耐久，长途运输不易变质。单件报价$64.48，入手门槛不高。产自墨西哥。食品类货物对仓储条件与保质期敏感。单件约16.3kg，分量较重，占行李配额多。
 - product_id: ciudad_juárez_矿产_B
   name_zh: 华雷斯城矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 59745
   fragility: 0.0
   rarity: 0.6
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 华雷斯城矿产合约。矿产品价格与全球大宗商品行情联动。单件约31.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$473.6，入手门槛不高。产自墨西哥。
 - product_id: ciudad_juárez_玩具_B
   name_zh: 华雷斯城玩具合约
   category: 玩具
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 42572
   fragility: 0.1
   rarity: 0.17
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 华雷斯城玩具合约。单件约4.6kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$70.52，入手门槛不高。产自墨西哥。玩具类商品批量贸易活跃，季节性强。
 - product_id: ciudad_juárez_电子_B
   name_zh: 华雷斯城电子合约
   category: 电子
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 50731
   fragility: 0.3
   rarity: 0.65
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 华雷斯城电子合约。性质耐久，长途运输不易变质。单件报价$2284.95，属高值商品。产自墨西哥。电子元件与消费电子是贸易量最大的品类之一。单件约4.3kg，分量适中。
 - product_id: ciudad_juárez_日用品_B
   name_zh: 华雷斯城日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 41885
   fragility: 0.0
   rarity: 0.14
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 华雷斯城日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$77.37，入手门槛不高。产自墨西哥。日用品需求平稳，适合作为常备贸易品。单件约13.2kg，分量较重，占行李配额多。

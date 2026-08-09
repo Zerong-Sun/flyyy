@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 82435
   fragility: 0.0
   rarity: 0.26
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 布里斯托尔纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约18kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$261.72，入手门槛不高。产自英国。
 - product_id: bristol_电子_B
   name_zh: 布里斯托尔电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 58699
   fragility: 0.3
   rarity: 0.68
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 布里斯托尔电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约2.3kg，分量适中。性质耐久，长途运输不易变质。单件报价$2834.83，属高值商品。产自英国。
 - product_id: bristol_机械_B
   name_zh: 布里斯托尔机械合约
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 16763
   fragility: 0.2
   rarity: 0.59
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 布里斯托尔机械合约。机械设备与工业部件是跨境物流的重要品类。单件约31.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自英国。
 - product_id: bristol_食品_B
   name_zh: 布里斯托尔食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 808
   fragility: 0.2
   rarity: 0.33
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 布里斯托尔食品合约。食品类货物对仓储条件与保质期敏感。单件约23.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$140.4，入手门槛不高。产自英国。
 - product_id: bristol_茶叶_B
   name_zh: 布里斯托尔茶叶合约
   category: 茶叶
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 6463
   fragility: 0.1
   rarity: 0.47
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 布里斯托尔茶叶合约。性质耐久，长途运输不易变质。单件报价$382.58，入手门槛不高。产自英国。茶叶是历史悠久的国际饮品贸易品。单件约10kg，分量较重，占行李配额多。

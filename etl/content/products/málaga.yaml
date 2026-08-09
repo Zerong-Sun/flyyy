@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 42932
   fragility: 0.0
   rarity: 0.42
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 马拉加纺织品合约。单件约14.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自西班牙。纺织与服装是国际贸易的传统大宗品类。
 - product_id: málaga_食品_B
   name_zh: 马拉加食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1938
   fragility: 0.2
   rarity: 0.27
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 马拉加食品合约。食品类货物对仓储条件与保质期敏感。单件约20.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$124.47，入手门槛不高。产自西班牙。
 - product_id: málaga_陶瓷_B
   name_zh: 马拉加陶瓷合约
   category: 陶瓷
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 61707
   fragility: 0.7
   rarity: 0.51
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 马拉加陶瓷合约。陶瓷制品易碎，包装与搬运需小心。单件约19.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$386.95，入手门槛不高。产自西班牙。
 - product_id: málaga_日用品_B
   name_zh: 马拉加日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 20029
   fragility: 0.0
   rarity: 0.08
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 马拉加日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$45.21，入手门槛不高。产自西班牙。日用品需求平稳，适合作为常备贸易品。单件约12.9kg，分量较重，占行李配额多。
 - product_id: málaga_糖果_B
   name_zh: 马拉加糖果合约
   category: 糖果
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1556
   fragility: 0.1
   rarity: 0.31
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 马拉加糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$156.04，入手门槛不高。产自西班牙。糖果点心类商品包装轻巧，礼品属性强。单件约4.9kg，分量适中。

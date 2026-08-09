@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1683
   fragility: 0.2
   rarity: 0.36
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 克莱蒙费朗食品合约。单件约28.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$114.15，入手门槛不高。产自法国。食品类货物对仓储条件与保质期敏感。
 - product_id: clermont_ferrand_香料_B
   name_zh: 克莱蒙费朗香料合约
   category: 香料
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 8245
   fragility: 0.0
   rarity: 0.41
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 克莱蒙费朗香料合约。香料贸易历史悠久，单价与风味并重。单件约0.6kg，轻便易携。性质耐久，长途运输不易变质。单件报价$209.7，入手门槛不高。产自法国。
 - product_id: clermont_ferrand_机械_B
   name_zh: 克莱蒙费朗机械合约
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 20719
   fragility: 0.2
   rarity: 0.6
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 克莱蒙费朗机械合约。单件约24.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自法国。机械设备与工业部件是跨境物流的重要品类。
 - product_id: clermont_ferrand_工艺品_B
   name_zh: 克莱蒙费朗工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 62851
   fragility: 0.5
   rarity: 0.54
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 克莱蒙费朗工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$416.62，入手门槛不高。产自法国。工艺品带有鲜明的地方工艺与审美传统。单件约5.2kg，分量适中。
 - product_id: clermont_ferrand_日用品_B
   name_zh: 克莱蒙费朗日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 53632
   fragility: 0.0
   rarity: 0.06
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 克莱蒙费朗日用品合约。日用品需求平稳，适合作为常备贸易品。单件约13.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$55.22，入手门槛不高。产自法国。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 38658
   fragility: 0.0
   rarity: 0.36
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 佛罗伦萨纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约17.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$491.86，入手门槛不高。产自意大利。
 - product_id: firenze_(fi)_机械_B
   name_zh: 佛罗伦萨机械合约
   category: 机械
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 43806
   fragility: 0.2
   rarity: 0.49
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 佛罗伦萨机械合约。单件约37.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自意大利。机械设备与工业部件是跨境物流的重要品类。
 - product_id: firenze_(fi)_食品_B
   name_zh: 佛罗伦萨食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1957
   fragility: 0.2
   rarity: 0.37
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 佛罗伦萨食品合约。性质耐久，长途运输不易变质。单件报价$159.62，入手门槛不高。产自意大利。食品类货物对仓储条件与保质期敏感。单件约27.5kg，分量较重，占行李配额多。
 - product_id: firenze_(fi)_工艺品_B
   name_zh: 佛罗伦萨工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 61440
   fragility: 0.5
   rarity: 0.64
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 佛罗伦萨工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约13.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$369.01，入手门槛不高。产自意大利。
 - product_id: firenze_(fi)_陶瓷_B
   name_zh: 佛罗伦萨陶瓷合约
   category: 陶瓷
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 46084
   fragility: 0.7
   rarity: 0.45
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 佛罗伦萨陶瓷合约。单件约15.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$481.48，入手门槛不高。产自意大利。陶瓷制品易碎，包装与搬运需小心。

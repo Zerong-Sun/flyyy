@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 2599
   fragility: 0.1
   rarity: 0.34
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 坎大哈糖果合约。单件约4.1kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$64.55，入手门槛不高。产自阿富汗。糖果点心类商品包装轻巧，礼品属性强。
 - product_id: kandahar_食品_B
   name_zh: 坎大哈食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 978
   fragility: 0.2
   rarity: 0.21
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 坎大哈食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$229.89，入手门槛不高。产自阿富汗。食品类货物对仓储条件与保质期敏感。单件约22.4kg，分量较重，占行李配额多。
 - product_id: kandahar_工艺品_B
   name_zh: 坎大哈工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 99460
   fragility: 0.5
   rarity: 0.53
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 坎大哈工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约10.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$487.91，入手门槛不高。产自阿富汗。
 - product_id: kandahar_日用品_B
   name_zh: 坎大哈日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 20164
   fragility: 0.0
   rarity: 0.18
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 坎大哈日用品合约。日用品需求平稳，适合作为常备贸易品。单件约7kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$93.53，入手门槛不高。产自阿富汗。
 - product_id: kandahar_咖啡_B
   name_zh: 坎大哈咖啡合约
   category: 咖啡
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 2549
   fragility: 0.0
   rarity: 0.41
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 坎大哈咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约10kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$146.65，入手门槛不高。产自阿富汗。

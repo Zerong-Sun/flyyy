@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.45
-  description: 板材与长材远期合约。交割单轻便，实物由目的地仓库提货。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 华北钢材合约。性质耐久，长途运输不易变质。单件报价$480，入手门槛不高。产自中国北京。矿产品价格与全球大宗商品行情联动。单件约1.5kg，轻便易携。
 - product_id: pek_textile_contract
   name_zh: 华北纺织合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.5
-  description: 产业用纺织品合约。无大件样品，适合跨城套利。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 华北纺织合约。单件约1kg，轻便易携。性质耐久，长途运输不易变质。单件报价$450，入手门槛不高。产自中国北京。纺织与服装是国际贸易的传统大宗品类。
 - product_id: pek_machinery_sample
   name_zh: 机床配件样品
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.55
-  description: 数控配件样品箱，附采购合约。中等重量，建议货运。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 机床配件样品。单件约7kg，分量适中。性质耐久，长途运输不易变质。产自中国北京。机械设备与工业部件是跨境物流的重要品类。
 - product_id: pek_jade_proxy
   name_zh: 和田玉代购件
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.1
   rarity: 0.8
-  description: 小件玉饰代购。高价值轻货，注意防撞包装。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 和田玉代购件。工艺品带有鲜明的地方工艺与审美传统。单件约0.35kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$3500，属高值商品。产自中国北京。
 - product_id: pek_sensor_core
   name_zh: 传感器核心器件
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.75
-  description: 工业传感器与采集模块。体积小，远端工厂升级需求强。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 传感器核心器件。单件约0.6kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$3900，属高值商品。产自中国北京。电子元件与消费电子是贸易量最大的品类之一。

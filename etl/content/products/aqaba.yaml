@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 95105
   fragility: 0.5
   rarity: 0.41
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 亚喀巴工艺品合约。单件约9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$402.88，入手门槛不高。产自约旦。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: aqaba_食品_B
   name_zh: 亚喀巴食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1806
   fragility: 0.2
   rarity: 0.21
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 亚喀巴食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$163.45，入手门槛不高。产自约旦。食品类货物对仓储条件与保质期敏感。单件约16.4kg，分量较重，占行李配额多。
 - product_id: aqaba_糖果_B
   name_zh: 亚喀巴糖果合约
   category: 糖果
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1688
   fragility: 0.1
   rarity: 0.16
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 亚喀巴糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$72.08，入手门槛不高。产自约旦。糖果点心类商品包装轻巧，礼品属性强。单件约6.9kg，分量适中。
 - product_id: aqaba_香料_B
   name_zh: 亚喀巴香料合约
   category: 香料
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 8507
   fragility: 0.0
   rarity: 0.4
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 亚喀巴香料合约。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$189.58，入手门槛不高。产自约旦。香料贸易历史悠久，单价与风味并重。
 - product_id: aqaba_日用品_B
   name_zh: 亚喀巴日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 85128
   fragility: 0.0
   rarity: 0.08
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 亚喀巴日用品合约。单件约5.3kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$90.82，入手门槛不高。产自约旦。日用品需求平稳，适合作为常备贸易品。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1013
   fragility: 0.2
   rarity: 0.38
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 安克雷奇食品合约。食品类货物对仓储条件与保质期敏感。单件约22.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$163.61，入手门槛不高。产自美国。
 - product_id: anchorage_能源_B
   name_zh: 安克雷奇能源合约
   category: 能源
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 23353
   fragility: 0.0
   rarity: 0.62
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 安克雷奇能源合约。能源类合约跟踪油气与电力等大宗商品行情。单件约3.6kg，分量适中。性质耐久，长途运输不易变质。产自美国。
 - product_id: anchorage_电子_B
   name_zh: 安克雷奇电子合约
   category: 电子
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 84345
   fragility: 0.3
   rarity: 0.59
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 安克雷奇电子合约。性质耐久，长途运输不易变质。产自美国。电子元件与消费电子是贸易量最大的品类之一。单件约3.8kg，分量适中。
 - product_id: anchorage_机械_B
   name_zh: 安克雷奇机械合约
   category: 机械
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 16332
   fragility: 0.2
   rarity: 0.51
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 安克雷奇机械合约。单件约26.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自美国。机械设备与工业部件是跨境物流的重要品类。
 - product_id: anchorage_日用品_B
   name_zh: 安克雷奇日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 33738
   fragility: 0.0
   rarity: 0.17
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 安克雷奇日用品合约。单件约12.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$72.67，入手门槛不高。产自美国。日用品需求平稳，适合作为常备贸易品。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1579
   fragility: 0.2
   rarity: 0.35
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 熊本食品合约。食品类货物对仓储条件与保质期敏感。单件约20.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$98.16，入手门槛不高。产自日本。
 - product_id: kumamoto_电子_B
   name_zh: 熊本电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 60337
   fragility: 0.3
   rarity: 0.74
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 熊本电子合约。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。产自日本。电子元件与消费电子是贸易量最大的品类之一。单件约2.5kg，分量适中。
 - product_id: kumamoto_工艺品_B
   name_zh: 熊本工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 98085
   fragility: 0.5
   rarity: 0.56
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 熊本工艺品合约。单件约6.5kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$380.79，入手门槛不高。产自日本。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: kumamoto_文具_B
   name_zh: 熊本文具合约
   category: 文具
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 83796
   fragility: 0.0
   rarity: 0.19
-  description: 当地特色文具纸品合约，轻便易携带。
+  description: 熊本文具合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$92.38，入手门槛不高。产自日本。文具用品需求稳定，轻便易携带。单件约2.1kg，分量适中。
 - product_id: kumamoto_玩具_B
   name_zh: 熊本玩具合约
   category: 玩具
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 50326
   fragility: 0.1
   rarity: 0.22
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 熊本玩具合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$173.55，入手门槛不高。产自日本。玩具类商品批量贸易活跃，季节性强。单件约5.2kg，分量适中。

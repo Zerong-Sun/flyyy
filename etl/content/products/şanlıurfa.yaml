@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 654
   fragility: 0.2
   rarity: 0.28
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 尚勒乌尔法食品合约。保质期约654小时。货源常见，走量为主。单件报价$101.36，入手门槛不高。产自土耳其。食品类货物对仓储条件与保质期敏感。单件约16.7kg，分量较重，占行李配额多。
 - product_id: şanlıurfa_陶瓷_B
   name_zh: 尚勒乌尔法陶瓷合约
   category: 陶瓷
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 35048
   fragility: 0.7
   rarity: 0.57
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 尚勒乌尔法陶瓷合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$250.09，入手门槛不高。产自土耳其。陶瓷制品易碎，包装与搬运需小心。单件约14.1kg，分量较重，占行李配额多。
 - product_id: şanlıurfa_矿产_B
   name_zh: 尚勒乌尔法矿产合约
   category: 矿产
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 93306
   fragility: 0.0
   rarity: 0.38
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 尚勒乌尔法矿产合约。矿产品价格与全球大宗商品行情联动。单件约31.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$454.39，入手门槛不高。产自土耳其。
 - product_id: şanlıurfa_纺织品_B
   name_zh: 尚勒乌尔法纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 54234
   fragility: 0.0
   rarity: 0.33
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 尚勒乌尔法纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$300.47，入手门槛不高。产自土耳其。纺织与服装是国际贸易的传统大宗品类。单件约8.7kg，分量较重，占行李配额多。
 - product_id: şanlıurfa_机械_B
   name_zh: 尚勒乌尔法机械合约
   category: 机械
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 72176
   fragility: 0.2
   rarity: 0.58
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 尚勒乌尔法机械合约。机械设备与工业部件是跨境物流的重要品类。单件约46.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自土耳其。

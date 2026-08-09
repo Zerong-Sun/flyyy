@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 73901
   fragility: 0.3
   rarity: 0.55
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 吉布提市电子合约。性质耐久，长途运输不易变质。单件报价$2855.45，属高值商品。产自吉布提。电子元件与消费电子是贸易量最大的品类之一。单件约1kg，轻便易携。
 - product_id: djibouti_city_糖果_B
   name_zh: 吉布提市糖果合约
   category: 糖果
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1391
   fragility: 0.1
   rarity: 0.35
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 吉布提市糖果合约。单件约0.3kg，轻便易携。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自吉布提。糖果点心类商品包装轻巧，礼品属性强。
 - product_id: djibouti_city_香料_C
   name_zh: 吉布提市香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 4664
   fragility: 0.0
   rarity: 0.55
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 吉布提市香料合约。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$397.54，入手门槛不高。产自吉布提。香料贸易历史悠久，单价与风味并重。
 - product_id: djibouti_city_工艺品_D
   name_zh: 吉布提市工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 60341
   fragility: 0.5
   rarity: 0.57
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 吉布提市工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约9.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$450.93，入手门槛不高。产自吉布提。
 - product_id: djibouti_city_矿产_E
   name_zh: 吉布提市矿产合约
   category: 矿产
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 21124
   fragility: 0.0
   rarity: 0.59
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 吉布提市矿产合约。矿产品价格与全球大宗商品行情联动。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$357.91，入手门槛不高。产自吉布提。

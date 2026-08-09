@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 9786
   fragility: 0.0
   rarity: 0.54
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 梅利塔矿产合约。矿产品价格与全球大宗商品行情联动。单件约35.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$292.56，入手门槛不高。产自突尼斯。
 - product_id: mellita_咖啡_B
   name_zh: 梅利塔咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 2504
   fragility: 0.0
   rarity: 0.42
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 梅利塔咖啡合约。单件约13kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$202.05，入手门槛不高。产自突尼斯。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: mellita_香料_B
   name_zh: 梅利塔香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 5330
   fragility: 0.0
   rarity: 0.57
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 梅利塔香料合约。香料贸易历史悠久，单价与风味并重。单件约0.6kg，轻便易携。性质耐久，长途运输不易变质。单件报价$285.83，入手门槛不高。产自突尼斯。
 - product_id: mellita_工艺品_B
   name_zh: 梅利塔工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 74053
   fragility: 0.5
   rarity: 0.55
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 梅利塔工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$203.5，入手门槛不高。产自突尼斯。工艺品带有鲜明的地方工艺与审美传统。单件约5.8kg，分量适中。
 - product_id: mellita_糖果_B
   name_zh: 梅利塔糖果合约
   category: 糖果
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 2400
   fragility: 0.1
   rarity: 0.16
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 梅利塔糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约6kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$116.25，入手门槛不高。产自突尼斯。

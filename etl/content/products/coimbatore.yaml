@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 6588
   fragility: 0.1
   rarity: 0.47
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 哥印拜陀茶叶合约。性质耐久，长途运输不易变质。单件报价$113.05，入手门槛不高。产自印度。茶叶是历史悠久的国际饮品贸易品。单件约5.1kg，分量适中。
 - product_id: coimbatore_矿产_B
   name_zh: 哥印拜陀矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 71798
   fragility: 0.0
   rarity: 0.48
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 哥印拜陀矿产合约。矿产品价格与全球大宗商品行情联动。单件约28.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$379.85，入手门槛不高。产自印度。
 - product_id: coimbatore_纺织品_B
   name_zh: 哥印拜陀纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 28812
   fragility: 0.0
   rarity: 0.42
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 哥印拜陀纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约12.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$233.27，入手门槛不高。产自印度。
 - product_id: coimbatore_香料_B
   name_zh: 哥印拜陀香料合约
   category: 香料
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 5221
   fragility: 0.0
   rarity: 0.42
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 哥印拜陀香料合约。香料贸易历史悠久，单价与风味并重。单件约0.5kg，轻便易携。性质耐久，长途运输不易变质。单件报价$222.28，入手门槛不高。产自印度。
 - product_id: coimbatore_电子_B
   name_zh: 哥印拜陀电子合约
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 53916
   fragility: 0.3
   rarity: 0.63
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 哥印拜陀电子合约。单件约2.1kg，分量适中。性质耐久，长途运输不易变质。产自印度。电子元件与消费电子是贸易量最大的品类之一。

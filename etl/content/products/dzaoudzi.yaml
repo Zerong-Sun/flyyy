@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 3884
   fragility: 0.0
   rarity: 0.46
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 藻德济咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约12.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$182.16，入手门槛不高。产自马约特。
 - product_id: dzaoudzi_香料_B
   name_zh: 藻德济香料合约
   category: 香料
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 8704
   fragility: 0.0
   rarity: 0.42
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 藻德济香料合约。性质耐久，长途运输不易变质。单件报价$357.15，入手门槛不高。产自马约特。香料贸易历史悠久，单价与风味并重。单件约0.9kg，轻便易携。
 - product_id: dzaoudzi_日用品_B
   name_zh: 藻德济日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 40290
   fragility: 0.0
   rarity: 0.1
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 藻德济日用品合约。单件约8.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$50.63，入手门槛不高。产自马约特。日用品需求平稳，适合作为常备贸易品。
 - product_id: dzaoudzi_纺织品_B
   name_zh: 藻德济纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 80101
   fragility: 0.0
   rarity: 0.4
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 藻德济纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约15.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$308.87，入手门槛不高。产自马约特。
 - product_id: dzaoudzi_食品_B
   name_zh: 藻德济食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1630
   fragility: 0.2
   rarity: 0.2
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 藻德济食品合约。单件约29.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$246.81，入手门槛不高。产自马约特。食品类货物对仓储条件与保质期敏感。

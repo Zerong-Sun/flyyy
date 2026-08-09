@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 47752
   fragility: 0.5
   rarity: 0.41
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 弗里波特工艺品合约。单件约12.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$376.77，入手门槛不高。产自巴哈马。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: freeport_食品_B
   name_zh: 弗里波特食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 818
   fragility: 0.2
   rarity: 0.38
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 弗里波特食品合约。性质耐久，长途运输不易变质。单件报价$144.38，入手门槛不高。产自巴哈马。食品类货物对仓储条件与保质期敏感。单件约16.7kg，分量较重，占行李配额多。
 - product_id: freeport_香料_B
   name_zh: 弗里波特香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 5806
   fragility: 0.0
   rarity: 0.54
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 弗里波特香料合约。香料贸易历史悠久，单价与风味并重。单件约0.9kg，轻便易携。性质耐久，长途运输不易变质。单件报价$377.67，入手门槛不高。产自巴哈马。
 - product_id: freeport_咖啡_B
   name_zh: 弗里波特咖啡合约
   category: 咖啡
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 3027
   fragility: 0.0
   rarity: 0.31
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 弗里波特咖啡合约。单件约10.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$246.09，入手门槛不高。产自巴哈马。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: freeport_纺织品_B
   name_zh: 弗里波特纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 42650
   fragility: 0.0
   rarity: 0.37
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 弗里波特纺织品合约。性质耐久，长途运输不易变质。单件报价$369.68，入手门槛不高。产自巴哈马。纺织与服装是国际贸易的传统大宗品类。单件约11.2kg，分量较重，占行李配额多。

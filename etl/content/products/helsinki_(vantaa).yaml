@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 14770
   fragility: 0.3
   rarity: 0.68
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 赫尔辛基电子合约。单件约1.6kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2492.48，属高值商品。产自芬兰。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: helsinki_(vantaa)_食品_B
   name_zh: 赫尔辛基食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1099
   fragility: 0.2
   rarity: 0.38
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 赫尔辛基食品合约。单件约1.7kg，轻便易携。性质耐久，长途运输不易变质。单件报价$227.85，入手门槛不高。产自芬兰。食品类货物对仓储条件与保质期敏感。
 - product_id: helsinki_(vantaa)_矿产_C
   name_zh: 赫尔辛基矿产合约
   category: 矿产
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 39943
   fragility: 0.0
   rarity: 0.42
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 赫尔辛基矿产合约。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$323.32，入手门槛不高。产自芬兰。矿产品价格与全球大宗商品行情联动。
 - product_id: helsinki_(vantaa)_工艺品_D
   name_zh: 赫尔辛基工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 79967
   fragility: 0.5
   rarity: 0.43
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 赫尔辛基工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$381.57，入手门槛不高。产自芬兰。工艺品带有鲜明的地方工艺与审美传统。单件约5.6kg，分量适中。
 - product_id: helsinki_(vantaa)_纺织品_E
   name_zh: 赫尔辛基纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 12832
   fragility: 0.0
   rarity: 0.35
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 赫尔辛基纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$325.07，入手门槛不高。产自芬兰。纺织与服装是国际贸易的传统大宗品类。单件约11.5kg，分量较重，占行李配额多。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.65
-  description: 成品油转口合约。交割单轻便。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 石油产品合约。单件约1kg，轻便易携。性质耐久，长途运输不易变质。产自新加坡新加坡。能源类合约跟踪油气与电力等大宗商品行情。
 - product_id: sin_chem_contract
   name_zh: 特种化工合约
   category: 能源
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.55
-  description: 添加剂远期合约，无桶装。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 特种化工合约。单件约1.2kg，轻便易携。性质耐久，长途运输不易变质。产自新加坡新加坡。能源类合约跟踪油气与电力等大宗商品行情。
 - product_id: sin_marine_sample
   name_zh: 海事机电样品
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.6
-  description: 船舶机电备件样品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 海事机电样品。单件约7kg，分量适中。性质耐久，长途运输不易变质。产自新加坡新加坡。机械设备与工业部件是跨境物流的重要品类。
 - product_id: sin_diamond_proxy
   name_zh: 工业钻石代购
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.1
   rarity: 0.9
-  description: 工业级钻石颗粒代购。极轻高价值。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 工业钻石代购。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$7200，属高值商品。产自新加坡新加坡。工艺品带有鲜明的地方工艺与审美传统。单件约0.15kg，轻便易携。
 - product_id: sin_network_core
   name_zh: 网络核心器件
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.75
-  description: 交换与光模块精品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 网络核心器件。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$4300，属高值商品。产自新加坡新加坡。电子元件与消费电子是贸易量最大的品类之一。单件约0.7kg，轻便易携。

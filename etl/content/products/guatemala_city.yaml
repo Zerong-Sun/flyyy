@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 81441
   fragility: 0.3
   rarity: 0.56
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 危地马拉城电子合约。单件约1kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2977.79，属高值商品。产自危地马拉。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: guatemala_city_食品_B
   name_zh: 危地马拉城食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 732
   fragility: 0.2
   rarity: 0.37
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 危地马拉城食品合约。单件约0.9kg，轻便易携。性质耐久，长途运输不易变质。单件报价$238.85，入手门槛不高。产自危地马拉。食品类货物对仓储条件与保质期敏感。
 - product_id: guatemala_city_工艺品_C
   name_zh: 危地马拉城工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 81725
   fragility: 0.5
   rarity: 0.52
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 危地马拉城工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约10.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$421.13，入手门槛不高。产自危地马拉。
 - product_id: guatemala_city_糖果_D
   name_zh: 危地马拉城糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2835
   fragility: 0.1
   rarity: 0.33
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 危地马拉城糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自危地马拉。糖果点心类商品包装轻巧，礼品属性强。单件约5.1kg，分量适中。
 - product_id: guatemala_city_香料_E
   name_zh: 危地马拉城香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 6156
   fragility: 0.0
   rarity: 0.44
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 危地马拉城香料合约。单件约0.6kg，轻便易携。性质耐久，长途运输不易变质。单件报价$201.3，入手门槛不高。产自危地马拉。香料贸易历史悠久，单价与风味并重。

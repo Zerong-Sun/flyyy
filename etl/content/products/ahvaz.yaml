@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 15047
   fragility: 0.5
   rarity: 0.59
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 阿瓦士工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约6.2kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$461.98，入手门槛不高。产自伊朗。
 - product_id: ahvaz_日用品_B
   name_zh: 阿瓦士日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 62344
   fragility: 0.0
   rarity: 0.13
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 阿瓦士日用品合约。单件约6kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$109.56，入手门槛不高。产自伊朗。日用品需求平稳，适合作为常备贸易品。
 - product_id: ahvaz_糖果_B
   name_zh: 阿瓦士糖果合约
   category: 糖果
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 2117
   fragility: 0.1
   rarity: 0.17
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 阿瓦士糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约5.9kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$78.09，入手门槛不高。产自伊朗。
 - product_id: ahvaz_咖啡_B
   name_zh: 阿瓦士咖啡合约
   category: 咖啡
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1715
   fragility: 0.0
   rarity: 0.32
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 阿瓦士咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$134.33，入手门槛不高。产自伊朗。
 - product_id: ahvaz_香料_B
   name_zh: 阿瓦士香料合约
   category: 香料
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 7008
   fragility: 0.0
   rarity: 0.51
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 阿瓦士香料合约。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$302.93，入手门槛不高。产自伊朗。香料贸易历史悠久，单价与风味并重。

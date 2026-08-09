@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 65178
   fragility: 0.5
   rarity: 0.47
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 古扎拉工艺品合约。单件约13.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$293，入手门槛不高。产自阿富汗。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: guzara_食品_B
   name_zh: 古扎拉食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1973
   fragility: 0.2
   rarity: 0.35
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 古扎拉食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$239.17，入手门槛不高。产自阿富汗。食品类货物对仓储条件与保质期敏感。单件约20.7kg，分量较重，占行李配额多。
 - product_id: guzara_咖啡_B
   name_zh: 古扎拉咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 2769
   fragility: 0.0
   rarity: 0.37
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 古扎拉咖啡合约。性质耐久，长途运输不易变质。单件报价$130.31，入手门槛不高。产自阿富汗。咖啡是国际大宗农产品，产地风味差异明显。单件约11kg，分量较重，占行李配额多。
 - product_id: guzara_日用品_B
   name_zh: 古扎拉日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 13430
   fragility: 0.0
   rarity: 0.07
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 古扎拉日用品合约。单件约13.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$82.48，入手门槛不高。产自阿富汗。日用品需求平稳，适合作为常备贸易品。
 - product_id: guzara_矿产_B
   name_zh: 古扎拉矿产合约
   category: 矿产
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 91933
   fragility: 0.0
   rarity: 0.4
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 古扎拉矿产合约。矿产品价格与全球大宗商品行情联动。单件约30.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自阿富汗。

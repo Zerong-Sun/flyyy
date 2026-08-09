@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 49430
   fragility: 0.3
   rarity: 0.66
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 布拉柴维尔电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约0.9kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2310.71，属高值商品。产自刚果（布）。
 - product_id: brazzaville_咖啡_B
   name_zh: 布拉柴维尔咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 3492
   fragility: 0.0
   rarity: 0.33
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 布拉柴维尔咖啡合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$276.96，入手门槛不高。产自刚果（布）。咖啡是国际大宗农产品，产地风味差异明显。单件约1.6kg，轻便易携。
 - product_id: brazzaville_工艺品_C
   name_zh: 布拉柴维尔工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 90300
   fragility: 0.5
   rarity: 0.58
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 布拉柴维尔工艺品合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$469.18，入手门槛不高。产自刚果（布）。工艺品带有鲜明的地方工艺与审美传统。单件约8kg，分量适中。
 - product_id: brazzaville_纺织品_D
   name_zh: 布拉柴维尔纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 80183
   fragility: 0.0
   rarity: 0.43
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 布拉柴维尔纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约10.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$328.41，入手门槛不高。产自刚果（布）。
 - product_id: brazzaville_食品_E
   name_zh: 布拉柴维尔食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 481
   fragility: 0.2
   rarity: 0.29
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 布拉柴维尔食品合约。单件约12kg，分量较重，占行李配额多。保质期约481小时。货源常见，走量为主。单件报价$206.87，入手门槛不高。产自刚果（布）。食品类货物对仓储条件与保质期敏感。

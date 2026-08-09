@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 52204
   fragility: 0.3
   rarity: 0.67
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 罗马电子合约。性质耐久，长途运输不易变质。单件报价$2441.58，属高值商品。产自意大利。电子元件与消费电子是贸易量最大的品类之一。单件约1.3kg，轻便易携。
 - product_id: rome_机械_B
   name_zh: 罗马机械合约
   category: 机械
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 11403
   fragility: 0.2
   rarity: 0.47
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 罗马机械合约。性质耐久，长途运输不易变质。产自意大利。机械设备与工业部件是跨境物流的重要品类。单件约12kg，分量较重，占行李配额多。
 - product_id: rome_工艺品_C
   name_zh: 罗马工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 89235
   fragility: 0.5
   rarity: 0.48
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 罗马工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约5.3kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$370.02，入手门槛不高。产自意大利。
 - product_id: rome_陶瓷_D
   name_zh: 罗马陶瓷合约
   category: 陶瓷
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 60216
   fragility: 0.7
   rarity: 0.48
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 罗马陶瓷合约。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$280.03，入手门槛不高。产自意大利。陶瓷制品易碎，包装与搬运需小心。单件约12kg，分量较重，占行李配额多。
 - product_id: rome_糖果_E
   name_zh: 罗马糖果合约
   category: 糖果
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 2663
   fragility: 0.1
   rarity: 0.23
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 罗马糖果合约。单件约5.5kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自意大利。糖果点心类商品包装轻巧，礼品属性强。

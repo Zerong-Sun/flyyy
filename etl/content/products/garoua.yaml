@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1728
   fragility: 0.1
   rarity: 0.23
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 加鲁阿糖果合约。单件约7.8kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$101.65，入手门槛不高。产自喀麦隆。糖果点心类商品包装轻巧，礼品属性强。
 - product_id: garoua_日用品_B
   name_zh: 加鲁阿日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 64899
   fragility: 0.0
   rarity: 0.2
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 加鲁阿日用品合约。日用品需求平稳，适合作为常备贸易品。单件约13.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$46.8，入手门槛不高。产自喀麦隆。
 - product_id: garoua_咖啡_B
   name_zh: 加鲁阿咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1597
   fragility: 0.0
   rarity: 0.41
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 加鲁阿咖啡合约。性质耐久，长途运输不易变质。单件报价$204.15，入手门槛不高。产自喀麦隆。咖啡是国际大宗农产品，产地风味差异明显。单件约6.7kg，分量适中。
 - product_id: garoua_香料_B
   name_zh: 加鲁阿香料合约
   category: 香料
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 7109
   fragility: 0.0
   rarity: 0.46
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 加鲁阿香料合约。香料贸易历史悠久，单价与风味并重。单件约0.8kg，轻便易携。性质耐久，长途运输不易变质。单件报价$305.98，入手门槛不高。产自喀麦隆。
 - product_id: garoua_食品_B
   name_zh: 加鲁阿食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1447
   fragility: 0.2
   rarity: 0.21
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 加鲁阿食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$239.04，入手门槛不高。产自喀麦隆。食品类货物对仓储条件与保质期敏感。单件约20.9kg，分量较重，占行李配额多。

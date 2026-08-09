@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 8390
   fragility: 0.0
   rarity: 0.43
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 阿斯旺香料合约。性质耐久，长途运输不易变质。单件报价$83.67，入手门槛不高。产自埃及。香料贸易历史悠久，单价与风味并重。单件约0.8kg，轻便易携。
 - product_id: aswan_矿产_B
   name_zh: 阿斯旺矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 25198
   fragility: 0.0
   rarity: 0.43
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 阿斯旺矿产合约。性质耐久，长途运输不易变质。单件报价$145.06，入手门槛不高。产自埃及。矿产品价格与全球大宗商品行情联动。单件约37.6kg，分量较重，占行李配额多。
 - product_id: aswan_食品_B
   name_zh: 阿斯旺食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1634
   fragility: 0.2
   rarity: 0.32
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 阿斯旺食品合约。食品类货物对仓储条件与保质期敏感。单件约23.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$116.52，入手门槛不高。产自埃及。
 - product_id: aswan_日用品_B
   name_zh: 阿斯旺日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 40817
   fragility: 0.0
   rarity: 0.1
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 阿斯旺日用品合约。日用品需求平稳，适合作为常备贸易品。单件约14.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$25.99，入手门槛不高。产自埃及。
 - product_id: aswan_纺织品_B
   name_zh: 阿斯旺纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 45919
   fragility: 0.0
   rarity: 0.3
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 阿斯旺纺织品合约。单件约8.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$163.6，入手门槛不高。产自埃及。纺织与服装是国际贸易的传统大宗品类。

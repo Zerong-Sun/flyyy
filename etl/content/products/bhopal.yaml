@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 29878
   fragility: 0.0
   rarity: 0.26
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 博帕尔纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约16.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$171.73，入手门槛不高。产自印度。
 - product_id: bhopal_矿产_B
   name_zh: 博帕尔矿产合约
   category: 矿产
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 20510
   fragility: 0.0
   rarity: 0.38
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 博帕尔矿产合约。单件约25.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$293.81，入手门槛不高。产自印度。矿产品价格与全球大宗商品行情联动。
 - product_id: bhopal_香料_B
   name_zh: 博帕尔香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 4489
   fragility: 0.0
   rarity: 0.46
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 博帕尔香料合约。单件约0.7kg，轻便易携。性质耐久，长途运输不易变质。单件报价$225.32，入手门槛不高。产自印度。香料贸易历史悠久，单价与风味并重。
 - product_id: bhopal_电子_B
   name_zh: 博帕尔电子合约
   category: 电子
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 96099
   fragility: 0.3
   rarity: 0.73
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 博帕尔电子合约。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。产自印度。电子元件与消费电子是贸易量最大的品类之一。单件约4.3kg，分量适中。
 - product_id: bhopal_茶叶_B
   name_zh: 博帕尔茶叶合约
   category: 茶叶
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 8003
   fragility: 0.1
   rarity: 0.42
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 博帕尔茶叶合约。性质耐久，长途运输不易变质。单件报价$98.1，入手门槛不高。产自印度。茶叶是历史悠久的国际饮品贸易品。单件约5.1kg，分量适中。

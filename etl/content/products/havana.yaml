@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 48046
   fragility: 0.3
   rarity: 0.75
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 哈瓦那电子合约。单件约2kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$2373，属高值商品。产自古巴。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: havana_咖啡_B
   name_zh: 哈瓦那咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 3572
   fragility: 0.0
   rarity: 0.38
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 哈瓦那咖啡合约。性质耐久，长途运输不易变质。单件报价$212.99，入手门槛不高。产自古巴。咖啡是国际大宗农产品，产地风味差异明显。单件约0.8kg，轻便易携。
 - product_id: havana_纺织品_C
   name_zh: 哈瓦那纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 20508
   fragility: 0.0
   rarity: 0.27
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 哈瓦那纺织品合约。单件约8.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$437.46，入手门槛不高。产自古巴。纺织与服装是国际贸易的传统大宗品类。
 - product_id: havana_日用品_D
   name_zh: 哈瓦那日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 66268
   fragility: 0.0
   rarity: 0.07
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 哈瓦那日用品合约。单件约6.4kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自古巴。日用品需求平稳，适合作为常备贸易品。
 - product_id: havana_矿产_E
   name_zh: 哈瓦那矿产合约
   category: 矿产
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 84881
   fragility: 0.0
   rarity: 0.39
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 哈瓦那矿产合约。矿产品价格与全球大宗商品行情联动。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$479.4，入手门槛不高。产自古巴。

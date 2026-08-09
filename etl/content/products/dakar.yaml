@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 74741
   fragility: 0.3
   rarity: 0.57
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 达喀尔电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约1.7kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2327.29，属高值商品。产自塞内加尔。
 - product_id: dakar_纺织品_B
   name_zh: 达喀尔纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 54689
   fragility: 0.0
   rarity: 0.45
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 达喀尔纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约1.9kg，轻便易携。性质耐久，长途运输不易变质。单件报价$456.11，入手门槛不高。产自塞内加尔。
 - product_id: dakar_日用品_C
   name_zh: 达喀尔日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 10366
   fragility: 0.0
   rarity: 0.07
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 达喀尔日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自塞内加尔。日用品需求平稳，适合作为常备贸易品。单件约7.5kg，分量适中。
 - product_id: dakar_糖果_D
   name_zh: 达喀尔糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1110
   fragility: 0.1
   rarity: 0.33
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 达喀尔糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约4.7kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自塞内加尔。
 - product_id: dakar_矿产_E
   name_zh: 达喀尔矿产合约
   category: 矿产
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 40659
   fragility: 0.0
   rarity: 0.5
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 达喀尔矿产合约。性质耐久，长途运输不易变质。单件报价$362.16，入手门槛不高。产自塞内加尔。矿产品价格与全球大宗商品行情联动。单件约12kg，分量较重，占行李配额多。

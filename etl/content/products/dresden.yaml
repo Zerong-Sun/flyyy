@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 58364
   fragility: 0.3
   rarity: 0.68
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 德累斯顿电子合约。性质耐久，长途运输不易变质。产自德国。电子元件与消费电子是贸易量最大的品类之一。单件约3.9kg，分量适中。
 - product_id: dresden_日用品_B
   name_zh: 德累斯顿日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 54019
   fragility: 0.0
   rarity: 0.13
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 德累斯顿日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$101.88，入手门槛不高。产自德国。日用品需求平稳，适合作为常备贸易品。单件约5.9kg，分量适中。
 - product_id: dresden_机械_B
   name_zh: 德累斯顿机械合约
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 9827
   fragility: 0.2
   rarity: 0.52
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 德累斯顿机械合约。单件约37.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自德国。机械设备与工业部件是跨境物流的重要品类。
 - product_id: dresden_食品_B
   name_zh: 德累斯顿食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 587
   fragility: 0.2
   rarity: 0.39
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 德累斯顿食品合约。单件约19.1kg，分量较重，占行李配额多。保质期约587小时。单件报价$97.16，入手门槛不高。产自德国。食品类货物对仓储条件与保质期敏感。
 - product_id: dresden_能源_B
   name_zh: 德累斯顿能源合约
   category: 能源
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 41164
   fragility: 0.0
   rarity: 0.67
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 德累斯顿能源合约。能源类合约跟踪油气与电力等大宗商品行情。单件约9.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自德国。

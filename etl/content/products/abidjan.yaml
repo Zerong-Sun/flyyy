@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 85580
   fragility: 0.3
   rarity: 0.55
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 阿比让电子合约。性质耐久，长途运输不易变质。单件报价$2766.51，属高值商品。产自科特迪瓦。电子元件与消费电子是贸易量最大的品类之一。单件约0.9kg，轻便易携。
 - product_id: abidjan_工艺品_B
   name_zh: 阿比让工艺品合约
   category: 工艺品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 12338
   fragility: 0.5
   rarity: 0.47
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 阿比让工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约1.4kg，轻便易携。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$287.21，入手门槛不高。产自科特迪瓦。
 - product_id: abidjan_矿产_C
   name_zh: 阿比让矿产合约
   category: 矿产
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 49420
   fragility: 0.0
   rarity: 0.41
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 阿比让矿产合约。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自科特迪瓦。矿产品价格与全球大宗商品行情联动。
 - product_id: abidjan_食品_D
   name_zh: 阿比让食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2006
   fragility: 0.2
   rarity: 0.26
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 阿比让食品合约。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$218.85，入手门槛不高。产自科特迪瓦。食品类货物对仓储条件与保质期敏感。
 - product_id: abidjan_咖啡_E
   name_zh: 阿比让咖啡合约
   category: 咖啡
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 4162
   fragility: 0.0
   rarity: 0.33
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 阿比让咖啡合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$211.35，入手门槛不高。产自科特迪瓦。咖啡是国际大宗农产品，产地风味差异明显。单件约11.1kg，分量较重，占行李配额多。

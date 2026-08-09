@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 54012
   fragility: 0.3
   rarity: 0.65
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 雅加达电子合约。性质耐久，长途运输不易变质。单件报价$2362.46，属高值商品。产自印度尼西亚。电子元件与消费电子是贸易量最大的品类之一。单件约1kg，轻便易携。
 - product_id: jakarta_工艺品_B
   name_zh: 雅加达工艺品合约
   category: 工艺品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 58318
   fragility: 0.5
   rarity: 0.57
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 雅加达工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约1.9kg，轻便易携。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$495.25，入手门槛不高。产自印度尼西亚。
 - product_id: jakarta_糖果_C
   name_zh: 雅加达糖果合约
   category: 糖果
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 734
   fragility: 0.1
   rarity: 0.17
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 雅加达糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自印度尼西亚。糖果点心类商品包装轻巧，礼品属性强。单件约5.6kg，分量适中。
 - product_id: jakarta_日用品_D
   name_zh: 雅加达日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 51678
   fragility: 0.0
   rarity: 0.1
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 雅加达日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自印度尼西亚。日用品需求平稳，适合作为常备贸易品。单件约5.7kg，分量适中。
 - product_id: jakarta_纺织品_E
   name_zh: 雅加达纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 53124
   fragility: 0.0
   rarity: 0.26
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 雅加达纺织品合约。单件约10.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$417.77，入手门槛不高。产自印度尼西亚。纺织与服装是国际贸易的传统大宗品类。

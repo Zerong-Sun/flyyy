@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1904
   fragility: 0.1
   rarity: 0.28
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 基桑加尼糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$76.12，入手门槛不高。产自刚果（金）。糖果点心类商品包装轻巧，礼品属性强。单件约5.6kg，分量适中。
 - product_id: kisangani_食品_B
   name_zh: 基桑加尼食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1451
   fragility: 0.2
   rarity: 0.24
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 基桑加尼食品合约。食品类货物对仓储条件与保质期敏感。单件约25.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$167.68，入手门槛不高。产自刚果（金）。
 - product_id: kisangani_香料_B
   name_zh: 基桑加尼香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 5513
   fragility: 0.0
   rarity: 0.46
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 基桑加尼香料合约。性质耐久，长途运输不易变质。单件报价$207.51，入手门槛不高。产自刚果（金）。香料贸易历史悠久，单价与风味并重。单件约0.8kg，轻便易携。
 - product_id: kisangani_工艺品_B
   name_zh: 基桑加尼工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 29966
   fragility: 0.5
   rarity: 0.64
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 基桑加尼工艺品合约。单件约11.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$467.72，入手门槛不高。产自刚果（金）。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: kisangani_纺织品_B
   name_zh: 基桑加尼纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 22945
   fragility: 0.0
   rarity: 0.31
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 基桑加尼纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$498.03，入手门槛不高。产自刚果（金）。纺织与服装是国际贸易的传统大宗品类。单件约8.2kg，分量较重，占行李配额多。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1720
   fragility: 0.2
   rarity: 0.26
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 波尔多食品合约。食品类货物对仓储条件与保质期敏感。单件约15.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$125.45，入手门槛不高。产自法国。
 - product_id: bordeaux_香料_B
   name_zh: 波尔多香料合约
   category: 香料
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 6335
   fragility: 0.0
   rarity: 0.58
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 波尔多香料合约。性质耐久，长途运输不易变质。单件报价$290.86，入手门槛不高。产自法国。香料贸易历史悠久，单价与风味并重。单件约1kg，轻便易携。
 - product_id: bordeaux_工艺品_B
   name_zh: 波尔多工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 25009
   fragility: 0.5
   rarity: 0.41
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 波尔多工艺品合约。单件约6.6kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$212.99，入手门槛不高。产自法国。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: bordeaux_日用品_B
   name_zh: 波尔多日用品合约
   category: 日用品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 76643
   fragility: 0.0
   rarity: 0.19
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 波尔多日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$66.1，入手门槛不高。产自法国。日用品需求平稳，适合作为常备贸易品。单件约12.1kg，分量较重，占行李配额多。
 - product_id: bordeaux_机械_B
   name_zh: 波尔多机械合约
   category: 机械
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 16227
   fragility: 0.2
   rarity: 0.58
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 波尔多机械合约。单件约40.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自法国。机械设备与工业部件是跨境物流的重要品类。

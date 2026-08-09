@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 5925
   fragility: 0.0
   rarity: 0.58
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 卡马圭香料合约。单件约0.3kg，轻便易携。性质耐久，长途运输不易变质。单件报价$340.51，入手门槛不高。产自古巴。香料贸易历史悠久，单价与风味并重。
 - product_id: camaguey_纺织品_B
   name_zh: 卡马圭纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 76873
   fragility: 0.0
   rarity: 0.45
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 卡马圭纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约13.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$216.42，入手门槛不高。产自古巴。
 - product_id: camaguey_矿产_B
   name_zh: 卡马圭矿产合约
   category: 矿产
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 80706
   fragility: 0.0
   rarity: 0.52
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 卡马圭矿产合约。矿产品价格与全球大宗商品行情联动。单件约34.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$394.89，入手门槛不高。产自古巴。
 - product_id: camaguey_糖果_B
   name_zh: 卡马圭糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 1346
   fragility: 0.1
   rarity: 0.33
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 卡马圭糖果合约。糖果点心类商品包装轻巧，礼品属性强。单件约4.9kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$131.57，入手门槛不高。产自古巴。
 - product_id: camaguey_工艺品_B
   name_zh: 卡马圭工艺品合约
   category: 工艺品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 82521
   fragility: 0.5
   rarity: 0.4
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 卡马圭工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约6.9kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$230.88，入手门槛不高。产自古巴。

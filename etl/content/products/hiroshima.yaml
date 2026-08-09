@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1945
   fragility: 0.2
   rarity: 0.32
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 广岛食品合约。食品类货物对仓储条件与保质期敏感。单件约26.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$222.57，入手门槛不高。产自日本。
 - product_id: hiroshima_电子_B
   name_zh: 广岛电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 79865
   fragility: 0.3
   rarity: 0.58
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 广岛电子合约。性质耐久，长途运输不易变质。产自日本。电子元件与消费电子是贸易量最大的品类之一。单件约4.8kg，分量适中。
 - product_id: hiroshima_玩具_B
   name_zh: 广岛玩具合约
   category: 玩具
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 26078
   fragility: 0.1
   rarity: 0.23
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 广岛玩具合约。单件约3.3kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$167.26，入手门槛不高。产自日本。玩具类商品批量贸易活跃，季节性强。
 - product_id: hiroshima_文具_B
   name_zh: 广岛文具合约
   category: 文具
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 97305
   fragility: 0.0
   rarity: 0.18
-  description: 当地特色文具纸品合约，轻便易携带。
+  description: 广岛文具合约。单件约2.1kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$71.55，入手门槛不高。产自日本。文具用品需求稳定，轻便易携带。
 - product_id: hiroshima_工艺品_B
   name_zh: 广岛工艺品合约
   category: 工艺品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 84926
   fragility: 0.5
   rarity: 0.45
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 广岛工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约14.6kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$188.08，入手门槛不高。产自日本。

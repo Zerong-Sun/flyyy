@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 58663
   fragility: 0.3
   rarity: 0.64
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 富查伊拉电子合约。性质耐久，长途运输不易变质。产自阿联酋。电子元件与消费电子是贸易量最大的品类之一。单件约4.7kg，分量适中。
 - product_id: fujairah_能源_B
   name_zh: 富查伊拉能源合约
   category: 能源
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 56350
   fragility: 0.0
   rarity: 0.53
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 富查伊拉能源合约。能源类合约跟踪油气与电力等大宗商品行情。单件约7.5kg，分量适中。性质耐久，长途运输不易变质。产自阿联酋。
 - product_id: fujairah_日用品_B
   name_zh: 富查伊拉日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 45028
   fragility: 0.0
   rarity: 0.05
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 富查伊拉日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$85.51，入手门槛不高。产自阿联酋。日用品需求平稳，适合作为常备贸易品。单件约6.8kg，分量适中。
 - product_id: fujairah_香料_B
   name_zh: 富查伊拉香料合约
   category: 香料
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 7802
   fragility: 0.0
   rarity: 0.48
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 富查伊拉香料合约。单件约0.4kg，轻便易携。性质耐久，长途运输不易变质。单件报价$417.39，入手门槛不高。产自阿联酋。香料贸易历史悠久，单价与风味并重。
 - product_id: fujairah_食品_B
   name_zh: 富查伊拉食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 1840
   fragility: 0.2
   rarity: 0.37
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 富查伊拉食品合约。食品类货物对仓储条件与保质期敏感。单件约16.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$180.99，入手门槛不高。产自阿联酋。

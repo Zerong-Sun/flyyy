@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 67781
   fragility: 0.0
   rarity: 0.06
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 基苏木日用品合约。日用品需求平稳，适合作为常备贸易品。单件约14.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$39.1，入手门槛不高。产自肯尼亚。
 - product_id: kisumu_食品_B
   name_zh: 基苏木食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1572
   fragility: 0.2
   rarity: 0.22
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 基苏木食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$78.1，入手门槛不高。产自肯尼亚。食品类货物对仓储条件与保质期敏感。单件约24.6kg，分量较重，占行李配额多。
 - product_id: kisumu_咖啡_B
   name_zh: 基苏木咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 3851
   fragility: 0.0
   rarity: 0.36
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 基苏木咖啡合约。性质耐久，长途运输不易变质。单件报价$91.94，入手门槛不高。产自肯尼亚。咖啡是国际大宗农产品，产地风味差异明显。单件约5.4kg，分量适中。
 - product_id: kisumu_纺织品_B
   name_zh: 基苏木纺织品合约
   category: 纺织品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 66315
   fragility: 0.0
   rarity: 0.4
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 基苏木纺织品合约。性质耐久，长途运输不易变质。单件报价$216.26，入手门槛不高。产自肯尼亚。纺织与服装是国际贸易的传统大宗品类。单件约8.1kg，分量较重，占行李配额多。
 - product_id: kisumu_茶叶_B
   name_zh: 基苏木茶叶合约
   category: 茶叶
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 8095
   fragility: 0.1
   rarity: 0.35
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 基苏木茶叶合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$149.58，入手门槛不高。产自肯尼亚。茶叶是历史悠久的国际饮品贸易品。单件约6.5kg，分量适中。

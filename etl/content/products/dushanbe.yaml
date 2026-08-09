@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 73603
   fragility: 0.3
   rarity: 0.65
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 杜尚别电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约1.9kg，轻便易携。性质耐久，长途运输不易变质。单件报价$2611.02，属高值商品。产自塔吉克斯坦。
 - product_id: dushanbe_日用品_B
   name_zh: 杜尚别日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 82413
   fragility: 0.0
   rarity: 0.17
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 杜尚别日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自塔吉克斯坦。日用品需求平稳，适合作为常备贸易品。单件约0.6kg，轻便易携。
 - product_id: dushanbe_食品_C
   name_zh: 杜尚别食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 2114
   fragility: 0.2
   rarity: 0.25
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 杜尚别食品合约。单件约12kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$221.28，入手门槛不高。产自塔吉克斯坦。食品类货物对仓储条件与保质期敏感。
 - product_id: dushanbe_咖啡_D
   name_zh: 杜尚别咖啡合约
   category: 咖啡
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2279
   fragility: 0.0
   rarity: 0.32
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 杜尚别咖啡合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$238.37，入手门槛不高。产自塔吉克斯坦。咖啡是国际大宗农产品，产地风味差异明显。单件约7.8kg，分量适中。
 - product_id: dushanbe_纺织品_E
   name_zh: 杜尚别纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 84922
   fragility: 0.0
   rarity: 0.31
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 杜尚别纺织品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$334.65，入手门槛不高。产自塔吉克斯坦。纺织与服装是国际贸易的传统大宗品类。单件约11kg，分量较重，占行李配额多。

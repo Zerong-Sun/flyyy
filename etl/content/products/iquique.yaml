@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 79080
   fragility: 0.0
   rarity: 0.19
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 伊基克日用品合约。单件约9.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$70.21，入手门槛不高。产自智利。日用品需求平稳，适合作为常备贸易品。
 - product_id: iquique_能源_B
   name_zh: 伊基克能源合约
   category: 能源
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 73509
   fragility: 0.0
   rarity: 0.56
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 伊基克能源合约。性质耐久，长途运输不易变质。产自智利。能源类合约跟踪油气与电力等大宗商品行情。单件约3.2kg，分量适中。
 - product_id: iquique_矿产_B
   name_zh: 伊基克矿产合约
   category: 矿产
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 53395
   fragility: 0.0
   rarity: 0.55
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 伊基克矿产合约。矿产品价格与全球大宗商品行情联动。单件约23.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自智利。
 - product_id: iquique_食品_B
   name_zh: 伊基克食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2104
   fragility: 0.2
   rarity: 0.21
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 伊基克食品合约。单件约29.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$207.41，入手门槛不高。产自智利。食品类货物对仓储条件与保质期敏感。
 - product_id: iquique_咖啡_B
   name_zh: 伊基克咖啡合约
   category: 咖啡
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 2720
   fragility: 0.0
   rarity: 0.42
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 伊基克咖啡合约。单件约5.9kg，分量适中。性质耐久，长途运输不易变质。单件报价$194.04，入手门槛不高。产自智利。咖啡是国际大宗农产品，产地风味差异明显。

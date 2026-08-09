@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 2143
   fragility: 0.2
   rarity: 0.31
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 博洛尼亚食品合约。食品类货物对仓储条件与保质期敏感。单件约23.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$275.52，入手门槛不高。产自意大利。
 - product_id: bologna_纺织品_B
   name_zh: 博洛尼亚纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 39326
   fragility: 0.0
   rarity: 0.43
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 博洛尼亚纺织品合约。单件约11.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$396.35，入手门槛不高。产自意大利。纺织与服装是国际贸易的传统大宗品类。
 - product_id: bologna_机械_B
   name_zh: 博洛尼亚机械合约
   category: 机械
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 66775
   fragility: 0.2
   rarity: 0.61
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 博洛尼亚机械合约。性质耐久，长途运输不易变质。产自意大利。机械设备与工业部件是跨境物流的重要品类。单件约34.2kg，分量较重，占行李配额多。
 - product_id: bologna_工艺品_B
   name_zh: 博洛尼亚工艺品合约
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 28856
   fragility: 0.5
   rarity: 0.54
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 博洛尼亚工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约5.1kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$369.14，入手门槛不高。产自意大利。
 - product_id: bologna_陶瓷_B
   name_zh: 博洛尼亚陶瓷合约
   category: 陶瓷
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 24983
   fragility: 0.7
   rarity: 0.47
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 博洛尼亚陶瓷合约。单件约21.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$425.71，入手门槛不高。产自意大利。陶瓷制品易碎，包装与搬运需小心。

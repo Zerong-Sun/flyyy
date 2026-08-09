@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 74724
   fragility: 0.0
   rarity: 0.06
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 巴士拉日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$64.05，入手门槛不高。产自伊拉克。日用品需求平稳，适合作为常备贸易品。单件约12kg，分量较重，占行李配额多。
 - product_id: basra_工艺品_B
   name_zh: 巴士拉工艺品合约
   category: 工艺品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 69139
   fragility: 0.5
   rarity: 0.56
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 巴士拉工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约8kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$266.02，入手门槛不高。产自伊拉克。
 - product_id: basra_纺织品_B
   name_zh: 巴士拉纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 49048
   fragility: 0.0
   rarity: 0.34
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 巴士拉纺织品合约。单件约9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$474.71，入手门槛不高。产自伊拉克。纺织与服装是国际贸易的传统大宗品类。
 - product_id: basra_咖啡_B
   name_zh: 巴士拉咖啡合约
   category: 咖啡
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 2908
   fragility: 0.0
   rarity: 0.46
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 巴士拉咖啡合约。单件约13.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$208.81，入手门槛不高。产自伊拉克。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: basra_糖果_B
   name_zh: 巴士拉糖果合约
   category: 糖果
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 850
   fragility: 0.1
   rarity: 0.15
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 巴士拉糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$77.57，入手门槛不高。产自伊拉克。糖果点心类商品包装轻巧，礼品属性强。单件约5kg，分量适中。

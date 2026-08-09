@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 36633
   fragility: 0.0
   rarity: 0.3
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 卡塔尼亚纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约16.2kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$480.58，入手门槛不高。产自意大利。
 - product_id: catania_食品_B
   name_zh: 卡塔尼亚食品合约
   category: 食品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 574
   fragility: 0.2
   rarity: 0.31
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 卡塔尼亚食品合约。单件约26.1kg，分量较重，占行李配额多。保质期约574小时。货源常见，走量为主。单件报价$114.45，入手门槛不高。产自意大利。食品类货物对仓储条件与保质期敏感。
 - product_id: catania_工艺品_B
   name_zh: 卡塔尼亚工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 89841
   fragility: 0.5
   rarity: 0.48
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 卡塔尼亚工艺品合约。单件约14.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$182.73，入手门槛不高。产自意大利。工艺品带有鲜明的地方工艺与审美传统。
 - product_id: catania_陶瓷_B
   name_zh: 卡塔尼亚陶瓷合约
   category: 陶瓷
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 57160
   fragility: 0.7
   rarity: 0.55
-  description: 本地陶瓷器具合约，运输需严密包装防破损。
+  description: 卡塔尼亚陶瓷合约。单件约24.7kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$386.37，入手门槛不高。产自意大利。陶瓷制品易碎，包装与搬运需小心。
 - product_id: catania_机械_B
   name_zh: 卡塔尼亚机械合约
   category: 机械
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 82783
   fragility: 0.2
   rarity: 0.52
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 卡塔尼亚机械合约。单件约33.9kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自意大利。机械设备与工业部件是跨境物流的重要品类。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 92588
   fragility: 0.0
   rarity: 0.06
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 奇姆肯特日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$57.49，入手门槛不高。产自哈萨克斯坦。日用品需求平稳，适合作为常备贸易品。单件约7.4kg，分量适中。
 - product_id: shymkent_咖啡_B
   name_zh: 奇姆肯特咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 1694
   fragility: 0.0
   rarity: 0.48
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 奇姆肯特咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约5.3kg，分量适中。性质耐久，长途运输不易变质。单件报价$106.18，入手门槛不高。产自哈萨克斯坦。
 - product_id: shymkent_香料_B
   name_zh: 奇姆肯特香料合约
   category: 香料
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 7476
   fragility: 0.0
   rarity: 0.5
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 奇姆肯特香料合约。香料贸易历史悠久，单价与风味并重。单件约0.5kg，轻便易携。性质耐久，长途运输不易变质。单件报价$303.23，入手门槛不高。产自哈萨克斯坦。
 - product_id: shymkent_糖果_B
   name_zh: 奇姆肯特糖果合约
   category: 糖果
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 817
   fragility: 0.1
   rarity: 0.19
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 奇姆肯特糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$135.95，入手门槛不高。产自哈萨克斯坦。糖果点心类商品包装轻巧，礼品属性强。单件约4.3kg，分量适中。
 - product_id: shymkent_纺织品_B
   name_zh: 奇姆肯特纺织品合约
   category: 纺织品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 64482
   fragility: 0.0
   rarity: 0.34
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 奇姆肯特纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约19.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$333.88，入手门槛不高。产自哈萨克斯坦。

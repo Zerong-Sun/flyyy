@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 65516
   fragility: 0.0
   rarity: 0.49
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 君士坦丁矿产合约。单件约24.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$224.6，入手门槛不高。产自阿尔及利亚。矿产品价格与全球大宗商品行情联动。
 - product_id: constantine_纺织品_B
   name_zh: 君士坦丁纺织品合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 73607
   fragility: 0.0
   rarity: 0.4
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 君士坦丁纺织品合约。单件约17.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$206.55，入手门槛不高。产自阿尔及利亚。纺织与服装是国际贸易的传统大宗品类。
 - product_id: constantine_能源_B
   name_zh: 君士坦丁能源合约
   category: 能源
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 19738
   fragility: 0.0
   rarity: 0.54
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 君士坦丁能源合约。性质耐久，长途运输不易变质。产自阿尔及利亚。能源类合约跟踪油气与电力等大宗商品行情。单件约4.6kg，分量适中。
 - product_id: constantine_食品_B
   name_zh: 君士坦丁食品合约
   category: 食品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 511
   fragility: 0.2
   rarity: 0.31
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 君士坦丁食品合约。保质期约511小时。货源常见，走量为主。单件报价$138.43，入手门槛不高。产自阿尔及利亚。食品类货物对仓储条件与保质期敏感。单件约29.7kg，分量较重，占行李配额多。
 - product_id: constantine_日用品_B
   name_zh: 君士坦丁日用品合约
   category: 日用品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 68766
   fragility: 0.0
   rarity: 0.12
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 君士坦丁日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$44.52，入手门槛不高。产自阿尔及利亚。日用品需求平稳，适合作为常备贸易品。单件约8.9kg，分量较重，占行李配额多。

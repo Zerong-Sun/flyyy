@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 93117
   fragility: 0.0
   rarity: 0.6
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 莱茵明斯特能源合约。性质耐久，长途运输不易变质。产自德国。能源类合约跟踪油气与电力等大宗商品行情。单件约9.7kg，分量较重，占行李配额多。
 - product_id: rheinmünster_日用品_B
   name_zh: 莱茵明斯特日用品合约
   category: 日用品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 28094
   fragility: 0.0
   rarity: 0.1
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 莱茵明斯特日用品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$100.88，入手门槛不高。产自德国。日用品需求平稳，适合作为常备贸易品。单件约5.7kg，分量适中。
 - product_id: rheinmünster_食品_B
   name_zh: 莱茵明斯特食品合约
   category: 食品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 1664
   fragility: 0.2
   rarity: 0.27
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 莱茵明斯特食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$257.12，入手门槛不高。产自德国。食品类货物对仓储条件与保质期敏感。单件约17.1kg，分量较重，占行李配额多。
 - product_id: rheinmünster_电子_B
   name_zh: 莱茵明斯特电子合约
   category: 电子
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 80548
   fragility: 0.3
   rarity: 0.68
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 莱茵明斯特电子合约。电子元件与消费电子是贸易量最大的品类之一。单件约3.3kg，分量适中。性质耐久，长途运输不易变质。产自德国。
 - product_id: rheinmünster_机械_B
   name_zh: 莱茵明斯特机械合约
   category: 机械
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 63679
   fragility: 0.2
   rarity: 0.62
-  description: 工业机械配件合约，重量大但单位价值极高。
+  description: 莱茵明斯特机械合约。性质耐久，长途运输不易变质。产自德国。机械设备与工业部件是跨境物流的重要品类。单件约41.9kg，分量较重，占行李配额多。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.55
-  description: 电梯与楼宇机电备件合约。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 楼宇机电合约。单件约1kg，轻便易携。性质耐久，长途运输不易变质。产自英国伦敦。机械设备与工业部件是跨境物流的重要品类。
 - product_id: lhr_textile_contract
   name_zh: 羊毛面料合约
   category: 纺织品
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.55
-  description: 精纺羊毛合约单据。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 羊毛面料合约。纺织与服装是国际贸易的传统大宗品类。单件约1kg，轻便易携。性质耐久，长途运输不易变质。产自英国伦敦。
 - product_id: lhr_metal_sample
   name_zh: 金属加工样品
   category: 矿产
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.45
-  description: 铜铝加工料样品。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 金属加工样品。性质耐久，长途运输不易变质。产自英国伦敦。矿产品价格与全球大宗商品行情联动。单件约5.5kg，分量适中。
 - product_id: lhr_jewelry_proxy
   name_zh: 银器珠宝代购
   category: 工艺品
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 99999
   fragility: 0.1
   rarity: 0.7
-  description: 银器与珠宝小件代购。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 银器珠宝代购。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$2900，属高值商品。产自英国伦敦。工艺品带有鲜明的地方工艺与审美传统。单件约0.4kg，轻便易携。
 - product_id: lhr_instrument_core
   name_zh: 测试仪器核心
   category: 电子
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 99999
   fragility: 0.0
   rarity: 0.8
-  description: 测试仪器核心板卡。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。适合轻装跨境贸易。
+  description: 测试仪器核心。单件约0.85kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$4600，属高值商品。产自英国伦敦。电子元件与消费电子是贸易量最大的品类之一。

@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 2101
   fragility: 0.2
   rarity: 0.34
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 芽庄食品合约。食品类货物对仓储条件与保质期敏感。单件约21.1kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$59.53，入手门槛不高。产自越南。
 - product_id: nha_trang_nha_trang_aiurportca_电子_B
   name_zh: 芽庄电子合约
   category: 电子
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 53141
   fragility: 0.3
   rarity: 0.7
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 芽庄电子合约。单件约1.6kg，轻便易携。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。产自越南。电子元件与消费电子是贸易量最大的品类之一。
 - product_id: nha_trang_nha_trang_aiurportca_纺织品_B
   name_zh: 芽庄纺织品合约
   category: 纺织品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 86178
   fragility: 0.0
   rarity: 0.37
-  description: 地区纺织产品合约，不易变质适合长途贸易。
+  description: 芽庄纺织品合约。纺织与服装是国际贸易的传统大宗品类。单件约19.5kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$227.23，入手门槛不高。产自越南。
 - product_id: nha_trang_nha_trang_aiurportca_玩具_B
   name_zh: 芽庄玩具合约
   category: 玩具
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 48717
   fragility: 0.1
   rarity: 0.16
-  description: 本地特色玩具合约，适合作为伴手礼转售。
+  description: 芽庄玩具合约。单件约3.8kg，分量适中。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$46.33，入手门槛不高。产自越南。玩具类商品批量贸易活跃，季节性强。
 - product_id: nha_trang_nha_trang_aiurportca_咖啡_B
   name_zh: 芽庄咖啡合约
   category: 咖啡
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 4083
   fragility: 0.0
   rarity: 0.5
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 芽庄咖啡合约。咖啡是国际大宗农产品，产地风味差异明显。单件约7.3kg，分量适中。性质耐久，长途运输不易变质。单件报价$85.57，入手门槛不高。产自越南。

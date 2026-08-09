@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 21338
   fragility: 0.0
   rarity: 0.41
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 卢本巴希矿产合约。矿产品价格与全球大宗商品行情联动。单件约29.8kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自刚果（金）。
 - product_id: lubumbashi_咖啡_B
   name_zh: 卢本巴希咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 2107
   fragility: 0.0
   rarity: 0.47
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 卢本巴希咖啡合约。单件约11kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。单件报价$205.64，入手门槛不高。产自刚果（金）。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: lubumbashi_工艺品_B
   name_zh: 卢本巴希工艺品合约
   category: 工艺品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 98491
   fragility: 0.5
   rarity: 0.48
-  description: 本地手工制品合约，精工细作运输需缓冲包装。
+  description: 卢本巴希工艺品合约。工艺品带有鲜明的地方工艺与审美传统。单件约6.1kg，分量适中。性质耐久，长途运输不易变质。质地易碎，运输需防震包装。单件报价$488.76，入手门槛不高。产自刚果（金）。
 - product_id: lubumbashi_香料_B
   name_zh: 卢本巴希香料合约
   category: 香料
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 6217
   fragility: 0.0
   rarity: 0.56
-  description: 精选干制香料，价值密度高，跨境贸易理想品。
+  description: 卢本巴希香料合约。性质耐久，长途运输不易变质。单件报价$225.88，入手门槛不高。产自刚果（金）。香料贸易历史悠久，单价与风味并重。单件约0.5kg，轻便易携。
 - product_id: lubumbashi_食品_B
   name_zh: 卢本巴希食品合约
   category: 食品
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 586
   fragility: 0.2
   rarity: 0.36
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 卢本巴希食品合约。保质期约586小时。单件报价$109.62，入手门槛不高。产自刚果（金）。食品类货物对仓储条件与保质期敏感。单件约27.5kg，分量较重，占行李配额多。

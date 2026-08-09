@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 1146
   fragility: 0.2
   rarity: 0.34
-  description: 密封保鲜的地方特色食品合约，适合区域贸易。
+  description: 布里斯班食品合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$97.71，入手门槛不高。产自澳大利亚。食品类货物对仓储条件与保质期敏感。单件约21.4kg，分量较重，占行李配额多。
 - product_id: brisbane_咖啡_B
   name_zh: 布里斯班咖啡合约
   category: 咖啡
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 2617
   fragility: 0.0
   rarity: 0.35
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 布里斯班咖啡合约。单件约10.4kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$288.07，入手门槛不高。产自澳大利亚。咖啡是国际大宗农产品，产地风味差异明显。
 - product_id: brisbane_日用品_B
   name_zh: 布里斯班日用品合约
   category: 日用品
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 12686
   fragility: 0.0
   rarity: 0.13
-  description: 地方日用品合约，需求平稳利润适中。
+  description: 布里斯班日用品合约。单件约9.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$56.65，入手门槛不高。产自澳大利亚。日用品需求平稳，适合作为常备贸易品。
 - product_id: brisbane_矿产_B
   name_zh: 布里斯班矿产合约
   category: 矿产
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 32917
   fragility: 0.0
   rarity: 0.59
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 布里斯班矿产合约。单件约30.3kg，分量较重，占行李配额多。性质耐久，长途运输不易变质。产自澳大利亚。矿产品价格与全球大宗商品行情联动。
 - product_id: brisbane_能源_B
   name_zh: 布里斯班能源合约
   category: 能源
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 60590
   fragility: 0.0
   rarity: 0.69
-  description: 能源产品合约代理，轻量高价值适合跨境。
+  description: 布里斯班能源合约。性质耐久，长途运输不易变质。产自澳大利亚。能源类合约跟踪油气与电力等大宗商品行情。单件约8.2kg，分量较重，占行李配额多。

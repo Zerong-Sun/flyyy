@@ -8,7 +8,7 @@ products:
   shelf_life_hours: 90003
   fragility: 0.3
   rarity: 0.7
-  description: 电子元器件合约，体积小价值极高，航空快运首选。
+  description: 布宜诺斯艾利斯电子合约。性质耐久，长途运输不易变质。市面较为稀缺，在需求地有溢价。单件报价$2211.83，属高值商品。产自阿根廷。电子元件与消费电子是贸易量最大的品类之一。单件约0.4kg，轻便易携。
 - product_id: buenos_aires_糖果_B
   name_zh: 布宜诺斯艾利斯糖果合约
   category: 糖果
@@ -18,7 +18,7 @@ products:
   shelf_life_hours: 2795
   fragility: 0.1
   rarity: 0.27
-  description: 地方传统糖果点心合约，便携适合礼品转售。
+  description: 布宜诺斯艾利斯糖果合约。性质耐久，长途运输不易变质。货源常见，走量为主。单件报价$200，入手门槛不高。产自阿根廷。糖果点心类商品包装轻巧，礼品属性强。单件约1.9kg，轻便易携。
 - product_id: buenos_aires_咖啡_C
   name_zh: 布宜诺斯艾利斯咖啡合约
   category: 咖啡
@@ -28,7 +28,7 @@ products:
   shelf_life_hours: 4093
   fragility: 0.0
   rarity: 0.42
-  description: 产区烘焙咖啡豆合约，建议最佳赏味期内转手。
+  description: 布宜诺斯艾利斯咖啡合约。性质耐久，长途运输不易变质。单件报价$241.15，入手门槛不高。产自阿根廷。咖啡是国际大宗农产品，产地风味差异明显。单件约9.6kg，分量较重，占行李配额多。
 - product_id: buenos_aires_矿产_D
   name_zh: 布宜诺斯艾利斯矿产合约
   category: 矿产
@@ -38,7 +38,7 @@ products:
   shelf_life_hours: 9138
   fragility: 0.0
   rarity: 0.6
-  description: 矿产品样品合约，重量较大但价值稳定。
+  description: 布宜诺斯艾利斯矿产合约。性质耐久，长途运输不易变质。产自阿根廷。矿产品价格与全球大宗商品行情联动。单件约12kg，分量较重，占行李配额多。
 - product_id: buenos_aires_茶叶_E
   name_zh: 布宜诺斯艾利斯茶叶合约
   category: 茶叶
@@ -48,4 +48,4 @@ products:
   shelf_life_hours: 8549
   fragility: 0.1
   rarity: 0.48
-  description: 产区直供茶叶合约，密封可保持风味一年以上。
+  description: 布宜诺斯艾利斯茶叶合约。性质耐久，长途运输不易变质。单件报价$310.89，入手门槛不高。产自阿根廷。茶叶是历史悠久的国际饮品贸易品。单件约3.2kg，分量适中。

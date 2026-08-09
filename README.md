@@ -156,6 +156,9 @@ cd ios/expo && npm test                    # 逻辑单测
 |------|------|------|
 | OurAirports | 机场坐标 | Unlicense / 公有领域 |
 | OpenFlights | 航线邻接种子 | ODbL |
+| BTS On-Time (DOT) | 美国国内真实航班号与计划时刻（2025-03） | 美国联邦政府公开数据 |
+| AeroSCOPE 2019 (Zenodo) | 全球航线年度频次（相对归一化） | 研究用途（商用前需联系作者） |
+| Wikidata | 城市人口、地理与行政区等结构化事实 | CC0 1.0 |
 | 游戏原创 | 城市简介与商品 | 原创内容 |
 | Noto Sans SC / JetBrains Mono | UI 字体 | OFL 1.1 |
 
