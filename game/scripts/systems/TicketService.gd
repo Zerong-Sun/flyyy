@@ -2,6 +2,7 @@ extends RefCounted
 class_name TicketService
 
 const _Economy = preload("res://scripts/systems/EconomySystem.gd")
+const _NewsEvents = preload("res://scripts/systems/NewsEvents.gd")
 
 
 static func next_ticket() -> Dictionary:
@@ -56,6 +57,10 @@ static func purchase(flight: Dictionary, cabin: String, extra_tier: String, carg
 		return "请先开始游戏"
 	if str(flight.get("origin_airport_id", "")) != AppState.current_airport_id:
 		return "只能购买当前机场出发航班"
+	var quoted: Dictionary = _NewsEvents.quote_flight(flight)
+	if bool(quoted.get("news_unavailable", false)):
+		return "受当前新闻事件影响，该航班已取消，请刷新航班列表"
+	flight = quoted
 	var dep: float = GameClock.parse_iso_to_unix(str(flight.get("scheduled_departure_utc", "")))
 	if dep <= GameClock.unix_time:
 		return "航班已起飞"
@@ -116,6 +121,9 @@ static func purchase_connection(conn: Dictionary, cabin: String, extra_tier: Str
 	## Purchase a two-leg connection itinerary built from transfer_edges.
 	if not AppState.game_started:
 		return "请先开始游戏"
+	conn = _NewsEvents.quote_flight(conn)
+	if bool(conn.get("news_unavailable", false)):
+		return "受当前新闻事件影响，该联程已不可用，请刷新航班列表"
 	if str(conn.get("origin_airport_id", "")) != AppState.current_airport_id:
 		return "只能购买当前机场出发航班"
 	if not AppState.held_tickets.is_empty():

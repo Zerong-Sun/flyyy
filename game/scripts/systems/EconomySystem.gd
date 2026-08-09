@@ -3,6 +3,7 @@ class_name EconomySystem
 ## Deterministic daily market prices + quality / demand modifiers.
 
 const _MarketEvents = preload("res://scripts/systems/MarketEvents.gd")
+const _NewsEvents = preload("res://scripts/systems/NewsEvents.gd")
 
 
 static func _hash_unit(seed_s: String) -> float:
@@ -36,7 +37,8 @@ static func buy_price(city_id: String, product_id: String) -> float:
 		return 0.0
 	var f: float = daily_factor(AppState.save_id, city_id, GameClock.game_date_string(), product_id)
 	var ev: Dictionary = _MarketEvents.factor_for(city_id, product_id, true)
-	return round(float(row.get("buy_base_usd", 0)) * f * float(ev.mult) * 100.0) / 100.0
+	var news: Dictionary = _NewsEvents.market_factor(city_id, product_id, true)
+	return round(float(row.get("buy_base_usd", 0)) * f * float(ev.mult) * float(news.mult) * 100.0) / 100.0
 
 
 static func sell_price(city_id: String, product_id: String, quality: float) -> float:
@@ -50,7 +52,8 @@ static func sell_price(city_id: String, product_id: String, quality: float) -> f
 	var pressure: float = float(AppState.demand_pressure.get(key, 0.0))
 	var demand_mul: float = max(0.55, 1.0 - pressure)
 	var ev: Dictionary = _MarketEvents.factor_for(city_id, product_id, false)
-	return round(base * qmul * demand_mul * float(ev.mult) * 100.0) / 100.0
+	var news: Dictionary = _NewsEvents.market_factor(city_id, product_id, false)
+	return round(base * qmul * demand_mul * float(ev.mult) * float(news.mult) * 100.0) / 100.0
 
 
 static func quality_multiplier(quality: float) -> float:

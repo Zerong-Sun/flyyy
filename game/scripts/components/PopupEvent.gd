@@ -14,9 +14,11 @@ var _event_data: Dictionary = {}
 func _ready() -> void:
 	# AcceptDialog always shows a default OK button that also fires `confirmed`,
 	# duplicating the explicit confirm buttons added by each event variant
-	# (趁机买入 / 成交！ / 继续 / 全部溢价卖出). Hide it so every popup shows
-	# exactly one set of choices.
+	# (趁机买入 / 成交！ / 继续 / 全部溢价卖出). Hide it and route the explicit
+	# accept buttons (which fire `custom_action`) to `event_confirmed` so every
+	# popup shows exactly one set of choices that actually work.
 	get_ok_button().visible = false
+	custom_action.connect(_on_custom_action)
 
 func show_event(event_type: String, data: Dictionary = {}) -> void:
 	_event_type = event_type
@@ -38,6 +40,18 @@ func _configure() -> void:
 		"sell_result":
 			title = ""
 			_show_sell_result(_event_data)
+		"news":
+			title = str(_event_data.get("title", "📰 区域新闻"))
+			dialog_text = "%s\n\n%s" % [
+				str(_event_data.get("body", "")), str(_event_data.get("impact", ""))
+			]
+			add_button(str(_event_data.get("accept_text", "查看市场影响")), true, "accept")
+			add_cancel_button(str(_event_data.get("close_text", "关闭新闻")))
+		"discovery":
+			title = str(_event_data.get("title", "✨ 意外发现！"))
+			dialog_text = str(_event_data.get("body", ""))
+			add_button(str(_event_data.get("accept_text", "全部溢价卖出")), true, "accept")
+			add_cancel_button(str(_event_data.get("close_text", "暂不处理")))
 		_:
 			push_error("PopupEvent: unknown event type '%s'" % _event_type)
 
@@ -45,11 +59,11 @@ func _show_two_button(item_desc: String, discount_pct: int = 0) -> void:
 	var body := ""
 	if _event_type == "arrival_discount":
 		body = "本地经销商清仓，\n" + item_desc + " 限时折扣 " + str(discount_pct) + "%\n\n" + "剩余 2 小时（游戏时间）"
-		add_button("趁机买入", true)
+		add_button("趁机买入", true, "accept")
 		add_cancel_button("不了谢谢")
 	elif _event_type == "free_cargo":
 		body = "该航班货舱有空位，额外 +50kg cargo 本次免费（原价 $380）"
-		add_button("接受", true)
+		add_button("接受", true, "accept")
 		add_cancel_button("不用")
 	dialog_text = body
 
@@ -60,13 +74,15 @@ func _show_one_button(bonus_pct: int, original: float, premium: float) -> void:
 		+ "原售出价：$" + str(original) + "\n"
 		+ "溢价后：$" + str(premium)
 	)
-	add_button("成交！", true)
+	add_button("成交！", true, "accept")
 
 func _show_sell_result(data: Dictionary) -> void:
-	# Handled by MainHUD._show_sell_result_card — this variant just displays result card content
-	dialog_text = ""  # populated by caller
-	# One close button only
-	add_button("继续", true)
+	title = str(data.get("title", "交易结果"))
+	dialog_text = str(data.get("body", ""))
+	var portrait := str(data.get("portrait", ""))
+	if not portrait.is_empty():
+		set_portrait(portrait)
+	add_button(str(data.get("accept_text", "继续")), true, "accept")
 
 
 func set_portrait(kind: String) -> void:
@@ -84,6 +100,12 @@ func _on_confirmed() -> void:
 
 func _on_cancelled() -> void:
 	event_cancelled.emit({"accepted": false, "type": _event_type, "data": _event_data})
+
+func _on_custom_action(_button_text: String) -> void:
+	# Explicit accept buttons (add_button with an action) fire `custom_action`,
+	# not `confirmed`. The dialog stays open after the signal, so close it here.
+	event_confirmed.emit({"accepted": true, "type": _event_type, "data": _event_data})
+	hide()
 
 # Seed generation helper — deterministic hash for event triggers
 static func event_seed(city_id: String, date_hour: int, product_id: String = "", event_type: String = "") -> int:

@@ -113,6 +113,9 @@ func _ready() -> void:
 			break
 	_check(popup_seen, "sell result card did not show (BUG: add_child/popup_centered order)")
 	if sell_popup != null:
+		_check(hud.get("_active_event_popup") == sell_popup,
+			"sell result bypassed the serialized event queue")
+		_check(GameClock.paused, "sell result card must pause game time")
 		var ok_btn: Button = sell_popup.get_ok_button()
 		_check(ok_btn != null and not ok_btn.visible,
 			"default OK button must be hidden on sell result card (BUG: duplicate OK/继续)")
@@ -123,6 +126,215 @@ func _ready() -> void:
 				visible_buttons += 1
 		_check(visible_buttons == 1,
 			"sell result card must show exactly one visible button, got %d" % visible_buttons)
+		# Real click on the close button must fire event_confirmed and close the
+		# card (regression: hiding the default OK left custom buttons dead).
+		var signal_state := {"confirmed": false}
+		sell_popup.event_confirmed.connect(func(_r): signal_state.confirmed = true)
+		for b_v in sell_popup.find_children("*", "Button", true, false):
+			var b: Button = b_v
+			if b.visible:
+				b.emit_signal("pressed")
+				break
+		await _frames(3)
+		_check(bool(signal_state.confirmed), "clicking sell-card close button did not fire event_confirmed")
+		_check(not is_instance_valid(sell_popup) or not sell_popup.visible,
+			"sell result card did not close after accept")
+	# A discovery card may legitimately follow the sale, but it must appear only
+	# after the result card and the whole chain must restore the clock afterward.
+	var post_sell_popup: PopupEvent = hud.get("_active_event_popup") as PopupEvent
+	if post_sell_popup != null:
+		_check(post_sell_popup.title.find("意外发现") >= 0,
+			"unexpected popup followed the sell result: %s" % post_sell_popup.title)
+		_press_button(post_sell_popup, "暂不处理")
+		await _frames(4)
+	_check(hud.get("_active_event_popup") == null, "sell-result event chain did not drain")
+	_check(not GameClock.paused, "sell-result event chain did not restore the clock")
+
+	# ── Scenario 3: real button click must accept an event popup ──
+	var accept_state := {"accepted": false, "cancelled": false}
+	var accept_popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
+	accept_popup.event_confirmed.connect(func(_r): accept_state.accepted = true)
+	accept_popup.event_cancelled.connect(func(_r): accept_state.cancelled = true)
+	hud.add_child(accept_popup)
+	accept_popup.show_event("arrival_discount", {"product_name": "测试商品", "discount_pct": 25})
+	await _frames(2)
+	_check(accept_popup.visible, "scenario 3 popup did not open")
+	var accept_btn: Button = null
+	for b_v in accept_popup.find_children("*", "Button", true, false):
+		var b: Button = b_v
+		if b.visible and b.text == "趁机买入":
+			accept_btn = b
+			break
+	_check(accept_btn != null, "scenario 3 accept button not found")
+	if accept_btn != null:
+		accept_btn.emit_signal("pressed")
+		await _frames(2)
+		_check(bool(accept_state.accepted), "clicking 趁机买入 did not fire event_confirmed (BUG: 事件无法接受)")
+		_check(not bool(accept_state.cancelled), "clicking accept must not cancel")
+		_check(not accept_popup.visible, "accepting must close the popup")
+	accept_popup.queue_free()
+
+	# Cancel path must still work independently on a fresh popup.
+	var cancel_popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
+	var cancel_state := {"accepted": false, "cancelled": false}
+	cancel_popup.event_confirmed.connect(func(_r): cancel_state.accepted = true)
+	cancel_popup.event_cancelled.connect(func(_r): cancel_state.cancelled = true)
+	hud.add_child(cancel_popup)
+	cancel_popup.show_event("arrival_discount", {"product_name": "测试商品", "discount_pct": 25})
+	await _frames(2)
+	var cancel_btn: Button = null
+	for b_v in cancel_popup.find_children("*", "Button", true, false):
+		var b: Button = b_v
+		if b.visible and b.text == "不了谢谢":
+			cancel_btn = b
+			break
+	_check(cancel_btn != null, "scenario 3 cancel button not found")
+	if cancel_btn != null:
+		cancel_btn.emit_signal("pressed")
+		await _frames(2)
+		_check(bool(cancel_state.cancelled), "clicking 不了谢谢 did not fire event_cancelled")
+		_check(not bool(cancel_state.accepted), "cancel fired accept (BUG: cancel must stay separate)")
+		_check(not cancel_popup.visible, "cancelling must close the popup")
+	cancel_popup.queue_free()
+
+	# ── Scenario 3b: accidental-premium callback accepts the emitted result ──
+	hud.call("_on_arrival_discount_accepted", {}, product_id, discount_pct)
+	await _frames(4)
+	var premium_index := -1
+	for i in AppState.inventory.size():
+		if str((AppState.inventory[i] as Dictionary).get("product_id", "")) == product_id:
+			premium_index = i
+			break
+	_check(premium_index >= 0, "could not prepare inventory for premium event")
+	if premium_index >= 0:
+		var premium_item: Dictionary = AppState.inventory[premium_index]
+		var premium_qty := 1
+		var premium_unit := _Economy.sell_price(city, product_id, _Economy.current_quality(premium_item))
+		var original_revenue := premium_unit * premium_qty
+		var premium_revenue := original_revenue * 1.25
+		var cash_before_premium := AppState.cash_usd
+		var qty_before_premium := _inventory_qty(product_id)
+		hud.call("_enqueue_event_popup", "accidental_premium", {
+			"bonus_pct": 25,
+			"original": int(original_revenue),
+			"premium": int(premium_revenue),
+		}, Callable(hud, "_on_premium_accepted").bind(
+			premium_index, premium_qty, 25, original_revenue, premium_revenue),
+		Callable(hud, "_on_premium_declined").bind(premium_index, premium_qty))
+		await _frames(3)
+		var premium_popup: PopupEvent = hud.get("_active_event_popup") as PopupEvent
+		_check(premium_popup != null and premium_popup.visible, "premium event did not open")
+		if premium_popup != null:
+			_press_button(premium_popup, "成交！")
+		await _frames(5)
+		_check(_inventory_qty(product_id) == qty_before_premium - 1, "premium accept did not sell inventory")
+		_check(absf((AppState.cash_usd - cash_before_premium) - premium_revenue) < 0.02,
+			"premium accept cash delta does not include bonus")
+		var premium_followup: PopupEvent = hud.get("_active_event_popup") as PopupEvent
+		_check(premium_followup != premium_popup,
+			"premium event remained active after accept")
+		_check(premium_followup != null,
+			"premium transaction did not serialize its sell-result follow-up")
+		# Close the sell result card produced by the premium transaction.
+		for child in hud.get_children():
+			if child is PopupEvent and child.visible:
+				_press_button(child, I18nService.t("sell_result_continue"))
+				break
+		await _frames(4)
+
+	# ── Scenario 4: queued event cards must never overlap ──
+	var queue_state := {"first": false, "second_cancelled": false}
+	var news_data := {
+		"title": "📰 测试新闻",
+		"body": "第一张卡片",
+		"impact": "采购价 +10%",
+		"accept_text": "查看市场影响",
+		"close_text": "关闭新闻",
+	}
+	hud.set("_transition_running", true)
+	hud.call("_enqueue_event_popup", "news", news_data,
+		func(_r): queue_state.first = true, func(_r): pass)
+	hud.call("_enqueue_event_popup", "news", news_data.merged({"body": "第二张卡片"}, true),
+		func(_r): pass, func(_r): queue_state.second_cancelled = true)
+	await _frames(3)
+	_check(hud.get("_active_event_popup") == null, "event popup opened over flight transition")
+	_check((hud.get("_event_queue") as Array).size() == 2, "transition should preserve queued events")
+	hud.set("_transition_running", false)
+	hud.call("_show_next_event_popup")
+	await _frames(4)
+	var first_queued: PopupEvent = hud.get("_active_event_popup") as PopupEvent
+	_check(first_queued != null and first_queued.visible, "first queued event did not open")
+	_check(GameClock.paused, "visible event popup must pause game time")
+	_check((hud.get("_event_queue") as Array).size() == 1, "second event was not held in queue")
+	_check(_visible_popup_count(hud) == 1, "queued events overlapped instead of showing one at a time")
+	if first_queued != null:
+		_press_button(first_queued, "查看市场影响")
+	await _frames(5)
+	_check(bool(queue_state.first), "first queued event callback did not run")
+	var second_queued: PopupEvent = hud.get("_active_event_popup") as PopupEvent
+	_check(second_queued != null and second_queued != first_queued and second_queued.visible,
+		"second queued event did not open after the first resolved")
+	_check(_visible_popup_count(hud) == 1, "resolving first event left multiple visible popups")
+	if second_queued != null:
+		_press_button(second_queued, "关闭新闻")
+	await _frames(5)
+	_check(bool(queue_state.second_cancelled), "second queued event cancel callback did not run")
+	_check(hud.get("_active_event_popup") == null, "event queue retained a resolved popup")
+	_check((hud.get("_event_queue") as Array).is_empty(), "event queue did not drain")
+	_check(not GameClock.paused, "event queue did not restore the running game clock")
+
+	# ── Scenario 5: viewing an airport card is not visiting it; close is explicit ──
+	var unvisited_id := ""
+	for airport_v in DataService.airports:
+		var airport: Dictionary = airport_v
+		var aid := str(airport.get("airport_id", ""))
+		if aid != AppState.current_airport_id and not AppState.visited_airports.has(aid):
+			unvisited_id = aid
+			break
+	_check(not unvisited_id.is_empty(), "no unvisited airport available for card semantics test")
+	var visited_before := AppState.visited_airports.size()
+	if not unvisited_id.is_empty():
+		hud.call("_on_airport_selected", unvisited_id)
+		await _frames(2)
+		var card_panel: PanelContainer = hud.get("_airport_card_panel") as PanelContainer
+		var card: RichTextLabel = hud.get("_airport_card") as RichTextLabel
+		_check(card_panel.visible, "airport card did not open on selection")
+		var viewport_rect := get_viewport().get_visible_rect()
+		_check(viewport_rect.encloses(card_panel.get_global_rect()), "airport card extends outside viewport")
+		_check(card.text.find("查看卡片不等于抵达") >= 0, "airport card does not clarify view vs visit")
+		_check(not AppState.visited_airports.has(unvisited_id), "viewing airport card incorrectly marked it visited")
+		var route_action: Button = hud.get("_airport_card_action") as Button
+		_check(not route_action.disabled and route_action.text == "查找前往此地的航班",
+			"unvisited airport card route action is unclear or disabled")
+		var close_card: Button = null
+		for button_v in card_panel.find_children("*", "Button", true, false):
+			var button: Button = button_v
+			if button.text == "收起卡片":
+				close_card = button
+				break
+		_check(close_card != null, "airport card close action missing")
+		if close_card != null:
+			(close_card as Button).emit_signal("pressed")
+		await _frames(2)
+		_check(not card_panel.visible, "airport card did not close")
+		_check(AppState.visited_airports.size() == visited_before, "closing card changed visit records")
+		# Reopen and use the explicit route action; the card should yield to the
+		# flight workbench and prefill the selected airport's IATA code.
+		hud.call("_on_airport_selected", unvisited_id)
+		await _frames(2)
+		route_action.emit_signal("pressed")
+		await _frames(5)
+		var target_airport := DataService.get_airport(unvisited_id)
+		var dest_query: LineEdit = hud.get("_dest_code_query") as LineEdit
+		_check(bool((hud.get("_panel_host") as Control).visible), "route action did not open flight panel")
+		_check(not card_panel.visible, "airport card overlaps flight workbench")
+		_check(dest_query != null and dest_query.text == str(target_airport.get("iata", "")),
+			"route action did not prefill destination IATA")
+		_check(not AppState.visited_airports.has(unvisited_id), "route search incorrectly marked destination visited")
+		hud.call("_close_panel")
+
+	# ── Scenario 6: navigation panels keep their close action reachable ──
+	await _verify_navigation_layout(hud)
 
 	_finish()
 
@@ -150,3 +362,45 @@ func _inventory_qty(product_id: String) -> int:
 		if str(stack.get("product_id", "")) == product_id:
 			total += int(stack.get("qty", 0))
 	return total
+
+
+func _visible_popup_count(parent: Node) -> int:
+	var count := 0
+	for child in parent.get_children():
+		if child is PopupEvent and child.visible:
+			count += 1
+	return count
+
+
+func _press_button(popup: PopupEvent, text: String) -> void:
+	for button_v in popup.find_children("*", "Button", true, false):
+		var button: Button = button_v
+		if button.visible and button.text == text:
+			button.emit_signal("pressed")
+			return
+	_check(false, "button not found: %s" % text)
+
+
+func _verify_navigation_layout(hud: Control) -> void:
+	for method in ["_show_city", "_show_achievements", "_toggle_pause"]:
+		hud.call(method)
+		await _frames(4)
+		var panel: PanelContainer = hud.get("_panel_host") as PanelContainer
+		_check(panel.visible, "%s did not open a panel" % method)
+		var close: Button = null
+		for button_v in panel.find_children("*", "Button", true, false):
+			var button: Button = button_v
+			if button.text == "返回地图（Esc）":
+				close = button
+				break
+		_check(close != null and close.visible, "%s has no reachable close action" % method)
+		if close != null:
+			_check(panel.get_global_rect().encloses(close.get_global_rect()),
+				"%s close action overflows the panel" % method)
+		_check(get_viewport().get_visible_rect().encloses(panel.get_global_rect()),
+			"%s panel extends outside viewport" % method)
+		if method == "_toggle_pause":
+			_check(not panel.find_children("*", "ScrollContainer", true, false).is_empty(),
+				"settings panel is not scrollable")
+		hud.call("_close_panel")
+		await _frames(2)

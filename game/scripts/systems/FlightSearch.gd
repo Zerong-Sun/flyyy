@@ -2,6 +2,7 @@ extends RefCounted
 class_name FlightSearch
 
 const FOCUS_LEAD_SEC := 7200.0
+const _NewsEvents = preload("res://scripts/systems/NewsEvents.gd")
 
 
 static func seconds_until_departure(fl: Dictionary) -> float:
@@ -37,7 +38,9 @@ static func search(
 	var dest_q: String = dest_code.strip_edges().to_upper()
 	var out: Array = []
 	for fl_v in all:
-		var fl: Dictionary = fl_v
+		var fl: Dictionary = _NewsEvents.quote_flight(fl_v)
+		if bool(fl.get("news_unavailable", false)):
+			continue
 		if str(fl.get("scheduled_departure_utc", "")) <= now_iso:
 			continue
 		if dest_q != "":
@@ -123,7 +126,7 @@ static func search_connections(origin_iata: String, query: String = "", max_resu
 		var price_econ: float = round(dist * price_per_km * connection_factor * 100.0) / 100.0
 		var biz_mult: float = float(econ.get("business_multiplier", 10.0))
 		var first_mult: float = float(econ.get("first_multiplier", 25.0))
-		results.append({
+		var connection := {
 			"type": "connection",
 			"origin_iata": origin,
 			"hub_iata": hub,
@@ -147,7 +150,10 @@ static func search_connections(origin_iata: String, query: String = "", max_resu
 			"cabin_first_available": true,
 			"scheduled_departure_utc": "",  # filled at purchase time
 			"scheduled_arrival_utc": "",
-		})
+		}
+		connection = _NewsEvents.quote_flight(connection)
+		if not bool(connection.get("news_unavailable", false)):
+			results.append(connection)
 	results.sort_custom(func(a, b): return float(a.get("total_distance_km", 0)) < float(b.get("total_distance_km", 0)))
 	if max_results > 0 and results.size() > max_results:
 		return results.slice(0, max_results)

@@ -8,6 +8,7 @@ signal ticket_purchased
 signal boarded
 signal arrived
 signal market_changed
+signal news_changed
 signal sell_completed(result: Dictionary)
 signal inventory_changed
 signal cash_changed
