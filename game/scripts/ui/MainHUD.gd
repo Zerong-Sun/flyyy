@@ -3319,6 +3319,7 @@ func _toggle_pause() -> void:
 		var idx := order.find(AppState.color_blind)
 		var nxt: String = order[(idx + 1) % order.size()]
 		AppState.color_blind = nxt
+		globe.refresh_marker_style()
 		_toggle_pause()
 	)
 	v.add_child(cb_btn)

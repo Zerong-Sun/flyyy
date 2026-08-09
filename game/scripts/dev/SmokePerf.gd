@@ -16,11 +16,18 @@ const SAMPLE_FRAMES := 180
 
 
 func _initialize() -> void:
+	# The shipped game is capped at 60 FPS for thermals. This headless smoke test
+	# deliberately removes that cap so TIME_FPS keeps measuring CPU-side headroom.
+	Engine.max_fps = 0
 	call_deferred("_run")
 
 
 func _run() -> void:
 	var errors: PackedStringArray = []
+	if int(ProjectSettings.get_setting("application/run/max_fps", 0)) != 60:
+		errors.append("application/run/max_fps must be 60")
+	if int(ProjectSettings.get_setting("display/window/vsync/vsync_mode", 0)) != 1:
+		errors.append("display/window/vsync/vsync_mode must be enabled")
 
 	var globe_script: GDScript = load("res://scripts/render/GlobeController.gd") as GDScript
 	var globe_scene := load("res://scenes/globe/globe.tscn") as PackedScene
@@ -39,6 +46,43 @@ func _run() -> void:
 	for i in 30:
 		await process_frame
 	var build_ms := Time.get_ticks_msec() - build_start
+
+	# Airport pins must stay batched: four visual states, one draw batch each,
+	# with pin shadows disabled. Labels are intentionally excluded here.
+	var airports_root := globe.get_node_or_null("Airports")
+	var batch_count := 0
+	var pin_count := 0
+	var pin_mesh_ids := {}
+	var pin_material_ids := {}
+	var expected_pin_count := 500
+	var data_service := root.get_node_or_null("DataService")
+	if data_service != null:
+		var loaded_airports = data_service.get("airports")
+		if loaded_airports is Array:
+			expected_pin_count = loaded_airports.size()
+	if airports_root == null:
+		errors.append("globe Airports root missing")
+	else:
+		for child in airports_root.get_children():
+			if child is MultiMeshInstance3D:
+				var batch := child as MultiMeshInstance3D
+				batch_count += 1
+				if batch.multimesh != null:
+					pin_count += batch.multimesh.instance_count
+					if batch.multimesh.mesh != null:
+						pin_mesh_ids[batch.multimesh.mesh.get_instance_id()] = true
+				if batch.material_override != null:
+					pin_material_ids[batch.material_override.get_instance_id()] = true
+				if batch.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+					errors.append("pin batch %s still casts shadows" % batch.name)
+	if batch_count != 4:
+		errors.append("expected 4 pin batches, got %d" % batch_count)
+	if pin_count != expected_pin_count:
+		errors.append("expected %d batched pins, got %d" % [expected_pin_count, pin_count])
+	if pin_mesh_ids.size() != 1:
+		errors.append("pin batches must share exactly one mesh, got %d" % pin_mesh_ids.size())
+	if pin_material_ids.size() != 4:
+		errors.append("expected 4 shared state materials, got %d" % pin_material_ids.size())
 
 	# Steady-state FPS sampling (post-warmup).
 	for i in WARMUP_FRAMES:
