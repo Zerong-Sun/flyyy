@@ -24,6 +24,7 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="AirborneTrader"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://assets/brand/app_icon.webp"
+run/max_fps=60
 
 [autoload]
 
@@ -53,6 +54,7 @@ gdscript/warnings/return_value_discarded=1
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
+window/vsync/vsync_mode=1
 
 [gui]
 

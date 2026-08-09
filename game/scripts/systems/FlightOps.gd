@@ -29,6 +29,8 @@ func _process(_delta: float) -> void:
 	if d != AppState.last_market_date:
 		_Economy.recover_demand_for_new_day(AppState.last_market_date, d)
 		AppState.last_market_date = d
+		EventBus.market_changed.emit()
+		EventBus.news_changed.emit()
 	var t: Dictionary = _Tickets.next_ticket()
 	if t.is_empty():
 		return
@@ -52,6 +54,8 @@ func fast_forward_to_departure() -> String:
 	AppState.last_market_date = after_date
 	_Economy.age_inventory(0.0)
 	EventBus.market_changed.emit()
+	if before_date != after_date:
+		EventBus.news_changed.emit()
 	AppState.log_stat("fast_forwards", 1.0)
 	return ""
 
@@ -114,6 +118,7 @@ func start_boarding(ticket: Dictionary) -> void:
 		transition_finished.emit()
 		return
 
+	var before_operation_date := GameClock.game_date_string()
 	var delay_min: int = int(roll.get("delay_min", 0))
 	if delay_min > 0:
 		AppState.log_stat("delayed_flights", 1.0)
@@ -126,6 +131,12 @@ func start_boarding(ticket: Dictionary) -> void:
 	var dur: float = float(ticket.get("duration_minutes", 0))
 	var hours: float = dur / 60.0
 	GameClock.add_minutes(dur)
+	var after_flight_date := GameClock.game_date_string()
+	if before_operation_date != after_flight_date:
+		_Economy.recover_demand_for_new_day(before_operation_date, after_flight_date)
+		AppState.last_market_date = after_flight_date
+		EventBus.market_changed.emit()
+		EventBus.news_changed.emit()
 	_Economy.age_inventory(0.0)
 	_Economy.apply_flight_fragility(hours)
 	var tree := Engine.get_main_loop() as SceneTree

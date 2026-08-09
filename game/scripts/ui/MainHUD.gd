@@ -5,6 +5,7 @@ const _Economy = preload("res://scripts/systems/EconomySystem.gd")
 const _Inventory = preload("res://scripts/systems/InventorySystem.gd")
 const _Tickets = preload("res://scripts/systems/TicketService.gd")
 const _MarketEvents = preload("res://scripts/systems/MarketEvents.gd")
+const _NewsEvents = preload("res://scripts/systems/NewsEvents.gd")
 const _FlightSearch = preload("res://scripts/systems/FlightSearch.gd")
 const _Colors = preload("res://themes/DemoColors.gd")
 const _ThemeFactory = preload("res://themes/ThemeFactory.gd")
@@ -38,6 +39,7 @@ var _flight_query: LineEdit
 var _dest_code_query: LineEdit
 var _flight_detail: RichTextLabel
 var _airport_card_panel: PanelContainer
+var _airport_card_action: Button
 var _bottom_nav: HBoxContainer
 const INTEL_UPGRADE_COST := 200.0
 var _market_tabs: TabContainer
@@ -109,6 +111,10 @@ var _collector_panel = null  # CollectorPanel instance (loaded lazily)
 var _result_panel = null  # ChallengeResultPanel instance (loaded lazily)
 var _codex_panel = null  # CodexPanel instance (loaded lazily)
 var _rep_panel = null  # ReputationPanel instance (loaded lazily)
+var _event_queue: Array[Dictionary] = []
+var _active_event_popup: PopupEvent = null
+var _event_pause_chain_active := false
+var _event_clock_was_paused := true
 
 # Five-tier sell feedback copy now lives in zh_CN.csv (REQ §5.5):
 # sell_console_*, celebration_w*_*, sell_result_title_*.
@@ -119,6 +125,7 @@ func _ready() -> void:
 	EventBus.airport_selected.connect(_on_airport_selected)
 	EventBus.cash_changed.connect(_refresh_top)
 	EventBus.inventory_changed.connect(_refresh_bags)
+	EventBus.news_changed.connect(_on_news_changed)
 	EventBus.ticket_purchased.connect(_refresh_countdown)
 	EventBus.arrived.connect(_on_arrived)
 	EventBus.tutorial_hint.connect(_show_hint)
@@ -252,17 +259,29 @@ func _build_ui() -> void:
 
 	# Right airport card
 	var right := PanelContainer.new()
-	right.position = Vector2(1000, 120)
-	right.size = Vector2(270, 360)
+	right.position = Vector2(990, 120)
+	right.size = Vector2(282, 420)
 	right.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
+	right.visible = false
 	add_child(right)
 	_airport_card_panel = right
+	var card_col := VBoxContainer.new()
+	card_col.add_theme_constant_override("separation", 6)
+	right.add_child(card_col)
 	_airport_card = RichTextLabel.new()
 	_airport_card.bbcode_enabled = true
 	_airport_card.fit_content = false
-	_airport_card.custom_minimum_size = Vector2(250, 340)
+	_airport_card.custom_minimum_size = Vector2(260, 315)
 	_airport_card.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	right.add_child(_airport_card)
+	card_col.add_child(_airport_card)
+	_airport_card_action = Button.new()
+	_airport_card_action.pressed.connect(_open_route_to_card_airport)
+	card_col.add_child(_airport_card_action)
+	var card_close := Button.new()
+	card_close.text = "收起卡片"
+	card_close.tooltip_text = "仅收起信息卡，不会改变当前位置或到访记录"
+	card_close.pressed.connect(_close_airport_card)
+	card_col.add_child(card_close)
 
 	# Bottom nav
 	var bottom := HBoxContainer.new()
@@ -553,6 +572,9 @@ func _show_codex() -> void:
 	if not _require_started():
 		return
 	_set_panel_bgm("menu")
+	# Codex is a standalone overlay while the other bottom tabs use
+	# _panel_host. Dismiss the hosted tab first so the two cannot overlap.
+	_dismiss_open_panel()
 	if _codex_panel == null:
 		_codex_panel = load("res://scripts/ui/CodexPanel.gd").new()
 		add_child(_codex_panel)
@@ -593,6 +615,15 @@ func _close_panel() -> void:
 	_restore_panel_center()
 	AudioService.play_sfx("sfx_ui_close_panel")
 	_set_panel_bgm("globe")
+
+
+func _add_panel_close(parent: Control) -> Button:
+	var close := Button.new()
+	close.text = "返回地图（Esc）"
+	close.tooltip_text = "关闭当前面板并返回地图；不会取消已完成的交易或购票"
+	close.pressed.connect(_close_panel)
+	parent.add_child(close)
+	return close
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -636,6 +667,11 @@ func _selected_or_first() -> String:
 
 
 func _on_game_started() -> void:
+	_event_queue.clear()
+	if is_instance_valid(_active_event_popup):
+		_active_event_popup.queue_free()
+	_active_event_popup = null
+	_event_pause_chain_active = false
 	_new_game_panel.visible = false
 	_dismiss_open_panel()
 	_refresh_airport_list("")
@@ -645,13 +681,31 @@ func _on_game_started() -> void:
 	globe.focus_airport(AppState.current_airport_id)
 	_set_panel_bgm("globe")
 	AudioService.play_sfx("sfx_ui_click")
+	var current_city := AppState.current_city_id()
+	if not current_city.is_empty():
+		_check_news_events(current_city)
 	if AppState.game_mode == "challenge" and bool(AppState.challenge.get("ended", false)):
 		_on_challenge_ended(AppState.challenge.get("result", {}))
 
 
+func _on_news_changed() -> void:
+	# Rebuild only the currently visible price-sensitive workbench. This keeps
+	# day-boundary quotes and news banners in sync without interrupting other UI.
+	if _market_tabs != null and is_instance_valid(_market_tabs):
+		_show_market()
+	elif _flight_tree != null and is_instance_valid(_flight_tree):
+		_show_flights()
+	var next_ticket := _Tickets.next_ticket()
+	var departure_due := (not next_ticket.is_empty()
+		and GameClock.parse_iso_to_unix(str(next_ticket.get("scheduled_departure_utc", ""))) <= GameClock.unix_time)
+	if not _transition_running and not departure_due:
+		var city_id := AppState.current_city_id()
+		if not city_id.is_empty():
+			_check_news_events(city_id)
+
+
 func _dismiss_open_panel() -> void:
-	for c in _panel_host.get_children():
-		c.queue_free()
+	_detach_panel_children()
 	_panel_host.visible = false
 	_restore_panel_center()
 	_market_built_city = ""
@@ -685,7 +739,7 @@ func _dock_panel_work() -> void:
 	_panel_host.size = PANEL_WORK_SIZE
 	_panel_host.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	if _bottom_nav:
-		_bottom_nav.visible = false
+		_bottom_nav.visible = true
 
 
 func _on_random() -> void:
@@ -721,11 +775,43 @@ func _on_airport_selected(airport_id: String) -> void:
 	var airport_name := DataService.place_name(a, "name")
 	var airport_city := DataService.place_name(a, "city")
 	var airport_country := DataService.place_name(a, "country")
-	_airport_card.text = "[b]%s[/b]\n%s / %s\n城市：%s（%s）\n国家：%s\n当地时间：%s\n海拔：%.0f ft\n直飞目的地：%d\n类型：%s\n可信：%s" % [
-		airport_name, a.iata, a.icao, airport_city, a.city_en, airport_country, local,
+	var visit_status := "起点候选（开始游戏后才计为到访）"
+	if AppState.game_started:
+		if airport_id == AppState.current_airport_id:
+			visit_status = "当前所在机场"
+		elif AppState.visited_airports.has(airport_id):
+			visit_status = "已到访 · 当前仅查看"
+		else:
+			visit_status = "尚未到访"
+	_airport_card.text = "[b]%s[/b]\n%s / %s\n[color=#d9a441]状态：%s[/color]\n城市：%s（%s）\n国家：%s\n当地时间：%s\n海拔：%.0f ft\n直飞目的地：%d\n类型：%s\n可信：%s" % [
+		airport_name, a.iata, a.icao, visit_status, airport_city, a.city_en, airport_country, local,
 		float(a.elevation_ft), dests, a.type, a.data_confidence
 	]
+	_airport_card_panel.visible = true
+	if AppState.game_started:
+		_airport_card_action.disabled = airport_id == AppState.current_airport_id
+		_airport_card_action.text = "当前所在机场" if _airport_card_action.disabled else "查找前往此地的航班"
+	else:
+		_airport_card_action.disabled = true
+		_airport_card_action.text = "已选为起点候选"
 	# Routes are drawn by GlobeController on selection; card only refreshes info.
+
+
+func _close_airport_card() -> void:
+	_airport_card_panel.visible = false
+	_show_hint("机场卡片已收起；当前位置和到访记录未改变")
+
+
+func _open_route_to_card_airport() -> void:
+	var airport_id := str(_airport_card.get_meta("aid", ""))
+	var airport := DataService.get_airport(airport_id)
+	if airport.is_empty() or airport_id == AppState.current_airport_id:
+		return
+	_show_connections = false
+	_show_flights()
+	if _dest_code_query != null:
+		_flight_page = 0
+		_dest_code_query.text = str(airport.get("iata", ""))
 
 
 func _on_toggle_routes() -> void:
@@ -810,6 +896,12 @@ func _do_fast_forward() -> void:
 func _on_transition_started(ticket: Dictionary) -> void:
 	# Reset any docked workbench (flights/market) so the panel is cleared and the
 	# bottom nav is restored before the travel overlay covers the screen.
+	if not is_instance_valid(_active_event_popup):
+		# A departure makes unresolved origin-side offers/news stale. Visible
+		# event cards pause the game clock, so only not-yet-shown requests can land
+		# here (for example a day-change refresh at the exact departure instant).
+		_event_queue.clear()
+		_event_pause_chain_active = false
 	_dismiss_open_panel()
 	_overlay.visible = true
 	_transition_running = true
@@ -948,6 +1040,7 @@ func _on_transition_finished() -> void:
 		globe.clear_plane_marker()
 	AudioService.end_transition_duck()
 	AudioService.play_sfx("sfx_arrive")
+	call_deferred("_show_next_event_popup")
 
 
 func _on_arrived() -> void:
@@ -962,6 +1055,7 @@ func _on_arrived() -> void:
 		return
 	if city_id != "":
 		_discovery_triggered_in_city.clear()
+		_check_news_events(city_id)
 		_check_arrival_encounter(city_id)
 		_check_free_cargo(city_id)
 		_market_arrival_sell_pending = not AppState.inventory.is_empty()
@@ -980,6 +1074,79 @@ func _get_market_products(city_id: String) -> Array:
 	return DataService.market_product_ids(city_id)
 
 
+func _enqueue_event_popup(event_type: String, data: Dictionary, on_accept: Callable, on_cancel: Callable) -> void:
+	_event_queue.append({
+		"type": event_type,
+		"data": data,
+		"on_accept": on_accept,
+		"on_cancel": on_cancel,
+	})
+	call_deferred("_show_next_event_popup")
+
+
+func _show_next_event_popup() -> void:
+	if _transition_running or is_instance_valid(_active_event_popup) or _event_queue.is_empty():
+		return
+	var next_ticket := _Tickets.next_ticket()
+	if (not next_ticket.is_empty()
+			and GameClock.parse_iso_to_unix(str(next_ticket.get("scheduled_departure_utc", ""))) <= GameClock.unix_time):
+		return
+	if not _event_pause_chain_active:
+		_event_clock_was_paused = GameClock.paused
+		_event_pause_chain_active = true
+	GameClock.set_paused(true)
+	var request: Dictionary = _event_queue.pop_front()
+	var popup := load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
+	_active_event_popup = popup
+	popup.event_confirmed.connect(_on_event_popup_resolved.bind(true, request.get("on_accept", Callable())))
+	popup.event_cancelled.connect(_on_event_popup_resolved.bind(false, request.get("on_cancel", Callable())))
+	add_child(popup)
+	popup.show_event(str(request.get("type", "")), request.get("data", {}))
+
+
+func _on_event_popup_resolved(result: Dictionary, _accepted: bool, callback: Callable) -> void:
+	var resolved := _active_event_popup
+	_active_event_popup = null
+	if is_instance_valid(resolved):
+		# Release Window exclusivity before the callback. Some callbacks open a
+		# result card immediately; doing that while the event window is still the
+		# exclusive child produces an unusable stacked-window state.
+		resolved.hide()
+		resolved.queue_free()
+	if callback.is_valid():
+		callback.call(result)
+	if _event_queue.is_empty() and _event_pause_chain_active:
+		GameClock.set_paused(_event_clock_was_paused)
+		_event_pause_chain_active = false
+	call_deferred("_show_next_event_popup")
+
+
+func _check_news_events(city_id: String) -> void:
+	for event_v in _NewsEvents.active_for_city(city_id):
+		var event: Dictionary = event_v
+		var seen_key := "news_seen|%s|%s" % [event.get("id", ""), event.get("start_day", 0)]
+		if bool(AppState.tutorial_flags.get(seen_key, false)):
+			continue
+		AppState.tutorial_flags[seen_key] = true
+		_enqueue_event_popup("news", {
+			"title": "📰 " + _NewsEvents.localized(event, "headline"),
+			"body": _NewsEvents.localized(event, "body"),
+			"impact": _NewsEvents.impact_text(event),
+			"event_id": event.get("id", ""),
+			"accept_text": "查看市场影响" if AppState.ui_locale != "en" else "View market impact",
+			"close_text": "关闭新闻" if AppState.ui_locale != "en" else "Close news",
+		}, Callable(self, "_on_news_open_market"), Callable(self, "_on_news_closed"))
+
+
+func _on_news_open_market(_result: Dictionary) -> void:
+	AudioService.play_sfx("sfx_ui_click")
+	_show_market()
+
+
+func _on_news_closed(_result: Dictionary) -> void:
+	AudioService.play_sfx("sfx_ui_close_panel")
+
+
 func _check_arrival_encounter(city_id: String) -> void:
 	var date_hour := int(GameClock.unix_time / 3600.0)
 	var seed_val := PopupEvent.event_seed(city_id, date_hour, "", "arrival_discount")
@@ -996,15 +1163,12 @@ func _check_arrival_encounter(city_id: String) -> void:
 	var product_name := str(DataService.get_product(product_id).get("name_zh", product_id))
 	var discount_pct := rng.randi_range(20, 40)
 
-	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
-	popup.event_confirmed.connect(_on_arrival_discount_accepted.bind(product_id, discount_pct))
-	popup.event_cancelled.connect(_on_arrival_discount_declined.bind())
-	add_child(popup)
-	popup.show_event("arrival_discount", {
+	_enqueue_event_popup("arrival_discount", {
 		"product_name": product_name,
 		"discount_pct": discount_pct,
 		"product_id": product_id,
-	})
+	}, Callable(self, "_on_arrival_discount_accepted").bind(product_id, discount_pct),
+		Callable(self, "_on_arrival_discount_declined"))
 
 	_active_arrival_discount = {
 		"product_id": product_id,
@@ -1048,11 +1212,8 @@ func _check_free_cargo(city_id: String) -> void:
 	if rng.randf() > 0.10:
 		return
 
-	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
-	popup.event_confirmed.connect(_on_free_cargo_accepted.bind())
-	popup.event_cancelled.connect(_on_free_cargo_declined.bind())
-	add_child(popup)
-	popup.show_event("free_cargo", {})
+	_enqueue_event_popup("free_cargo", {}, Callable(self, "_on_free_cargo_accepted"),
+		Callable(self, "_on_free_cargo_declined"))
 
 
 func _on_free_cargo_accepted(_result: Dictionary) -> void:
@@ -1066,8 +1227,14 @@ func _on_free_cargo_declined(_result: Dictionary) -> void:
 
 
 func _clear_panel() -> void:
-	for c in _panel_host.get_children():
-		c.queue_free()
+	# Remove old content synchronously. queue_free() alone leaves the previous
+	# workbench participating in this frame's minimum-size calculation, which
+	# could make a newly opened compact card (notably Notes) expand off-screen.
+	_detach_panel_children()
+	if _codex_panel != null and is_instance_valid(_codex_panel):
+		_codex_panel.visible = false
+	if _airport_card_panel != null:
+		_airport_card_panel.visible = false
 	_panel_host.visible = true
 	_restore_panel_center()
 	_market_built_city = ""
@@ -1083,6 +1250,13 @@ func _clear_panel() -> void:
 	_market_sell_qty = null
 	_flight_list = null
 	AudioService.play_sfx("sfx_ui_open_panel")
+
+
+func _detach_panel_children() -> void:
+	for child_v in _panel_host.get_children():
+		var child: Node = child_v
+		_panel_host.remove_child(child)
+		child.queue_free()
 
 
 func _require_started() -> bool:
@@ -1143,15 +1317,18 @@ func _show_city() -> void:
 		return
 	_set_panel_bgm("market")
 	_clear_panel()
+	_dock_panel_work()
 	var city_id := AppState.current_city_id()
 	var c: Dictionary = DataService.get_city(city_id)
 	var col := VBoxContainer.new()
+	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	col.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_panel_host.add_child(col)
 	var hero_tex: Texture2D = _IconFactory.get_city_hero(city_id)
 	if hero_tex != null:
 		var hero := TextureRect.new()
 		hero.texture = hero_tex
-		hero.custom_minimum_size = Vector2(700, 200)
+		hero.custom_minimum_size = Vector2(700, 160)
 		hero.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		hero.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		hero.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1165,6 +1342,7 @@ func _show_city() -> void:
 	col.add_child(_city_text)
 	if c.is_empty():
 		_city_text.text = I18nService.t("ui.city.no_data")
+		_add_panel_close(col)
 		return
 	var sec := {
 		"history_summary": I18nService.t("ui.city.history"),
@@ -1188,6 +1366,7 @@ func _show_city() -> void:
 		_city_text.text = "[color=#d9a441]%s[/color]\n\n%s" % [
 			I18nService.t("ui.city.low_content"), _city_text.text
 		]
+	_add_panel_close(col)
 
 
 func _show_market() -> void:
@@ -1228,6 +1407,14 @@ func _show_market() -> void:
 		ev_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		ev_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 		v.add_child(ev_label)
+	var news := _NewsEvents.active_for_city(city)
+	for news_v in news:
+		var news_event: Dictionary = news_v
+		var news_label := Label.new()
+		news_label.text = "📰 %s\n%s" % [_NewsEvents.localized(news_event, "headline"), _NewsEvents.impact_text(news_event)]
+		news_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		news_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+		v.add_child(news_label)
 	var ticket_dest_city := _get_ticket_dest_city_id()
 	if ticket_dest_city != "":
 		var dest := DataService.get_city(ticket_dest_city)
@@ -1241,10 +1428,7 @@ func _show_market() -> void:
 	v.add_child(_market_tabs)
 	_build_market_buy_tab()
 	_build_market_sell_tab()
-	var close := Button.new()
-	close.text = "关闭"
-	close.pressed.connect(_close_panel)
-	v.add_child(close)
+	_add_panel_close(v)
 	var open_sell := _market_arrival_sell_pending and not AppState.inventory.is_empty()
 	_market_arrival_sell_pending = false
 	_market_tabs.current_tab = 1 if open_sell else 0
@@ -1880,6 +2064,17 @@ func _show_flights() -> void:
 	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	v.add_theme_constant_override("separation", 4)
 	_panel_host.add_child(v)
+	var active_news := _NewsEvents.active_for_city(AppState.current_city_id())
+	if not active_news.is_empty():
+		var news_event: Dictionary = active_news[0]
+		var news_label := Label.new()
+		news_label.text = "📰 %s · %s" % [
+			_NewsEvents.localized(news_event, "headline"), _NewsEvents.impact_text(news_event)
+		]
+		news_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		news_label.tooltip_text = _NewsEvents.localized(news_event, "body")
+		news_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+		v.add_child(news_label)
 
 	# Row 1: search + mode + compact filters
 	var top := HBoxContainer.new()
@@ -2001,10 +2196,7 @@ func _show_flights() -> void:
 	br.text = I18nService.t("ui.ticket.refund")
 	br.pressed.connect(func (): _show_hint(_Tickets.refund_current()); _refresh_bags())
 	row.add_child(br)
-	var close := Button.new()
-	close.text = "关闭"
-	close.pressed.connect(_close_panel)
-	row.add_child(close)
+	_add_panel_close(row)
 	_extra_tier = ""
 	_cargo_blocks = 0
 	_flight_page = 0
@@ -2291,14 +2483,18 @@ func _on_flight_selected(idx: int) -> void:
 	var al_tag := ""
 	if al_id != "" and al_id != "none":
 		al_tag = " · %s" % DataService.alliance_name(al_id)
-	_flight_detail.text = "[b]%s[/b] %s→%s · 起飞 %s · %.0fkm/%dmin · 经$%.0f/公$%.0f/头$%.0f%s%s · 行李=%s 货运×%d" % [
+	var news_tag := ""
+	var news_headlines: Array = fl.get("news_headlines", [])
+	if not news_headlines.is_empty():
+		news_tag = " · 📰 %s" % "；".join(PackedStringArray(news_headlines))
+	_flight_detail.text = "[b]%s[/b] %s→%s · 起飞 %s · %.0fkm/%dmin · 经$%.0f/公$%.0f/头$%.0f%s%s%s · 行李=%s 货运×%d" % [
 		fl.get("marketing_flight_number", ""),
 		fl.get("origin_iata", ""), fl.get("destination_iata", ""),
 		str(fl.get("scheduled_departure_utc", "")).substr(0, 16),
 		float(fl.get("distance_km", 0)), int(fl.get("duration_minutes", 0)),
 		float(fl.get("ticket_base_price_economy", 0)), float(fl.get("ticket_base_price_business", 0)),
 		float(fl.get("ticket_base_price_first", 0)),
-		stop_tag, al_tag,
+		stop_tag, al_tag, news_tag,
 		_extra_tier if _extra_tier != "" else "无", _cargo_blocks
 	]
 
@@ -2416,10 +2612,7 @@ func _show_inventory() -> void:
 	market.text = "前往市场出售"
 	market.pressed.connect(func (): _market_arrival_sell_pending = true; _show_market())
 	row.add_child(market)
-	var close := Button.new()
-	close.text = "关闭"
-	close.pressed.connect(_close_panel)
-	row.add_child(close)
+	_add_panel_close(row)
 
 
 func _add_inventory_group(parent: VBoxContainer, title_text: String, cargo: bool) -> void:
@@ -2477,17 +2670,16 @@ func _check_accidental_premium(product_id: String, index: int, qty: int) -> void
 	var original_revenue: float = unit * float(actual_qty)
 	var premium_revenue: float = original_revenue * (1.0 + float(bonus_pct) / 100.0)
 
-	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
-	popup.event_confirmed.connect(_on_premium_accepted.bind(index, actual_qty, bonus_pct, original_revenue, premium_revenue))
-	add_child(popup)
-	popup.show_event("accidental_premium", {
+	_enqueue_event_popup("accidental_premium", {
 		"bonus_pct": bonus_pct,
 		"original": int(original_revenue),
 		"premium": int(premium_revenue),
-	})
+	}, Callable(self, "_on_premium_accepted").bind(index, actual_qty, bonus_pct, original_revenue, premium_revenue),
+		Callable(self, "_on_premium_declined").bind(index, actual_qty))
 
 
-func _on_premium_accepted(index: int, qty: int, bonus_pct: int, original_revenue: float, premium_revenue: float) -> void:
+func _on_premium_accepted(_event_result: Dictionary, index: int, qty: int, bonus_pct: int,
+		original_revenue: float, premium_revenue: float) -> void:
 	var result: Dictionary = _Inventory.sell(index, qty)
 
 	if not result.get("success", false):
@@ -2518,6 +2710,12 @@ func _on_premium_accepted(index: int, qty: int, bonus_pct: int, original_revenue
 	_refresh_market_after_sale()
 	_refresh_bags()
 	_after_sell_check_discovery(result["product_id"])
+
+
+func _on_premium_declined(_event_result: Dictionary, index: int, qty: int) -> void:
+	# Closing the bonus card keeps the player's original sell intent instead of
+	# leaving the transaction in an ambiguous half-finished state.
+	_do_sell(index, qty)
 
 
 func _do_sell(index: int, qty: int) -> void:
@@ -2586,17 +2784,12 @@ func _after_sell_check_discovery(sold_product_id: String) -> void:
 		return
 	_discovery_triggered_in_city[trigger_key] = true
 
-	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
-	popup.event_confirmed.connect(_on_discovery_sell_all.bind(sold_product_id, city_id))
-	add_child(popup)
-	popup.dialog_text = (
-		'"这里的人从没见过%s！"\n\n库存中所有%s 卖出价额外 ×2.0'
-		% [sold_product_id, sold_product_id]
-	)
-	popup.title = "✨ 意外发现！"
-	popup.add_button("全部溢价卖出", true)
-	popup.add_cancel_button("暂不处理")
-	popup.popup_centered()
+	_enqueue_event_popup("discovery", {
+		"title": "✨ 意外发现！",
+		"body": '"这里的人从没见过%s！"\n\n库存中所有%s 卖出价额外 ×2.0' % [sold_product_id, sold_product_id],
+		"accept_text": "全部溢价卖出",
+		"close_text": "暂不处理",
+	}, Callable(self, "_on_discovery_sell_all").bind(sold_product_id, city_id), Callable())
 
 
 func _on_discovery_sell_all(_result: Dictionary, product_id: String, city_id: String) -> void:
@@ -2647,10 +2840,14 @@ func _show_notes() -> void:
 	_set_panel_bgm("menu")
 	_clear_panel()
 	AudioService.play_sfx("sfx_ui_click")
+	var root := VBoxContainer.new()
+	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_panel_host.add_child(root)
 	var scroll := ScrollContainer.new()
-	scroll.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_panel_host.add_child(scroll)
+	root.add_child(scroll)
 	var vbox := VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(vbox)
@@ -2658,8 +2855,10 @@ func _show_notes() -> void:
 	if AppState.sell_transactions.is_empty():
 		var empty := Label.new()
 		empty.text = "暂无交易记录"
+		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		empty.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 		vbox.add_child(empty)
+		_add_panel_close(root)
 		return
 
 	var by_city: Dictionary = {}
@@ -2675,6 +2874,7 @@ func _show_notes() -> void:
 
 		var header := Label.new()
 		header.text = "📒 %s" % city_name
+		header.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		header.add_theme_font_size_override("font_size", 16)
 		header.add_theme_color_override("font_color", _Colors.ICE)
 		vbox.add_child(header)
@@ -2695,6 +2895,7 @@ func _show_notes() -> void:
 				losses += 1
 			var row := Label.new()
 			row.text = "  %s %s：毛利 $%d" % [emoji, product_name, int(margin)]
+			row.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			row.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
 			vbox.add_child(row)
 
@@ -2703,8 +2904,10 @@ func _show_notes() -> void:
 
 		var summary := Label.new()
 		summary.text = "  %d赚 %d亏  净利 $%d" % [wins, losses, int(total_margin)]
+		summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		summary.add_theme_color_override("font_color", _Colors.ACCENT_TEAL if total_margin >= 0 else _Colors.WARN_RED)
 		vbox.add_child(summary)
+	_add_panel_close(root)
 
 
 func _show_achievements() -> void:
@@ -2712,7 +2915,10 @@ func _show_achievements() -> void:
 		return
 	_set_panel_bgm("menu")
 	_clear_panel()
+	_dock_panel_work()
 	var v := VBoxContainer.new()
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_panel_host.add_child(v)
 	var title := Label.new()
 	title.text = I18nService.t("ui.tab.achievements")
@@ -2793,18 +2999,23 @@ func _show_achievements() -> void:
 	footer.text = "已解锁 %d / %d" % [AppState.unlocked_achievements.size(), AchievementSystem.definitions.size()]
 	footer.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 	v.add_child(footer)
-	var close := Button.new()
-	close.text = "关闭"
-	close.pressed.connect(_close_panel)
-	v.add_child(close)
+	_add_panel_close(v)
 
 
 func _show_log() -> void:
+	if not _require_started():
+		return
+	_set_panel_bgm("menu")
 	_clear_panel()
+	var v := VBoxContainer.new()
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_panel_host.add_child(v)
 	_log_text = RichTextLabel.new()
-	_log_text.custom_minimum_size = Vector2(700, 440)
+	_log_text.custom_minimum_size = Vector2(700, 400)
+	_log_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_log_text.bbcode_enabled = true
-	_panel_host.add_child(_log_text)
+	v.add_child(_log_text)
 	var s := "[b]旅行记录[/b]\n已访问机场 %d · 城市 %d · 国家 %d\n\n" % [
 		AppState.visited_airports.size(), AppState.visited_cities.size(), AppState.visited_countries.size()
 	]
@@ -2814,15 +3025,24 @@ func _show_log() -> void:
 			e.get("airline", ""), float(e.get("ticket_price", 0))
 		]
 	_log_text.text = s
+	_add_panel_close(v)
 
 
 func _show_attr() -> void:
+	if not _require_started():
+		return
+	_set_panel_bgm("menu")
 	_clear_panel()
+	var v := VBoxContainer.new()
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	v.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_panel_host.add_child(v)
 	_attr_text = RichTextLabel.new()
 	_attr_text.bbcode_enabled = true
-	_attr_text.custom_minimum_size = Vector2(700, 440)
+	_attr_text.custom_minimum_size = Vector2(700, 400)
+	_attr_text.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_attr_text.scroll_active = true
-	_panel_host.add_child(_attr_text)
+	v.add_child(_attr_text)
 	var body := I18nService.attribution()
 	if body.is_empty():
 		body = I18nService.disclaimer()
@@ -2836,6 +3056,7 @@ func _show_attr() -> void:
 		I18nService.t("ui.attr.etl", {"v": str(meta.get("etl_version", ""))}),
 		I18nService.t("ui.attr.generated", {"v": str(meta.get("generated_at", ""))}),
 	]
+	_add_panel_close(v)
 
 
 func _determine_sell_tier(margin: float, margin_rate: float, accidental_premium: bool) -> String:
@@ -2857,35 +3078,36 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 		sell_result.get("accidental_premium", false)
 	)
 
-	var popup: PopupEvent = load("res://scenes/PopupEvent.tscn").instantiate() as PopupEvent
+	var result_title := ""
+	var portrait := ""
 
 	match tier:
 		"L2":
-			popup.title = I18nService.t("sell_result_title_l2")
-			popup.set_portrait("worried")
+			result_title = I18nService.t("sell_result_title_l2")
+			portrait = "worried"
 			if not AppState.reduced_animations:
 				FeedbackParticles.play(self, {"palette": "grey", "count": 25, "duration": 2.0, "direction": "down"})
 			AudioService.play_sfx("sfx_loss")
 
 		"L1":
-			popup.title = I18nService.t("sell_result_title_l1")
+			result_title = I18nService.t("sell_result_title_l1")
 			AudioService.play_sfx("sfx_loss_light")
 
 		"W0":
-			popup.title = I18nService.t("sell_result_title_w0")
+			result_title = I18nService.t("sell_result_title_w0")
 			AudioService.play_sfx("sfx_sell")
 
 		"W1":
-			popup.title = I18nService.t("sell_result_title_w1")
+			result_title = I18nService.t("sell_result_title_w1")
 			if not AppState.reduced_animations:
 				FeedbackParticles.play(self, {"palette": "gold", "count": 30, "duration": 2.0, "direction": "right_arc"})
 			AudioService.play_sfx("sfx_big_win")
 
 		"W2":
-			popup.title = I18nService.t("sell_result_title_w2")
-			popup.set_portrait("celebrating")
+			result_title = I18nService.t("sell_result_title_w2")
+			portrait = "celebrating"
 			if sell_result.get("discovery_bonus", false):
-				popup.title = I18nService.t("sell_result_title_w2_discovery")
+				result_title = I18nService.t("sell_result_title_w2_discovery")
 			if not AppState.reduced_animations:
 				FeedbackParticles.play(self, {"palette": "gold_rain", "count": 60, "duration": 3.0, "direction": "down"})
 			AudioService.play_sfx("sfx_grand_slam")
@@ -2937,16 +3159,17 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 	if AppState.cash_usd >= 100000 or AppState.cash_usd >= start_cash * 2.0:
 		_show_toast(I18nService.t("sell_result_milestone"))
 
-	popup.dialog_text = body
-	popup.add_button(I18nService.t("sell_result_continue"), true)
+	_enqueue_event_popup("sell_result", {
+		"title": result_title,
+		"body": body,
+		"portrait": portrait,
+		"accept_text": I18nService.t("sell_result_continue"),
+	}, Callable(self, "_on_sell_result_acknowledged").bind(
+		int(sell_result["revenue"] - sell_result["total_unit_cost"])), Callable())
 
-	add_child(popup)
-	popup.popup_centered()
 
-	# Cash roll animation (Task 14 will wire this)
-	popup.event_confirmed.connect(func(_r):
-		_cash_roll_animation(int(sell_result["revenue"] - sell_result["total_unit_cost"]))
-	)
+func _on_sell_result_acknowledged(_result: Dictionary, delta_margin: int) -> void:
+	_cash_roll_animation(delta_margin)
 
 
 ## Draw one random line from an i18n pool named {prefix}_{1..n} (zh_CN.csv).
@@ -3031,9 +3254,19 @@ func _load() -> void:
 
 func _toggle_pause() -> void:
 	_clear_panel()
+	_dock_panel_work()
 	_set_panel_bgm("menu")
+	var root := VBoxContainer.new()
+	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_panel_host.add_child(root)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root.add_child(scroll)
 	var v := VBoxContainer.new()
-	_panel_host.add_child(v)
+	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(v)
 	var title := Label.new()
 	title.text = I18nService.t("ui.settings.title")
 	title.add_theme_font_size_override("font_size", 18)
@@ -3086,6 +3319,7 @@ func _toggle_pause() -> void:
 		var idx := order.find(AppState.color_blind)
 		var nxt: String = order[(idx + 1) % order.size()]
 		AppState.color_blind = nxt
+		globe.refresh_marker_style()
 		_toggle_pause()
 	)
 	v.add_child(cb_btn)
@@ -3155,12 +3389,7 @@ func _toggle_pause() -> void:
 		AudioService.set_bus_volume("Transition", v)
 	)
 	sfx_row.add_child(sfx_slider)
-	var close := Button.new()
-	close.text = I18nService.t("ui.settings.back")
-	if close.text == "" or close.text.begins_with("ui."):
-		close.text = "关闭"
-	close.pressed.connect(_close_panel)
-	v.add_child(close)
+	_add_panel_close(root)
 
 
 func _set_panel_bgm(mode: String) -> void:

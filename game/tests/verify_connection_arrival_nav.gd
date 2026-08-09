@@ -89,10 +89,10 @@ func _ready() -> void:
 		_finish()
 		return
 
-	# ── During the hub layover, open the flights workbench (docks panel, hides nav) ──
+	# ── During the hub layover, open the flights workbench; nav stays available ──
 	hud.call("_show_flights")
 	await _frames(5)
-	_check(not bool(hud.get("_bottom_nav").visible), "nav should be hidden while the workbench is docked")
+	_check(bool(hud.get("_bottom_nav").visible), "bottom nav should stay visible while the workbench is docked")
 	_check(bool(hud.get("_panel_host").visible), "flights panel should be open/docked before leg-2 boarding")
 
 	# ── Leg 2: board → arrive at the second destination ──

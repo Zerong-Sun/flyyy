@@ -19,7 +19,7 @@
 | 项 | 预算 | 代码位置 |
 |----|------|----------|
 | 地球贴图 | 优先 4K，缺失回退 2K / placeholder | `GlobeController._build_earth` |
-| 机场 pin | 500（低模 ArrayMesh，圆柱+球头） | `GlobeController._make_pin_mesh` / `_build_airports` |
+| 机场 pin | 500（低模 ArrayMesh；四状态 MultiMesh 合批；不投影） | `GlobeController._make_pin_mesh` / `_spawn_airports` / `_update_markers` |
 | 标签同时显示 | ≤200（可配置；仅选中/当前/已访问近处） | `GlobeController._update_markers` |
 | 航线同时绘制 | ≤24 条 / 源 | `GlobeController.draw_routes_from` |
 | 网格 | 15° 经纬线 ImmediateMesh，远淡近显 | `GlobeController._build_grid_overlay` |
@@ -43,6 +43,16 @@
 | 每帧预算 | 7.63 ms |
 | 判定 | SMOKE_PERF_OK（阈值：build ≤2000 ms，均值 ≥20 FPS） |
 
+### 2026-08-10 合批后基线
+
+| 指标 | 值 |
+|------|------|
+| 场景 + 500-pin 构建耗时 | 281 ms |
+| CPU 帧预算基线（预热后均值） | 142.6 FPS（min 37.0，90 采样） |
+| 每帧预算 | 7.01 ms |
+| 图形进程静止 CPU（Apple M2 Pro） | 约 7%–16%（优化前约 31%–36%） |
+| 判定 | SMOKE_PERF_OK；4 批次 / 500 实例 / 1 网格 / 4 材质 / 无投影门禁通过 |
+
 ### 判读
 
 - 帧预算 7.63 ms < 16.7 ms（60 FPS 预算），CPU 侧余量充足；真机 GPU 瓶颈（4K 贴图采样、pin 面数）需手动 Profiler 复核。
@@ -59,4 +69,5 @@
 
 | 日期 | 说明 |
 |------|------|
+| 2026-08-10 | 60 FPS + VSync；机场 pin 四状态 MultiMesh 合批并关闭投影；新增结构回归门禁 |
 | 2026-08-06 | 初稿：目标值 + LOD 预算 + SmokePerf headless 基线（283ms / 131 FPS） |

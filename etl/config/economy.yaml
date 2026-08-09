@@ -29,6 +29,9 @@ flight_synth:
   schedule_days: 31         # cover >=30 game days
   stopover_fraction: 0.04   # ~4% of long-haul OD pairs get a one-stop marketed flight
   stopover_ground_min: 45   # minutes on ground at stop (no disembark for player)
+  bts_max_flights_per_route_per_day: 8   # BTS real schedules capped per route/day (uniform sampling)
+  aeroscope_freq_min: 1                  # AeroSCOPE relative-normalization floor (flights/day)
+  aeroscope_freq_max: 4                  # AeroSCOPE relative-normalization cap (--full overrides 1-2)
 
 baggage_extras:
   light: {extra_kg: 10, price_usd: 160}

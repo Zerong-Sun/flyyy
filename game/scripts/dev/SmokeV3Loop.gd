@@ -57,8 +57,9 @@ func _run() -> void:
 
 	# ── v0.3 data surface ──
 	var world: Dictionary = data.get("world") as Dictionary
-	ok = _check(str(world.get("meta", {}).get("etl_version", "")) == "0.3.0",
-			"etl_version != 0.3.0") and ok
+	var etl_version := str(world.get("meta", {}).get("etl_version", ""))
+	ok = _check(etl_version.begins_with("0.3."),
+			"etl_version is not v0.3-compatible: %s" % etl_version) and ok
 	var alliances: Dictionary = data.get("alliances_by_id") as Dictionary
 	ok = _check(alliances.size() >= 3, "alliances_by_id < 3") and ok
 	var airlines: Dictionary = data.get("airlines_by_id") as Dictionary

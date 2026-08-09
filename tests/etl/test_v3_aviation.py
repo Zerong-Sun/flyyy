@@ -85,7 +85,7 @@ def test_world_json_v3_fields_if_present():
         airports = world["airports"]
         assert any("mct_minutes" in a for a in airports)
         report = world.get("coverage_report") or {}
-        assert report.get("etl_version") == "0.3.0"
+        assert str(report.get("etl_version", "")).startswith("0.3")
         assert "stopover_flights" in report
 
 
@@ -186,6 +186,8 @@ def test_flight_airlines_match_real_route_operators():
     active = _active_iatas()
     fabricated = []
     for fl in flights:
+        if fl.get("data_source") == "bts_2025_03":
+            continue  # BTS 2025-03 is newer/authoritative than routes.dat (2014)
         ops = route_airlines.get((fl["origin_iata"], fl["destination_iata"]), set())
         active_ops = ops & active
         if active_ops and fl["operating_airline_id"] not in active_ops:
@@ -203,6 +205,8 @@ def test_no_third_continent_airline_on_fallback_routes():
     active = _active_iatas()
     bad = []
     for fl in flights:
+        if fl.get("data_source") == "bts_2025_03":
+            continue  # BTS 2025-03 is authoritative, not bound by 2014 routes.dat
         ops = route_airlines.get((fl["origin_iata"], fl["destination_iata"]), set())
         if ops & active:
             continue
@@ -243,6 +247,8 @@ def test_domestic_routes_prefer_domestic_operator_when_available():
 
     bad = []
     for fl in flights:
+        if fl.get("data_source") == "bts_2025_03":
+            continue  # real US schedules, not bound by 2014 routes.dat operators
         o, d = fl["origin_iata"], fl["destination_iata"]
         country = by_iata[o]["country_id"]
         if country != by_iata[d]["country_id"]:
@@ -274,3 +280,89 @@ def test_world_airlines_catalog_covers_all_operators():
     operators = {fl["operating_airline_id"] for fl in flights}
     assert operators <= catalog, f"missing airlines in catalog: {sorted(operators - catalog)}"
     assert len(catalog) > 100, "airline catalog not expanded to real operators"
+
+
+def test_flight_data_source_tags():
+    """Every flight must carry a known data_source tag (traceability)."""
+    world, flights = _load_generated_world_and_flights()
+    assert flights, "no flights to check"
+    allowed = {
+        "bts_2025_03", "aeroscope_2019",
+        "synthetic_openflights", "synthetic_route_fill", "synthetic_stopover",
+    }
+    bad = {f["flight_instance_id"]: f.get("data_source") for f in flights if f.get("data_source") not in allowed}
+    assert not bad, f"unknown data_source tags: {bad}"
+    # v0.3.1 must actually use the new real layers somewhere.
+    sources = {f.get("data_source") for f in flights}
+    assert sources & {"bts_2025_03", "aeroscope_2019"}, (
+        f"no real-schedule layers present (got {sorted(sources)})"
+    )
+
+
+def test_bts_flights_real_schedule():
+    """US domestic BTS flights must carry real flight numbers + 2025-03 planned times."""
+    world, flights = _load_generated_world_and_flights()
+    by_iata = {a["iata"]: a for a in world["airports"]}
+    bts = [f for f in flights if f.get("data_source") == "bts_2025_03"]
+    assert bts, "no bts_2025_03 flights generated"
+    bad_route = []
+    bad_date = []
+    bad_fn = []
+    us_carriers = {"AA", "DL", "UA", "WN", "B6", "AS", "NK", "F9", "G4", "HA", "MX", "SY"}
+    for f in bts:
+        o, d = f["origin_iata"], f["destination_iata"]
+        if by_iata[o]["country_id"] != "US" or by_iata[d]["country_id"] != "US":
+            bad_route.append(f["flight_instance_id"])
+        dep = f["scheduled_departure_utc"]
+        # West-coast late departures can spill into 2025-04-01 UTC; only forbid
+        # departures before 2025-03-01 or after 2025-04-01.
+        if not (dep[:10] >= "2025-03-01" and dep[:10] <= "2025-04-01"):
+            bad_date.append(f["flight_instance_id"])
+        fn = f["marketing_flight_number"]
+        if not (len(fn) >= 3 and fn[:2] in us_carriers and fn[2:].isdigit()):
+            bad_fn.append(fn)
+    assert not bad_route, f"non-US flights tagged bts_2025_03: {bad_route[:5]}"
+    assert not bad_date, f"BTS flights outside 2025-03 schedule: {bad_date[:5]}"
+    assert not bad_fn, f"BTS flight numbers look wrong: {bad_fn[:10]}"
+    # A known real schedule should be present (AA/UA/DL on JFK-LAX etc.)
+    jfk_lax = [f for f in bts if f["origin_iata"] == "JFK" and f["destination_iata"] == "LAX"]
+    assert jfk_lax, "no JFK->LAX BTS flights (expected a heavily served US route)"
+
+
+def test_aeroscope_frequency_drives_schedule():
+    """AeroSCOPE-driven flights must respect the configured daily frequency band."""
+    world, flights = _load_generated_world_and_flights()
+    aero = [f for f in flights if f.get("data_source") == "aeroscope_2019"]
+    assert aero, "no aeroscope_2019 flights generated"
+    eco = yaml.safe_load((CFG / "economy.yaml").read_text(encoding="utf-8"))
+    fmin = int(eco["flight_synth"].get("aeroscope_freq_min", 1))
+    fmax = int(eco["flight_synth"].get("aeroscope_freq_max", 4))
+    # Convert UTC dep back to origin-local date using the per-day offset table
+    # (exact DST handling), then count flights per (route, local day).
+    from datetime import datetime, timedelta
+
+    tz_offsets = world.get("tz_offsets", {})
+    by_airport = {a["iata"]: a for a in world["airports"]}
+
+    def local_date(iso: str, iata: str) -> str:
+        dep = datetime.strptime(iso, "%Y-%m-%dT%H:%M:%SZ")
+        table = tz_offsets.get(by_airport[iata].get("timezone", ""), {})
+        off = 0.0
+        if table:
+            day = dep.strftime("%Y-%m-%d")
+            if day in table:
+                off = float(table[day])
+            else:
+                keys = sorted(table.keys())
+                off = float(table[keys[0]]) if day < keys[0] else float(table[keys[-1]])
+        return (dep + timedelta(hours=off)).strftime("%Y-%m-%d")
+
+    counts: dict[tuple[str, str, str], int] = {}
+    for f in aero:
+        key = (f["origin_iata"], f["destination_iata"], local_date(f["scheduled_departure_utc"], f["origin_iata"]))
+        counts[key] = counts.get(key, 0) + 1
+    worst = max(counts.values())
+    assert worst <= fmax, f"aero route/day exceeds freq_max: max {worst} > {fmax}"
+    # Most routes should have >= freq_min flights on most days (sparse tails tolerated).
+    under = sum(1 for v in counts.values() if v < fmin)
+    assert under <= len(counts) * 0.2, f"{under}/{len(counts)} route-days under freq_min {fmin}"
