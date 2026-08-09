@@ -336,8 +336,11 @@ func focus_airport(airport_id: String) -> void:
 	if a.is_empty():
 		return
 	var pos := latlon_to_vec(float(a.latitude), float(a.longitude), EARTH_RADIUS)
-	var target_yaw := atan2(pos.z, pos.x)
-	var target_pitch := asin(clampf(pos.y / EARTH_RADIUS, -1.0, 1.0))
+	# The camera sits on CameraPivot's local +Z axis and looks back at the
+	# origin. Rotate that +Z axis onto the airport's outward normal so the pin
+	# lands at screen centre on the visible hemisphere.
+	var target_yaw := atan2(pos.x, pos.z)
+	var target_pitch := -asin(clampf(pos.y / EARTH_RADIUS, -1.0, 1.0))
 	var target_distance := 22.0
 	EventBus.airport_selected.emit(airport_id)
 	_kill_focus_tween()

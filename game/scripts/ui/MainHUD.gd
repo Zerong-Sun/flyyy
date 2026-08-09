@@ -572,6 +572,9 @@ func _show_codex() -> void:
 	if not _require_started():
 		return
 	_set_panel_bgm("menu")
+	# Codex is a standalone overlay while the other bottom tabs use
+	# _panel_host. Dismiss the hosted tab first so the two cannot overlap.
+	_dismiss_open_panel()
 	if _codex_panel == null:
 		_codex_panel = load("res://scripts/ui/CodexPanel.gd").new()
 		add_child(_codex_panel)
@@ -702,8 +705,7 @@ func _on_news_changed() -> void:
 
 
 func _dismiss_open_panel() -> void:
-	for c in _panel_host.get_children():
-		c.queue_free()
+	_detach_panel_children()
 	_panel_host.visible = false
 	_restore_panel_center()
 	_market_built_city = ""
@@ -737,7 +739,7 @@ func _dock_panel_work() -> void:
 	_panel_host.size = PANEL_WORK_SIZE
 	_panel_host.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	if _bottom_nav:
-		_bottom_nav.visible = false
+		_bottom_nav.visible = true
 
 
 func _on_random() -> void:
@@ -780,7 +782,7 @@ func _on_airport_selected(airport_id: String) -> void:
 		elif AppState.visited_airports.has(airport_id):
 			visit_status = "已到访 · 当前仅查看"
 		else:
-			visit_status = "尚未到访 · 查看卡片不等于抵达"
+			visit_status = "尚未到访"
 	_airport_card.text = "[b]%s[/b]\n%s / %s\n[color=#d9a441]状态：%s[/color]\n城市：%s（%s）\n国家：%s\n当地时间：%s\n海拔：%.0f ft\n直飞目的地：%d\n类型：%s\n可信：%s" % [
 		airport_name, a.iata, a.icao, visit_status, airport_city, a.city_en, airport_country, local,
 		float(a.elevation_ft), dests, a.type, a.data_confidence
@@ -1225,8 +1227,12 @@ func _on_free_cargo_declined(_result: Dictionary) -> void:
 
 
 func _clear_panel() -> void:
-	for c in _panel_host.get_children():
-		c.queue_free()
+	# Remove old content synchronously. queue_free() alone leaves the previous
+	# workbench participating in this frame's minimum-size calculation, which
+	# could make a newly opened compact card (notably Notes) expand off-screen.
+	_detach_panel_children()
+	if _codex_panel != null and is_instance_valid(_codex_panel):
+		_codex_panel.visible = false
 	if _airport_card_panel != null:
 		_airport_card_panel.visible = false
 	_panel_host.visible = true
@@ -1244,6 +1250,13 @@ func _clear_panel() -> void:
 	_market_sell_qty = null
 	_flight_list = null
 	AudioService.play_sfx("sfx_ui_open_panel")
+
+
+func _detach_panel_children() -> void:
+	for child_v in _panel_host.get_children():
+		var child: Node = child_v
+		_panel_host.remove_child(child)
+		child.queue_free()
 
 
 func _require_started() -> bool:
@@ -2842,6 +2855,7 @@ func _show_notes() -> void:
 	if AppState.sell_transactions.is_empty():
 		var empty := Label.new()
 		empty.text = "暂无交易记录"
+		empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		empty.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 		vbox.add_child(empty)
 		_add_panel_close(root)
@@ -2860,6 +2874,7 @@ func _show_notes() -> void:
 
 		var header := Label.new()
 		header.text = "📒 %s" % city_name
+		header.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		header.add_theme_font_size_override("font_size", 16)
 		header.add_theme_color_override("font_color", _Colors.ICE)
 		vbox.add_child(header)
@@ -2880,6 +2895,7 @@ func _show_notes() -> void:
 				losses += 1
 			var row := Label.new()
 			row.text = "  %s %s：毛利 $%d" % [emoji, product_name, int(margin)]
+			row.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			row.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
 			vbox.add_child(row)
 
@@ -2888,6 +2904,7 @@ func _show_notes() -> void:
 
 		var summary := Label.new()
 		summary.text = "  %d赚 %d亏  净利 $%d" % [wins, losses, int(total_margin)]
+		summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		summary.add_theme_color_override("font_color", _Colors.ACCENT_TEAL if total_margin >= 0 else _Colors.WARN_RED)
 		vbox.add_child(summary)
 	_add_panel_close(root)

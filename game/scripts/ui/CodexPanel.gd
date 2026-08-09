@@ -15,7 +15,10 @@ var _tab_buttons: Array = []
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
-	mouse_filter = Control.MOUSE_FILTER_STOP
+	# Keep the transparent area around the centred card click-through so the
+	# persistent bottom navigation remains usable. The PanelContainer itself
+	# still handles input inside the card.
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func refresh() -> void:

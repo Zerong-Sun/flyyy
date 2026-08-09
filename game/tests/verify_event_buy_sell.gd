@@ -301,7 +301,7 @@ func _ready() -> void:
 		_check(card_panel.visible, "airport card did not open on selection")
 		var viewport_rect := get_viewport().get_visible_rect()
 		_check(viewport_rect.encloses(card_panel.get_global_rect()), "airport card extends outside viewport")
-		_check(card.text.find("查看卡片不等于抵达") >= 0, "airport card does not clarify view vs visit")
+		_check(card.text.find("查看卡片不等于抵达") < 0, "airport card still shows the removed view-vs-arrival copy")
 		_check(not AppState.visited_airports.has(unvisited_id), "viewing airport card incorrectly marked it visited")
 		var route_action: Button = hud.get("_airport_card_action") as Button
 		_check(not route_action.disabled and route_action.text == "查找前往此地的航班",
@@ -335,6 +335,26 @@ func _ready() -> void:
 
 	# ── Scenario 6: navigation panels keep their close action reachable ──
 	await _verify_navigation_layout(hud)
+
+	# ── Scenario 7: focused airport is centred on the camera-facing hemisphere ──
+	if not unvisited_id.is_empty():
+		var globe: Node3D = get_node("../Main/Globe") as Node3D
+		var reduced_before := AppState.reduced_animations
+		AppState.reduced_animations = true
+		globe.call("focus_airport", unvisited_id)
+		await _frames(2)
+		var focused_airport := DataService.get_airport(unvisited_id)
+		var airport_dir: Vector3 = globe.call(
+			"latlon_to_vec",
+			float(focused_airport.get("latitude", 0.0)),
+			float(focused_airport.get("longitude", 0.0)),
+			1.0
+		).normalized()
+		var camera: Camera3D = globe.get("camera") as Camera3D
+		var camera_dir := (camera.global_position - globe.global_position).normalized()
+		_check(camera_dir.dot(airport_dir) > 0.999,
+			"focused airport is not centred on the camera-facing hemisphere")
+		AppState.reduced_animations = reduced_before
 
 	_finish()
 
@@ -382,11 +402,20 @@ func _press_button(popup: PopupEvent, text: String) -> void:
 
 
 func _verify_navigation_layout(hud: Control) -> void:
-	for method in ["_show_city", "_show_achievements", "_toggle_pause"]:
+	for method in [
+		"_show_city", "_show_market", "_show_flights", "_show_inventory",
+		"_show_notes", "_show_achievements", "_show_log", "_show_attr",
+		"_toggle_pause",
+	]:
 		hud.call(method)
 		await _frames(4)
 		var panel: PanelContainer = hud.get("_panel_host") as PanelContainer
+		var bottom_nav: HBoxContainer = hud.get("_bottom_nav") as HBoxContainer
 		_check(panel.visible, "%s did not open a panel" % method)
+		_check(bottom_nav.visible,
+			"%s hides the bottom navigation row" % method)
+		_check(get_viewport().get_visible_rect().encloses(bottom_nav.get_global_rect()),
+			"bottom navigation row extends outside viewport in %s" % method)
 		var close: Button = null
 		for button_v in panel.find_children("*", "Button", true, false):
 			var button: Button = button_v
@@ -404,3 +433,30 @@ func _verify_navigation_layout(hud: Control) -> void:
 				"settings panel is not scrollable")
 		hud.call("_close_panel")
 		await _frames(2)
+
+	# Switch directly from a wide workbench to Notes. The previous child must be
+	# detached before the compact panel is laid out, otherwise its minimum width
+	# can push the right edge outside the viewport for one frame.
+	hud.call("_show_city")
+	await _frames(2)
+	hud.call("_show_notes")
+	await _frames(2)
+	var notes_panel: PanelContainer = hud.get("_panel_host") as PanelContainer
+	_check(get_viewport().get_visible_rect().encloses(notes_panel.get_global_rect()),
+		"notes panel extends outside viewport after switching from a workbench")
+	_check(bool(hud.get("_bottom_nav").visible), "notes panel hides the bottom navigation row")
+
+	# Codex and hosted tabs are mutually exclusive in both directions.
+	hud.call("_show_codex")
+	await _frames(2)
+	var codex: Control = hud.get("_codex_panel") as Control
+	_check(codex != null and codex.visible, "codex did not open")
+	_check(not notes_panel.visible, "codex overlaps the notes panel")
+	_check(codex.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"codex blocks clicks to the persistent bottom navigation")
+	hud.call("_show_notes")
+	await _frames(2)
+	_check(not codex.visible, "notes panel overlaps the codex")
+	_check(notes_panel.visible, "notes panel did not reopen after codex")
+	hud.call("_close_panel")
+	await _frames(2)
