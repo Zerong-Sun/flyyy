@@ -2007,7 +2007,7 @@ def write_sqlite(airports, routes, flights, cities, products, markets, eco, meta
         ("Wikidata", "CC0 1.0",
          "Structured city facts used by the authored city summaries"),
         ("Natural Earth", "public domain", "Globe visual inspiration; simplified procedural earth in Demo"),
-        ("Airborne Trader Demo", "game content", "City blurbs and products are original game content"),
+        ("Wanli Trader Demo", "game content", "City blurbs and products are original game content"),
     ]
     for name, lic, note in attributions:
         w.execute("INSERT INTO attributions(name, license, note) VALUES(?,?,?)", (name, lic, note))

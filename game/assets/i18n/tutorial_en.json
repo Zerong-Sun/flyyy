@@ -3,8 +3,8 @@
     {
       "id": "tutorial.new_game",
       "trigger": "new_game",
-      "title": "Welcome to Global Merchant",
-      "text": "Welcome to Global Merchant. Browse the local market first, then pick your next flight; follow real airline routes to buy local specialties and earn the spread.",
+      "title": "Welcome to Wanli Trader",
+      "text": "Welcome to Wanli Trader. Browse the local market first, then pick your next flight; follow real airline routes to buy local specialties and earn the spread.",
       "can_skip": true,
       "show_once": true
     },

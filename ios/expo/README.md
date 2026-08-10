@@ -1,4 +1,4 @@
-# Airborne Trader — Expo Go (20-hub demo)
+# Wanli Trader — Expo Go (20-hub demo)
 
 React Native port of the playable **20-hub** demo. Runs in **Expo Go SDK 54** on a phone over your local network.
 

@@ -1,6 +1,6 @@
 keys,en
 ui.new_game.title,Choose starting airport
-ui.new_game.game_title,Airborne Trader
+ui.new_game.game_title,Wanli Trader
 ui.new_game.intro,"Buy local goods low, fly them where scarce, and sell high."
 ui.loading.poem_title,The Merchant's Song · Yuan Zhen (Tang dynasty)
 ui.loading.poem,"Merchants have no settled home; where profit calls, they go.\nThey seek partners at the door and bid father and brother farewell.\nFather and brother instruct them: pursue profit, never fame.\nFor fame there are things one must refuse; for profit there is nothing they will not scheme.\nTheir partners bind them with oaths: sell the false, never the true.\nIn every deal they trade in fraud, and think little of what their own capital gains or loses.\nFrom then on they travel together, sworn to death never to change their ways.\nThey learn the jargon of the market and forget all neighborly feeling.\nBrass beaten into arm-bangles, sticky rice blown into necklaces.\nThey peddle them back in the village, tapping them to ring like metal and stone.\nThe village girls dare not bargain over the price.\nA hundred coppers of capital has already brought tenfold profit.\nTheir faces grow sleek and fair, their food and drink sweet and fragrant.\nCapital multiplies apace; their trade swallows up more each day.\nFor pearls they sail the wide seas; for jade they climb Mount Jing and Mount Heng.\nNorthward they buy Tangut horses; westward they capture Tibetan parrots.\nFire-washed cloth from the torrid isles, brocade woven in Shu.\nYue maids with sleek and creamy flesh, Xi boys with bright brows and eyes.\nThey count the cost of food and clothes, but never the length of the road.\nTheir ventures span the whole realm, until they arrive at Chang'an.\nIn the Eastern and Western Markets, traders greet them one after another.\nThey welcome the merchants and flatter them — wealth commands power.\nThe merchants are shrewd at heart, and at these words their hearts leap.\nFirst they ask after the Ten Eunuchs, then court the hundred lords and ministers.\nMarquises' mansions and princesses' courts are furnished with nothing but the finest.\nOnly then do they sit down at ease, their wealth a match for any king's.\nThe market guards reek of wine and meat; the county clerks build great houses.\nNot only do they hold their tongues, they scurry at every command.\nThe elder son trades in timber, knowing at a glance beam from pillar.\nThe younger son peddles salt, beyond the reach of county and prefecture levies.\nOne man stretched across the market's profit, surging like a whale that parts the sea.\nEven the cruelest hooks dare not strike; strike, and teeth would gash them.\nBorn to the merchant's joy, you are bound to enjoy it your whole life.\nAnd you will father two sons of your own — when will the hunger for coin ever rest?"
@@ -220,7 +220,7 @@ ui.reputation.unlock.lv2,Cargo slot +1
 ui.reputation.unlock.lv3,20% off cold-chain baggage
 ui.reputation.unlock.lv4,30% off intel forecast
 ui.reputation.unlock.lv5,Carry-on +10kg
-ui.reputation.unlock.lv6,Title "Global Merchant"
+ui.reputation.unlock.lv6,Title "Wanli Trader"
 ui.city.no_data,No city data
 ui.city.history,History
 ui.city.geography,Geography

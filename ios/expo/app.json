@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Airborne Trader",
-    "slug": "airborne-trader-mobile",
+    "name": "Wanli Trader",
+    "slug": "wanli-trader-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
-    "scheme": "airborne-trader-mobile",
+    "scheme": "wanli-trader-mobile",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash-icon.png",

@@ -22,7 +22,7 @@ WORLD_PATH = ROOT / "game" / "data" / "world.json"
 FLIGHTS_DIR = ROOT / "game" / "data" / "flights"
 MARKETS_DIR = ROOT / "game" / "data" / "markets"
 IOS_DIR = ROOT / "ios"
-HTML_PATH = IOS_DIR / "Airborne Trader iOS.dc.html"
+HTML_PATH = IOS_DIR / "Wanli Trader iOS.dc.html"
 CITY_CONFIG_PATH = IOS_DIR / "config" / "curated_cities.json"
 EXTRA_PRODUCTS_PATH = IOS_DIR / "config" / "extra_products.json"
 
@@ -333,7 +333,7 @@ def build_snapshot() -> dict:
         {"name": "OpenFlights", "license": "ODbL", "use": "航线拓扑和公开航空网络关系。"},
         {"name": "Natural Earth", "license": "Public domain", "use": "地球陆地与海岸线底图。"},
         {"name": "IANA Time Zone Database", "license": "Public domain", "use": "城市本地时间和夏令时偏移。"},
-        {"name": "Airborne Trader", "license": "Original game content", "use": "城市文案、商品目录和游戏经济模型。"},
+        {"name": "Wanli Trader", "license": "Original game content", "use": "城市文案、商品目录和游戏经济模型。"},
     ]
     return {
         "meta": {

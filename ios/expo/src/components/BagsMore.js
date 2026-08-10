@@ -460,7 +460,7 @@ export function MoreScreen({ game }) {
           </View>
         </Card>
 
-        <Text style={styles.version}>{t('bags.version', 'Airborne Trader · Demo build 0.3')}</Text>
+        <Text style={styles.version}>{t('bags.version', 'Wanli Trader · Demo build 0.3')}</Text>
       </View>
     );
   }
@@ -712,7 +712,7 @@ export function OverlaySheets({ game }) {
           <View style={styles.introShade} />
           <View style={styles.introContent}>
             <Image source={assetSource('assets/logo_mark.webp')} style={styles.introLogo} accessible={false} />
-            <Text style={styles.introTitle}>{t('intro.title', 'Airborne Trader')}</Text>
+            <Text style={styles.introTitle}>{t('intro.title', 'Wanli Trader')}</Text>
             <Text style={styles.introLead}>
               {t('intro.lead', 'Twenty hub airports. Buy low where a thing is made, fly it somewhere it is scarce, sell high. Weight is the whole game.')}
             </Text>

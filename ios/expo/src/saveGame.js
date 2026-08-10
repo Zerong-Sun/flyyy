@@ -3,7 +3,7 @@
  * Used by useGame and Node unit tests.
  */
 
-export const SAVE_KEY = 'airborne-trader/slot-1';
+export const SAVE_KEY = 'wanli-trader/slot-1';
 export const SAVE_VERSION = 1;
 
 export const PERSIST = [

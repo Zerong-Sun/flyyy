@@ -1,10 +1,10 @@
-# 《环球航商》iOS Expo — 下一里程碑需求规格
+# 《万里行商》iOS Expo — 下一里程碑需求规格
 
 | 字段 | 内容 |
 |------|------|
 | 文档编号 | REQ-ios-expo-M2 |
 | 版本 | v0.2 |
-| 产品 | 《环球航商》/ Airborne Trader |
+| 产品 | 《万里行商》/ Wanli Trader |
 | 目标工程 | [`ios/expo/`](../ios/expo/)（Expo Go SDK 54 · 12 枢纽 Demo） |
 | 关联 | [PRD_01.md](../PRD_01.md)；[CONTENT_ASSET_SPEC.md](CONTENT_ASSET_SPEC.md)（CAS-01 · Godot 美术/音乐真源）；[v0.2_REQUIREMENTS.md](v0.2_REQUIREMENTS.md)；[ios/expo/README.md](../ios/expo/README.md)；[ios/github.md](../ios/github.md) |
 | 前置里程碑 | **M1（已交付）**：审阅优化 — 真实登机倒计时与自动起飞、行李随票失效、购买校验与加权成本、时钟隔离、AsyncStorage 存档、成就 toast、Reduce motion、safe-area |
