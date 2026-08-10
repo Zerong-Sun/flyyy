@@ -354,56 +354,33 @@ func _build_ui() -> void:
 	add_child(_replace_ticket_dialog)
 
 	_new_game_panel = PanelContainer.new()
-	_new_game_panel.position = Vector2(360, 160)
-	_new_game_panel.size = Vector2(560, 360)
+	_new_game_panel.position = Vector2(360, 190)
+	_new_game_panel.size = Vector2(560, 320)
 	_new_game_panel.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	add_child(_new_game_panel)
 	var ngv := VBoxContainer.new()
+	ngv.add_theme_constant_override("separation", 12)
 	_new_game_panel.add_child(ngv)
-	var splash_tex: Texture2D = _IconFactory.get_brand("splash")
-	if splash_tex != null:
-		var splash := TextureRect.new()
-		splash.texture = splash_tex
-		splash.custom_minimum_size = Vector2(520, 120)
-		splash.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		splash.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		splash.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ngv.add_child(splash)
-	var brand_row := HBoxContainer.new()
-	brand_row.alignment = BoxContainer.ALIGNMENT_CENTER
-	ngv.add_child(brand_row)
-	var logo_tex: Texture2D = _IconFactory.get_brand("logo")
-	if logo_tex != null:
-		var logo := TextureRect.new()
-		logo.texture = logo_tex
-		logo.custom_minimum_size = Vector2(56, 56)
-		logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		brand_row.add_child(logo)
-	var word_tex: Texture2D = _IconFactory.get_brand("wordmark")
-	if word_tex != null:
-		var word := TextureRect.new()
-		word.texture = word_tex
-		word.custom_minimum_size = Vector2(280, 56)
-		word.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		word.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		brand_row.add_child(word)
-	else:
-		var title := Label.new()
-		title.text = "《环球航商》"
-		title.add_theme_font_size_override("font_size", 22)
-		title.add_theme_color_override("font_color", _Colors.ICE)
-		brand_row.add_child(title)
+	var title := Label.new()
+	title.text = I18nService.t("ui.new_game.game_title")
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 30)
+	title.add_theme_color_override("font_color", _Colors.ICE)
+	ngv.add_child(title)
+	var intro := Label.new()
+	intro.text = I18nService.t("ui.new_game.intro")
+	intro.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	intro.add_theme_font_size_override("font_size", 17)
+	intro.add_theme_color_override("font_color", _Colors.ACCENT_TEAL)
+	ngv.add_child(intro)
+	ngv.add_child(HSeparator.new())
 	var subtitle := Label.new()
 	subtitle.text = I18nService.t("ui.new_game.title")
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+	subtitle.add_theme_font_size_override("font_size", 16)
+	subtitle.add_theme_color_override("font_color", _Colors.TEXT_PRIMARY)
 	ngv.add_child(subtitle)
-	var info := Label.new()
-	info.text = "在左侧搜索或点选地球机场，然后开始。也可随机。\n" + I18nService.disclaimer()
-	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	info.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
-	ngv.add_child(info)
 	var mode_row := HBoxContainer.new()
 	mode_row.alignment = BoxContainer.ALIGNMENT_CENTER
 	mode_row.add_theme_constant_override("separation", 8)
@@ -3327,7 +3304,6 @@ func _toggle_pause() -> void:
 		var idx := order.find(AppState.color_blind)
 		var nxt: String = order[(idx + 1) % order.size()]
 		AppState.color_blind = nxt
-		globe.refresh_marker_style()
 		_toggle_pause()
 	)
 	v.add_child(cb_btn)
