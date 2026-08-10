@@ -11,7 +11,7 @@ const UNLOCK_LV2 := "unlock_lv2_cargo"     # cargo capacity +1 block
 const UNLOCK_LV3 := "unlock_lv3_cold_discount"  # cold-chain baggage 20% off
 const UNLOCK_LV4 := "unlock_lv4_intel_discount"  # intel forecast 30% off
 const UNLOCK_LV5 := "unlock_lv5_baggage_plus10"  # +10kg baggage allowance
-const UNLOCK_LV6 := "unlock_lv6_globe_title"     # "环球航商" title
+const UNLOCK_LV6 := "unlock_lv6_globe_title"     # "万里行商" title
 
 
 func _ready() -> void:

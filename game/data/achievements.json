@@ -4,7 +4,7 @@
     {"id": "ach_explore_cities_10", "category": "explore", "name": "十城记", "desc": "已访问城市 ≥10", "stat_key": "visited_cities", "target": 10, "icon": "icon_ach_explore_cities_10_64"},
     {"id": "ach_explore_cities_50", "category": "explore", "name": "五十城", "desc": "已访问城市 ≥50", "stat_key": "visited_cities", "target": 50, "icon": "icon_ach_explore_cities_50_64"},
     {"id": "ach_explore_cities_100", "category": "explore", "name": "百城旅人", "desc": "已访问城市 ≥100", "stat_key": "visited_cities", "target": 100, "icon": "icon_ach_explore_cities_100_64"},
-    {"id": "ach_explore_cities_500", "category": "explore", "name": "环球航商", "desc": "已访问城市 ≥500（或当前 L2 全解锁）", "stat_key": "visited_cities", "target": 500, "icon": "icon_ach_explore_cities_500_64"},
+    {"id": "ach_explore_cities_500", "category": "explore", "name": "万里行商", "desc": "已访问城市 ≥500（或当前 L2 全解锁）", "stat_key": "visited_cities", "target": 500, "icon": "icon_ach_explore_cities_500_64"},
     {"id": "ach_explore_countries_10", "category": "explore", "name": "十国通行", "desc": "已访问国家/地区 ≥10", "stat_key": "visited_countries", "target": 10, "icon": "icon_ach_explore_countries_10_64"},
     {"id": "ach_explore_countries_30", "category": "explore", "name": "三十国", "desc": "已访问国家/地区 ≥30", "stat_key": "visited_countries", "target": 30, "icon": "icon_ach_explore_countries_30_64"},
     {"id": "ach_explore_hubs_20", "category": "explore", "name": "枢纽巡礼", "desc": "Demo 20 枢纽全部访问", "stat_key": "demo_hubs_visited", "target": 20, "icon": "icon_ach_explore_hubs_20_64"},

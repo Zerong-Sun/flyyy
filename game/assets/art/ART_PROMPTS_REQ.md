@@ -1,6 +1,6 @@
-# 环球航商 (Airborne Trader) — Art Generation Prompts
+# 万里行商 (Wanli Trader) — Art Generation Prompts
 
-> **Project:** flyyy / Airborne Trader — global travel-trade simulation
+> **Project:** flyyy / Wanli Trader — global travel-trade simulation
 > **Style:** dark aeronautical HUD · chart-instrument clarity · matte globe navigation · cold navy information design
 > **Palette anchors:**
 >   bg-deep `#0B1C2C` · bg-panel `#122A3D@88%` · ocean `#1A4A6E` · land `#3D6B4F` · ice `#D9E6F0`
@@ -449,7 +449,7 @@ Negative: photorealistic, 3D renders, text, watermarks, close-up people, cartoon
 - **Mode**: separate · **Count**: 4 · **Background**: transparent
 - **Output dir**: art
 - **Files**:
-  1. `logo_wordmark_zh.webp` — AirborneTrader horizontal wordmark, elegant travel sans-serif
+  1. `logo_wordmark_zh.webp` — WanliTrader horizontal wordmark, elegant travel sans-serif
   2. `logo_mark.webp` — globe+route abstract geometric mark, aeronautical-chart style
   3. `app_icon.webp` — app icon, 512×512, globe with route arc
   4. `splash.webp` — 1920×1080 splash screen, globe + logo space + disclaimer bar
@@ -458,7 +458,7 @@ Negative: photorealistic, 3D renders, text, watermarks, close-up people, cartoon
 
 Generate exactly 4 SEPARATE images, NOT a contact sheet. Do not write an explanation. Travel-trade simulation game brand identity.
 
-Image 1 (512×128 transparent): "AirborneTrader" horizontal wordmark in clean modern sans-serif, wide letter-spacing, deep navy `#0B1C2C`. Elegant, trustworthy. No Chinese characters needed — just pure English logotype.
+Image 1 (512×128 transparent): "WanliTrader" horizontal wordmark in clean modern sans-serif, wide letter-spacing, deep navy `#0B1C2C`. Elegant, trustworthy. No Chinese characters needed — just pure English logotype.
 
 Image 2 (512×512 transparent): Abstract globe mark — sphere suggested by latitude arcs, one sweeping great-circle route line in teal `#3CB8A4`. Aeronautical chart minimalism. Pure geometric.
 

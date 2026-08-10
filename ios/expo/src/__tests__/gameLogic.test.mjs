@@ -269,12 +269,12 @@ describe('i18n', () => {
   });
 
   it('t returns the localized string and falls back safely', () => {
-    assert.equal(t('en', 'brand'), 'Airborne Trader');
-    assert.equal(t('zh', 'brand'), '环球航商');
+    assert.equal(t('en', 'brand'), 'Wanli Trader');
+    assert.equal(t('zh', 'brand'), '万里行商');
     assert.equal(t('en', 'tab_market'), 'Market');
     assert.equal(t('zh', 'tab_market'), '市场');
     assert.equal(t('en', 'missing_key'), 'missing_key');
-    assert.equal(t('xx', 'brand'), 'Airborne Trader'); // unknown locale → en
+    assert.equal(t('xx', 'brand'), 'Wanli Trader'); // unknown locale → en
   });
 
   it('covers every city with name/airport/country/continent entries', () => {

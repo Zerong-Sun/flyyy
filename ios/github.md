@@ -24,4 +24,4 @@ date: 2026-08-01T00:00:00Z
 | Flight cutscene | `game/assets/anim/flight_transition/`, `game/assets/art/anim_flight_*.webp` |
 | Tab bar & inline icons | `game/assets/icons/icon_*_32.webp` |
 | Lock-screen widget, push banner | new — no repo counterpart |
-| Expo app (`expo/`) | port of `Airborne Trader iOS.dc.html`; data contract shared with `etl/config/hubs_20.yaml` |
+| Expo app (`expo/`) | port of `Wanli Trader iOS.dc.html`; data contract shared with `etl/config/hubs_20.yaml` |

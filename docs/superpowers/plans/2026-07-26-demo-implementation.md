@@ -20,7 +20,7 @@ todos:
 isProject: false
 ---
 
-# 《环球航商》Demo 完整版实现计划
+# 《万里行商》Demo 完整版实现计划
 
 > **For agentic workers:** 实现时按阶段顺序推进；每阶段结束必须满足该阶段退出条件后再进入下一阶段。推荐使用 subagent-driven-development 或 executing-plans 按任务执行。
 

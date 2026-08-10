@@ -98,7 +98,7 @@ function GameApp() {
         <View style={styles.header}>
           <View style={styles.brandRow}>
             <AssetIcon path="assets/logo_mark.webp" size={22} />
-            <Text style={[styles.brand, { fontSize: 14 * (state.fontScale || 1) }]}>{t('brand', 'Airborne Trader')}</Text>
+            <Text style={[styles.brand, { fontSize: 14 * (state.fontScale || 1) }]}>{t('brand', 'Wanli Trader')}</Text>
           </View>
           <View style={styles.headerMeta}>
             <Text style={[styles.cityLabel, { fontSize: 13 * (state.fontScale || 1) }]}>{city.iata}</Text>

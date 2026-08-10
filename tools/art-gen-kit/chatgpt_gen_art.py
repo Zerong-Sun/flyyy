@@ -55,7 +55,7 @@ SECTION_MARKERS = {
     "ALL": (r"# 一、P0", r"# 附录"),
 }
 
-# --- Project global style (Airborne Trader — referenced but NOT injected into per-batch prompts) ---
+# --- Project global style (Wanli Trader — referenced but NOT injected into per-batch prompts) ---
 # Each batch in ART_PROMPTS_REQ.md already carries its own complete style spec.
 # Global anchors (from ART_PROMPTS_REQ.md §1):
 #   Style: dark aeronautical HUD · chart-instrument clarity · matte globe navigation · cold navy

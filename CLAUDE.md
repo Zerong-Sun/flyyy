@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-《环球航商》Airborne Trader — an offline, single-player travel-and-trade simulation game. Players fly a real-world-style airline network between cities, buy local products, and arbitrage price differences. Content is Chinese-first (game UI/text is zh-authored; English fields are generated); code comments are English.
+《万里行商》Wanli Trader — an offline, single-player travel-and-trade simulation game. Players fly a real-world-style airline network between cities, buy local products, and arbitrage price differences. Content is Chinese-first (game UI/text is zh-authored; English fields are generated); code comments are English.
 
 Three deliverables in this repo:
 

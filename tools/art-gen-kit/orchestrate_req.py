@@ -103,7 +103,7 @@ P1_WINDOW_ORDER = [
     "Contract",
 ]
 
-# --- Project global style (Airborne Trader) ---
+# --- Project global style (Wanli Trader) ---
 # Each batch in ART_PROMPTS_REQ.md carries its own complete style spec.
 # No global style is injected — the per-batch prompt is used as-is via build_batch_message().
 

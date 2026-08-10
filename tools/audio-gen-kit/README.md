@@ -1,4 +1,4 @@
-# Audio Gen Kit — 《环球航商》Demo 音频
+# Audio Gen Kit — 《万里行商》Demo 音频
 
 程序合成 + 可选 CC0 拉取，输出到 `game/assets/audio/`。
 

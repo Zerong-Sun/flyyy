@@ -12,7 +12,7 @@
 export const LOCALES = ['en', 'zh'];
 
 const EN = {
-  brand: 'Airborne Trader',
+  brand: 'Wanli Trader',
   tab_globe: 'Globe',
   tab_market: 'Market',
   tab_flights: 'Flights',
@@ -438,7 +438,7 @@ const EN = {
   'bags.keep_playing': 'Keep playing',
   'bags.restart': 'Restart',
   'bags.restart_game': 'Restart game',
-  'bags.version': 'Airborne Trader · Demo build 0.3',
+  'bags.version': 'Wanli Trader · Demo build 0.3',
   'bags.more_hint': '1 real second = 6 in-game minutes. A full trade run fits in about a minute.',
   'bags.currently_in': 'Currently in {name}',
   'bags.menu_notes': 'Trader notes',
@@ -448,7 +448,7 @@ const EN = {
   'bags.menu_settings': 'Settings & save',
 
   /* ---- intro ------------------------------------------------------ */
-  'intro.title': 'Airborne Trader',
+  'intro.title': 'Wanli Trader',
   'intro.lead': 'Twenty hub airports. Buy low where a thing is made, fly it somewhere it is scarce, sell high. Weight is the whole game.',
   'intro.step1_title': 'Buy where it is made',
   'intro.step1_sub': 'Local goods price low at their origin.',
@@ -517,7 +517,7 @@ const EN = {
 };
 
 const ZH = {
-  brand: '环球航商',
+  brand: '万里行商',
   tab_globe: '环球',
   tab_market: '市场',
   tab_flights: '航班',
@@ -929,7 +929,7 @@ const ZH = {
   'bags.keep_playing': '继续游戏',
   'bags.restart': '重新开始',
   'bags.restart_game': '重新开始游戏',
-  'bags.version': '环球航商 · 演示版 0.3',
+  'bags.version': '万里行商 · 演示版 0.3',
   'bags.more_hint': '现实 1 秒 = 游戏 6 分钟。一趟完整贸易约一分钟。',
   'bags.currently_in': '当前位于 {name}',
   'bags.menu_notes': '商旅手记',
@@ -938,7 +938,7 @@ const ZH = {
   'bags.menu_sources': '数据来源',
   'bags.menu_settings': '设置与存档',
 
-  'intro.title': '环球航商',
+  'intro.title': '万里行商',
   'intro.lead': '二十个枢纽机场。在原产地低价买入，运到稀缺之地高价卖出。重量决定一切。',
   'intro.step1_title': '在原产地买入',
   'intro.step1_sub': '本地商品在原产地价格最低。',

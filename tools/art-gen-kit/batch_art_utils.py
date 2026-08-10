@@ -538,7 +538,7 @@ def collect_catalog(art_dir: Path | None = None) -> dict[str, Any]:
 
     return {
         "version": 1,
-        "style": "Airborne Trader — dark aeronautical HUD / chart-instrument clarity",
+        "style": "Wanli Trader — dark aeronautical HUD / chart-instrument clarity",
         "count": len(assets),
         "assets": assets,
     }
