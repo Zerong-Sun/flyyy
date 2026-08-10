@@ -119,6 +119,33 @@ function BackButton({ onPress, t }) {
   );
 }
 
+function EventCard({ event, current, t, tf }) {
+  const eventCity = CITIES[event.cityId];
+  if (!eventCity) return null;
+  return (
+    <Card style={styles.eventCard}>
+      <View style={styles.eventCardHeader}>
+        <View style={styles.eventCityChip}>
+          <Text style={styles.eventCityChipText}>
+            {eventCity.iata} · {t(`city.${event.cityId}`, eventCity.name)}
+          </Text>
+        </View>
+        <Text style={styles.eventKind}>{t(`event.kind.${event.kind}`, event.kind)}</Text>
+      </View>
+      <Text style={styles.eventHeadline}>{event.headlineText}</Text>
+      <Text style={styles.eventBody}>{event.bodyText}</Text>
+      <View style={styles.eventImpactBox}>
+        <Text style={styles.eventImpactText}>{event.impactText}</Text>
+      </View>
+      <Text style={styles.eventTiming}>
+        {current
+          ? tf('event.days_left', { n: event.daysRemaining }, `${event.daysRemaining} day(s) remaining`)
+          : tf('event.seen_day', { n: event.seenDay + 1 }, `Encountered episode · day ${event.seenDay + 1}`)}
+      </Text>
+    </Card>
+  );
+}
+
 export function MoreScreen({ game }) {
   const {
     state,
@@ -137,6 +164,8 @@ export function MoreScreen({ game }) {
     achievements,
     sources,
     noteText,
+    currentEvents,
+    eventHistory,
   } = game;
   const page = state.page;
 
@@ -294,6 +323,55 @@ export function MoreScreen({ game }) {
                 ) : null}
               </View>
             ))}
+          </View>
+        )}
+      </View>
+    );
+  }
+
+  if (page === 'events') {
+    return (
+      <View style={styles.screen}>
+        <View style={styles.subHeader}>
+          <BackButton onPress={() => setPage(null)} t={t} />
+          <ScreenTitle
+            title={t('events_title', 'Events')}
+            subtitle={tf('event.active_worldwide', { n: currentEvents.length }, `${currentEvents.length} active worldwide`)}
+            style={styles.subTitle}
+          />
+        </View>
+
+        <View style={styles.eventSectionHeader}>
+          <Text style={styles.eventSectionTitle}>{t('event.current', 'Current worldwide')}</Text>
+          <Text style={styles.eventSectionCount}>{currentEvents.length}</Text>
+        </View>
+        {currentEvents.length ? (
+          <View style={styles.list}>
+            {currentEvents.map((event) => (
+              <EventCard key={event.episodeKey} event={event} current t={t} tf={tf} />
+            ))}
+          </View>
+        ) : (
+          <View style={[styles.emptyBox, styles.eventEmpty]}>
+            <Text style={styles.emptyTitle}>{t('event.none_current', 'No active events')}</Text>
+            <Text style={styles.emptySub}>{t('event.none_current_sub', 'The world is quiet today. Check again after the game clock advances.')}</Text>
+          </View>
+        )}
+
+        <View style={[styles.eventSectionHeader, styles.eventHistoryHeader]}>
+          <Text style={styles.eventSectionTitle}>{t('event.history', 'Encounter history')}</Text>
+          <Text style={styles.eventSectionCount}>{eventHistory.length}</Text>
+        </View>
+        {eventHistory.length ? (
+          <View style={styles.list}>
+            {eventHistory.map((event) => (
+              <EventCard key={event.episodeKey} event={event} current={false} t={t} tf={tf} />
+            ))}
+          </View>
+        ) : (
+          <View style={[styles.emptyBox, styles.eventEmpty]}>
+            <Text style={styles.emptyTitle}>{t('event.none_seen', 'No encounters yet')}</Text>
+            <Text style={styles.emptySub}>{t('event.none_seen_sub', 'Land in a city while its event is active to add it here.')}</Text>
           </View>
         )}
       </View>
@@ -470,6 +548,7 @@ export function MoreScreen({ game }) {
   ).length;
   const menuRows = [
     { key: 'notes', label: t('bags.menu_notes', 'Trader notes'), icon: 'assets/ach_cities_10.webp', value: `${state.visited.length} / ${CIDS.length}` },
+    { key: 'events', label: t('bags.menu_events', 'Events'), icon: 'assets/ic_warning.webp', value: currentEvents.length ? String(currentEvents.length) : '' },
     { key: 'ach', label: t('bags.menu_ach', 'Achievements'), icon: 'assets/ach_legendary.webp', value: `${unlocked} / ${achievements.length}` },
     { key: 'log', label: t('bags.menu_log', 'Trade log'), icon: 'assets/ic_log.webp', value: state.log.length ? String(state.log.length) : '' },
     { key: 'sources', label: t('bags.menu_sources', 'Data sources'), icon: 'assets/ic_attr.webp', value: '' },
@@ -512,8 +591,10 @@ export function OverlaySheets({ game }) {
     state,
     city,
     sell,
+    popupEvent,
     hm,
     closeSheet,
+    dismissEvent,
     runCutscene,
     sellAll,
     startGame,
@@ -538,6 +619,33 @@ export function OverlaySheets({ game }) {
 
   return (
     <>
+      <Sheet visible={state.sheet === 'event' && !!popupEvent} onClose={() => dismissEvent(false)} center>
+        {popupEvent ? (
+          <ScrollView style={styles.eventPopupScroll} contentContainerStyle={styles.eventPopup}>
+            <View style={styles.eventPopupIcon}>
+              <AssetIcon path="assets/ic_warning.webp" size={30} tintColor={COLORS.orange} />
+            </View>
+            <Text style={styles.eventPopupEyebrow}>{t('event.breaking', 'City event')}</Text>
+            <Text style={styles.eventPopupTitle}>{popupEvent.headlineText}</Text>
+            <Text style={styles.eventPopupCity}>
+              {t(`city.${popupEvent.cityId}`, CITIES[popupEvent.cityId]?.name || popupEvent.cityId)}
+              {' · '}
+              {tf('event.days_left', { n: popupEvent.daysRemaining }, `${popupEvent.daysRemaining} day(s) remaining`)}
+            </Text>
+            <Text style={styles.eventPopupBody}>{popupEvent.bodyText}</Text>
+            <View style={styles.eventImpactBox}>
+              <Text style={styles.eventImpactText}>{popupEvent.impactText}</Text>
+            </View>
+            <Button variant="primary" onPress={() => dismissEvent(true)} style={styles.eventPopupPrimary}>
+              {t('event.view_market', 'View market impact')}
+            </Button>
+            <Button variant="ghost" onPress={() => dismissEvent(false)}>
+              {t('event.close_news', 'Close news')}
+            </Button>
+          </ScrollView>
+        ) : null}
+      </Sheet>
+
       <Sheet visible={state.sheet === 'ff'} onClose={closeSheet} center>
         <View style={styles.ffBody}>
           <Text style={styles.ffTitle}>{t('sheet.ff_title', 'Speed up to takeoff?')}</Text>
@@ -820,6 +928,139 @@ const styles = StyleSheet.create({
     color: COLORS.muted,
     marginTop: 4,
     textAlign: 'center',
+  },
+  eventSectionHeader: {
+    marginTop: 18,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  eventHistoryHeader: {
+    marginTop: 26,
+  },
+  eventSectionTitle: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: '700',
+    color: COLORS.muted,
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
+  },
+  eventSectionCount: {
+    minWidth: 25,
+    textAlign: 'center',
+    fontSize: 12,
+    fontWeight: '700',
+    color: COLORS.orange,
+  },
+  eventEmpty: {
+    marginHorizontal: 16,
+    marginTop: 12,
+  },
+  eventCard: {
+    padding: 14,
+  },
+  eventCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  eventCityChip: {
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 7,
+    backgroundColor: 'rgba(232, 154, 60, 0.14)',
+  },
+  eventCityChipText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: COLORS.orange,
+  },
+  eventKind: {
+    flex: 1,
+    textAlign: 'right',
+    fontSize: 10,
+    color: COLORS.muted2,
+    textTransform: 'uppercase',
+  },
+  eventHeadline: {
+    marginTop: 10,
+    fontSize: 17,
+    lineHeight: 22,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  eventBody: {
+    marginTop: 6,
+    fontSize: 13,
+    lineHeight: 19,
+    color: COLORS.muted,
+  },
+  eventImpactBox: {
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: 'rgba(60, 184, 164, 0.09)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(60, 184, 164, 0.3)',
+  },
+  eventImpactText: {
+    fontSize: 11,
+    lineHeight: 17,
+    color: COLORS.teal,
+  },
+  eventTiming: {
+    marginTop: 9,
+    fontSize: 11,
+    color: COLORS.muted2,
+  },
+  eventPopup: {
+    padding: 20,
+    alignItems: 'stretch',
+  },
+  eventPopupScroll: {
+    maxHeight: '88%',
+  },
+  eventPopupIcon: {
+    alignSelf: 'center',
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    backgroundColor: 'rgba(232, 154, 60, 0.14)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  eventPopupEyebrow: {
+    marginTop: 12,
+    textAlign: 'center',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    color: COLORS.orange,
+  },
+  eventPopupTitle: {
+    marginTop: 7,
+    textAlign: 'center',
+    fontSize: 22,
+    lineHeight: 27,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  eventPopupCity: {
+    marginTop: 6,
+    textAlign: 'center',
+    fontSize: 12,
+    color: COLORS.muted2,
+  },
+  eventPopupBody: {
+    marginTop: 15,
+    fontSize: 14,
+    lineHeight: 21,
+    color: COLORS.muted,
+  },
+  eventPopupPrimary: {
+    marginTop: 16,
   },
   invRow: {
     flexDirection: 'row',
