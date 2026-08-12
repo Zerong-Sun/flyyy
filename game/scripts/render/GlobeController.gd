@@ -205,6 +205,7 @@ func _add_icosphere(st: SurfaceTool, radius: float, center: Vector3) -> void:
 
 func _spawn_airports() -> void:
 	for c in airports_root.get_children():
+		airports_root.remove_child(c)
 		c.queue_free()
 	_airport_nodes.clear()
 	_label_nodes.clear()
@@ -245,6 +246,12 @@ func _spawn_airports() -> void:
 		lab.modulate = Color(1, 0.95, 0.7)
 		airports_root.add_child(lab)
 		_label_nodes[a.airport_id] = lab
+	_update_markers()
+
+
+func refresh_marker_style() -> void:
+	## Re-apply marker colors and scale after accessibility settings change.
+	_update_markers()
 
 
 func _build_plane_marker() -> void:
