@@ -6,7 +6,6 @@ const EARTH_RADIUS := 10.0
 const GRID_RADIUS := 10.08
 const PIN_HEIGHT := 0.34
 const _CB = preload("res://themes/ColorBlindPalette.gd")
-const PIN_STATES := ["unvisited", "visited", "selected", "current"]
 
 signal airport_clicked(airport_id: String)
 
@@ -20,10 +19,7 @@ var _yaw := 0.5
 var _pitch := 0.3
 var _distance := 28.0
 var _dragging := false
-var _airport_positions: Dictionary = {}
-var _airport_transforms: Dictionary = {}
-var _pin_batches: Dictionary = {}
-var _pin_materials: Dictionary = {}
+var _airport_nodes: Dictionary = {}
 var _label_nodes: Dictionary = {}
 var _selected_id: String = ""
 var _routes_origin_id: String = ""
@@ -211,28 +207,23 @@ func _spawn_airports() -> void:
 	for c in airports_root.get_children():
 		airports_root.remove_child(c)
 		c.queue_free()
-	_airport_positions.clear()
-	_airport_transforms.clear()
-	_pin_batches.clear()
-	_pin_materials.clear()
+	_airport_nodes.clear()
 	_label_nodes.clear()
 	var pin_mesh := _make_pin_mesh()
-	for state in PIN_STATES:
-		var batch := MultiMeshInstance3D.new()
-		batch.name = "Pins_%s" % state.capitalize()
-		batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		var mat := _make_pin_material()
-		batch.material_override = mat
-		var multimesh := MultiMesh.new()
-		multimesh.transform_format = MultiMesh.TRANSFORM_3D
-		multimesh.mesh = pin_mesh
-		multimesh.instance_count = 0
-		batch.multimesh = multimesh
-		airports_root.add_child(batch)
-		_pin_batches[state] = batch
-		_pin_materials[state] = mat
 	for a in DataService.airports:
+		var mi := MeshInstance3D.new()
+		mi.mesh = pin_mesh
+		var mat := StandardMaterial3D.new()
+		mat.vertex_color_use_as_albedo = true
+		mat.albedo_color = Color(0.58, 0.60, 0.64)
+		mat.roughness = 0.35
+		mat.metallic = 0.25
+		mat.emission_enabled = true
+		mat.emission = Color(0.12, 0.13, 0.15)
+		mat.emission_energy_multiplier = 0.45
+		mi.material_override = mat
 		var pos := latlon_to_vec(float(a.latitude), float(a.longitude), EARTH_RADIUS + 0.015)
+		mi.position = pos
 		# Orient pin: local +Y points outward from globe
 		var outward := pos.normalized()
 		var tangent := Vector3.UP.cross(outward)
@@ -240,9 +231,11 @@ func _spawn_airports() -> void:
 			tangent = Vector3.RIGHT.cross(outward)
 		tangent = tangent.normalized()
 		var bitangent := outward.cross(tangent).normalized()
-		var airport_id := str(a.airport_id)
-		_airport_positions[airport_id] = pos
-		_airport_transforms[airport_id] = Transform3D(Basis(tangent, outward, bitangent), pos)
+		mi.basis = Basis(tangent, outward, bitangent)
+		mi.scale = Vector3.ONE * 0.92
+		mi.name = str(a.airport_id)
+		airports_root.add_child(mi)
+		_airport_nodes[a.airport_id] = mi
 		var lab := Label3D.new()
 		lab.text = str(a.get("iata", ""))
 		lab.font_size = 42
@@ -252,73 +245,13 @@ func _spawn_airports() -> void:
 		lab.visible = false
 		lab.modulate = Color(1, 0.95, 0.7)
 		airports_root.add_child(lab)
-		_label_nodes[airport_id] = lab
+		_label_nodes[a.airport_id] = lab
 	_update_markers()
 
 
 func refresh_marker_style() -> void:
-	## Re-apply shared state materials after accessibility settings change.
+	## Re-apply marker colors and scale after accessibility settings change.
 	_update_markers()
-
-
-func _make_pin_material() -> StandardMaterial3D:
-	var mat := StandardMaterial3D.new()
-	mat.vertex_color_use_as_albedo = true
-	mat.emission_enabled = true
-	return mat
-
-
-func _pin_state_for(airport_id: String) -> String:
-	if airport_id == AppState.current_airport_id:
-		return "current"
-	if airport_id == _selected_id:
-		return "selected"
-	if AppState.visited_airports.has(airport_id):
-		return "visited"
-	return "unvisited"
-
-
-func _pin_scale_for(state: String, color_blind: bool) -> float:
-	if not color_blind:
-		return 1.0
-	match state:
-		"current":
-			return _CB.SCALE_CURRENT
-		"selected":
-			return _CB.SCALE_SELECTED
-		"visited":
-			return _CB.SCALE_VISITED
-		_:
-			return _CB.SCALE_UNVISITED
-
-
-func _configure_pin_material(state: String, color_blind: bool) -> void:
-	var mat: StandardMaterial3D = _pin_materials[state]
-	match state:
-		"current":
-			mat.albedo_color = _CB.PIN_CURRENT if color_blind else Color(0.28, 0.88, 0.48)
-			mat.emission = _CB.EMISSION_CURRENT if color_blind else Color(0.08, 0.42, 0.18)
-			mat.emission_energy_multiplier = 0.9 if color_blind else 0.7
-			mat.metallic = 0.35
-			mat.roughness = 0.28
-		"selected":
-			mat.albedo_color = _CB.PIN_SELECTED if color_blind else Color(0.92, 0.48, 0.26)
-			mat.emission = _CB.EMISSION_SELECTED if color_blind else Color(0.5, 0.18, 0.06)
-			mat.emission_energy_multiplier = 0.9 if color_blind else 0.75
-			mat.metallic = 0.35
-			mat.roughness = 0.28
-		"visited":
-			mat.albedo_color = _CB.PIN_VISITED if color_blind else Color(0.92, 0.78, 0.28)
-			mat.emission = _CB.EMISSION_VISITED if color_blind else Color(0.48, 0.34, 0.06)
-			mat.emission_energy_multiplier = 0.7 if color_blind else 0.55
-			mat.metallic = 0.3
-			mat.roughness = 0.32
-		_:
-			mat.albedo_color = _CB.PIN_UNVISITED if color_blind else Color(0.58, 0.60, 0.64)
-			mat.emission = Color(0.12, 0.13, 0.15)
-			mat.emission_energy_multiplier = 0.45
-			mat.metallic = 0.25
-			mat.roughness = 0.35
 
 
 func _build_plane_marker() -> void:
@@ -455,26 +388,56 @@ func _kill_focus_tween() -> void:
 
 func _update_markers() -> void:
 	var cb := _CB.active()
-	var grouped := {}
-	for state in PIN_STATES:
-		grouped[state] = []
-		_configure_pin_material(state, cb)
-	for id in _airport_transforms.keys():
-		var state := _pin_state_for(id)
-		var base: Transform3D = _airport_transforms[id]
-		var scale := _pin_scale_for(state, cb)
-		var transform := Transform3D(base.basis.scaled(Vector3.ONE * scale), base.origin)
-		grouped[state].append(transform)
+	for id in _airport_nodes.keys():
+		var mi: MeshInstance3D = _airport_nodes[id]
+		var mat: StandardMaterial3D = mi.material_override
 		var lab: Label3D = _label_nodes.get(id)
 		var show_label: bool = id == _selected_id or id == AppState.current_airport_id
 		if lab:
 			lab.visible = show_label
-	for state in PIN_STATES:
-		var batch: MultiMeshInstance3D = _pin_batches[state]
-		var transforms: Array = grouped[state]
-		batch.multimesh.instance_count = transforms.size()
-		for i in transforms.size():
-			batch.multimesh.set_instance_transform(i, transforms[i])
+		if id == AppState.current_airport_id:
+			mi.scale = Vector3.ONE * (_CB.SCALE_CURRENT if cb else 1.0)
+			if cb:
+				mat.albedo_color = _CB.PIN_CURRENT
+				mat.emission = _CB.EMISSION_CURRENT
+				mat.emission_energy_multiplier = 0.9
+			else:
+				mat.albedo_color = Color(0.28, 0.88, 0.48)
+				mat.emission = Color(0.08, 0.42, 0.18)
+				mat.emission_energy_multiplier = 0.7
+			mat.metallic = 0.35
+			mat.roughness = 0.28
+		elif id == _selected_id:
+			mi.scale = Vector3.ONE * (_CB.SCALE_SELECTED if cb else 1.0)
+			if cb:
+				mat.albedo_color = _CB.PIN_SELECTED
+				mat.emission = _CB.EMISSION_SELECTED
+				mat.emission_energy_multiplier = 0.9
+			else:
+				mat.albedo_color = Color(0.92, 0.48, 0.26)
+				mat.emission = Color(0.5, 0.18, 0.06)
+				mat.emission_energy_multiplier = 0.75
+			mat.metallic = 0.35
+			mat.roughness = 0.28
+		elif AppState.visited_airports.has(id):
+			mi.scale = Vector3.ONE * (_CB.SCALE_VISITED if cb else 1.0)
+			if cb:
+				mat.albedo_color = _CB.PIN_VISITED
+				mat.emission = _CB.EMISSION_VISITED
+				mat.emission_energy_multiplier = 0.7
+			else:
+				mat.albedo_color = Color(0.92, 0.78, 0.28)
+				mat.emission = Color(0.48, 0.34, 0.06)
+				mat.emission_energy_multiplier = 0.55
+			mat.metallic = 0.3
+			mat.roughness = 0.32
+		else:
+			mi.scale = Vector3.ONE * (_CB.SCALE_UNVISITED if cb else 1.0)
+			mat.albedo_color = Color(0.58, 0.60, 0.64)
+			mat.emission = Color(0.12, 0.13, 0.15)
+			mat.emission_energy_multiplier = 0.45
+			mat.metallic = 0.25
+			mat.roughness = 0.35
 
 
 func clear_routes() -> void:
@@ -603,14 +566,14 @@ func _pick_nearest_airport_id() -> String:
 	var dir := cam.project_ray_normal(mouse)
 	var best_id := ""
 	var best_dist := 0.30
-	for id in _airport_positions.keys():
-		var pin_position := airports_root.to_global(_airport_positions[id])
-		var to_point := pin_position - from
+	for id in _airport_nodes.keys():
+		var mi: MeshInstance3D = _airport_nodes[id]
+		var to_point := mi.global_position - from
 		var proj := to_point.dot(dir)
 		if proj < 0:
 			continue
 		var closest := from + dir * proj
-		var d := closest.distance_to(pin_position)
+		var d := closest.distance_to(mi.global_position)
 		if d < best_dist:
 			best_dist = d
 			best_id = id

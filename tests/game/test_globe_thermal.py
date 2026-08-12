@@ -1,4 +1,4 @@
-"""Regression gates for desktop globe thermal optimizations."""
+"""Regression gates for desktop runtime thermal settings."""
 from pathlib import Path
 
 
@@ -9,36 +9,40 @@ HUD = ROOT / "game/scripts/ui/MainHUD.gd"
 SMOKE = ROOT / "game/scripts/dev/SmokePerf.gd"
 
 
-def test_runtime_is_vsynced_and_capped_at_60_fps():
+def test_runtime_is_not_explicitly_unsynced_and_is_capped_at_60_fps():
     project = PROJECT.read_text(encoding="utf-8")
     assert "run/max_fps=60" in project
-    assert "window/vsync/vsync_mode=1" in project
+    # Godot omits default-valued settings when saving project.godot. VSync's
+    # default is enabled, so absence is valid; only an explicit 0 disables it.
+    assert "window/vsync/vsync_mode=0" not in project
 
 
-def test_airport_pins_use_four_shadowless_multimesh_batches():
+def test_airport_pins_use_the_original_individual_mesh_nodes():
     globe = GLOBE.read_text(encoding="utf-8")
-    assert 'const PIN_STATES := ["unvisited", "visited", "selected", "current"]' in globe
-    assert "MultiMeshInstance3D.new()" in globe
-    assert "SHADOW_CASTING_SETTING_OFF" in globe
-    assert "_pin_materials[state] = mat" in globe
-    assert "MeshInstance3D.new()\n\t\tmi.mesh = pin_mesh" not in globe
+    assert "var _airport_nodes: Dictionary = {}" in globe
+    assert "var mi := MeshInstance3D.new()\n\t\tmi.mesh = pin_mesh" in globe
+    assert "_airport_nodes[a.airport_id] = mi" in globe
+    assert "airports_root.remove_child(c)\n\t\tc.queue_free()" in globe
+    for batched_marker in (
+        "PIN_STATES",
+        "MultiMeshInstance3D",
+        "_pin_batches",
+        "_pin_materials",
+    ):
+        assert batched_marker not in globe
 
 
-def test_accessibility_palette_refreshes_shared_materials_immediately():
+def test_accessibility_palette_refreshes_individual_pins_immediately():
     globe = GLOBE.read_text(encoding="utf-8")
     hud = HUD.read_text(encoding="utf-8")
     assert "func refresh_marker_style()" in globe
     assert "globe.refresh_marker_style()" in hud
 
 
-def test_performance_smoke_guards_batching_and_runtime_config():
+def test_performance_smoke_guards_runtime_config():
     smoke = SMOKE.read_text(encoding="utf-8")
     for marker in (
         'ProjectSettings.get_setting("application/run/max_fps"',
         'ProjectSettings.get_setting("display/window/vsync/vsync_mode"',
-        "batch_count != 4",
-        "pin_mesh_ids.size() != 1",
-        "pin_material_ids.size() != 4",
-        "SHADOW_CASTING_SETTING_OFF",
     ):
         assert marker in smoke
