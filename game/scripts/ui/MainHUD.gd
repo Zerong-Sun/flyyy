@@ -361,12 +361,24 @@ func _build_ui() -> void:
 	var ngv := VBoxContainer.new()
 	ngv.add_theme_constant_override("separation", 12)
 	_new_game_panel.add_child(ngv)
+	var brand_row := HBoxContainer.new()
+	brand_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	brand_row.add_theme_constant_override("separation", 10)
+	ngv.add_child(brand_row)
+	var brand_tex := _IconFactory.get_brand("logo")
+	if brand_tex:
+		var brand := TextureRect.new()
+		brand.texture = brand_tex
+		brand.custom_minimum_size = Vector2(48, 48)
+		brand.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		brand.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		brand_row.add_child(brand)
 	var title := Label.new()
 	title.text = I18nService.t("ui.new_game.game_title")
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 30)
 	title.add_theme_color_override("font_color", _Colors.ICE)
-	ngv.add_child(title)
+	brand_row.add_child(title)
 	var intro := Label.new()
 	intro.text = I18nService.t("ui.new_game.intro")
 	intro.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -3304,6 +3316,7 @@ func _toggle_pause() -> void:
 		var idx := order.find(AppState.color_blind)
 		var nxt: String = order[(idx + 1) % order.size()]
 		AppState.color_blind = nxt
+		globe.refresh_marker_style()
 		_toggle_pause()
 	)
 	v.add_child(cb_btn)

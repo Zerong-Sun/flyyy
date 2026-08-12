@@ -37,11 +37,10 @@ CITIES = CONTENT / "cities"
 FACTS_PATH = CONTENT / "wikidata_facts.json"
 GAME_DATA = ROOT.parents[0] / "game" / "data"
 
-try:
-    from opencc import OpenCC
-    _t2s = OpenCC("t2s").convert
-except Exception:  # pragma: no cover
-    _t2s = lambda s: s  # noqa: E731
+# Keep authored output independent of optional packages installed in the active
+# Python environment. The checked-in Wikidata labels are preserved verbatim;
+# curated country names below still provide the intended simplified Chinese.
+_t2s = lambda s: s  # noqa: E731
 
 FILLER_MARKERS = ("更多细节将在后续更新中扩展", "更多细节将在后续内容更新中扩展",
                   "旅客可在此采购特色商品", "城市作为全球航线节点",
