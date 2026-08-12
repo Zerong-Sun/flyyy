@@ -28,16 +28,26 @@ import {
   imports,
   intel,
   locals,
+  marketPriceAt,
   money,
   pad,
-  priceAt,
   priceSparkline,
   destinationsFrom,
   routesFrom,
   sellData,
   sortByDestProfit,
+  visibleFlightBoard,
   waitUntilDep,
 } from '../gameLogic';
+import { EVENT_BY_ID } from '../eventData';
+import {
+  activeEvents,
+  eventGameDay,
+  eventImpactText,
+  localizedEvent,
+  quoteFlightForEvents,
+  unseenArrivalEvent,
+} from '../eventLogic';
 import { playSfx } from '../audio';
 import { f as i18nF, t as i18nT } from '../i18n';
 import {
@@ -100,6 +110,10 @@ const initialState = () => ({
   locale: 'en',
   fontScale: 1,
   colorBlind: 'off',
+  eventSeed: `run:${Date.now()}:${Math.random().toString(36).slice(2, 10)}`,
+  seenEventEpisodes: [],
+  eventPopup: null,
+  eventReturnSheet: null,
 });
 
 function unlockedIds(stats, unlocked = []) {
@@ -292,6 +306,21 @@ export function useGame() {
       if (!s.ticket || s.ticket.toId !== ticket.toId) return s;
       const visited = s.visited.includes(ticket.toId) ? s.visited : [...s.visited, ticket.toId];
       const hasInv = s.inv.length > 0;
+      const arrivalGameMin = s.gameMin + s.minsToDep + ticket.mins;
+      const arrivalEvent = unseenArrivalEvent(
+        activeEvents(arrivalGameMin, s.eventSeed),
+        ticket.toId,
+        s.seenEventEpisodes || [],
+      );
+      const showEvent = !!arrivalEvent;
+      const seenEventEpisodes = showEvent
+        ? [{
+          episodeKey: arrivalEvent.episodeKey,
+          eventId: arrivalEvent.id,
+          startDay: arrivalEvent.startDay,
+          seenAt: arrivalGameMin,
+        }].concat(s.seenEventEpisodes || []).slice(0, 100)
+        : (s.seenEventEpisodes || []);
       const entry = {
         icon: 'assets/ic_flight.webp',
         title: stF(s, 'log.landed', { name: stT(s, `city.${ticket.toId}`, to.name) }, `Landed in ${to.name}`),
@@ -301,7 +330,7 @@ export function useGame() {
         }, `${ticket.no} · ${ticket.km.toLocaleString('en-US')} km`),
         amount: '',
         color: '#A8B8C8',
-        t: s.gameMin + s.minsToDep + ticket.mins,
+        t: arrivalGameMin,
       };
       const next = {
         ...s,
@@ -319,11 +348,14 @@ export function useGame() {
         focusDest: '',
         visited,
         log: [entry].concat(s.log).slice(0, 40),
-        gameMin: s.gameMin + s.minsToDep + ticket.mins,
+        gameMin: arrivalGameMin,
         legs: s.legs + 1,
         km: s.km + ticket.km,
         bizLegs: s.bizLegs + (ticket.cabin === 'business' ? 1 : 0),
-        sheet: hasInv ? 'sell' : null,
+        sheet: showEvent ? 'event' : (hasInv ? 'sell' : null),
+        eventPopup: showEvent ? arrivalEvent : null,
+        eventReturnSheet: showEvent && hasInv ? 'sell' : null,
+        seenEventEpisodes,
         overweightNote: overweightKg > 0
           ? stF(s, 'msg.overweight_note', { n: overweightKg.toFixed(1) }, `Carry-on over by ${overweightKg.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`)
           : '',
@@ -463,7 +495,38 @@ export function useGame() {
     state.visited, state.legs, state.profitable, state.bizLegs,
     state.cargoLots, state.cash, state.profit,
   ]);
-  const sell = useMemo(() => sellData(state.inv, state.city, loc), [state.inv, state.city, loc]);
+  const worldEventDay = eventGameDay(state.gameMin);
+  const worldEvents = useMemo(
+    () => activeEvents(worldEventDay * 1440, state.eventSeed),
+    [worldEventDay, state.eventSeed],
+  );
+  const currentEvents = useMemo(() => worldEvents
+    .map((event) => ({
+      ...localizedEvent(event, loc),
+      impactText: eventImpactText(event, loc),
+    }))
+    .sort((a, b) => (a.cityId === state.city ? -1 : b.cityId === state.city ? 1 : a.cityId.localeCompare(b.cityId))),
+  [worldEvents, loc, state.city]);
+  const eventHistory = useMemo(() => (state.seenEventEpisodes || [])
+    .map((row) => {
+      const event = EVENT_BY_ID[row.eventId];
+      if (!event) return null;
+      return {
+        ...localizedEvent(event, loc),
+        ...row,
+        seenDay: eventGameDay(row.seenAt),
+        impactText: eventImpactText(event, loc),
+      };
+    })
+    .filter(Boolean), [state.seenEventEpisodes, loc]);
+  const popupEvent = useMemo(() => (state.eventPopup ? {
+    ...localizedEvent(state.eventPopup, loc),
+    impactText: eventImpactText(state.eventPopup, loc),
+  } : null), [state.eventPopup, loc]);
+  const sell = useMemo(
+    () => sellData(state.inv, state.city, loc, worldEvents),
+    [state.inv, state.city, loc, worldEvents],
+  );
 
   const setTab = useCallback((tab) => {
     markInteracted();
@@ -522,6 +585,18 @@ export function useGame() {
   const closeSheet = useCallback(() => setState((s) => ({
     ...s, sheet: null, selInv: null, invQty: 1, overweightNote: s.sheet === 'sell' ? '' : s.overweightNote,
   })), []);
+  const dismissEvent = useCallback((openMarket = false) => {
+    markInteracted();
+    setState((s) => ({
+      ...s,
+      sheet: openMarket ? null : (s.eventReturnSheet || null),
+      tab: openMarket ? 'market' : s.tab,
+      page: openMarket ? null : s.page,
+      seg: openMarket ? 'local' : s.seg,
+      eventPopup: null,
+      eventReturnSheet: null,
+    }));
+  }, [markInteracted]);
   const startGame = useCallback(() => {
     markInteracted();
     setState((s) => ({ ...s, intro: false }));
@@ -558,9 +633,15 @@ export function useGame() {
     ...s, sheet: 'product', selId: id, qty: 1, slot: 'bag',
   })), []);
 
-  const openFlight = useCallback((fl) => setState((s) => ({
-    ...s, sheet: 'flight', selFlight: fl, cabin: 'economy', addon: '',
-  })), []);
+  const openFlight = useCallback((fl) => {
+    if (!fl || fl.eventUnavailable) {
+      buzz(tr('msg.event_flight_unavailable', 'This service is unavailable during the current event.'), 'bad');
+      return;
+    }
+    setState((s) => ({
+      ...s, sheet: 'flight', selFlight: fl, cabin: 'economy', addon: '',
+    }));
+  }, [buzz, tr]);
 
   const openFF = useCallback(() => {
     if (!stateRef.current.ticket) return;
@@ -628,7 +709,7 @@ export function useGame() {
       if (!p) return st;
       const n = st.qty;
       const slot = st.slot;
-      const unit = priceAt(p.id, st.city);
+      const unit = marketPriceAt(p.id, st.city, 'buy', activeEvents(st.gameMin, st.eventSeed));
       const cost = unit * n;
       const wt = p.w * n;
       if (cost > st.cash) {
@@ -697,8 +778,17 @@ export function useGame() {
         result = { ok: false, msg: stT(st, 'msg.cancel_ticket_first', 'Cancel your current ticket first'), kind: 'bad' };
         return st;
       }
-      const fl = st.selFlight;
+      const fl = quoteFlightForEvents(
+        st.selFlight,
+        st.city,
+        activeEvents(st.gameMin, st.eventSeed),
+        st.eventSeed,
+      );
       if (!fl) return st;
+      if (fl.eventUnavailable) {
+        result = { ok: false, msg: stT(st, 'msg.event_flight_unavailable', 'This service is unavailable during the current event.'), kind: 'bad' };
+        return { ...st, sheet: null, selFlight: null };
+      }
       const add = ADDONS.find((a) => a.k === st.addon) || ADDONS[0];
       const total = (st.cabin === 'economy' ? fl.econ : fl.biz) + add.price;
       if (total > st.cash) {
@@ -756,7 +846,7 @@ export function useGame() {
     let result = null;
     setState((s) => {
       if (!s.inv.length) return s;
-      const d = sellData(s.inv, s.city, s.locale);
+      const d = sellData(s.inv, s.city, s.locale, activeEvents(s.gameMin, s.eventSeed));
       const here = CITIES[s.city];
       const entry = {
         icon: 'assets/ic_market.webp',
@@ -801,7 +891,7 @@ export function useGame() {
       if (idx < 0) return s;
       const item = s.inv[idx];
       const qty = Math.min(Math.max(1, n || s.invQty), item.n);
-      const unit = priceAt(item.id, s.city);
+      const unit = marketPriceAt(item.id, s.city, 'sell', activeEvents(s.gameMin, s.eventSeed));
       const gross = unit * qty;
       const net = gross - item.cost * qty;
       const inv = s.inv.slice();
@@ -986,13 +1076,13 @@ export function useGame() {
 
   const productRows = useMemo(() => {
     const baseIds = state.seg === 'local' ? localIds : importIds;
-    const ids = destId ? sortByDestProfit(baseIds, state.city, destId) : baseIds;
+    const ids = destId ? sortByDestProfit(baseIds, state.city, destId, worldEvents) : baseIds;
     return ids.map((id) => {
       const q = PRODUCTS[id];
-      const unit = priceAt(id, state.city);
-      const tag = intel(id, state.city, destId, loc);
-      const spark = priceSparkline(id, state.city, 5);
-      const destPrice = destId ? priceAt(id, destId) : null;
+      const unit = marketPriceAt(id, state.city, 'buy', worldEvents);
+      const tag = intel(id, state.city, destId, loc, worldEvents);
+      const spark = priceSparkline(id, state.city, 5, worldEvents);
+      const destPrice = destId ? marketPriceAt(id, destId, 'sell', worldEvents) : null;
       const cat = i18nT(loc, `cat.${q.category}`, q.category);
       const name = i18nT(loc, `prod.${id}`, q.name);
       const isLocal = q.home === state.city;
@@ -1012,22 +1102,29 @@ export function useGame() {
         spark,
       };
     });
-  }, [state.seg, state.city, destId, loc, localIds, importIds]);
+  }, [state.seg, state.city, destId, loc, localIds, importIds, worldEvents]);
 
   const sortedFlights = useMemo(() => {
     const localNow = ((cityMinutes(state.gameMin, state.city) % 1440) + 1440) % 1440;
+    const quotedRoutes = routes.map((route) => quoteFlightForEvents(
+      route,
+      state.city,
+      worldEvents,
+      state.eventSeed,
+    ));
     // True next departure by local clock (independent of focus / filter order).
-    const nextKey = [...routes]
-      .filter((f) => f.depMin >= localNow)
+    const nextKey = [...quotedRoutes]
+      .filter((f) => !f.eventUnavailable && f.depMin >= localNow)
       .sort((a, b) => a.depMin - b.depMin)[0];
     const nextId = nextKey ? `${nextKey.no}-${nextKey.toId}-${nextKey.depMin}` : null;
 
-    let list = [...routes].sort((a, b) => {
+    const sorted = [...quotedRoutes].sort((a, b) => {
       if (state.focusDest) {
         const af = a.toId === state.focusDest ? 0 : 1;
         const bf = b.toId === state.focusDest ? 0 : 1;
         if (af !== bf) return af - bf;
       }
+      if (!!a.eventUnavailable !== !!b.eventUnavailable) return a.eventUnavailable ? 1 : -1;
       const ap = a.depMin < localNow ? 1 : 0;
       const bp = b.depMin < localNow ? 1 : 0;
       if (ap !== bp) return ap - bp;
@@ -1040,7 +1137,11 @@ export function useGame() {
       }
       if (state.filter === 'biz') return a.biz - b.biz;
       return a.depMin - b.depMin;
-    }).slice(0, 12);
+    });
+    // Preserve the existing 12-service board for normal traffic, then append
+    // every event-cancelled service so cancellations remain visible and
+    // explainable instead of silently disappearing behind the list cap.
+    const list = visibleFlightBoard(sorted, 12);
 
     return list.map((fl) => {
       const past = fl.depMin < localNow;
@@ -1063,7 +1164,7 @@ export function useGame() {
         isNext: key === nextId,
       };
     });
-  }, [routes, state.filter, state.visited, state.focusDest, state.opt24h, state.gameMin, state.city, loc]);
+  }, [routes, state.filter, state.visited, state.focusDest, state.opt24h, state.gameMin, state.city, state.eventSeed, loc, worldEvents]);
 
   const q = state.query.trim().toLowerCase();
   const searchResults = q
@@ -1088,7 +1189,8 @@ export function useGame() {
     : [];
 
   const selProduct = state.selId ? PRODUCTS[state.selId] : null;
-  const unitHere = selProduct ? priceAt(selProduct.id, state.city) : 0;
+  const unitHere = selProduct ? marketPriceAt(selProduct.id, state.city, 'buy', worldEvents) : 0;
+  const sellUnitHere = selProduct ? marketPriceAt(selProduct.id, state.city, 'sell', worldEvents) : 0;
   const costTotal = unitHere * state.qty;
   const wtTotal = selProduct ? selProduct.w * state.qty : 0;
   const slotUsed = state.slot === 'bag' ? bagKg : cargoKg;
@@ -1103,16 +1205,19 @@ export function useGame() {
   const add = addons.find((a) => a.k === state.addon) || addons[0];
   const addonKg = add.k === 'light' ? 10 : add.k === 'standard' ? 20 : add.k === 'heavy' ? 50 : 0;
   const bookingBagLimit = state.ticket ? state.bagLimit : DEFAULT_BAG_LIMIT + addonKg;
-  const fareTotal = state.selFlight
-    ? (state.cabin === 'economy' ? state.selFlight.econ : state.selFlight.biz) + add.price
+  const selFlight = state.selFlight
+    ? quoteFlightForEvents(state.selFlight, state.city, worldEvents, state.eventSeed)
+    : null;
+  const fareTotal = selFlight
+    ? (state.cabin === 'economy' ? selFlight.econ : selFlight.biz) + add.price
     : 0;
-  const canBook = !!state.selFlight && !state.ticket && fareTotal <= state.cash;
+  const canBook = !!selFlight && !selFlight.eventUnavailable && !state.ticket && fareTotal <= state.cash;
   const bagOverKg = Math.max(0, bagKg - bookingBagLimit);
   const selInvItem = (() => {
     const idx = findInv(state.inv, state.selInv);
     return idx >= 0 ? state.inv[idx] : null;
   })();
-  const invUnit = selInvItem ? priceAt(selInvItem.id, state.city) : 0;
+  const invUnit = selInvItem ? marketPriceAt(selInvItem.id, state.city, 'sell', worldEvents) : 0;
   const invGross = selInvItem ? invUnit * state.invQty : 0;
 
   const achievements = useMemo(() => ACHIEVEMENTS.map((a) => ({
@@ -1143,6 +1248,9 @@ export function useGame() {
     bagOverKg,
     stats,
     sell,
+    currentEvents,
+    eventHistory,
+    popupEvent,
     productRows,
     sortedFlights,
     routes,
@@ -1163,10 +1271,12 @@ export function useGame() {
     addons,
     noteText,
     selProduct,
+    selFlight,
     selInvItem,
     invUnit,
     invGross,
     unitHere,
+    sellUnitHere,
     costTotal,
     wtTotal,
     over,
@@ -1179,7 +1289,8 @@ export function useGame() {
     hm: (m) => hm(m, loc),
     hhmm,
     money,
-    priceAt,
+    priceAt: (pid, cityId, side = 'sell') => marketPriceAt(pid, cityId, side, worldEvents),
+    marketIntel: (pid, cityId, destinationId) => intel(pid, cityId, destinationId, loc, worldEvents),
     setTab,
     setPage,
     setSeg,
@@ -1196,6 +1307,7 @@ export function useGame() {
     setFontScale,
     cycleColorBlind,
     closeSheet,
+    dismissEvent,
     startGame,
     openProduct,
     openFlight,

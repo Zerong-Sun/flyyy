@@ -1,4 +1,5 @@
 import { AIRLINE, CIDS, CITIES, FLIGHTS, PRODUCTS, PRODUCT_IDS } from './gameData.js';
+import { eventAdjustedPrice } from './eventLogic.js';
 import { f, t } from './i18n.js';
 
 const FACTORS = [1.58, 1.41, 1.24, 1.08, 0.95, 0.82];
@@ -73,6 +74,11 @@ export function priceAt(pid, city) {
   return Math.round(PRODUCTS[pid].base * factorFor(pid, city));
 }
 
+/** Runtime market quote with optional active city events applied. */
+export function marketPriceAt(pid, city, side = 'buy', events = []) {
+  return eventAdjustedPrice(priceAt(pid, city), pid, city, side, events);
+}
+
 /** One generated departure; idx spaces repeat services across the day. */
 function legFor(cid, k, idx) {
   const A = CITIES[cid];
@@ -135,6 +141,12 @@ export function destinationsFrom(cid) {
   return routesFrom(cid).reduce((a, r) => (a.indexOf(r.toId) < 0 ? a.concat([r.toId]) : a), []);
 }
 
+/** Keep the normal compact board while retaining every event-cancelled row. */
+export function visibleFlightBoard(sortedFlights, normalLimit = 12) {
+  const limit = Math.max(0, Math.floor(normalLimit));
+  return (sortedFlights || []).filter((flight, index) => index < limit || flight.eventUnavailable);
+}
+
 export function bagUsed(inv) {
   return inv.filter((i) => i.slot === 'bag').reduce((a, i) => a + i.w * i.n, 0);
 }
@@ -165,11 +177,11 @@ export function imports(cityId) {
     .slice(0, 6);
 }
 
-export function sellData(inv, cityId, locale = 'en') {
+export function sellData(inv, cityId, locale = 'en', events = []) {
   let gross = 0;
   let cost = 0;
   const rows = inv.map((i) => {
-    const u = priceAt(i.id, cityId);
+    const u = marketPriceAt(i.id, cityId, 'sell', events);
     const g = u * i.n;
     const c = i.cost * i.n;
     gross += g;
@@ -187,10 +199,10 @@ export function sellData(inv, cityId, locale = 'en') {
   return { rows, gross, net: gross - cost };
 }
 
-export function intel(pid, cityId, destId, locale = 'en') {
-  const here = priceAt(pid, cityId);
+export function intel(pid, cityId, destId, locale = 'en', events = []) {
+  const here = marketPriceAt(pid, cityId, 'buy', events);
   if (destId) {
-    const tp = priceAt(pid, destId);
+    const tp = marketPriceAt(pid, destId, 'sell', events);
     const pct = Math.round((tp / here - 1) * 100);
     const cn = t(locale, `city.${destId}`, CITIES[destId].name);
     if (pct >= 25) return { text: f(locale, 'market.intel_hot', { pct, city: cn }, `+${pct}% in ${cn}`), kind: 'hot' };
@@ -200,7 +212,7 @@ export function intel(pid, cityId, destId, locale = 'en') {
   }
   let best = null;
   destinationsFrom(cityId).forEach((toId) => {
-    const tp = priceAt(pid, toId);
+    const tp = marketPriceAt(pid, toId, 'sell', events);
     if (!best || tp > best.p) best = { p: tp, c: t(locale, `city.${toId}`, CITIES[toId].name) };
   });
   if (best && best.p > here * 1.2) return { text: f(locale, 'market.intel_best', { city: best.c, price: money(best.p) }, `Best: ${best.c} ${money(best.p)}`), kind: 'best' };
@@ -271,8 +283,8 @@ export function mergeInvCost(prevCost, prevN, unit, n) {
  * Stable fake price history (3–5 points) ending at current local price.
  * Not real market data — for sparkline UI only.
  */
-export function priceSparkline(pid, cityId, points = 5) {
-  const now = priceAt(pid, cityId);
+export function priceSparkline(pid, cityId, points = 5, events = []) {
+  const now = marketPriceAt(pid, cityId, 'buy', events);
   const n = Math.max(3, Math.min(5, points));
   const out = [];
   for (let i = 0; i < n; i += 1) {
@@ -285,11 +297,11 @@ export function priceSparkline(pid, cityId, points = 5) {
 }
 
 /** Sort product ids by profit uplift to dest (desc). */
-export function sortByDestProfit(ids, fromCity, destId) {
+export function sortByDestProfit(ids, fromCity, destId, events = []) {
   if (!destId) return ids.slice();
   return ids.slice().sort((a, b) => {
-    const da = priceAt(a, destId) - priceAt(a, fromCity);
-    const db = priceAt(b, destId) - priceAt(b, fromCity);
+    const da = marketPriceAt(a, destId, 'sell', events) - marketPriceAt(a, fromCity, 'buy', events);
+    const db = marketPriceAt(b, destId, 'sell', events) - marketPriceAt(b, fromCity, 'buy', events);
     return db - da;
   });
 }

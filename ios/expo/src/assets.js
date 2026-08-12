@@ -86,6 +86,7 @@ const ASSETS = {
   'assets/ic_economy.webp': require('../../assets/ic_economy.webp'),
   'assets/ic_business.webp': require('../../assets/ic_business.webp'),
   'assets/ic_fast_forward.webp': require('../../assets/ic_fast_forward.webp'),
+  'assets/ic_warning.webp': require('../../assets/ic_warning.webp'),
   'assets/ic_attr.webp': require('../../assets/ic_attr.webp'),
   'assets/ic_save.webp': require('../../assets/ic_save.webp'),
   'assets/ach_first_city.webp': require('../../assets/ach_first_city.webp'),

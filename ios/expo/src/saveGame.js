@@ -3,8 +3,10 @@
  * Used by useGame and Node unit tests.
  */
 
+import { EVENT_BY_ID } from './eventData.js';
+
 export const SAVE_KEY = 'wanli-trader/slot-1';
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 export const PERSIST = [
   'cash', 'bagLimit', 'cargoCap', 'inv', 'ticket', 'minsToDep', 'gameMin',
@@ -14,6 +16,7 @@ export const PERSIST = [
   'locale',
   'fontScale', 'colorBlind',
   'rep', 'level',
+  'eventSeed', 'seenEventEpisodes',
 ];
 
 /** Chain upgrades from stored version up to SAVE_VERSION. */
@@ -31,7 +34,14 @@ export function migrateSave(raw, targetVersion = SAVE_VERSION) {
     ver = 1;
   }
 
-  // Future: if (ver < 2) { …; ver = 2; }
+  // v1 → v2: seed event rolls without discarding existing progress and start a
+  // clean encounter history. The derived legacy seed remains stable thereafter.
+  if (ver < 2) {
+    data.eventSeed = data.eventSeed
+      || `legacy:${data.city || 'unknown'}:${Number(data.gameMin || 0)}:${Number(data.savedAt || 0)}`;
+    data.seenEventEpisodes = [];
+    ver = 2;
+  }
 
   data.saveVersion = ver;
   return { ok: true, reason: 'ok', version: ver, data };
@@ -53,6 +63,29 @@ export function hydrateSave(baseState, migrated, cities, startingCity) {
   if (!Array.isArray(next.visited)) next.visited = [startingCity];
   if (!Array.isArray(next.log)) next.log = [];
   if (!Array.isArray(next.unlockedAch)) next.unlockedAch = [];
+  if (typeof next.eventSeed !== 'string' || !next.eventSeed.trim()) {
+    next.eventSeed = String(baseState.eventSeed || 'legacy-default');
+  }
+  next.eventSeed = next.eventSeed.trim().slice(0, 128);
+  if (!Array.isArray(next.seenEventEpisodes)) next.seenEventEpisodes = [];
+  const seenKeys = new Set();
+  const sanitizedEpisodes = [];
+  next.seenEventEpisodes.forEach((row) => {
+    if (sanitizedEpisodes.length >= 100) return;
+    if (!row || typeof row !== 'object' || !EVENT_BY_ID[row.eventId]) return;
+    if (!Number.isInteger(row.startDay) || row.startDay < 0) return;
+    const episodeKey = `${row.eventId}|${row.startDay}`;
+    if (seenKeys.has(episodeKey)) return;
+    seenKeys.add(episodeKey);
+    const seenAt = Number(row.seenAt);
+    sanitizedEpisodes.push({
+      eventId: row.eventId,
+      startDay: row.startDay,
+      episodeKey,
+      seenAt: Number.isFinite(seenAt) && seenAt >= 0 ? seenAt : 0,
+    });
+  });
+  next.seenEventEpisodes = sanitizedEpisodes;
   if (next.rep == null) next.rep = 0;
   if (next.level == null) next.level = 1;
   // Drop focus / ticket legs that point at unknown hubs (corrupt or downsized saves).

@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { CITIES } from '../gameData';
-import { money, tagColor, intel } from '../gameLogic';
+import { money, tagColor } from '../gameLogic';
 import { assetSource } from '../assets';
 import { COLORS } from '../theme';
 import {
@@ -177,14 +177,17 @@ export function FlightsScreen({ game }) {
         {sortedFlights.map((f) => (
           <Pressable
             key={`${f.no}-${f.toId}-${f.depMin}`}
+            disabled={f.eventUnavailable}
             style={({ pressed }) => [
               styles.flightCard,
               f.focused && styles.flightCardFocused,
               f.past && styles.flightCardPast,
+              f.eventUnavailable && styles.flightCardUnavailable,
               pressed && styles.rowPressed,
             ]}
             onPress={() => openFlight(f)}
             accessibilityRole="button"
+            accessibilityState={{ disabled: !!f.eventUnavailable }}
             accessibilityLabel={tf('flight.a11y', {
               no: f.no,
               to: f.toName,
@@ -204,6 +207,20 @@ export function FlightsScreen({ game }) {
               {f.past ? (
                 <View style={styles.tomorrowChip}>
                   <Text style={styles.tomorrowChipText}>{t('flight.tomorrow', 'Tomorrow')}</Text>
+                </View>
+              ) : null}
+              {f.eventUnavailable ? (
+                <View style={styles.eventUnavailableChip}>
+                  <Text style={styles.eventUnavailableText}>{t('flight.event_unavailable', 'Event · unavailable')}</Text>
+                </View>
+              ) : f.eventIds?.length ? (
+                <View style={styles.eventFareChip}>
+                  <Text style={styles.eventFareText}>
+                    {tf('flight.event_fare', {
+                      pct: Math.abs(Math.round((f.eventFareMult - 1) * 100)),
+                      sign: Math.round((f.eventFareMult - 1) * 100) >= 0 ? '+' : '−',
+                    }, `Event ${Math.round((f.eventFareMult - 1) * 100) >= 0 ? '+' : '−'}${Math.abs(Math.round((f.eventFareMult - 1) * 100))}%`)}
+                  </Text>
                 </View>
               ) : null}
               {f.focused ? (
@@ -252,7 +269,9 @@ export function MarketSheets({ game }) {
     city,
     destId,
     selProduct,
+    selFlight,
     unitHere,
+    sellUnitHere,
     costTotal,
     wtTotal,
     over,
@@ -264,6 +283,7 @@ export function MarketSheets({ game }) {
     bagOverKg,
     money,
     priceAt,
+    marketIntel,
     closeSheet,
     setQty,
     setSlot,
@@ -273,16 +293,14 @@ export function MarketSheets({ game }) {
     buyTicket,
     add,
     addons,
-    locale,
     t,
     tf,
   } = game;
 
-  const selFlight = state.selFlight;
   const forecast = selProduct
     ? (destId ? money(priceAt(selProduct.id, destId)) : t('sheet.pick_dest', '— pick a destination'))
     : '';
-  const selIntel = selProduct ? intel(selProduct.id, state.city, destId, locale) : { kind: '' };
+  const selIntel = selProduct ? marketIntel(selProduct.id, state.city, destId) : { kind: '' };
   const selCat = selProduct ? t(`cat.${selProduct.category}`, selProduct.category) : '';
 
   return (
@@ -308,7 +326,7 @@ export function MarketSheets({ game }) {
               <View style={styles.priceCell}>
                 <Text style={styles.priceLabel}>{t('sheet.sells_here', 'Sells here')}</Text>
                 <Text style={[styles.priceVal, styles.priceMuted]}>
-                  {money(unitHere)}
+                  {money(sellUnitHere)}
                 </Text>
               </View>
               <View style={[styles.priceCell, { flex: 1.2 }]}>
@@ -378,6 +396,16 @@ export function MarketSheets({ game }) {
                 <Text style={styles.sheetCity}>{t(`city.${selFlight.toId}`, CITIES[selFlight.toId].name)}</Text>
               </View>
             </View>
+
+            {selFlight.eventIds?.length ? (
+              <View style={styles.eventFlightNotice}>
+                <Text style={styles.eventFlightNoticeText}>
+                  {tf('flight.event_notice', {
+                    pct: Math.round((selFlight.eventFareMult - 1) * 100),
+                  }, `Current events adjust this fare by ${Math.round((selFlight.eventFareMult - 1) * 100)}%.`)}
+                </Text>
+              </View>
+            ) : null}
 
             <Text style={styles.sectionLabel}>{t('sheet.cabin', 'Cabin')}</Text>
             {['economy', 'business'].map((cabin) => {
@@ -633,6 +661,10 @@ const styles = StyleSheet.create({
   flightCardPast: {
     opacity: 0.55,
   },
+  flightCardUnavailable: {
+    opacity: 0.7,
+    borderColor: 'rgba(224, 85, 85, 0.55)',
+  },
   flightTextPast: {
     color: COLORS.muted2,
   },
@@ -657,6 +689,41 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '600',
     color: COLORS.muted,
+  },
+  eventUnavailableChip: {
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 5,
+    backgroundColor: 'rgba(224, 85, 85, 0.17)',
+  },
+  eventUnavailableText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: COLORS.red,
+  },
+  eventFareChip: {
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 5,
+    backgroundColor: 'rgba(232, 154, 60, 0.15)',
+  },
+  eventFareText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: COLORS.orange,
+  },
+  eventFlightNotice: {
+    marginTop: 12,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: 'rgba(232, 154, 60, 0.12)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(232, 154, 60, 0.35)',
+  },
+  eventFlightNoticeText: {
+    fontSize: 12,
+    lineHeight: 17,
+    color: COLORS.orange,
   },
   sparkRow: {
     flexDirection: 'row',

@@ -2,17 +2,20 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   priceAt,
+  marketPriceAt,
   factorFor,
   waitUntilDep,
   bagUsed,
   mergeInvCost,
   routesFrom,
+  visibleFlightBoard,
   sellData,
   computeStats,
   cityMinutes,
   sortByDestProfit,
   priceSparkline,
   locals,
+  imports,
   globeSizeFor,
   hm,
   fmtClock,
@@ -20,6 +23,16 @@ import {
   clockLabel,
 } from '../gameLogic.js';
 import { ACHIEVEMENTS, CITIES, CIDS, NOTE_TEXT, PRODUCT_IDS, PRODUCTS, STARTING_CITY } from '../gameData.js';
+import { EVENTS } from '../eventData.js';
+import {
+  activeEvents,
+  eventAdjustedPrice,
+  eventGameDay,
+  eventImpactText,
+  localizedEvent,
+  quoteFlightForEvents,
+  unseenArrivalEvent,
+} from '../eventLogic.js';
 import { t, f, LOCALES, DICT } from '../i18n.js';
 import {
   SAVE_VERSION,
@@ -86,6 +99,15 @@ describe('routesFrom replace', () => {
       byTo[r.toId] = (byTo[r.toId] || 0) + 1;
     });
     Object.values(byTo).forEach((n) => assert.ok(n >= 1));
+  });
+
+  it('retains every event-unavailable service beyond the normal board cap', () => {
+    const rows = Array.from({ length: 18 }, (_, index) => ({
+      id: index,
+      eventUnavailable: index === 3 || index === 14 || index === 17,
+    }));
+    const board = visibleFlightBoard(rows, 12);
+    assert.deepEqual(board.map((row) => row.id), [...Array.from({ length: 12 }, (_, i) => i), 14, 17]);
   });
 });
 
@@ -158,10 +180,12 @@ describe('save migrate round-trip', () => {
     assert.equal(m.reason, 'future');
   });
 
-  it('missing saveVersion migrates as v1', () => {
+  it('missing saveVersion migrates through v2', () => {
     const m = migrateSave({ cash: 50, city: 'istanbul' });
     assert.equal(m.ok, true);
-    assert.equal(m.data.saveVersion, 1);
+    assert.equal(m.data.saveVersion, 2);
+    assert.equal(typeof m.data.eventSeed, 'string');
+    assert.deepEqual(m.data.seenEventEpisodes, []);
     const h = hydrateSave({ cash: 0 }, m, CITIES, STARTING_CITY);
     assert.equal(h.cash, 50);
   });
@@ -194,6 +218,197 @@ describe('save migrate round-trip', () => {
     assert.equal(h.ticket, null);
     assert.equal(h.minsToDep, 0);
     assert.deepEqual(h.visited, ['istanbul']);
+  });
+
+  it('round-trips v2 event state and sanitizes invalid history rows', () => {
+    const validEvent = EVENTS[0];
+    const base = {
+      cash: 500,
+      city: 'istanbul',
+      inv: [],
+      eventSeed: 'run-test-seed',
+      seenEventEpisodes: [
+        { eventId: validEvent.id, startDay: 2, episodeKey: 'wrong', seenAt: 3200 },
+        { eventId: validEvent.id, startDay: 2, seenAt: 9999 },
+        { eventId: 'missing-event', startDay: 1, seenAt: 100 },
+        { eventId: validEvent.id, startDay: -1, seenAt: 100 },
+      ],
+    };
+    const loaded = loadSavePayload(
+      JSON.stringify(serializeSave(base)),
+      { cash: 0, city: STARTING_CITY, inv: [], eventSeed: 'fallback', seenEventEpisodes: [] },
+      CITIES,
+      STARTING_CITY,
+    );
+    assert.equal(loaded.ok, true);
+    assert.equal(loaded.data.eventSeed, 'run-test-seed');
+    assert.deepEqual(loaded.data.seenEventEpisodes, [{
+      eventId: validEvent.id,
+      startDay: 2,
+      episodeKey: `${validEvent.id}|2`,
+      seenAt: 3200,
+    }]);
+  });
+
+  it('bounds event seed and encounter history from malformed or oversized saves', () => {
+    const rows = Array.from({ length: 120 }, (_, index) => ({
+      eventId: EVENTS[index % EVENTS.length].id,
+      startDay: index,
+      seenAt: index === 0 ? -10 : index * 10,
+    }));
+    const m = migrateSave({
+      saveVersion: 2,
+      city: 'istanbul',
+      eventSeed: `  ${'x'.repeat(200)}  `,
+      seenEventEpisodes: rows,
+    });
+    const h = hydrateSave({ city: STARTING_CITY, inv: [], eventSeed: 'fallback' }, m, CITIES, STARTING_CITY);
+    assert.equal(h.eventSeed.length, 128);
+    assert.equal(h.seenEventEpisodes.length, 100);
+    assert.equal(h.seenEventEpisodes[0].seenAt, 0);
+  });
+});
+
+describe('city event catalog', () => {
+  it('contains one valid bilingual event for every playable city', () => {
+    assert.equal(EVENTS.length, 20);
+    assert.deepEqual(
+      EVENTS.map((event) => event.cityId).sort(),
+      [...CIDS].sort(),
+    );
+    assert.equal(new Set(EVENTS.map((event) => event.id)).size, EVENTS.length);
+    EVENTS.forEach((event) => {
+      assert.ok(event.headline.en && event.headline.zh, `${event.id} headline`);
+      assert.ok(event.body.en && event.body.zh, `${event.id} body`);
+      assert.ok(event.probability > 0 && event.probability <= 0.22, `${event.id} probability`);
+      assert.ok(event.durationDays >= 1 && event.durationDays <= 3, `${event.id} duration`);
+      assert.ok(event.market.buyMult >= 0.9 && event.market.buyMult <= 1.22, `${event.id} buy`);
+      assert.ok(event.market.sellMult >= 0.9 && event.market.sellMult <= 1.22, `${event.id} sell`);
+      assert.ok(event.flight.fareMult >= 0.95 && event.flight.fareMult <= 1.18, `${event.id} fare`);
+      assert.ok(event.flight.cancelProb >= 0 && event.flight.cancelProb <= 0.25, `${event.id} cancel`);
+      const visible = [...locals(event.cityId), ...imports(event.cityId)];
+      assert.ok(
+        visible.some((productId) => event.market.categories.includes(PRODUCTS[productId].category)),
+        `${event.id} affects no visible product`,
+      );
+      assert.match(eventImpactText(event, 'en'), /Affected:/);
+      assert.match(eventImpactText(event, 'zh'), /影响：/);
+      assert.equal(localizedEvent(event, 'en').headlineText, event.headline.en);
+      assert.equal(localizedEvent(event, 'zh').bodyText, event.body.zh);
+    });
+  });
+});
+
+describe('deterministic event activation', () => {
+  it('rolls over on UTC day boundaries and allows a new episode after expiry', () => {
+    assert.equal(eventGameDay(859), 0);
+    assert.equal(eventGameDay(860), 1);
+    const always = {
+      ...EVENTS[0],
+      id: 'always-active-test',
+      probability: 1,
+      durationDays: 2,
+    };
+    const day0 = activeEvents(0, 'always', [always])[0];
+    const day1 = activeEvents(1440, 'always', [always])[0];
+    const day2 = activeEvents(2880, 'always', [always])[0];
+    assert.equal(day0.startDay, 0);
+    assert.equal(day1.episodeKey, day0.episodeKey);
+    assert.equal(day2.startDay, 2);
+    assert.notEqual(day2.episodeKey, day0.episodeKey);
+  });
+
+  it('is stable, eventually activates every catalog row, and preserves episodes', () => {
+    const seed = 'activation-seed';
+    EVENTS.forEach((event) => {
+      let start = null;
+      for (let day = 0; day < 730; day += 1) {
+        const first = activeEvents(day * 1440, seed, [event]);
+        const second = activeEvents(day * 1440, seed, [event]);
+        assert.deepEqual(first, second);
+        if (first[0]?.startDay === eventGameDay(day * 1440)) {
+          start = first[0];
+          break;
+        }
+      }
+      assert.ok(start, `${event.id} never starts`);
+      for (let age = 0; age < event.durationDays; age += 1) {
+        const active = activeEvents((start.startDay + age) * 1440, seed, [event]);
+        assert.equal(active[0]?.episodeKey, start.episodeKey, `${event.id} continuity age ${age}`);
+      }
+    });
+  });
+
+  it('different run seeds produce different schedules', () => {
+    const signature = (seed) => Array.from({ length: 40 }, (_, day) => (
+      activeEvents(day * 1440, seed).map((event) => event.episodeKey).sort().join(',')
+    )).join('|');
+    assert.notEqual(signature('run-a'), signature('run-b'));
+  });
+
+  it('offers an arrival episode once and suppresses it after history records it', () => {
+    let episode = null;
+    for (let day = 0; day < 100 && !episode; day += 1) {
+      episode = activeEvents(day * 1440, 'arrival-seed')[0] || null;
+    }
+    assert.ok(episode);
+    assert.equal(unseenArrivalEvent([episode], episode.cityId, [])?.episodeKey, episode.episodeKey);
+    assert.equal(unseenArrivalEvent([episode], episode.cityId, [{ episodeKey: episode.episodeKey }]), null);
+    assert.equal(unseenArrivalEvent([episode], 'not-the-city', []), null);
+  });
+
+  it('keeps authored daily probability statistically credible', () => {
+    const event = EVENTS.find((row) => row.durationDays === 1 && row.probability === 0.2);
+    let starts = 0;
+    for (let day = 0; day < 2000; day += 1) {
+      if (activeEvents(day * 1440, 'probability-seed', [event]).length) starts += 1;
+    }
+    const rate = starts / 2000;
+    assert.ok(rate >= 0.17 && rate <= 0.23, `rate=${rate}`);
+  });
+});
+
+describe('event market and flight effects', () => {
+  const event = {
+    ...EVENTS.find((row) => row.cityId === 'istanbul'),
+    startDay: 3,
+    episodeKey: 'test|3',
+  };
+
+  it('changes only matching city/category prices and keeps no-event behavior', () => {
+    const productId = 'ist_textile';
+    const base = priceAt(productId, 'istanbul');
+    assert.equal(marketPriceAt(productId, 'istanbul'), base);
+    assert.equal(
+      marketPriceAt(productId, 'istanbul', 'buy', [event]),
+      eventAdjustedPrice(base, productId, 'istanbul', 'buy', [event]),
+    );
+    assert.equal(marketPriceAt('ist_lokum', 'istanbul', 'buy', [event]), priceAt('ist_lokum', 'istanbul'));
+    assert.equal(marketPriceAt(productId, 'paris', 'buy', [event]), priceAt(productId, 'paris'));
+
+    const inv = [{ id: productId, name: 'Textile', icon: 'x', w: 1, n: 2, slot: 'bag', cost: 100 }];
+    const quoted = sellData(inv, 'istanbul', 'en', [event]);
+    assert.equal(quoted.gross, marketPriceAt(productId, 'istanbul', 'sell', [event]) * 2);
+  });
+
+  it('quotes flights idempotently and cancellation rolls remove some, not all', () => {
+    const route = { toId: 'paris', no: 'TK 101', depMin: 600, econ: 200, biz: 620 };
+    const first = quoteFlightForEvents(route, 'istanbul', [event], 'flight-seed');
+    const second = quoteFlightForEvents(first, 'istanbul', [event], 'flight-seed');
+    assert.equal(second.econ, first.econ);
+    assert.equal(second.biz, first.biz);
+    assert.ok(first.eventFareMult >= 0.6 && first.eventFareMult <= 2);
+
+    const cancelEvent = {
+      ...event,
+      flight: { fareMult: 1.18, cancelProb: 0.25 },
+    };
+    let unavailable = 0;
+    for (let i = 0; i < 120; i += 1) {
+      const quote = quoteFlightForEvents({ ...route, no: `TK ${i}` }, 'istanbul', [cancelEvent], 'flight-seed');
+      if (quote.eventUnavailable) unavailable += 1;
+    }
+    assert.ok(unavailable > 0 && unavailable < 120, `unavailable=${unavailable}`);
   });
 });
 
