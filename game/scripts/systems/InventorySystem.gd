@@ -48,6 +48,10 @@ static func buy(product_id: String, qty: int, as_cargo: bool = false, discount_f
 		"purchased_unix": GameClock.unix_time,
 		"in_cargo": as_cargo,
 	})
+	# Discovery credits at PURCHASE (GDLC Playtest #3): selling is already the
+	# profit axis; requiring a sell to "discover" made the products metric
+	# anti-correlated with net worth (collector runs wrecked their profit).
+	AppState.mark_product_discovered(product_id)
 	EventBus.inventory_changed.emit()
 	if not bool(AppState.tutorial_flags.get("bought", false)):
 		AppState.tutorial_flags["bought"] = true
@@ -71,8 +75,18 @@ static func sell(index: int, qty: int) -> Dictionary:
 	var product_id: String = str(item.get("product_id", ""))
 	var q: float = _Economy.current_quality(item)
 	item["quality"] = q
-	var unit: float = _Economy.sell_price(city_id, product_id, q)
-	var revenue: float = unit * float(qty)
+	# In-sale demand escalation (GDLC Playtest #3 ratchet): unit k is priced at
+	# the pressure after k-1 units, so a single bulk dump cannot transact 100%
+	# of units at the pre-sale price.
+	var key: String = "%s|%s" % [city_id, product_id]
+	var market: Dictionary = DataService.economy.get("market", {})
+	var decay: float = float(market.get("demand_decay_per_sale", 0.08))
+	var base_pressure: float = float(AppState.demand_pressure.get(key, 0.0))
+	var revenue := 0.0
+	var unit := _Economy.sell_price(city_id, product_id, q)
+	for k in range(qty):
+		unit = _Economy.sell_price(city_id, product_id, q, minf(0.7, base_pressure + decay * float(k)))
+		revenue += unit
 	var unit_cost: float = float(item.get("unit_cost", 0))
 	var total_unit_cost: float = unit_cost * float(qty)
 	var margin: float = revenue - total_unit_cost

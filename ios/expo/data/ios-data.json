@@ -1009,5 +1009,20 @@
       "w": 0.7,
       "base": 3900.0
     }
-  ]
+  ],
+  "economy": {
+    "challenge": {
+      "days": 15,
+      "cap_net_worth": 200000,
+      "cap_cities": 60,
+      "cap_countries": 30,
+      "cap_products": 350,
+      "cap_distance_km": 40075,
+      "cap_single_profit": 10000,
+      "cap_profit_per_hour": 200,
+      "grade_a": 80,
+      "grade_b": 60,
+      "grade_c": 40
+    }
+  }
 }

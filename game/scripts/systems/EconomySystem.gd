@@ -41,7 +41,7 @@ static func buy_price(city_id: String, product_id: String) -> float:
 	return round(float(row.get("buy_base_usd", 0)) * f * float(ev.mult) * float(news.mult) * 100.0) / 100.0
 
 
-static func sell_price(city_id: String, product_id: String, quality: float) -> float:
+static func sell_price(city_id: String, product_id: String, quality: float, pressure_override: float = -1.0) -> float:
 	var row: Dictionary = DataService.market_row(city_id, product_id)
 	if row.is_empty():
 		return 0.0
@@ -49,7 +49,10 @@ static func sell_price(city_id: String, product_id: String, quality: float) -> f
 	var base: float = float(row.get("sell_base_usd", 0)) * f * seasonal_factor(GameClock.game_date_string())
 	var qmul: float = quality_multiplier(quality)
 	var key: String = "%s|%s" % [city_id, product_id]
-	var pressure: float = float(AppState.demand_pressure.get(key, 0.0))
+	# pressure_override >= 0 lets a sale price unit k at the pressure after
+	# k-1 units (in-sale escalation — GDLC Playtest #3 ratchet).
+	var pressure: float = pressure_override if pressure_override >= 0.0 \
+			else float(AppState.demand_pressure.get(key, 0.0))
 	var demand_mul: float = max(0.55, 1.0 - pressure)
 	var ev: Dictionary = _MarketEvents.factor_for(city_id, product_id, false)
 	var news: Dictionary = _NewsEvents.market_factor(city_id, product_id, false)

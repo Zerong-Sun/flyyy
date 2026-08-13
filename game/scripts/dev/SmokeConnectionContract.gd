@@ -64,6 +64,7 @@ func _run() -> void:
 	ok = await _part_a_real_flights() and ok
 	ok = await _part_b_cancel_no_teleport(ops) and ok
 	ok = await _part_c_boarding_origin_guard(ops) and ok
+	ok = await _part_d_delayed_leg1_rebook(ops) and ok
 
 	_finish(ok)
 
@@ -256,6 +257,79 @@ func _part_c_boarding_origin_guard(ops: Node) -> bool:
 	await _wait_frames(2)
 	ok = _check(str(app_state.get("current_airport_id")) == "pvg",
 			"forged ticket (origin ORD) boarded from PVG — no origin guard") and ok
+	return ok
+
+
+# ═══ PART D: a delayed leg-1 must rebook leg 2 inside the MCT window or
+#     refund-and-park — never board a connection whose MCT contract the
+#     delay broke (GDLC Playtest #3) ═══
+func _part_d_delayed_leg1_rebook(ops: Node) -> bool:
+	var ok := true
+	app_state.call("reset_new_game", "pvg")
+	clock.call("set_paused", true)
+	var baseline := 1740787200.0
+	clock.set("unix_time", baseline)
+
+	# Deterministic scan (no purchases): find a real PVG→hub flight whose roll
+	# is a DELAY, and a real hub→dest flight whose scheduled gap >= MCT but
+	# whose gap after the delay violates it. Hold both directly, then fly
+	# leg 1 into its delay.
+	var mct_contract := 120
+	var t1: Dictionary = {}
+	var t2: Dictionary = {}
+	var delay_min := 0
+	for f1_v in data.call("flights_from", "pvg"):
+		var f1: Dictionary = f1_v
+		var dep1: float = clock.call("parse_iso_to_unix", str(f1.get("scheduled_departure_utc", "")))
+		if dep1 < baseline + 60.0:
+			continue
+		clock.set("unix_time", dep1)
+		var roll: Dictionary = ops.call("_reliability_roll", {
+			"flight_instance_id": f1.get("flight_instance_id", ""),
+			"scheduled_departure_utc": f1.get("scheduled_departure_utc", ""),
+		}) as Dictionary
+		if bool(roll.get("cancelled", false)) or int(roll.get("delay_min", 0)) <= 0:
+			continue
+		var hub_id := str(f1.get("destination_airport_id", ""))
+		var arr1: float = clock.call("parse_iso_to_unix", str(f1.get("scheduled_arrival_utc", "")))
+		for f2_v in data.call("flights_from", hub_id):
+			var f2: Dictionary = f2_v
+			var dep2: float = clock.call("parse_iso_to_unix", str(f2.get("scheduled_departure_utc", "")))
+			var gap_sched: float = (dep2 - arr1) / 60.0
+			var gap_actual: float = (dep2 - (arr1 + float(int(roll.get("delay_min", 0))) * 60.0)) / 60.0
+			if gap_sched >= float(mct_contract) - 0.5 and gap_actual < float(mct_contract) - 0.5:
+				t1 = _ticket_from_flight(f1, 1, 300.0)
+				t1["mct_minutes"] = mct_contract
+				t2 = _ticket_from_flight(f2, 2, 200.0)
+				delay_min = int(roll.get("delay_min", 0))
+				break
+		if not t1.is_empty():
+			break
+	ok = _check(not t1.is_empty(), "no delayed-leg1 MCT-violation candidate found — widen scan") and ok
+	if t1.is_empty():
+		return ok
+	clock.set("unix_time", baseline)
+	app_state.set("held_tickets", [t1, t2])
+	var t1_dep: float = clock.call("parse_iso_to_unix", str(t1.get("scheduled_departure_utc", "")))
+	clock.set("unix_time", t1_dep)
+	await ops.call("start_boarding", t1)
+	clock.call("set_paused", true)
+	# After the delayed arrival at the hub: either the itinerary was dropped
+	# (refund-and-park) or leg 2 was rebooked with a gap >= contract MCT.
+	var hub_id := str(t1.get("destination_airport_id", ""))
+	var after: Array = app_state.get("held_tickets") as Array
+	if after.is_empty():
+		ok = _check(str(app_state.get("current_airport_id")) == hub_id,
+				"refund-and-park left player off the hub") and ok
+	else:
+		var t2_new: Dictionary = after[0]
+		var now_t := float(clock.get("unix_time"))
+		var dep2_new: float = clock.call("parse_iso_to_unix", str(t2_new.get("scheduled_departure_utc", "")))
+		var gap_new := (dep2_new - now_t) / 60.0
+		ok = _check(gap_new >= float(mct_contract) - 0.5,
+				"delayed leg-1 kept leg 2 with gap %.1f min < MCT %d" % [gap_new, mct_contract]) and ok
+		ok = _check(str(t2_new.get("origin_airport_id", "")) == hub_id,
+				"rebooked leg 2 wrong origin") and ok
 	return ok
 
 

@@ -87,15 +87,20 @@ def build_cities_500_from_ourairports(
     oa: dict[str, dict],
     existing_hubs: list[dict],
     openflights_iatas: set[str],
+    route_counts: "Counter[str] | None" = None,
 ) -> list[dict]:
     """Select 500+ cities from OurAirports data with passenger service.
 
     Priority rules:
     1. Existing 20 demo hubs (preserved).
     2. Airports that appear in OpenFlights routes (passenger service indicator).
-    3. Major airports (large_airport / medium_airport) sorted by if they have routes.
+    3. Major airports (large_airport / medium_airport) sorted by route count,
+       then IATA as the final deterministic tiebreak (GDLC Playtest #3: the
+       pure alphabetical tiebreak excluded SFO/SEA/IAH/LAS while keeping
+       BUR/FAT/GEG).
     4. Capital cities / largest airports per country.
     """
+    route_counts = route_counts or Counter()
     existing_iata = {h["iata"] for h in existing_hubs}
     existing_city = {h["city_id"] for h in existing_hubs}
 
@@ -119,7 +124,7 @@ def build_cities_500_from_ourairports(
             score += 30
         candidates.append((score, iata, info))
 
-    candidates.sort(key=lambda x: (-x[0], x[1]))
+    candidates.sort(key=lambda x: (-x[0], -route_counts.get(x[1], 0), x[1]))
 
     additional = []
     seen_city_ids: set[str] = set(existing_city)
@@ -997,6 +1002,11 @@ COUNTRY_PRICE_LEVEL = {
     "HK": 1.10,
     "TH": 0.70,
 }
+
+# Cheapest possible remote purchase price level — the margin-per-kg clamp is
+# referenced against this (GDLC Playtest #3), so no purchase city can beat
+# the bound.
+MIN_CPL = min(COUNTRY_PRICE_LEVEL.values())
 
 # Deterministic per-(product, destination) remote demand multiplier.
 # Uses zlib.crc32 (NOT the builtin hash(), which is salted per process) so the
@@ -1922,15 +1932,16 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
                 # country (GB). Keeps "⭐最佳目的地" meaningful per product.
                 sell *= _remote_demand(prod["product_id"], city_id)
                 sell = max(sell, buy * 0.95)
-                # Margin-per-kg clamp (GDLC Playtest #2 ratchet): light
-                # high-rarity proxies paid up to $53.5k/kg ($1.07M per 20kg
-                # hold) and trivialized every other system. Cap the remote
-                # margin so baggage tiers / cargo / cold chain stay meaningful.
-                ocpl = COUNTRY_PRICE_LEVEL.get(prod["origin_country_id"], 1.0)
-                obuy = (prod["base_reference_price"] * ocpl
-                        * mcfg["origin_supply_bonus"] * mcfg["retail_markup"])
-                sell = min(sell, obuy + mcfg["margin_per_kg_cap_usd"] * prod["weight_kg"])
                 buy = prod["base_reference_price"] * cpl * 1.05 * mcfg["retail_markup"]
+            # Margin-per-kg clamp (GDLC Playtest #2 + #3 ratchet), applied to
+            # EVERY row including the origin city: the bound references the
+            # cheapest PURCHASABLE price (remote buy at the lowest price-level
+            # country vs origin buy with the supply bonus) — anything else
+            # leaves an arbitrage hole (measured 15,642 $/kg, zero flights).
+            origin_cpl = COUNTRY_PRICE_LEVEL.get(prod["origin_country_id"], 1.0)
+            cheapest_buy = (prod["base_reference_price"] * mcfg["retail_markup"]
+                    * min(MIN_CPL * 1.05, origin_cpl * mcfg["origin_supply_bonus"]))
+            sell = min(sell, cheapest_buy + mcfg["margin_per_kg_cap_usd"] * prod["weight_kg"])
             markets.append(
                 {
                     "city_id": city_id,
@@ -2641,7 +2652,19 @@ def main() -> int:
     auto_limit = 30  # Default: manageable for dev iteration
     if "--full" in sys.argv:
         auto_limit = 480  # Full 500+ city scale
-    additional = build_cities_500_from_ourairports(oa, hubs_cfg["hubs"], openflights_iatas)
+    # Traffic tiebreak (GDLC Playtest #3): count OpenFlights route occurrences
+    # per airport so top-traffic airports rank above alphabetical neighbors.
+    route_counts: Counter[str] = Counter()
+    if rf_path.exists():
+        with rf_path.open(encoding="utf-8", newline="") as f:
+            for line in f:
+                cols = line.split(",")
+                if len(cols) >= 6:
+                    if len(cols[2]) == 3:
+                        route_counts[cols[2]] += 1
+                    if len(cols[4]) == 3:
+                        route_counts[cols[4]] += 1
+    additional = build_cities_500_from_ourairports(oa, hubs_cfg["hubs"], openflights_iatas, route_counts)
     additional = additional[:auto_limit]
     all_hub_configs = list(hubs_cfg["hubs"]) + additional
     # Combine into a single config-like structure

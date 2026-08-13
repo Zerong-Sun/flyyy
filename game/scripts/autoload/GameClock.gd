@@ -46,7 +46,14 @@ func add_minutes(m: float) -> void:
 
 
 func now_iso() -> String:
-	return Time.get_datetime_string_from_unix_time(int(unix_time), true) + "Z"
+	# T-separated ISO-8601, matching the data files' scheduled_*_utc format.
+	# (Godot 4.3+ returns a SPACE-separated string here; a space broke the
+	# departed-flight string comparison in FlightSearch — GDLC Playtest #3,
+	# pinned by verify_timezone.tscn.)
+	var dt := Time.get_datetime_dict_from_unix_time(int(unix_time))
+	return "%04d-%02d-%02dT%02d:%02d:%02dZ" % [
+		dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second
+	]
 
 
 func game_date_string() -> String:

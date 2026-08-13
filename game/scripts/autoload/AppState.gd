@@ -306,7 +306,8 @@ func log_sell_transaction(sell_city: String, product_id: String, qty: int,
 		"margin": total_revenue - total_unit_cost,
 		"timestamp": game_timestamp
 	})
-	mark_product_discovered(product_id)
+	# Discovery credit moved to the buy path (GDLC Playtest #3) — selling
+	# remains the profit axis; discovery is purchase-scored.
 	var p: Dictionary = DataService.get_product(product_id)
 	mark_category_sold(str(p.get("category", "")))
 	var margin: float = total_revenue - total_unit_cost

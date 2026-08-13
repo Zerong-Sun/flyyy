@@ -36,12 +36,23 @@ def test_snap_preserves_the_requested_maximum_length():
 
 def test_city_content_matches_the_checked_in_generator_output():
     facts = json.loads(FACTS.read_text(encoding="utf-8"))
-    writer = CityWriter(facts, _load_airports())
+    airports = _load_airports()
+    writer = CityWriter(facts, airports)
     checked = 0
+    skipped_dropped = 0
 
     for path in sorted(CITIES.glob("*.json")):
         city = json.loads(path.read_text(encoding="utf-8"))
         if city.get("content_confidence") == "A":
+            continue
+        # Cities not in the current generated world have no airport row, so the
+        # generator's airport sentence legitimately differs from the checked-in
+        # text authored for an earlier roster (GDLC Playtest #3: the
+        # traffic-ranked selection reshuffled the 500-city set). Guard only the
+        # cities that ship in this world snapshot; dropped cities keep their
+        # content checked in for when they re-enter.
+        if city.get("city_id", path.stem) not in airports:
+            skipped_dropped += 1
             continue
         generated = writer.compose(city)
         checked += 1
@@ -50,7 +61,7 @@ def test_city_content_matches_the_checked_in_generator_output():
             assert minimum <= len(city[field]) <= maximum, path.name
             assert not any(marker in city[field] for marker in FILLER_MARKERS), path.name
 
-    assert checked == 400
+    assert checked == 400 - skipped_dropped
 
 
 def test_product_descriptions_match_the_checked_in_generator_output():

@@ -213,6 +213,10 @@ func _build_ui() -> void:
 	_hint_panel.size = Vector2(740, 54)
 	_hint_panel.clip_contents = true
 	_hint_panel.visible = false
+	# Render above the full-screen transition overlay so reliability toasts
+	# (delay/cancel) stay readable during the 5s travel transition
+	# (GDLC Playtest #3).
+	_hint_panel.z_index = 100
 	var hint_style := StyleBoxFlat.new()
 	hint_style.bg_color = Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.94)
 	hint_style.border_color = Color(_Colors.ACCENT_AMBER.r, _Colors.ACCENT_AMBER.g, _Colors.ACCENT_AMBER.b, 0.55)
@@ -671,7 +675,7 @@ func _on_game_started() -> void:
 	_set_panel_bgm("globe")
 	AudioService.play_sfx("sfx_ui_click")
 	var current_city := AppState.current_city_id()
-	if not current_city.is_empty():
+	if not current_city.is_empty() and float(AppState.stats.get("total_flight_segments", 0)) > 0.0:
 		_check_news_events(current_city)
 	if AppState.game_mode == "challenge" and bool(AppState.challenge.get("ended", false)):
 		_on_challenge_ended(AppState.challenge.get("result", {}))
@@ -835,6 +839,10 @@ func _refresh_bags() -> void:
 
 
 func _refresh_countdown() -> void:
+	# Re-assert visibility: _show_hint hides the countdown while a hint shows;
+	# once the hint fades the countdown must come back (GDLC Playtest #3).
+	if _countdown.text != "":
+		_countdown.visible = not _hint_panel.visible
 	var t: Dictionary = _Tickets.next_ticket()
 	if t.is_empty():
 		_countdown.text = ""
@@ -1039,7 +1047,10 @@ func _on_arrived() -> void:
 	var city_id := AppState.current_city_id()
 	if not AppState.held_tickets.is_empty():
 		var next_t: Dictionary = _Tickets.next_ticket()
-		_show_hint("转机中 → %s（约 90 分钟转机后继续）" % str(next_t.get("destination_iata", "")))
+		_show_hint("转机中 → %s（中转 %d 分钟转机后继续）" % [
+			str(next_t.get("destination_iata", "")),
+			int(next_t.get("layover_minutes", next_t.get("mct_minutes", 90))),
+		])
 		_set_panel_bgm("globe")
 		return
 	if city_id != "":
@@ -1185,7 +1196,7 @@ func _on_arrival_discount_accepted(_result: Dictionary, product_id: String, disc
 		_select_market_row(product_id)
 		_buy_selected(true)
 	if _inventory_qty(product_id) > qty_before:
-		_show_hint("已以 %d%% 折扣买入 %s！采购页已置顶该商品，可继续追加购买" % [discount_pct, product_id])
+		_show_hint("已以 %d%% 折扣买入 %s！采购页已置顶该商品，可继续追加购买" % [discount_pct, DataService.get_product(product_id).get("name_zh", product_id)])
 
 
 func _on_arrival_discount_declined(_result: Dictionary) -> void:
@@ -1645,6 +1656,18 @@ func _market_buy_outlook(p: Dictionary, city: String, ticket_dest_city: String) 
 		var estimate := _Economy.sell_price_estimate(product_id, ticket_dest_city)
 		var margin := estimate - buy
 		return "%s · %s$%.0f" % [_Economy.format_money(estimate), "+" if margin >= 0 else "-", absf(margin)]
+	# No ticket held: still show a data-only destination estimate for the top
+	# hot city (GDLC Playtest #3 — the 0.20 flavor gate hid verified 2.15x
+	# margins from the players the tutorial told to shop first).
+	var origin_city := str(p.get("origin_city_id", ""))
+	var tags: Dictionary = DataService.product_market_tags.get("%s|%s" % [origin_city, product_id], {})
+	var hot_cities: Array = tags.get("hot", [])
+	if hot_cities.size() > 0:
+		var estimate := _Economy.sell_price_estimate(product_id, str(hot_cities[0]))
+		var city_row := DataService.get_city(str(hot_cities[0]))
+		var city_name := DataService.place_name(city_row, "name")
+		var margin := estimate - buy
+		return "≈%s → %s · %s$%.0f" % [city_name, _Economy.format_money(estimate), "+" if margin >= 0 else "-", absf(margin)]
 	return _get_intelligence_tag(p, "")
 
 
@@ -2438,6 +2461,18 @@ func _select_flight_tree_index(index: int) -> void:
 		item = item.get_next()
 
 
+func _reliability_disclosure() -> String:
+	# Pre-purchase risk disclosure (GDLC Playtest #3): the 8%/1.5% delay/cancel
+	# simulation and the refund fee were never stated before commitment.
+	var rel: Dictionary = DataService.economy.get("reliability", {})
+	var fee_pct := int(float(DataService.economy.get("baggage_extras", {}).get("refund_fee_rate", 0.3)) * 100.0)
+	return " · 模拟可靠性：延误 %d%% · 取消 %s%% · 退票费 %d%%" % [
+		int(float(rel.get("delay_prob", 0.08)) * 100.0),
+		str(float(rel.get("cancel_prob", 0.015)) * 100.0),
+		fee_pct,
+	]
+
+
 func _flight_destination_name(flight: Dictionary) -> String:
 	var airport := DataService.get_airport(str(flight.get("destination_airport_id", "")))
 	var city := DataService.get_city(str(airport.get("city_id", "")))
@@ -2461,12 +2496,13 @@ func _on_flight_selected(idx: int) -> void:
 		_selected_flight = {}
 		var c: Dictionary = _selected_connection
 		var mct := int(c.get("mct_minutes", 90))
-		_flight_detail.text = "[b]联程[/b] %s→%s→%s · %.0fkm · %dmin(MCT%d) · 经$%.0f/公$%.0f/头$%.0f · 行李=%s 货运×%d" % [
+		_flight_detail.text = "[b]联程[/b] %s→%s→%s · %.0fkm · %dmin(MCT%d) · 经$%.0f/公$%.0f/头$%.0f · 行李=%s 货运×%d%s" % [
 			c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", ""),
 			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)), mct,
 			float(c.get("ticket_base_price_economy", 0)), float(c.get("ticket_base_price_business", 0)),
 			float(c.get("ticket_base_price_first", 0)),
-			_extra_tier if _extra_tier != "" else "无", _cargo_blocks
+			_extra_tier if _extra_tier != "" else "无", _cargo_blocks,
+			_reliability_disclosure(),
 		]
 		return
 	if idx < 0 or idx >= _flights_cache.size():
@@ -2484,7 +2520,7 @@ func _on_flight_selected(idx: int) -> void:
 	var news_headlines: Array = fl.get("news_headlines", [])
 	if not news_headlines.is_empty():
 		news_tag = " · 📰 %s" % "；".join(PackedStringArray(news_headlines))
-	_flight_detail.text = "[b]%s[/b] %s→%s · 起飞 %s · %.0fkm/%dmin · 经$%.0f/公$%.0f/头$%.0f%s%s%s · 行李=%s 货运×%d" % [
+	_flight_detail.text = "[b]%s[/b] %s→%s · 起飞 %s · %.0fkm/%dmin · 经$%.0f/公$%.0f/头$%.0f%s%s%s · 行李=%s 货运×%d%s" % [
 		fl.get("marketing_flight_number", ""),
 		fl.get("origin_iata", ""), fl.get("destination_iata", ""),
 		str(fl.get("scheduled_departure_utc", "")).substr(0, 16),
@@ -2492,7 +2528,8 @@ func _on_flight_selected(idx: int) -> void:
 		float(fl.get("ticket_base_price_economy", 0)), float(fl.get("ticket_base_price_business", 0)),
 		float(fl.get("ticket_base_price_first", 0)),
 		stop_tag, al_tag, news_tag,
-		_extra_tier if _extra_tier != "" else "无", _cargo_blocks
+		_extra_tier if _extra_tier != "" else "无", _cargo_blocks,
+		_reliability_disclosure(),
 	]
 
 
@@ -2504,7 +2541,8 @@ func _purchase(cabin: String) -> void:
 		var err_c: String = _Tickets.purchase_connection(_selected_connection, cabin, _extra_tier, _cargo_blocks, false)
 		if err_c.find("已有机票") >= 0:
 			_pending_cabin = cabin
-			_replace_ticket_dialog.dialog_text = err_c + "\n将按 30% 手续费退旧票后购买联程，确认？"
+			_replace_ticket_dialog.dialog_text = err_c + ("\n将按 %d%% 手续费退旧票后购买联程，确认？" %
+					[int(float(DataService.economy.get("baggage_extras", {}).get("refund_fee_rate", 0.3)) * 100.0)])
 			_replace_ticket_dialog.popup_centered()
 			return
 		_show_hint(err_c if err_c != "" else "联程购票成功（两段）")
@@ -2534,7 +2572,8 @@ func _purchase(cabin: String) -> void:
 	var err: String = _Tickets.purchase(_selected_flight, cabin, _extra_tier, _cargo_blocks, false)
 	if err.find("已有机票") >= 0:
 		_pending_cabin = cabin
-		_replace_ticket_dialog.dialog_text = err + "\n将按 30% 手续费退旧票后购买新票，确认？"
+		_replace_ticket_dialog.dialog_text = err + ("\n将按 %d%% 手续费退旧票后购买新票，确认？" %
+				[int(float(DataService.economy.get("baggage_extras", {}).get("refund_fee_rate", 0.3)) * 100.0)])
 		_replace_ticket_dialog.popup_centered()
 		return
 	_show_hint(err if err != "" else "购票成功")
@@ -2783,7 +2822,10 @@ func _after_sell_check_discovery(sold_product_id: String) -> void:
 
 	_enqueue_event_popup("discovery", {
 		"title": "✨ 意外发现！",
-		"body": '"这里的人从没见过%s！"\n\n库存中所有%s 卖出价额外 ×2.0' % [sold_product_id, sold_product_id],
+		"body": '"这里的人从没见过%s！"\n\n库存中所有%s 卖出价额外 ×2.0' % [
+			DataService.get_product(sold_product_id).get("name_zh", sold_product_id),
+			DataService.get_product(sold_product_id).get("name_zh", sold_product_id),
+		],
 		"accept_text": "全部溢价卖出",
 		"close_text": "暂不处理",
 	}, Callable(self, "_on_discovery_sell_all").bind(sold_product_id, city_id), Callable())
@@ -2820,7 +2862,7 @@ func _on_discovery_sell_all(_result: Dictionary, product_id: String, city_id: St
 
 	AudioService.play_sfx("sfx_sell")
 	_show_hint("🎉 意外发现！售出 %s ×%d，收入 %s，毛利 %s（溢价%d%%）" % [
-		product_id,
+		DataService.get_product(product_id).get("name_zh", product_id),
 		total_qty,
 		_Economy.format_money(total_revenue),
 		_Economy.format_money(margin),

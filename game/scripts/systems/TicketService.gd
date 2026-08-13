@@ -221,7 +221,9 @@ static func purchase_connection(conn: Dictionary, cabin: String, extra_tier: Str
 		"is_connection_leg": true,
 		"connection_leg": 1,
 		"connection_final_dest": conn.get("destination_iata", ""),
-		"mct_minutes": mct_gap,
+		# Contractual MCT (the minimum) vs the actual scheduled layover gap.
+		"mct_minutes": mct,
+		"layover_minutes": mct_gap,
 		"enables_cold_chain": bag.enables_cold_chain,
 	}
 	var ticket2 := {
@@ -269,6 +271,63 @@ static func _unix_to_iso(unix_t: float) -> String:
 	]
 
 
+static func rebook_connection_leg2(leg2: Dictionary, mct_minutes: int) -> Dictionary:
+	## Rebook a connection leg 2 onto the next real hub→dest flight departing
+	## inside [now + mct, now + max_connection] (GDLC Playtest #3 ratchet).
+	## Free through-ticket rebooking: keeps the original price/allocation,
+	## swaps the flight fields. Returns {} if no candidate exists.
+	var hub_id := str(leg2.get("origin_airport_id", ""))
+	var dest_id := str(leg2.get("destination_airport_id", ""))
+	var econ_mct: Dictionary = DataService.economy.get("mct", {})
+	var max_cnx: int = int(econ_mct.get("max_connection_min", 480))
+	var now := GameClock.unix_time
+	var best: Dictionary = {}
+	var best_dep := INF
+	for f_v in DataService.flights_from(hub_id):
+		var f: Dictionary = f_v
+		if str(f.get("destination_airport_id", "")) != dest_id:
+			continue
+		var q: Dictionary = _NewsEvents.quote_flight(f)
+		if bool(q.get("news_unavailable", false)):
+			continue
+		var dep: float = GameClock.parse_iso_to_unix(str(q.get("scheduled_departure_utc", "")))
+		if dep < now + float(mct_minutes) * 60.0 - 30.0:
+			continue
+		if dep - now > float(max_cnx) * 60.0:
+			continue
+		if dep < best_dep:
+			best_dep = dep
+			best = q
+	if best.is_empty():
+		return {}
+	return {
+		"flight_instance_id": best.get("flight_instance_id", ""),
+		"marketing_flight_number": best.get("marketing_flight_number", ""),
+		"airline_name": best.get("airline_name", ""),
+		"alliance_id": best.get("alliance_id", DataService.airline_alliance_id(str(best.get("operating_airline_id", "")))),
+		"origin_airport_id": best.get("origin_airport_id", ""),
+		"destination_airport_id": best.get("destination_airport_id", ""),
+		"origin_iata": best.get("origin_iata", ""),
+		"destination_iata": best.get("destination_iata", ""),
+		"scheduled_departure_utc": best.get("scheduled_departure_utc", ""),
+		"scheduled_arrival_utc": best.get("scheduled_arrival_utc", ""),
+		"distance_km": best.get("distance_km", 0),
+		"duration_minutes": best.get("duration_minutes", 0),
+		"stops": int(best.get("stops", 0)),
+		"cabin": leg2.get("cabin", "economy"),
+		"ticket_price": leg2.get("ticket_price", 0),
+		"extra_kg": 0.0,
+		"cargo_kg": leg2.get("cargo_kg", 0),
+		"extra_tier": "",
+		"cargo_blocks": leg2.get("cargo_blocks", 0),
+		"total_paid": leg2.get("total_paid", 0),
+		"is_connection_leg": true,
+		"connection_leg": 2,
+		"connection_final_dest": leg2.get("connection_final_dest", ""),
+		"enables_cold_chain": leg2.get("enables_cold_chain", false),
+	}
+
+
 static func refund_current() -> String:
 	var t: Dictionary = next_ticket()
 	if t.is_empty():
@@ -292,7 +351,7 @@ static func refund_current() -> String:
 	AppState.trip_cabin = "economy"
 	AppState.set_cold_chain(false)
 	EventBus.ticket_purchased.emit()
-	return "已退票，退回 %s（含 30%% 手续费）" % _Economy.format_money(refund)
+	return "已退票，退回 %s（含 %d%% 手续费）" % [_Economy.format_money(refund), int(fee_rate * 100.0)]
 
 
 static func add_baggage_or_cargo(extra_tier: String, add_cargo_blocks: int) -> String:

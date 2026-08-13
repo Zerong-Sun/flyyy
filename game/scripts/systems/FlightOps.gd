@@ -102,7 +102,8 @@ func start_boarding(ticket: Dictionary) -> void:
 		AppState.trip_cabin = "economy"
 		AppState.set_cold_chain(false)
 		AppState.cargo_kg_capacity = 0.0
-		EventBus.tutorial_hint.emit("行程已失效 — 已退回 70% 票款，请重新购票。")
+		var _fee_pct := int(float(DataService.economy.get("baggage_extras", {}).get("refund_fee_rate", 0.3)) * 100.0)
+		EventBus.tutorial_hint.emit("行程已失效 — 已退回 %d%% 票款（%d%% 为退票手续费），请重新购票。" % [100 - _fee_pct, _fee_pct])
 		EventBus.ticket_purchased.emit()
 		transition_finished.emit()
 		return
@@ -126,7 +127,8 @@ func start_boarding(ticket: Dictionary) -> void:
 		AppState.trip_cabin = "economy"
 		AppState.set_cold_chain(false)
 		AppState.cargo_kg_capacity = 0.0
-		EventBus.tutorial_hint.emit("航班取消（模拟）— 已退回 70% 票款。重建时刻表，不代表真实取消。")
+		var _fee_pct := int(float(DataService.economy.get("baggage_extras", {}).get("refund_fee_rate", 0.3)) * 100.0)
+		EventBus.tutorial_hint.emit("航班取消（模拟）— 已退回 %d%% 票款（%d%% 为退票手续费）。重建时刻表，不代表真实取消。" % [100 - _fee_pct, _fee_pct])
 		EventBus.ticket_purchased.emit()
 		_boarding = false
 		GameClock.set_paused(false)
@@ -161,12 +163,47 @@ func start_boarding(ticket: Dictionary) -> void:
 	if is_cnx1:
 		wait_s = 4.0
 	await tree.create_timer(wait_s).timeout
-	if is_cnx1:
-		var mct := int(ticket.get("mct_minutes", DataService.mct_minutes_for_airport(str(ticket.get("destination_airport_id", "")))))
-		layover_prompt.emit(str(ticket.get("destination_iata", "")), mct)
-		EventBus.tutorial_hint.emit("转机中：%s · MCT %d 分钟" % [ticket.get("destination_iata", ""), mct])
-		await tree.create_timer(1.0).timeout
 	_arrive(ticket, bool(roll.get("on_time", true)))
+	if is_cnx1:
+		# MCT re-check on ACTUAL arrival (GDLC Playtest #3 ratchet): a leg-1
+		# delay may have pushed the hub gap below the contractual MCT — rebook
+		# leg 2 inside the window or refund-and-park. Never honor an impossible
+		# connection.
+		var mct_contract := int(ticket.get("mct_minutes", DataService.mct_minutes_for_airport(str(ticket.get("destination_airport_id", "")))))
+		var hub_id := str(ticket.get("destination_airport_id", ""))
+		var t2: Dictionary = _Tickets.next_ticket()
+		var gap_min := 0.0
+		if not t2.is_empty() and str(t2.get("origin_airport_id", "")) == hub_id:
+			var dep2: float = GameClock.parse_iso_to_unix(str(t2.get("scheduled_departure_utc", "")))
+			gap_min = (dep2 - GameClock.unix_time) / 60.0
+			if gap_min < float(mct_contract) - 0.5:
+				var replacement := _Tickets.rebook_connection_leg2(t2, mct_contract)
+				if replacement.is_empty():
+					# Refund-and-park: 70% of the remaining itinerary.
+					var paid_total := 0.0
+					for t_v in AppState.held_tickets:
+						paid_total += float((t_v as Dictionary).get("total_paid", 0.0))
+					AppState.add_cash(paid_total * 0.7)
+					AppState.held_tickets = []
+					AppState.trip_baggage_extra_kg = 0.0
+					AppState.trip_cabin = "economy"
+					AppState.set_cold_chain(false)
+					AppState.cargo_kg_capacity = 0.0
+					var _fee_pct := int(float(DataService.economy.get("baggage_extras", {}).get("refund_fee_rate", 0.3)) * 100.0)
+					EventBus.tutorial_hint.emit("前段延误致转机衔接失败 — 已退回 %d%% 票款（%d%% 为退票手续费），请重新购票。" % [100 - _fee_pct, _fee_pct])
+					EventBus.ticket_purchased.emit()
+				else:
+					AppState.held_tickets = [replacement]
+					var dep2_new: float = GameClock.parse_iso_to_unix(str(replacement.get("scheduled_departure_utc", "")))
+					gap_min = (dep2_new - GameClock.unix_time) / 60.0
+					EventBus.tutorial_hint.emit("前段延误致转机紧张 — 已免费改签至 %s。" %
+							[str(replacement.get("marketing_flight_number", ""))])
+					EventBus.ticket_purchased.emit()
+		# Honest layover copy: the actual remaining gap vs the contractual MCT.
+		layover_prompt.emit(str(ticket.get("destination_iata", "")), int(round(gap_min)))
+		EventBus.tutorial_hint.emit("转机中：%s · 中转 %d 分钟（本场 MCT %d）" %
+				[ticket.get("destination_iata", ""), int(round(gap_min)), mct_contract])
+		await tree.create_timer(1.0).timeout
 	_boarding = false
 	GameClock.set_paused(false)
 	transition_finished.emit()

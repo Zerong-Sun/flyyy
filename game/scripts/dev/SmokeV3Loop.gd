@@ -117,9 +117,11 @@ func _run() -> void:
 			var max_cnx := int(econ.get("mct", {}).get("max_connection_min", 480))
 			ok = _check(gap_min >= float(mct) - 0.5 and gap_min <= float(max_cnx) + 0.5,
 					"layover gap %.1f min outside [%d, %d]" % [gap_min, mct, max_cnx]) and ok
-			ok = _check(int(t1.get("mct_minutes", 0)) == int(round(gap_min)),
-					"leg1 mct_minutes %d != actual gap %d" %
-					[int(t1.get("mct_minutes", 0)), int(round(gap_min))]) and ok
+			ok = _check(int(t1.get("mct_minutes", 0)) == mct,
+					"leg1 mct_minutes %d != contract MCT %d" % [int(t1.get("mct_minutes", 0)), mct]) and ok
+			ok = _check(int(t1.get("layover_minutes", 0)) == int(round(gap_min)),
+					"leg1 layover_minutes %d != actual gap %d" %
+					[int(t1.get("layover_minutes", 0)), int(round(gap_min))]) and ok
 		var stats: Dictionary = app_state.get("stats")
 		ok = _check(float(stats.get("connection_flights", 0)) >= 1.0,
 				"connection_flights stat not counted") and ok

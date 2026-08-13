@@ -65,15 +65,33 @@ func _build() -> void:
 	grade_label.add_theme_color_override("font_color", _grade_color(str(_result.get("grade", "D"))))
 	v.add_child(grade_label)
 
+	# Value / cap (n%) per axis (GDLC Playtest #3): the raw values alone never
+	# told the player how close they came — caps come from economy.challenge.
+	var cfg: Dictionary = DataService.economy.get("challenge", {})
+	var cap_net := float(cfg.get("cap_net_worth", 200000.0))
+	var cap_cities := float(cfg.get("cap_cities", 60.0))
+	var cap_countries := float(cfg.get("cap_countries", 30.0))
+	var cap_products := float(cfg.get("cap_products", 350.0))
+	var cap_distance := float(cfg.get("cap_distance_km", 40075.0))
+	var cap_single := float(cfg.get("cap_single_profit", 10000.0))
+	var cap_pph := float(cfg.get("cap_profit_per_hour", 200.0))
+	var nw := float(_result.get("net_worth", 0.0))
+	var cities_n := float(_result.get("visited_cities", 0))
+	var countries_n := float(_result.get("visited_countries", 0))
+	var products_n := float(_result.get("products_discovered", 0))
+	var dist_n := float(_result.get("total_distance_km", 0))
+	var ot := float(_result.get("on_time_rate", 0))
+	var single_n := float(_result.get("single_profit_max", 0))
+	var pph := float(_result.get("profit_per_hour", 0))
 	var metrics: Array = [
-		["ui.challenge.metric.net_worth", _Economy.format_money(float(_result.get("net_worth", 0)))],
-		["ui.challenge.metric.visited_cities", "%d" % int(_result.get("visited_cities", 0))],
-		["ui.challenge.metric.visited_countries", "%d" % int(_result.get("visited_countries", 0))],
-		["ui.challenge.metric.products_discovered", "%d" % int(_result.get("products_discovered", 0))],
-		["ui.challenge.metric.total_distance_km", "%.0f km" % float(_result.get("total_distance_km", 0))],
-		["ui.challenge.metric.on_time_rate", "%d%%" % int(float(_result.get("on_time_rate", 0)) * 100.0)],
-		["ui.challenge.metric.single_profit_max", _Economy.format_money(float(_result.get("single_profit_max", 0)))],
-		["ui.challenge.metric.profit_per_hour", _Economy.format_money(float(_result.get("profit_per_hour", 0)))],
+		["ui.challenge.metric.net_worth", "%s（%d%%）" % [_Economy.format_money(nw), int(nw / cap_net * 100.0)]],
+		["ui.challenge.metric.visited_cities", "%d / %.0f（%d%%）" % [int(cities_n), cap_cities, int(cities_n / cap_cities * 100.0)]],
+		["ui.challenge.metric.visited_countries", "%d / %.0f（%d%%）" % [int(countries_n), cap_countries, int(countries_n / cap_countries * 100.0)]],
+		["ui.challenge.metric.products_discovered", "%d / %.0f（%d%%）" % [int(products_n), cap_products, int(products_n / cap_products * 100.0)]],
+		["ui.challenge.metric.total_distance_km", "%.0f / %.0f km（%d%%）" % [dist_n, cap_distance, int(dist_n / cap_distance * 100.0)]],
+		["ui.challenge.metric.on_time_rate", "%d%%" % int(ot * 100.0)],
+		["ui.challenge.metric.single_profit_max", "%s / %s（%d%%）" % [_Economy.format_money(single_n), _Economy.format_money(cap_single), int(single_n / cap_single * 100.0)]],
+		["ui.challenge.metric.profit_per_hour", "%s / %s（%d%%）" % [_Economy.format_money(pph), _Economy.format_money(cap_pph), int(pph / cap_pph * 100.0)]],
 	]
 	for m in metrics:
 		var row := HBoxContainer.new()

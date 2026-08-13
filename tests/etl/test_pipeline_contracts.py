@@ -74,11 +74,14 @@ def _openflights_route_set() -> set[tuple[str, str, str]]:
 
 
 def test_margin_per_kg_bound():
-    """No (product, destination) may exceed margin_per_kg_cap_usd vs origin buy."""
+    """No (product, destination) may exceed margin_per_kg_cap_usd vs the
+    CHEAPEST possible purchase (GDLC Playtest #3: the origin-buy reference
+    left a same-city arbitrage hole — buying at a low-cpl country then
+    reselling locally paid 15,642 $/kg with zero flight hours)."""
     from collections import defaultdict
 
     products = {p["product_id"]: p for p in WORLD["products"]}
-    origin_buy: dict[str, float] = {}
+    min_buy: dict[str, float] = {}
     # Single pass over every market file (never per-product file reads — that
     # is O(products × files) and cost 23 minutes on the full 500-city set).
     sell_rows: dict[str, list[tuple[str, float]]] = defaultdict(list)
@@ -87,27 +90,38 @@ def test_margin_per_kg_bound():
         for r in json.loads(fpath.read_text(encoding="utf-8")):
             pid = r["p"]
             sell_rows[pid].append((city, float(r["s"])))
-            p = products.get(pid)
-            if p is not None and city == p["origin_city_id"]:
-                origin_buy[pid] = float(r["b"])
+            b = float(r["b"])
+            if b > 0.0 and (pid not in min_buy or b < min_buy[pid]):
+                min_buy[pid] = b
     worst = 0.0
     worst_pair = ""
     for pid, rows in sell_rows.items():
         p = products[pid]
         w_kg = float(p["weight_kg"])
-        ob = origin_buy.get(pid)
-        if not ob or w_kg <= 0.0:
+        mb = min_buy.get(pid)
+        if not mb or w_kg <= 0.0:
             continue
         for city, s in rows:
-            margin = (s - ob) / w_kg
+            margin = (s - mb) / w_kg
             if margin > worst:
                 worst = margin
-                worst_pair = f"{pid} -> {city}: sell {s} - buy {ob} / {w_kg}kg"
+                worst_pair = f"{pid} -> {city}: sell {s} - min_buy {mb} / {w_kg}kg"
     # +0.05 tolerance: the clamp is exact but market rows round to 2 decimals,
     # so a clamped value can land a few cents over the cap per kg.
     assert worst <= CAP_MARGIN_PER_KG + 0.05, (
         f"max margin {worst:.2f} $/kg > cap {CAP_MARGIN_PER_KG} at {worst_pair}"
     )
+
+
+def test_top_traffic_airports_present():
+    """P2 ratchet (Playtest #3): alphabetical tiebreaks must not exclude the
+    world's top-traffic airports — SFO/SEA/IAH/LAS were absent entirely
+    while BUR/FAT/GEG were present."""
+    iatas = {a["iata"] for a in WORLD["airports"]}
+    must_have = {"SFO", "SEA", "IAH", "LAS", "PHX", "MSP", "SYD", "NRT", "KIX",
+                 "YYZ", "MUC", "ZRH", "MAD", "FCO", "VIE", "OSL", "MAN", "LIS"}
+    missing = sorted(must_have - iatas)
+    assert not missing, f"top-traffic airports missing from world: {missing}"
 
 
 def test_margin_cap_in_config():
@@ -181,13 +195,21 @@ def test_challenge_config_in_data():
 
 
 def test_expo_export_carries_challenge_block():
-    from tools.export_expo_data import build_snapshot
+    from tools.export_expo_data import OUT_PATH, build_snapshot
 
     snap = build_snapshot()
     ch = snap.get("economy", {}).get("challenge", {})
     assert ch.get("days") == 15 and ch.get("cap_products") == 350 and ch.get("grade_a") == 80, (
         f"expo snapshot missing economy.challenge block: {ch}"
     )
+    # The demo reads the on-disk artifact, not the in-memory snapshot — pin it
+    # (GDLC Playtest #3: ios-data.json was 12 days stale with no economy key).
+    if OUT_PATH.is_file():
+        disk = json.loads(OUT_PATH.read_text(encoding="utf-8"))
+        dch = disk.get("economy", {}).get("challenge", {})
+        assert dch.get("days") == 15 and dch.get("cap_products") == 350, (
+            "on-disk ios-data.json missing economy.challenge — re-run tools/export_expo_data.py"
+        )
 
 
 def test_expo_declared_mapping():

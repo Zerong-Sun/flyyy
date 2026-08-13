@@ -42,11 +42,14 @@ baggage_extras:
   refund_fee_rate: 0.30
 
 # Minimum connection time (minutes). Per-airport override via airport.mct_minutes.
+# NOTE (GDLC Playtest #3): an alliance discount was removed — MCT is a published
+# airport property and the shipped alliance data is wrong for real pairings
+# (e.g. AC "none" vs UA "star"); re-introduce only together with protected
+# rebooking (interline protection) in the delay-rebook path.
 mct:
   default_min: 90
   international_min: 120
   max_connection_min: 480
-  same_alliance_discount_min: 15   # subtract from MCT when both legs share alliance
 
 # Delay / cancel simulation (seeded at runtime; conservative defaults)
 reliability:
