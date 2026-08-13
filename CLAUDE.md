@@ -49,7 +49,8 @@ Godot headless smoke regressions (`game/scripts/dev/Smoke*.gd`):
 ```bash
 GODOT=/Applications/Godot.app/Contents/MacOS/Godot
 $GODOT --headless --path game -s res://scripts/dev/SmokeV3Loop.gd      # full trade loop
-$GODOT --headless --path game -s res://scripts/dev/SmokeChallenge.gd   # 30-day challenge
+$GODOT --headless --path game -s res://scripts/dev/SmokeChallenge.gd   # 15-day challenge
+$GODOT --headless --path game -s res://scripts/dev/SmokeConnectionContract.gd  # connection contract (real legs, no cancel teleport)
 $GODOT --headless --path game -s res://scripts/dev/SmokeCollector.gd
 $GODOT --headless --path game -s res://scripts/dev/SmokeCodex.gd
 $GODOT --headless --path game -s res://scripts/dev/SmokeReputation.gd

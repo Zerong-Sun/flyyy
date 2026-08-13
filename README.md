@@ -171,7 +171,8 @@ source etl/.venv/bin/activate
 pytest tests/etl tests/game -q
 python tools/demo_smoke_logic.py
 GODOT=/Applications/Godot.app/Contents/MacOS/Godot
-$GODOT --headless --path game -s res://scripts/dev/SmokeChallenge.gd   # 30日挑战全生命周期
+$GODOT --headless --path game -s res://scripts/dev/SmokeChallenge.gd   # 15日挑战全生命周期
+$GODOT --headless --path game -s res://scripts/dev/SmokeConnectionContract.gd  # 联程契约（真实航班拼接 + 取消不瞬移）
 $GODOT --headless --path game -s res://scripts/dev/SmokeCollector.gd  # 收藏家模式进度面板
 $GODOT --headless --path game -s res://scripts/dev/SmokeCodex.gd      # 图鉴三页签
 $GODOT --headless --path game -s res://scripts/dev/SmokeReputation.gd # 声望/解锁树

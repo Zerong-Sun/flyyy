@@ -89,6 +89,23 @@ func _reliability_roll(ticket: Dictionary) -> Dictionary:
 func start_boarding(ticket: Dictionary) -> void:
 	if _boarding:
 		return
+	# Origin guard (ratchet P0): never board a ticket that does not depart from
+	# the player's current airport — a stale leg would teleport the player.
+	# Stale itineraries are dropped with the same 70% refund as a cancellation.
+	if str(ticket.get("origin_airport_id", "")) != AppState.current_airport_id:
+		var paid_total := 0.0
+		for t_v in AppState.held_tickets:
+			paid_total += float((t_v as Dictionary).get("total_paid", 0.0))
+		AppState.add_cash(paid_total * 0.7)
+		AppState.held_tickets = []
+		AppState.trip_baggage_extra_kg = 0.0
+		AppState.trip_cabin = "economy"
+		AppState.set_cold_chain(false)
+		AppState.cargo_kg_capacity = 0.0
+		EventBus.tutorial_hint.emit("行程已失效 — 已退回 70% 票款，请重新购票。")
+		EventBus.ticket_purchased.emit()
+		transition_finished.emit()
+		return
 	_boarding = true
 	GameClock.set_paused(true)
 
@@ -96,21 +113,19 @@ func start_boarding(ticket: Dictionary) -> void:
 	if bool(roll.get("cancelled", false)):
 		AppState.log_stat("cancelled_flights", 1.0)
 		AppState.stats["consecutive_on_time"] = 0
-		# Soft cancel: refund 70%, clear this leg, keep connection remainder if any.
-		var paid: float = float(ticket.get("total_paid", ticket.get("ticket_price", 0)))
-		AppState.add_cash(paid * 0.7)
-		var remaining: Array = []
-		var consumed_id := str(ticket.get("flight_instance_id", ""))
+		# Soft cancel: refund 70% of the FULL itinerary and drop every held leg.
+		# Keeping a connection leg 2 whose origin is a hub the player never
+		# reached would let _process auto-board it later and teleport the player
+		# (ratchet P0 — SmokeConnectionContract.gd part B).
+		var paid_total := 0.0
 		for t_v in AppState.held_tickets:
-			var t: Dictionary = t_v
-			if str(t.get("flight_instance_id", "")) != consumed_id:
-				remaining.append(t)
-		AppState.held_tickets = remaining
-		if remaining.is_empty():
-			AppState.trip_baggage_extra_kg = 0.0
-			AppState.trip_cabin = "economy"
-			AppState.set_cold_chain(false)
-			AppState.cargo_kg_capacity = 0.0
+			paid_total += float((t_v as Dictionary).get("total_paid", 0.0))
+		AppState.add_cash(paid_total * 0.7)
+		AppState.held_tickets = []
+		AppState.trip_baggage_extra_kg = 0.0
+		AppState.trip_cabin = "economy"
+		AppState.set_cold_chain(false)
+		AppState.cargo_kg_capacity = 0.0
 		EventBus.tutorial_hint.emit("航班取消（模拟）— 已退回 70% 票款。重建时刻表，不代表真实取消。")
 		EventBus.ticket_purchased.emit()
 		_boarding = false

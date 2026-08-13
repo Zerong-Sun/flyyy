@@ -118,12 +118,12 @@ static func purchase(flight: Dictionary, cabin: String, extra_tier: String, carg
 
 
 static func purchase_connection(conn: Dictionary, cabin: String, extra_tier: String, cargo_blocks: int, replace_existing: bool = false) -> String:
-	## Purchase a two-leg connection itinerary built from transfer_edges.
+	## Purchase a two-leg connection assembled from REAL scheduled flights:
+	## an origin→hub leg plus the earliest hub→dest leg departing within
+	## [arr1 + MCT, arr1 + max_connection]. Never mints phantom flights
+	## (ratchet P0 — SmokeConnectionContract.gd part A).
 	if not AppState.game_started:
 		return "请先开始游戏"
-	conn = _NewsEvents.quote_flight(conn)
-	if bool(conn.get("news_unavailable", false)):
-		return "受当前新闻事件影响，该联程已不可用，请刷新航班列表"
 	if str(conn.get("origin_airport_id", "")) != AppState.current_airport_id:
 		return "只能购买当前机场出发航班"
 	if not AppState.held_tickets.is_empty():
@@ -136,73 +136,115 @@ static func purchase_connection(conn: Dictionary, cabin: String, extra_tier: Str
 	var dest_id := str(conn.get("destination_airport_id", ""))
 	if hub_id == "" or dest_id == "":
 		return "联程数据不完整"
-	var price: float = _cabin_price(conn, cabin)
+	var mct: int = int(conn.get("mct_minutes", 0))
+	if mct <= 0:
+		var origin_ap: Dictionary = DataService.get_airport(str(conn.get("origin_airport_id", "")))
+		var dest_ap: Dictionary = DataService.get_airport(dest_id)
+		var international: bool = str(origin_ap.get("country_id", "")) != str(dest_ap.get("country_id", ""))
+		mct = DataService.mct_minutes_for_airport(hub_id, international)
+	var econ_mct: Dictionary = DataService.economy.get("mct", {})
+	var max_cnx: int = int(econ_mct.get("max_connection_min", 480))
+	var now := GameClock.unix_time
+
+	# Assemble from the real schedule: earliest origin→hub flight that has a
+	# hub→dest flight departing inside the [arr1 + mct, arr1 + max_cnx] window.
+	var f1: Dictionary = {}
+	var f2: Dictionary = {}
+	for f1_v in DataService.flights_from(str(conn.get("origin_airport_id", ""))):
+		var cand1: Dictionary = f1_v
+		if str(cand1.get("destination_airport_id", "")) != hub_id:
+			continue
+		var q1: Dictionary = _NewsEvents.quote_flight(cand1)
+		if bool(q1.get("news_unavailable", false)):
+			continue
+		var dep1: float = GameClock.parse_iso_to_unix(str(q1.get("scheduled_departure_utc", "")))
+		if dep1 < now + 60.0:
+			continue
+		var arr1: float = dep1 + float(q1.get("duration_minutes", 0)) * 60.0
+		var best2: Dictionary = {}
+		var best2_dep := INF
+		for f2_v in DataService.flights_from(hub_id):
+			var cand2: Dictionary = f2_v
+			if str(cand2.get("destination_airport_id", "")) != dest_id:
+				continue
+			var q2: Dictionary = _NewsEvents.quote_flight(cand2)
+			if bool(q2.get("news_unavailable", false)):
+				continue
+			var dep2: float = GameClock.parse_iso_to_unix(str(q2.get("scheduled_departure_utc", "")))
+			if dep2 < arr1 + float(mct) * 60.0:
+				continue
+			if dep2 - arr1 > float(max_cnx) * 60.0:
+				continue
+			if dep2 < best2_dep:
+				best2_dep = dep2
+				best2 = q2
+		if not best2.is_empty():
+			f1 = q1
+			f2 = best2
+			break
+	if f1.is_empty() or f2.is_empty():
+		return "当前时刻无可用联程航班（需满足 %d–%d 分钟中转窗口）" % [mct, max_cnx]
+
+	var dep1: float = GameClock.parse_iso_to_unix(str(f1.get("scheduled_departure_utc", "")))
+	var arr1: float = dep1 + float(f1.get("duration_minutes", 0)) * 60.0
+	var dep2: float = GameClock.parse_iso_to_unix(str(f2.get("scheduled_departure_utc", "")))
+	var mct_gap := int(round((dep2 - arr1) / 60.0))
+	var price1: float = _cabin_price(f1, cabin)
+	var price2: float = _cabin_price(f2, cabin)
+	var price: float = price1 + price2
 	var bag: Dictionary = _extra_cost(extra_tier, cargo_blocks)
 	var total: float = price + float(bag.extra_cost) + float(bag.cargo_cost)
 	if total > AppState.cash_usd:
 		return "资金不足（需 %s）" % _Economy.format_money(total)
-	# Schedule: depart in 3h; second leg after hub MCT (per-airport / edge).
-	var now := GameClock.unix_time
-	var dep1 := now + 3.0 * 3600.0
-	var seg1_min := int(conn.get("seg1_duration_avg", 120))
-	var seg2_min := int(conn.get("seg2_duration_avg", 120))
-	var origin_ap: Dictionary = DataService.get_airport(str(conn.get("origin_airport_id", "")))
-	var dest_ap: Dictionary = DataService.get_airport(dest_id)
-	var international: bool = str(origin_ap.get("country_id", "")) != str(dest_ap.get("country_id", ""))
-	var mct: int = int(conn.get("mct_minutes", 0))
-	if mct <= 0:
-		mct = DataService.mct_minutes_for_airport(hub_id, international)
-	var arr1 := dep1 + float(seg1_min) * 60.0
-	var dep2 := arr1 + float(mct) * 60.0
-	var arr2 := dep2 + float(seg2_min) * 60.0
-	var dist_total := float(conn.get("total_distance_km", 0))
-	var dist1 := dist_total * 0.55
-	var dist2 := dist_total * 0.45
 	AppState.add_cash(-total)
 	var ticket1 := {
-		"flight_instance_id": "cnx1_%s_%s" % [conn.get("origin_iata", ""), conn.get("hub_iata", "")],
-		"marketing_flight_number": "CN1 %s-%s" % [conn.get("origin_iata", ""), conn.get("hub_iata", "")],
-		"airline_name": "联程拼装（重建网络）",
-		"origin_airport_id": conn.get("origin_airport_id", ""),
-		"destination_airport_id": hub_id,
-		"origin_iata": conn.get("origin_iata", ""),
-		"destination_iata": conn.get("hub_iata", ""),
-		"scheduled_departure_utc": _unix_to_iso(dep1),
-		"scheduled_arrival_utc": _unix_to_iso(arr1),
-		"distance_km": dist1,
-		"duration_minutes": seg1_min,
+		"flight_instance_id": f1.get("flight_instance_id", ""),
+		"marketing_flight_number": f1.get("marketing_flight_number", ""),
+		"airline_name": f1.get("airline_name", ""),
+		"alliance_id": f1.get("alliance_id", DataService.airline_alliance_id(str(f1.get("operating_airline_id", "")))),
+		"origin_airport_id": f1.get("origin_airport_id", ""),
+		"destination_airport_id": f1.get("destination_airport_id", ""),
+		"origin_iata": f1.get("origin_iata", ""),
+		"destination_iata": f1.get("destination_iata", ""),
+		"scheduled_departure_utc": f1.get("scheduled_departure_utc", ""),
+		"scheduled_arrival_utc": f1.get("scheduled_arrival_utc", ""),
+		"distance_km": f1.get("distance_km", 0),
+		"duration_minutes": f1.get("duration_minutes", 0),
+		"stops": int(f1.get("stops", 0)),
 		"cabin": cabin,
-		"ticket_price": price * 0.55,
+		"ticket_price": price1,
 		"extra_kg": bag.extra_kg,
 		"cargo_kg": bag.cargo_kg,
 		"extra_tier": extra_tier,
 		"cargo_blocks": cargo_blocks,
-		"total_paid": total * 0.55,
+		"total_paid": price1 + float(bag.extra_cost) + float(bag.cargo_cost),
 		"is_connection_leg": true,
 		"connection_leg": 1,
 		"connection_final_dest": conn.get("destination_iata", ""),
-		"mct_minutes": mct,
+		"mct_minutes": mct_gap,
 		"enables_cold_chain": bag.enables_cold_chain,
 	}
 	var ticket2 := {
-		"flight_instance_id": "cnx2_%s_%s" % [conn.get("hub_iata", ""), conn.get("destination_iata", "")],
-		"marketing_flight_number": "CN2 %s-%s" % [conn.get("hub_iata", ""), conn.get("destination_iata", "")],
-		"airline_name": "联程拼装（重建网络）",
-		"origin_airport_id": hub_id,
-		"destination_airport_id": dest_id,
-		"origin_iata": conn.get("hub_iata", ""),
-		"destination_iata": conn.get("destination_iata", ""),
-		"scheduled_departure_utc": _unix_to_iso(dep2),
-		"scheduled_arrival_utc": _unix_to_iso(arr2),
-		"distance_km": dist2,
-		"duration_minutes": seg2_min,
+		"flight_instance_id": f2.get("flight_instance_id", ""),
+		"marketing_flight_number": f2.get("marketing_flight_number", ""),
+		"airline_name": f2.get("airline_name", ""),
+		"alliance_id": f2.get("alliance_id", DataService.airline_alliance_id(str(f2.get("operating_airline_id", "")))),
+		"origin_airport_id": f2.get("origin_airport_id", ""),
+		"destination_airport_id": f2.get("destination_airport_id", ""),
+		"origin_iata": f2.get("origin_iata", ""),
+		"destination_iata": f2.get("destination_iata", ""),
+		"scheduled_departure_utc": f2.get("scheduled_departure_utc", ""),
+		"scheduled_arrival_utc": f2.get("scheduled_arrival_utc", ""),
+		"distance_km": f2.get("distance_km", 0),
+		"duration_minutes": f2.get("duration_minutes", 0),
+		"stops": int(f2.get("stops", 0)),
 		"cabin": cabin,
-		"ticket_price": price * 0.45,
+		"ticket_price": price2,
 		"extra_kg": 0.0,
 		"cargo_kg": bag.cargo_kg,
 		"extra_tier": "",
 		"cargo_blocks": cargo_blocks,
-		"total_paid": total * 0.45,
+		"total_paid": price2,
 		"is_connection_leg": true,
 		"connection_leg": 2,
 		"connection_final_dest": conn.get("destination_iata", ""),

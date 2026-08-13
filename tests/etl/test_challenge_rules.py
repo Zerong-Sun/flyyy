@@ -15,11 +15,12 @@ WORLD = json.loads((GAME / "data" / "world.json").read_text(encoding="utf-8"))
 APPSTATE_SRC = (GAME / "scripts" / "autoload" / "AppState.gd").read_text(encoding="utf-8")
 CHALLENGE_SRC = (GAME / "scripts" / "systems" / "ChallengeSystem.gd").read_text(encoding="utf-8")
 
-# Normalization caps mirrored from ChallengeSystem.gd
+# Normalization caps mirrored from ChallengeSystem.gd (15-day-window
+# calibrated for the collection metrics — see test_excellent_15_day_run_scores_a)
 CAP_NET_WORTH = 200_000.0
-CAP_CITIES = 500.0
-CAP_COUNTRIES = 100.0
-CAP_PRODUCTS = 800.0
+CAP_CITIES = 60.0
+CAP_COUNTRIES = 30.0
+CAP_PRODUCTS = 350.0
 CAP_DISTANCE_KM = 40075.0
 CAP_SINGLE_PROFIT = 10_000.0
 CAP_PROFIT_PER_HOUR = 200.0
@@ -140,6 +141,29 @@ def test_score_aggregation_and_grade_consistency():
     assert _grade(_score([1.0] * 8)) == "A"
     assert _score([0.0] * 8) == 0
     assert _grade(_score([0.0] * 8)) == "D"
+
+
+def test_excellent_15_day_run_scores_a():
+    # GDLC Playtest #1 ratchet (P0): the collection caps were calibrated for
+    # the 500-city world, so an excellent 15-day run could never reach A (80).
+    # Benchmarked from the persona sims (Trade Senior greedy sim; Speedrunner
+    # 4-strategy x 70-run sim): money metrics saturate by day ~3-5, on-time
+    # lands ~0.95, and measured collector maxima were cities=40, countries=25,
+    # products=244 (while solvent). Such a run MUST clear the A threshold.
+    excellent_parts = [
+        1.0,  # net_worth — saturates
+        40 / CAP_CITIES,
+        25 / CAP_COUNTRIES,
+        244 / CAP_PRODUCTS,
+        1.0,  # distance — saturates
+        0.95,  # on_time_rate
+        1.0,  # single_profit_max — saturates
+        1.0,  # profit_per_hour — saturates
+    ]
+    assert _score(excellent_parts) >= 80, (
+        "excellent 15-day run scores %d < 80 (A unreachable) — recalibrate "
+        "the collection caps for the 15-day window" % _score(excellent_parts)
+    )
 
 
 def test_save_paths_per_mode():

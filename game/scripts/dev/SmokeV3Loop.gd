@@ -74,49 +74,59 @@ func _run() -> void:
 	app_state.call("reset_new_game", "pvg")
 	ok = _check(str(app_state.get("current_airport_id")) == "pvg", "new game not at pvg") and ok
 
-	# ═══ PART A: 联程 MCT — schedule must use edge/airport MCT, not hardcoded 90 ═══
+	# ═══ PART A: 联程 — legs must be REAL scheduled flights with the layover
+	# gap inside [edge MCT, 480] at the hub (v0.3.1 contract) ═══
 	var conns: Array = _search_script.search_connections("PVG")
 	ok = _check(conns.size() > 0, "no connections from PVG") and ok
-	var conn: Dictionary = {}
+	var conn_used: Dictionary = {}
+	var held_conn: Array = []
 	for c_v in conns:
 		var c: Dictionary = c_v
-		if int(c.get("mct_minutes", 0)) > 0 and int(c.get("mct_minutes", 0)) != 90:
-			conn = c
+		var cmsg: String = _ticket_script.purchase_connection(c, "economy", "", 0)
+		if cmsg == "":
+			conn_used = c
+			held_conn = app_state.get("held_tickets") as Array
 			break
-	if conn.is_empty():
-		for c_v in conns:
-			var c: Dictionary = c_v
-			if int(c.get("mct_minutes", 0)) > 0:
-				conn = c
-				break
-	ok = _check(not conn.is_empty(), "no connection with mct_minutes > 0") and ok
-	if not conn.is_empty():
-		var mct := int(conn.get("mct_minutes", 0))
-		var seg1 := int(conn.get("seg1_duration_avg", 0))
-		var seg2 := int(conn.get("seg2_duration_avg", 0))
-		ok = _check(int(conn.get("duration_minutes", 0)) == seg1 + mct + seg2,
+	ok = _check(not conn_used.is_empty(),
+			"no connection purchasable from PVG at baseline time (real-flight assembly)") and ok
+	if not conn_used.is_empty():
+		var mct := int(conn_used.get("mct_minutes", 0))
+		var seg1 := int(conn_used.get("seg1_duration_avg", 0))
+		var seg2 := int(conn_used.get("seg2_duration_avg", 0))
+		ok = _check(int(conn_used.get("duration_minutes", 0)) == seg1 + mct + seg2,
 				"connection duration does not include MCT") and ok
-		var cmsg: String = _ticket_script.purchase_connection(conn, "economy", "", 0)
-		ok = _check(cmsg == "", "connection purchase failed: %s" % cmsg) and ok
-		var held: Array = app_state.get("held_tickets")
-		ok = _check(held.size() == 2, "expected 2 connection legs") and ok
-		if held.size() == 2:
-			var t1: Dictionary = held[0]
-			var t2: Dictionary = held[1]
-			ok = _check(int(t1.get("mct_minutes", 0)) == mct,
-					"leg1 mct_minutes mismatch: %s != %d" % [t1.get("mct_minutes", 0), mct]) and ok
+		ok = _check(held_conn.size() == 2, "expected 2 connection legs") and ok
+		if held_conn.size() == 2:
+			var t1: Dictionary = held_conn[0]
+			var t2: Dictionary = held_conn[1]
+			# Legs must be real scheduled flights — no minted cnx ids.
+			for leg_v in held_conn:
+				var leg: Dictionary = leg_v
+				var found := false
+				for f_v in data.call("flights_from", str(leg.get("origin_airport_id", ""))):
+					var f: Dictionary = f_v
+					if str(f.get("flight_instance_id", "")) == str(leg.get("flight_instance_id", "")) \
+							and str(f.get("scheduled_departure_utc", "")) == str(leg.get("scheduled_departure_utc", "")):
+						found = true
+						break
+				ok = _check(found,
+						"phantom connection leg: %s" % str(leg.get("flight_instance_id", ""))) and ok
 			var arr1: float = clock.call("parse_iso_to_unix", str(t1.get("scheduled_arrival_utc", "")))
 			var dep2: float = clock.call("parse_iso_to_unix", str(t2.get("scheduled_departure_utc", "")))
 			var gap_min: float = (dep2 - arr1) / 60.0
-			ok = _check(absf(gap_min - float(mct)) < 1.0,
-					"MCT layover gap %.1f min != %d min" % [gap_min, mct]) and ok
+			var max_cnx := int(econ.get("mct", {}).get("max_connection_min", 480))
+			ok = _check(gap_min >= float(mct) - 0.5 and gap_min <= float(max_cnx) + 0.5,
+					"layover gap %.1f min outside [%d, %d]" % [gap_min, mct, max_cnx]) and ok
+			ok = _check(int(t1.get("mct_minutes", 0)) == int(round(gap_min)),
+					"leg1 mct_minutes %d != actual gap %d" %
+					[int(t1.get("mct_minutes", 0)), int(round(gap_min))]) and ok
 		var stats: Dictionary = app_state.get("stats")
 		ok = _check(float(stats.get("connection_flights", 0)) >= 1.0,
 				"connection_flights stat not counted") and ok
-		# Refund must cover BOTH legs: a connection splits total_paid 55/45.
+		# Refund must cover BOTH legs (sum of total_paid).
 		var fee_rate := float(econ.get("baggage_extras", {}).get("refund_fee_rate", 0.3))
 		var paid_total := 0.0
-		for t_v in held:
+		for t_v in held_conn:
 			paid_total += float((t_v as Dictionary).get("total_paid", 0))
 		var cash_before_refund := float(app_state.get("cash_usd"))
 		var rmsg: String = _ticket_script.refund_current()

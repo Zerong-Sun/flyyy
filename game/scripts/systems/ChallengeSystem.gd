@@ -9,10 +9,14 @@ const CHALLENGE_DAYS := 15
 const DAY_SECONDS := 86400.0
 
 # Metric normalization caps (value ÷ cap, clamped to 0..1).
+# Collection caps are calibrated for the 15-day window, not the 500-city
+# world totals: GDLC Playtest #1 measured excellent-play maxima of cities=40,
+# countries=25, products=244, which must clear the A threshold (ratchet:
+# tests/etl/test_challenge_rules.py::test_excellent_15_day_run_scores_a).
 const CAP_NET_WORTH := 200000.0
-const CAP_CITIES := 500.0
-const CAP_COUNTRIES := 100.0
-const CAP_PRODUCTS := 800.0
+const CAP_CITIES := 60.0
+const CAP_COUNTRIES := 30.0
+const CAP_PRODUCTS := 350.0
 const CAP_DISTANCE_KM := 40075.0
 const CAP_SINGLE_PROFIT := 10000.0
 const CAP_PROFIT_PER_HOUR := 200.0
