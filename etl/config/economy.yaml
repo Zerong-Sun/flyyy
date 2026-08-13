@@ -71,6 +71,25 @@ market:
   scarcity_remote_bonus: 1.35
   demand_decay_per_sale: 0.08
   demand_recovery_per_day: 0.05
+  # Remote sell price may not exceed origin-buy + this cap per kg of product
+  # weight (GDLC Playtest #2 ratchet — bounds the light-luxury-goods tail).
+  margin_per_kg_cap_usd: 500.0
+
+# 15-day challenge scoring — exported into world.json economy.challenge, the
+# single source of truth read by ChallengeSystem.gd, the pytest mirror, and
+# the expo snapshot (GDLC Playtest #2 ratchet — caps were literals in 3 places).
+challenge:
+  days: 15
+  cap_net_worth: 200000
+  cap_cities: 60
+  cap_countries: 30
+  cap_products: 350
+  cap_distance_km: 40075
+  cap_single_profit: 10000
+  cap_profit_per_hour: 200
+  grade_a: 80
+  grade_b: 60
+  grade_c: 40
 
 # Cold-chain decay multiplier when cold baggage is NOT active (1.0 = normal)
 cold_chain:

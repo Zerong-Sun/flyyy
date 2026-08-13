@@ -15,15 +15,17 @@ WORLD = json.loads((GAME / "data" / "world.json").read_text(encoding="utf-8"))
 APPSTATE_SRC = (GAME / "scripts" / "autoload" / "AppState.gd").read_text(encoding="utf-8")
 CHALLENGE_SRC = (GAME / "scripts" / "systems" / "ChallengeSystem.gd").read_text(encoding="utf-8")
 
-# Normalization caps mirrored from ChallengeSystem.gd (15-day-window
-# calibrated for the collection metrics — see test_excellent_15_day_run_scores_a)
-CAP_NET_WORTH = 200_000.0
-CAP_CITIES = 60.0
-CAP_COUNTRIES = 30.0
-CAP_PRODUCTS = 350.0
-CAP_DISTANCE_KM = 40075.0
-CAP_SINGLE_PROFIT = 10_000.0
-CAP_PROFIT_PER_HOUR = 200.0
+# Caps come from world.json economy.challenge — the single source of truth
+# read by ChallengeSystem.gd, this mirror, and the expo snapshot (GDLC
+# Playtest #2 ratchet). 15-day-window calibration: Playtest #1.
+_CH = WORLD["economy"].get("challenge", {})
+CAP_NET_WORTH = float(_CH.get("cap_net_worth", 200_000.0))
+CAP_CITIES = float(_CH.get("cap_cities", 60.0))
+CAP_COUNTRIES = float(_CH.get("cap_countries", 30.0))
+CAP_PRODUCTS = float(_CH.get("cap_products", 350.0))
+CAP_DISTANCE_KM = float(_CH.get("cap_distance_km", 40075.0))
+CAP_SINGLE_PROFIT = float(_CH.get("cap_single_profit", 10_000.0))
+CAP_PROFIT_PER_HOUR = float(_CH.get("cap_profit_per_hour", 200.0))
 
 REQUIRED_STAT_KEYS = {
     "total_flight_segments",
@@ -119,9 +121,13 @@ def test_required_stat_keys_exist_in_appstate_defaults():
 def test_metric_keys_and_normalization_caps_in_challenge_source():
     for key in METRIC_KEYS:
         assert key in CHALLENGE_SRC, f"metric key {key!r} missing from ChallengeSystem.gd"
-    for cap_name in ["CAP_NET_WORTH", "CAP_CITIES", "CAP_COUNTRIES", "CAP_PRODUCTS",
-                     "CAP_DISTANCE_KM", "CAP_SINGLE_PROFIT", "CAP_PROFIT_PER_HOUR"]:
-        assert cap_name in CHALLENGE_SRC, f"cap {cap_name!r} missing from ChallengeSystem.gd"
+    # Caps/thresholds must be read from economy.challenge data (GDLC Playtest #2
+    # ratchet) — the source must reference the data block and the fallback keys.
+    assert '"challenge"' in CHALLENGE_SRC, "ChallengeSystem.gd must read from economy.challenge"
+    for cap_name in ["cap_net_worth", "cap_cities", "cap_countries", "cap_products",
+                     "cap_distance_km", "cap_single_profit", "cap_profit_per_hour",
+                     "grade_a", "grade_b", "grade_c"]:
+        assert cap_name in CHALLENGE_SRC, f"challenge key {cap_name!r} missing from ChallengeSystem.gd"
 
 
 def test_grade_boundaries():

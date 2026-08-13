@@ -96,6 +96,11 @@ def build_snapshot() -> dict:
         },
         "cities": cities,
         "products": products,
+        # Challenge scoring config so the demo's future challenge port reads the
+        # same numbers as Godot (GDLC Playtest #2 ratchet).
+        "economy": {
+            "challenge": world.get("economy", {}).get("challenge", {}),
+        },
     }
 
 

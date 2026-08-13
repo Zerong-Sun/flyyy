@@ -563,13 +563,16 @@ def load_aviation_config() -> tuple[list[dict], list[dict], dict]:
 
 
 def airport_mct_minutes(airport: dict, eco: dict, international: bool = False) -> int:
-    """Resolve MCT for an airport (override → intl default → default)."""
+    """Resolve MCT for an airport (intl minimum first; per-airport override
+    applies to domestic transfers only — an authored-hub 75-min override must
+    never undercut international_min)."""
     mct = eco.get("mct") or {}
     if international:
-        default = int(mct.get("international_min", mct.get("default_min", 90)))
-    else:
-        default = int(mct.get("default_min", 90))
-    return int(airport.get("mct_minutes", default))
+        return int(mct.get("international_min", mct.get("default_min", 90)))
+    override = airport.get("mct_minutes")
+    if override:
+        return int(override)
+    return int(mct.get("default_min", 90))
 
 
 def resolve_hazmat_class(category: str, override: str | None = None) -> str:
@@ -951,8 +954,9 @@ def generate_inherited_products(city_id: str, country_id: str, authored_count: i
     products = []
     # Pick templates not already used by this city
     categories = list(PRODUCT_TEMPLATES.keys())
-    # Stable shuffle based on city_id
-    rng = random.Random(hash(city_id) & 0xFFFFFFFF)
+    # Stable shuffle based on city_id (sha256-seeded — never builtin hash(),
+    # which is salted per process and would break reproducible outputs)
+    rng = stable_rand("inherited_products", city_id)
     rng.shuffle(categories)
 
     for cat in categories:
@@ -1115,10 +1119,10 @@ def build_airports(hubs_cfg: dict, oa: dict[str, dict], passenger_iatas: set[str
         # Demo / authored hubs get a slightly tighter MCT override.
         mct_override = 75 if bool(h.get("has_content_file", h.get("authored", False))) else None
         if mct_override is None and h.get("city_id") in (
-            "beijing", "shanghai", "hongkong", "tokyo", "singapore", "dubai",
+            "beijing", "shanghai", "hong_kong", "tokyo", "singapore", "dubai",
             "london", "paris", "frankfurt", "amsterdam", "istanbul", "newyork",
-            "losangeles", "chicago", "atlanta", "dallas", "denver", "miami",
-            "seoul", "bangkok",
+            "los_angeles", "chicago", "atlanta", "dallas", "denver", "miami",
+            "seoul", "bangkok", "guangzhou",
         ):
             mct_override = 75
         row = {
@@ -1311,7 +1315,7 @@ def synth_flights(
                 p_eco = round(base * rnd, 2)
                 p_biz = round(p_eco * tcfg["business_multiplier"], 2)
                 p_first = round(p_eco * first_mult, 2)
-                fn = f"{airline['id']}{100 + (hash((origin, dest, day_i, slot)) % 900)}"
+                fn = f"{airline['id']}{100 + stable_rand('flight_no', origin, dest, day_i, slot).randint(0, 899)}"
                 fid += 1
                 flights.append(
                     {
@@ -1399,21 +1403,32 @@ def _synth_stopover_flights(
     out: list[dict] = []
     fid = start_fid
     for origin, dest in long_haul[:target_n]:
-        # Pick a geographic mid-hub that connects both ends when possible
-        candidates = [
-            h
-            for h in neighbor_of.get(origin, set())
-            if h != dest and dest in neighbor_of.get(h, set())
-        ]
-        if not candidates:
-            continue
-        rr = stable_rand("stopover", origin, dest)
-        hub = candidates[rr.randrange(len(candidates))]
+        # Pick a geographic mid-hub that connects both ends AND is served by an
+        # airline operating BOTH legs (contract: never fabricate airline-route
+        # pairs). Sorted candidates keep the pick deterministic per process.
         oa = airports_by_iata[origin]
-        ha = airports_by_iata[hub]
         da = airports_by_iata[dest]
-        d1 = haversine_km(oa["latitude"], oa["longitude"], ha["latitude"], ha["longitude"])
-        d2 = haversine_km(ha["latitude"], ha["longitude"], da["latitude"], da["longitude"])
+        rr = stable_rand("stopover", origin, dest)
+        valid: list[tuple[str, list[str], float, float]] = []
+        for hub in sorted(neighbor_of.get(origin, set())):
+            if hub == dest or dest not in neighbor_of.get(hub, set()):
+                continue
+            ha = airports_by_iata[hub]
+            d1 = haversine_km(oa["latitude"], oa["longitude"], ha["latitude"], ha["longitude"])
+            d2 = haversine_km(ha["latitude"], ha["longitude"], da["latitude"], da["longitude"])
+            if d1 + d2 > 20037.0:  # antipodal bound — never emit an impossible distance
+                continue
+            joint = sorted(
+                (route_airlines.get((origin, hub), set())
+                 & route_airlines.get((hub, dest), set()))
+                & active_iatas
+            )
+            if joint:
+                valid.append((hub, joint, d1, d2))
+        if not valid:
+            continue
+        hub, joint, d1, d2 = valid[rr.randrange(len(valid))]
+        ha = airports_by_iata[hub]
         dur1 = int(d1 / fcfg["cruise_km_per_min"] + fcfg["taxi_pad_min"])
         dur2 = int(d2 / fcfg["cruise_km_per_min"] + fcfg["taxi_pad_min"])
         duration = dur1 + ground + dur2
@@ -1425,13 +1440,32 @@ def _synth_stopover_flights(
             + tcfg["airport_fee_default"] * 2
         ) * demand
         real_route = (origin, dest) in route_airlines
+        if real_route:
+            # synthetic_stopover label promises the airline operates the OD too —
+            # restrict the pool to operators recorded on ALL THREE segments.
+            od_ops = route_airlines.get((origin, dest), set()) & active_iatas
+            joint = sorted(set(joint) & od_ops)
+        else:
+            # Fallback stopovers keep the endpoint-continent airline rule (same
+            # convention as synthetic_route_fill direct flights — the pipeline
+            # validator asserts no third-continent fallback carriers).
+            endpoint_conts = {
+                country_continent(str(oa.get("country_id", ""))),
+                country_continent(str(da.get("country_id", ""))),
+            }
+            joint = sorted(a for a in joint
+                           if _active_entry_continents(a, real_airlines) & endpoint_conts)
+        if not joint:
+            continue
         for day_i in range(0, days, 2):  # every other day to limit volume
             day = start + timedelta(days=day_i)
             rng = stable_rand("stopflight", origin, hub, dest, day.isoformat())
-            airline = pick_airline(
-                stable_rand("stop_airline", origin, dest, day_i),
-                origin, dest, airports_by_iata, route_airlines,
-                active_iatas, real_airlines, curated_alliance,
+            chosen_iata = joint[rng.randrange(len(joint))]
+            airline = _resolve_airline_row(
+                chosen_iata, real_airlines, curated_alliance,
+                (str(oa.get("country_id", "")), str(da.get("country_id", ""))),
+                (country_continent(str(oa.get("country_id", ""))),
+                 country_continent(str(da.get("country_id", "")))),
             )
             hour = rng.randint(7, 18)
             minute = rng.choice([0, 15, 30, 45])
@@ -1444,7 +1478,7 @@ def _synth_stopover_flights(
             out.append(
                 {
                     "flight_instance_id": f"F{fid:06d}",
-                    "marketing_flight_number": f"{airline['id']}{800 + (fid % 100)}",
+                    "marketing_flight_number": f"{airline['id']}{800 + rng.randint(0, 99)}",
                     "operating_airline_id": airline["id"],
                     "marketing_airline_id": airline["id"],
                     "airline_name": airline["name"],
@@ -1888,6 +1922,14 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
                 # country (GB). Keeps "⭐最佳目的地" meaningful per product.
                 sell *= _remote_demand(prod["product_id"], city_id)
                 sell = max(sell, buy * 0.95)
+                # Margin-per-kg clamp (GDLC Playtest #2 ratchet): light
+                # high-rarity proxies paid up to $53.5k/kg ($1.07M per 20kg
+                # hold) and trivialized every other system. Cap the remote
+                # margin so baggage tiers / cargo / cold chain stay meaningful.
+                ocpl = COUNTRY_PRICE_LEVEL.get(prod["origin_country_id"], 1.0)
+                obuy = (prod["base_reference_price"] * ocpl
+                        * mcfg["origin_supply_bonus"] * mcfg["retail_markup"])
+                sell = min(sell, obuy + mcfg["margin_per_kg_cap_usd"] * prod["weight_kg"])
                 buy = prod["base_reference_price"] * cpl * 1.05 * mcfg["retail_markup"]
             markets.append(
                 {
@@ -1958,7 +2000,10 @@ def write_sqlite(airports, routes, flights, cities, products, markets, eco, meta
                 a["data_confidence"],
             ),
         )
-    for o, d in routes:
+    # routes is a set — sort before insert so row order (and therefore the
+    # sqlite bytes) are deterministic across processes (same fix as the
+    # world.json export and the transfer-edge builder).
+    for o, d in sorted(routes):
         aa = next(x for x in airports if x["iata"] == o)
         bb = next(x for x in airports if x["iata"] == d)
         dist = haversine_km(aa["latitude"], aa["longitude"], bb["latitude"], bb["longitude"])
@@ -2091,6 +2136,8 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
         economy_out["cold_chain"] = eco["cold_chain"]
     if eco.get("dynamics"):
         economy_out["dynamics"] = eco["dynamics"]
+    if eco.get("challenge"):
+        economy_out["challenge"] = eco["challenge"]
 
     # Curated airlines first (known alliance metadata), then every real operator
     # used by the generated flights. Resolve name/home_country from the flights
@@ -2273,7 +2320,6 @@ def build_transfer_edges(routes: set[tuple[str, str]], airports_by_iata: dict[st
             if (origin, dest) in direct:
                 continue
             da = airports_by_iata[dest]
-            international = oa.get("country_id") != da.get("country_id")
             edges = []
             for hub in hub_set:
                 if hub == origin or hub == dest:
@@ -2284,6 +2330,10 @@ def build_transfer_edges(routes: set[tuple[str, str]], airports_by_iata: dict[st
                 if dest not in neighbor_of.get(hub, set()):
                     continue
                 hub_ap = airports_by_iata[hub]
+                # International = either leg crosses a border (per-leg, not
+                # origin-vs-dest country).
+                international = (oa.get("country_id") != hub_ap.get("country_id")
+                                 or hub_ap.get("country_id") != da.get("country_id"))
                 mct = airport_mct_minutes(hub_ap, eco, international=international)
                 d1 = hub_dists[hub][origin]
                 d2 = hub_dists[hub][dest]
@@ -2358,7 +2408,8 @@ def _check_hot_win_rate(product_market_tags: dict, market_index: dict, samples: 
     Reports the percentage of hot pairs that remain profitable (sell > buy).
     Target: ≥85% at quality=1.0, ≥70% at quality=0.8.
     """
-    import random as _rnd
+    # Deterministic sampling so the printed win rate is reproducible.
+    _rnd = stable_rand("hot_win_validation")
 
     hot_pairs = []
     for key, tags in product_market_tags.items():

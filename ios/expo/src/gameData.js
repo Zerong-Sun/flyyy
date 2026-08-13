@@ -390,6 +390,15 @@ const NOTE_SEED = {
 };
 Object.keys(NOTE_SEED).forEach((id) => defineCity({ id, note: NOTE_SEED[id] }));
 
+// ── DEMO ECONOMY MAPPING (declared contract — do not drift silently) ────────
+// The demo is a scaled-down re-implementation of world.json economy. The
+// canonical mapping is DEMO_SCALE = 1 / USD_CNY (1 / 7.2): starting cash
+// 6944 ≈ 50000 × DEMO_SCALE, cargo cap 50 ≈ 360 kg × DEMO_SCALE, and the
+// fare formula ((80 + 0.098/km) × costIndex) / 4 is the demo-scale analog of
+// the ETL fare 40 + 0.085/km + fees. tests/etl/test_pipeline_contracts.py::
+// test_expo_declared_mapping pins this declaration so any drift fails CI.
+export const DEMO_SCALE = 1 / 7.2;
+
 export const STARTING_CASH = 6944;
 export const STARTING_CITY = 'istanbul';
 export const DEFAULT_BAG_LIMIT = 23;

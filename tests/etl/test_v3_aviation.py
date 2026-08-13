@@ -95,8 +95,8 @@ def test_transfer_edge_includes_mct_when_built():
     airports = {
         "AAA": {"latitude": 0.0, "longitude": 0.0, "country_id": "AA", "mct_minutes": 80},
         "HHH": {"latitude": 10.0, "longitude": 10.0, "country_id": "HH", "mct_minutes": 100},
-        "BBB": {"latitude": 20.0, "longitude": 20.0, "country_id": "BB"},
-        "CCC": {"latitude": 5.0, "longitude": 5.0, "country_id": "CC"},
+        "BBB": {"latitude": 20.0, "longitude": 20.0, "country_id": "HH"},
+        "CCC": {"latitude": 5.0, "longitude": 5.0, "country_id": "HH"},
         "DDD": {"latitude": 15.0, "longitude": 15.0, "country_id": "DD"},
         "EEE": {"latitude": 8.0, "longitude": 8.0, "country_id": "EE"},
         "FFF": {"latitude": 12.0, "longitude": 12.0, "country_id": "FF"},
@@ -112,10 +112,16 @@ def test_transfer_edge_includes_mct_when_built():
             continue
         routes.add(("HHH", other))
         routes.add((other, "HHH"))
-    # No direct AAA→BBB so transfer via HHH should exist
     eco = {"mct": {"default_min": 90, "international_min": 120, "max_connection_min": 480}}
     edges = build_transfer_edges(routes, airports, iatas, eco)
+    # International transfer (AA→HH leg crosses a border): the hub's 100-min
+    # override must NOT undercut international_min 120 (GDLC Playtest #2).
     key = "AAA|BBB"
+    assert key in edges
+    assert edges[key][0]["hub"] == "HHH"
+    assert edges[key][0]["mct_minutes"] == 120
+    # Domestic transfer (HH→HH→HH): the authored override applies.
+    key = "BBB|CCC"
     assert key in edges
     assert edges[key][0]["hub"] == "HHH"
     assert edges[key][0]["mct_minutes"] == 100

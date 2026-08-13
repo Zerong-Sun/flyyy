@@ -5,21 +5,29 @@ extends Node
 
 const _Economy = preload("res://scripts/systems/EconomySystem.gd")
 
-const CHALLENGE_DAYS := 15
 const DAY_SECONDS := 86400.0
 
-# Metric normalization caps (value ÷ cap, clamped to 0..1).
-# Collection caps are calibrated for the 15-day window, not the 500-city
-# world totals: GDLC Playtest #1 measured excellent-play maxima of cities=40,
-# countries=25, products=244, which must clear the A threshold (ratchet:
-# tests/etl/test_challenge_rules.py::test_excellent_15_day_run_scores_a).
-const CAP_NET_WORTH := 200000.0
-const CAP_CITIES := 60.0
-const CAP_COUNTRIES := 30.0
-const CAP_PRODUCTS := 350.0
-const CAP_DISTANCE_KM := 40075.0
-const CAP_SINGLE_PROFIT := 10000.0
-const CAP_PROFIT_PER_HOUR := 200.0
+# Challenge config lives in world.json economy.challenge (single source of
+# truth read by Godot, the pytest mirror, and the expo snapshot — GDLC
+# Playtest #2 ratchet). Literal fallbacks mirror etl/config/economy.yaml in
+# case the data block is absent.
+const _DEFAULT_CHALLENGE := {
+	"days": 15,
+	"cap_net_worth": 200000.0,
+	"cap_cities": 60.0,
+	"cap_countries": 30.0,
+	"cap_products": 350.0,
+	"cap_distance_km": 40075.0,
+	"cap_single_profit": 10000.0,
+	"cap_profit_per_hour": 200.0,
+	"grade_a": 80,
+	"grade_b": 60,
+	"grade_c": 40,
+}
+
+
+func _challenge_cfg() -> Dictionary:
+	return DataService.economy.get("challenge", _DEFAULT_CHALLENGE)
 
 
 func _ready() -> void:
@@ -49,9 +57,10 @@ func is_active() -> bool:
 
 func start_new() -> void:
 	var now: float = float(GameClock.unix_time)
+	var days: float = float(_challenge_cfg().get("days", 15))
 	AppState.challenge = {
 		"start_unix": now,
-		"deadline_unix": now + CHALLENGE_DAYS * DAY_SECONDS,
+		"deadline_unix": now + days * DAY_SECONDS,
 		"ended": false,
 		"result": {},
 	}
@@ -76,15 +85,16 @@ func compute_metrics() -> Dictionary:
 	if flight_hours > 0.0:
 		profit_per_hour = maxf(0.0, (net_worth - start_cash) / flight_hours)
 
+	var cfg: Dictionary = _challenge_cfg()
 	var parts: Array[float] = [
-		_normalize(net_worth, CAP_NET_WORTH),
-		_normalize(float(AppState.visited_cities.size()), CAP_CITIES),
-		_normalize(float(AppState.visited_countries.size()), CAP_COUNTRIES),
-		_normalize(float(AppState.stats.get("products_discovered", {}).size()), CAP_PRODUCTS),
-		_normalize(float(AppState.stats.get("total_distance_km", 0.0)), CAP_DISTANCE_KM),
+		_normalize(net_worth, float(cfg.get("cap_net_worth", 200000.0))),
+		_normalize(float(AppState.visited_cities.size()), float(cfg.get("cap_cities", 60.0))),
+		_normalize(float(AppState.visited_countries.size()), float(cfg.get("cap_countries", 30.0))),
+		_normalize(float(AppState.stats.get("products_discovered", {}).size()), float(cfg.get("cap_products", 350.0))),
+		_normalize(float(AppState.stats.get("total_distance_km", 0.0)), float(cfg.get("cap_distance_km", 40075.0))),
 		on_time_rate,
-		_normalize(float(AppState.stats.get("single_profit_max", 0.0)), CAP_SINGLE_PROFIT),
-		_normalize(profit_per_hour, CAP_PROFIT_PER_HOUR),
+		_normalize(float(AppState.stats.get("single_profit_max", 0.0)), float(cfg.get("cap_single_profit", 10000.0))),
+		_normalize(profit_per_hour, float(cfg.get("cap_profit_per_hour", 200.0))),
 	]
 	var score_sum := 0.0
 	for p in parts:
@@ -132,10 +142,11 @@ func _normalize(value: float, cap: float) -> float:
 
 
 func _grade(score_pct: int) -> String:
-	if score_pct >= 80:
+	var cfg: Dictionary = _challenge_cfg()
+	if score_pct >= int(cfg.get("grade_a", 80)):
 		return "A"
-	if score_pct >= 60:
+	if score_pct >= int(cfg.get("grade_b", 60)):
 		return "B"
-	if score_pct >= 40:
+	if score_pct >= int(cfg.get("grade_c", 40)):
 		return "C"
 	return "D"

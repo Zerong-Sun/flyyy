@@ -23,6 +23,8 @@ Persona matrix pruned to cover these surfaces only. Add rows back as new surface
 _Rules earned through this project's playtests. When a rule recurs in a second case study, it graduates to the upstream playbook in `claude-gdlc-wizard`._
 
 1. **Score caps must be calibrated to the play window, not the world population.** (Playtest #1) Challenge normalization caps set to world totals (500 cities / 100 countries / 800 products) made A mathematically unreachable in a 15-day window; recalibrated to window-measured excellent-play maxima (60/30/350) with a pytest winability property pinned to persona-sim benchmarks. Candidate for upstream graduation if a second case study hits it.
+2. **Economies need a margin-per-kg bound, not a price-ratio bound.** (Playtest #2) A 2.5× sell/buy ratio is harmless on 20 kg of rice and game-breaking on 0.12 kg of diamonds ($53.5k/kg, $1.07M per hold); the degeneracy is margin × (1/weight), so the clamp must couple price to weight. Fixed with `margin_per_kg_cap_usd` — kills the tail, preserves median texture.
+3. **Scoring config belongs in data, not literals.** (Playtest #2) Challenge caps/thresholds lived as literals in three places (Godot, pytest mirror, docs) with presence-only guards — value drift passes silently. Moved into `world.json economy.challenge` as the single source of truth read by all consumers.
 
 ## Playtest Ledger
 
@@ -36,6 +38,16 @@ _Chronological log of playtest cycles. Each entry: date, cycle type, personas, f
 - Ratchet delta: +1 headless smoke (`SmokeConnectionContract.gd`: real-legs contract, cancel-no-teleport, boarding origin guard); +1 pytest winability property (`test_excellent_15_day_run_scores_a`, RED 70 < 80 → GREEN 89); SmokeV3Loop updated to the real-flight connection contract; PRD §6.2 caps/thresholds documented; 30→15 day references aligned (PRD/README/CLAUDE.md).
 - Earned rules: 1 candidate (window-calibrated caps).
 - Queued for pipeline-contract-audit cycle: ETL `hash()` flight numbers (determinism violation), stopover airline–route fabrication, dead MCT config (75 override vs 120 intl / alliance discount), luxury-goods margin blowout (P0 claim, single-observer → downgraded P1, root cause in ETL pricing), Expo challenge-mode parity.
+
+### Playtest #2 — 2026-08-14 (pipeline-contract-audit: determinism, data honesty, economy bounds, cross-implementation)
+
+- Cycle: pipeline-contract-audit, one roster of 4 contract personas, distinct instruments (double-run byte diff; stopover/MCT sampling vs raw routes.dat; margin/kg distribution model; pytest↔Godot↔Expo drift matrix)
+- Personas: Determinism Auditor (确定性审计员), Data-Contract Auditor (数据契约审计员), Economy Auditor (经济审计员), Cross-Implementation Auditor (跨实现审计员)
+- Findings: 2 P0s (pipeline not byte-reproducible — 55 artifacts drifted; economy tail $53.5k/kg) + 2 P1s (stopover fabrication 144/144; Expo economy drift 3.5×) + 4 P2s (MCT dead config, caps literals, demand-pressure bypass, dead export bridge) — all fixed except runtime-only items queued below. 4/4 ship votes N pre-fix.
+- Ratchet delta: +`tests/etl/test_pipeline_contracts.py` (8 RED tests: double-run byte-identity, margin/kg bound, stopover leg membership + antipodal cap, per-leg MCT, challenge-config-in-data, expo export block, demo mapping declaration). Pipeline: stable_rand flight numbers, sorted stopover hubs + joint-airline membership + 20,037 km cap, `airport_mct_minutes` international-first, hub tuple spellings + guangzhou, margin clamp, inherited-product seed, hot-win seed, routes sqlite sort, stopover numbers decoupled from fid. `economy.yaml`: `margin_per_kg_cap_usd` + `challenge:` block → world.json economy. ChallengeSystem.gd + pytest mirror read caps from data; expo snapshot carries the block; gameData.js declares DEMO_SCALE. Data regenerated `--full`.
+- Earned rules: 2 new candidates (margin-per-kg bound; scoring config in data).
+- Re-surface: determinism `hash()` + stopover + MCT + luxury goods re-verified from Playtest #1 (2 cycles, converging; fixed here). 0 net-new gameplay regressions.
+- Queued: demand-pressure applied after sale (runtime, P2), `same_alliance_discount_min` dead config (apply at runtime or remove, P2), Expo full wiring of ios-data.json + challenge mode (P1 partial), same-day flight-number collisions incl. synthetic-vs-BTS (P3), `generated_at` documented exemption (sidecar optional).
 
 ## Ratchet (Regression Tests)
 
@@ -53,6 +65,13 @@ _Each P0 finding earns a test RED before the fix. P1/P2 entries at author discre
 | 2026-08-13 | P1 — default start airport (ATL) never stated on the new-game panel | Tourist | persona-note only, recurrence-likely — new-game UI |
 | 2026-08-13 | P1 — products metric anti-correlated with net worth (discovery credits only on sell) | Speedrunner | persona-note only, recurrence-likely — challenge metrics |
 | 2026-08-13 | P2/P3 ×12 — fee legibility, delay toast consequences, hidden metric list, toast channel overwrite, tutorial re-read, countdown suppression, news-on-first-boot, baggage-tier state, UTC build-dependence, reliability zero-coverage (now partially covered by SmokeConnectionContract), MCT config dead paths, rosy reliability model, BTS duplicate numbers, generated product copy | all personas | persona-note only — see Playtest #1 queue |
+| 2026-08-14 | P0 — pipeline not byte-reproducible: salted `hash()` flight numbers + set-iteration hub/routes order (55 artifacts drifted across PYTHONHASHSEED) | Determinism Auditor (double-run diff) + Hub Purist (#1) | tests/etl/test_pipeline_contracts.py::test_pipeline_double_run_byte_identical, run_pipeline.py |
+| 2026-08-14 | P0 — light high-rarity proxies paid up to $53.5k/kg ($1.07M per 20kg hold on real legs); margin × 1/weight degeneracy | Economy Auditor (distribution model) + Trade Senior (#1) | tests/etl/test_pipeline_contracts.py::test_margin_per_kg_bound + test_margin_cap_in_config, economy.yaml margin_per_kg_cap_usd 500 |
+| 2026-08-14 | P1 — stopover mint fabricated airline–leg pairs (144/144 unoperated first legs) and could exceed the antipodal bound | Data-Contract Auditor (routes.dat sampling) + Hub Purist (#1) | tests/etl/test_pipeline_contracts.py::test_stopover_legs_real_and_bounded, run_pipeline.py joint-airline membership + 20,037 km cap |
+| 2026-08-14 | P1 — Expo demo economy drifted 3.5× on fares (unguarded duplicate; ios-data.json had zero consumers) | Cross-Implementation Auditor (+ RED drift test as second observer) | tests/etl/test_pipeline_contracts.py::test_expo_declared_mapping, gameData.js DEMO_SCALE |
+| 2026-08-14 | P2 — flat 75-min hub overrides killed international_min 120 on 87% of transfer edges | Data-Contract Auditor + Hub Purist (#1) | tests/etl/test_pipeline_contracts.py::test_mct_transfer_edges, run_pipeline.py per-leg international + airport_mct_minutes |
+| 2026-08-14 | P2 — challenge caps/thresholds were literals in 3 places with presence-only guards | Cross-Implementation Auditor | tests/etl/test_pipeline_contracts.py::test_challenge_config_in_data + test_expo_export_carries_challenge_block, economy.yaml challenge block |
+| 2026-08-14 | P2/P3 — demand-pressure applied after sale (bypassable in one dump); `same_alliance_discount_min` dead config; same-day flight-number collisions; latent `hash(city_id)` product seed; unseeded hot-win validation | Economy / Data-Contract / Determinism auditors | persona-note only — runtime items queued, see Playtest #2 queue |
 
 ## What's Working
 
