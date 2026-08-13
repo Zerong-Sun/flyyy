@@ -41,3 +41,8 @@ etl/scripts/city_list.json
 
 # Natural Earth GeoJSON cache (download via tools/fetch_geo_data.py)
 tools/geo/
+.claude/plans/
+.claude/settings.local.json
+
+# GDLC transient drafts (never committed)
+.gdlc/feedback-drafts/
