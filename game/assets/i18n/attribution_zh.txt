@@ -4,6 +4,7 @@
 数据来源：OurAirports 开放数据集（https://ourairports.com/data/）
 许可：Public Domain（Unlicense）
 说明：提供全球机场的IATA/ICAO代码、名称、经纬度、类型等基础信息。本游戏使用其中约 8.5 万条机场记录中的一部分用于地球端展示和航线分析。
+地球贴图 — 程序生成（Natural Earth 1:50m 海岸线，公有领域）+ 游戏色板（tools/generate_earth_albedo.py）
 
 航线参考数据 — OpenFlights
 数据来源：OpenFlights 开放航线与航空公司数据集（https://openflights.org/data.html）

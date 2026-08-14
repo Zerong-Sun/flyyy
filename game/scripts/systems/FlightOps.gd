@@ -70,7 +70,10 @@ func _reliability_roll(ticket: Dictionary) -> Dictionary:
 		ticket.get("scheduled_departure_utc", ""),
 		GameClock.game_date_string(),
 	]
-	var h := hash(seed_s)
+	# sha256-derived seed — GDScript's builtin hash() is process-randomized on
+	# strings, which made delay/cancel rolls (and the smokes that scan them)
+	# flaky across runs (GDLC Playtest #4).
+	var h := seed_s.sha256_text().substr(0, 8).hex_to_int()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = h if h != 0 else 1
 	var cancel_p: float = float(rel.get("cancel_prob", 0.015))

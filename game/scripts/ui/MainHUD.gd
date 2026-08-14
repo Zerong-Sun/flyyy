@@ -189,11 +189,22 @@ func _build_ui() -> void:
 	_countdown.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_countdown.add_theme_font_size_override("font_size", 16)
 	_countdown.add_theme_color_override("font_color", _Colors.WARN_RED)
+	# Dark scrim behind the globe-floating labels: WARN_RED over the globe
+	# measured 2.49:1 (GDLC Playtest #4 ratchet — see test_visual_contract.py).
+	var _scrim := StyleBoxFlat.new()
+	_scrim.bg_color = Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.85)
+	_scrim.set_corner_radius_all(6)
+	_scrim.content_margin_left = 10
+	_scrim.content_margin_right = 10
+	_scrim.content_margin_top = 3
+	_scrim.content_margin_bottom = 3
+	_countdown.add_theme_stylebox_override("normal", _scrim)
 	_challenge_label = _label(self, Vector2(350, 106), "")
 	_challenge_label.size = Vector2(580, 28)
 	_challenge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_challenge_label.add_theme_font_size_override("font_size", 14)
 	_challenge_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+	_challenge_label.add_theme_stylebox_override("normal", _scrim)
 	_btn_ff = Button.new()
 	_btn_ff.text = I18nService.t("ui.ff.button")
 	_btn_ff.position = Vector2(940, 60)
@@ -206,7 +217,7 @@ func _build_ui() -> void:
 	_disclaimer = _label(self, Vector2(12, 690), I18nService.disclaimer())
 	_disclaimer.add_theme_font_size_override("font_size", 12)
 	_disclaimer.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
-	_disclaimer.modulate = Color(1, 1, 1, 0.7)
+	_disclaimer.modulate = Color(1, 1, 1, 0.9)
 
 	_hint_panel = PanelContainer.new()
 	_hint_panel.position = Vector2(270, 60)
@@ -217,6 +228,9 @@ func _build_ui() -> void:
 	# (delay/cancel) stay readable during the 5s travel transition
 	# (GDLC Playtest #3).
 	_hint_panel.z_index = 100
+	# Toasts must never swallow clicks (GDLC Playtest #4: the panel covered the
+	# fast-forward button for 8-12 s after every purchase).
+	_hint_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var hint_style := StyleBoxFlat.new()
 	hint_style.bg_color = Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.94)
 	hint_style.border_color = Color(_Colors.ACCENT_AMBER.r, _Colors.ACCENT_AMBER.g, _Colors.ACCENT_AMBER.b, 0.55)
@@ -233,6 +247,7 @@ func _build_ui() -> void:
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_hint.add_theme_font_size_override("font_size", 14)
+	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hint.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 	_hint_panel.add_child(_hint)
 
@@ -1711,7 +1726,7 @@ func _refresh_market_sell() -> void:
 		item.set_text(5, _Economy.format_money(sell))
 		item.set_text(6, "%s$%.0f" % ["+" if sell >= cost else "-", absf(sell - cost)])
 		item.set_metadata(0, i)
-		item.set_custom_color(6, Color(0.45, 0.85, 0.55) if sell >= cost else _Colors.WARN_RED)
+		item.set_custom_color(6, _Colors.PROFIT_GREEN if sell >= cost else _Colors.WARN_RED)
 	if AppState.inventory.is_empty() and _market_sell_detail:
 		_market_sell_detail.text = "库存为空。前往采购页购买当地特产。"
 
@@ -1800,7 +1815,7 @@ func _apply_market_row_values(row: HBoxContainer, p: Dictionary, is_local: bool,
 		margin_label.text = "%s$%.0f" % [sign, absf(margin)]
 		margin_label.add_theme_color_override(
 			"font_color",
-			Color(0.45, 0.85, 0.55) if margin >= 0 else _Colors.WARN_RED
+			_Colors.PROFIT_GREEN if margin >= 0 else _Colors.WARN_RED
 		)
 
 
@@ -2213,7 +2228,7 @@ func _show_flights() -> void:
 	disc.text = I18nService.disclaimer()
 	disc.add_theme_font_size_override("font_size", 11)
 	disc.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
-	disc.modulate = Color(1, 1, 1, 0.7)
+	disc.modulate = Color(1, 1, 1, 0.9)
 	disc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	disc.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	v.add_child(disc)
