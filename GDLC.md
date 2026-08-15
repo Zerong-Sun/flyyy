@@ -25,6 +25,7 @@ _Rules earned through this project's playtests. When a rule recurs in a second c
 1. **Score caps must be calibrated to the play window, not the world population.** (Playtest #1) Challenge normalization caps set to world totals (500 cities / 100 countries / 800 products) made A mathematically unreachable in a 15-day window; recalibrated to window-measured excellent-play maxima (60/30/350) with a pytest winability property pinned to persona-sim benchmarks. Candidate for upstream graduation if a second case study hits it.
 2. **Economies need a margin-per-kg bound, not a price-ratio bound.** (Playtest #2) A 2.5× sell/buy ratio is harmless on 20 kg of rice and game-breaking on 0.12 kg of diamonds ($53.5k/kg, $1.07M per hold); the degeneracy is margin × (1/weight), so the clamp must couple price to weight. Fixed with `margin_per_kg_cap_usd` — kills the tail, preserves median texture.
 3. **Scoring config belongs in data, not literals.** (Playtest #2) Challenge caps/thresholds lived as literals in three places (Godot, pytest mirror, docs) with presence-only guards — value drift passes silently. Moved into `world.json economy.challenge` as the single source of truth read by all consumers.
+4. **Selection realism over edge invention.** (Playtest #5) When a synthesis rule must guarantee connectivity, filter the roster at selection time (admit only airports with a real edge to the accepted set, greedy with re-scan so small airports join once their partners do) instead of minting synthetic edges. Result: 500 airports, 0 invented edges, single giant component, all real partners preserved.
 
 ## Playtest Ledger
 
@@ -58,6 +59,17 @@ _Chronological log of playtest cycles. Each entry: date, cycle type, personas, f
 - Earned rules: 0 new (existing 3 candidates held).
 - Re-surface: disclosure, intel gate, demand pressure, MCT-on-delay, dead alliance config, metrics visibility — all re-verified and fixed; 0% NEW-invalidated.
 - Queued: throughput vs `cap_profit_per_hour` (clamp-honest play still 14× the 200 $/h cap — re-derive cap from hourly target; balance-direction note), rep grant drift under purchase-credit (+3/discovery — watch), tutorial re-read button, toast queue, baggage-tier toggle states, auto-board panel-yank warning, day-rollover selection persistence, buy-tab estimate realism (assumption labeling shipped), settlement net-worth end-city footnote, `hash(seed_s)` engine-version ratchet (verify scene pins the Time API side).
+
+### Playtest #5 — 2026-08-15 (pipeline-contract-audit: route realism)
+
+- Cycle: pipeline-contract-audit, 3 contract personas, distinct instruments (independent provenance re-derivation vs routes.dat + OurAirports iso_country; 5× cross-PYTHONHASHSEED double-run byte diff incl. sqlite table-level comparison; network-structure analysis — giant component, transfer reachability BFS from ATL + BCN, domestic-only inventory, transfer-hub qualification)
+- Personas: Data-Contract Auditor (数据契约审计员), Determinism Auditor (确定性审计员), Hub Purist (枢纽专家)
+- Directive: routes must follow reality — remove small-airport connectivity compensation (nearest-neighbour degree padding + forced international routes). User confirmed: keep the 20 demo hubs' ≥8 fill; filter at selection time (≥1 real route per airport).
+- Findings: no P0. 2 P2s + 1 P3 fixed this cycle (flight layer operated 13,278 real BTS flights on 424 pairs absent from routes/transfers/coverage — merged real BTS pairs into the route layer; latent hub-padding path could mint hub→non-hub synthetic edges if the ≥8 floor ever fired — fill candidates restricted to hub↔hub; validate() no-intl check was print-only — promoted to an assert). 6 P3s queued (see below). All findings NEW (5th cycle, new surface; 0% re-surface).
+- Ratchet delta: `tests/etl/test_route_realism.py` (6 RED-first contract tests: non-hub routes must be real, no forced international edges, non-hub degree == real partner count, small airports stay small, no isolates, every flight pair in the route layer — the last RED at 13,278 flights/424 pairs). `test_v3_aviation.py` intl-route contract rewritten to the realism contract (≥1 route, domestic-only permitted). Pipeline: `ensure_intl_routes` deleted; `ensure_route_degree` hub-only (min 8, hub↔hub candidates); `filter_connected_cities` (ranked greedy + re-scan, selection realism); BTS pairs merged into `routes`; `validate()` forced-intl assert. Result: 500 airports, 0 invented edges (100% of 19,036 directed routes trace to routes.dat or BTS 2025-03), 28 domestic-only airports (e.g. ABQ/ALB/ANC), min non-hub degree 3 (SZB), single giant component (500/500 reachable ≤2 hops via transfers). Roster tail changed by the filter: PIE dropped (orphan plate removed), san_pedro_sula added (procedural plate generated). PRD §3.2 route-realism rule ratified. Data regenerated `--full`; Expo snapshot byte-identical (routes not in the export).
+- Earned rules: 1 new candidate (selection realism over edge invention). Cross-model review (Codex) skipped — CLI + API key unavailable in this session.
+- Re-surface: 0. Determinism double-run verified byte-identical across seeds (only `meta.generated_at` exempted, per existing contract).
+- Queued: P3 — no degree-1/2 island spurs (selection favors big airports; admit true spurs explicitly if wanted); P3 — hub ≥8 guarantee is roster-coupled (HND=29 min) — re-check on roster resize; P3 — challenge 60-city cap never binds (500 cities ≤2 hops of ATL) — balance-direction note, joins the throughput-vs-cap queue; P3 — BHM/RIC/JHG render domestic-only because their real intl partners (FPO/LPQ) are off-roster; P3 — 212 reverse-direction pairs fabricated from one-directional real edges (PRD "合理重建", kept by design); P3 — printed world-hash digests `generated_at` bytes — do not wire into CI as a reproducibility gate.
 
 ### Playtest #4 — 2026-08-14 (art-craft-review: first craft cycle)
 
@@ -108,12 +120,22 @@ _Each P0 finding earns a test RED before the fix. P1/P2 entries at author discre
 | 2026-08-14 | P2/P3 — no art-style contract; inline colors escaping tokens; transition frames non-uniform; hub plates half spec resolution (documented exception) | Art Director | docs/ARTSTYLE.md ratified; PROFIT_GREEN token; frames unified 1280×720 |
 | 2026-08-14 | P3 — five-tier loss rungs titled identically (L2=L1 交易亏损); emoji glyphs clash with poster identity; poster art smallest element on screen | Retro Gamer | csv copy differentiated (小幅亏损); emoji/poster-visibility queued |
 | 2026-08-15 | P1 — GDScript `hash()` on strings is process-randomized: delay/cancel rolls differed per run, making the roll-scanning smokes (V3Loop/Challenge) intermittently red since Playtest #1 preflight | cross-cycle evidence (P1 preflight + P4 suite) | FlightOps._reliability_roll sha256 seed; 3× repeat runs green |
+| 2026-08-15 | Contract change (user directive): remove small-airport connectivity compensation — nearest-neighbour degree padding + forced international routes minted non-real edges (88 directed / 0.5% in full mode; PPT 4→6, ZUH→MFM) | user directive; Data-Contract Auditor + Hub Purist concurred post-fix | tests/etl/test_route_realism.py C1/C3/C5/small-airport/isolate (RED 4/5 on old data), run_pipeline.py ensure_intl_routes removed + filter_connected_cities |
+| 2026-08-15 | P2 — flight layer operated 13,278 real BTS flights on 424 pairs absent from routes/transfers/coverage (game sold them; route systems never saw them) | Data-Contract Auditor | tests/etl/test_route_realism.py::test_every_flight_pair_is_in_routes (RED 13,278/424), run_pipeline.py BTS-pair route merge |
+| 2026-08-15 | P2 — latent: hub degree-floor padding could mint hub→non-hub synthetic edges (breaking the no-synthetic/domestic-only contracts) if the ≥8 floor ever fired | Data-Contract Auditor | tests/etl/test_route_realism.py C1/C3/C5, run_pipeline.py hub↔hub-only fill candidates |
+| 2026-08-15 | P3 — validate() no-intl check was print-only: a synthetic international edge would pass the pipeline undetected | Data-Contract Auditor | run_pipeline.py forced_intl assert |
+| 2026-08-15 | P3 — roster tail favors big airports: no degree-1/2 island spurs (real networks have them) | Hub Purist | persona-note only, recurrence-likely — see Playtest #5 queue |
+| 2026-08-15 | P3 — hub ≥8 guarantee is roster-coupled (HND=29 min); re-check if the roster is ever resized | Hub Purist | persona-note only — see Playtest #5 queue |
+| 2026-08-15 | P3 — challenge 60-city cap never binds (500 cities ≤2 hops of ATL); challenge bound by schedule, not network | Hub Purist | persona-note only, balance-direction |
+| 2026-08-15 | P3 — BHM/RIC/JHG render domestic-only in-game; their real intl partners (FPO/LPQ) are off-roster | Data-Contract Auditor | persona-note only — roster-coverage note |
+| 2026-08-15 | P3 — 212 reverse-direction pairs fabricated from one-directional real edges (PRD "合理重建", kept by design) | Data-Contract Auditor | persona-note only — by design |
+| 2026-08-15 | P3 — printed world-hash digests generated_at bytes; do not wire into CI as a reproducibility gate | Determinism Auditor | persona-note only |
 
 ## What's Working
 
 _Methodological patterns that proved themselves across 2+ playtests (playbook rule #28)._
 
-(none yet)
+- **Contract personas auditing a landed pipeline change with independent instruments** (2026-08-15, confirmed across Playtests #2 and #5): each persona re-derives its evidence from raw artifacts with its own scripts and its own regenerations, and the audit has found real holes both times (P2: 8/8 RED contract violations; P5: 424 route-less BTS pairs + a latent padding path). Persona-run audits catch what the author's own GREEN tests structurally miss.
 
 ## Related playbooks
 

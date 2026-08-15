@@ -163,7 +163,7 @@ def build_cities_500_from_ourairports(
             "has_content_file": False,
         })
 
-        if len(additional) >= 480:
+        if len(additional) >= 1200:
             break
 
     print(f"Selected {len(additional)} additional cities from OurAirports")
@@ -1162,7 +1162,8 @@ def build_airports(hubs_cfg: dict, oa: dict[str, dict], passenger_iatas: set[str
 
 
 def ensure_route_degree(
-    edges: set[tuple[str, str]], iatas: list[str], min_deg: int, airports_by_iata: dict[str, dict]
+    edges: set[tuple[str, str]], iatas: list[str], min_deg: int, airports_by_iata: dict[str, dict],
+    candidate_iatas: list[str] | None = None,
 ) -> set[tuple[str, str]]:
     # undirected complement then orient both ways for travel
     undirected = {frozenset(e) for e in edges}
@@ -1179,7 +1180,7 @@ def ensure_route_degree(
         # add nearest hubs
         dist = []
         aa = airports_by_iata[a]
-        for b in iatas:
+        for b in (candidate_iatas if candidate_iatas is not None else iatas):
             if b == a or b in neighbors:
                 continue
             bb = airports_by_iata[b]
@@ -1200,65 +1201,58 @@ def ensure_route_degree(
     return out
 
 
-def ensure_intl_routes(
-    routes: set[tuple[str, str]],
-    iatas: list[str],
-    airports_by_iata: dict[str, dict],
-    route_airlines: dict[tuple[str, str], set[str]],
-    active_iatas: set[str],
-) -> set[tuple[str, str]]:
-    """Guarantee every airport has at least one direct international route.
+def filter_connected_cities(
+    additional: list[dict], hub_iatas: set[str], rf_path: Path, auto_limit: int
+) -> list[dict]:
+    """Keep only cities with >=1 real OpenFlights edge to the accepted set.
 
-    Prefer real edges from routes.dat (they carry real operators); fall back to
-    the nearest international airport when the snapshot lacks one. This is the
-    PRD §24 plan-A 补齐 for small domestic-only airports (e.g. ANC/ALB/BUF).
+    Selection realism, not route invention (GDLC Playtest #5): airports whose
+    real route partners are all outside the roster are dropped at selection
+    time instead of receiving synthetic edges. Greedy along ranking order so
+    the roster stays deterministic and traffic-ranked.
     """
-    def is_intl(a: str, b: str) -> bool:
-        return airports_by_iata[a]["country_id"] != airports_by_iata[b]["country_id"]
-
-    # Real international edges (with an active operator) from routes.dat.
-    real_intl: dict[str, list[tuple[float, str]]] = {}
-    for (o, d), ops in route_airlines.items():
-        if ops & active_iatas and is_intl(o, d):
-            oa = airports_by_iata[o]
-            da = airports_by_iata[d]
-            real_intl.setdefault(o, []).append(
-                (haversine_km(oa["latitude"], oa["longitude"], da["latitude"], da["longitude"]), d)
-            )
-            real_intl.setdefault(d, []).append(
-                (haversine_km(oa["latitude"], oa["longitude"], da["latitude"], da["longitude"]), o)
-            )
-    for lst in real_intl.values():
-        lst.sort()
-
-    out = set(routes)
-    for a in iatas:
-        if any(is_intl(a, d) for o, d in out if o == a):
-            continue
-        added = False
-        for _, d in real_intl.get(a, []):
-            if (a, d) not in out and (d, a) not in out:
-                out.add((a, d))
-                out.add((d, a))
-                added = True
+    if auto_limit <= 0:
+        return []
+    # Real undirected pairs from routes.dat touching a candidate or hub
+    interesting = hub_iatas | {c["iata"] for c in additional}
+    real_neighbors: dict[str, set[str]] = {}
+    if rf_path.exists():
+        with rf_path.open(encoding="utf-8", newline="") as f:
+            for line in f:
+                parts = line.strip().split(",")
+                if len(parts) < 5:
+                    continue
+                src, dst = parts[2].strip(), parts[4].strip()
+                if src == dst:
+                    continue
+                if src in interesting:
+                    real_neighbors.setdefault(src, set()).add(dst)
+                if dst in interesting:
+                    real_neighbors.setdefault(dst, set()).add(src)
+    accepted = set(hub_iatas)
+    out: list[dict] = []
+    remaining = list(additional)
+    # Greedy with re-scan: a candidate becomes eligible once any of its real
+    # partners is accepted, so airports whose partners rank behind them still
+    # join (e.g. PIE). Deterministic: each pass walks rank order.
+    while remaining and len(out) < auto_limit:
+        progressed = False
+        still: list[dict] = []
+        for city in remaining:
+            if len(out) >= auto_limit:
                 break
-        if added:
-            continue
-        aa = airports_by_iata[a]
-        candidates = sorted(
-            (
-                haversine_km(aa["latitude"], aa["longitude"],
-                             airports_by_iata[b]["latitude"], airports_by_iata[b]["longitude"]),
-                b,
-            )
-            for b in iatas
-            if b != a and is_intl(a, b)
-        )
-        for _, b in candidates:
-            if (a, b) not in out and (b, a) not in out:
-                out.add((a, b))
-                out.add((b, a))
-                break
+            if real_neighbors.get(city["iata"], set()) & accepted:
+                out.append(city)
+                accepted.add(city["iata"])
+                progressed = True
+            else:
+                still.append(city)
+        remaining = still
+        if not progressed:
+            break
+    if len(out) < auto_limit:
+        print(f"Connectivity filter could only select {len(out)}/{auto_limit} "
+              f"connected cities (candidate pool exhausted)")
     return out
 
 
@@ -2599,7 +2593,13 @@ def validate(
             f"{len(foreign_domestic)} domestic flights use a foreign airline although a "
             f"domestic operator exists, e.g.:\n  " + "\n  ".join(foreign_domestic[:8])
         )
-        # 4) Every passenger airport must have a direct international route.
+        # 4) Route-realism contract (GDLC Playtest #5): airports may be
+        # domestic-only — that mirrors reality (small airports keep their real
+        # networks). No synthetic international routes are added. Every
+        # passenger airport must still have at least one real route (the
+        # connectivity-aware city selection guarantees this).
+        deg0 = [a["iata"] for a in airports if not any(o == a["iata"] for o, _ in routes)]
+        assert not deg0, f"airports with zero routes (selection filter violated): {sorted(deg0)}"
         no_intl = [
             a["iata"] for a in airports
             if a.get("has_passenger_service", False)
@@ -2608,7 +2608,26 @@ def validate(
                 for o, d in routes if o == a["iata"]
             )
         ]
-        assert not no_intl, f"airports without any international route: {sorted(no_intl)}"
+        # Contract 3 enforcement: an airport with NO real international
+        # routes.dat edge must have no international output route either.
+        real_intl_airports: set[str] = set()
+        for o, d in route_airlines:
+            if o in by_iata_v and d in by_iata_v and by_iata_v[o]["country_id"] != by_iata_v[d]["country_id"]:
+                real_intl_airports.add(o)
+                real_intl_airports.add(d)
+        forced_intl = [
+            a["iata"] for a in airports
+            if a.get("has_passenger_service", False)
+            and a["iata"] not in real_intl_airports
+            and any(
+                by_iata_v[o]["country_id"] != by_iata_v[d]["country_id"]
+                for o, d in routes if o == a["iata"]
+            )
+        ]
+        assert not forced_intl, f"airports with synthetic international routes: {sorted(forced_intl)}"
+        print(f"VALIDATION (aviation): {len(no_intl)} passenger airports without a "
+              f"direct international route (realism — expected, e.g. "
+              f"{sorted(no_intl)[:6]})")
 
         real_route_flights = sum(
             1 for fl in flights
@@ -2665,7 +2684,11 @@ def main() -> int:
                     if len(cols[4]) == 3:
                         route_counts[cols[4]] += 1
     additional = build_cities_500_from_ourairports(oa, hubs_cfg["hubs"], openflights_iatas, route_counts)
-    additional = additional[:auto_limit]
+    # Connectivity-aware selection: only airports with >=1 real OpenFlights
+    # route to the roster (no synthetic edges — GDLC Playtest #5).
+    additional = filter_connected_cities(
+        additional, {h["iata"] for h in hubs_cfg["hubs"]}, rf_path, auto_limit
+    )
     all_hub_configs = list(hubs_cfg["hubs"]) + additional
     # Combine into a single config-like structure
     hubs_cfg_expanded = {"hubs": all_hub_configs, "fallback_coords": hubs_cfg.get("fallback_coords", {})}
@@ -2677,8 +2700,6 @@ def main() -> int:
     iatas = [a["iata"] for a in airports]
 
     # Build routes: use OpenFlights edges where both airports exist
-    # For expanded sets, limit route degree and flight count
-    min_deg = max(2, min(6, len(iatas) // 10))
     edges = read_openflights_routes(rf_path, set(iatas))
     # Real airline/route data (OpenFlights) — replaces the 18-airline random pool.
     real_airlines = read_real_airlines(RAW / "airlines.dat")
@@ -2688,9 +2709,14 @@ def main() -> int:
     }
     curated_alliance = {r["id"]: r.get("alliance_id", "none") for r in _AIRLINE_ROWS}
     route_airlines = read_route_airlines(rf_path, set(iatas), active_iatas)
-    routes = ensure_route_degree(edges, iatas, min_deg, by_iata)
-    # Guarantee every airport has a direct international route (PRD plan-A 补齐).
-    routes = ensure_intl_routes(routes, iatas, by_iata, route_airlines, active_iatas)
+    # Only the 20 authored demo hubs get a degree floor (demo acceptance
+    # contract: >=8 connections). Small airports keep their real networks —
+    # no nearest-neighbour fill, no forced international route (route realism,
+    # GDLC Playtest #5). Fill candidates are hub-only: a padding edge is
+    # hub↔hub, so the no-synthetic-edges and domestic-only contracts can
+    # never be broken by the floor.
+    hub_iatas = [h["iata"] for h in hubs_cfg["hubs"]]
+    routes = ensure_route_degree(edges, hub_iatas, 8, by_iata, candidate_iatas=hub_iatas)
 
     # For expanded sets, reduce flight density (also tightens AeroSCOPE mapping)
     if len(additional) > 0:
@@ -2705,6 +2731,11 @@ def main() -> int:
     # US domestic flights: BTS 2025-03 real flight numbers + CRS planned times.
     bts_rows = read_bts_schedule(RAW / "bts_on_time_2025_3.csv", by_iata, set(iatas))
     bts_routes = {(r["origin_iata"], r["destination_iata"]) for r in bts_rows}
+    # Merge real BTS 2025-03 scheduled pairs into the route layer so every
+    # flyable pair is visible to routes/transfers/coverage (data honesty —
+    # GDLC Playtest #5; RED: 13,278 BTS flights on 424 route-less pairs).
+    # synth_flights skips BTS pairs — only real BTS flights operate them.
+    routes = routes | bts_routes
     # Global non-US frequency: AeroSCOPE 2019 annual n_flights relative-normalized.
     aeroscope_annual = read_aeroscope_frequency(RAW / "AeroSCOPE_2019.csv")
     freq_min = int(eco["flight_synth"].get("aeroscope_freq_min", 1))
