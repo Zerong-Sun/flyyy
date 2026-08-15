@@ -266,17 +266,20 @@ def test_domestic_routes_prefer_domestic_operator_when_available():
     assert not bad, f"{len(bad)} domestic flights use a foreign airline despite a domestic operator: {bad[:5]}"
 
 
-def test_every_airport_has_international_route():
-    """Each airport must have at least one direct international route."""
+def test_every_airport_has_at_least_one_route():
+    """Each airport must have at least one direct route (any domestic/intl).
+
+    Contract change (GDLC Playtest #5, route realism): the old guarantee of
+    >=1 international route per airport was a synthesis compensation and is
+    removed — domestic-only airports are legitimate and keep their real
+    networks. Connectivity is guaranteed at selection time: every roster
+    airport has >=1 real OpenFlights route.
+    """
     world, _ = _load_generated_world_and_flights()
     by_iata = {a["iata"]: a for a in world["airports"]}
     routes = [(r["origin"], r["destination"]) for r in world["routes"]]
-    no_intl = [
-        iata for iata, a in by_iata.items()
-        if a.get("has_passenger_service", False)
-        and not any(by_iata[o]["country_id"] != by_iata[d]["country_id"] for o, d in routes if o == iata)
-    ]
-    assert not no_intl, f"airports without an international route: {sorted(no_intl)}"
+    deg0 = [iata for iata in by_iata if not any(o == iata for o, _ in routes)]
+    assert not deg0, f"airports with zero routes: {sorted(deg0)}"
 
 
 def test_world_airlines_catalog_covers_all_operators():
