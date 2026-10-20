@@ -10,9 +10,11 @@ __pycache__/
 game/.godot/
 *.translation
 .import/
-export_presets.cfg
 *.uid
 *.import
+!game/assets/i18n/zh_CN.csv.import
+!game/assets/i18n/en.csv.import
+!game/assets/audio/AUDIO_MANIFEST.csv.import
 tools/art-gen-kit/.venv/
 tools/art-gen-kit/config.env
 tools/audio-gen-kit/_cc0_cache/
@@ -23,6 +25,7 @@ game/assets/art/orchestrate_req_status.json
 assets/art/
 ios/expo/dist/
 ios/expo/.expo/
+dist/
 
 # Generated game data (run pipeline to regenerate)
 game/data/

@@ -6,6 +6,8 @@
 
 > 航班网络基于公开航空数据重建，不代表真实购票信息。
 
+Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-Sun/flyyy/releases/latest)。Windows 解压后运行 `WanliTrader.exe`，并保留同目录的 `.pck` 文件；macOS 解压后运行 `WanliTrader.app`。macOS 版本为通用架构，支持 Apple Silicon 与 Intel。当前桌面包没有开发者证书公证，首次打开如被系统拦截，请在“系统设置 → 隐私与安全性”中选择“仍要打开”。发布包附有 SHA-256 校验文件。
+
 ---
 
 ## 游戏立意
