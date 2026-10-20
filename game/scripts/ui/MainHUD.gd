@@ -2239,41 +2239,7 @@ func _show_flights() -> void:
 
 
 func _get_recommended_destinations(limit: int = 5) -> Array:
-	var scores: Dictionary = {}
-	for item_v in AppState.inventory:
-		var item: Dictionary = item_v
-		var product_id := str(item.get("product_id", ""))
-		var origin := str(DataService.get_product(product_id).get("origin_city_id", AppState.current_city_id()))
-		var tag_key := "%s|%s" % [origin, product_id]
-		var tags: Dictionary = DataService.product_market_tags.get(tag_key, {})
-		for dest in tags.get("hot", []):
-			scores[dest] = int(scores.get(dest, 0)) + 1
-	var sorted_keys: Array = scores.keys()
-	sorted_keys.sort_custom(func(a, b): return int(scores[a]) > int(scores[b]))
-	var out: Array = []
-	var origin_iata := str(AppState.current_airport().get("iata", "")).to_upper()
-	var direct_dests := {}
-	for d in DataService.destinations_from(origin_iata):
-		direct_dests[str(d).to_upper()] = true
-	for city_id in sorted_keys:
-		var city: Dictionary = DataService.get_city(str(city_id))
-		var city_iata := ""
-		# Find a passenger airport for this city
-		for a in DataService.airports:
-			if str(a.get("city_id", "")) == str(city_id):
-				city_iata = str(a.get("iata", "")).to_upper()
-				break
-		var is_direct := city_iata != "" and direct_dests.has(city_iata)
-		out.append({
-			"city_id": city_id,
-			"name_zh": DataService.place_name(city, "name"),
-			"iata": city_iata,
-			"hot_count": scores[city_id],
-			"direct": is_direct,
-		})
-		if out.size() >= limit:
-			break
-	return out
+	return preload("res://scripts/systems/TradePlanner.gd").recommendations(limit)
 
 
 func _rebuild_recommendations() -> void:
@@ -2281,7 +2247,7 @@ func _rebuild_recommendations() -> void:
 		return
 	for c in _recommend_box.get_children():
 		c.queue_free()
-	var row := HBoxContainer.new()
+	var row := VBoxContainer.new()
 	row.add_theme_constant_override("separation", 6)
 	_recommend_box.add_child(row)
 	var header := Label.new()
@@ -2291,18 +2257,19 @@ func _rebuild_recommendations() -> void:
 	header.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 	header.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	row.add_child(header)
-	var recs := _get_recommended_destinations(5)
+	header.text = "首趟目标：覆盖采购与机票成本" if not AppState.tutorial_flags.get("first_profitable_trade", false) else "航线净收益比较"
+	var recs := _get_recommended_destinations(3)
 	if recs.is_empty():
 		var empty := Label.new()
-		empty.text = "（库存为空时无推荐；买入商品后根据热卖目的地生成）"
+		empty.text = "已有机票，请先完成行程或退票再比较。" if not AppState.held_tickets.is_empty() else "没有符合经济舱重量与现金条件的方案；请调整库存或行李。"
 		empty.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 		row.add_child(empty)
 		return
 	for rec_v in recs:
 		var rec: Dictionary = rec_v
 		var btn := Button.new()
-		var mode := "直飞" if rec.get("direct", false) else "联程"
-		btn.text = "%s · %s件 · %s" % [rec.get("name_zh", rec.get("city_id", "")), rec.get("hot_count", 0), mode]
+		btn.text = "%s · 预计净利 $%d · $%d/kg · %.1f 小时（含候机）" % [rec.name_zh, rec.net, rec.per_kg, rec.hours]
+		btn.tooltip_text = "采购 $%d / 销售 $%d / 机票 $%d / 标准行李 $0\n%s\n估计已计入需求衰减与保质期；抵达时行情可能变化。只比较经济舱随身行李方案。" % [rec.purchase, rec.revenue, rec.fare, rec.starter]
 		var dest_iata := str(rec.get("iata", ""))
 		var want_cnx := not bool(rec.get("direct", false))
 		btn.pressed.connect(func ():
@@ -2311,6 +2278,8 @@ func _rebuild_recommendations() -> void:
 				_flight_query.text = dest_iata
 			_flight_page = 0
 			_reload_flights()
+			if str(rec.get("starter", "")) != "":
+				_show_hint("采购建议：%s；预留机票 $%d。预计净利 $%d。" % [rec.starter, rec.fare, rec.net])
 		)
 		row.add_child(btn)
 
@@ -2337,7 +2306,7 @@ func _refund_unlock_cargo(free_cargo_used: bool = false) -> void:
 	if free_cargo_used:
 		return
 	if _cargo_blocks > 0 and ReputationSystem.has_unlock(ReputationSystem.UNLOCK_LV2):
-		AppState.add_cash(_cargo_block_price())
+		_Tickets.apply_cargo_promotion()
 		_refresh_top()
 		_show_hint("声望特权：免费货运 1 块")
 
@@ -2571,7 +2540,7 @@ func _purchase(cabin: String) -> void:
 		_refresh_countdown()
 		var free_cargo_used := false
 		if err_c == "" and _free_cargo_on_flight and _cargo_blocks > 0:
-			AppState.add_cash(_cargo_block_price())
+			_Tickets.apply_cargo_promotion()
 			_free_cargo_on_flight = false
 			free_cargo_used = true
 			_refresh_top()
@@ -2602,7 +2571,7 @@ func _purchase(cabin: String) -> void:
 		globe.draw_trip_route(AppState.current_airport_id, str(_selected_flight.destination_airport_id))
 	var free_cargo_used := false
 	if err == "" and _free_cargo_on_flight and _cargo_blocks > 0:
-		AppState.add_cash(_cargo_block_price())
+		_Tickets.apply_cargo_promotion()
 		_free_cargo_on_flight = false
 		free_cargo_used = true
 		_refresh_top()
@@ -2629,7 +2598,7 @@ func _do_replace_purchase() -> void:
 		globe.draw_trip_route(AppState.current_airport_id, str(_selected_connection.hub_airport_id))
 	var free_cargo_used := false
 	if err == "" and _free_cargo_on_flight and _cargo_blocks > 0:
-		AppState.add_cash(_cargo_block_price())
+		_Tickets.apply_cargo_promotion()
 		_free_cargo_on_flight = false
 		free_cargo_used = true
 		_refresh_top()
@@ -2957,7 +2926,7 @@ func _show_notes() -> void:
 		vbox.add_child(sep)
 
 		var summary := Label.new()
-		summary.text = "  %d赚 %d亏  净利 $%d" % [wins, losses, int(total_margin)]
+		summary.text = "  %d赚 %d亏  商品毛利 $%d" % [wins, losses, int(total_margin)]
 		summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		summary.add_theme_color_override("font_color", _Colors.ACCENT_TEAL if total_margin >= 0 else _Colors.WARN_RED)
 		vbox.add_child(summary)
@@ -3184,18 +3153,12 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 	var sign := "+" if margin >= 0 else ""
 	body += "账面毛利：" + sign + "$" + str(int(margin)) + "\n"
 
-	# Net trip profit hint
-	var flight_cost: float = AppState.last_flight_price
-	var baggage_cost: float = AppState.last_baggage_cost
-	if flight_cost > 0 or baggage_cost > 0:
-		body += "本趟机票：−$" + str(int(flight_cost))
-		if baggage_cost > 0:
-			body += "  行李/货运：−$" + str(int(baggage_cost))
-		body += "\n"
-		var net: float = margin - flight_cost - baggage_cost
-		var net_sign := "+" if net >= 0 else ""
-		body += "──────────────────\n"
-		body += "行程净利：" + net_sign + "$" + str(int(net)) + "\n"
+	body += "采购成本：$%d · 销售收入：$%d\n" % [sell_result["total_unit_cost"], sell_result["revenue"]]
+	body += "──────────────────\n"
+	body += "累计商品毛利：$%d\n累计交通净支出：$%d\n累计已实现净利：$%d\n" % [AppState.realized_margin, AppState.travel_expenses, AppState.realized_net()]
+	body += "交通费用在购票时记账一次；退款冲减费用。未售库存不计入利润。\n"
+	if AppState.tutorial_flags.get("first_profitable_trade", false):
+		body += "首趟盈利目标已达成：收入已覆盖商品成本与累计交通费。\n"
 
 	# Consolation or celebration copy (pool from zh_CN.csv)
 	match tier:

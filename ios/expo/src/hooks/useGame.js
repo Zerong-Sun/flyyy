@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, NativeModules } from 'react-native';
+import { Alert, AppState as NativeAppState, NativeModules } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import {
@@ -9,6 +9,7 @@ import {
   CITIES,
   CUTSCENE_ART,
   DEFAULT_BAG_LIMIT,
+  MOBILE_BALANCE,
   DEFAULT_CARGO_CAP,
   NOTE_TEXT,
   PRODUCTS,
@@ -34,6 +35,7 @@ import {
   priceSparkline,
   destinationsFrom,
   routesFrom,
+  routeOpportunities,
   sellData,
   sortByDestProfit,
   visibleFlightBoard,
@@ -48,14 +50,12 @@ import {
   quoteFlightForEvents,
   unseenArrivalEvent,
 } from '../eventLogic';
+import { createStateStore } from '../stateStore';
+import { readSave, resetSave, writeSave } from '../saveStorage';
+import { travelCharge, saleCredit, refundTravel } from '../accounting';
 import { playSfx } from '../audio';
 import { f as i18nF, t as i18nT } from '../i18n';
-import {
-  SAVE_KEY,
-  serializeSave,
-  loadSavePayload,
-  corruptBackupKey,
-} from '../saveGame';
+import { serializeSave } from '../saveGame';
 
 const initialState = () => ({
   tab: 'globe',
@@ -94,6 +94,7 @@ const initialState = () => ({
   cargoLots: 0,
   profitable: 0,
   profit: 0,
+  travelExpenses: 0,
   km: 0,
   savedAt: 0,
   called: false,
@@ -143,18 +144,23 @@ function findInv(inv, selInv) {
 }
 
 export function useGame() {
-  const [state, setState] = useState(initialState);
+  const [state, publishState] = useState(initialState);
+  const storeRef = useRef(null);
+  if (!storeRef.current) storeRef.current = createStateStore(state, publishState);
+  const stateRef = storeRef.current;
+  const setState = stateRef.set;
   const [loaded, setLoaded] = useState(false);
   const cutRef = useRef(null);
   const toastRef = useRef(null);
   const saveRef = useRef(null);
-  const stateRef = useRef(state);
-  const interactedRef = useRef(false);
+  const saveQueue = useRef(Promise.resolve());
+  const loadedRef = useRef(false);
+  const runGeneration = useRef(0);
   const flyingRef = useRef(false);
+  const foregroundRef = useRef(true);
   const calledEdgeRef = useRef(false);
   const suspendAutosaveRef = useRef(false);
   const pendingAchRef = useRef([]);
-  stateRef.current = state;
 
   const loc = state.locale || 'en';
   /** Live-locale lookup helpers (read current locale via ref, safe inside callbacks). */
@@ -193,7 +199,7 @@ export function useGame() {
     tap(kind);
   }, [tap]);
 
-  /** Pure: returns updated unlock ids; queues toast ids for a later effect. */
+  /** Called once per transaction; queue achievement feedback after commit. */
   const announceAchievements = useCallback((prevUnlocked, nextStats) => {
     const next = unlockedIds(nextStats, prevUnlocked);
     const fresh = next.filter((id) => !prevUnlocked.includes(id));
@@ -201,85 +207,61 @@ export function useGame() {
     return next;
   }, []);
 
-  const markInteracted = useCallback(() => {
-    interactedRef.current = true;
+  const persist = useCallback(() => {
+    if (!loadedRef.current || suspendAutosaveRef.current) return Promise.reject(new Error('Save not ready or protected'));
+    const generation = runGeneration.current;
+    const snapshot = { ...stateRef.current, savedAt: stateRef.current.gameMin };
+    const payload = JSON.stringify(serializeSave(snapshot));
+    const job = saveQueue.current.catch(() => {}).then(() => writeSave(AsyncStorage, payload));
+    saveQueue.current = job;
+    return job.then(() => {
+      if (loadedRef.current && generation === runGeneration.current) setState((s) => ({ ...s, savedAt: snapshot.savedAt }));
+    });
   }, []);
 
   /* ---- save / restore ------------------------------------------- */
 
   useEffect(() => {
     let alive = true;
-    AsyncStorage.getItem(SAVE_KEY)
-      .then(async (raw) => {
+    readSave(AsyncStorage, initialState())
+      .then((result) => {
         if (!alive) return;
-        if (!raw) {
-          // First launch: follow the device language (Step 3 W5 i18n).
-          const sys = systemLocale();
-          if (sys === 'zh') {
-            setState((s) => (interactedRef.current ? s : { ...s, locale: 'zh' }));
-          }
-          return;
+        if (result.ok) {
+          setState({ ...stateRef.current, ...result.data });
+          if (result.recovered) buzz(tr('msg.recovered', 'Recovered the previous saved progress.'), 'ok');
+        } else if (result.reason === 'missing') {
+          setState((s) => ({ ...s, locale: systemLocale() }));
+        } else {
+          suspendAutosaveRef.current = true;
+          buzz(tr('msg.restore_protected', 'Save could not be loaded. Original files are protected; use New run to start again.'), 'bad');
         }
-        if (interactedRef.current) return;
-        let result;
-        try {
-          result = loadSavePayload(raw, initialState(), CITIES, STARTING_CITY);
-        } catch (err) {
-          const bak = corruptBackupKey();
-          await AsyncStorage.setItem(bak, raw).catch(() => {});
-          await AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
-          setTimeout(() => buzz(tr('msg.corrupt', 'Save was corrupted — started a new run. Backup kept on device.'), 'bad'), 400);
-          return;
-        }
-        if (!result.ok && result.reason === 'future') {
-          // Park the newer save so autosave cannot clobber it; play a fresh run.
-          const parked = `${SAVE_KEY}-future-${Date.now()}`;
-          await AsyncStorage.setItem(parked, raw).catch(() => {});
-          await AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
-          suspendAutosaveRef.current = false;
-          setTimeout(() => {
-            Alert.alert(
-              tr('alert.newer_title', 'Save from a newer build'),
-              tr('alert.newer_body', 'That save was parked on this device. Continue with a new run here?'),
-              [
-                {
-                  text: tr('alert.ok', 'OK'),
-                  onPress: () => buzz(tr('msg.parked_new', 'New run — newer save kept as a backup key.'), 'ok'),
-                },
-              ],
-            );
-          }, 400);
-          return;
-        }
-        if (!result.ok) {
-          const bak = corruptBackupKey();
-          await AsyncStorage.setItem(bak, raw).catch(() => {});
-          await AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
-          setTimeout(() => buzz(tr('msg.restore_failed', 'Save could not be restored — started fresh.'), 'bad'), 400);
-          return;
-        }
-        setState((s) => (interactedRef.current ? s : { ...s, ...result.data }));
       })
-      .catch(() => {})
-      .finally(() => { if (alive) setLoaded(true); });
-    return () => { alive = false; };
-  }, [buzz]);
+      .catch(() => {
+        if (!alive) return;
+        suspendAutosaveRef.current = true;
+        buzz(tr('msg.save_failed', 'Storage unavailable — progress has not been saved.'), 'bad');
+      })
+      .finally(() => { if (alive) { loadedRef.current = true; setLoaded(true); } });
+    return () => { alive = false; loadedRef.current = false; };
+  }, [buzz, tr]);
 
+  // Only durable progress schedules a write; UI animation and toasts do not.
+  const durablePayload = JSON.stringify({ ...serializeSave(state), savedAt: 0, gameMin: Math.floor(state.gameMin / 30) * 30, minsToDep: Math.ceil(state.minsToDep / 30) * 30 });
   useEffect(() => {
     if (!loaded || suspendAutosaveRef.current) return undefined;
     clearTimeout(saveRef.current);
-    saveRef.current = setTimeout(() => {
-      if (suspendAutosaveRef.current) return;
-      const savedAt = stateRef.current.gameMin;
-      const slice = serializeSave({ ...stateRef.current, savedAt });
-      AsyncStorage.setItem(SAVE_KEY, JSON.stringify(slice))
-        .then(() => {
-          setState((s) => (s.savedAt === savedAt ? s : { ...s, savedAt }));
-        })
-        .catch(() => {});
-    }, 700);
+    saveRef.current = setTimeout(() => { persist().catch(() => buzz(tr('msg.save_failed', 'Could not save progress'), 'bad')); }, 700);
     return () => clearTimeout(saveRef.current);
-  }, [state, loaded]);
+  }, [durablePayload, loaded, persist, buzz, tr]);
+
+  useEffect(() => {
+    if (!loaded) return undefined;
+    const subscription = NativeAppState.addEventListener('change', (next) => {
+      foregroundRef.current = next === 'active';
+      if (next !== 'active') { clearTimeout(saveRef.current); persist().catch(() => {}); }
+    });
+    return () => subscription.remove();
+  }, [loaded, persist]);
 
   // Flush achievement toasts outside setState updaters.
   useEffect(() => {
@@ -430,7 +412,7 @@ export function useGame() {
     if (!loaded) return undefined;
     const t = setInterval(() => {
       const cur = stateRef.current;
-      if (cur.intro || cur.cut) return;
+      if (cur.intro || cur.cut || !foregroundRef.current) return;
       setState((s) => {
         if (s.intro || s.cut) return s;
         const minsToDep = s.ticket ? Math.max(0, s.minsToDep - 6) : 0;
@@ -438,7 +420,7 @@ export function useGame() {
         if (
           s.ticket
           && minsToDep === 0
-          && s.minsToDep > 0
+          && s.minsToDep >= 0
           && !flyingRef.current
           && !s.cut
         ) {
@@ -529,20 +511,16 @@ export function useGame() {
   );
 
   const setTab = useCallback((tab) => {
-    markInteracted();
     setState((s) => ({ ...s, tab, page: null, query: '' }));
-  }, [markInteracted]);
+  }, []);
   const setPage = useCallback((page) => {
-    markInteracted();
     setState((s) => ({ ...s, page }));
-  }, [markInteracted]);
+  }, []);
   const setSeg = useCallback((seg) => setState((s) => ({ ...s, seg })), []);
   const setQuery = useCallback((query) => {
-    markInteracted();
     setState((s) => ({ ...s, query }));
-  }, [markInteracted]);
+  }, []);
   const setFocusDest = useCallback((focusDest) => {
-    markInteracted();
     // Clearing focus stays on the current tab; setting focus opens Flights.
     if (!focusDest) {
       setState((s) => ({ ...s, focusDest: '', pinCity: null }));
@@ -557,7 +535,7 @@ export function useGame() {
       filter: 'departure',
       pinCity: null,
     }));
-  }, [markInteracted]);
+  }, []);
 
   const openPinCity = useCallback((id) => {
     if (!id || !CITIES[id]) return;
@@ -570,7 +548,6 @@ export function useGame() {
 
   /** Focus a hub for market intel without opening Flights. */
   const watchDest = useCallback((focusDest) => {
-    markInteracted();
     setState((s) => ({
       ...s,
       focusDest: focusDest || '',
@@ -579,14 +556,13 @@ export function useGame() {
       page: null,
       pinCity: null,
     }));
-  }, [markInteracted]);
+  }, []);
 
   const setFilter = useCallback((filter) => setState((s) => ({ ...s, filter })), []);
   const closeSheet = useCallback(() => setState((s) => ({
     ...s, sheet: null, selInv: null, invQty: 1, overweightNote: s.sheet === 'sell' ? '' : s.overweightNote,
   })), []);
   const dismissEvent = useCallback((openMarket = false) => {
-    markInteracted();
     setState((s) => ({
       ...s,
       sheet: openMarket ? null : (s.eventReturnSheet || null),
@@ -596,38 +572,32 @@ export function useGame() {
       eventPopup: null,
       eventReturnSheet: null,
     }));
-  }, [markInteracted]);
+  }, []);
   const startGame = useCallback(() => {
-    markInteracted();
     setState((s) => ({ ...s, intro: false }));
-  }, [markInteracted]);
+  }, []);
   const setRot = useCallback((rot) => {
-    markInteracted();
     setState((s) => ({ ...s, rot }));
-  }, [markInteracted]);
+  }, []);
   const setDragging = useCallback((dragging) => {
     if (dragging) markInteracted();
     setState((s) => ({ ...s, dragging }));
-  }, [markInteracted]);
+  }, []);
   const toggleOpt = useCallback((key) => {
-    markInteracted();
     setState((s) => ({ ...s, [key]: !s[key] }));
-  }, [markInteracted]);
+  }, []);
 
   const setFontScale = useCallback((scale) => {
-    markInteracted();
     setState((s) => ({ ...s, fontScale: [1, 1.25, 1.5].includes(scale) ? scale : 1 }));
-  }, [markInteracted]);
+  }, []);
 
   const cycleColorBlind = useCallback((mode) => {
-    markInteracted();
     setState((s) => ({ ...s, colorBlind: ['off', 'deuteranopia', 'protanopia'].includes(mode) ? mode : 'off' }));
-  }, [markInteracted]);
+  }, []);
 
   const setLocale = useCallback((lng) => {
-    markInteracted();
     setState((s) => ({ ...s, locale: lng === 'zh' ? 'zh' : 'en' }));
-  }, [markInteracted]);
+  }, []);
 
   const openProduct = useCallback((id) => setState((s) => ({
     ...s, sheet: 'product', selId: id, qty: 1, slot: 'bag',
@@ -684,11 +654,11 @@ export function useGame() {
   const setAddon = useCallback((addon) => setState((s) => ({ ...s, addon })), []);
 
   const cancelTicket = useCallback(() => {
-    markInteracted();
     setState((s) => {
       if (!s.ticket || s.cut) return s;
       return {
         ...s,
+        ...refundTravel(s, MOBILE_BALANCE.refundRate),
         ticket: null,
         minsToDep: 0,
         called: false,
@@ -698,11 +668,10 @@ export function useGame() {
     });
     flyingRef.current = false;
     calledEdgeRef.current = false;
-    buzz(tr('msg.ticket_cancelled', 'Ticket cancelled — baggage allowance reset'), 'ok');
-  }, [buzz, markInteracted, tr]);
+    buzz(trf('msg.ticket_cancelled_pct', { pct: Math.round(MOBILE_BALANCE.refundRate * 100) }, 'Ticket cancelled'), 'ok');
+  }, [buzz, trf]);
 
   const buy = useCallback(() => {
-    markInteracted();
     let result = null;
     setState((st) => {
       const p = PRODUCTS[st.selId];
@@ -768,10 +737,9 @@ export function useGame() {
     });
     if (result?.ok) click();
     if (result) setTimeout(() => buzz(result.msg, result.kind), 0);
-  }, [announceAchievements, buzz, click, markInteracted]);
+  }, [announceAchievements, buzz, click]);
 
   const buyTicket = useCallback(() => {
-    markInteracted();
     let result = null;
     setState((st) => {
       if (st.ticket) {
@@ -815,7 +783,7 @@ export function useGame() {
       calledEdgeRef.current = false;
       return {
         ...st,
-        cash: st.cash - total,
+        ...travelCharge(st, total),
         sheet: null,
         tab: 'globe',
         page: null,
@@ -832,6 +800,8 @@ export function useGame() {
           dur: fl.dur,
           mins: fl.mins,
           extraKg: kg,
+          totalPaid: total,
+          ledgerPaid: total,
         },
         minsToDep: wait,
         log: [entry].concat(st.log).slice(0, 40),
@@ -839,10 +809,9 @@ export function useGame() {
     });
     if (result?.ok) click('sfx_ticket');
     if (result) setTimeout(() => buzz(result.msg, result.kind), 0);
-  }, [buzz, click, markInteracted]);
+  }, [buzz, click]);
 
   const sellAll = useCallback(() => {
-    markInteracted();
     let result = null;
     setState((s) => {
       if (!s.inv.length) return s;
@@ -861,13 +830,12 @@ export function useGame() {
       result = d;
       const next = {
         ...s,
-        cash: s.cash + d.gross,
+        ...saleCredit(s, d.gross, d.cost),
         inv: [],
         sheet: null,
         selInv: null,
         lastSale: d.net,
-        profit: s.profit + Math.max(0, d.net),
-        profitable: s.profitable + (d.net > 0 ? 1 : 0),
+
         log: [entry].concat(s.log).slice(0, 40),
         overweightNote: '',
       };
@@ -881,10 +849,9 @@ export function useGame() {
     } else {
       setTimeout(() => buzz(trf('msg.rough_run', { loss: money(-result.net) }, `Rough run — ${money(-result.net)} down. Next leg pays it back.`), 'bad'), 0);
     }
-  }, [announceAchievements, buzz, click, markInteracted, trf]);
+  }, [announceAchievements, buzz, click, trf]);
 
   const sellQty = useCallback((n) => {
-    markInteracted();
     let result = null;
     setState((s) => {
       const idx = findInv(s.inv, s.selInv);
@@ -913,14 +880,13 @@ export function useGame() {
       };
       const next = {
         ...s,
-        cash: s.cash + gross,
+        ...saleCredit(s, gross, item.cost * qty),
         inv,
         sheet: null,
         selInv: null,
         invQty: 1,
         lastSale: net,
-        profit: s.profit + Math.max(0, net),
-        profitable: s.profitable + (net > 0 ? 1 : 0),
+
         log: [entry].concat(s.log).slice(0, 40),
         overweightNote: (() => {
           const over = Math.max(0, bagUsed(inv) - DEFAULT_BAG_LIMIT);
@@ -935,7 +901,7 @@ export function useGame() {
     if (!result) return;
     click(result.net >= 0 ? 'sfx_profit' : 'sfx_loss');
     setTimeout(() => buzz(result.msg, result.kind), 0);
-  }, [announceAchievements, buzz, click, markInteracted]);
+  }, [announceAchievements, buzz, click]);
 
   const discardQty = useCallback((n) => {
     const s0 = stateRef.current;
@@ -952,8 +918,7 @@ export function useGame() {
           text: tr('alert.discard', 'Discard'),
           style: 'destructive',
           onPress: () => {
-            markInteracted();
-            setState((s) => {
+                    setState((s) => {
               const idx = findInv(s.inv, s.selInv);
               if (idx < 0) return s;
               const item = s.inv[idx];
@@ -965,6 +930,7 @@ export function useGame() {
               return {
                 ...s,
                 inv,
+                profit: s.profit - item.cost * qty,
                 sheet: null,
                 selInv: null,
                 invQty: 1,
@@ -978,10 +944,9 @@ export function useGame() {
         },
       ],
     );
-  }, [buzz, markInteracted, tr, trf]);
+  }, [buzz, tr, trf]);
 
   const moveInvSlot = useCallback(() => {
-    markInteracted();
     let result = null;
     setState((s) => {
       const idx = findInv(s.inv, s.selInv);
@@ -1045,34 +1010,42 @@ export function useGame() {
       };
     });
     if (result) setTimeout(() => buzz(result.msg, result.kind), 0);
-  }, [buzz, markInteracted]);
+  }, [buzz]);
 
-  const saveNow = useCallback(() => {
-    markInteracted();
-    const savedAt = stateRef.current.gameMin;
-    setState((s) => ({ ...s, savedAt }));
-    const slice = serializeSave({ ...stateRef.current, savedAt });
-    AsyncStorage.setItem(SAVE_KEY, JSON.stringify(slice)).catch(() => {});
-    buzz(tr('msg.saved', 'Progress saved to slot 1'), 'ok');
-  }, [buzz, markInteracted, tr]);
+  const saveNow = useCallback(async () => {
+    clearTimeout(saveRef.current);
+    try { await persist(); buzz(tr('msg.saved', 'Progress saved to slot 1'), 'ok'); }
+    catch { buzz(tr('msg.save_failed', 'Could not save progress'), 'bad'); }
+  }, [buzz, tr, persist]);
 
-  const restart = useCallback(() => {
-    markInteracted();
+  const restart = useCallback(async () => {
+    if (!loadedRef.current) return;
     clearTimeout(cutRef.current);
+    clearTimeout(saveRef.current);
     flyingRef.current = false;
     calledEdgeRef.current = false;
-    setState((s) => ({
-      ...initialState(),
-      optHaptics: s.optHaptics,
-      optPush: s.optPush,
-      optSound: s.optSound,
-      opt24h: s.opt24h,
-      optReduce: s.optReduce,
-      locale: s.locale,
-    }));
-    AsyncStorage.removeItem(SAVE_KEY).catch(() => {});
-    buzz(tr('msg.new_run', 'New run — back in Istanbul'), 'ok');
-  }, [buzz, markInteracted, tr]);
+    loadedRef.current = false;
+    setLoaded(false);
+    runGeneration.current += 1;
+    const previous = stateRef.current;
+    const next = { ...initialState() };
+    for (const key of ['optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce', 'locale', 'fontScale', 'colorBlind']) next[key] = previous[key];
+    const job = saveQueue.current.catch(() => {}).then(() => resetSave(AsyncStorage, JSON.stringify(serializeSave(next))));
+    saveQueue.current = job;
+    try {
+      await job;
+      suspendAutosaveRef.current = false;
+      setState(next);
+      buzz(tr('msg.new_run', 'New run — back in Istanbul'), 'ok');
+    } catch {
+      // Resume the prior ticket from its checkpoint if a cutscene was interrupted.
+      setState((s) => ({ ...s, cut: null, cutLine: '' }));
+      buzz(tr('msg.reset_failed', 'New run was not saved. Your current game remains open.'), 'bad');
+    } finally {
+      loadedRef.current = true;
+      setLoaded(true);
+    }
+  }, [buzz, tr]);
 
   const productRows = useMemo(() => {
     const baseIds = state.seg === 'local' ? localIds : importIds;
@@ -1166,6 +1139,10 @@ export function useGame() {
     });
   }, [routes, state.filter, state.visited, state.focusDest, state.opt24h, state.gameMin, state.city, state.eventSeed, loc, worldEvents]);
 
+  const opportunities = useMemo(() => routeOpportunities(state, worldEvents,
+    routes.map((route) => quoteFlightForEvents(route, state.city, worldEvents, state.eventSeed))),
+  [state.inv, state.cash, state.city, state.gameMin, state.locale, state.ticket, state.eventSeed, routes, worldEvents]);
+
   const q = state.query.trim().toLowerCase();
   const searchResults = q
     ? CIDS.filter((k) => k !== state.city)
@@ -1253,10 +1230,12 @@ export function useGame() {
     popupEvent,
     productRows,
     sortedFlights,
+    opportunities,
     routes,
     destinations,
     searchResults,
     clockText: clockLabel(state.gameMin, state.opt24h, loc),
+    localHour: Math.floor(((cityMinutes(state.gameMin, state.city) % 1440) + 1440) % 1440 / 60),
     localTime: fmtClock(cityMinutes(state.gameMin, state.city), state.opt24h, loc),
     locale: state.locale || 'en',
     t: (key, fallback) => i18nT(state.locale || 'en', key, fallback),

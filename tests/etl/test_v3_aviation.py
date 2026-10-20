@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from functools import lru_cache
 from pathlib import Path
 
 import pytest
@@ -127,6 +128,7 @@ def test_transfer_edge_includes_mct_when_built():
     assert edges[key][0]["mct_minutes"] == 100
 
 
+@lru_cache(maxsize=1)
 def _load_generated_world_and_flights():
     """Load the regenerated world.json and per-airport flight files."""
     world_path = GAME_DATA / "world.json"
@@ -161,18 +163,11 @@ def _load_real_route_airlines():
     return route_airlines
 
 
+@lru_cache(maxsize=1)
 def _load_real_airlines():
-    """Parse airlines.dat → {IATA: [entries]} with resolved home countries."""
-    from functools import lru_cache
-
     from etl.scripts.run_pipeline import read_real_airlines
-
-    @lru_cache(maxsize=1)
-    def _cached() -> dict[str, list[dict]]:
-        path = ROOT / "etl" / "raw" / "airlines.dat"
-        return read_real_airlines(path) if path.exists() else {}
-
-    return _cached()
+    path = ROOT / "etl" / "raw" / "airlines.dat"
+    return read_real_airlines(path) if path.exists() else {}
 
 
 def _active_iatas() -> set[str]:

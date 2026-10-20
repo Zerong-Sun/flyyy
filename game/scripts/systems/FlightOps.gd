@@ -10,6 +10,7 @@ signal transition_finished
 signal layover_prompt(hub_iata: String, mct_minutes: int)
 
 var _boarding := false
+var _run_generation := 0
 
 
 func _ready() -> void:
@@ -18,6 +19,8 @@ func _ready() -> void:
 
 
 func _on_game_started() -> void:
+	_run_generation += 1
+	SaveSystem.flight_in_progress = false
 	AppState.last_market_date = GameClock.game_date_string()
 	_boarding = false
 
@@ -96,10 +99,7 @@ func start_boarding(ticket: Dictionary) -> void:
 	# the player's current airport — a stale leg would teleport the player.
 	# Stale itineraries are dropped with the same 70% refund as a cancellation.
 	if str(ticket.get("origin_airport_id", "")) != AppState.current_airport_id:
-		var paid_total := 0.0
-		for t_v in AppState.held_tickets:
-			paid_total += float((t_v as Dictionary).get("total_paid", 0.0))
-		AppState.add_cash(paid_total * 0.7)
+		_Tickets.refund_held()
 		AppState.held_tickets = []
 		AppState.trip_baggage_extra_kg = 0.0
 		AppState.trip_cabin = "economy"
@@ -110,6 +110,7 @@ func start_boarding(ticket: Dictionary) -> void:
 		EventBus.ticket_purchased.emit()
 		transition_finished.emit()
 		return
+	var generation := _run_generation
 	_boarding = true
 	GameClock.set_paused(true)
 
@@ -121,10 +122,7 @@ func start_boarding(ticket: Dictionary) -> void:
 		# Keeping a connection leg 2 whose origin is a hub the player never
 		# reached would let _process auto-board it later and teleport the player
 		# (ratchet P0 — SmokeConnectionContract.gd part B).
-		var paid_total := 0.0
-		for t_v in AppState.held_tickets:
-			paid_total += float((t_v as Dictionary).get("total_paid", 0.0))
-		AppState.add_cash(paid_total * 0.7)
+		_Tickets.refund_held()
 		AppState.held_tickets = []
 		AppState.trip_baggage_extra_kg = 0.0
 		AppState.trip_cabin = "economy"
@@ -138,6 +136,9 @@ func start_boarding(ticket: Dictionary) -> void:
 		transition_finished.emit()
 		return
 
+	# Keep a consistent pre-flight checkpoint while the visual transition runs.
+	SaveSystem.save_game()
+	SaveSystem.flight_in_progress = true
 	var before_operation_date := GameClock.game_date_string()
 	var delay_min: int = int(roll.get("delay_min", 0))
 	if delay_min > 0:
@@ -166,6 +167,8 @@ func start_boarding(ticket: Dictionary) -> void:
 	if is_cnx1:
 		wait_s = 4.0
 	await tree.create_timer(wait_s).timeout
+	if generation != _run_generation:
+		return
 	_arrive(ticket, bool(roll.get("on_time", true)))
 	if is_cnx1:
 		# MCT re-check on ACTUAL arrival (GDLC Playtest #3 ratchet): a leg-1
@@ -183,10 +186,7 @@ func start_boarding(ticket: Dictionary) -> void:
 				var replacement := _Tickets.rebook_connection_leg2(t2, mct_contract)
 				if replacement.is_empty():
 					# Refund-and-park: 70% of the remaining itinerary.
-					var paid_total := 0.0
-					for t_v in AppState.held_tickets:
-						paid_total += float((t_v as Dictionary).get("total_paid", 0.0))
-					AppState.add_cash(paid_total * 0.7)
+					_Tickets.refund_held()
 					AppState.held_tickets = []
 					AppState.trip_baggage_extra_kg = 0.0
 					AppState.trip_cabin = "economy"
@@ -206,7 +206,13 @@ func start_boarding(ticket: Dictionary) -> void:
 		layover_prompt.emit(str(ticket.get("destination_iata", "")), int(round(gap_min)))
 		EventBus.tutorial_hint.emit("转机中：%s · 中转 %d 分钟（本场 MCT %d）" %
 				[ticket.get("destination_iata", ""), int(round(gap_min)), mct_contract])
+		SaveSystem.flight_in_progress = false
+		SaveSystem.save_game()
 		await tree.create_timer(1.0).timeout
+		if generation != _run_generation:
+			return
+	SaveSystem.flight_in_progress = false
+	SaveSystem.save_game()
 	_boarding = false
 	GameClock.set_paused(false)
 	transition_finished.emit()
@@ -278,7 +284,6 @@ func _arrive(ticket: Dictionary, on_time: bool = true) -> void:
 		AppState.log_stat("consecutive_on_time", 1.0)
 	AppState.update_extreme_airport(dest)
 	AppState.last_market_date = GameClock.game_date_string()
-	SaveSystem.save_game()
 	EventBus.arrived.emit()
 	EventBus.airport_selected.emit(dest)
 	EventBus.inventory_changed.emit()

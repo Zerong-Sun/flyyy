@@ -1,7 +1,7 @@
 extends Node
 ## Player runtime state.
 
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
 
 var save_id: String = ""
 var cash_usd: float = 0.0
@@ -33,6 +33,15 @@ var reliability_events_enabled: bool = true
 var last_market_date: String = ""
 var reputation_points: int = 0
 var level: int = 1
+var realized_margin: float = 0.0
+var travel_expenses: float = 0.0
+
+func record_travel_expense(amount: float) -> void:
+	travel_expenses += amount
+
+func realized_net() -> float:
+	return realized_margin - travel_expenses
+
 var last_flight_price: float = 0.0
 var last_baggage_cost: float = 0.0
 var reduced_animations: bool = false
@@ -119,6 +128,8 @@ func reset_new_game(airport_id: String, mode: String = "sandbox") -> void:
 	last_market_date = "2025-03-01"
 	reputation_points = 0
 	level = 1
+	realized_margin = 0.0
+	travel_expenses = 0.0
 	last_flight_price = 0.0
 	last_baggage_cost = 0.0
 	unlocked_achievements = {}
@@ -297,6 +308,9 @@ func update_extreme_airport(airport_id: String) -> void:
 ## Log a completed sell transaction. Persists to save file via to_dict/from_dict.
 func log_sell_transaction(sell_city: String, product_id: String, qty: int,
 		total_revenue: float, total_unit_cost: float, game_timestamp: float) -> void:
+	realized_margin += total_revenue - total_unit_cost
+	if realized_net() > 0.0:
+		tutorial_flags["first_profitable_trade"] = true
 	sell_transactions.append({
 		"sell_city": sell_city,
 		"product_id": product_id,
@@ -348,6 +362,8 @@ func to_dict() -> Dictionary:
 		"game_mode": game_mode,
 		"challenge": challenge,
 		"sell_transactions": sell_transactions,
+		"realized_margin": realized_margin,
+		"travel_expenses": travel_expenses,
 		"last_flight_price": last_flight_price,
 		"last_baggage_cost": last_baggage_cost,
 		"reduced_animations": reduced_animations,
@@ -377,7 +393,12 @@ func from_dict(d: Dictionary) -> void:
 	visited_countries = d.get("visited_countries", {})
 	inventory = d.get("inventory", [])
 	cargo_kg_capacity = float(d.get("cargo_kg_capacity", 0))
-	held_tickets = d.get("held_tickets", [])
+	held_tickets = d.get("held_tickets", []).duplicate(true)
+	for ticket in held_tickets:
+		if int(d.get("save_version", 1)) < 2:
+			ticket["ledger_paid"] = 0.0
+		elif not ticket.has("ledger_paid"):
+			ticket["ledger_paid"] = float(ticket.get("total_paid", 0.0))
 	travel_log = d.get("travel_log", [])
 	demand_pressure = d.get("demand_pressure", {})
 	tutorial_flags = d.get("tutorial_flags", {})
@@ -398,6 +419,9 @@ func from_dict(d: Dictionary) -> void:
 	for tx_v in d.get("sell_transactions", []):
 		if typeof(tx_v) == TYPE_DICTIONARY:
 			sell_transactions.append(tx_v)
+	# Legacy accounting starts a new ledger; historical travel costs were not saved.
+	realized_margin = float(d.get("realized_margin", 0.0))
+	travel_expenses = float(d.get("travel_expenses", 0.0))
 	last_flight_price = float(d.get("last_flight_price", 0.0))
 	last_baggage_cost = float(d.get("last_baggage_cost", 0.0))
 	reduced_animations = bool(d.get("reduced_animations", false))

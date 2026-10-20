@@ -56,7 +56,9 @@ static func sell_price(city_id: String, product_id: String, quality: float, pres
 	var demand_mul: float = max(0.55, 1.0 - pressure)
 	var ev: Dictionary = _MarketEvents.factor_for(city_id, product_id, false)
 	var news: Dictionary = _NewsEvents.market_factor(city_id, product_id, false)
-	return round(base * qmul * demand_mul * float(ev.mult) * float(news.mult) * 100.0) / 100.0
+	# Apply the spread AFTER every event modifier so local round trips cannot mint cash.
+	var quote: float = base * qmul * demand_mul * float(ev.mult) * float(news.mult)
+	return floor(min(quote, buy_price(city_id, product_id) * 0.95) * 100.0) / 100.0
 
 
 static func quality_multiplier(quality: float) -> float:

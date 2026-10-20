@@ -118,7 +118,7 @@ export function MarketScreen({ game }) {
 }
 
 export function FlightsScreen({ game }) {
-  const { state, city, sortedFlights, setFilter, openFlight, setFocusDest, t, tf } = game;
+  const { state, opportunities, city, sortedFlights, setFilter, openFlight, setFocusDest, t, tf } = game;
   const focusCity = state.focusDest ? CITIES[state.focusDest] : null;
   const focusCityName = state.focusDest ? t(`city.${state.focusDest}`, CITIES[state.focusDest].name) : '';
   const flightFilters = [
@@ -146,6 +146,18 @@ export function FlightsScreen({ game }) {
           </Text>
         </Pressable>
       ) : null}
+      <View style={styles.emptyBox}>
+        <Text style={styles.emptyTitle}>{state.locale === 'zh' ? (state.profitable ? '航线净收益比较' : '首趟目标：收入覆盖采购与旅费') : (state.profitable ? 'Compare route earnings' : 'First goal: cover goods and travel costs')}</Text>
+        <Text style={styles.emptySub}>{state.locale === 'zh' ? '经济舱标准行李方案；按当前行情估算，抵达价可能变化。' : 'Economy carry-on plans at current quotes; arrival prices may change.'}</Text>
+        {opportunities.map((plan) => (
+          <Pressable key={plan.route.toId} onPress={() => setFocusDest(plan.route.toId)} accessibilityRole="button" style={styles.flightCard}>
+            <Text style={styles.emptyTitle}>{t(`city.${plan.route.toId}`, CITIES[plan.route.toId].name)} · {money(plan.net)} · {money(plan.perKg)}/kg · {Math.round(plan.minutes / 6) / 10}h</Text>
+            <Text style={styles.emptySub}>{state.locale === 'zh' ? `采购 ${money(plan.purchase)} / 销售 ${money(plan.revenue)} / 机票 ${money(plan.fare)} / 行李 $0` : `Goods ${money(plan.purchase)} / sales ${money(plan.revenue)} / flight ${money(plan.fare)} / bags $0`}</Text>
+            {plan.starter ? <Text style={styles.emptySub}>{t(`prod.${plan.starter.id}`, plan.starter.id)} × {plan.starter.n}</Text> : null}
+          </Pressable>
+        ))}
+        {!opportunities.length ? <Text style={styles.emptySub}>{state.locale === 'zh' ? (state.ticket ? '请先完成当前行程或退票，再比较新航线。' : '当前资金或行李不满足方案要求。') : (state.ticket ? 'Complete or cancel your current itinerary before planning another.' : 'No plan fits the current cash and carry-on capacity.')}</Text> : null}
+      </View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

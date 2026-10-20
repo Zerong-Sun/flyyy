@@ -1,0 +1,11 @@
+{
+  "profile": "mobile-curated-v1",
+  "startingCash": 6944,
+  "startingCity": "istanbul",
+  "bagKg": 23,
+  "cargoKg": 50,
+  "marketSpread": 0.05,
+  "refundRate": 0.7,
+  "goods": "51 authored mobile products; IDs retained for save compatibility",
+  "schedule": "synthetic daily departures on the shared ETL route graph"
+}

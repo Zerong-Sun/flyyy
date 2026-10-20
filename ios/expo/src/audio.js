@@ -24,6 +24,7 @@ let ready = false;
 const cache = {};
 let bgmPlayer = null;
 let currentBgm = null;
+let bgmGeneration = 0;
 
 async function ensureMode() {
   if (ready) return;
@@ -62,36 +63,27 @@ export async function playBgm(id) {
   const src = BGM_SOURCES[id];
   if (!src) return false;
   if (currentBgm === id && bgmPlayer) return true;
-  try {
-    await ensureMode();
-    if (bgmPlayer) {
-      await bgmPlayer.stopAsync().catch(() => {});
-      await bgmPlayer.unloadAsync().catch(() => {});
-      bgmPlayer = null;
-    }
-    const created = await Audio.Sound.createAsync(src, {
-      shouldPlay: false,
-      volume: 0.5,
-      isLooping: true,
-    });
-    bgmPlayer = created.sound;
-    currentBgm = id;
-    await bgmPlayer.playAsync();
-    return true;
-  } catch (_) {
-    return false;
-  }
-}
-
-/** Stop looping BGM (e.g. Sound toggle off). */
-export async function stopBgm() {
-  if (!bgmPlayer) return;
-  try {
-    await bgmPlayer.stopAsync().catch(() => {});
-    await bgmPlayer.unloadAsync().catch(() => {});
-  } catch (_) {
-    /* ignore */
-  }
+  const generation = ++bgmGeneration;
+  const previous = bgmPlayer;
   bgmPlayer = null;
   currentBgm = null;
+  try {
+    await ensureMode();
+    if (previous) await previous.unloadAsync().catch(() => {});
+    if (generation !== bgmGeneration) return false;
+    const { sound } = await Audio.Sound.createAsync(src, { shouldPlay: false, volume: 0.5, isLooping: true });
+    if (generation !== bgmGeneration) { await sound.unloadAsync().catch(() => {}); return false; }
+    bgmPlayer = sound;
+    currentBgm = id;
+    await sound.playAsync();
+    return true;
+  } catch (_) { return false; }
+}
+
+export async function stopBgm() {
+  ++bgmGeneration;
+  const previous = bgmPlayer;
+  bgmPlayer = null;
+  currentBgm = null;
+  if (previous) await previous.unloadAsync().catch(() => {});
 }

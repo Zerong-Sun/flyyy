@@ -180,10 +180,10 @@ describe('save migrate round-trip', () => {
     assert.equal(m.reason, 'future');
   });
 
-  it('missing saveVersion migrates through v2', () => {
+  it('missing saveVersion migrates through current schema', () => {
     const m = migrateSave({ cash: 50, city: 'istanbul' });
     assert.equal(m.ok, true);
-    assert.equal(m.data.saveVersion, 2);
+    assert.equal(m.data.saveVersion, SAVE_VERSION);
     assert.equal(typeof m.data.eventSeed, 'string');
     assert.deepEqual(m.data.seenEventEpisodes, []);
     const h = hydrateSave({ cash: 0 }, m, CITIES, STARTING_CITY);
@@ -567,5 +567,76 @@ describe('i18n', () => {
     assert.ok(clockLabel(0, false, 'zh').includes('上午'));
     assert.ok(clockLabel(0, false, 'en').includes('Mar'));
     assert.ok(clockLabel(0, false, 'en').includes('AM'));
+  });
+});
+
+// Upgrade regression coverage: real failure paths from the review.
+import { ROUTE_PAIRS, MOBILE_BALANCE } from '../gameData.js';
+import { routeOpportunities } from '../gameLogic.js';
+import { travelCharge, saleCredit } from '../accounting.js';
+import { writeSave, BACKUP_KEY } from '../saveStorage.js';
+import { SAVE_KEY } from '../saveGame.js';
+describe('desktop/mobile upgrade contracts', () => {
+  const base = { cash: 6944, city: STARTING_CITY, inv: [], gameMin: 0, profit: 0, travelExpenses: 0, profitable: 0, locale: 'en' };
+  it('rejects malformed inventory, unknown goods, nonfinite values and roots', () => {
+    for (const bad of [{ inv: [null] }, { inv: [{ id: 'removed', n: 1, cost: 1, slot: 'bag' }] }, { cash: '100' }, { cash: -1 }, { ticket: { toId: 'dubai', mins: -3 } }]) {
+      const result = loadSavePayload(JSON.stringify({ ...serializeSave(base), ...bad }), base, CITIES, STARTING_CITY);
+      assert.equal(result.ok, false, JSON.stringify(bad));
+    }
+    for (const raw of ['null', '[]', '42']) assert.equal(loadSavePayload(raw, base, CITIES, STARTING_CITY).ok, false);
+  });
+  it('preserves zero-countdown tickets and accounting over reload', () => {
+    const state = { ...base, ticket: { toId: 'dubai', mins: 120, km: 2000, extraKg: 0, totalPaid: 300 }, minsToDep: 0, profit: -300, travelExpenses: 300 };
+    const restored = loadSavePayload(JSON.stringify(serializeSave(state)), base, CITIES, STARTING_CITY);
+    assert.equal(restored.ok, true);
+    assert.equal(restored.data.minsToDep, 0);
+    assert.equal(restored.data.ticket.totalPaid, 300);
+    assert.equal(restored.data.profit, -300);
+  });
+  it('charges travel once across partial sales, additional legs, refunds and losses', () => {
+    let state = { ...base, ...travelCharge(base, 300) };
+    state = { ...state, ...saleCredit(state, 500, 100) };
+    state = { ...state, ...saleCredit(state, 200, 100) };
+    assert.equal(state.profit, 200);
+    state = { ...state, ...travelCharge(state, 100) };
+    state = { ...state, ...travelCharge(state, -70) };
+    state = { ...state, ...saleCredit(state, 10, 50) };
+    assert.equal(state.profit, 130);
+    assert.equal(state.travelExpenses, 330);
+  });
+  it('enforces a spread after every event and stacked events in every city', () => {
+    for (const events of [[], ...EVENTS.map((event) => [event]), EVENTS]) {
+      for (const city of CIDS) for (const pid of PRODUCT_IDS) {
+        assert.ok(marketPriceAt(pid, city, 'sell', events) <= Math.floor(marketPriceAt(pid, city, 'buy', events) * (1 - MOBILE_BALANCE.marketSpread)));
+      }
+    }
+  });
+  it('only creates services on canonical routes', () => {
+    const edges = new Set(ROUTE_PAIRS.map(([a, b]) => `${a}|${b}`));
+    for (const cid of CIDS) for (const route of routesFrom(cid)) assert.ok(edges.has(`${cid}|${route.toId}`));
+  });
+  it('offers an affordable profitable first trade with costs and waiting time', () => {
+    const plans = routeOpportunities(base);
+    assert.ok(plans.length > 0);
+    assert.ok(plans[0].net > 0);
+    for (const plan of plans) {
+      assert.equal(plan.net, plan.revenue - plan.purchase - plan.fare);
+      assert.ok(plan.purchase + plan.fare <= base.cash);
+      assert.ok(plan.minutes >= plan.route.mins);
+      assert.ok(plan.starter.n * PRODUCTS[plan.starter.id].w <= MOBILE_BALANCE.bagKg);
+    }
+  });
+  it('retains the primary when a backup write fails and preserves last good on success', async () => {
+    const old = JSON.stringify(serializeSave(base));
+    const next = JSON.stringify(serializeSave({ ...base, cash: 7000 }));
+    const memory = new Map([[SAVE_KEY, old]]);
+    let fail = true;
+    const storage = { getItem: async (k) => memory.get(k), setItem: async (k, v) => { if (fail && k === BACKUP_KEY) throw new Error('disk full'); memory.set(k, v); } };
+    await assert.rejects(writeSave(storage, next));
+    assert.equal(memory.get(SAVE_KEY), old);
+    fail = false;
+    await writeSave(storage, next);
+    assert.equal(memory.get(BACKUP_KEY), old);
+    assert.equal(memory.get(SAVE_KEY), next);
   });
 });

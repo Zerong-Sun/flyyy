@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -56,8 +56,11 @@ export function Globe({ game }) {
   const { height } = useWindowDimensions();
   const SIZE = globeSizeFor(height);
   const IMG_W = SIZE * 2;
-  const { state, city, setRot, setDragging, openPinCity, buzz, t, tf } = game;
-  const rot = state.rot === null || state.rot === undefined ? -city.lon : state.rot;
+  const { state, city, openPinCity, buzz, t, tf } = game;
+  const [rot, setRot] = useState(-city.lon);
+  const [dragging, setDragging] = useState(false);
+  const dragStart = useRef(rot);
+  useEffect(() => { setRot(-city.lon); }, [city.lon]);
   const rotRef = useRef(rot);
   rotRef.current = rot;
   const pinPressRef = useRef({ t: 0, x: 0, y: 0, id: null });
@@ -74,10 +77,11 @@ export function Globe({ game }) {
     onMoveShouldSetPanResponder: (_e, g) => Math.abs(g.dx) > 3,
     onPanResponderGrant: () => {
       if (inertiaRef.current) cancelAnimationFrame(inertiaRef.current);
+      dragStart.current = rotRef.current;
       setDragging(true);
     },
     onPanResponderMove: (_e, g) => {
-      setRot(rotRef.current + g.dx * 0.55 * (276 / SIZE));
+      setRot(dragStart.current + g.dx * 0.55 * (276 / SIZE));
     },
     onPanResponderRelease: (_e, g) => {
       setDragging(false);
@@ -139,7 +143,7 @@ export function Globe({ game }) {
     });
   })();
 
-  const hint = state.dragging
+  const hint = dragging
     ? tf('globe.drag_hint_dragging', { name: city.name, deg: Math.round(((-rot % 360) + 360) % 360) }, `${city.name} · ${Math.round(((-rot % 360) + 360) % 360)}° E`)
     : t('globe.drag_hint', 'Drag to spin · tap a pin for details');
 

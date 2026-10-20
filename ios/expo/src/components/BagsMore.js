@@ -683,10 +683,10 @@ export function OverlaySheets({ game }) {
               </View>
             ) : null}
             <Text style={styles.sellHeadline}>
-              {sell.net >= 0
-                ? tf('sheet.sell_good', { net: money(sell.net) }, `Market looks good — ${money(sell.net)} net if you sell now.`)
-                : tf('sheet.sell_bad', { loss: money(-sell.net) }, `Tough market — ${money(-sell.net)} down if you sell now.`)}
+              {state.locale === 'zh' ? `本批商品毛利 ${money(sell.net)}；卖出后累计净利 ${money(state.profit + sell.net)}` : `Goods margin ${money(sell.net)}; cumulative net after sale ${money(state.profit + sell.net)}`}
             </Text>
+            <Text style={styles.sellRowMeta}>{state.locale === 'zh' ? `采购 ${money(sell.cost)} / 销售 ${money(sell.gross)} / 累计交通净支出 ${money(state.travelExpenses)}` : `Goods cost ${money(sell.cost)} / sales ${money(sell.gross)} / travel paid less refunds ${money(state.travelExpenses)}`}</Text>
+            <Text style={styles.sellRowMeta}>{state.locale === 'zh' ? '交通费购票时计入一次，分批卖货不会重复扣除。' : 'Travel is charged once at booking, including when selling in batches.'}</Text>
             {sell.rows.map((row, idx) => (
               <View key={idx} style={styles.sellRow}>
                 <Image source={assetSource(row.icon)} style={styles.sellIcon} accessible={false} />
@@ -701,7 +701,7 @@ export function OverlaySheets({ game }) {
               </View>
             ))}
             <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>{t('bags.net_profit', 'Net profit')}</Text>
+              <Text style={styles.totalLabel}>{state.locale === 'zh' ? '本批商品毛利' : 'Goods margin'}</Text>
               <Text style={[styles.totalVal, { color: sell.net >= 0 ? COLORS.teal : COLORS.red }]}>
                 {sell.net >= 0 ? '+' : '−'}{money(Math.abs(sell.net))}
               </Text>

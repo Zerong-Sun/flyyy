@@ -72,6 +72,8 @@ func _run() -> void:
 
 	# ── start a fresh game at PVG hub ──
 	app_state.call("reset_new_game", "pvg")
+	app_state.set("save_id", "v3-loop-regression")
+	clock.call("set_paused", true)
 	ok = _check(str(app_state.get("current_airport_id")) == "pvg", "new game not at pvg") and ok
 
 	# ═══ PART A: 联程 — legs must be REAL scheduled flights with the layover
@@ -148,6 +150,11 @@ func _run() -> void:
 	var saved_unix: float = float(clock.get("unix_time"))
 	for f_v in flights:
 		var f: Dictionary = f_v
+		if float(f.get("ticket_base_price_first", 1e12)) + 1000.0 > float(app_state.get("cash_usd")):
+			continue
+		var news: GDScript = load("res://scripts/systems/NewsEvents.gd")
+		if bool(news.quote_flight(f).get("news_unavailable", false)):
+			continue
 		if not bool(f.get("cabin_first_available", false)):
 			continue
 		var dep: float = clock.call("parse_iso_to_unix", str(f.get("scheduled_departure_utc", "")))
@@ -179,7 +186,7 @@ func _run() -> void:
 		if not held.is_empty():
 			var ticket: Dictionary = held[0]
 			ok = _check(absf(float(ticket.get("ticket_price", 0.0))
-					- float(delayed_fl.get("ticket_base_price_first", 0.0))) < 0.01,
+					- float((load("res://scripts/systems/NewsEvents.gd") as GDScript).quote_flight(delayed_fl).get("ticket_base_price_first", 0.0))) < 0.01,
 					"first-class price not from ticket_base_price_first") and ok
 			var limit: float = app_state.call("personal_baggage_limit_kg")
 			ok = _check(absf(limit - (first_kg + carry_kg)) < 0.01,
@@ -233,6 +240,10 @@ func _run() -> void:
 		# ── board the flight: seeded delay fires, arrival resets trip state ──
 		var ff := ops.call("fast_forward_to_departure") as String
 		ok = _check(ff == "", "fast_forward: %s" % ff) and ok
+		if (app_state.get("held_tickets") as Array).is_empty():
+			_fail("no ticket available for boarding")
+			_finish()
+			return
 		await ops.call("start_boarding", app_state.get("held_tickets")[0])
 		var stats: Dictionary = app_state.get("stats")
 		ok = _check(float(stats.get("delayed_flights", 0)) >= 1.0,

@@ -76,6 +76,7 @@ static func purchase(flight: Dictionary, cabin: String, extra_tier: String, carg
 	if total > AppState.cash_usd:
 		return "资金不足（需 %s）" % _Economy.format_money(total)
 	AppState.add_cash(-total)
+	AppState.record_travel_expense(total)
 	AppState.held_tickets = [{
 		"flight_instance_id": flight.get("flight_instance_id", ""),
 		"marketing_flight_number": flight.get("marketing_flight_number", ""),
@@ -98,6 +99,7 @@ static func purchase(flight: Dictionary, cabin: String, extra_tier: String, carg
 		"extra_tier": extra_tier,
 		"cargo_blocks": cargo_blocks,
 		"total_paid": total,
+		"ledger_paid": total,
 		"is_connection_leg": false,
 		"enables_cold_chain": bag.enables_cold_chain,
 	}]
@@ -197,6 +199,7 @@ static func purchase_connection(conn: Dictionary, cabin: String, extra_tier: Str
 	if total > AppState.cash_usd:
 		return "资金不足（需 %s）" % _Economy.format_money(total)
 	AppState.add_cash(-total)
+	AppState.record_travel_expense(total)
 	var ticket1 := {
 		"flight_instance_id": f1.get("flight_instance_id", ""),
 		"marketing_flight_number": f1.get("marketing_flight_number", ""),
@@ -218,6 +221,7 @@ static func purchase_connection(conn: Dictionary, cabin: String, extra_tier: Str
 		"extra_tier": extra_tier,
 		"cargo_blocks": cargo_blocks,
 		"total_paid": price1 + float(bag.extra_cost) + float(bag.cargo_cost),
+		"ledger_paid": price1 + float(bag.extra_cost) + float(bag.cargo_cost),
 		"is_connection_leg": true,
 		"connection_leg": 1,
 		"connection_final_dest": conn.get("destination_iata", ""),
@@ -247,6 +251,7 @@ static func purchase_connection(conn: Dictionary, cabin: String, extra_tier: Str
 		"extra_tier": "",
 		"cargo_blocks": cargo_blocks,
 		"total_paid": price2,
+		"ledger_paid": price2,
 		"is_connection_leg": true,
 		"connection_leg": 2,
 		"connection_final_dest": conn.get("destination_iata", ""),
@@ -321,6 +326,7 @@ static func rebook_connection_leg2(leg2: Dictionary, mct_minutes: int) -> Dictio
 		"extra_tier": "",
 		"cargo_blocks": leg2.get("cargo_blocks", 0),
 		"total_paid": leg2.get("total_paid", 0),
+		"ledger_paid": leg2.get("ledger_paid", 0),
 		"is_connection_leg": true,
 		"connection_leg": 2,
 		"connection_final_dest": leg2.get("connection_final_dest", ""),
@@ -339,12 +345,7 @@ static func refund_current() -> String:
 	var fee_rate: float = float(extras.get("refund_fee_rate", 0.3))
 	# Refund every held leg: a connection holds one itinerary across two legs
 	# whose total_paid is split 55/45, so clearing both must refund the full sum.
-	var paid_total: float = 0.0
-	for t_v in AppState.held_tickets:
-		var held: Dictionary = t_v
-		paid_total += float(held.get("total_paid", 0))
-	var refund: float = paid_total * (1.0 - fee_rate)
-	AppState.add_cash(refund)
+	var refund: float = refund_held(fee_rate)
 	AppState.held_tickets.clear()
 	AppState.trip_baggage_extra_kg = 0.0
 	AppState.cargo_kg_capacity = 0.0
@@ -383,14 +384,53 @@ static func add_baggage_or_cargo(extra_tier: String, add_cargo_blocks: int) -> S
 	if cost > AppState.cash_usd:
 		return "资金不足（需 %s）" % _Economy.format_money(cost)
 	AppState.add_cash(-cost)
+	AppState.record_travel_expense(cost)
 	t["extra_kg"] = extra_kg
 	t["extra_tier"] = extra_tier if extra_tier != "" else t.get("extra_tier", "")
 	t["cargo_blocks"] = blocks
 	t["cargo_kg"] = 50.0 * float(blocks)
 	t["total_paid"] = float(t.get("total_paid", 0)) + cost
+	t["ledger_paid"] = float(t.get("ledger_paid", 0)) + cost
 	AppState.trip_baggage_extra_kg = extra_kg
 	AppState.cargo_kg_capacity = float(t["cargo_kg"])
 	AppState.held_tickets[0] = t
 	EventBus.ticket_purchased.emit()
 	EventBus.inventory_changed.emit()
 	return "加购成功，支付 %s" % _Economy.format_money(cost)
+
+
+static func refund_held(fee_rate: float = -1.0) -> float:
+	if fee_rate < 0.0:
+		fee_rate = float(DataService.economy.get("baggage_extras", {}).get("refund_fee_rate", 0.3))
+	var refund := 0.0
+	var ledger_refund := 0.0
+	for ticket in AppState.held_tickets:
+		refund += float(ticket.get("total_paid", 0.0)) * (1.0 - clampf(fee_rate, 0.0, 1.0))
+		ledger_refund += float(ticket.get("ledger_paid", 0.0)) * (1.0 - clampf(fee_rate, 0.0, 1.0))
+	AppState.add_cash(refund)
+	AppState.record_travel_expense(-minf(maxf(0.0, AppState.travel_expenses), ledger_refund))
+	return refund
+
+
+static func apply_cargo_promotion() -> float:
+	## One free block per itinerary, including the receipt used for later refunds.
+	if AppState.held_tickets.is_empty():
+		return 0.0
+	var first: Dictionary = AppState.held_tickets[0]
+	if bool(first.get("cargo_promotion_applied", false)) or int(first.get("cargo_blocks", 0)) <= 0:
+		return 0.0
+	var remaining: float = float(DataService.economy.get("baggage_extras", {}).get("cargo_per_50kg_usd", 0))
+	var refunded := 0.0
+	var ledger_refunded := 0.0
+	for ticket in AppState.held_tickets:
+		var reduction: float = minf(remaining, float(ticket.get("total_paid", 0)))
+		var ledger_reduction: float = minf(reduction, float(ticket.get("ledger_paid", 0)))
+		ticket["total_paid"] = float(ticket.get("total_paid", 0)) - reduction
+		ticket["ledger_paid"] = float(ticket.get("ledger_paid", 0)) - ledger_reduction
+		ticket["cargo_promotion_applied"] = true
+		remaining -= reduction
+		refunded += reduction
+		ledger_refunded += ledger_reduction
+	AppState.add_cash(refunded)
+	AppState.record_travel_expense(-minf(maxf(0.0, AppState.travel_expenses), ledger_refunded))
+	return refunded

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -14,7 +15,7 @@ def _load_markets_by_city() -> dict[str, list[dict]]:
     if markets_dir.is_dir():
         by_city: dict[str, list[dict]] = {}
         for path in sorted(markets_dir.glob("*.json")):
-            by_city[path.stem] = json.loads(path.read_text(encoding="utf-8"))
+            by_city[unicodedata.normalize("NFC", path.stem)] = json.loads(path.read_text(encoding="utf-8"))
         return by_city
 
     legacy = DATA_DIR / "markets.json"
@@ -52,7 +53,7 @@ def load_transfer_edges() -> dict:
     if transfers_dir.is_dir():
         edges: dict[str, list] = {}
         for path in sorted(transfers_dir.glob("*.json")):
-            origin = path.stem
+            origin = unicodedata.normalize("NFC", path.stem)
             by_dest = json.loads(path.read_text(encoding="utf-8"))
             for dest, options in by_dest.items():
                 edges[f"{origin}|{dest}"] = options

@@ -59,14 +59,14 @@ function GameApp() {
       stopBgm();
       return;
     }
-    const localHour = Number(String(state.localTime ?? '').split(':')[0] ?? 0);
+    const localHour = game.localHour;
     const isNight = localHour >= 22 || localHour < 5;
     let track = 'bgm_globe_day';
     if (state.tab === 'market' || state.tab === 'flights') track = 'bgm_market';
     else if (state.tab === 'more' || state.tab === 'bags') track = 'bgm_menu';
     else if (isNight) track = 'bgm_night';
     playBgm(track);
-  }, [state.tab, state.localTime, state.optSound, loaded]);
+  }, [state.tab, game.localHour, state.optSound, loaded]);
 
   // Warm the bitmap cache so the globe texture, the current city hero and the
   // flight cutscenes paint immediately instead of popping in over the tunnel.

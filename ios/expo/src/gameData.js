@@ -1,3 +1,4 @@
+import { WORLD_CONTENT } from './worldContent.js';
 /* ============================================================
    Content API — cities, products and flights
    ------------------------------------------------------------
@@ -399,10 +400,10 @@ Object.keys(NOTE_SEED).forEach((id) => defineCity({ id, note: NOTE_SEED[id] }));
 // test_expo_declared_mapping pins this declaration so any drift fails CI.
 export const DEMO_SCALE = 1 / 7.2;
 
-export const STARTING_CASH = 6944;
-export const STARTING_CITY = 'istanbul';
-export const DEFAULT_BAG_LIMIT = 23;
-export const DEFAULT_CARGO_CAP = 50;
+export const STARTING_CASH = WORLD_CONTENT.mobile_balance.startingCash;
+export const STARTING_CITY = WORLD_CONTENT.mobile_balance.startingCity;
+export const DEFAULT_BAG_LIMIT = WORLD_CONTENT.mobile_balance.bagKg;
+export const DEFAULT_CARGO_CAP = WORLD_CONTENT.mobile_balance.cargoKg;
 
 export const TABS = [
   { k: 'globe', label: 'Globe', icon: 'assets/ic_city.webp' },
@@ -417,3 +418,10 @@ export const CUTSCENE_ART = [
   { phase: 'Cruising', title: '34,000 ft', art: 'assets/anim_flight_cruise.webp', pct: '62%' },
   { phase: 'Approach', title: 'Landing', art: 'assets/anim_flight_land.webp', pct: '100%' },
 ];
+
+// Canonical geography and connectivity; platform-specific goods and balance remain explicit.
+WORLD_CONTENT.cities.forEach((city) => {
+  if (CITIES[city.id]) Object.assign(CITIES[city.id], { lat: city.lat, lon: city.lon, iata: city.iata, icao: city.icao });
+});
+export const ROUTE_PAIRS = WORLD_CONTENT.routes;
+export const MOBILE_BALANCE = WORLD_CONTENT.mobile_balance;

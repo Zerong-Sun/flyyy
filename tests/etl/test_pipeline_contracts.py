@@ -222,36 +222,27 @@ def test_expo_declared_mapping():
 
 
 def test_pipeline_double_run_byte_identical():
-    """P0 ratchet: two pipeline runs with different PYTHONHASHSEED must produce
-    byte-identical artifacts. Exemption (documented): meta.generated_at — the
-    UI-displayed provenance timestamp — is normalized before comparison.
-
-    The pipeline writes to the repo's fixed game/data + etl/out paths, so the
-    pre-test state is snapshotted and restored afterward — a 50-city regen
-    must not clobber the full dataset other tests read.
-    """
+    """Generate twice in isolated roots; never replace a running game's data."""
     with tempfile.TemporaryDirectory(prefix="gdlc-det-") as tmp:
         tmp_path = Path(tmp)
-        data_snap = tmp_path / "repo-data"
-        out_snap = tmp_path / "repo-out"
-        shutil.copytree(DATA, data_snap)
-        shutil.copytree(ROOT / "etl" / "out", out_snap)
-        try:
-            for tag, seed in (("run1", "1"), ("run2", "424242")):
-                env = dict(os.environ, PYTHONHASHSEED=seed)
-                proc = subprocess.run(
-                    [sys.executable, "etl/scripts/run_pipeline.py"],
-                    cwd=ROOT, env=env, capture_output=True, text=True, timeout=900,
-                )
-                assert proc.returncode == 0, f"pipeline run failed ({tag}): {proc.stderr[-800:]}"
-                snap = tmp_path / tag
-                shutil.copytree(DATA, snap / "data")
-                shutil.copytree(ROOT / "etl" / "out", snap / "out")
-        finally:
-            shutil.rmtree(DATA)
-            shutil.rmtree(ROOT / "etl" / "out")
-            shutil.copytree(data_snap, DATA)
-            shutil.copytree(out_snap, ROOT / "etl" / "out")
+        for tag, seed in (("run1", "1"), ("run2", "424242")):
+            workspace = tmp_path / (tag + "-workspace")
+            etl = workspace / "etl"
+            etl.mkdir(parents=True)
+            # Copy entry-point scripts: symlinking them would resolve ROOT back
+            # into the real repository and recreate the original destructive test.
+            shutil.copytree(ROOT / "etl/scripts", etl / "scripts")
+            for directory in ("config", "raw", "content"):
+                (etl / directory).symlink_to(ROOT / "etl" / directory, target_is_directory=True)
+            env = dict(os.environ, PYTHONHASHSEED=seed)
+            proc = subprocess.run(
+                [sys.executable, "etl/scripts/run_pipeline.py"],
+                cwd=workspace, env=env, capture_output=True, text=True, timeout=900,
+            )
+            assert proc.returncode == 0, f"pipeline run failed ({tag}): {proc.stderr[-800:]}"
+            snap = tmp_path / tag
+            shutil.copytree(workspace / "game/data", snap / "data")
+            shutil.copytree(etl / "out", snap / "out")
 
         _normalize_generated_at(tmp_path / "run1" / "data" / "world.json")
         _normalize_generated_at(tmp_path / "run2" / "data" / "world.json")

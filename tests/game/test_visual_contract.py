@@ -9,6 +9,7 @@ contrast ratios. Authored RED from the craft personas' measurements
 from __future__ import annotations
 
 import json
+import unicodedata
 import re
 from pathlib import Path
 
@@ -131,7 +132,7 @@ def test_no_orphan_city_plates():
     world_ids = {c["city_id"] for c in json.loads((GAME / "data" / "world.json").read_text(encoding="utf-8"))["cities"]}
     d = GAME / "assets" / "cities"
     plates = {p.name[len("city_"):-len("_hero_720.webp")] for p in d.glob("city_*_hero_720.webp")}
-    orphans = plates - world_ids
+    orphans = {unicodedata.normalize("NFC", p) for p in plates} - world_ids
     assert not orphans, f"{len(orphans)} orphan city plates: {sorted(orphans)[:5]}"
 
 

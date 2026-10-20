@@ -35,3 +35,16 @@ class ExpoExportContractTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_mobile_runtime_matches_generated_contract():
+    import json
+    snapshot = build_snapshot()
+    runtime_path = HUBS_PATH.parents[1] / 'expo/src/worldContent.js'
+    text = runtime_path.read_text(encoding='utf-8')
+    runtime = json.loads(text.split('export const WORLD_CONTENT = ', 1)[1].rstrip(';\n'))
+    expected = {key: snapshot[key] for key in ('cities', 'routes', 'mobile_balance')}
+    assert runtime == json.loads(json.dumps(expected))
+    assert all(isinstance(c['lat'], (float, int)) and isinstance(c['lon'], (float, int)) for c in runtime['cities'])
+    assert 'hong_kong' in {c['id'] for c in runtime['cities']}
+    assert all(a != b for a, b in runtime['routes'])

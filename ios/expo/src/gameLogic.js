@@ -1,4 +1,4 @@
-import { AIRLINE, CIDS, CITIES, FLIGHTS, PRODUCTS, PRODUCT_IDS } from './gameData.js';
+import { AIRLINE, ROUTE_PAIRS, MOBILE_BALANCE, CIDS, CITIES, FLIGHTS, PRODUCTS, PRODUCT_IDS } from './gameData.js';
 import { eventAdjustedPrice } from './eventLogic.js';
 import { f, t } from './i18n.js';
 
@@ -76,7 +76,9 @@ export function priceAt(pid, city) {
 
 /** Runtime market quote with optional active city events applied. */
 export function marketPriceAt(pid, city, side = 'buy', events = []) {
-  return eventAdjustedPrice(priceAt(pid, city), pid, city, side, events);
+  const quote = eventAdjustedPrice(priceAt(pid, city), pid, city, side, events);
+  const buy = eventAdjustedPrice(priceAt(pid, city), pid, city, 'buy', events);
+  return side === 'sell' ? Math.min(quote, Math.floor(buy * (1 - MOBILE_BALANCE.marketSpread))) : quote;
 }
 
 /** One generated departure; idx spaces repeat services across the day. */
@@ -105,12 +107,12 @@ function legFor(cid, k, idx) {
 
 export function routesFrom(cid) {
   if (!CITIES[cid]) return [];
-  const custom = FLIGHTS.filter((f) => f.from === cid);
+  const custom = FLIGHTS.filter((f) => f.from === cid && ROUTE_PAIRS.some(([a, b]) => a === cid && b === f.to));
   const replaced = {};
   custom.forEach((f) => { if (f.replace) replaced[f.to] = true; });
 
   const out = [];
-  CIDS.filter((k) => k !== cid && !replaced[k]).forEach((k) => {
+  ROUTE_PAIRS.filter(([from]) => from === cid).map(([, to]) => to).filter((k) => k !== cid && !replaced[k]).forEach((k) => {
     const daily = gcKm(CITIES[cid], CITIES[k]) < 4200 ? 2 : 1;
     for (let i = 0; i < daily; i += 1) out.push(legFor(cid, k, i));
   });
@@ -196,7 +198,7 @@ export function sellData(inv, cityId, locale = 'en', events = []) {
       color: g - c >= 0 ? '#3CB8A4' : '#E05555',
     };
   });
-  return { rows, gross, net: gross - cost };
+  return { rows, gross, cost, net: gross - cost };
 }
 
 export function intel(pid, cityId, destId, locale = 'en', events = []) {
@@ -304,4 +306,40 @@ export function sortByDestProfit(ids, fromCity, destId, events = []) {
     const db = marketPriceAt(b, destId, 'sell', events) - marketPriceAt(b, fromCity, 'buy', events);
     return db - da;
   });
+}
+
+/** Budgeted carry-on plans using current quotes; future events can change the result. */
+export function routeOpportunities(state, events = [], quotedRoutes = routesFrom(state.city)) {
+  if (state.ticket) return [];
+  const seen = new Map();
+  for (const route of quotedRoutes) {
+    if (route.eventUnavailable || route.econ > state.cash) continue;
+    const fare = route.econ;
+    let inv = state.inv;
+    let starter = null;
+    if (!inv.length) {
+      let best = -Infinity;
+      for (const id of locals(state.city)) {
+        const product = PRODUCTS[id];
+        const cost = marketPriceAt(id, state.city, 'buy', events);
+        const n = Math.min(200, Math.floor(MOBILE_BALANCE.bagKg / product.w), Math.floor((state.cash - fare) / cost));
+        if (n <= 0) continue;
+        const margin = n * (marketPriceAt(id, route.toId, 'sell', events) - cost);
+        if (margin > best) {
+          best = margin;
+          starter = { id, n };
+          inv = [{ id, n, cost, w: product.w, name: product.name, icon: product.icon, slot: 'bag' }];
+        }
+      }
+    }
+    if (!inv.length || bagUsed(inv) > MOBILE_BALANCE.bagKg || cargoUsed(inv) > 0) continue;
+    const quote = sellData(inv, route.toId, state.locale, events);
+    const weight = bagUsed(inv);
+    const net = quote.net - fare;
+    const minutes = waitUntilDep(state.gameMin, state.city, route.depMin) + route.mins;
+    const result = { route, starter, net, perKg: net / weight, minutes, purchase: quote.cost, revenue: quote.gross, fare };
+    const previous = seen.get(route.toId);
+    if (!previous || net > previous.net || (net === previous.net && minutes < previous.minutes)) seen.set(route.toId, result);
+  }
+  return [...seen.values()].sort((a, b) => b.net - a.net || a.minutes - b.minutes).slice(0, 3);
 }
