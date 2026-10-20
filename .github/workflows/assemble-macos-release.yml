@@ -1,0 +1,67 @@
+name: Assemble macOS desktop release
+
+on:
+  push:
+    branches: [codex/desktop-mobile-validation]
+    paths: [.github/workflows/assemble-macos-release.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: macos-latest
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TAG: v0.4.0
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for the shared Windows pack and signed macOS app shell
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/release"
+          for asset in "WanliTrader-${TAG}-windows-x64.zip" "WanliTrader-${TAG}-macos-shell.zip"; do
+            ready=false
+            for attempt in {1..180}; do
+              if gh release download "$TAG" --pattern "$asset" --dir "$RUNNER_TEMP/release" --clobber; then
+                ready=true
+                break
+              fi
+              sleep 30
+            done
+            if [ "$ready" != true ]; then
+              echo "Asset not available: $asset" >&2
+              exit 1
+            fi
+          done
+      - name: Assemble and verify macOS app
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/release/windows" "$RUNNER_TEMP/release/macos"
+          unzip -q "$RUNNER_TEMP/release/WanliTrader-${TAG}-windows-x64.zip" -d "$RUNNER_TEMP/release/windows"
+          unzip -q "$RUNNER_TEMP/release/WanliTrader-${TAG}-macos-shell.zip" -d "$RUNNER_TEMP/release/macos"
+          cp "$RUNNER_TEMP/release/windows/windows/WanliTrader.pck" "$RUNNER_TEMP/release/macos/WanliTrader.app/Contents/Resources/万里行商.pck"
+          codesign --verify --deep --strict "$RUNNER_TEMP/release/macos/WanliTrader.app"
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          import os
+          root = Path(os.environ['RUNNER_TEMP']) / 'release'
+          app = root / 'macos/WanliTrader.app'
+          archive = root / f"WanliTrader-{os.environ['TAG']}-macos-universal.zip"
+          with ZipFile(archive, 'w', ZIP_DEFLATED, compresslevel=6) as output:
+              for path in sorted(app.rglob('*')):
+                  if path.is_file():
+                      output.write(path, path.relative_to(app.parent).as_posix())
+          print(f'Assembled {archive}: {archive.stat().st_size:,} bytes')
+          PY
+          unzip -tq "$RUNNER_TEMP/release/WanliTrader-${TAG}-macos-universal.zip"
+      - name: Upload final asset and matching checksums
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/release"
+          shasum -a 256 "WanliTrader-${TAG}-windows-x64.zip" "WanliTrader-${TAG}-macos-universal.zip" > "WanliTrader-${TAG}-SHA256SUMS.txt"
+          gh release upload "$TAG" "WanliTrader-${TAG}-macos-universal.zip" "WanliTrader-${TAG}-SHA256SUMS.txt" --clobber
