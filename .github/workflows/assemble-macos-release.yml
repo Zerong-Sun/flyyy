@@ -60,7 +60,6 @@ jobs:
                   raise RuntimeError(f"Bad {kind} SHA-256: {digest}")
               print(f'Verified {kind}: {output.stat().st_size:,} bytes')
           PY
-          done
       - name: Assemble and verify macOS app
         shell: bash
         run: |
