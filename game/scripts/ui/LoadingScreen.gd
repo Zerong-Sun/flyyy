@@ -16,6 +16,7 @@ var _scroll_accum: float = 0.0
 
 
 func _ready() -> void:
+	_Colors.apply_mode(AppState.theme_mode)
 	_build_ui()
 	modulate.a = 0.0
 	var fade_in := create_tween()

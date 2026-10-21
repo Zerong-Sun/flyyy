@@ -123,6 +123,7 @@ var _event_clock_was_paused := true
 
 
 func _ready() -> void:
+	_Colors.apply_mode(AppState.theme_mode)
 	_build_ui()
 	resized.connect(_layout_floating_panels)
 	EventBus.airport_selected.connect(_on_airport_selected)
@@ -138,7 +139,10 @@ func _ready() -> void:
 	flight_ops.transition_started.connect(_on_transition_started)
 	flight_ops.transition_finished.connect(_on_transition_finished)
 	_load_market_tags()
-	_show_new_game()
+	if AppState.game_started:
+		_on_game_started()
+	else:
+		_show_new_game()
 	_refresh_airport_list("")
 	_disclaimer.text = I18nService.disclaimer()
 
@@ -3324,7 +3328,10 @@ func _load() -> void:
 	if not AppState.game_started:
 		AppState.game_mode = _selected_mode
 	if SaveSystem.load_game():
-		_show_hint("已读档")
+		if _Colors.BG_DEEP != (Color("F3FFD4") if AppState.theme_mode == "light" else Color("15131A")):
+			get_tree().reload_current_scene()
+		else:
+			_show_hint("已读档")
 	else:
 		_show_hint("无存档或存档损坏")
 	GameClock.set_paused(not AppState.game_started)
@@ -3387,6 +3394,14 @@ func _toggle_pause() -> void:
 		get_tree().reload_current_scene()
 	)
 	v.add_child(font_btn)
+	var theme_btn := Button.new()
+	theme_btn.text = "外观 / Appearance: %s" % ("午夜港口 · Dark" if AppState.theme_mode == "dark" else "电光集市 · Light")
+	theme_btn.pressed.connect(func ():
+		AppState.set_theme_mode("light" if AppState.theme_mode == "dark" else "dark")
+		SaveSystem.save_game()
+		get_tree().reload_current_scene()
+	)
+	v.add_child(theme_btn)
 	var cb_btn := Button.new()
 	var cb_mode := AppState.color_blind
 	cb_btn.text = I18nService.t("ui.settings.color_blind", {"mode": I18nService.t("ui.settings.cb." + cb_mode)})

@@ -111,6 +111,7 @@ const initialState = () => ({
   locale: 'en',
   fontScale: 1,
   colorBlind: 'off',
+  themeMode: 'dark',
   eventSeed: `run:${Date.now()}:${Math.random().toString(36).slice(2, 10)}`,
   seenEventEpisodes: [],
   eventPopup: null,
@@ -587,6 +588,10 @@ export function useGame() {
     setState((s) => ({ ...s, [key]: !s[key] }));
   }, []);
 
+  const setThemeMode = useCallback((mode) => {
+    setState((s) => ({ ...s, themeMode: mode === 'light' ? 'light' : 'dark' }));
+  }, []);
+
   const setFontScale = useCallback((scale) => {
     setState((s) => ({ ...s, fontScale: [1, 1.25, 1.5].includes(scale) ? scale : 1 }));
   }, []);
@@ -1029,7 +1034,7 @@ export function useGame() {
     runGeneration.current += 1;
     const previous = stateRef.current;
     const next = { ...initialState() };
-    for (const key of ['optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce', 'locale', 'fontScale', 'colorBlind']) next[key] = previous[key];
+    for (const key of ['optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce', 'locale', 'fontScale', 'colorBlind', 'themeMode']) next[key] = previous[key];
     const job = saveQueue.current.catch(() => {}).then(() => resetSave(AsyncStorage, JSON.stringify(serializeSave(next))));
     saveQueue.current = job;
     try {
@@ -1284,6 +1289,7 @@ export function useGame() {
     toggleOpt,
     setLocale,
     setFontScale,
+    setThemeMode,
     cycleColorBlind,
     closeSheet,
     dismissEvent,

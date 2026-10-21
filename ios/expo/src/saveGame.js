@@ -16,7 +16,7 @@ export const PERSIST = [
   'profit', 'travelExpenses', 'km', 'savedAt', 'intro', 'focusDest', 'unlockedAch',
   'optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce',
   'locale',
-  'fontScale', 'colorBlind',
+  'fontScale', 'colorBlind', 'themeMode',
   'rep', 'level',
   'eventSeed', 'seenEventEpisodes',
 ];
@@ -82,6 +82,7 @@ export function hydrateSave(baseState, migrated, cities, startingCity) {
   for (const key of ['intro', 'optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce']) {
     if (typeof next[key] !== 'boolean') next[key] = baseState[key];
   }
+  if (!['dark', 'light'].includes(next.themeMode)) next.themeMode = 'dark';
   if (next.inv === undefined) next.inv = [];
   if (!Array.isArray(next.inv)) return null;
   if (next.inv.some((i) => !i || !known(PRODUCTS, i.id) || !Number.isInteger(i.n) || i.n <= 0 || i.n > 1000000 || !finite(i.cost) || i.cost < 0 || !['bag', 'cargo'].includes(i.slot))) return null;

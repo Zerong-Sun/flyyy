@@ -12,7 +12,7 @@ import {
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useGame } from './src/hooks/useGame';
 import { TABS, CUTSCENE_ART } from './src/gameData';
-import { COLORS, A11yContext } from './src/theme';
+import { COLORS, A11yContext, setThemeMode, themedStyles } from './src/theme';
 import { AssetIcon } from './src/components/ui';
 import { assetSource } from './src/assets';
 import { GlobeScreen } from './src/components/GlobeScreen';
@@ -41,6 +41,7 @@ function TabContent({ game }) {
 function GameApp() {
   const game = useGame();
   const { state, city, clockText, money, setTab, loaded, t } = game;
+  setThemeMode(state.themeMode);
   const scrollRef = useRef(null);
   const prevTab = useRef(state.tab);
 
@@ -83,7 +84,7 @@ function GameApp() {
   if (!loaded) {
     return (
       <SafeAreaView style={styles.root}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle={state.themeMode === 'light' ? 'dark-content' : 'light-content'} />
         <View style={styles.loading}>
           <ActivityIndicator color={COLORS.orange} size="large" />
         </View>
@@ -94,7 +95,7 @@ function GameApp() {
   return (
     <A11yContext.Provider value={{ fontScale: state.fontScale || 1, colorBlind: state.colorBlind || 'off' }}>
       <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle={state.themeMode === 'light' ? 'dark-content' : 'light-content'} />
 
         <View style={styles.header}>
           <View style={styles.brandRow}>
@@ -175,7 +176,7 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: COLORS.bg,
@@ -301,4 +302,4 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: COLORS.orange,
   },
-});
+}));

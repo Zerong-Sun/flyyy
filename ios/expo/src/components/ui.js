@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { assetSource } from '../assets';
-import { COLORS, A11yContext } from '../theme';
+import { COLORS, A11yContext, themedStyles } from '../theme';
 
 function useA11y() {
   return useContext(A11yContext) || { fontScale: 1, colorBlind: 'off' };
@@ -172,7 +172,7 @@ export function Toggle({ label, sub, value, onToggle }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(StyleSheet.create({
   toggleRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     width: 23,
     height: 23,
     borderRadius: 12,
-    backgroundColor: '#F2F6FA',
+    backgroundColor: '#FFFFFF',
   },
   knobOn: {
     alignSelf: 'flex-end',
@@ -341,4 +341,4 @@ const styles = StyleSheet.create({
   segTextActive: {
     color: COLORS.text,
   },
-});
+}));

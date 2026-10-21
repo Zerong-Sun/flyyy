@@ -48,6 +48,19 @@ var reduced_animations: bool = false
 var night_bgm_enabled: bool = true
 var place_locale: String = "zh"  # "zh" or "en" — display language for place names only
 var ui_locale: String = "zh"  # "zh" or "en" — display language for the whole UI
+var theme_mode: String = "dark"  # "dark" | "light"
+
+func _ready() -> void:
+	var prefs := ConfigFile.new()
+	if prefs.load("user://preferences.cfg") == OK:
+		var selected := str(prefs.get_value("appearance", "mode", "dark"))
+		theme_mode = selected if selected in ["dark", "light"] else "dark"
+
+func set_theme_mode(mode: String) -> void:
+	theme_mode = mode if mode in ["dark", "light"] else "dark"
+	var prefs := ConfigFile.new()
+	prefs.set_value("appearance", "mode", theme_mode)
+	prefs.save("user://preferences.cfg")
 var font_scale: float = 1.0  # accessibility font multiplier (1.0 / 1.25 / 1.5)
 var color_blind: String = "off"  # "off" | "deuteranopia" | "protanopia"
 var subtitles_enabled: bool = false
@@ -372,6 +385,7 @@ func to_dict() -> Dictionary:
 		"night_bgm_enabled": night_bgm_enabled,
 		"place_locale": place_locale,
 		"ui_locale": ui_locale,
+		"theme_mode": theme_mode,
 		"font_scale": font_scale,
 		"color_blind": color_blind,
 		"subtitles_enabled": subtitles_enabled,
@@ -433,6 +447,8 @@ func from_dict(d: Dictionary) -> void:
 	place_locale = pl if pl in ["zh", "en"] else "zh"
 	var ul := str(d.get("ui_locale", "zh"))
 	ui_locale = ul if ul in ["zh", "en"] else "zh"
+	var tm := str(d.get("theme_mode", "dark"))
+	theme_mode = tm if tm in ["dark", "light"] else "dark"
 	var fs := float(d.get("font_scale", 1.0))
 	font_scale = fs if fs in [1.0, 1.25, 1.5] else 1.0
 	var cb := str(d.get("color_blind", "off"))

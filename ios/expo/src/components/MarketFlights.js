@@ -10,7 +10,7 @@ import {
 import { CITIES } from '../gameData';
 import { money, tagColor } from '../gameLogic';
 import { assetSource } from '../assets';
-import { COLORS } from '../theme';
+import { COLORS, themedStyles } from '../theme';
 import {
   AssetIcon,
   Button,
@@ -498,7 +498,7 @@ export function MarketSheets({ game }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(StyleSheet.create({
   screen: {
     paddingTop: 12,
     paddingBottom: 24,
@@ -1103,4 +1103,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 16,
   },
-});
+}));

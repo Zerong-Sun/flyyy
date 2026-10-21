@@ -16,7 +16,7 @@ import {
 } from '../gameData';
 import { assetSource } from '../assets';
 import { money } from '../gameLogic';
-import { COLORS } from '../theme';
+import { COLORS, themedStyles } from '../theme';
 import {
   AssetIcon,
   Button,
@@ -158,6 +158,7 @@ export function MoreScreen({ game }) {
     toggleOpt,
     setLocale,
     setFontScale,
+    setThemeMode,
     cycleColorBlind,
     t,
     tf,
@@ -439,6 +440,22 @@ export function MoreScreen({ game }) {
         <Card style={styles.settingsCard}>
           <View style={styles.settingsRow}>
             <View style={styles.settingsBody}>
+              <Text style={styles.settingsTitle}>{t('settings_theme', 'Appearance')}</Text>
+              <Text style={styles.settingsSub}>{t('settings_theme_sub', 'Choose a bright market or a night port.')}</Text>
+            </View>
+          </View>
+          <View style={styles.langRow}>
+            {(['dark', 'light']).map((mode) => (
+              <Button key={mode} variant={state.themeMode === mode ? 'primary' : 'secondary'} style={styles.langBtn} onPress={() => setThemeMode(mode)}>
+                {mode === 'dark' ? '午夜港口 · Dark' : '电光集市 · Light'}
+              </Button>
+            ))}
+          </View>
+        </Card>
+
+        <Card style={styles.settingsCard}>
+          <View style={styles.settingsRow}>
+            <View style={styles.settingsBody}>
               <Text style={styles.settingsTitle}>{t('settings_lang', 'Language')}</Text>
               <Text style={styles.settingsSub}>{t('settings_lang_sub', 'Switch the interface between English and 中文.')}</Text>
             </View>
@@ -538,7 +555,7 @@ export function MoreScreen({ game }) {
           </View>
         </Card>
 
-        <Text style={styles.version}>{t('bags.version', 'Wanli Trader · Demo build 0.3')}</Text>
+        <Text style={styles.version}>{t('bags.version', 'Wanli Trader · 1.1.0')}</Text>
       </View>
     );
   }
@@ -852,7 +869,7 @@ export function OverlaySheets({ game }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(StyleSheet.create({
   screen: {
     paddingTop: 12,
     paddingBottom: 24,
@@ -1885,4 +1902,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 16,
   },
-});
+}));

@@ -11,7 +11,7 @@ import {
 import { CIDS, CITIES } from '../gameData';
 import { globeSizeFor } from '../gameLogic';
 import { assetSource } from '../assets';
-import { COLORS, pinPaletteFor } from '../theme';
+import { COLORS, pinPaletteFor, themedStyles } from '../theme';
 
 const R = Math.PI / 180;
 
@@ -249,7 +249,7 @@ export function Globe({ game }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(StyleSheet.create({
   stage: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -308,4 +308,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.muted2,
   },
-});
+}));

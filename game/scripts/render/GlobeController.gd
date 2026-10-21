@@ -34,6 +34,9 @@ const FOCUS_DURATION := 0.7
 
 
 func _ready() -> void:
+	var world := $WorldEnvironment as WorldEnvironment
+	world.environment = world.environment.duplicate() as Environment
+	world.environment.background_color = Color("E7F2B8") if AppState.theme_mode == "light" else Color("15131A")
 	_build_earth()
 	_build_grid_overlay()
 	_spawn_airports()

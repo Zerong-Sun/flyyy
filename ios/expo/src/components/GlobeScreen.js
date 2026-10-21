@@ -10,7 +10,7 @@ import {
 import { CITIES } from '../gameData';
 import { assetSource } from '../assets';
 import { gcKm } from '../gameLogic';
-import { COLORS } from '../theme';
+import { COLORS, themedStyles } from '../theme';
 import { AssetIcon, Button, Card } from './ui';
 import { Globe } from './Globe';
 
@@ -239,7 +239,7 @@ export function GlobeScreen({ game }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(StyleSheet.create({
   wrap: {
     paddingTop: 12,
     paddingBottom: 24,
@@ -515,4 +515,4 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     color: COLORS.muted2,
   },
-});
+}));

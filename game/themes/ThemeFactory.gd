@@ -110,7 +110,7 @@ static func _set_button(theme: Theme, font_scale: float = 1.0) -> void:
 	var normal := _flat(Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.95), _Colors.BORDER, 6.0)
 	var hover := _flat(Color(_Colors.ACCENT_TEAL.r, _Colors.ACCENT_TEAL.g, _Colors.ACCENT_TEAL.b, 0.35), _Colors.ACCENT_TEAL, 6.0)
 	var pressed := _flat(Color(_Colors.ACCENT_AMBER.r, _Colors.ACCENT_AMBER.g, _Colors.ACCENT_AMBER.b, 0.45), _Colors.ACCENT_AMBER, 6.0)
-	var disabled := _flat(Color(0.1, 0.12, 0.15, 0.7), _Colors.BORDER, 6.0)
+	var disabled := _flat(_Colors.BG_PANEL.darkened(0.1) if _Colors.BG_DEEP.get_luminance() < 0.3 else _Colors.BG_PANEL.darkened(0.05), _Colors.BORDER, 6.0)
 	theme.set_stylebox("normal", "Button", normal)
 	theme.set_stylebox("hover", "Button", hover)
 	theme.set_stylebox("pressed", "Button", pressed)

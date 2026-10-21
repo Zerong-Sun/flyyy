@@ -174,6 +174,15 @@ describe('save migrate round-trip', () => {
     assert.deepEqual(loaded.data.unlockedAch, ['first_flight']);
   });
 
+  it('persists the selected appearance and recovers an invalid value', () => {
+    const base = { cash: 500, city: STARTING_CITY, inv: [], themeMode: 'light' };
+    const restored = loadSavePayload(JSON.stringify(serializeSave(base)), { cash: 0, city: STARTING_CITY, inv: [], themeMode: 'dark' }, CITIES, STARTING_CITY);
+    assert.equal(restored.ok, true);
+    assert.equal(restored.data.themeMode, 'light');
+    const invalid = loadSavePayload(JSON.stringify(serializeSave({ ...base, themeMode: 'unknown' })), { cash: 0, city: STARTING_CITY, inv: [], themeMode: 'dark' }, CITIES, STARTING_CITY);
+    assert.equal(invalid.data.themeMode, 'dark');
+  });
+
   it('future version is rejected', () => {
     const m = migrateSave({ saveVersion: 99, cash: 1 });
     assert.equal(m.ok, false);
