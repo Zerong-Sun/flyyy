@@ -1,4 +1,5 @@
 keys,zh_CN
+ui.new_game.route_hints,显示首趟航线提示（最多 1 条）
 ui.new_game.title,选择起始机场
 ui.new_game.game_title,万里行商
 ui.new_game.intro,低价买入各地特产，搭乘航班运往稀缺城市，高价卖出。

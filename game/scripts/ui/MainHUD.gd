@@ -60,6 +60,8 @@ var _overlay: ColorRect
 var _overlay_label: Label
 var _overlay_fx: Control
 var _new_game_panel: PanelContainer
+var _new_game_route_hints: CheckButton
+var _panel_work_mode := false
 var _selected_flight: Dictionary = {}
 var _cabin: String = "economy"
 var _extra_tier: String = ""
@@ -122,6 +124,7 @@ var _event_clock_was_paused := true
 
 func _ready() -> void:
 	_build_ui()
+	resized.connect(_layout_floating_panels)
 	EventBus.airport_selected.connect(_on_airport_selected)
 	EventBus.cash_changed.connect(_refresh_top)
 	EventBus.inventory_changed.connect(_refresh_bags)
@@ -339,6 +342,7 @@ func _build_ui() -> void:
 	_panel_host.visible = false
 	_panel_host.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	add_child(_panel_host)
+	_panel_host.resized.connect(_layout_floating_panels)
 
 	_overlay = ColorRect.new()
 	_overlay.color = Color(_Colors.BG_DEEP.r, _Colors.BG_DEEP.g, _Colors.BG_DEEP.b, 0.82)
@@ -374,7 +378,7 @@ func _build_ui() -> void:
 
 	_new_game_panel = PanelContainer.new()
 	_new_game_panel.position = Vector2(360, 190)
-	_new_game_panel.size = Vector2(560, 320)
+	_new_game_panel.size = Vector2(560, 350)
 	_new_game_panel.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	add_child(_new_game_panel)
 	var ngv := VBoxContainer.new()
@@ -434,6 +438,10 @@ func _build_ui() -> void:
 	_mode_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_mode_desc.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 	ngv.add_child(_mode_desc)
+	_new_game_route_hints = CheckButton.new()
+	_new_game_route_hints.text = I18nService.t("ui.new_game.route_hints")
+	_new_game_route_hints.button_pressed = false
+	ngv.add_child(_new_game_route_hints)
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	row.add_theme_constant_override("separation", 8)
@@ -457,6 +465,7 @@ func _build_ui() -> void:
 	_wire_ui_sound(_load_button)
 	row.add_child(_load_button)
 	_update_load_button()
+	_layout_floating_panels()
 
 
 func _bar(c: Color) -> ColorRect:
@@ -659,7 +668,7 @@ func _start_selected() -> void:
 	var id := _selected_or_first()
 	if id == "":
 		return
-	AppState.reset_new_game(id, _selected_mode)
+	AppState.reset_new_game(id, _selected_mode, _new_game_route_hints.button_pressed)
 	_new_game_panel.visible = false
 	globe.focus_airport(id)
 	_refresh_top()
@@ -735,19 +744,34 @@ func _dismiss_open_panel() -> void:
 
 
 func _restore_panel_center() -> void:
-	_panel_host.position = PANEL_CENTER_POS
-	_panel_host.size = PANEL_CENTER_SIZE
+	_panel_work_mode = false
+	_layout_floating_panels()
 	_panel_host.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	if _bottom_nav:
 		_bottom_nav.visible = true
 
 
 func _dock_panel_work() -> void:
-	_panel_host.position = PANEL_WORK_POS
-	_panel_host.size = PANEL_WORK_SIZE
+	_panel_work_mode = true
+	_layout_floating_panels()
 	_panel_host.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	if _bottom_nav:
 		_bottom_nav.visible = true
+
+
+func _layout_floating_panels() -> void:
+	if _panel_host == null:
+		return
+	var bounds := size
+	if bounds.x < 1.0 or bounds.y < 1.0:
+		bounds = get_viewport_rect().size
+	var target := PANEL_WORK_SIZE if _panel_work_mode else PANEL_CENTER_SIZE
+	var margin := Vector2(24, 80) if _panel_work_mode else Vector2(24, 24)
+	_panel_host.size = Vector2(minf(target.x, maxf(1.0, bounds.x - margin.x)), minf(target.y, maxf(1.0, bounds.y - margin.y)))
+	_panel_host.position = (bounds - _panel_host.size) * 0.5
+	if _new_game_panel != null:
+		_new_game_panel.size = Vector2(minf(560.0, maxf(1.0, bounds.x - 24.0)), minf(350.0, maxf(1.0, bounds.y - 24.0)))
+		_new_game_panel.position = (bounds - _new_game_panel.size) * 0.5
 
 
 func _on_random() -> void:
@@ -1309,21 +1333,12 @@ func _get_intelligence_tag(p: Dictionary, ticket_dest_city: String) -> String:
 			return "⚠️不建议"
 		return ""
 	else:
+		if product_id != _market_hint_product_for_city(AppState.current_city_id()):
+			return ""
 		var hot_cities: Array = tags.get("hot", [])
 		if hot_cities.size() > 0:
-			# Best-destination intel is shown for this product only ~20% of the
-			# time per day, seeded by save_id + product + game date so the same
-			# save on the same day always shows the same hints (replayable).
-			var gate_seed := hash("%s|%s|%s|%s" % [
-				AppState.save_id, origin_city, product_id, GameClock.game_date_string()
-			])
-			var rng := RandomNumberGenerator.new()
-			rng.seed = gate_seed if gate_seed != 0 else 1
-			if rng.randf() > 0.20:
-				return ""
-			var city := DataService.get_city(hot_cities[0])
-			var city_name := DataService.place_name(city, "name")
-			return "⭐最佳目的地：" + city_name
+			var city := DataService.get_city(str(hot_cities[0]))
+			return "⭐最佳目的地：" + DataService.place_name(city, "name")
 		return ""
 
 
@@ -1411,6 +1426,8 @@ func _show_market() -> void:
 		AppState.inventory_weight_kg(true, false), AppState.cargo_kg_capacity,
 	]
 	title.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	title.tooltip_text = title.text
 	v.add_child(title)
 	var evs := _MarketEvents.city_events(city)
 	if not evs.is_empty():
@@ -1420,14 +1437,18 @@ func _show_market() -> void:
 			texts.append(I18nService.t(str((ev as Dictionary).get("label", ""))))
 		ev_label.text = "📌 " + "；".join(texts)
 		ev_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		ev_label.max_lines_visible = 1
+		ev_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		ev_label.tooltip_text = ev_label.text
 		ev_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 		v.add_child(ev_label)
 	var news := _NewsEvents.active_for_city(city)
-	for news_v in news:
+	for news_v in news.slice(0, 1):
 		var news_event: Dictionary = news_v
 		var news_label := Label.new()
-		news_label.text = "📰 %s\n%s" % [_NewsEvents.localized(news_event, "headline"), _NewsEvents.impact_text(news_event)]
-		news_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		news_label.text = "📰 %s · %s" % [_NewsEvents.localized(news_event, "headline"), _NewsEvents.impact_text(news_event)]
+		news_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		news_label.tooltip_text = news_label.text
 		news_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 		v.add_child(news_label)
 	var ticket_dest_city := _get_ticket_dest_city_id()
@@ -1457,7 +1478,7 @@ func _build_market_buy_tab() -> void:
 	page.add_theme_constant_override("separation", 10)
 	_market_tabs.add_child(page)
 	var left := VBoxContainer.new()
-	left.custom_minimum_size = Vector2(700, 0)
+	left.custom_minimum_size = Vector2(580, 0)
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	page.add_child(left)
 	_market_search = LineEdit.new()
@@ -1465,7 +1486,8 @@ func _build_market_buy_tab() -> void:
 	_market_search.placeholder_text = "搜索全部商品（空白时仅显示本地特产）"
 	_market_search.text_changed.connect(func (_text): _market_buy_page = 0; _refresh_market_buy())
 	left.add_child(_market_search)
-	_market_buy_tree = _make_table(["商品", "来源", "重量", "采购价", "目的地估价 / 情报"], [210, 85, 70, 100, 190])
+	_market_buy_tree = _make_table(["商品", "来源", "重量", "采购价", "估价 / 情报"], [155, 70, 60, 90, 150])
+	_market_buy_tree.custom_minimum_size = Vector2(0, 220)
 	_market_buy_tree.name = "MarketBuyTree"
 	_market_buy_tree.item_selected.connect(_on_market_buy_tree_selected)
 	left.add_child(_market_buy_tree)
@@ -1487,7 +1509,7 @@ func _build_market_buy_tab() -> void:
 	page.add_child(right)
 	_market_buy_detail = RichTextLabel.new()
 	_market_buy_detail.bbcode_enabled = true
-	_market_buy_detail.custom_minimum_size = Vector2(320, 220)
+	_market_buy_detail.custom_minimum_size = Vector2(320, 170)
 	_market_buy_detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_market_buy_detail.text = "选择商品查看采购与目的地利润。"
 	right.add_child(_market_buy_detail)
@@ -1500,14 +1522,15 @@ func _build_market_sell_tab() -> void:
 	page.add_theme_constant_override("separation", 10)
 	_market_tabs.add_child(page)
 	var left := VBoxContainer.new()
-	left.custom_minimum_size = Vector2(700, 0)
+	left.custom_minimum_size = Vector2(580, 0)
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	page.add_child(left)
 	var help := Label.new()
 	help.text = "出售库存 · 品质和当地需求会影响最终售价"
 	help.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
 	left.add_child(help)
-	_market_sell_tree = _make_table(["商品", "数量", "品质", "存放", "成本", "当地售价", "预计毛利"], [170, 55, 60, 60, 85, 95, 100])
+	_market_sell_tree = _make_table(["商品", "数量", "品质", "存放", "成本", "当地售价", "预计毛利"], [135, 45, 50, 50, 75, 90, 90])
+	_market_sell_tree.custom_minimum_size = Vector2(0, 220)
 	_market_sell_tree.name = "MarketSellTree"
 	_market_sell_tree.item_selected.connect(_on_market_sell_tree_selected)
 	left.add_child(_market_sell_tree)
@@ -1566,7 +1589,8 @@ func _add_market_buy_actions(parent: VBoxContainer) -> void:
 	buy_cargo.text = "买入（货运）"
 	buy_cargo.pressed.connect(func (): _buy_selected(true))
 	actions.add_child(buy_cargo)
-	var capacity := HBoxContainer.new()
+	var capacity := GridContainer.new()
+	capacity.columns = 2
 	parent.add_child(capacity)
 	for pair in [["+10kg", "light"], ["+20kg", "standard"], ["+50kg", "heavy"]]:
 		var extend := Button.new()
@@ -1655,7 +1679,9 @@ func _refresh_market_buy() -> void:
 		item.set_text(1, "本地" if is_local else DataService.place_name(origin, "name"))
 		item.set_text(2, "%.2fkg" % float(p.get("weight_kg", 0)))
 		item.set_text(3, _Economy.format_money(_Economy.buy_price(city, product_id)))
-		item.set_text(4, _market_buy_outlook(p, city, ticket_dest_city))
+		var outlook := _market_buy_outlook(p, city, ticket_dest_city)
+		item.set_text(4, _market_buy_outlook_short(p, city, ticket_dest_city, outlook))
+		item.set_tooltip_text(4, outlook)
 		item.set_metadata(0, product_id)
 		if is_local:
 			item.set_custom_color(1, _Colors.ACCENT_AMBER)
@@ -1671,9 +1697,9 @@ func _market_buy_outlook(p: Dictionary, city: String, ticket_dest_city: String) 
 		var estimate := _Economy.sell_price_estimate(product_id, ticket_dest_city)
 		var margin := estimate - buy
 		return "%s · %s$%.0f" % [_Economy.format_money(estimate), "+" if margin >= 0 else "-", absf(margin)]
-	# No ticket held: still show a data-only destination estimate for the top
-	# hot city (GDLC Playtest #3 — the 0.20 flavor gate hid verified 2.15x
-	# margins from the players the tutorial told to shop first).
+	# Without a ticket, reveal at most one product hint in selected cities.
+	if product_id != _market_hint_product_for_city(city):
+		return ""
 	var origin_city := str(p.get("origin_city_id", ""))
 	var tags: Dictionary = DataService.product_market_tags.get("%s|%s" % [origin_city, product_id], {})
 	var hot_cities: Array = tags.get("hot", [])
@@ -1684,6 +1710,35 @@ func _market_buy_outlook(p: Dictionary, city: String, ticket_dest_city: String) 
 		var margin := estimate - buy
 		return "≈%s → %s · %s$%.0f" % [city_name, _Economy.format_money(estimate), "+" if margin >= 0 else "-", absf(margin)]
 	return _get_intelligence_tag(p, "")
+
+
+func _market_hint_product_for_city(city: String) -> String:
+	if not AppState.route_hints_enabled:
+		return ""
+	if AppState.visited_cities.size() > 1 and posmod(hash(city), 3) != 0:
+		return ""
+	for product_v in DataService.products_for_city(city):
+		var pid := str((product_v as Dictionary).get("product_id", ""))
+		var tags: Dictionary = DataService.product_market_tags.get("%s|%s" % [city, pid], {})
+		if not (tags.get("hot", []) as Array).is_empty():
+			return pid
+	return ""
+
+
+func _market_buy_outlook_short(p: Dictionary, city: String, ticket_dest_city: String, full: String) -> String:
+	if full == "":
+		return ""
+	var pid := str(p.get("product_id", ""))
+	var destination := ticket_dest_city
+	if destination == "":
+		var tags: Dictionary = DataService.product_market_tags.get("%s|%s" % [str(p.get("origin_city_id", "")), pid], {})
+		var hot: Array = tags.get("hot", [])
+		if hot.is_empty():
+			return full
+		destination = str(hot[0])
+	var estimate := _Economy.sell_price_estimate(pid, destination)
+	var margin := estimate - _Economy.buy_price(city, pid)
+	return "≈%s  %s$%.0f" % [_Economy.format_money(estimate), "+" if margin >= 0 else "-", absf(margin)]
 
 
 func _on_market_buy_tree_selected() -> void:
@@ -2239,14 +2294,20 @@ func _show_flights() -> void:
 
 
 func _get_recommended_destinations(limit: int = 5) -> Array:
-	return preload("res://scripts/systems/TradePlanner.gd").recommendations(limit)
+	if not AppState.route_hints_enabled or float(AppState.stats.get("total_flight_segments", 0)) > 0.0:
+		return []
+	return preload("res://scripts/systems/TradePlanner.gd").recommendations(mini(limit, 1))
 
 
 func _rebuild_recommendations() -> void:
 	if _recommend_box == null:
 		return
 	for c in _recommend_box.get_children():
+		_recommend_box.remove_child(c)
 		c.queue_free()
+	_recommend_box.visible = AppState.route_hints_enabled and float(AppState.stats.get("total_flight_segments", 0)) == 0.0
+	if not _recommend_box.visible:
+		return
 	var row := VBoxContainer.new()
 	row.add_theme_constant_override("separation", 6)
 	_recommend_box.add_child(row)
@@ -2257,8 +2318,8 @@ func _rebuild_recommendations() -> void:
 	header.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 	header.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	row.add_child(header)
-	header.text = "首趟目标：覆盖采购与机票成本" if not AppState.tutorial_flags.get("first_profitable_trade", false) else "航线净收益比较"
-	var recs := _get_recommended_destinations(3)
+	header.text = "可选提示：首趟目标"
+	var recs := _get_recommended_destinations(1)
 	if recs.is_empty():
 		var empty := Label.new()
 		empty.text = "已有机票，请先完成行程或退票再比较。" if not AppState.held_tickets.is_empty() else "没有符合经济舱重量与现金条件的方案；请调整库存或行李。"

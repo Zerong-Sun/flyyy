@@ -51,6 +51,7 @@ var ui_locale: String = "zh"  # "zh" or "en" — display language for the whole 
 var font_scale: float = 1.0  # accessibility font multiplier (1.0 / 1.25 / 1.5)
 var color_blind: String = "off"  # "off" | "deuteranopia" | "protanopia"
 var subtitles_enabled: bool = false
+var route_hints_enabled: bool = false
 var unlocked_achievements: Dictionary = {}  # id -> true
 var stats: Dictionary = {
 	"total_flight_segments": 0,
@@ -105,8 +106,9 @@ func _default_stats() -> Dictionary:
 	}
 
 
-func reset_new_game(airport_id: String, mode: String = "sandbox") -> void:
+func reset_new_game(airport_id: String, mode: String = "sandbox", show_route_hints: bool = false) -> void:
 	save_id = "S%s_%d" % [Time.get_unix_time_from_system(), randi() % 10000]
+	route_hints_enabled = show_route_hints
 	game_mode = mode
 	challenge = {}
 	cash_usd = float(DataService.economy.get("starting_cash_usd", 50000.0))
@@ -373,6 +375,7 @@ func to_dict() -> Dictionary:
 		"font_scale": font_scale,
 		"color_blind": color_blind,
 		"subtitles_enabled": subtitles_enabled,
+		"route_hints_enabled": route_hints_enabled,
 		"unlocked_achievements": unlocked_achievements,
 		"stats": stats,
 	}
@@ -435,6 +438,7 @@ func from_dict(d: Dictionary) -> void:
 	var cb := str(d.get("color_blind", "off"))
 	color_blind = cb if cb in ["off", "deuteranopia", "protanopia"] else "off"
 	subtitles_enabled = bool(d.get("subtitles_enabled", false))
+	route_hints_enabled = bool(d.get("route_hints_enabled", false))
 	unlocked_achievements = d.get("unlocked_achievements", {})
 	stats = _default_stats()
 	var loaded_stats: Dictionary = d.get("stats", {})

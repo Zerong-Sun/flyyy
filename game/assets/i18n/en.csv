@@ -1,4 +1,5 @@
 keys,en
+ui.new_game.route_hints,Show one first-flight route hint
 ui.new_game.title,Choose starting airport
 ui.new_game.game_title,Wanli Trader
 ui.new_game.intro,"Buy local goods low, fly them where scarce, and sell high."
