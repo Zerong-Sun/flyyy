@@ -80,8 +80,10 @@
 
 | 客户端 | 范围 | 说明 |
 |--------|------|------|
-| **Godot 4.x**（主客户端） | 20 座全球客运枢纽 | 3D 地球、拟真航班、贸易闭环、存档与数据来源页 |
-| **Expo Go**（[`ios/expo/`](ios/expo/)） | 12 枢纽手机 Demo | React Native，Design Canvas 原型移植，Expo SDK 54 |
+| **Godot 4.7**（桌面主客户端） | 20 座全球客运枢纽 | 3D 地球、拟真航班、贸易闭环、存档与数据来源页；[v0.4.0 Windows / macOS 下载](https://github.com/Zerong-Sun/flyyy/releases/tag/v0.4.0) |
+| **React Native / Expo SDK 54**（[`ios/expo/`](ios/expo/)） | 20 座枢纽 | 可玩的手机端：地球、市场、航班、行李、交易记录、成就、音效和存档；目前通过 Expo Go 本地预览，尚无公开的手机安装包或商店版本 |
+
+Expo Go 是开发预览容器，不是《万里行商》的手机版安装包。仓库中的 `ios/expo/app.json` 虽写有应用版本 `1.0.0`，这只是项目配置，**不代表已发布手机 v1.0.0**。当前公开的 v0.4.0 Release 仅包含 Windows 和 macOS。
 
 **首版里程碑验收 = 可玩 Demo（PRD §27）**  
 对照表：[docs/superpowers/plans/2026-07-26-demo-acceptance.md](docs/superpowers/plans/2026-07-26-demo-acceptance.md)  
@@ -97,7 +99,7 @@ iOS Expo M2 验收：[docs/superpowers/plans/2026-08-01-ios-expo-m2-acceptance.m
 
 ### 要求
 
-- Godot 4.3+（本地开发使用 4.7.x）  
+- Godot 4.7.x（项目配置使用 Godot 4.7 / Forward Plus）
 - Python 3.11+（ETL）  
 
 ### 1. 生成数据
@@ -123,7 +125,7 @@ python scripts/run_pipeline.py
 /Applications/Godot.app/Contents/MacOS/Godot --path game
 ```
 
-### 3. Expo Go 手机 Demo
+### 3. 运行手机端开发预览
 
 ```bash
 cd ios/expo
@@ -131,7 +133,7 @@ npm install
 npx expo start
 ```
 
-安装 Expo Go，手机与电脑同一 Wi‑Fi，扫描终端二维码。详见 [`ios/expo/README.md`](ios/expo/README.md)。
+安装与项目 **SDK 54** 兼容的 Expo Go，手机与电脑连接同一 Wi‑Fi，再扫描终端二维码。Expo Go 的 SDK 版本须与项目一致；如出现版本不兼容提示，参见 [Expo 官方说明](https://docs.expo.dev/troubleshooting/expo-go-version-mismatch/)。详见 [`ios/expo/README.md`](ios/expo/README.md)。
 
 ```bash
 python3 tools/export_expo_data.py          # ETL → ios/expo/data/ios-data.json
@@ -192,9 +194,9 @@ python -m etl.content.city_content_en      # 单独重打 game/data/world.json �
 
 - `etl/` — Python 管线 → SQLite（校验）+ JSON（运行时）  
 - `game/` — Godot 客户端（只读 `game/data/*.json`）  
-- `ios/expo/` — Expo Go 手机 Demo  
+- `ios/expo/` — React Native / Expo 手机客户端（当前提供开发预览）
 - `game/themes/` — Demo Theme / CAS 色板  
 - `PRD_01.md` — 完整产品需求  
 - `docs/CONTENT_ASSET_SPEC.md` — 美术 / 音乐 / 文本规格  
 
-引擎锁定：项目以 Godot 4.x Forward+ 为目标。
+桌面项目配置为 Godot 4.7 / Forward Plus；手机端使用 React Native / Expo SDK 54。
