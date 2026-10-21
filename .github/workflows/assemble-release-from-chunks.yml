@@ -1,0 +1,60 @@
+name: Assemble release from verified chunks
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to assemble
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: macos-15-intel
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TAG: ${{ inputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download chunks and manifest
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/release"
+          gh release download "$TAG" --pattern "WanliTrader-${TAG}-chunks.json" --dir "$RUNNER_TEMP/release"
+          gh release download "$TAG" --pattern "WanliTrader-${TAG}-*.part*" --dir "$RUNNER_TEMP/release"
+      - name: Reassemble and verify
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, json, os, shutil
+          root = Path(os.environ['RUNNER_TEMP']) / 'release'
+          tag = os.environ['TAG']
+          manifest = json.loads((root / f'WanliTrader-{tag}-chunks.json').read_text())
+          for kind in ('windows', 'macos_universal'):
+              item = manifest[kind]
+              output = root / item['name']
+              with output.open('wb') as target:
+                  for name in item['parts']:
+                      with (root / name).open('rb') as part:
+                          shutil.copyfileobj(part, target)
+              digest = hashlib.sha256(output.read_bytes()).hexdigest()
+              if digest != item['sha256']:
+                  raise RuntimeError(f'{kind}: SHA-256 mismatch')
+              print(f'Verified {kind}: {output.stat().st_size:,} bytes')
+          PY
+          unzip -tq "$RUNNER_TEMP/release/WanliTrader-${TAG}-windows-x64.zip"
+          unzip -tq "$RUNNER_TEMP/release/WanliTrader-${TAG}-macos-universal.zip"
+          cd "$RUNNER_TEMP/release"
+          shasum -a 256 "WanliTrader-${TAG}-windows-x64.zip" "WanliTrader-${TAG}-macos-universal.zip" > "WanliTrader-${TAG}-SHA256SUMS.txt"
+      - name: Upload complete archives and publish
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP/release"
+          gh release upload "$TAG" "WanliTrader-${TAG}-windows-x64.zip" "WanliTrader-${TAG}-macos-universal.zip" "WanliTrader-${TAG}-SHA256SUMS.txt" --clobber
+          gh release edit "$TAG" --draft=false --latest

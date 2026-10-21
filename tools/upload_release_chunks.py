@@ -16,11 +16,11 @@ import time
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TAG = "v0.4.0"
+TAG = sys.argv[1] if len(sys.argv) > 1 else "v0.4.0"
 CHUNK_SIZE = 8 * 1024 * 1024
 SOURCES = {
-    "windows": ROOT / "dist/WanliTrader-v0.4.0-windows-x64.zip",
-    "macos_shell": ROOT / "dist/WanliTrader-v0.4.0-macos-shell.zip",
+    "windows": ROOT / f"dist/WanliTrader-{TAG}-windows-x64.zip",
+    ("macos_shell" if TAG == "v0.4.0" else "macos_universal"): ROOT / f"dist/WanliTrader-{TAG}-{'macos-shell' if TAG == 'v0.4.0' else 'macos-universal'}.zip",
 }
 
 
@@ -49,7 +49,7 @@ def upload(path: Path) -> str:
 
 
 def main() -> None:
-    chunk_dir = ROOT / "dist/release-chunks"
+    chunk_dir = ROOT / "dist/release-chunks" / TAG
     chunk_dir.mkdir(parents=True, exist_ok=True)
     manifest = {}
     all_parts: list[Path] = []
