@@ -1,8 +1,8 @@
-# Wanli Trader — Expo Go (20-hub demo)
+# Wanli Trader — mobile client (20 hubs)
 
-React Native port of the playable **20-hub** demo. Runs in **Expo Go SDK 54** on a phone over your local network.
+This playable React Native client covers **20 hubs**. The project uses **Expo SDK 54** and can be previewed locally with a matching Expo Go build. Expo Go is a development container, not a released Wanli Trader mobile app. No public mobile installer or app-store release is available yet.
 
-Use this folder for the mobile flight trading game prototype.
+Use this folder for the mobile flight trading game.
 
 ## Start (LAN first)
 
@@ -12,7 +12,7 @@ npm install
 npx expo start
 ```
 
-1. Install **Expo Go** on your iPhone or Android device.
+1. Install an **Expo Go build compatible with SDK 54** on your iPhone or Android device. See [Expo's version-mismatch guide](https://docs.expo.dev/troubleshooting/expo-go-version-mismatch/) if needed.
 2. Put your phone and computer on the **same Wi‑Fi**.
 3. Scan the QR code shown in the terminal.
 

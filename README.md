@@ -83,8 +83,10 @@ Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-
 
 | 客户端 | 范围 | 说明 |
 |--------|------|------|
-| **Godot 4.x**（主客户端） | 500 个机场、2500 件商品 | 3D 地球、拟真航班、贸易闭环、存档与数据来源页 |
-| **Expo Go**（[`ios/expo/`](ios/expo/)） | 20 枢纽、51 件精选商品 | React Native，Design Canvas 原型移植，Expo SDK 54 |
+| **Godot 4.7**（桌面主客户端） | 500 个机场、2500 件商品 | 3D 地球、航班、贸易、存档与双外观；[v0.5.0 Windows / macOS 下载](https://github.com/Zerong-Sun/flyyy/releases/tag/v0.5.0) |
+| **React Native / Expo SDK 54**（[`ios/expo/`](ios/expo/)） | 20 座枢纽、精选商品 | 可玩的手机端：地球、市场、航班、行李、交易记录、成就、音效、存档与双外观；目前通过 Expo Go 本地预览 |
+
+Expo Go 是开发预览容器，不是《万里行商》的手机版安装包。`ios/expo/app.json` 的 `1.1.0` 是源代码版本；尚未发布新的 iOS / Android 安装包。当前公开的 v0.5.0 Release 仅包含 Windows 和 macOS。
 
 **首版里程碑验收 = 可玩 Demo（PRD §27）**  
 对照表：[docs/superpowers/plans/2026-07-26-demo-acceptance.md](docs/superpowers/plans/2026-07-26-demo-acceptance.md)  
@@ -100,7 +102,7 @@ iOS Expo M2 验收：[docs/superpowers/plans/2026-08-01-ios-expo-m2-acceptance.m
 
 ### 要求
 
-- Godot 4.3+（本地开发使用 4.7.x）  
+- Godot 4.7.x（项目配置使用 Godot 4.7 / Forward Plus）
 - Python 3.11+（ETL）  
 
 ### 1. 生成数据
@@ -126,7 +128,7 @@ python scripts/run_pipeline.py
 /Applications/Godot.app/Contents/MacOS/Godot --path game
 ```
 
-### 3. Expo Go 手机 Demo
+### 3. 运行手机端开发预览
 
 ```bash
 cd ios/expo
@@ -134,7 +136,7 @@ npm install
 npx expo start
 ```
 
-安装 Expo Go，手机与电脑同一 Wi‑Fi，扫描终端二维码。详见 [`ios/expo/README.md`](ios/expo/README.md)。
+安装与项目 **SDK 54** 兼容的 Expo Go，手机与电脑连接同一 Wi‑Fi，再扫描终端二维码。Expo Go 的 SDK 版本须与项目一致；如出现版本不兼容提示，参见 [Expo 官方说明](https://docs.expo.dev/troubleshooting/expo-go-version-mismatch/)。详见 [`ios/expo/README.md`](ios/expo/README.md)。
 
 ```bash
 python3 tools/export_expo_data.py          # ETL → ios/expo/data/ios-data.json
@@ -195,13 +197,9 @@ python -m etl.content.city_content_en      # 单独重打 game/data/world.json �
 
 - `etl/` — Python 管线 → SQLite（校验）+ JSON（运行时）  
 - `game/` — Godot 客户端（只读 `game/data/*.json`）  
-- `ios/expo/` — Expo Go 手机 Demo  
+- `ios/expo/` — React Native / Expo 手机客户端（当前提供开发预览）
 - `game/themes/` — Demo Theme / CAS 色板  
 - `PRD_01.md` — 完整产品需求  
 - `docs/CONTENT_ASSET_SPEC.md` — 美术 / 音乐 / 文本规格  
 
-引擎锁定：项目以 Godot 4.x Forward+ 为目标。
-
-## 桌面与手机端升级
-
-本轮维护范围为 Godot 桌面客户端和 Expo 手机端。实现、存档兼容说明与验证命令见 [升级说明](docs/DESKTOP_MOBILE_UPGRADE.md)。手机端从桌面数据导出机场坐标和航线图，商品、票价与负重使用明确的平台配置。
+桌面项目配置为 Godot 4.7 / Forward Plus；手机端使用 React Native / Expo SDK 54。桌面与手机端的实现、存档兼容及验证命令见 [升级说明](docs/DESKTOP_MOBILE_UPGRADE.md)。
