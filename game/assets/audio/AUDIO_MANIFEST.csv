@@ -1,4 +1,5 @@
 id,filename,license,author,source_url,source,loop,loop_start_ms,loop_end_ms,bus,notes
+bgm_intro,bgm/audio_bgm_intro.wav,original-procedural,Wanli Trader / intro-music-generator,,procedural,true,0,30000,BGM,30s D-minor modal opening theme; first 10s hook and repeated variations
 bgm_globe_day,bgm/audio_bgm_globe_day.ogg,original-procedural,Wanli Trader / audio-gen-kit,,procedural,true,8000,133000,BGM,Demo P0 ambient pad; ~135s
 bgm_market,bgm/audio_bgm_market.ogg,original-procedural,Wanli Trader / audio-gen-kit,,procedural,true,6000,118000,BGM,v0.2 market BGM; globe-day弱变奏; ~120s
 bgm_menu,bgm/audio_bgm_menu.ogg,original-procedural,Wanli Trader / audio-gen-kit,,procedural,true,5000,88000,BGM,v0.2 menu BGM; slower quieter sparse; ~90s

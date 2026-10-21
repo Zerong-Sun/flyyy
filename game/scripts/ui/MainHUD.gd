@@ -518,7 +518,7 @@ func _show_new_game() -> void:
 		_rep_panel.visible = false
 	_new_game_panel.visible = true
 	GameClock.set_paused(true)
-	AudioService.set_bgm("bgm_menu")
+	AudioService.set_bgm("bgm_intro")
 
 
 func _select_mode(mode: String) -> void:

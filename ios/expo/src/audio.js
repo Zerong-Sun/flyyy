@@ -14,6 +14,7 @@ const SOURCES = {
 
 // Looping BGM scenes (AAC from game/assets/audio/bgm/*.ogg via ffmpeg).
 const BGM_SOURCES = {
+  bgm_intro: require('../assets/audio/bgm/bgm_intro.m4a'),
   bgm_globe_day: require('../assets/audio/bgm/bgm_globe_day.m4a'),
   bgm_market: require('../assets/audio/bgm/bgm_market.m4a'),
   bgm_menu: require('../assets/audio/bgm/bgm_menu.m4a'),

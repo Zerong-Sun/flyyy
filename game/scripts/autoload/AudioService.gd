@@ -98,6 +98,8 @@ func _stream_for(id: String) -> AudioStream:
 	# Prefer runtime Ogg loader (works before Godot Import generates .import)
 	if path.ends_with(".ogg") and FileAccess.file_exists(path):
 		stream = AudioStreamOggVorbis.load_from_file(path)
+	elif path.ends_with(".wav") and FileAccess.file_exists(path):
+		stream = AudioStreamWAV.load_from_file(path)
 	elif ResourceLoader.exists(path):
 		stream = load(path) as AudioStream
 	if stream == null:
@@ -105,6 +107,8 @@ func _stream_for(id: String) -> AudioStream:
 		return null
 	if stream is AudioStreamOggVorbis:
 		(stream as AudioStreamOggVorbis).loop = bool(_by_id[id].loop)
+	elif stream is AudioStreamWAV:
+		(stream as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_FORWARD if bool(_by_id[id].loop) else AudioStreamWAV.LOOP_DISABLED
 	_streams[id] = stream
 	return stream
 
