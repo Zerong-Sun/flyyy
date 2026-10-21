@@ -60,10 +60,15 @@ def main() -> None:
         manifest[key] = {"name": source.name, "sha256": sha, "parts": [p.name for p in parts]}
         all_parts.extend(parts)
         print(f"{key}: {len(parts)} parts, SHA-256 {sha}", flush=True)
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        futures = [pool.submit(upload, part) for part in all_parts]
+    existing = set(subprocess.check_output(
+        ["gh", "release", "view", TAG, "--json", "assets", "--jq", ".assets[].name"], text=True
+    ).splitlines())
+    pending = [part for part in all_parts if part.name not in existing]
+    print(f"Resuming {len(pending)}/{len(all_parts)} parts", flush=True)
+    with ThreadPoolExecutor(max_workers=24) as pool:
+        futures = [pool.submit(upload, part) for part in pending]
         for count, future in enumerate(as_completed(futures), 1):
-            print(f"Uploaded {count}/{len(all_parts)}: {future.result()}", flush=True)
+            print(f"Uploaded {count}/{len(pending)}: {future.result()}", flush=True)
     manifest_path = chunk_dir / f"WanliTrader-{TAG}-chunks.json"
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     print("Uploaded manifest:", upload(manifest_path), flush=True)
