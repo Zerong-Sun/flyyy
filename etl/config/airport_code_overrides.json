@@ -1,0 +1,6 @@
+{
+  "3766": {
+    "iata": "PBI",
+    "reason": "Preserve the PBI code used by the March 2025 BTS/OpenFlights schedule; the current OurAirports row uses DJT. Match the stable source row ID, not an unrelated airport's code."
+  }
+}

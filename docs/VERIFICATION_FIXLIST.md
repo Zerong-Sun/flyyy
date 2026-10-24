@@ -29,6 +29,7 @@
 | V10 | P1 | 干净环境下载 BTS 后将解压 CSV 保存成 .zip，管线读取 .csv，导致真实航班层缺失；直接下载失败还可能覆盖旧源文件 | 使用管线约定的 CSV 文件名，流式下载到临时目录并原子替换；直接读取 ZIP 成员避免路径问题；CI 使用 --strict 拒绝静默降级 | test_fetch_sources：ZIP 文件名/嵌套成员、无 CSV、下载中断保护、正常下载、严格模式失败；由远程完整数据重建验证 |
 | V11 | P1 | game/data 被忽略后，成就、新闻及 Steam 映射没有可重建输入；本机旧文件掩盖了新克隆无法启动相关系统的问题 | 将现有成就/新闻内容原样保留为 etl/config/runtime 输入；主 ETL 导出两者并派生 Steam 映射；质量与发行入口检查这些必需文件 | test_runtime_data 从空目录导出并验证确定性、覆盖旧输出；第二次 CI 的缺文件错误作为修复依据 |
 | V12 | P2 | 滚动测试假定同一中英混排句在各系统上均超过 44px；Linux 字体回退使文字只有一行，导致错误失败 | 用显式三行长文本制造稳定溢出，继续对比 fit_content=true 可滚动、false 裁剪 | verify_detail_scroll；Linux 原始输出 22px/不可滚动，修复后重跑 |
+| V13 | P1 | 上游 municipality、机场类型/排序及 IATA 更新会改变 ID 或移出名单，最新数据使 Edinburgh、Ciudad de la Costa、West Palm Beach 的内容/美术断开，并影响旧存档引用 | 记录已交付 500 个机场的稳定城市 ID，优先保留已支持城市；按稳定源记录 ID 将改名后的机场代码关联到 2025-03 历史航班（PBI）；不放宽资源完整性测试 | test_city_identity 覆盖三城改名、新机场、Demo 优先级、机场降级和历史代码映射；最新源数据全名单对照；云端原失败为 2 项美术完整性测试，27 个 Godot 已通过 |
 
 ## 执行记录
 
@@ -36,11 +37,12 @@
 
 | 验证 | 结果 | 证据 |
 |---|---|---|
-| Python 全量 | 184 passed，3 skipped；3 项原因见下方 | python.log |
+| Python 全量（0bce5b5 本机复跑） | 190 passed，3 skipped；3 项原因见下方 | final/python.log |
 | 干净下载追加回归 | 5 项通过；在上述全量之后发现并修复，云端再验证完整管线 | fetch-sources.log；before/fetch-sources.log |
 | 干净运行时数据导出 | 空目录输出、Steam 映射与确定性覆盖回归；随最终全量重跑 | tests/etl/test_runtime_data.py |
+| 最新源数据身份检查 | 4 项回归通过；最新 OurAirports 名单的 500 城 ID 与 500 张城市图片完全匹配 | latest-roster.log；tests/etl/test_city_identity.py |
 | 手机逻辑 | 77 passed，0 failed | mobile.log |
-| Godot 空缓存导入、17 smoke + 10 场景 | 27/27 passed；headless 平均 6.900 ms、p95 8.210 ms | godot.log、godot/ |
+| Godot 空缓存导入、17 smoke + 10 场景 | 本机复跑与 Linux 云端均 27/27 passed；最初本机 headless 平均 6.900 ms、p95 8.210 ms | final/godot.log；云端 40108180974 的 Godot 阶段 |
 | 桌面真实渲染 | SmokeUI、SmokeGamedevQuality 通过；已查看市场/航班截图，输入焦点可见 | render.log、render/、market.png、flights.png |
 | iOS/Android 生产资源导出 | 两个平台均成功 | mobile-ios-export.log、mobile-android-export.log |
 | Git 格式与工作流结构 | 通过；二进制资源哈希与 HEAD 相同，原文件模式保留 | git diff --cached --check；YAML 解析 |

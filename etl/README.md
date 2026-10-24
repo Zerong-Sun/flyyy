@@ -29,4 +29,10 @@ Small authored catalogs live in versioned `etl/config/runtime/`. The pipeline ex
 them on every build and derives Steam names from the achievement IDs. Keep edits in
 those source catalogs rather than the ignored `game/data/` output directory.
 
+`etl/config/airport_city_ids.json` preserves shipped city IDs by airport IATA code.
+Upstream municipality spelling may change without renaming content/assets or save
+identifiers. Update this mapping deliberately when adding or migrating cities.
+`airport_code_overrides.json` joins renamed airport codes to the historical March
+2025 schedule by stable OurAirports row ID (for example, the shipped PBI route).
+
 Godot reads the JSON exports at runtime (generated from the validated SQLite snapshot).

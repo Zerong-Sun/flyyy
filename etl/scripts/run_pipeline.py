@@ -54,10 +54,12 @@ def stable_rand(*parts: object) -> random.Random:
 def read_ourairports_by_iata(path: Path) -> dict[str, dict]:
     if not path.exists():
         return {}
+    overrides = json.loads((CFG / 'airport_code_overrides.json').read_text(encoding='utf-8'))
     out: dict[str, dict] = {}
     with path.open(encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
-            iata = (row.get("iata_code") or "").strip()
+            historical = overrides.get(row.get('id', ''), {})
+            iata = (historical.get('iata') or row.get("iata_code") or "").strip()
             if not iata:
                 continue
             try:
@@ -102,6 +104,9 @@ def build_cities_500_from_ourairports(
     4. Capital cities / largest airports per country.
     """
     route_counts = route_counts or Counter()
+    # Authored content, art and saves use stable city IDs. Upstream municipality
+    # spelling is display data, not an instruction to rename those identifiers.
+    city_ids_by_iata = json.loads((CFG / 'airport_city_ids.json').read_text(encoding='utf-8'))
     existing_iata = {h["iata"] for h in existing_hubs}
     existing_city = {h["city_id"] for h in existing_hubs}
 
@@ -125,15 +130,17 @@ def build_cities_500_from_ourairports(
             score += 30
         candidates.append((score, iata, info))
 
-    candidates.sort(key=lambda x: (-x[0], -route_counts.get(x[1], 0), x[1]))
+    # Preserve supported cities before considering additions. Changes to upstream
+    # airport type/traffic must not silently evict shipped content from the roster.
+    candidates.sort(key=lambda x: (0 if x[1] in city_ids_by_iata else 1,
+                                   -x[0], -route_counts.get(x[1], 0), x[1]))
 
     additional = []
     seen_city_ids: set[str] = set(existing_city)
 
     for score, iata, info in candidates:
         municipality = info["municipality"] or info["name"] or iata
-        # Derive city_id from municipality
-        city_id = municipality.lower().replace(" ", "_").replace("/", "_").replace("-", "_")[:30]
+        city_id = city_ids_by_iata.get(iata) or municipality.lower().replace(" ", "_").replace("/", "_").replace("-", "_")[:30]
         if city_id in seen_city_ids:
             # Same city, just different airport - skip for city list (but airport can still be added)
             continue
