@@ -84,7 +84,9 @@ def main():
     dependencies = [name for name in ('pytest', 'yaml', 'PIL', 'numpy') if importlib.util.find_spec(name) is None]
     if dependencies:
         parser.error('Missing dependencies: ' + ', '.join(dependencies) + '. Install etl/requirements.txt with this Python interpreter')
-    required = ['game/data/world.json', 'game/data/flights/_manifest.json', 'etl/out/coverage_report.json']
+    required = ['game/data/world.json', 'game/data/flights/_manifest.json', 'etl/out/coverage_report.json',
+                'game/data/product_market_tags.json', 'game/data/achievements.json',
+                'game/data/steam_achievements.json', 'game/data/news_events.json']
     missing = [name for name in required if not (ROOT / name).is_file()]
     if missing:
         parser.error('Generate full ETL data before validation: ' + ', '.join(missing))

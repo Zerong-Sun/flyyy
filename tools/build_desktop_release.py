@@ -27,6 +27,8 @@ def require_data() -> None:
     paths = [
         GAME / "data/world.json",
         GAME / "data/achievements.json",
+        GAME / "data/steam_achievements.json",
+        GAME / "data/news_events.json",
         GAME / "data/product_market_tags.json",
         GAME / "data/flights/_manifest.json",
     ]

@@ -27,6 +27,8 @@
 | V08 | P2 | 原 CI push 只覆盖 main，本次开发分支推送不触发质量门禁 | push 增加 codex/**，保留 PR/manual | YAML 检查与推送后的 GitHub Actions 状态 |
 | V09 | P2 | 登机逻辑在 flight_in_progress=true 后再次保存，该调用必然返回 false | 移除无效调用，保留过场前有效检查点及到达后的保存 | 完整 FlightOps/联程回归与飞行期间禁止写盘用例 |
 | V10 | P1 | 干净环境下载 BTS 后将解压 CSV 保存成 .zip，管线读取 .csv，导致真实航班层缺失；直接下载失败还可能覆盖旧源文件 | 使用管线约定的 CSV 文件名，流式下载到临时目录并原子替换；直接读取 ZIP 成员避免路径问题；CI 使用 --strict 拒绝静默降级 | test_fetch_sources：ZIP 文件名/嵌套成员、无 CSV、下载中断保护、正常下载、严格模式失败；由远程完整数据重建验证 |
+| V11 | P1 | game/data 被忽略后，成就、新闻及 Steam 映射没有可重建输入；本机旧文件掩盖了新克隆无法启动相关系统的问题 | 将现有成就/新闻内容原样保留为 etl/config/runtime 输入；主 ETL 导出两者并派生 Steam 映射；质量与发行入口检查这些必需文件 | test_runtime_data 从空目录导出并验证确定性、覆盖旧输出；第二次 CI 的缺文件错误作为修复依据 |
+| V12 | P2 | 滚动测试假定同一中英混排句在各系统上均超过 44px；Linux 字体回退使文字只有一行，导致错误失败 | 用显式三行长文本制造稳定溢出，继续对比 fit_content=true 可滚动、false 裁剪 | verify_detail_scroll；Linux 原始输出 22px/不可滚动，修复后重跑 |
 
 ## 执行记录
 
@@ -36,6 +38,7 @@
 |---|---|---|
 | Python 全量 | 184 passed，3 skipped；3 项原因见下方 | python.log |
 | 干净下载追加回归 | 5 项通过；在上述全量之后发现并修复，云端再验证完整管线 | fetch-sources.log；before/fetch-sources.log |
+| 干净运行时数据导出 | 空目录输出、Steam 映射与确定性覆盖回归；随最终全量重跑 | tests/etl/test_runtime_data.py |
 | 手机逻辑 | 77 passed，0 failed | mobile.log |
 | Godot 空缓存导入、17 smoke + 10 场景 | 27/27 passed；headless 平均 6.900 ms、p95 8.210 ms | godot.log、godot/ |
 | 桌面真实渲染 | SmokeUI、SmokeGamedevQuality 通过；已查看市场/航班截图，输入焦点可见 | render.log、render/、market.png、flights.png |
@@ -49,4 +52,4 @@
 - Python 的原始美术 contact sheet 与旧 HTML 端 curated_cities.json 为既有可选素材，缺失引起的跳过会单独披露，不作为 Expo 核心测试通过的证据。
 - 商业版数据授权、Steam 云存档、商店签名/上架属于后续发行门槛，不包含在本次代码修复与 commit/push 中。
 
-完整三阶段同次执行完成，`summary.json` 为 `status: passed`。GitHub Actions 由本次分支推送触发，远程结果以 [Game quality 运行记录](https://github.com/Zerong-Sun/flyyy/actions/workflows/quality.yml) 为准；本文的本机记录不预先声明远程通过。
+首次完整三阶段同次执行通过，之后云端干净环境补充发现 V10–V12，已修复并重新验收。旧云端失败证据见 [运行 40107396992](https://github.com/Zerong-Sun/flyyy/actions/runs/40107396992)；远程最终结果以 [Game quality 运行记录](https://github.com/Zerong-Sun/flyyy/actions/workflows/quality.yml) 为准。本文的本机记录不预先声明远程通过。

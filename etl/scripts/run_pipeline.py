@@ -28,6 +28,7 @@ GAME_DATA = ROOT.parents[0] / "game" / "data"
 # Allow `from etl.content...` imports when run as a plain script / via runpy.
 sys.path.insert(0, str(ROOT.parent))
 from etl.content.city_content_en import FIELD_EN_MAP, apply_en_fields
+from etl.content.runtime_data import export_runtime_data
 
 EARTH_R_KM = 6371.0
 
@@ -2126,6 +2127,7 @@ def export_json_for_godot(airports, routes, flights, cities, products, markets, 
     import shutil
 
     GAME_DATA.mkdir(parents=True, exist_ok=True)
+    export_runtime_data(GAME_DATA)
 
     # English city-text fields (Step 3 W5): Demo 20 hubs authored, rest templated.
     cities = apply_en_fields(cities)

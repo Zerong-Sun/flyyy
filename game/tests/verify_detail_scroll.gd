@@ -16,6 +16,9 @@ func _ready() -> void:
 	rtl.scroll_active = false
 	rtl.custom_minimum_size = Vector2(1160, 0)
 	rtl.text = "[b]TG681[/b] ATL→BJX · 起飞 2025-03-01T11:10 · 2188km/202min · 经$334/公$3336/头$8339 · 星空联盟 · 行李=无 货运×0 · 这是一条很长的附加说明需要换行显示以验证滚动是否正常工作"
+	# Font fallback differs across Linux/macOS. Guarantee overflow instead of
+	# assuming this CJK sentence always wraps to more than 44 pixels.
+	rtl.text = "\n".join([rtl.text, rtl.text, rtl.text])
 	scroll.add_child(rtl)
 
 	await get_tree().process_frame
