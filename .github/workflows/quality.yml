@@ -40,6 +40,8 @@ jobs:
   desktop:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      PYTHONUNBUFFERED: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -65,7 +67,7 @@ jobs:
       - name: Fetch public aviation snapshots
         if: steps.sources.outputs.cache-hit != 'true'
         timeout-minutes: 15
-        run: python etl/scripts/01_fetch_sources.py
+        run: python etl/scripts/01_fetch_sources.py --strict
       - name: Record source digests
         run: |
           mkdir -p dist/quality

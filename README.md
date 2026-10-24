@@ -112,7 +112,7 @@ cd etl
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python scripts/01_fetch_sources.py
+python scripts/01_fetch_sources.py --strict
 python scripts/run_pipeline.py
 ```
 

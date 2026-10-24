@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 ```bash
 # optional: refresh OurAirports / OpenFlights
-python scripts/01_fetch_sources.py
+python scripts/01_fetch_sources.py --strict
 
 # build SQLite + Godot JSON
 python scripts/run_pipeline.py

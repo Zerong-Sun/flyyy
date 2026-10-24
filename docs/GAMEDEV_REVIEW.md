@@ -68,7 +68,7 @@ CI=1 EXPO_OFFLINE=1 npx expo export --platform android --output-dir dist/android
 
 统一验收记录在 `dist/quality/summary.json` 及相邻日志中。测试写入临时 user 目录，不接触玩家的正式存档。本机原有两个 Python venv 链接指向已不存在的 Homebrew Python，因此本轮使用独立临时 Python 3.12 环境完成验收，未改写原环境。
 
-首次克隆需要完整世界数据：先运行 `etl/scripts/01_fetch_sources.py`，再运行 `etl/scripts/run_pipeline.py --full` 和 `tools/export_expo_data.py`。CI 缓存公开数据并记录 SHA-256；初次下载的上游内容可能变化，更新数据版本时需同步审阅生成结果。缺少生成数据时统一入口会明确失败，不以跳过冒充全量验收。
+首次克隆需要完整世界数据：先运行 `etl/scripts/01_fetch_sources.py --strict`，再运行 `etl/scripts/run_pipeline.py --full` 和 `tools/export_expo_data.py`。严格下载模式在来源不可用时失败；省略参数仍可用于显式的离线降级流程。CI 缓存公开数据并记录 SHA-256；初次下载的上游内容可能变化，更新数据版本时需同步审阅生成结果。缺少生成数据时统一入口会明确失败，不以跳过冒充全量验收。
 
 ## 性能证据
 

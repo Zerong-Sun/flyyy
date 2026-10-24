@@ -26,6 +26,7 @@
 | V07 | P2 | 超时仅结束父进程，嵌套 Godot/ETL 子进程可能继续运行 | 共用执行器，超时/中断清理进程组及另开会话的后代 | 实际启动另开会话的子进程，超时后不得写出标记文件 |
 | V08 | P2 | 原 CI push 只覆盖 main，本次开发分支推送不触发质量门禁 | push 增加 codex/**，保留 PR/manual | YAML 检查与推送后的 GitHub Actions 状态 |
 | V09 | P2 | 登机逻辑在 flight_in_progress=true 后再次保存，该调用必然返回 false | 移除无效调用，保留过场前有效检查点及到达后的保存 | 完整 FlightOps/联程回归与飞行期间禁止写盘用例 |
+| V10 | P1 | 干净环境下载 BTS 后将解压 CSV 保存成 .zip，管线读取 .csv，导致真实航班层缺失；直接下载失败还可能覆盖旧源文件 | 使用管线约定的 CSV 文件名，流式下载到临时目录并原子替换；直接读取 ZIP 成员避免路径问题；CI 使用 --strict 拒绝静默降级 | test_fetch_sources：ZIP 文件名/嵌套成员、无 CSV、下载中断保护、正常下载、严格模式失败；由远程完整数据重建验证 |
 
 ## 执行记录
 
@@ -34,6 +35,7 @@
 | 验证 | 结果 | 证据 |
 |---|---|---|
 | Python 全量 | 184 passed，3 skipped；3 项原因见下方 | python.log |
+| 干净下载追加回归 | 5 项通过；在上述全量之后发现并修复，云端再验证完整管线 | fetch-sources.log；before/fetch-sources.log |
 | 手机逻辑 | 77 passed，0 failed | mobile.log |
 | Godot 空缓存导入、17 smoke + 10 场景 | 27/27 passed；headless 平均 6.900 ms、p95 8.210 ms | godot.log、godot/ |
 | 桌面真实渲染 | SmokeUI、SmokeGamedevQuality 通过；已查看市场/航班截图，输入焦点可见 | render.log、render/、market.png、flights.png |

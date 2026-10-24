@@ -2,7 +2,9 @@
 """Fetch OurAirports + OpenFlights + BTS + AeroSCOPE source CSVs (best-effort; offline fallbacks exist)."""
 from __future__ import annotations
 
-import io
+import argparse
+import shutil
+import tempfile
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -29,36 +31,52 @@ SOURCES = {
 BTS_EXTRACTED_NAME = "bts_on_time_2025_3.csv"
 
 
-def _fetch(name: str, url: str) -> None:
-    dest = RAW / name
-    print(f"Fetching {name} ...")
+def _fetch(name: str, url: str) -> bool:
+    dest = RAW / (BTS_EXTRACTED_NAME if name.endswith('.zip') else name)
+    print(f"Fetching {name} ...", flush=True)
     try:
-        if name.endswith(".zip"):
-            raw = urllib.request.urlopen(url, timeout=600).read()
-            with zipfile.ZipFile(io.BytesIO(raw)) as zf:
-                csv_members = [n for n in zf.namelist() if n.lower().endswith(".csv")]
-                if not csv_members:
-                    print(f"  WARN: no CSV inside {name}; skipping")
-                    return
-                zf.extract(csv_members[0], RAW)
-                extracted = RAW / Path(csv_members[0]).name
-                if extracted != dest:
-                    extracted.replace(dest)
-            print(f"  OK -> {dest} ({dest.stat().st_size} bytes)")
-        else:
-            urllib.request.urlretrieve(url, dest)
-            print(f"  OK -> {dest} ({dest.stat().st_size} bytes)")
+        # Stage on the same filesystem: incomplete downloads never replace a
+        # working local snapshot. Stream large BTS data instead of holding it in RAM.
+        with tempfile.TemporaryDirectory(prefix='.fetch-', dir=RAW) as directory:
+            downloaded = Path(directory) / 'download'
+            with urllib.request.urlopen(url, timeout=60) as response, downloaded.open('wb') as output:
+                shutil.copyfileobj(response, output, length=1024 * 1024)
+            payload = downloaded
+            if name.endswith('.zip'):
+                payload = Path(directory) / 'schedule.csv'
+                with zipfile.ZipFile(downloaded) as zf:
+                    csv_members = [n for n in zf.namelist() if n.lower().endswith('.csv')]
+                    if len(csv_members) != 1:
+                        raise ValueError(f'Expected one CSV inside {name}, found {len(csv_members)}')
+                    # Read the member directly; nested/untrusted member names
+                    # cannot decide the output path.
+                    with zf.open(csv_members[0]) as source, payload.open('wb') as output:
+                        shutil.copyfileobj(source, output, length=1024 * 1024)
+            if not payload.stat().st_size:
+                raise ValueError(f'Empty source: {name}')
+            payload.replace(dest)
+        print(f"  OK -> {dest} ({dest.stat().st_size} bytes)", flush=True)
+        return True
     except Exception as exc:  # noqa: BLE001
-        print(f"  WARN: {exc}")
+        print(f"  WARN: {exc}", flush=True)
         if not dest.exists():
             print("  No local copy; pipeline will use embedded fallbacks.")
+        return False
 
 
-def main() -> None:
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--strict', action='store_true', help='Fail if any source cannot be downloaded (CI)')
+    args = parser.parse_args(argv)
     RAW.mkdir(parents=True, exist_ok=True)
+    failed = []
     for name, url in SOURCES.items():
-        _fetch(name, url)
+        if not _fetch(name, url):
+            failed.append(name)
+    if failed:
+        print('Unavailable sources: ' + ', '.join(failed), flush=True)
+    return int(args.strict and bool(failed))
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
