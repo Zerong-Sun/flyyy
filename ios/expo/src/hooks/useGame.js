@@ -51,11 +51,18 @@ import {
   unseenArrivalEvent,
 } from '../eventLogic';
 import { createStateStore } from '../stateStore';
+import { advanceWorldClock } from '../worldClock';
 import { readSave, resetSave, writeSave } from '../saveStorage';
 import { travelCharge, saleCredit, refundTravel } from '../accounting';
 import { playSfx } from '../audio';
 import { f as i18nF, t as i18nT } from '../i18n';
 import { serializeSave } from '../saveGame';
+import {
+  createTripForecast,
+  landTripForecast,
+  recordTripDiscard,
+  recordTripSale,
+} from '../tripRecap';
 
 const initialState = () => ({
   tab: 'globe',
@@ -88,6 +95,7 @@ const initialState = () => ({
   visited: [STARTING_CITY],
   log: [],
   lastSale: null,
+  tripRecap: null,
   intro: true,
   legs: 0,
   bizLegs: 0,
@@ -182,6 +190,7 @@ export function useGame() {
   const click = useCallback((sfxId) => {
     if (!stateRef.current.optSound) return;
     const fallback = () => {
+      if (!stateRef.current.optHaptics) return;
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
     };
     if (!sfxId) {
@@ -335,9 +344,10 @@ export function useGame() {
         legs: s.legs + 1,
         km: s.km + ticket.km,
         bizLegs: s.bizLegs + (ticket.cabin === 'business' ? 1 : 0),
-        sheet: showEvent ? 'event' : (hasInv ? 'sell' : null),
+        sheet: showEvent ? 'event' : (hasInv ? 'sell' : (ticket.tripForecast ? 'tripRecap' : null)),
         eventPopup: showEvent ? arrivalEvent : null,
-        eventReturnSheet: showEvent && hasInv ? 'sell' : null,
+        eventReturnSheet: showEvent && hasInv ? 'sell' : (showEvent && ticket.tripForecast ? 'tripRecap' : null),
+        tripRecap: landTripForecast(ticket.tripForecast, arrivalGameMin),
         seenEventEpisodes,
         overweightNote: overweightKg > 0
           ? stF(s, 'msg.overweight_note', { n: overweightKg.toFixed(1) }, `Carry-on over by ${overweightKg.toFixed(1)} kg — sell, discard, or buy baggage on your next ticket.`)
@@ -362,7 +372,23 @@ export function useGame() {
   }, [announceAchievements, buzz]);
 
   const runCutscene = useCallback(() => {
-    const t = stateRef.current.ticket;
+    const current = stateRef.current;
+    const originalTicket = current.ticket;
+    const forecastMinute = current.gameMin + Math.max(0, current.minsToDep);
+    const forecastEvents = activeEvents(forecastMinute, current.eventSeed);
+    const t = originalTicket && CITIES[originalTicket.toId]
+      ? {
+        ...originalTicket,
+        tripForecast: createTripForecast({
+          from: originalTicket.from,
+          to: originalTicket.toId,
+          inventory: current.inv,
+          fare: originalTicket.fareCost ?? originalTicket.totalPaid,
+          baggage: originalTicket.baggageCost ?? 0,
+          quote: (id, cityId) => marketPriceAt(id, cityId, 'sell', forecastEvents),
+        }),
+      }
+      : originalTicket;
     if (!t || stateRef.current.cut || flyingRef.current) return;
     const to = CITIES[t.toId];
     if (!to) {
@@ -391,6 +417,7 @@ export function useGame() {
     let i = 0;
     setState((s) => ({
       ...s,
+      ticket: t,
       sheet: null,
       cut: steps[0],
       cutLine: `${t.no} · ${t.from} → ${t.to} · ${i18nF(l, 'fmt.km', { n: t.km.toLocaleString('en-US') }, `${t.km.toLocaleString('en-US')} km`)}`,
@@ -416,23 +443,17 @@ export function useGame() {
       if (cur.intro || cur.cut || !foregroundRef.current) return;
       setState((s) => {
         if (s.intro || s.cut) return s;
-        const minsToDep = s.ticket ? Math.max(0, s.minsToDep - 6) : 0;
-        const called = s.ticket ? (s.called || minsToDep <= 30) : false;
+        const next = advanceWorldClock(s);
         if (
           s.ticket
-          && minsToDep === 0
+          && next.minsToDep === 0
           && s.minsToDep >= 0
           && !flyingRef.current
           && !s.cut
         ) {
           setTimeout(() => runCutscene(), 0);
         }
-        return {
-          ...s,
-          gameMin: s.gameMin + 6,
-          minsToDep,
-          called,
-        };
+        return next;
       });
     }, 1000);
     return () => {
@@ -763,7 +784,9 @@ export function useGame() {
         return { ...st, sheet: null, selFlight: null };
       }
       const add = ADDONS.find((a) => a.k === st.addon) || ADDONS[0];
-      const total = (st.cabin === 'economy' ? fl.econ : fl.biz) + add.price;
+      const fare = st.cabin === 'economy' ? fl.econ : fl.biz;
+      const baggage = add.price;
+      const total = fare + baggage;
       if (total > st.cash) {
         result = { ok: false, msg: stT(st, 'msg.no_cash_fare', 'Not enough cash for this fare'), kind: 'bad' };
         return st;
@@ -805,6 +828,8 @@ export function useGame() {
           dur: fl.dur,
           mins: fl.mins,
           extraKg: kg,
+          fareCost: fare,
+          baggageCost: baggage,
           totalPaid: total,
           ledgerPaid: total,
         },
@@ -833,13 +858,21 @@ export function useGame() {
         t: s.gameMin,
       };
       result = d;
+      const tripRecap = d.rows.reduce((recap, row) => recordTripSale(recap, s.city, {
+        id: row.id,
+        qty: row.qty,
+        cost: row.costValue,
+        revenue: row.grossValue,
+        fullQualityRevenue: row.grossValue,
+      }), s.tripRecap);
       const next = {
         ...s,
         ...saleCredit(s, d.gross, d.cost),
         inv: [],
-        sheet: null,
+        sheet: tripRecap !== s.tripRecap ? 'tripRecap' : null,
         selInv: null,
         lastSale: d.net,
+        tripRecap,
 
         log: [entry].concat(s.log).slice(0, 40),
         overweightNote: '',
@@ -883,14 +916,18 @@ export function useGame() {
         msg: stF(s, 'msg.sold', { n: qty, name: stT(s, `prod.${item.id}`, item.name), total: money(gross) }, `Sold ${qty} × ${item.name} · ${money(gross)}`),
         kind: net >= 0 ? 'ok' : 'bad',
       };
+      const tripRecap = recordTripSale(s.tripRecap, s.city, {
+        id: item.id, qty, cost: item.cost * qty, revenue: gross, fullQualityRevenue: gross,
+      });
       const next = {
         ...s,
         ...saleCredit(s, gross, item.cost * qty),
         inv,
-        sheet: null,
+        sheet: tripRecap !== s.tripRecap ? 'tripRecap' : null,
         selInv: null,
         invQty: 1,
         lastSale: net,
+        tripRecap,
 
         log: [entry].concat(s.log).slice(0, 40),
         overweightNote: (() => {
@@ -932,11 +969,13 @@ export function useGame() {
               if (qty >= item.n) inv.splice(idx, 1);
               else inv[idx] = { ...item, n: item.n - qty };
               const over = Math.max(0, bagUsed(inv) - DEFAULT_BAG_LIMIT);
+              const tripRecap = recordTripDiscard(s.tripRecap, s.city, item.id, qty, item.cost * qty);
               return {
                 ...s,
                 inv,
                 profit: s.profit - item.cost * qty,
-                sheet: null,
+                tripRecap,
+                sheet: tripRecap !== s.tripRecap ? 'tripRecap' : null,
                 selInv: null,
                 invQty: 1,
                 overweightNote: over > 0

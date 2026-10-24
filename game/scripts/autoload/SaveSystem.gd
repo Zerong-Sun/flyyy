@@ -1,9 +1,12 @@
 extends Node
 ## Validated saves, atomic replacement and one last-known-good recovery copy.
 const SAVE_PATH := "user://save_demo.json"
+const CHECKPOINT_SECONDS := 30.0
+const RETRY_SECONDS := 5.0
 var _blocked_paths: Dictionary = {}
 var _dirty: bool = false
 var _cooldown: float = 0.0
+var _checkpoint_elapsed: float = 0.0
 var flight_in_progress: bool = false
 
 func _ready() -> void:
@@ -11,24 +14,41 @@ func _ready() -> void:
 	EventBus.inventory_changed.connect(_schedule)
 	EventBus.ticket_purchased.connect(_schedule)
 	EventBus.game_started.connect(_schedule)
+	EventBus.settings_changed.connect(_schedule)
+	EventBus.arrived.connect(_schedule)
 
 func _schedule() -> void:
 	_dirty = true
 	_cooldown = 0.8
 
 func _process(delta: float) -> void:
-	if not _dirty or flight_in_progress:
+	if not AppState.game_started or flight_in_progress:
+		return
+	_checkpoint_elapsed += delta
+	if _checkpoint_elapsed >= CHECKPOINT_SECONDS:
+		_checkpoint_elapsed = 0.0
+		# Continuous trades/settings changes must not postpone a checkpoint forever.
+		_dirty = true
+		_cooldown = 0.0
+	if not _dirty:
 		return
 	_cooldown -= delta
 	if _cooldown <= 0.0:
+		_attempt_checkpoint()
+
+func _attempt_checkpoint() -> void:
+	if _blocked_paths.has(_path_for(AppState.game_mode)):
 		_dirty = false
-		if AppState.game_started and not _blocked_paths.has(_path_for(AppState.game_mode)) and not save_game():
-			EventBus.tutorial_hint.emit("存档失败，上一份存档已保留，请重试。")
+		return
+	if not save_game():
+		_dirty = true
+		_cooldown = RETRY_SECONDS
+		EventBus.tutorial_hint.emit(I18nService.t("ui.save.retry"))
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_WM_CLOSE_REQUEST:
 		if AppState.game_started and not flight_in_progress:
-			save_game()
+			_attempt_checkpoint()
 
 
 func _path_for(mode: String) -> String:
@@ -201,7 +221,11 @@ func save_game() -> bool:
 	if not validate(_read(path)).is_empty():
 		if DirAccess.copy_absolute(ProjectSettings.globalize_path(path), ProjectSettings.globalize_path(path + ".bak")) != OK:
 			return false
-	return DirAccess.rename_absolute(ProjectSettings.globalize_path(temporary), ProjectSettings.globalize_path(path)) == OK
+	if DirAccess.rename_absolute(ProjectSettings.globalize_path(temporary), ProjectSettings.globalize_path(path)) != OK:
+		return false
+	_dirty = false
+	_checkpoint_elapsed = 0.0
+	return true
 
 func load_game() -> bool:
 	var path := _path_for(AppState.game_mode)

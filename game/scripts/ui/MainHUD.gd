@@ -4,12 +4,14 @@ extends Control
 const _Economy = preload("res://scripts/systems/EconomySystem.gd")
 const _Inventory = preload("res://scripts/systems/InventorySystem.gd")
 const _Tickets = preload("res://scripts/systems/TicketService.gd")
+const _TripRecap = preload("res://scripts/systems/TripRecap.gd")
 const _MarketEvents = preload("res://scripts/systems/MarketEvents.gd")
 const _NewsEvents = preload("res://scripts/systems/NewsEvents.gd")
 const _FlightSearch = preload("res://scripts/systems/FlightSearch.gd")
 const _Colors = preload("res://themes/DemoColors.gd")
 const _ThemeFactory = preload("res://themes/ThemeFactory.gd")
 const _IconFactory = preload("res://themes/IconFactory.gd")
+const _FocusNavigation = preload("res://scripts/ui/FocusNavigation.gd")
 
 const PANEL_CENTER_POS := Vector2(260, 150)
 const PANEL_CENTER_SIZE := Vector2(720, 460)
@@ -530,6 +532,7 @@ func _show_new_game() -> void:
 	if _rep_panel != null:
 		_rep_panel.visible = false
 	_new_game_panel.visible = true
+	_FocusNavigation.focus_first.call_deferred(_new_game_panel)
 	GameClock.set_paused(true)
 	AudioService.set_bgm("bgm_intro")
 
@@ -1102,6 +1105,14 @@ func _on_arrived() -> void:
 		_check_arrival_encounter(city_id)
 		_check_free_cargo(city_id)
 		_market_arrival_sell_pending = not AppState.inventory.is_empty()
+		if AppState.inventory.is_empty():
+			var recap_text := _trip_recap_text()
+			if recap_text != "":
+				_enqueue_event_popup("trip_recap", {
+					"title": "单趟收支与预测回顾",
+					"body": recap_text,
+					"accept_text": "继续",
+				}, Callable(), Callable())
 	AchievementSystem.check_all()
 	_set_panel_bgm("globe")
 
@@ -1279,6 +1290,7 @@ func _clear_panel() -> void:
 	if _airport_card_panel != null:
 		_airport_card_panel.visible = false
 	_panel_host.visible = true
+	_FocusNavigation.focus_first.call_deferred(_panel_host)
 	_restore_panel_center()
 	_market_built_city = ""
 	_selected_market_product_id = ""
@@ -2773,10 +2785,15 @@ func _on_premium_accepted(_event_result: Dictionary, index: int, qty: int, bonus
 
 	var bonus_cash: float = premium_revenue - original_revenue
 	AppState.add_cash(bonus_cash)
+	AppState.realized_margin += bonus_cash
+	if AppState.realized_net() > 0.0:
+		AppState.tutorial_flags["first_profitable_trade"] = true
+	AppState.trip_recap = _TripRecap.add_sale_bonus(AppState.trip_recap, AppState.current_city_id(), bonus_cash)
 
 	result["accidental_premium"] = true
 	result["accidental_premium_bonus"] = bonus_pct
 	result["revenue"] = premium_revenue
+	result["full_quality_revenue"] = float(result.get("full_quality_revenue", original_revenue)) + bonus_cash
 	result["margin"] = premium_revenue - result["total_unit_cost"]
 	result["margin_rate"] = result["margin"] / result["total_unit_cost"] if result["total_unit_cost"] > 0 else 0.0
 
@@ -3202,28 +3219,24 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 
 	# Build card body text
 	var body := ""
-	body += "售出数量：" + str(sell_result["qty"]) + "\n"
-	body += "售出收入：$" + str(int(sell_result["revenue"])) + "\n"
-	var unit_buy: float = float(sell_result.get("unit_cost", 0))
-	var unit_sell: float = float(sell_result.get("unit_price", 0))
-	if unit_buy > 0 or unit_sell > 0:
-		body += "买入单价：$" + str(int(unit_buy)) + "  →  卖出单价：$" + str(int(unit_sell))
-		if unit_sell > 0:
-			var unit_spread := unit_sell - unit_buy
-			var unit_sign := "+" if unit_spread >= 0 else ""
-			body += "  (%s$%d)" % [unit_sign, int(unit_spread)]
-		body += "\n"
-
-	var margin: float = sell_result["margin"]
-	var sign := "+" if margin >= 0 else ""
-	body += "账面毛利：" + sign + "$" + str(int(margin)) + "\n"
-
-	body += "采购成本：$%d · 销售收入：$%d\n" % [sell_result["total_unit_cost"], sell_result["revenue"]]
-	body += "──────────────────\n"
-	body += "累计商品毛利：$%d\n累计交通净支出：$%d\n累计已实现净利：$%d\n" % [AppState.realized_margin, AppState.travel_expenses, AppState.realized_net()]
-	body += "交通费用在购票时记账一次；退款冲减费用。未售库存不计入利润。\n"
-	if AppState.tutorial_flags.get("first_profitable_trade", false):
-		body += "首趟盈利目标已达成：收入已覆盖商品成本与累计交通费。\n"
+	var trip_text := _trip_recap_text()
+	if trip_text != "":
+		body += "本次售出 %d 件，收入 $%d。\n\n" % [sell_result["qty"], sell_result["revenue"]]
+		body += trip_text
+	else:
+		body += "售出数量：%d\n售出收入：$%d\n" % [sell_result["qty"], sell_result["revenue"]]
+		var unit_buy: float = float(sell_result.get("unit_cost", 0))
+		var unit_sell: float = float(sell_result.get("unit_price", 0))
+		if unit_buy > 0 or unit_sell > 0:
+			body += "买入单价：$%d  →  卖出单价：$%d\n" % [unit_buy, unit_sell]
+		var margin: float = sell_result["margin"]
+		body += "账面毛利：%s$%d\n" % ["+" if margin >= 0 else "−", int(absf(margin))]
+		body += "采购成本：$%d · 销售收入：$%d\n" % [sell_result["total_unit_cost"], sell_result["revenue"]]
+		body += "──────────────────\n"
+		body += "累计商品毛利：$%d\n累计交通净支出：$%d\n累计已实现净利：$%d\n" % [AppState.realized_margin, AppState.travel_expenses, AppState.realized_net()]
+		body += "交通费用在购票时记账一次；退款冲减费用。未售库存不计入利润。\n"
+		if AppState.tutorial_flags.get("first_profitable_trade", false):
+			body += "首趟盈利目标已达成：收入已覆盖商品成本与累计交通费。\n"
 
 	# Consolation or celebration copy (pool from zh_CN.csv)
 	match tier:
@@ -3248,6 +3261,40 @@ func _show_sell_result_card(sell_result: Dictionary) -> void:
 		"accept_text": I18nService.t("sell_result_continue"),
 	}, Callable(self, "_on_sell_result_acknowledged").bind(
 		int(sell_result["revenue"] - sell_result["total_unit_cost"])), Callable())
+
+
+func _trip_recap_text() -> String:
+	var recap: Dictionary = AppState.trip_recap
+	if recap.is_empty() or str(recap.get("status", "")) != "landed" \
+			or str(recap.get("to_city", "")) != AppState.current_city_id():
+		return ""
+	var totals: Dictionary = _TripRecap.totals(recap)
+	var expected := float(totals.get("forecast_net", 0.0))
+	var realized := float(totals.get("realized_net", 0.0))
+	var market_delta := float(recap.get("market_variance", 0.0))
+	var quality_loss := float(recap.get("quality_loss", 0.0))
+	var fare := float(recap.get("fare_cost", 0.0))
+	var baggage := float(recap.get("baggage_cost", 0.0))
+	var forecast_revenue := float(recap.get("forecast_revenue", 0.0))
+	var forecast_cost := float(recap.get("forecast_cost", 0.0))
+	var actual_revenue := float(recap.get("actual_revenue", 0.0))
+	var sold_cost := float(recap.get("sold_cost", 0.0))
+	var sold_qty := int(recap.get("sold_qty", 0))
+	var remaining_qty := int(totals.get("remaining_qty", 0))
+	var route := "%s → %s" % [str(recap.get("from_iata", recap.get("from_city", ""))), str(recap.get("to_iata", recap.get("to_city", "")))]
+	var body := "单趟回顾 %s\n" % route
+	body += "预测销售收入：%s · 采购成本：−%s\n" % [_Economy.format_money(forecast_revenue), _Economy.format_money(forecast_cost)]
+	body += "预测净收益：%s\n" % _Economy.format_money(expected)
+	body += "机票：−%s · 行李/货运：−%s\n" % [_Economy.format_money(fare), _Economy.format_money(baggage)]
+	body += "已售收入：%s · 已售成本：−%s\n" % [_Economy.format_money(actual_revenue), _Economy.format_money(sold_cost)]
+	body += "行情偏差：%s%s\n" % ["+" if market_delta >= 0.0 else "−", _Economy.format_money(absf(market_delta))]
+	body += "商品品质损耗：−%s\n" % _Economy.format_money(quality_loss)
+	body += "已实现净额：%s%s\n" % ["+" if realized >= 0.0 else "−", _Economy.format_money(absf(realized))]
+	if sold_qty > 0 or remaining_qty > 0:
+		body += "已售 %d 件 · 预计库存剩余 %d 件" % [sold_qty, remaining_qty]
+		if remaining_qty > 0:
+			body += "（暂未计入已实现净额）"
+	return body
 
 
 func _on_sell_result_acknowledged(_result: Dictionary, delta_margin: int) -> void:
@@ -3315,12 +3362,13 @@ func _find_cash_label() -> Label:
 
 
 func _save() -> void:
+	var was_paused := GameClock.paused
 	GameClock.set_paused(true)
 	if SaveSystem.save_game():
-		_show_hint("已保存")
+		_show_hint(I18nService.t("ui.save.success"))
 	else:
-		_show_hint("保存失败")
-	GameClock.set_paused(false)
+		_show_hint(I18nService.t("ui.save.failure"))
+	GameClock.set_paused(was_paused)
 
 
 func _load() -> void:
@@ -3369,7 +3417,10 @@ func _toggle_pause() -> void:
 	if reduced.text == "" or reduced.text.begins_with("ui."):
 		reduced.text = "减少动态效果"
 	reduced.button_pressed = AppState.reduced_animations
-	reduced.toggled.connect(func (on): AppState.reduced_animations = on)
+	reduced.toggled.connect(func (on):
+		AppState.reduced_animations = on
+		EventBus.settings_changed.emit()
+	)
 	v.add_child(reduced)
 	var night := CheckButton.new()
 	night.text = I18nService.t("ui.settings.night_bgm")
@@ -3378,6 +3429,7 @@ func _toggle_pause() -> void:
 	night.button_pressed = AppState.night_bgm_enabled
 	night.toggled.connect(func (on):
 		AppState.night_bgm_enabled = on
+		EventBus.settings_changed.emit()
 		_set_panel_bgm("menu")
 	)
 	v.add_child(night)
@@ -3390,6 +3442,7 @@ func _toggle_pause() -> void:
 		var cur: int = font_levels.find(AppState.font_scale)
 		var next: float = font_levels[(cur + 1) % font_levels.size()] if cur >= 0 else 1.0
 		AppState.font_scale = next
+		EventBus.settings_changed.emit()
 		_show_hint(I18nService.t("ui.settings.font_scale_changed", {"scale": "%d%%" % int(next * 100.0)}))
 		get_tree().reload_current_scene()
 	)
@@ -3412,6 +3465,7 @@ func _toggle_pause() -> void:
 		var idx := order.find(AppState.color_blind)
 		var nxt: String = order[(idx + 1) % order.size()]
 		AppState.color_blind = nxt
+		EventBus.settings_changed.emit()
 		globe.refresh_marker_style()
 		_toggle_pause()
 	)
@@ -3421,12 +3475,16 @@ func _toggle_pause() -> void:
 	if subtitles.text == "" or subtitles.text.begins_with("ui."):
 		subtitles.text = "字幕/提示"
 	subtitles.button_pressed = AppState.subtitles_enabled
-	subtitles.toggled.connect(func (on): AppState.subtitles_enabled = on)
+	subtitles.toggled.connect(func (on):
+		AppState.subtitles_enabled = on
+		EventBus.settings_changed.emit()
+	)
 	v.add_child(subtitles)
 	var ui_locale_btn := Button.new()
 	ui_locale_btn.text = I18nService.t("ui.settings.language", {"lang": I18nService.t("ui.settings.lang." + AppState.ui_locale)})
 	ui_locale_btn.pressed.connect(func ():
 		AppState.ui_locale = "zh" if AppState.ui_locale == "en" else "en"
+		EventBus.settings_changed.emit()
 		_show_hint(I18nService.t("ui.settings.language_changed"))
 		get_tree().reload_current_scene()
 	)
@@ -3435,6 +3493,7 @@ func _toggle_pause() -> void:
 	locale_btn.text = I18nService.t("ui.settings.place_locale", {"lang": I18nService.t("ui.settings.lang." + AppState.place_locale)})
 	locale_btn.pressed.connect(func ():
 		AppState.place_locale = "en" if AppState.place_locale == "zh" else "zh"
+		EventBus.settings_changed.emit()
 		locale_btn.text = I18nService.t("ui.settings.place_locale", {"lang": I18nService.t("ui.settings.lang." + AppState.place_locale)})
 		_show_hint(I18nService.t("ui.settings.place_locale_changed"))
 	)

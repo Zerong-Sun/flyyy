@@ -119,8 +119,15 @@ func _run() -> void:
 	root.add_child(ops)
 	ops.set_process(false)
 	state.reset_new_game("ist", "collector")
+	state.save_id = "review-flight-reset"
 	clock.set_paused(true)
 	state.reliability_events_enabled = false
+	flights = search.search("ist", "", 1)
+	if flights.is_empty():
+		check(false, "reset fixture needs an available flight")
+		_finish()
+		return
+	flight = flights[0]
 	check(tickets.purchase(flight, "economy", "", 0) == "", "flight fixture purchased")
 	ops.start_boarding(state.held_tickets[0])
 	check(saves.flight_in_progress, "flight checkpoint guarded")

@@ -385,6 +385,9 @@ static func add_baggage_or_cargo(extra_tier: String, add_cargo_blocks: int) -> S
 		return "资金不足（需 %s）" % _Economy.format_money(cost)
 	AppState.add_cash(-cost)
 	AppState.record_travel_expense(cost)
+	AppState.last_baggage_cost += cost
+	if str(AppState.trip_recap.get("status", "")) == "in_transit":
+		AppState.trip_recap["baggage_cost"] = float(AppState.trip_recap.get("baggage_cost", 0.0)) + cost
 	t["extra_kg"] = extra_kg
 	t["extra_tier"] = extra_tier if extra_tier != "" else t.get("extra_tier", "")
 	t["cargo_blocks"] = blocks

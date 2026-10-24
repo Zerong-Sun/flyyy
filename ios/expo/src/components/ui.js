@@ -6,7 +6,10 @@ import {
   Text,
   Image,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { assetSource } from '../assets';
 import { COLORS, A11yContext, themedStyles } from '../theme';
 
@@ -113,15 +116,25 @@ export function ScreenTitle({ title, subtitle, style }) {
 }
 
 export function Sheet({ visible, onClose, children, center }) {
+  const insets = useSafeAreaInsets();
+  const { reduceMotion = false } = useA11y();
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={[styles.backdrop, center && styles.backdropCenter]}>
-        <Pressable style={StyleSheet.absoluteFillObject} onPress={onClose} />
-        <View style={[center ? styles.sheetCenter : styles.sheetBody, styles.sheetForeground]}>
+    <Modal visible={visible} transparent animationType={reduceMotion ? 'none' : 'fade'} onRequestClose={onClose}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={[styles.backdrop, center && styles.backdropCenter, {
+          paddingTop: Math.max(16, insets.top),
+          paddingBottom: Math.max(16, insets.bottom),
+          paddingLeft: Math.max(16, insets.left),
+          paddingRight: Math.max(16, insets.right),
+        }]}
+      >
+        <Pressable style={StyleSheet.absoluteFillObject} onPress={onClose} accessible={false} />
+        <View accessibilityViewIsModal onAccessibilityEscape={onClose} style={[center ? styles.sheetCenter : styles.sheetBody, styles.sheetForeground]}>
           {!center && <View style={styles.sheetHandle} />}
           {children}
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
@@ -294,6 +307,7 @@ const styles = themedStyles(StyleSheet.create({
     maxHeight: '92%',
   },
   sheetCenter: {
+    maxHeight: '92%',
     backgroundColor: 'rgba(24, 46, 63, 0.98)',
     borderRadius: 22,
     borderWidth: StyleSheet.hairlineWidth,

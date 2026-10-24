@@ -1,0 +1,84 @@
+name: Game quality
+
+on:
+  pull_request:
+  push:
+    branches: [main, 'codex/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: ios/expo/package-lock.json
+      - run: npm ci
+        working-directory: ios/expo
+      - run: npm test
+        working-directory: ios/expo
+      - name: Bundle both mobile platforms
+        working-directory: ios/expo
+        env:
+          CI: '1'
+          EXPO_OFFLINE: '1'
+        run: |
+          npx expo export --platform ios --output-dir dist/ios
+          npx expo export --platform android --output-dir dist/android
+
+  desktop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: etl/requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r etl/requirements.txt
+      - name: Install pinned Godot
+        run: |
+          curl --fail --location --retry 3 --max-time 180 -o "$RUNNER_TEMP/godot.zip" https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable/Godot_v4.7.1-stable_linux.x86_64.zip
+          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64"
+          echo "GODOT_BIN=$RUNNER_TEMP/godot/Godot_v4.7.1-stable_linux.x86_64" >> "$GITHUB_ENV"
+      - uses: actions/cache@v4
+        id: sources
+        with:
+          path: etl/raw
+          key: aviation-sources-v1-${{ hashFiles('etl/scripts/01_fetch_sources.py') }}
+      - name: Fetch public aviation snapshots
+        if: steps.sources.outputs.cache-hit != 'true'
+        timeout-minutes: 15
+        run: python etl/scripts/01_fetch_sources.py
+      - name: Record source digests
+        run: |
+          mkdir -p dist/quality
+          find etl/raw -type f -exec sha256sum {} + > dist/quality/source-sha256.txt
+      - name: Generate the full world and mobile snapshot
+        timeout-minutes: 15
+        run: |
+          python etl/scripts/run_pipeline.py --full
+          python tools/export_expo_data.py
+      - name: Run all quality gates
+        run: python tools/check_quality.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-logs
+          path: dist/quality

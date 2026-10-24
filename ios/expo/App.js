@@ -93,7 +93,7 @@ function GameApp() {
   }
 
   return (
-    <A11yContext.Provider value={{ fontScale: state.fontScale || 1, colorBlind: state.colorBlind || 'off' }}>
+    <A11yContext.Provider value={{ fontScale: state.fontScale || 1, colorBlind: state.colorBlind || 'off', reduceMotion: state.optReduce }}>
       <SafeAreaView style={styles.root} edges={['top', 'left', 'right']}>
         <StatusBar barStyle={state.themeMode === 'light' ? 'dark-content' : 'light-content'} />
 

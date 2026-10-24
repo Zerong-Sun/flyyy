@@ -15,6 +15,8 @@ const CATEGORY_EN := {
 }
 
 static var _catalog_cache: Array[Dictionary] = []
+static var _active_context: Array = []
+static var _active_city_cache: Dictionary = {}
 
 
 static func catalog() -> Array[Dictionary]:
@@ -69,6 +71,15 @@ static func active_for_city(city_id: String, game_date: String = "", save_id: St
 		return []
 	var date := game_date if not game_date.is_empty() else GameClock.game_date_string()
 	var sid := save_id if not save_id.is_empty() else AppState.save_id
+	# Bound the cache to one date/run. Never leak mutable dictionaries to callers.
+	var context := [date, sid]
+	if context != _active_context:
+		_active_context = context
+		_active_city_cache.clear()
+	if _active_city_cache.has(city_id):
+		var cached: Array[Dictionary] = []
+		cached.assign(_active_city_cache[city_id].duplicate(true))
+		return cached
 	var today := _day_index(date)
 	if today < 0:
 		return []
@@ -90,6 +101,7 @@ static func active_for_city(city_id: String, game_date: String = "", save_id: St
 				active["days_remaining"] = duration - age
 				out.append(active)
 				break
+	_active_city_cache[city_id] = out.duplicate(true)
 	return out
 
 

@@ -44,6 +44,34 @@ import {
 
 // Node ESM requires .js extensions; Metro also accepts them.
 
+describe('persisted ticket cost breakdown', () => {
+  const ticket = { from: CITIES.istanbul.iata, toId: 'dubai', totalPaid: 120, ledgerPaid: 120, mins: 120, km: 3000 };
+  const restore = (extra) => loadSavePayload(JSON.stringify(serializeSave({
+    city: 'istanbul', cash: 500, inv: [], ticket: { ...ticket, ...extra },
+  })), {}, CITIES, STARTING_CITY);
+  it('migrates tickets without a breakdown without inventing extra travel costs', () => {
+    const result = restore({});
+    assert.equal(result.ok, true);
+    assert.equal(result.data.ticket.fareCost, 120);
+    assert.equal(result.data.ticket.baggageCost, 0);
+  });
+  it('preserves a valid fare and baggage split', () => {
+    const result = restore({ fareCost: 100, baggageCost: 20 });
+    assert.equal(result.ok, true);
+    assert.equal(result.data.ticket.fareCost + result.data.ticket.baggageCost, 120);
+  });
+  it('rejects negative, nonnumeric, missing and inconsistent components', () => {
+    for (const extra of [
+      { fareCost: -10, baggageCost: 130 },
+      { fareCost: '100', baggageCost: 20 },
+      { fareCost: 100, baggageCost: null },
+      { fareCost: 100 },
+      { fareCost: 100, baggageCost: 30 },
+      { fareCost: 1e308, baggageCost: 1e308 },
+    ]) assert.equal(restore(extra).ok, false, JSON.stringify(extra));
+  });
+});
+
 describe('priceAt / factorFor', () => {
   it('home city is cheaper than a far import market', () => {
     const home = factorFor('ist_lokum', 'istanbul');
@@ -181,6 +209,47 @@ describe('save migrate round-trip', () => {
     assert.equal(restored.data.themeMode, 'light');
     const invalid = loadSavePayload(JSON.stringify(serializeSave({ ...base, themeMode: 'unknown' })), { cash: 0, city: STARTING_CITY, inv: [], themeMode: 'dark' }, CITIES, STARTING_CITY);
     assert.equal(invalid.data.themeMode, 'dark');
+  });
+
+  it('persists a valid landed trip recap and drops malformed recap data', () => {
+    const tripRecap = {
+      from: 'istanbul', to: 'dubai', status: 'landed', fare: 100, baggage: 20,
+      items: { lhr_tea: { qty: 2, cost: 40, revenue: 80, soldQty: 1 } },
+      forecastRevenue: 80, forecastCost: 40, actualRevenue: 35, actualCost: 20,
+      marketVariance: -5, qualityLoss: 0, discardedCost: 0, soldQty: 1, discardedQty: 0,
+      arrivalMinute: 900,
+    };
+    const base = { cash: 500, city: 'dubai', inv: [], tripRecap };
+    const loaded = loadSavePayload(JSON.stringify(serializeSave(base)), base, CITIES, STARTING_CITY);
+    assert.equal(loaded.ok, true);
+    assert.deepEqual(loaded.data.tripRecap, tripRecap);
+    const corrupt = loadSavePayload(
+      JSON.stringify(serializeSave({ ...base, tripRecap: { status: 'landed', actualRevenue: 'NaN' } })),
+      base, CITIES, STARTING_CITY,
+    );
+    assert.equal(corrupt.ok, true);
+    assert.equal(corrupt.data.tripRecap, null);
+    const inheritedCity = loadSavePayload(
+      JSON.stringify(serializeSave({ ...base, tripRecap: { ...tripRecap, to: '__proto__' } })),
+      base, CITIES, STARTING_CITY,
+    );
+    assert.equal(inheritedCity.data.tripRecap, null);
+  });
+
+  it('keeps a validated departure forecast on a ticket across a midflight save', () => {
+    const forecast = {
+      from: 'IST', to: 'dubai', status: 'forecast', fare: 100, baggage: 20,
+      items: { lhr_tea: { qty: 2, cost: 40, revenue: 80, soldQty: 0 } },
+      forecastRevenue: 80, forecastCost: 40, actualRevenue: 0, actualCost: 0,
+      marketVariance: 0, qualityLoss: 0, discardedCost: 0, soldQty: 0, discardedQty: 0,
+    };
+    const base = {
+      cash: 500, city: 'istanbul', inv: [], tripRecap: null,
+      ticket: { no: 'XY 1', from: CITIES.istanbul.iata, to: CITIES.dubai.iata, toId: 'dubai', dur: '2h', km: 3000, mins: 120, extraKg: 0, totalPaid: 120, ledgerPaid: 120, tripForecast: forecast },
+    };
+    const loaded = loadSavePayload(JSON.stringify(serializeSave(base)), base, CITIES, STARTING_CITY);
+    assert.equal(loaded.ok, true);
+    assert.deepEqual(loaded.data.ticket.tripForecast, forecast);
   });
 
   it('future version is rejected', () => {

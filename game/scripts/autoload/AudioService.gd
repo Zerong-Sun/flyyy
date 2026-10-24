@@ -153,6 +153,8 @@ func set_bgm(id: String) -> void:
 	var stream := _stream_for(id)
 	if stream == null:
 		return
+	if _bgm_player.stream == stream and _bgm_player.playing:
+		return
 	_bgm_player.stream = stream
 	if not _muted:
 		_bgm_player.play()
@@ -163,12 +165,15 @@ func stop_bgm() -> void:
 
 
 func set_muted(on: bool) -> void:
+	if _muted == on:
+		return
 	_muted = on
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), on)
 	if on:
 		_bgm_player.stop()
 	elif _bgm_player.stream != null:
 		_bgm_player.play()
+	EventBus.settings_changed.emit()
 
 
 func is_muted() -> bool:
@@ -185,10 +190,18 @@ func get_sfx_volume() -> float:
 
 func set_bus_volume(bus: String, linear: float) -> void:
 	linear = clampf(linear, 0.0, 1.0)
+	var changed := false
 	if bus == "BGM":
+		changed = _bgm_linear != linear
 		_bgm_linear = linear
 	elif bus in ["SFX", "UI", "Transition"]:
+		changed = _sfx_linear != linear
 		_sfx_linear = linear
+		# SFX is the player's single effects slider, including UI and transitions.
+		for name in ["SFX", "UI", "Transition"]:
+			var group_idx := AudioServer.get_bus_index(name)
+			if group_idx >= 0:
+				AudioServer.set_bus_volume_db(group_idx, linear_to_db(maxf(linear, 0.0001)))
 	var idx := AudioServer.get_bus_index(bus)
 	if idx < 0:
 		return
@@ -198,6 +211,8 @@ func set_bus_volume(bus: String, linear: float) -> void:
 		if _ducked:
 			db += BGM_DUCK_DB
 	AudioServer.set_bus_volume_db(idx, db)
+	if changed:
+		EventBus.settings_changed.emit()
 
 
 func end_transition_duck() -> void:

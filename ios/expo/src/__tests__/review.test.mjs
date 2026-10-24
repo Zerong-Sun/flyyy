@@ -16,6 +16,12 @@ function memory(entries = []) {
 }
 
 describe('review: durable restore and restart', () => {
+  it('protects a future backup even when the primary is valid', async () => {
+    const future = JSON.stringify({ saveVersion: SAVE_VERSION + 1, cash: 999 });
+    const storage = memory([[SAVE_KEY, payload()], [BACKUP_KEY, future]]);
+    assert.equal((await readSave(storage, base)).reason, 'future');
+    assert.equal(storage.map.get(BACKUP_KEY), future);
+  });
   it('recovers a missing or corrupt primary from the last good copy', async () => {
     for (const raw of [null, '{broken']) {
       const storage = memory([[SAVE_KEY, raw], [BACKUP_KEY, payload({ cash: 1234 })]]);

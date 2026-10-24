@@ -1,6 +1,8 @@
 extends Node
 ## Player runtime state.
 
+const _TripRecap = preload("res://scripts/systems/TripRecap.gd")
+
 const SAVE_VERSION := 2
 
 var save_id: String = ""
@@ -35,6 +37,7 @@ var reputation_points: int = 0
 var level: int = 1
 var realized_margin: float = 0.0
 var travel_expenses: float = 0.0
+var trip_recap: Dictionary = {}
 
 func record_travel_expense(amount: float) -> void:
 	travel_expenses += amount
@@ -145,6 +148,7 @@ func reset_new_game(airport_id: String, mode: String = "sandbox", show_route_hin
 	level = 1
 	realized_margin = 0.0
 	travel_expenses = 0.0
+	trip_recap = {}
 	last_flight_price = 0.0
 	last_baggage_cost = 0.0
 	unlocked_achievements = {}
@@ -379,6 +383,7 @@ func to_dict() -> Dictionary:
 		"sell_transactions": sell_transactions,
 		"realized_margin": realized_margin,
 		"travel_expenses": travel_expenses,
+		"trip_recap": trip_recap,
 		"last_flight_price": last_flight_price,
 		"last_baggage_cost": last_baggage_cost,
 		"reduced_animations": reduced_animations,
@@ -439,6 +444,8 @@ func from_dict(d: Dictionary) -> void:
 	# Legacy accounting starts a new ledger; historical travel costs were not saved.
 	realized_margin = float(d.get("realized_margin", 0.0))
 	travel_expenses = float(d.get("travel_expenses", 0.0))
+	var loaded_trip_recap = d.get("trip_recap", {})
+	trip_recap = _TripRecap.sanitize(loaded_trip_recap)
 	last_flight_price = float(d.get("last_flight_price", 0.0))
 	last_baggage_cost = float(d.get("last_baggage_cost", 0.0))
 	reduced_animations = bool(d.get("reduced_animations", false))

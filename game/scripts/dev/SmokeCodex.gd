@@ -38,6 +38,10 @@ func _run() -> void:
 		_finish()
 
 	app_state.call("reset_new_game", "pvg", "sandbox")
+	app_state.set("save_id", "codex-collection-regression")
+	# This fixture verifies collection credit; cancellation is covered by the
+	# connection contract and news-event suites.
+	app_state.set("reliability_events_enabled", false)
 	ok = _check(str(app_state.get("game_mode")) == "sandbox", "game_mode != sandbox") and ok
 
 	# ── seed collection state: 1 visited city (PVG), 1 discovered product,
@@ -68,7 +72,8 @@ func _run() -> void:
 	root.add_child(ops)
 	ops.set_process(false)
 
-	var flights: Array = data.call("flights_from", str(app_state.get("current_airport_id")))
+	var search: GDScript = load("res://scripts/systems/FlightSearch.gd")
+	var flights: Array = search.search(str(app_state.get("current_airport_id")), "", 0)
 	var now := float(clock.get("unix_time"))
 	var chosen: Dictionary = {}
 	for f_v in flights:

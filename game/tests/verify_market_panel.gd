@@ -52,24 +52,30 @@ func _ready() -> void:
 		return
 	AppState.held_tickets.clear()
 
-	# Best-destination intel gate: the "⭐最佳目的地：{城}" free label should show
-	# for roughly 20% of products per day (seeded by save_id+product+date).
-	var shown := 0
-	var sampled := 0
-	for product_v in DataService.world.get("products", []):
-		var product: Dictionary = product_v
-		var tag: String = MainHUD._get_intelligence_tag(product, "")
-		sampled += 1
-		if tag != "":
-			shown += 1
-			if not tag.begins_with("⭐最佳目的地："):
-				_fail("unexpected intel tag: " + tag)
-				return
-	var rate := float(shown) / float(sampled) if sampled > 0 else 0.0
-	print("OK: best-destination gate shown=%d/%d (%.0f%%)" % [shown, sampled, rate * 100.0])
-	if rate < 0.10 or rate > 0.30:
-		_fail("best-destination gate rate %.2f outside [0.10, 0.30]" % rate)
-		return
+	# Current optional guidance reveals at most one local product. The retired
+	# 20%-of-all-products expectation conflicts with the explicit hints toggle.
+	var eligible_local := false
+	for product_v in DataService.products_for_city(AppState.current_city_id()):
+		var key := "%s|%s" % [AppState.current_city_id(), product_v.product_id]
+		if not DataService.product_market_tags.get(key, {}).get("hot", []).is_empty():
+			eligible_local = true
+	for enabled in [false, true]:
+		AppState.route_hints_enabled = enabled
+		var shown := 0
+		for product_v in DataService.world.get("products", []):
+			var product: Dictionary = product_v
+			var tag: String = MainHUD._get_intelligence_tag(product, "")
+			if tag != "":
+				shown += 1
+				if not tag.begins_with("⭐最佳目的地：") or str(product.origin_city_id) != AppState.current_city_id():
+					_fail("hint must identify a local product destination: " + tag)
+					return
+		var expected_hints := 1 if enabled and eligible_local else 0
+		if shown != expected_hints:
+			_fail("hints enabled=%s: got %d, expected %d" % [enabled, shown, expected_hints])
+			return
+	AppState.route_hints_enabled = false
+	print("OK: optional destination guidance respects the toggle and one-product limit")
 
 	var external: Dictionary = {}
 	for product_v in DataService.world.get("products", []):

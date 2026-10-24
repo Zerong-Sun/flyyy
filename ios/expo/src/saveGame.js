@@ -8,12 +8,12 @@ import { gcKm } from './gameLogic.js';
 import { EVENT_BY_ID } from './eventData.js';
 
 export const SAVE_KEY = 'wanli-trader/slot-1';
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 export const PERSIST = [
   'cash', 'bagLimit', 'cargoCap', 'inv', 'ticket', 'minsToDep', 'gameMin',
   'city', 'visited', 'log', 'legs', 'bizLegs', 'cargoLots', 'profitable',
-  'profit', 'travelExpenses', 'km', 'savedAt', 'intro', 'focusDest', 'unlockedAch',
+  'profit', 'travelExpenses', 'tripRecap', 'km', 'savedAt', 'intro', 'focusDest', 'unlockedAch',
   'optHaptics', 'optPush', 'optSound', 'opt24h', 'optReduce',
   'locale',
   'fontScale', 'colorBlind', 'themeMode',
@@ -53,6 +53,11 @@ export function migrateSave(raw, targetVersion = SAVE_VERSION) {
     if (data.ticket && typeof data.ticket === 'object') data.ticket = { ...data.ticket, ledgerPaid: 0 };
     ver = 3;
   }
+
+  if (ver < 4 && targetVersion >= 4) {
+    // Trip recaps are optional and are initialized from the current landing.
+    ver = 4;
+  }
   data.saveVersion = ver;
   return { ok: true, reason: 'ok', version: ver, data };
 }
@@ -68,6 +73,33 @@ export function hydrateSave(baseState, migrated, cities, startingCity) {
   PERSIST.forEach((k) => {
     if (saved[k] !== undefined) next[k] = saved[k];
   });
+  const finiteNonNegative = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0;
+  const sanitizeTrip = (raw, expectedStatus = null) => {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+    if (!['forecast', 'landed'].includes(raw.status) || (expectedStatus && raw.status !== expectedStatus)) return null;
+    if (typeof raw.from !== 'string' || typeof raw.to !== 'string' || !Object.prototype.hasOwnProperty.call(cities, raw.to)) return null;
+    const numeric = ['fare', 'baggage', 'forecastRevenue', 'forecastCost', 'actualRevenue', 'actualCost', 'qualityLoss', 'discardedCost', 'soldQty', 'discardedQty'];
+    if (numeric.some((key) => !finiteNonNegative(raw[key]))) return null;
+    if (!Number.isInteger(raw.soldQty) || !Number.isInteger(raw.discardedQty)) return null;
+    if (typeof raw.marketVariance !== 'number' || !Number.isFinite(raw.marketVariance)) return null;
+    if (!raw.items || typeof raw.items !== 'object' || Array.isArray(raw.items)) return null;
+    const items = {};
+    for (const [id, item] of Object.entries(raw.items)) {
+      if (!Object.prototype.hasOwnProperty.call(PRODUCTS, id) || !item || typeof item !== 'object') return null;
+      if (['qty', 'cost', 'revenue', 'soldQty'].some((key) => !finiteNonNegative(item[key]))
+          || !Number.isInteger(item.qty) || !Number.isInteger(item.soldQty) || item.soldQty > item.qty) return null;
+      items[id] = { qty: item.qty, cost: item.cost, revenue: item.revenue, soldQty: item.soldQty };
+    }
+    return {
+      from: raw.from, to: raw.to, status: raw.status, fare: raw.fare, baggage: raw.baggage, items,
+      forecastRevenue: raw.forecastRevenue, forecastCost: raw.forecastCost,
+      actualRevenue: raw.actualRevenue, actualCost: raw.actualCost, marketVariance: raw.marketVariance,
+      qualityLoss: raw.qualityLoss, discardedCost: raw.discardedCost,
+      soldQty: raw.soldQty, discardedQty: raw.discardedQty,
+      ...(finiteNonNegative(raw.arrivalMinute) ? { arrivalMinute: raw.arrivalMinute } : {}),
+    };
+  };
+  next.tripRecap = sanitizeTrip(next.tripRecap, 'landed');
   const known = (map, id) => typeof id === 'string' && Object.prototype.hasOwnProperty.call(map, id);
   if (!known(cities, next.city)) return null;
   const finite = (v) => typeof v === 'number' && Number.isFinite(v);
@@ -149,6 +181,20 @@ export function hydrateSave(baseState, migrated, cities, startingCity) {
   }
   if (next.ticket) {
     if (next.ticket.ledgerPaid > next.ticket.totalPaid) return null;
+    const { fareCost, baggageCost, totalPaid } = next.ticket;
+    // Older saves only recorded the total. Keep that charge exactly once.
+    if (fareCost === undefined && baggageCost === undefined) {
+      next.ticket.fareCost = totalPaid;
+      next.ticket.baggageCost = 0;
+    } else if (!finiteNonNegative(fareCost) || !finiteNonNegative(baggageCost)
+        || !Number.isFinite(fareCost + baggageCost)
+        || Math.abs(fareCost + baggageCost - totalPaid) > 0.01) {
+      return null;
+    }
+    if (next.ticket.tripForecast !== undefined) {
+      next.ticket.tripForecast = sanitizeTrip(next.ticket.tripForecast, 'forecast');
+      if (!next.ticket.tripForecast) delete next.ticket.tripForecast;
+    }
     next.ticket.no = next.ticket.no || 'Legacy flight';
     next.ticket.from = next.ticket.from || cities[next.city].iata;
     next.ticket.to = next.ticket.to || cities[next.ticket.toId].iata;

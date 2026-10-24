@@ -213,6 +213,7 @@ func _ready() -> void:
 		var original_revenue := premium_unit * premium_qty
 		var premium_revenue := original_revenue * 1.25
 		var cash_before_premium := AppState.cash_usd
+		var margin_before_premium := AppState.realized_margin
 		var qty_before_premium := _inventory_qty(product_id)
 		hud.call("_enqueue_event_popup", "accidental_premium", {
 			"bonus_pct": 25,
@@ -230,6 +231,9 @@ func _ready() -> void:
 		_check(_inventory_qty(product_id) == qty_before_premium - 1, "premium accept did not sell inventory")
 		_check(absf((AppState.cash_usd - cash_before_premium) - premium_revenue) < 0.02,
 			"premium accept cash delta does not include bonus")
+		var expected_premium_margin := premium_revenue - float(premium_item.get("unit_cost", 0.0)) * premium_qty
+		_check(absf((AppState.realized_margin - margin_before_premium) - expected_premium_margin) < 0.02,
+			"premium accept did not update realized margin")
 		var premium_followup: PopupEvent = hud.get("_active_event_popup") as PopupEvent
 		_check(premium_followup != premium_popup,
 			"premium event remained active after accept")

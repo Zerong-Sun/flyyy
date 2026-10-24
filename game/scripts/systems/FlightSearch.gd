@@ -38,9 +38,8 @@ static func search(
 	var dest_q: String = dest_code.strip_edges().to_upper()
 	var out: Array = []
 	for fl_v in all:
-		var fl: Dictionary = _NewsEvents.quote_flight(fl_v)
-		if bool(fl.get("news_unavailable", false)):
-			continue
+		# Reject by immutable schedule/route fields before copying and quoting.
+		var fl: Dictionary = fl_v
 		if str(fl.get("scheduled_departure_utc", "")) <= now_iso:
 			continue
 		if dest_q != "":
@@ -51,8 +50,6 @@ static func search(
 			var dest_id: String = str(fl.get("destination_airport_id", ""))
 			if AppState.visited_airports.has(dest_id):
 				continue
-		if max_price_economy > 0.0 and float(fl.get("ticket_base_price_economy", 0)) > max_price_economy:
-			continue
 		if max_duration_min > 0 and int(fl.get("duration_minutes", 0)) > max_duration_min:
 			continue
 		if business_available_only and not bool(fl.get("cabin_business_available", true)):
@@ -66,6 +63,12 @@ static func search(
 			]
 			if blob.to_lower().find(q) < 0:
 				continue
+		fl = _NewsEvents.quote_flight(fl)
+		if bool(fl.get("news_unavailable", false)):
+			continue
+		# Price limits must use the news-adjusted quote, never the base fare.
+		if max_price_economy > 0.0 and float(fl.get("ticket_base_price_economy", 0)) > max_price_economy:
+			continue
 		out.append(fl)
 	out.sort_custom(func(a, b): return _cmp(a, b, sort_by))
 	if max_results > 0 and out.size() > max_results:

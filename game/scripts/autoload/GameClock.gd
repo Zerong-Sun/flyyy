@@ -77,12 +77,15 @@ func offset_hours_for(tz_name: String) -> float:
 	var d: String = game_date_string()
 	if table.has(d):
 		return float(table[d])
-	# nearest known day or fixed fallback
+	# A sparse table uses the latest known offset at or before the requested day.
 	if not table.is_empty():
 		var keys: Array = table.keys()
 		keys.sort()
 		if d < str(keys[0]):
 			return float(table[keys[0]])
+		for i in range(keys.size() - 1, -1, -1):
+			if str(keys[i]) <= d:
+				return float(table[keys[i]])
 		return float(table[keys[keys.size() - 1]])
 	return _fallback_offset_hours(tz_name)
 

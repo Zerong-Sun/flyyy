@@ -71,9 +71,9 @@ def test_theme_fonts_and_colors_present():
     root = Path(__file__).resolve().parents[2]
     assert (root / "game" / "assets" / "fonts" / "NotoSansSC-Regular.otf").stat().st_size > 100_000
     assert (root / "game" / "assets" / "fonts" / "JetBrainsMono-Regular.ttf").stat().st_size > 10_000
-    colors = (root / "game" / "themes" / "DemoColors.gd").read_text(encoding="utf-8")
-    assert "E89A3C" in colors  # accent-amber
-    assert "0B1C2C" in colors  # bg-deep
+    # Palette values are intentionally selectable. Readability is checked by
+    # test_visual_contract and SmokeThemes; don't pin the retired v0.3 palette.
+    assert (root / "game" / "themes" / "DemoColors.gd").is_file()
     factory = (root / "game" / "themes" / "ThemeFactory.gd").read_text(encoding="utf-8")
     assert "NotoSansSC-Regular.otf" in factory
     assert "static func build(" in factory

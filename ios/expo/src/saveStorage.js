@@ -11,10 +11,11 @@ const parse = (raw, base = {}) => {
 /** Read without deleting anything. Future primary/backup formats remain protected. */
 export async function readSave(storage, base) {
   const primary = parse(await storage.getItem(SAVE_KEY), base);
-  if (primary.ok || primary.reason === 'future') return primary;
   const backup = parse(await storage.getItem(BACKUP_KEY), base);
-  if (backup.ok) return { ...backup, recovered: true };
+  if (primary.reason === 'future') return primary;
   if (backup.reason === 'future') return backup;
+  if (primary.ok) return primary;
+  if (backup.ok) return { ...backup, recovered: true };
   return { ok: false, reason: primary.reason === 'missing' && backup.reason === 'missing' ? 'missing' : 'invalid' };
 }
 

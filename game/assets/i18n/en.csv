@@ -229,3 +229,6 @@ ui.city.economy,Economy
 ui.city.food,Food
 ui.city.travel,Travel tips
 ui.city.low_content,"Warning: limited info. This entry is auto-generated with low confidence and is for reference only."
+ui.save.retry,Save failed. Previous progress is safe; retrying in 5 seconds.
+ui.save.success,Progress saved.
+ui.save.failure,Save failed. Previous progress is safe.

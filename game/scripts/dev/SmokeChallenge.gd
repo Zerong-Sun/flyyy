@@ -53,6 +53,7 @@ func _run() -> void:
 
 	# ── start a fresh 15-day challenge at PVG hub ──
 	app_state.call("reset_new_game", "pvg", "challenge")
+	app_state.set("save_id", "challenge-lifecycle-regression")
 	ok = _check(str(app_state.get("game_mode")) == "challenge", "game_mode != challenge") and ok
 	ok = _check(bool(challenge.call("is_active")), "challenge not active after start") and ok
 	ok = _check(float(app_state.get("cash_usd")) > 0.0, "cash not initialized") and ok
@@ -72,7 +73,10 @@ func _run() -> void:
 		if float((app_state.get("stats") as Dictionary).get("total_flight_segments", 0)) >= 3.0:
 			break
 		var origin_id: String = str(app_state.get("current_airport_id"))
-		var flights: Array = data.call("flights_from", origin_id)
+		# Use the player's board so a cancelled news flight cannot be selected
+		# eight times in a row without advancing the clock.
+		var search: GDScript = load("res://scripts/systems/FlightSearch.gd")
+		var flights: Array = search.search(origin_id, "", 0)
 		var now := float(clock.get("unix_time"))
 		var chosen: Dictionary = {}
 		for f_v in flights:

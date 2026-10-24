@@ -171,20 +171,28 @@ cd ios/expo && npm test                    # 逻辑单测
 
 ## 验收
 
+建议使用统一入口（需要已生成完整数据、Python 3.11+、Node.js 和 Godot 4.7.1）：
+
+```bash
+python3 tools/check_quality.py
+python3 tools/check_quality.py --stage godot  # 修复桌面问题后，只重跑相关阶段
+# 自动寻找 Godot；也可通过 GODOT_BIN 或 --godot 指定。
+# 输出：dist/quality/summary.json、Python / 手机逻辑 / Godot 各场景日志。
+python3 tools/test_godot.py SmokeGamedevQuality.gd SmokeSearchPerf.gd
+python3 tools/test_godot.py --scenes   # 所有 Smoke + verify 场景，使用隔离存档
+```
+
+Godot 测试应通过 `tools/test_godot.py` 运行，避免直接启动回归脚本写入玩家存档；首次运行自动导入资源，`--import` 可强制重新导入。完整优化清单、来源与验收记录见 [游戏开发审阅](docs/GAMEDEV_REVIEW.md)。GitHub Actions 的 [Game quality](.github/workflows/quality.yml) 执行数据生成、逻辑测试、场景回归和双端资源打包。
+
+`summary.json` 只记录本次调用：全阶段通过为 `passed`，`--stage` 局部通过为 `partial`，失败为 `failed`；中断会保留 `running`，环境检查未完成为 `preflight`。不能把旧日志或局部通过视为全量验收。六方面复核与修复证据见 [验证修复清单](docs/VERIFICATION_FIXLIST.md)。
+
 ```bash
 source etl/.venv/bin/activate
 pytest tests/etl tests/game -q
 python tools/demo_smoke_logic.py
-GODOT=/Applications/Godot.app/Contents/MacOS/Godot
-$GODOT --headless --path game -s res://scripts/dev/SmokeChallenge.gd   # 15日挑战全生命周期
-$GODOT --headless --path game -s res://scripts/dev/SmokeConnectionContract.gd  # 联程契约（真实航班拼接 + 取消不瞬移）
-$GODOT --headless --path game -s res://scripts/dev/SmokeCollector.gd  # 收藏家模式进度面板
-$GODOT --headless --path game -s res://scripts/dev/SmokeCodex.gd      # 图鉴三页签
-$GODOT --headless --path game -s res://scripts/dev/SmokeReputation.gd # 声望/解锁树
-$GODOT --headless --path game -s res://scripts/dev/SmokeV3Loop.gd     # v0.3 完整贸易闭环
-$GODOT --headless --path game -s res://scripts/dev/SmokeContent.gd    # 内容抽检
-$GODOT --headless --path game -s res://scripts/dev/SmokeAudio.gd      # 音频清单全表可播
-$GODOT --headless --path game -s res://scripts/dev/SmokePerf.gd       # 地球场景性能基线
+python tools/test_godot.py SmokeChallenge.gd SmokeConnectionContract.gd SmokeCollector.gd
+python tools/test_godot.py SmokeCodex.gd SmokeReputation.gd SmokeV3Loop.gd
+python tools/test_godot.py SmokeContent.gd SmokeAudio.gd SmokePerf.gd
 # 城市正文 en 由 ETL 生成（Demo 20 手写 + 其余模板），已挂入 run_pipeline：
 python -m etl.content.city_content_en      # 单独重打 game/data/world.json 的 *_en 字段
 ```

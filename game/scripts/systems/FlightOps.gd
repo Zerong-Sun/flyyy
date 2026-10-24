@@ -3,6 +3,7 @@ extends Node
 ## v0.3: delay/cancel simulation (seeded), first-class / alliance / stopover stats.
 
 const _Economy = preload("res://scripts/systems/EconomySystem.gd")
+const _TripRecap = preload("res://scripts/systems/TripRecap.gd")
 const _Tickets = preload("res://scripts/systems/TicketService.gd")
 
 signal transition_started(ticket: Dictionary)
@@ -146,6 +147,7 @@ func start_boarding(ticket: Dictionary) -> void:
 		AppState.stats["consecutive_on_time"] = 0
 		GameClock.add_minutes(float(delay_min))
 		EventBus.tutorial_hint.emit("航班延误 %d 分钟（模拟）。" % delay_min)
+	_capture_trip_forecast(ticket)
 
 	AudioService.play_sfx("sfx_boarding_alert")
 	transition_started.emit(ticket)
@@ -246,6 +248,7 @@ func _arrive(ticket: Dictionary, on_time: bool = true) -> void:
 			item["in_cargo"] = false
 			item["quality"] = _Economy.current_quality(item)
 		AppState.cargo_kg_capacity = 0.0
+		AppState.trip_recap = _TripRecap.land(AppState.trip_recap, AppState.current_city_id())
 	AppState.travel_log.append({
 		"departure_airport": ticket.get("origin_iata", ""),
 		"arrival_airport": ticket.get("destination_iata", ""),
@@ -293,3 +296,67 @@ func _arrive(ticket: Dictionary, on_time: bool = true) -> void:
 		if tip.is_empty():
 			tip = "已抵达目的地。打开「市场」出售商品结算利润。"
 		EventBus.tutorial_hint.emit(tip)
+
+
+func _capture_trip_forecast(ticket: Dictionary) -> void:
+	var route: Array = AppState.held_tickets
+	var final_ticket: Dictionary = route.back() if not route.is_empty() else ticket
+	var destination_airport := str(final_ticket.get("destination_airport_id", ticket.get("destination_airport_id", "")))
+	var destination := str(DataService.get_airport(destination_airport).get("city_id", ""))
+	if destination == "":
+		return
+	var product_lots: Dictionary = {}
+	for item_v in AppState.inventory:
+		if typeof(item_v) != TYPE_DICTIONARY:
+			continue
+		var item: Dictionary = item_v
+		var product_id := str(item.get("product_id", ""))
+		var quantity := maxi(0, int(item.get("qty", 0)))
+		if product_id == "" or quantity <= 0:
+			continue
+		if not product_lots.has(product_id):
+			product_lots[product_id] = {"qty": 0, "cost": 0.0}
+		var lot: Dictionary = product_lots[product_id]
+		lot["qty"] = int(lot.get("qty", 0)) + quantity
+		lot["cost"] = float(lot.get("cost", 0.0)) + float(item.get("unit_cost", 0.0)) * quantity
+	var market: Dictionary = DataService.economy.get("market", {})
+	var pressure_decay := float(market.get("demand_decay_per_sale", 0.08))
+	var forecast_items: Array = []
+	for product_v in product_lots.keys():
+		var product_id := str(product_v)
+		var lot: Dictionary = product_lots[product_v]
+		var quantity := int(lot.get("qty", 0))
+		if quantity <= 0:
+			continue
+		var key := "%s|%s" % [destination, product_id]
+		var pressure := float(AppState.demand_pressure.get(key, 0.0))
+		var expected_revenue := 0.0
+		for unit_index in range(quantity):
+			var unit_pressure := minf(0.7, pressure + pressure_decay * float(unit_index))
+			expected_revenue += _Economy.sell_price(destination, product_id, 1.0, unit_pressure)
+		forecast_items.append({
+			"product_id": product_id,
+			"qty": quantity,
+			"unit_cost": float(lot.get("cost", 0.0)) / float(quantity),
+			"forecast_unit": expected_revenue / float(quantity),
+		})
+	var previous: Dictionary = AppState.trip_recap
+	var origin_city := AppState.current_city_id()
+	var origin_iata := str(ticket.get("origin_iata", ""))
+	if str(previous.get("status", "")) == "in_transit":
+		origin_city = str(previous.get("from_city", origin_city))
+		origin_iata = str(previous.get("from_iata", origin_iata))
+	var recap := _TripRecap.create_forecast(origin_city, destination, forecast_items,
+		AppState.last_flight_price, AppState.last_baggage_cost)
+	recap["from_iata"] = origin_iata
+	recap["to_iata"] = str(final_ticket.get("destination_iata", ticket.get("destination_iata", "")))
+	recap["estimated_arrival_unix"] = GameClock.unix_time + float(ticket.get("duration_minutes", 0)) * 60.0
+	recap["estimated_arrival_unix"] = float(recap["estimated_arrival_unix"]) + float(ticket.get("layover_minutes", 0)) * 60.0
+	for leg_v in route:
+		if typeof(leg_v) == TYPE_DICTIONARY:
+			var leg: Dictionary = leg_v
+			if str(leg.get("flight_instance_id", "")) == str(ticket.get("flight_instance_id", "")):
+				continue
+			recap["estimated_arrival_unix"] = float(recap["estimated_arrival_unix"]) + float(leg.get("duration_minutes", 0)) * 60.0
+			recap["estimated_arrival_unix"] = float(recap["estimated_arrival_unix"]) + float(leg.get("layover_minutes", 0)) * 60.0
+	AppState.trip_recap = recap

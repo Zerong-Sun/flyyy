@@ -3,6 +3,7 @@ class_name InventorySystem
 
 const _Economy = preload("res://scripts/systems/EconomySystem.gd")
 const _Tickets = preload("res://scripts/systems/TicketService.gd")
+const _TripRecap = preload("res://scripts/systems/TripRecap.gd")
 
 
 static func buy(product_id: String, qty: int, as_cargo: bool = false, discount_factor: float = 1.0) -> String:
@@ -83,10 +84,13 @@ static func sell(index: int, qty: int) -> Dictionary:
 	var decay: float = float(market.get("demand_decay_per_sale", 0.08))
 	var base_pressure: float = float(AppState.demand_pressure.get(key, 0.0))
 	var revenue := 0.0
+	var full_quality_revenue := 0.0
 	var unit := _Economy.sell_price(city_id, product_id, q)
 	for k in range(qty):
-		unit = _Economy.sell_price(city_id, product_id, q, minf(0.7, base_pressure + decay * float(k)))
+		var pressure := minf(0.7, base_pressure + decay * float(k))
+		unit = _Economy.sell_price(city_id, product_id, q, pressure)
 		revenue += unit
+		full_quality_revenue += _Economy.sell_price(city_id, product_id, 1.0, pressure)
 	var unit_cost: float = float(item.get("unit_cost", 0))
 	var total_unit_cost: float = unit_cost * float(qty)
 	var margin: float = revenue - total_unit_cost
@@ -97,6 +101,8 @@ static func sell(index: int, qty: int) -> Dictionary:
 	if int(item.get("qty", 0)) <= 0:
 		AppState.inventory.remove_at(index)
 	AppState.log_sell_transaction(city_id, product_id, qty, revenue, total_unit_cost, GameClock.unix_time)
+	AppState.trip_recap = _TripRecap.record_sale(AppState.trip_recap, city_id, product_id,
+		qty, total_unit_cost, revenue, full_quality_revenue)
 	# Hot-streak: selling product at a destination tagged hot relative to its origin.
 	var origin_city := str(DataService.get_product(product_id).get("origin_city_id", ""))
 	var tag_key := "%s|%s" % [origin_city, product_id]
@@ -113,6 +119,7 @@ static func sell(index: int, qty: int) -> Dictionary:
 		"unit_price": unit,
 		"unit_cost": unit_cost,
 		"total_unit_cost": total_unit_cost,
+		"full_quality_revenue": full_quality_revenue,
 		"margin": margin,
 		"margin_rate": margin_rate,
 		"accidental_premium": false,

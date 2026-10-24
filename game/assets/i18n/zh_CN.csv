@@ -229,3 +229,6 @@ ui.city.economy,经济
 ui.city.food,饮食
 ui.city.travel,旅行提示
 ui.city.low_content,"⚠ 资料不足：该城市内容为低置信度自动生成，仅供参考。"
+ui.save.retry,存档失败，上一份存档已保留；5 秒后重试。
+ui.save.success,已保存
+ui.save.failure,保存失败，上一份存档已保留。

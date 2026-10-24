@@ -16,6 +16,7 @@ import {
 } from '../gameData';
 import { assetSource } from '../assets';
 import { money } from '../gameLogic';
+import { tripRecapTotals } from '../tripRecap';
 import { COLORS, themedStyles } from '../theme';
 import {
   AssetIcon,
@@ -25,6 +26,15 @@ import {
   Sheet,
   Toggle,
 } from './ui';
+
+function TripRecapRow({ label, value, strong = false }) {
+  return (
+    <View style={styles.tripRecapRow}>
+      <Text style={[styles.tripRecapLabel, strong && styles.tripRecapStrong]}>{label}</Text>
+      <Text style={[styles.tripRecapValue, strong && styles.tripRecapStrong]}>{value}</Text>
+    </View>
+  );
+}
 
 export function BagsScreen({ game }) {
   const { state, bagText, cargoText, bagKg, openSell, openInvItem, t, tf } = game;
@@ -629,6 +639,7 @@ export function OverlaySheets({ game }) {
 
   const ticket = state.ticket;
   const cut = state.cut;
+  const tripTotals = tripRecapTotals(state.tripRecap);
   const invMax = selInvItem ? selInvItem.n : 1;
   const moveLabel = selInvItem?.slot === 'cargo'
     ? t('sheet.move_to_carry', 'Move to carry-on')
@@ -743,6 +754,42 @@ export function OverlaySheets({ game }) {
             </Button>
           </View>
         </ScrollView>
+      </Sheet>
+
+      <Sheet visible={state.sheet === 'tripRecap' && !!state.tripRecap} onClose={closeSheet} center>
+        {state.tripRecap && tripTotals ? (
+          <ScrollView contentContainerStyle={styles.tripRecapBody}>
+            <Text style={styles.tripRecapEyebrow}>{state.locale === 'zh' ? '单趟复盘' : 'TRIP REVIEW'}</Text>
+            <Text style={styles.tripRecapTitle}>
+              {state.locale === 'zh'
+                ? `${state.tripRecap.from} → ${CITIES[state.tripRecap.to]?.iata || state.tripRecap.to} 收支回顾`
+                : `${state.tripRecap.from} → ${CITIES[state.tripRecap.to]?.iata || state.tripRecap.to} trip review`}
+            </Text>
+            <Text style={styles.tripRecapSubtitle}>
+              {state.locale === 'zh' ? '以起飞时行情为预测基准；未售库存暂不计入实现净额。' : 'Forecast uses quotes at takeoff; unsold stock is excluded from realized P&L.'}
+            </Text>
+            <View style={styles.tripRecapDivider} />
+            <TripRecapRow label={state.locale === 'zh' ? '预测销售收入' : 'Forecast sales'} value={money(state.tripRecap.forecastRevenue)} />
+            <TripRecapRow label={state.locale === 'zh' ? '预测采购成本' : 'Forecast goods cost'} value={`−${money(state.tripRecap.forecastCost)}`} />
+            <TripRecapRow label={state.locale === 'zh' ? '预测净收益' : 'Forecast net'} value={money(tripTotals.forecastNet)} strong />
+            <TripRecapRow label={state.locale === 'zh' ? '机票' : 'Airfare'} value={`−${money(state.tripRecap.fare)}`} />
+            <TripRecapRow label={state.locale === 'zh' ? '行李与货运' : 'Baggage & cargo'} value={`−${money(state.tripRecap.baggage)}`} />
+            <TripRecapRow label={state.locale === 'zh' ? '已售收入' : 'Sales realized'} value={money(state.tripRecap.actualRevenue)} />
+            <TripRecapRow label={state.locale === 'zh' ? '已售商品成本' : 'Cost of goods sold'} value={`−${money(state.tripRecap.actualCost)}`} />
+            <TripRecapRow label={state.locale === 'zh' ? '行情偏差' : 'Market variance'} value={`${state.tripRecap.marketVariance >= 0 ? '+' : '−'}${money(Math.abs(state.tripRecap.marketVariance))}`} />
+            <TripRecapRow label={state.locale === 'zh' ? '商品损耗（已丢弃成本）' : 'Goods discarded'} value={`−${money(state.tripRecap.discardedCost)}`} />
+            <View style={styles.tripRecapDivider} />
+            <TripRecapRow label={state.locale === 'zh' ? '本趟已实现净额' : 'Realized trip net'} value={`${tripTotals.realizedNet >= 0 ? '+' : '−'}${money(Math.abs(tripTotals.realizedNet))}`} strong />
+            <Text style={styles.tripRecapFootnote}>
+              {state.locale === 'zh'
+                ? `已售 ${state.tripRecap.soldQty} 件 · 约 ${tripTotals.remainingQty} 件仍待处理；损耗按主动丢弃的成本计算。`
+                : `${state.tripRecap.soldQty} sold · about ${tripTotals.remainingQty} remain; goods loss reflects discarded cost.`}
+            </Text>
+            <Button variant="primary" onPress={closeSheet} style={styles.tripRecapButton}>
+              {state.locale === 'zh' ? '继续' : 'Continue'}
+            </Button>
+          </ScrollView>
+        ) : null}
       </Sheet>
 
       <Sheet visible={state.sheet === 'inv' && !!selInvItem} onClose={closeSheet}>
@@ -1669,6 +1716,65 @@ const styles = themedStyles(StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'baseline',
     marginTop: 4,
+  },
+  tripRecapBody: {
+    paddingHorizontal: 22,
+    paddingTop: 30,
+    paddingBottom: 26,
+  },
+  tripRecapEyebrow: {
+    color: COLORS.teal,
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1.5,
+    marginBottom: 8,
+  },
+  tripRecapTitle: {
+    color: COLORS.text,
+    fontSize: 23,
+    fontWeight: '800',
+  },
+  tripRecapSubtitle: {
+    color: COLORS.muted,
+    fontSize: 13,
+    lineHeight: 19,
+    marginTop: 7,
+    marginBottom: 13,
+  },
+  tripRecapDivider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: COLORS.border,
+    marginVertical: 10,
+  },
+  tripRecapRow: {
+    minHeight: 35,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 14,
+  },
+  tripRecapLabel: {
+    color: COLORS.muted,
+    fontSize: 14,
+    flex: 1,
+  },
+  tripRecapValue: {
+    color: COLORS.text,
+    fontSize: 15,
+    fontVariant: ['tabular-nums'],
+  },
+  tripRecapStrong: {
+    color: COLORS.text,
+    fontWeight: '800',
+  },
+  tripRecapFootnote: {
+    color: COLORS.muted,
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 8,
+  },
+  tripRecapButton: {
+    marginTop: 20,
   },
   totalLabel: {
     flex: 1,
