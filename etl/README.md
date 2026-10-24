@@ -32,6 +32,8 @@ those source catalogs rather than the ignored `game/data/` output directory.
 `etl/config/airport_city_ids.json` preserves shipped city IDs by airport IATA code.
 Upstream municipality spelling may change without renaming content/assets or save
 identifiers. Update this mapping deliberately when adding or migrating cities.
+Authored city display names also take priority over upstream neighborhood labels,
+so approved prose and airport descriptions remain reproducible.
 `airport_code_overrides.json` joins renamed airport codes to the historical March
 2025 schedule by stable OurAirports row ID (for example, the shipped PBI route).
 

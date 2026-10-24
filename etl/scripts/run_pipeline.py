@@ -146,6 +146,13 @@ def build_cities_500_from_ourairports(
             continue
         seen_city_ids.add(city_id)
 
+        # Approved prose refers to these display names as well as the stable ID.
+        # A municipality/neighborhood rename must not silently rewrite its airport
+        # sentence or change the content writer's truncation boundaries.
+        authored_city = CONTENT / 'cities' / f'{city_id}.json'
+        if authored_city.is_file():
+            municipality = json.loads(authored_city.read_text(encoding='utf-8')).get('name_en') or municipality
+
         # Derive country and timezone
         country_id = info.get("iso_country", "XX")
         country_zh = COUNTRY_ZH.get(country_id, "未知")

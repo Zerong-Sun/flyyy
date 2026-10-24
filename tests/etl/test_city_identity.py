@@ -13,7 +13,9 @@ def test_upstream_municipality_renames_preserve_authored_city_ids():
     } for iata, (name, _) in renamed.items()}
     rows = build_cities_500_from_ourairports(airports, [], set(airports))
     assert {row['iata']: row['city_id'] for row in rows} == {iata: value[1] for iata, value in renamed.items()}
-    assert {row['iata']: row['city_en'] for row in rows} == {iata: value[0] for iata, value in renamed.items()}
+    display = {row['iata']: row['city_en'] for row in rows}
+    assert display['EDI'] == 'Edinburgh'  # approved city prose uses this name
+    assert display['MVD'] == renamed['MVD'][0]  # no authored catalog: upstream display is retained
 
 
 def test_new_airport_still_gets_a_city_id_and_demo_hubs_keep_priority():
