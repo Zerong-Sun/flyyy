@@ -100,6 +100,11 @@ export function GlobeScreen({ game }) {
         </View>
       ) : null}
 
+      {state.merchant?.order && <Pressable onPress={() => setTab('market')} accessibilityRole="button" style={{ paddingVertical: 7 }}>
+        <Text numberOfLines={1} style={{ color: COLORS.orange, fontSize: 12, textAlign: 'center' }}>
+          {state.locale === 'zh' ? '委托' : 'Order'} · {t(`city.${state.merchant.order.city}`, CITIES[state.merchant.order.city].name)} · {Math.max(0, (state.merchant.order.deadline - state.gameMin) / 60).toFixed(1)}h · {state.merchant.order.done}/{state.merchant.order.qty}
+        </Text>
+      </Pressable>}
       {searching ? (
         <View style={styles.results}>
           {searchResults.length === 0 ? (

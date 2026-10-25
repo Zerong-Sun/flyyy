@@ -38,7 +38,7 @@ static func buy_price(city_id: String, product_id: String) -> float:
 	var f: float = daily_factor(AppState.save_id, city_id, GameClock.game_date_string(), product_id)
 	var ev: Dictionary = _MarketEvents.factor_for(city_id, product_id, true)
 	var news: Dictionary = _NewsEvents.market_factor(city_id, product_id, true)
-	return round(float(row.get("buy_base_usd", 0)) * f * float(ev.mult) * float(news.mult) * 100.0) / 100.0
+	return round(float(row.get("buy_base_usd", 0)) * f * float(ev.mult) * float(news.mult) * MerchantSystem.buy_factor(product_id) * 100.0) / 100.0
 
 
 static func sell_price(city_id: String, product_id: String, quality: float, pressure_override: float = -1.0) -> float:
@@ -57,7 +57,7 @@ static func sell_price(city_id: String, product_id: String, quality: float, pres
 	var ev: Dictionary = _MarketEvents.factor_for(city_id, product_id, false)
 	var news: Dictionary = _NewsEvents.market_factor(city_id, product_id, false)
 	# Apply the spread AFTER every event modifier so local round trips cannot mint cash.
-	var quote: float = base * qmul * demand_mul * float(ev.mult) * float(news.mult)
+	var quote: float = base * qmul * demand_mul * float(ev.mult) * float(news.mult) * MerchantSystem.sell_factor(product_id)
 	return floor(min(quote, buy_price(city_id, product_id) * 0.95) * 100.0) / 100.0
 
 
@@ -96,6 +96,7 @@ static func current_quality(item: Dictionary) -> float:
 			protected_hours += max(0.0, (GameClock.unix_time - base) / 3600.0)
 		var unprotected_hours: float = max(0.0, hours - protected_hours)
 		hours = protected_hours * protected_mult + unprotected_hours * unprotected_mult
+	hours = maxf(0, hours - MerchantSystem.preservation_hours(item))
 	return max(0.0, 1.0 - hours / life)
 
 

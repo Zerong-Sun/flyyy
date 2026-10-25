@@ -35,6 +35,8 @@ static func create_forecast(from_city: String, to_city: String, items: Array,
 		"to_city": to_city,
 		"fare_cost": maxf(0.0, fare_cost),
 		"baggage_cost": maxf(0.0, baggage_cost),
+		"journey_cost": 0.0,
+		"journey_income": 0.0,
 		"items": forecast_items,
 		"forecast_revenue": forecast_revenue,
 		"forecast_cost": forecast_cost,
@@ -104,7 +106,7 @@ static func totals(recap: Dictionary) -> Dictionary:
 			remaining += maxi(0, int(row.get("qty", 0)) - int(row.get("sold_qty", 0)))
 	return {
 		"forecast_net": float(recap.get("forecast_revenue", 0.0)) - float(recap.get("forecast_cost", 0.0)) - fare - baggage,
-		"realized_net": float(recap.get("actual_revenue", 0.0)) - float(recap.get("sold_cost", 0.0)) - fare - baggage,
+		"realized_net": float(recap.get("actual_revenue", 0.0)) - float(recap.get("sold_cost", 0.0)) - fare - baggage - float(recap.get("journey_cost", 0)) + float(recap.get("journey_income", 0)),
 		"remaining_qty": remaining,
 	}
 
@@ -154,6 +156,9 @@ static func sanitize(raw: Variant) -> Dictionary:
 			return {}
 		clean_items[product_id] = {"qty": qty, "sold_qty": sold_qty,
 			"unit_cost": unit_cost, "forecast_unit": forecast_unit}
+	for field in ["journey_cost", "journey_income"]:
+		if not (recap.get(field, 0) is float or recap.get(field, 0) is int) or not is_finite(float(recap.get(field, 0))) or float(recap.get(field, 0)) < 0:
+			return {}
 	var clean := recap.duplicate(true)
 	clean["items"] = clean_items
 	for field in ["from_iata", "to_iata"]:

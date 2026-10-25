@@ -1,3 +1,4 @@
+import { MerchantBoard } from './MerchantBoard';
 import React from 'react';
 import {
   View,
@@ -45,6 +46,7 @@ export function MarketScreen({ game }) {
 
   return (
     <View style={styles.screen}>
+      <MerchantBoard game={game} />
       <ScreenTitle
         title={t('market_title', 'Market')}
         subtitle={
@@ -131,6 +133,7 @@ export function FlightsScreen({ game }) {
 
   return (
     <View style={styles.screen}>
+      <MerchantBoard game={game} />
       <ScreenTitle
         title={t('flights_title', 'Flights')}
         subtitle={
@@ -204,9 +207,9 @@ export function FlightsScreen({ game }) {
               no: f.no,
               to: f.toName,
               dep: f.dep,
-              price: money(f.econ),
+              price: money(game.flightFare(f.econ)),
               extra: f.isNext ? t('flight.next', 'Next') : '',
-            }, `${f.no} to ${f.toName}, departs ${f.dep}, economy ${money(f.econ)}${f.isNext ? ', next departure' : ''}`)}
+            }, `${f.no} to ${f.toName}, departs ${f.dep}, economy ${money(game.flightFare(f.econ))}${f.isNext ? ', next departure' : ''}`)}
           >
             <View style={styles.flightHeader}>
               <Text style={[styles.flightNo, f.past && styles.flightTextPast]}>{f.no}</Text>
@@ -262,8 +265,8 @@ export function FlightsScreen({ game }) {
               </View>
             </View>
             <View style={styles.flightFooter}>
-              <Text style={styles.econPrice}>{tf('flight.econ', { price: money(f.econ) }, `Econ ${money(f.econ)}`)}</Text>
-              <Text style={styles.bizPrice}>{tf('flight.biz', { price: money(f.biz) }, `Biz ${money(f.biz)}`)}</Text>
+              <Text style={styles.econPrice}>{tf('flight.econ', { price: money(game.flightFare(f.econ)) }, `Econ ${money(game.flightFare(f.econ))}`)}</Text>
+              <Text style={styles.bizPrice}>{tf('flight.biz', { price: money(game.flightFare(f.biz)) }, `Biz ${money(game.flightFare(f.biz))}`)}</Text>
               <Text style={styles.kmText}>
                 {tf('fmt.km', { n: f.km.toLocaleString('en-US') }, `${f.km.toLocaleString('en-US')} km`)}
               </Text>

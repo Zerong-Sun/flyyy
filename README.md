@@ -6,7 +6,7 @@
 
 > 航班网络基于公开航空数据重建，不代表真实购票信息。
 
-Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-Sun/flyyy/releases/latest)。 当前桌面版 v0.5.0 提供「午夜港口 · Dark」和「电光集市 · Light」，可在游戏设置中切换。Windows 解压后运行 `WanliTrader.exe`，并保留同目录的 `.pck` 文件；macOS 解压后运行 `WanliTrader.app`。macOS 版本为通用架构，支持 Apple Silicon 与 Intel。当前桌面包没有开发者证书公证，首次打开如被系统拦截，请在“系统设置 → 隐私与安全性”中选择“仍要打开”。发布包附有 SHA-256 校验文件。
+Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-Sun/flyyy/releases/latest)。 当前桌面版 v0.6.0 提供「午夜港口 · Dark」和「电光集市 · Light」，可在游戏设置中切换。Windows 解压后运行 `WanliTrader.exe`，并保留同目录的 `.pck` 文件；macOS 解压后运行 `WanliTrader.app`。macOS 版本为通用架构，支持 Apple Silicon 与 Intel。当前桌面包没有开发者证书公证，首次打开如被系统拦截，请在“系统设置 → 隐私与安全性”中选择“仍要打开”。发布包附有 SHA-256 校验文件。
 
 ---
 
@@ -66,6 +66,14 @@ Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-
 | **定价** | 原产地采购通常更便宜；目的地越稀缺售价越高；易腐品有保质期与品质衰减 |
 | **存档** | 自动/手动保存资金、位置、库存、时间与旅行记录 |
 
+### v0.6.0 行商玩法
+
+市场与航班页的「商机」入口提供 24–72 游戏小时限时委托、最多三段连续委托，以及销售额 / 飞行次数解锁的随机专长候选；同一时间只启用一个专长，新选择替换旧选择。分批交付沿用原有出售数量操作。
+
+飞行画面加入 30 个途中事件，每趟最多一次、两个短选项。报价与优惠有数量、目的地和有效期限制，地图显示订单倒计时。普通出售与抵达减少强制弹窗。桌面 v0.6.0 已包含这些玩法；手机端同步更新源码，仍通过 Expo Go 预览。
+
+规则、双端差异和验证入口见 [行商玩法说明](docs/implementation/2026-10-25-merchant-gameplay.md)。
+
 ### 游戏模式
 
 - **沙盒模式** — 无固定结束时间，持续环球旅行（Demo 默认）  
@@ -83,10 +91,10 @@ Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-
 
 | 客户端 | 范围 | 说明 |
 |--------|------|------|
-| **Godot 4.7**（桌面主客户端） | 500 个机场、2500 件商品 | 3D 地球、航班、贸易、存档与双外观；[v0.5.0 Windows / macOS 下载](https://github.com/Zerong-Sun/flyyy/releases/tag/v0.5.0) |
+| **Godot 4.7**（桌面主客户端） | 500 个机场、2500 件商品 | 3D 地球、航班、贸易、存档与双外观；[v0.6.0 Windows / macOS 下载](https://github.com/Zerong-Sun/flyyy/releases/tag/v0.6.0) |
 | **React Native / Expo SDK 54**（[`ios/expo/`](ios/expo/)） | 20 座枢纽、精选商品 | 可玩的手机端：地球、市场、航班、行李、交易记录、成就、音效、存档与双外观；目前通过 Expo Go 本地预览 |
 
-Expo Go 是开发预览容器，不是《万里行商》的手机版安装包。`ios/expo/app.json` 的 `1.1.0` 是源代码版本；尚未发布新的 iOS / Android 安装包。当前公开的 v0.5.0 Release 仅包含 Windows 和 macOS。
+Expo Go 是开发预览容器，不是《万里行商》的手机版安装包。`ios/expo/app.json` 的 `1.1.0` 是源代码版本；尚未发布新的 iOS / Android 安装包。当前公开的 v0.6.0 Release 仅包含 Windows 和 macOS。
 
 **首版里程碑验收 = 可玩 Demo（PRD §27）**  
 对照表：[docs/superpowers/plans/2026-07-26-demo-acceptance.md](docs/superpowers/plans/2026-07-26-demo-acceptance.md)  

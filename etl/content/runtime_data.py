@@ -8,7 +8,7 @@ SOURCE = Path(__file__).resolve().parents[1] / 'config' / 'runtime'
 
 def export_runtime_data(destination: Path) -> None:
     catalogs = {name: json.loads((SOURCE / name).read_text(encoding='utf-8'))
-                for name in ('achievements.json', 'news_events.json')}
+                for name in ('achievements.json', 'news_events.json', 'journey_events.json', 'merchant_rules.json')}
     definitions = catalogs['achievements.json']['achievements']
     catalogs['steam_achievements.json'] = {
         'achievements': {

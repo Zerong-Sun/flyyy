@@ -23,6 +23,8 @@ export function createTripForecast({ from, to, inventory, fare, baggage, quote }
     status: 'forecast',
     fare: Math.max(0, Number(fare) || 0),
     baggage: Math.max(0, Number(baggage) || 0),
+    journeyCost: 0,
+    journeyIncome: 0,
     items,
     forecastRevenue,
     forecastCost,
@@ -92,7 +94,7 @@ export function tripRecapTotals(recap) {
   if (!recap) return null;
   return {
     forecastNet: recap.forecastRevenue - recap.forecastCost - recap.fare - recap.baggage,
-    realizedNet: recap.actualRevenue - recap.actualCost - recap.fare - recap.baggage - recap.discardedCost,
+    realizedNet: recap.actualRevenue - recap.actualCost - recap.fare - recap.baggage - recap.discardedCost - (recap.journeyCost || 0) + (recap.journeyIncome || 0),
     remainingQty: Math.max(0, Object.values(recap.items || {}).reduce((n, item) => n + item.qty - item.soldQty, 0)),
   };
 }

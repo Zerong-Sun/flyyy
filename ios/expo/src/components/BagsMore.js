@@ -1,3 +1,4 @@
+import { eventText, canChooseJourney, merchantText } from '../merchantLogic';
 import React from 'react';
 import {
   View,
@@ -774,6 +775,8 @@ export function OverlaySheets({ game }) {
             <TripRecapRow label={state.locale === 'zh' ? '预测净收益' : 'Forecast net'} value={money(tripTotals.forecastNet)} strong />
             <TripRecapRow label={state.locale === 'zh' ? '机票' : 'Airfare'} value={`−${money(state.tripRecap.fare)}`} />
             <TripRecapRow label={state.locale === 'zh' ? '行李与货运' : 'Baggage & cargo'} value={`−${money(state.tripRecap.baggage)}`} />
+            {!!state.tripRecap.journeyCost && <TripRecapRow label={state.locale === "zh" ? "途中支出" : "Journey expenses"} value={`−${money(state.tripRecap.journeyCost)}`} />}
+            {!!state.tripRecap.journeyIncome && <TripRecapRow label={state.locale === "zh" ? "预支收入" : "Advance received"} value={`+${money(state.tripRecap.journeyIncome)}`} />}
             <TripRecapRow label={state.locale === 'zh' ? '已售收入' : 'Sales realized'} value={money(state.tripRecap.actualRevenue)} />
             <TripRecapRow label={state.locale === 'zh' ? '已售商品成本' : 'Cost of goods sold'} value={`−${money(state.tripRecap.actualCost)}`} />
             <TripRecapRow label={state.locale === 'zh' ? '行情偏差' : 'Market variance'} value={`${state.tripRecap.marketVariance >= 0 ? '+' : '−'}${money(Math.abs(state.tripRecap.marketVariance))}`} />
@@ -852,7 +855,7 @@ export function OverlaySheets({ game }) {
         ) : null}
       </Sheet>
 
-      <Modal visible={!!cut} animationType="fade" transparent={false}>
+      <Modal visible={!!cut} animationType={state.optReduce ? "none" : "fade"} transparent={false} onRequestClose={() => { if (state.journey) game.chooseJourney(false); }}>
         <View style={styles.cutscene}>
           <Image
             source={assetSource(cut?.art || 'assets/anim_flight_takeoff.webp')}
@@ -861,15 +864,20 @@ export function OverlaySheets({ game }) {
             accessible={false}
           />
           <View style={styles.cutShade} />
-          <View style={styles.cutContent}>
+          <ScrollView style={{ position: "absolute", left: 0, right: 0, top: 56, bottom: 32 }} contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end", paddingHorizontal: 26, alignItems: "center" }}>
             <Text style={styles.cutPhase}>{cut?.phase || ''}</Text>
             <Text style={styles.cutTitle}>{cut?.title || ''}</Text>
             <Text style={styles.cutSub}>{state.cutLine}</Text>
             <View style={styles.cutTrack}>
               <View style={[styles.cutFill, { width: cut?.pct || '22%' }]} />
             </View>
-            <Text style={styles.cutHint}>{t('sheet.cut_hint', 'Flight time is on the world clock')}</Text>
-          </View>
+            {state.journey ? <View style={{ backgroundColor: COLORS.panel, padding: 16, borderRadius: 12, marginTop: 12, width: '100%', maxWidth: 480 }}>
+              <Text style={{ color: COLORS.text, fontSize: 18, fontWeight: '600' }}>{eventText(state, state.journey, 'title')}</Text>
+              <Text style={{ color: COLORS.muted, fontSize: 14, lineHeight: 22, marginVertical: 12 }}>{eventText(state, state.journey, 'body')}{['extend', 'rush', 'advance'].includes(state.journey.kind) && state.merchant.order ? merchantText(state, `\n委托剩余 ${Math.max(0, (state.merchant.order.deadline - state.gameMin) / 60).toFixed(1)}h · 本次行程约 ${Math.max(0, (state.journey.arrival - state.gameMin) / 60).toFixed(1)}h`, `\nOrder: ${Math.max(0, (state.merchant.order.deadline - state.gameMin) / 60).toFixed(1)}h left · Journey: ${Math.max(0, (state.journey.arrival - state.gameMin) / 60).toFixed(1)}h`) : ''}</Text>
+              <Button disabled={!canChooseJourney(state, state.journey)} onPress={() => game.chooseJourney(true)}>{eventText(state, state.journey, 'action')}</Button>
+              <Button onPress={() => game.chooseJourney(false)}>{merchantText(state, '照原计划', 'Keep the plan')}</Button>
+            </View> : <Text style={styles.cutHint}>{t('sheet.cut_hint', 'Flight time is on the world clock')}</Text>}
+          </ScrollView>
         </View>
       </Modal>
 

@@ -3,7 +3,7 @@ extends Node
 
 const _TripRecap = preload("res://scripts/systems/TripRecap.gd")
 
-const SAVE_VERSION := 2
+const SAVE_VERSION := 3
 
 var save_id: String = ""
 var cash_usd: float = 0.0
@@ -38,6 +38,7 @@ var level: int = 1
 var realized_margin: float = 0.0
 var travel_expenses: float = 0.0
 var trip_recap: Dictionary = {}
+var merchant: Dictionary = {}
 
 func record_travel_expense(amount: float) -> void:
 	travel_expenses += amount
@@ -149,6 +150,7 @@ func reset_new_game(airport_id: String, mode: String = "sandbox", show_route_hin
 	realized_margin = 0.0
 	travel_expenses = 0.0
 	trip_recap = {}
+	merchant = {}
 	last_flight_price = 0.0
 	last_baggage_cost = 0.0
 	unlocked_achievements = {}
@@ -222,6 +224,8 @@ func add_cash(delta: float) -> void:
 
 
 func set_cold_chain(active: bool) -> void:
+	for item in inventory:
+		MerchantSystem.settle_preservation(item)
 	## Open/close the cold-chain window. Opening records the start time so
 	## EconomySystem can age cold-chain goods at the protected rate for the
 	## window; closing folds the protected hours into each cold item.
@@ -384,6 +388,7 @@ func to_dict() -> Dictionary:
 		"realized_margin": realized_margin,
 		"travel_expenses": travel_expenses,
 		"trip_recap": trip_recap,
+		"merchant": merchant,
 		"last_flight_price": last_flight_price,
 		"last_baggage_cost": last_baggage_cost,
 		"reduced_animations": reduced_animations,
@@ -446,6 +451,7 @@ func from_dict(d: Dictionary) -> void:
 	travel_expenses = float(d.get("travel_expenses", 0.0))
 	var loaded_trip_recap = d.get("trip_recap", {})
 	trip_recap = _TripRecap.sanitize(loaded_trip_recap)
+	merchant = MerchantSystem.sanitize(d.get("merchant", {}))
 	last_flight_price = float(d.get("last_flight_price", 0.0))
 	last_baggage_cost = float(d.get("last_baggage_cost", 0.0))
 	reduced_animations = bool(d.get("reduced_animations", false))

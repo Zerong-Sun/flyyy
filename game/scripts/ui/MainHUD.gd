@@ -138,6 +138,8 @@ func _ready() -> void:
 	EventBus.game_started.connect(_on_game_started)
 	EventBus.challenge_ended.connect(_on_challenge_ended)
 	EventBus.reputation_changed.connect(_on_reputation_changed)
+	MerchantSystem.journey_requested.connect(_show_journey_choice)
+	MerchantSystem.changed.connect(_refresh_merchant_quotes)
 	flight_ops.transition_started.connect(_on_transition_started)
 	flight_ops.transition_finished.connect(_on_transition_finished)
 	_load_market_tags()
@@ -387,6 +389,9 @@ func _build_ui() -> void:
 	_new_game_panel.size = Vector2(560, 350)
 	_new_game_panel.add_theme_stylebox_override("panel", _ThemeFactory.card_style(false))
 	add_child(_new_game_panel)
+	# Wrapped labels briefly report a tall minimum before receiving their width.
+	# Refit after container sorting so the menu and its buttons stay on screen.
+	_new_game_panel.minimum_size_changed.connect(func(): _layout_floating_panels.call_deferred())
 	var ngv := VBoxContainer.new()
 	ngv.add_theme_constant_override("separation", 12)
 	_new_game_panel.add_child(ngv)
@@ -719,13 +724,6 @@ func _on_news_changed() -> void:
 		_show_market()
 	elif _flight_tree != null and is_instance_valid(_flight_tree):
 		_show_flights()
-	var next_ticket := _Tickets.next_ticket()
-	var departure_due := (not next_ticket.is_empty()
-		and GameClock.parse_iso_to_unix(str(next_ticket.get("scheduled_departure_utc", ""))) <= GameClock.unix_time)
-	if not _transition_running and not departure_due:
-		var city_id := AppState.current_city_id()
-		if not city_id.is_empty():
-			_check_news_events(city_id)
 
 
 func _dismiss_open_panel() -> void:
@@ -889,9 +887,14 @@ func _refresh_countdown() -> void:
 	# once the hint fades the countdown must come back (GDLC Playtest #3).
 	if _countdown.text != "":
 		_countdown.visible = not _hint_panel.visible
+	var order: Dictionary = MerchantSystem.data().order
+	var order_text := ""
+	if not order.is_empty():
+		order_text = MerchantSystem.text("委托 %s · 剩余 %.1fh · %d/%d", "Order %s · %.1fh left · %d/%d") % [DataService.place_name(DataService.get_city(str(order.city)), "name"), maxf(0, (float(order.deadline) - GameClock.unix_time) / 3600), int(order.done), int(order.qty)]
 	var t: Dictionary = _Tickets.next_ticket()
 	if t.is_empty():
-		_countdown.text = ""
+		_countdown.text = order_text
+		_countdown.visible = order_text != "" and not _hint_panel.visible
 		_btn_ff.visible = false
 		return
 	var dep: float = GameClock.parse_iso_to_unix(str(t.get("scheduled_departure_utc", "")))
@@ -911,6 +914,8 @@ func _refresh_countdown() -> void:
 		]
 		_countdown.add_theme_color_override("font_color", _Colors.WARN_RED if hrs < 2 else _Colors.TEXT_PRIMARY)
 		_btn_ff.visible = AppState.game_started
+	if order_text != "":
+		_countdown.text += "\n" + order_text
 
 
 func _on_fast_forward() -> void:
@@ -1101,18 +1106,7 @@ func _on_arrived() -> void:
 		return
 	if city_id != "":
 		_discovery_triggered_in_city.clear()
-		_check_news_events(city_id)
-		_check_arrival_encounter(city_id)
-		_check_free_cargo(city_id)
 		_market_arrival_sell_pending = not AppState.inventory.is_empty()
-		if AppState.inventory.is_empty():
-			var recap_text := _trip_recap_text()
-			if recap_text != "":
-				_enqueue_event_popup("trip_recap", {
-					"title": "单趟收支与预测回顾",
-					"body": recap_text,
-					"accept_text": "继续",
-				}, Callable(), Callable())
 	AchievementSystem.check_all()
 	_set_panel_bgm("globe")
 
@@ -1474,6 +1468,7 @@ func _show_market() -> void:
 		ticket_chip.text = "当前机票目的地：%s（采购页按此估算利润）" % DataService.place_name(dest, "name")
 		ticket_chip.add_theme_color_override("font_color", _Colors.ACCENT_TEAL)
 		v.add_child(ticket_chip)
+	_add_merchant_board(v)
 	_market_tabs = TabContainer.new()
 	_market_tabs.name = "MarketTabs"
 	_market_tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -1787,7 +1782,7 @@ func _refresh_market_sell() -> void:
 		var product := DataService.get_product(product_id)
 		var quality := _Economy.current_quality(stack)
 		var cost := float(stack.get("unit_cost", 0))
-		var sell := _Economy.sell_price(city, product_id, quality)
+		var sell := MerchantSystem.lot_quote(stack, _Economy.sell_price(city, product_id, quality))
 		var item := _market_sell_tree.create_item(root)
 		item.set_text(0, str(product.get("name_zh", product_id)))
 		item.set_text(1, "×%d" % int(stack.get("qty", 0)))
@@ -1814,7 +1809,7 @@ func _on_market_sell_tree_selected() -> void:
 	var product := DataService.get_product(product_id)
 	var quality := _Economy.current_quality(stack)
 	var cost := float(stack.get("unit_cost", 0))
-	var sell := _Economy.sell_price(AppState.current_city_id(), product_id, quality)
+	var sell := MerchantSystem.lot_quote(stack, _Economy.sell_price(AppState.current_city_id(), product_id, quality))
 	_market_sell_detail.text = "[b]%s[/b]\n\n数量：%d\n品质：%.0f%%\n存放：%s\n成本：%s / 件\n当地售价：%s / 件\n预计毛利：%s$%.0f / 件" % [
 		product.get("name_zh", product_id), int(stack.get("qty", 0)), quality * 100.0,
 		"货运" if bool(stack.get("in_cargo", false)) else "行李",
@@ -1831,7 +1826,7 @@ func _sell_selected_market() -> void:
 		return
 	var stack: Dictionary = AppState.inventory[_market_sell_index]
 	var qty := int(_market_sell_qty.value) if _market_sell_qty else 1
-	_check_accidental_premium(str(stack.get("product_id", "")), _market_sell_index, qty)
+	_do_sell(_market_sell_index, qty)
 
 
 ## Legacy market-row helpers remain for compatibility with old saves and tooling.
@@ -2174,6 +2169,7 @@ func _show_flights() -> void:
 		news_label.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
 		v.add_child(news_label)
 
+	_add_merchant_board(v)
 	# Row 1: search + mode + compact filters
 	var top := HBoxContainer.new()
 	top.add_theme_constant_override("separation", 6)
@@ -2373,7 +2369,7 @@ func _baggage_tier_price(tier: String) -> float:
 
 func _cargo_block_price() -> float:
 	var extras: Dictionary = DataService.economy.get("baggage_extras", {})
-	return float(extras.get("cargo_per_50kg_usd", 0))
+	return float(extras.get("cargo_per_50kg_usd", 0)) * MerchantSystem.cargo_factor()
 
 
 ## Lv2 privilege: one cargo block is free per purchase. When the free-cargo
@@ -2406,7 +2402,7 @@ func _reload_flights(_q: String = "") -> void:
 					filtered.append(c)
 			all_cnx = filtered
 		if _max_price > 0.0:
-			all_cnx = all_cnx.filter(func(c): return float(c.get("ticket_base_price_economy", 0)) <= _max_price)
+			all_cnx = all_cnx.filter(func(c): return _merchant_fare(c, "economy") <= _max_price)
 		if _max_duration > 0:
 			all_cnx = all_cnx.filter(func(c): return int(c.get("duration_minutes", 0)) <= _max_duration)
 		var start_c: int = _flight_page * FLIGHTS_PER_PAGE
@@ -2463,7 +2459,7 @@ func _fill_flight_rows() -> void:
 		item.set_text(2, "%s %s" % [fl.get("destination_iata", ""), _flight_destination_name(fl)])
 		item.set_text(3, _flight_local_time(str(fl.get("scheduled_arrival_utc", "")), str(fl.get("destination_airport_id", ""))))
 		item.set_text(4, "%d分钟%s" % [int(fl.get("duration_minutes", 0)), " · 经停×%d" % stop_n if stop_n > 0 else ""])
-		item.set_text(5, _Economy.format_money(float(fl.get("ticket_base_price_economy", 0))))
+		item.set_text(5, _Economy.format_money(_merchant_fare(fl, "economy")))
 		item.set_metadata(0, i)
 		var muted := _FlightSearch.is_short_lead(fl)
 		if muted:
@@ -2490,7 +2486,7 @@ func _fill_connection_rows() -> void:
 		item.set_text(2, "%s 经 %s" % [c.get("destination_iata", ""), c.get("hub_iata", "")])
 		item.set_text(3, "两段行程")
 		item.set_text(4, "%d分钟 · MCT%d" % [int(c.get("duration_minutes", 0)), int(c.get("mct_minutes", 90))])
-		item.set_text(5, _Economy.format_money(float(c.get("ticket_base_price_economy", 0))))
+		item.set_text(5, _Economy.format_money(_merchant_fare(c, "economy")))
 		item.set_metadata(0, i)
 	if not _connection_cache.is_empty():
 		_select_flight_tree_index(0)
@@ -2560,8 +2556,8 @@ func _on_flight_selected(idx: int) -> void:
 		_flight_detail.text = "[b]联程[/b] %s→%s→%s · %.0fkm · %dmin(MCT%d) · 经$%.0f/公$%.0f/头$%.0f · 行李=%s 货运×%d%s" % [
 			c.get("origin_iata", ""), c.get("hub_iata", ""), c.get("destination_iata", ""),
 			float(c.get("total_distance_km", 0)), int(c.get("duration_minutes", 0)), mct,
-			float(c.get("ticket_base_price_economy", 0)), float(c.get("ticket_base_price_business", 0)),
-			float(c.get("ticket_base_price_first", 0)),
+			_merchant_fare(c, "economy"), _merchant_fare(c, "business"),
+			_merchant_fare(c, "first"),
 			_extra_tier if _extra_tier != "" else "无", _cargo_blocks,
 			_reliability_disclosure(),
 		]
@@ -2586,8 +2582,8 @@ func _on_flight_selected(idx: int) -> void:
 		fl.get("origin_iata", ""), fl.get("destination_iata", ""),
 		str(fl.get("scheduled_departure_utc", "")).substr(0, 16),
 		float(fl.get("distance_km", 0)), int(fl.get("duration_minutes", 0)),
-		float(fl.get("ticket_base_price_economy", 0)), float(fl.get("ticket_base_price_business", 0)),
-		float(fl.get("ticket_base_price_first", 0)),
+		_merchant_fare(fl, "economy"), _merchant_fare(fl, "business"),
+		_merchant_fare(fl, "first"),
 		stop_tag, al_tag, news_tag,
 		_extra_tier if _extra_tier != "" else "无", _cargo_blocks,
 		_reliability_disclosure(),
@@ -2624,7 +2620,6 @@ func _purchase(cabin: String) -> void:
 			_show_hint("免费货运额度已使用！")
 		if err_c == "":
 			_refund_unlock_cargo(free_cargo_used)
-			_check_free_cargo(AppState.current_city_id())
 			AchievementSystem.check_all()
 		return
 	if _selected_flight.is_empty():
@@ -2655,7 +2650,6 @@ func _purchase(cabin: String) -> void:
 		_show_hint("免费货运额度已使用！")
 	if err == "":
 		_refund_unlock_cargo(free_cargo_used)
-		_check_free_cargo(AppState.current_city_id())
 		AchievementSystem.check_all()
 
 
@@ -2682,7 +2676,6 @@ func _do_replace_purchase() -> void:
 		_show_hint("免费货运额度已使用！")
 	if err == "":
 		_refund_unlock_cargo(free_cargo_used)
-		_check_free_cargo(AppState.current_city_id())
 		AchievementSystem.check_all()
 
 
@@ -2730,7 +2723,7 @@ func _add_inventory_group(parent: VBoxContainer, title_text: String, cargo: bool
 		var product := DataService.get_product(pid)
 		var quality := _Economy.current_quality(item)
 		var cost := float(item.get("unit_cost", 0))
-		var current := _Economy.sell_price(AppState.current_city_id(), pid, quality)
+		var current := MerchantSystem.lot_quote(item, _Economy.sell_price(AppState.current_city_id(), pid, quality))
 		var spread := current - cost
 		var idx := list.add_item("%s ×%d · 品质 %.0f%% · 成本 %s · 当前价值 %s · %s$%.0f/件" % [
 			product.get("name_zh", pid), int(item.get("qty", 0)), quality * 100.0,
@@ -2825,10 +2818,11 @@ func _do_sell(index: int, qty: int) -> void:
 	if not result.get("success", false):
 		_show_hint(str(result.get("msg", "")))
 		return
-	_show_sell_result_card(result)
+	_show_hint(str(result.msg) + (" · 委托奖励 +$%.0f" % float(result.order_bonus) if float(result.get("order_bonus", 0)) > 0 else ""))
+	AudioService.play_sfx("sfx_sell")
 	_refresh_market_after_sale()
 	_refresh_bags()
-	_after_sell_check_discovery(result["product_id"])
+
 
 
 func _player_has_more_of(product_id: String) -> bool:
@@ -3286,6 +3280,8 @@ func _trip_recap_text() -> String:
 	body += "预测销售收入：%s · 采购成本：−%s\n" % [_Economy.format_money(forecast_revenue), _Economy.format_money(forecast_cost)]
 	body += "预测净收益：%s\n" % _Economy.format_money(expected)
 	body += "机票：−%s · 行李/货运：−%s\n" % [_Economy.format_money(fare), _Economy.format_money(baggage)]
+	if float(recap.get("journey_cost", 0)) > 0 or float(recap.get("journey_income", 0)) > 0:
+		body += "途中支出：−$%.0f · 预支收入：+$%.0f\n" % [float(recap.get("journey_cost", 0)), float(recap.get("journey_income", 0))]
 	body += "已售收入：%s · 已售成本：−%s\n" % [_Economy.format_money(actual_revenue), _Economy.format_money(sold_cost)]
 	body += "行情偏差：%s%s\n" % ["+" if market_delta >= 0.0 else "−", _Economy.format_money(absf(market_delta))]
 	body += "商品品质损耗：−%s\n" % _Economy.format_money(quality_loss)
@@ -3560,3 +3556,81 @@ func _set_panel_bgm(mode: String) -> void:
 			AudioService.set_bgm("bgm_menu")
 		_:
 			AudioService.set_bgm("bgm_night" if use_night else "bgm_globe_day")
+
+
+func _add_merchant_board(parent: Node) -> void:
+	var board := load("res://scripts/ui/MerchantBoard.gd").new() as VBoxContainer
+	board.name = "MerchantBoard"
+	board.expansion_changed.connect(func(): _layout_floating_panels.call_deferred())
+	board.delivery_requested.connect(func(order: Dictionary):
+		if str(order.city) == AppState.current_city_id():
+			_market_arrival_sell_pending = true
+			_show_market()
+		else:
+			_show_flights()
+			_dest_code_query.text = str(DataService.get_airport(str(order.airport)).get("iata", ""))
+			_reload_flights()
+	)
+	parent.add_child(board)
+
+
+func _show_journey_choice(event: Dictionary) -> void:
+	var panel := PanelContainer.new()
+	panel.name = "JourneyChoice"
+	panel.z_index = 20
+	_overlay.add_child(panel)
+	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	panel.offset_left = -290
+	panel.offset_right = 290
+	panel.offset_top = -95
+	panel.offset_bottom = 95
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 14)
+	panel.add_child(column)
+	var title := Label.new()
+	title.text = MerchantSystem.localized(event, "title")
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	column.add_child(title)
+	var body := Label.new()
+	body.text = MerchantSystem.localized(event, "body")
+	if str(event.kind) in ["extend", "rush", "advance"] and not MerchantSystem.data().order.is_empty():
+		var remaining := maxf(0, (float(MerchantSystem.data().order.deadline) - GameClock.unix_time) / 3600)
+		var travel := maxf(0, (float(event.arrival) - GameClock.unix_time) / 3600)
+		body.text += MerchantSystem.text("\n委托剩余 %.1fh · 本次行程约 %.1fh" % [remaining, travel], "\nOrder: %.1fh left · This journey: %.1fh" % [remaining, travel])
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.custom_minimum_size.x = 540
+	column.add_child(body)
+	var buttons := HBoxContainer.new()
+	column.add_child(buttons)
+	var take := Button.new()
+	take.text = MerchantSystem.localized(event, "action")
+	take.disabled = not MerchantSystem.event_available(event)
+	take.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	buttons.add_child(take)
+	var skip := Button.new()
+	skip.text = MerchantSystem.text("照原计划", "Keep the plan")
+	skip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	buttons.add_child(skip)
+	take.pressed.connect(func():
+		if MerchantSystem.resolve_journey(true):
+			panel.queue_free()
+	)
+	skip.pressed.connect(func():
+		MerchantSystem.resolve_journey(false)
+		panel.queue_free()
+	)
+	skip.grab_focus()
+
+
+func _merchant_fare(flight: Dictionary, cabin: String) -> float:
+	var price: float = _Tickets._cabin_price(flight, cabin)
+	return price - MerchantSystem.fare_discount(price)
+
+
+func _refresh_merchant_quotes() -> void:
+	if is_instance_valid(_market_buy_tree):
+		_refresh_market_buy.call_deferred()
+	if is_instance_valid(_market_sell_tree):
+		_refresh_market_sell.call_deferred()
+	if is_instance_valid(_flight_tree):
+		_reload_flights.call_deferred()

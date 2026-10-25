@@ -91,9 +91,16 @@ func validate(data: Variant) -> Dictionary:
 				return {}
 		if float(row.qty) != floor(float(row.qty)) or row.qty <= 0 or row.qty > 1000000:
 			return {}
-		for key in ["quality", "cold_protected_hours"]:
+		for key in ["quality", "cold_protected_hours", "merchant_preserved_hours", "merchant_age_stamp"]:
 			if row.has(key) and not _number(row[key]):
 				return {}
+		if row.has("merchant_deal"):
+			var deal: Variant = row.merchant_deal
+			if not deal is Dictionary or deal.get("kind", "") not in ["lock", "insurance", "buyer", "speculate"] or not deal.get("city") is String:
+				return {}
+			for key in ["unit", "mult", "expires"]:
+				if not _number(deal.get(key)) or float(deal[key]) < 0:
+					return {}
 		if row.has("in_cargo") and not row.in_cargo is bool:
 			return {}
 	for key in ["visited_airports", "visited_cities", "visited_countries", "tutorial_flags", "unlocked_achievements"]:
@@ -114,7 +121,7 @@ func validate(data: Variant) -> Dictionary:
 		for key in ["is_connection_leg", "enables_cold_chain", "cargo_promotion_applied"]:
 			if ticket.has(key) and not ticket[key] is bool:
 				return {}
-		for key in ["total_paid", "ledger_paid", "ticket_price", "duration_minutes", "distance_km", "extra_kg", "cargo_kg", "cargo_blocks", "stops"]:
+		for key in ["cargo_block_paid", "total_paid", "ledger_paid", "ticket_price", "duration_minutes", "distance_km", "extra_kg", "cargo_kg", "cargo_blocks", "stops"]:
 			if ticket.has(key) and (not _number(ticket[key]) or float(ticket[key]) < 0):
 				return {}
 		if float(ticket.get("ledger_paid", 0)) > float(ticket.get("total_paid", 0)):

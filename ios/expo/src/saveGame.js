@@ -3,12 +3,13 @@
  * Used by useGame and Node unit tests.
  */
 
+import { freshMerchant, sanitizeMerchant } from './merchantLogic.js';
 import { PRODUCTS, DEFAULT_BAG_LIMIT, DEFAULT_CARGO_CAP } from './gameData.js';
 import { gcKm } from './gameLogic.js';
 import { EVENT_BY_ID } from './eventData.js';
 
 export const SAVE_KEY = 'wanli-trader/slot-1';
-export const SAVE_VERSION = 4;
+export const SAVE_VERSION = 5;
 
 export const PERSIST = [
   'cash', 'bagLimit', 'cargoCap', 'inv', 'ticket', 'minsToDep', 'gameMin',
@@ -18,7 +19,7 @@ export const PERSIST = [
   'locale',
   'fontScale', 'colorBlind', 'themeMode',
   'rep', 'level',
-  'eventSeed', 'seenEventEpisodes',
+  'eventSeed', 'seenEventEpisodes', 'merchant',
 ];
 
 /** Chain upgrades from stored version up to SAVE_VERSION. */
@@ -58,6 +59,7 @@ export function migrateSave(raw, targetVersion = SAVE_VERSION) {
     // Trip recaps are optional and are initialized from the current landing.
     ver = 4;
   }
+  if (ver < 5 && targetVersion >= 5) { data.merchant = freshMerchant(); ver = 5; }
   data.saveVersion = ver;
   return { ok: true, reason: 'ok', version: ver, data };
 }
@@ -92,6 +94,8 @@ export function hydrateSave(baseState, migrated, cities, startingCity) {
     }
     return {
       from: raw.from, to: raw.to, status: raw.status, fare: raw.fare, baggage: raw.baggage, items,
+      ...(finiteNonNegative(raw.journeyCost) ? { journeyCost: raw.journeyCost } : {}),
+      ...(finiteNonNegative(raw.journeyIncome) ? { journeyIncome: raw.journeyIncome } : {}),
       forecastRevenue: raw.forecastRevenue, forecastCost: raw.forecastCost,
       actualRevenue: raw.actualRevenue, actualCost: raw.actualCost, marketVariance: raw.marketVariance,
       qualityLoss: raw.qualityLoss, discardedCost: raw.discardedCost,
@@ -99,6 +103,7 @@ export function hydrateSave(baseState, migrated, cities, startingCity) {
       ...(finiteNonNegative(raw.arrivalMinute) ? { arrivalMinute: raw.arrivalMinute } : {}),
     };
   };
+  next.merchant = sanitizeMerchant(next.merchant);
   next.tripRecap = sanitizeTrip(next.tripRecap, 'landed');
   const known = (map, id) => typeof id === 'string' && Object.prototype.hasOwnProperty.call(map, id);
   if (!known(cities, next.city)) return null;

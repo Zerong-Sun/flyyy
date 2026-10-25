@@ -153,6 +153,9 @@ func start_boarding(ticket: Dictionary) -> void:
 	transition_started.emit(ticket)
 	var dur: float = float(ticket.get("duration_minutes", 0))
 	var hours: float = dur / 60.0
+	await MerchantSystem.request_journey(ticket)
+	if generation != _run_generation:
+		return
 	GameClock.add_minutes(dur)
 	var after_flight_date := GameClock.game_date_string()
 	if before_operation_date != after_flight_date:
@@ -348,6 +351,9 @@ func _capture_trip_forecast(ticket: Dictionary) -> void:
 		origin_iata = str(previous.get("from_iata", origin_iata))
 	var recap := _TripRecap.create_forecast(origin_city, destination, forecast_items,
 		AppState.last_flight_price, AppState.last_baggage_cost)
+	if str(previous.get("status", "")) == "in_transit":
+		recap.journey_cost = float(previous.get("journey_cost", 0))
+		recap.journey_income = float(previous.get("journey_income", 0))
 	recap["from_iata"] = origin_iata
 	recap["to_iata"] = str(final_ticket.get("destination_iata", ticket.get("destination_iata", "")))
 	recap["estimated_arrival_unix"] = GameClock.unix_time + float(ticket.get("duration_minutes", 0)) * 60.0

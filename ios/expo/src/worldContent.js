@@ -1374,5 +1374,334 @@ export const WORLD_CONTENT = {
     "refundRate": 0.7,
     "goods": "51 authored mobile products; IDs retained for save compatibility",
     "schedule": "synthetic daily departures on the shared ETL route graph"
+  },
+  "journey_events": [
+    {
+      "id": "lock_1",
+      "kind": "lock",
+      "title_zh": "老买家来电",
+      "title_en": "A familiar buyer calls",
+      "body_zh": "按目的地现价的 95% 锁定随身货物，抵达后 48 小时内有效。",
+      "body_en": "Lock carried goods at 95% of the destination quote for 48 hours after arrival.",
+      "action_zh": "提前锁价",
+      "action_en": "Lock quote"
+    },
+    {
+      "id": "lock_2",
+      "kind": "lock",
+      "title_zh": "展会采购经理",
+      "title_en": "An exhibition buyer",
+      "body_zh": "按目的地现价的 95% 锁定随身货物，抵达后 48 小时内有效。",
+      "body_en": "Lock carried goods at 95% of the destination quote for 48 hours after arrival.",
+      "action_zh": "提前锁价",
+      "action_en": "Lock quote"
+    },
+    {
+      "id": "lock_3",
+      "kind": "lock",
+      "title_zh": "酒店补货短信",
+      "title_en": "A hotel restock request",
+      "body_zh": "按目的地现价的 95% 锁定随身货物，抵达后 48 小时内有效。",
+      "body_en": "Lock carried goods at 95% of the destination quote for 48 hours after arrival.",
+      "action_zh": "提前锁价",
+      "action_en": "Lock quote"
+    },
+    {
+      "id": "speculate_1",
+      "kind": "speculate",
+      "title_zh": "收藏商的口信",
+      "title_en": "A collector’s message",
+      "body_zh": "付 $40 联络费；60% 概率随身货物售价 +25%，否则 -10%，限目的地 48 小时。",
+      "body_en": "Pay $40: 60% chance of +25% on carried goods, otherwise -10%, at destination for 48 hours.",
+      "action_zh": "押高价买家",
+      "action_en": "Try a premium buyer"
+    },
+    {
+      "id": "speculate_2",
+      "kind": "speculate",
+      "title_zh": "精品店试单",
+      "title_en": "A boutique trial order",
+      "body_zh": "付 $40 联络费；60% 概率随身货物售价 +25%，否则 -10%，限目的地 48 小时。",
+      "body_en": "Pay $40: 60% chance of +25% on carried goods, otherwise -10%, at destination for 48 hours.",
+      "action_zh": "押高价买家",
+      "action_en": "Try a premium buyer"
+    },
+    {
+      "id": "speculate_3",
+      "kind": "speculate",
+      "title_zh": "临时竞价邀请",
+      "title_en": "An auction invitation",
+      "body_zh": "付 $40 联络费；60% 概率随身货物售价 +25%，否则 -10%，限目的地 48 小时。",
+      "body_en": "Pay $40: 60% chance of +25% on carried goods, otherwise -10%, at destination for 48 hours.",
+      "action_zh": "押高价买家",
+      "action_en": "Try a premium buyer"
+    },
+    {
+      "id": "insurance_1",
+      "kind": "insurance",
+      "title_zh": "货损保障",
+      "title_en": "Cargo protection",
+      "body_zh": "付 $35；随身货物在目的地 48 小时内售价不低于采购单价的 90%。",
+      "body_en": "Pay $35 for a 90% purchase-cost floor on carried goods at destination for 48 hours.",
+      "action_zh": "保本托底",
+      "action_en": "Protect the cargo"
+    },
+    {
+      "id": "insurance_2",
+      "kind": "insurance",
+      "title_zh": "买家保底协议",
+      "title_en": "A buyer’s floor offer",
+      "body_zh": "付 $35；随身货物在目的地 48 小时内售价不低于采购单价的 90%。",
+      "body_en": "Pay $35 for a 90% purchase-cost floor on carried goods at destination for 48 hours.",
+      "action_zh": "保本托底",
+      "action_en": "Protect the cargo"
+    },
+    {
+      "id": "insurance_3",
+      "kind": "insurance",
+      "title_zh": "同行互助担保",
+      "title_en": "A traders’ guarantee",
+      "body_zh": "付 $35；随身货物在目的地 48 小时内售价不低于采购单价的 90%。",
+      "body_en": "Pay $35 for a 90% purchase-cost floor on carried goods at destination for 48 hours.",
+      "action_zh": "保本托底",
+      "action_en": "Protect the cargo"
+    },
+    {
+      "id": "buyer_1",
+      "kind": "buyer",
+      "title_zh": "餐饮供应商",
+      "title_en": "A catering supplier",
+      "body_zh": "多花 1 游戏小时验货，随身货物目的地售价 +8%，限抵达后 48 小时。",
+      "body_en": "Spend 1 game hour on inspection for +8% on carried goods at destination for 48 hours.",
+      "action_zh": "接受验货",
+      "action_en": "Accept inspection"
+    },
+    {
+      "id": "buyer_2",
+      "kind": "buyer",
+      "title_zh": "百货采购员",
+      "title_en": "A department-store buyer",
+      "body_zh": "多花 1 游戏小时验货，随身货物目的地售价 +8%，限抵达后 48 小时。",
+      "body_en": "Spend 1 game hour on inspection for +8% on carried goods at destination for 48 hours.",
+      "action_zh": "接受验货",
+      "action_en": "Accept inspection"
+    },
+    {
+      "id": "buyer_3",
+      "kind": "buyer",
+      "title_zh": "机场买手",
+      "title_en": "An airport purchasing agent",
+      "body_zh": "多花 1 游戏小时验货，随身货物目的地售价 +8%，限抵达后 48 小时。",
+      "body_en": "Spend 1 game hour on inspection for +8% on carried goods at destination for 48 hours.",
+      "action_zh": "接受验货",
+      "action_en": "Accept inspection"
+    },
+    {
+      "id": "extend_1",
+      "kind": "extend",
+      "title_zh": "买家愿意等",
+      "title_en": "The buyer can wait",
+      "body_zh": "付 $60，将当前委托截止时间延长 6 游戏小时。",
+      "body_en": "Pay $60 to extend the active order by 6 game hours.",
+      "action_zh": "协商宽限",
+      "action_en": "Extend the deadline"
+    },
+    {
+      "id": "extend_2",
+      "kind": "extend",
+      "title_zh": "订单排期空位",
+      "title_en": "An opening in the schedule",
+      "body_zh": "付 $60，将当前委托截止时间延长 6 游戏小时。",
+      "body_en": "Pay $60 to extend the active order by 6 game hours.",
+      "action_zh": "协商宽限",
+      "action_en": "Extend the deadline"
+    },
+    {
+      "id": "extend_3",
+      "kind": "extend",
+      "title_zh": "夜间收货窗口",
+      "title_en": "A late delivery slot",
+      "body_zh": "付 $60，将当前委托截止时间延长 6 游戏小时。",
+      "body_en": "Pay $60 to extend the active order by 6 game hours.",
+      "action_zh": "协商宽限",
+      "action_en": "Extend the deadline"
+    },
+    {
+      "id": "rush_1",
+      "kind": "rush",
+      "title_zh": "展位抢先开售",
+      "title_en": "An early stall opening",
+      "body_zh": "当前委托时限缩短 4 游戏小时，完成奖金增加 25%；剩余不足 12 小时不可选。",
+      "body_en": "Shorten the active order by 4 game hours for a 25% larger bonus; requires 12 hours remaining.",
+      "action_zh": "追加急单",
+      "action_en": "Raise the stakes"
+    },
+    {
+      "id": "rush_2",
+      "kind": "rush",
+      "title_zh": "买家提前营业",
+      "title_en": "The buyer opens early",
+      "body_zh": "当前委托时限缩短 4 游戏小时，完成奖金增加 25%；剩余不足 12 小时不可选。",
+      "body_en": "Shorten the active order by 4 game hours for a 25% larger bonus; requires 12 hours remaining.",
+      "action_zh": "追加急单",
+      "action_en": "Raise the stakes"
+    },
+    {
+      "id": "rush_3",
+      "kind": "rush",
+      "title_zh": "加急仓位",
+      "title_en": "An urgent warehouse slot",
+      "body_zh": "当前委托时限缩短 4 游戏小时，完成奖金增加 25%；剩余不足 12 小时不可选。",
+      "body_en": "Shorten the active order by 4 game hours for a 25% larger bonus; requires 12 hours remaining.",
+      "action_zh": "追加急单",
+      "action_en": "Raise the stakes"
+    },
+    {
+      "id": "advance_1",
+      "kind": "advance",
+      "title_zh": "买家先付款",
+      "title_en": "The buyer offers an advance",
+      "body_zh": "立即领取当前委托奖金的 25%，本单最终奖金改为原来的 75%；完成时只补足差额。",
+      "body_en": "Receive 25% of the order bonus now; total bonus becomes 75% of the original, with the balance paid on completion.",
+      "action_zh": "预支奖金",
+      "action_en": "Take an advance"
+    },
+    {
+      "id": "advance_2",
+      "kind": "advance",
+      "title_zh": "熟客周转金",
+      "title_en": "A regular’s cash advance",
+      "body_zh": "立即领取当前委托奖金的 25%，本单最终奖金改为原来的 75%；完成时只补足差额。",
+      "body_en": "Receive 25% of the order bonus now; total bonus becomes 75% of the original, with the balance paid on completion.",
+      "action_zh": "预支奖金",
+      "action_en": "Take an advance"
+    },
+    {
+      "id": "advance_3",
+      "kind": "advance",
+      "title_zh": "采购预付款",
+      "title_en": "A purchase advance",
+      "body_zh": "立即领取当前委托奖金的 25%，本单最终奖金改为原来的 75%；完成时只补足差额。",
+      "body_en": "Receive 25% of the order bonus now; total bonus becomes 75% of the original, with the balance paid on completion.",
+      "action_zh": "预支奖金",
+      "action_en": "Take an advance"
+    },
+    {
+      "id": "fare_1",
+      "kind": "fare",
+      "title_zh": "常旅客空位",
+      "title_en": "A frequent-flyer offer",
+      "body_zh": "付 $30，下一次购票票价优惠 15%，最多省 $150；72 游戏小时内有效。",
+      "body_en": "Pay $30 for 15% off the next ticket, capped at $150, within 72 game hours.",
+      "action_zh": "预订优惠",
+      "action_en": "Reserve a fare discount"
+    },
+    {
+      "id": "fare_2",
+      "kind": "fare",
+      "title_zh": "航空公司回馈",
+      "title_en": "An airline thank-you",
+      "body_zh": "付 $30，下一次购票票价优惠 15%，最多省 $150；72 游戏小时内有效。",
+      "body_en": "Pay $30 for 15% off the next ticket, capped at $150, within 72 game hours.",
+      "action_zh": "预订优惠",
+      "action_en": "Reserve a fare discount"
+    },
+    {
+      "id": "fare_3",
+      "kind": "fare",
+      "title_zh": "联程推广券",
+      "title_en": "A connecting-flight promotion",
+      "body_zh": "付 $30，下一次购票票价优惠 15%，最多省 $150；72 游戏小时内有效。",
+      "body_en": "Pay $30 for 15% off the next ticket, capped at $150, within 72 game hours.",
+      "action_zh": "预订优惠",
+      "action_en": "Reserve a fare discount"
+    },
+    {
+      "id": "supply_1",
+      "kind": "supply",
+      "title_zh": "产地批发商",
+      "title_en": "A local wholesaler",
+      "body_zh": "付 $25，抵达后首次采购减价 12%，最多省 $100；24 游戏小时内有效。",
+      "body_en": "Pay $25 for 12% off the first purchase at destination, capped at $100, within 24 game hours.",
+      "action_zh": "预订货源",
+      "action_en": "Reserve local stock"
+    },
+    {
+      "id": "supply_2",
+      "kind": "supply",
+      "title_zh": "市集尾货预约",
+      "title_en": "A market clearance reservation",
+      "body_zh": "付 $25，抵达后首次采购减价 12%，最多省 $100；24 游戏小时内有效。",
+      "body_en": "Pay $25 for 12% off the first purchase at destination, capped at $100, within 24 game hours.",
+      "action_zh": "预订货源",
+      "action_en": "Reserve local stock"
+    },
+    {
+      "id": "supply_3",
+      "kind": "supply",
+      "title_zh": "合作社直供",
+      "title_en": "A cooperative supplier",
+      "body_zh": "付 $25，抵达后首次采购减价 12%，最多省 $100；24 游戏小时内有效。",
+      "body_en": "Pay $25 for 12% off the first purchase at destination, capped at $100, within 24 game hours.",
+      "action_zh": "预订货源",
+      "action_en": "Reserve local stock"
+    },
+    {
+      "id": "tip_1",
+      "kind": "tip",
+      "title_zh": "同行的路线笔记",
+      "title_en": "A trader’s route notes",
+      "body_zh": "付 $20，抵达后下一批限时商机的完成奖金提高 20%；72 游戏小时内有效。",
+      "body_en": "Pay $20 for a 20% bonus boost on the next batch of timed offers at destination, within 72 game hours.",
+      "action_zh": "购买情报",
+      "action_en": "Buy a lead"
+    },
+    {
+      "id": "tip_2",
+      "kind": "tip",
+      "title_zh": "展会需求清单",
+      "title_en": "An exhibition demand list",
+      "body_zh": "付 $20，抵达后下一批限时商机的完成奖金提高 20%；72 游戏小时内有效。",
+      "body_en": "Pay $20 for a 20% bonus boost on the next batch of timed offers at destination, within 72 game hours.",
+      "action_zh": "购买情报",
+      "action_en": "Buy a lead"
+    },
+    {
+      "id": "tip_3",
+      "kind": "tip",
+      "title_zh": "港口商会消息",
+      "title_en": "News from the trade association",
+      "body_zh": "付 $20，抵达后下一批限时商机的完成奖金提高 20%；72 游戏小时内有效。",
+      "body_en": "Pay $20 for a 20% bonus boost on the next batch of timed offers at destination, within 72 game hours.",
+      "action_zh": "购买情报",
+      "action_en": "Buy a lead"
+    }
+  ],
+  "merchant_rules": {
+    "min_hours": 24,
+    "max_hours": 72,
+    "offer_count": 3,
+    "order_bonus_rate": 0.4,
+    "chain_bonus_step": 0.15,
+    "max_chain": 3,
+    "product_milestone": 5000,
+    "category_milestone": 15000,
+    "flight_milestone": 5,
+    "mobile_product_milestone": 1000,
+    "mobile_category_milestone": 3000,
+    "candidate_limit": 3,
+    "ability_sell": 0.08,
+    "ability_buy": 0.08,
+    "ability_fare": 0.1,
+    "ability_cargo": 0.15,
+    "event_fees": {
+      "speculate": 40,
+      "insurance": 35,
+      "extend": 60,
+      "fare": 30,
+      "supply": 25,
+      "tip": 20
+    },
+    "event_quote_hours": 48
   }
 };

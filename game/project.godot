@@ -15,6 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="万里行商"
+config/version="0.6.0"
 config/name_localized={
 "en": "Wanli Trader"
 }
@@ -38,6 +39,7 @@ AudioService="*res://scripts/autoload/AudioService.gd"
 AchievementSystem="*res://scripts/systems/AchievementSystem.gd"
 ChallengeSystem="*res://scripts/systems/ChallengeSystem.gd"
 ReputationSystem="*res://scripts/systems/ReputationSystem.gd"
+MerchantSystem="*res://scripts/systems/MerchantSystem.gd"
 
 [debug]
 
@@ -61,5 +63,5 @@ theme/custom="res://themes/demo_theme.tres"
 
 [rendering]
 
-anti_aliasing/quality/msaa_3d=1
 textures/vram_compression/import_etc2_astc=true
+anti_aliasing/quality/msaa_3d=1

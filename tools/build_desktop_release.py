@@ -29,6 +29,8 @@ def require_data() -> None:
         GAME / "data/achievements.json",
         GAME / "data/steam_achievements.json",
         GAME / "data/news_events.json",
+        GAME / "data/journey_events.json",
+        GAME / "data/merchant_rules.json",
         GAME / "data/product_market_tags.json",
         GAME / "data/flights/_manifest.json",
     ]
@@ -73,6 +75,8 @@ def smoke_pack(godot: str, pack: Path) -> None:
         "DataService loaded: 500 airports" not in log
         or not re.search(r"I18nService loaded: zh=[1-9]\d* en=[1-9]\d* ui keys", log)
         or "missing res://" in log
+        or "SCRIPT ERROR:" in log
+        or re.search(r"(?:^|\n)\s*ERROR:", log)
     ):
         raise RuntimeError("Exported pack failed the data, language, or audio manifest startup check:\n" + log)
 

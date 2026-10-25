@@ -1,0 +1,27 @@
+{
+  "min_hours": 24,
+  "max_hours": 72,
+  "offer_count": 3,
+  "order_bonus_rate": 0.4,
+  "chain_bonus_step": 0.15,
+  "max_chain": 3,
+  "product_milestone": 5000,
+  "category_milestone": 15000,
+  "flight_milestone": 5,
+  "mobile_product_milestone": 1000,
+  "mobile_category_milestone": 3000,
+  "candidate_limit": 3,
+  "ability_sell": 0.08,
+  "ability_buy": 0.08,
+  "ability_fare": 0.1,
+  "ability_cargo": 0.15,
+  "event_fees": {
+    "speculate": 40,
+    "insurance": 35,
+    "extend": 60,
+    "fare": 30,
+    "supply": 25,
+    "tip": 20
+  },
+  "event_quote_hours": 48
+}

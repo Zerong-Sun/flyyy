@@ -1,3 +1,4 @@
+import { freshMerchant, refreshOffers, expireMerchant, acceptOrder, abandonOrder, equipAbility, dismissAbility, merchantArrival, merchantUnit, merchantFare, merchantBaggage, purchaseTotal, saleQuote, merchantSellData, recordMerchantSale, consumeDeal, journeyEvent, resolveJourney } from '../merchantLogic';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, AppState as NativeAppState, NativeModules } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -96,6 +97,8 @@ const initialState = () => ({
   log: [],
   lastSale: null,
   tripRecap: null,
+  merchant: freshMerchant(),
+  journey: null,
   intro: true,
   legs: 0,
   bizLegs: 0,
@@ -304,7 +307,7 @@ export function useGame() {
         ticket.toId,
         s.seenEventEpisodes || [],
       );
-      const showEvent = !!arrivalEvent;
+      const showEvent = false;
       const seenEventEpisodes = showEvent
         ? [{
           episodeKey: arrivalEvent.episodeKey,
@@ -334,7 +337,7 @@ export function useGame() {
         bagLimit: DEFAULT_BAG_LIMIT,
         city: ticket.toId,
         rot: -to.lon,
-        tab: 'globe',
+        tab: hasInv ? 'market' : 'globe',
         page: null,
         seg: 'local',
         focusDest: '',
@@ -344,7 +347,7 @@ export function useGame() {
         legs: s.legs + 1,
         km: s.km + ticket.km,
         bizLegs: s.bizLegs + (ticket.cabin === 'business' ? 1 : 0),
-        sheet: showEvent ? 'event' : (hasInv ? 'sell' : (ticket.tripForecast ? 'tripRecap' : null)),
+        sheet: null,
         eventPopup: showEvent ? arrivalEvent : null,
         eventReturnSheet: showEvent && hasInv ? 'sell' : (showEvent && ticket.tripForecast ? 'tripRecap' : null),
         tripRecap: landTripForecast(ticket.tripForecast, arrivalGameMin),
@@ -354,7 +357,7 @@ export function useGame() {
           : '',
       };
       next.unlockedAch = announceAchievements(s.unlockedAch || [], computeStats(next));
-      return next;
+      return merchantArrival(next);
     });
     flyingRef.current = false;
     calledEdgeRef.current = false;
@@ -379,13 +382,13 @@ export function useGame() {
     const t = originalTicket && CITIES[originalTicket.toId]
       ? {
         ...originalTicket,
-        tripForecast: createTripForecast({
+        tripForecast: originalTicket.tripForecast || createTripForecast({
           from: originalTicket.from,
           to: originalTicket.toId,
           inventory: current.inv,
           fare: originalTicket.fareCost ?? originalTicket.totalPaid,
           baggage: originalTicket.baggageCost ?? 0,
-          quote: (id, cityId) => marketPriceAt(id, cityId, 'sell', forecastEvents),
+          quote: (id, cityId) => merchantUnit(current, id, cityId, 'sell', forecastEvents),
         }),
       }
       : originalTicket;
@@ -428,11 +431,22 @@ export function useGame() {
         setState((s) => ({ ...s, cut: steps[i] }));
         cutRef.current = setTimeout(tick, dur);
       } else {
-        finishLanding(t);
+        const event = journeyEvent(stateRef.current, t);
+        if (event) setState((s) => ({ ...s, journey: event }));
+        else finishLanding(t);
       }
     };
     cutRef.current = setTimeout(tick, dur);
   }, [buzz, click, finishLanding]);
+
+  const chooseJourney = useCallback((accept) => {
+    const s = stateRef.current;
+    if (!s.journey || !s.ticket) return;
+    const next = resolveJourney(s, s.journey, accept);
+    if (next === s) return;
+    setState({ ...next, journey: null });
+    finishLanding(next.ticket);
+  }, [finishLanding]);
 
   /* ---- world clock ---------------------------------------------- */
 
@@ -443,7 +457,7 @@ export function useGame() {
       if (cur.intro || cur.cut || !foregroundRef.current) return;
       setState((s) => {
         if (s.intro || s.cut) return s;
-        const next = advanceWorldClock(s);
+        const next = expireMerchant(advanceWorldClock(s));
         if (
           s.ticket
           && next.minsToDep === 0
@@ -528,12 +542,12 @@ export function useGame() {
     impactText: eventImpactText(state.eventPopup, loc),
   } : null), [state.eventPopup, loc]);
   const sell = useMemo(
-    () => sellData(state.inv, state.city, loc, worldEvents),
-    [state.inv, state.city, loc, worldEvents],
+    () => merchantSellData(state, worldEvents),
+    [state.inv, state.city, state.merchant, state.gameMin, loc, worldEvents],
   );
 
   const setTab = useCallback((tab) => {
-    setState((s) => ({ ...s, tab, page: null, query: '' }));
+    setState((s) => refreshOffers({ ...s, tab, page: null, query: '' }));
   }, []);
   const setPage = useCallback((page) => {
     setState((s) => ({ ...s, page }));
@@ -596,7 +610,7 @@ export function useGame() {
     }));
   }, []);
   const startGame = useCallback(() => {
-    setState((s) => ({ ...s, intro: false }));
+    setState((s) => refreshOffers({ ...s, intro: false }));
   }, []);
   const setRot = useCallback((rot) => {
     setState((s) => ({ ...s, rot }));
@@ -704,8 +718,8 @@ export function useGame() {
       if (!p) return st;
       const n = st.qty;
       const slot = st.slot;
-      const unit = marketPriceAt(p.id, st.city, 'buy', activeEvents(st.gameMin, st.eventSeed));
-      const cost = unit * n;
+      const cost = purchaseTotal(st, p.id, n);
+      const unit = cost / n;
       const wt = p.w * n;
       if (cost > st.cash) {
         result = { ok: false, msg: stF(st, 'msg.no_cash_short', { short: money(cost - st.cash) }, `Not enough cash — short ${money(cost - st.cash)}`), kind: 'bad' };
@@ -752,6 +766,7 @@ export function useGame() {
       const next = {
         ...st,
         inv,
+        merchant: { ...st.merchant, supply: st.merchant.supply?.city === st.city ? null : st.merchant.supply },
         cash: st.cash - cost,
         sheet: null,
         qty: 1,
@@ -784,8 +799,8 @@ export function useGame() {
         return { ...st, sheet: null, selFlight: null };
       }
       const add = ADDONS.find((a) => a.k === st.addon) || ADDONS[0];
-      const fare = st.cabin === 'economy' ? fl.econ : fl.biz;
-      const baggage = add.price;
+      const fare = merchantFare(st, st.cabin === 'economy' ? fl.econ : fl.biz);
+      const baggage = merchantBaggage(st, add.price);
       const total = fare + baggage;
       if (total > st.cash) {
         result = { ok: false, msg: stT(st, 'msg.no_cash_fare', 'Not enough cash for this fare'), kind: 'bad' };
@@ -812,6 +827,7 @@ export function useGame() {
       return {
         ...st,
         ...travelCharge(st, total),
+        merchant: { ...st.merchant, coupon: null },
         sheet: null,
         tab: 'globe',
         page: null,
@@ -819,6 +835,7 @@ export function useGame() {
         focusDest: fl.toId,
         bagLimit: DEFAULT_BAG_LIMIT + kg,
         ticket: {
+          merchantKey: `${st.legs}|${fl.no}|${fl.toId}|${st.gameMin + wait}`,
           no: fl.no,
           from: from.iata,
           to: to.iata,
@@ -845,7 +862,16 @@ export function useGame() {
     let result = null;
     setState((s) => {
       if (!s.inv.length) return s;
-      const d = sellData(s.inv, s.city, s.locale, activeEvents(s.gameMin, s.eventSeed));
+      const d = merchantSellData(s);
+      let progressState = s;
+      let bonus = 0;
+      for (const row of d.rows) {
+        const progress = recordMerchantSale(progressState, row.id, row.qty, row.grossValue);
+        progressState = progress.state;
+        bonus += progress.bonus;
+        row.grossValue += progress.bonus;
+      }
+      d.gross += bonus; d.net += bonus;
       const here = CITIES[s.city];
       const entry = {
         icon: 'assets/ic_market.webp',
@@ -866,10 +892,10 @@ export function useGame() {
         fullQualityRevenue: row.grossValue,
       }), s.tripRecap);
       const next = {
-        ...s,
+        ...progressState,
         ...saleCredit(s, d.gross, d.cost),
         inv: [],
-        sheet: tripRecap !== s.tripRecap ? 'tripRecap' : null,
+        sheet: null,
         selInv: null,
         lastSale: d.net,
         tripRecap,
@@ -896,8 +922,9 @@ export function useGame() {
       if (idx < 0) return s;
       const item = s.inv[idx];
       const qty = Math.min(Math.max(1, n || s.invQty), item.n);
-      const unit = marketPriceAt(item.id, s.city, 'sell', activeEvents(s.gameMin, s.eventSeed));
-      const gross = unit * qty;
+      const quoted = saleQuote(s, item, qty);
+      const progress = recordMerchantSale(s, item.id, qty, quoted);
+      const gross = quoted + progress.bonus;
       const net = gross - item.cost * qty;
       const inv = s.inv.slice();
       if (qty >= item.n) inv.splice(idx, 1);
@@ -920,10 +947,10 @@ export function useGame() {
         id: item.id, qty, cost: item.cost * qty, revenue: gross, fullQualityRevenue: gross,
       });
       const next = {
-        ...s,
+        ...progress.state,
         ...saleCredit(s, gross, item.cost * qty),
         inv,
-        sheet: tripRecap !== s.tripRecap ? 'tripRecap' : null,
+        sheet: null,
         selInv: null,
         invQty: 1,
         lastSale: net,
@@ -971,7 +998,7 @@ export function useGame() {
               const over = Math.max(0, bagUsed(inv) - DEFAULT_BAG_LIMIT);
               const tripRecap = recordTripDiscard(s.tripRecap, s.city, item.id, qty, item.cost * qty);
               return {
-                ...s,
+                ...consumeDeal(s, item.id, qty),
                 inv,
                 profit: s.profit - item.cost * qty,
                 tripRecap,
@@ -1096,10 +1123,10 @@ export function useGame() {
     const ids = destId ? sortByDestProfit(baseIds, state.city, destId, worldEvents) : baseIds;
     return ids.map((id) => {
       const q = PRODUCTS[id];
-      const unit = marketPriceAt(id, state.city, 'buy', worldEvents);
+      const unit = merchantUnit(state, id, state.city, 'buy', worldEvents);
       const tag = intel(id, state.city, destId, loc, worldEvents);
       const spark = priceSparkline(id, state.city, 5, worldEvents);
-      const destPrice = destId ? marketPriceAt(id, destId, 'sell', worldEvents) : null;
+      const destPrice = destId ? merchantUnit(state, id, destId, 'sell', worldEvents) : null;
       const cat = i18nT(loc, `cat.${q.category}`, q.category);
       const name = i18nT(loc, `prod.${id}`, q.name);
       const isLocal = q.home === state.city;
@@ -1119,7 +1146,7 @@ export function useGame() {
         spark,
       };
     });
-  }, [state.seg, state.city, destId, loc, localIds, importIds, worldEvents]);
+  }, [state.seg, state.city, state.merchant, destId, loc, localIds, importIds, worldEvents]);
 
   const sortedFlights = useMemo(() => {
     const localNow = ((cityMinutes(state.gameMin, state.city) % 1440) + 1440) % 1440;
@@ -1210,9 +1237,9 @@ export function useGame() {
     : [];
 
   const selProduct = state.selId ? PRODUCTS[state.selId] : null;
-  const unitHere = selProduct ? marketPriceAt(selProduct.id, state.city, 'buy', worldEvents) : 0;
-  const sellUnitHere = selProduct ? marketPriceAt(selProduct.id, state.city, 'sell', worldEvents) : 0;
-  const costTotal = unitHere * state.qty;
+  const unitHere = selProduct ? merchantUnit(state, selProduct.id, state.city, 'buy', worldEvents) : 0;
+  const sellUnitHere = selProduct ? merchantUnit(state, selProduct.id, state.city, 'sell', worldEvents) : 0;
+  const costTotal = selProduct ? purchaseTotal(state, selProduct.id, state.qty) : 0;
   const wtTotal = selProduct ? selProduct.w * state.qty : 0;
   const slotUsed = state.slot === 'bag' ? bagKg : cargoKg;
   const slotCap = state.slot === 'bag' ? state.bagLimit : state.cargoCap;
@@ -1230,7 +1257,7 @@ export function useGame() {
     ? quoteFlightForEvents(state.selFlight, state.city, worldEvents, state.eventSeed)
     : null;
   const fareTotal = selFlight
-    ? (state.cabin === 'economy' ? selFlight.econ : selFlight.biz) + add.price
+    ? merchantFare(state, state.cabin === 'economy' ? selFlight.econ : selFlight.biz) + merchantBaggage(state, add.price)
     : 0;
   const canBook = !!selFlight && !selFlight.eventUnavailable && !state.ticket && fareTotal <= state.cash;
   const bagOverKg = Math.max(0, bagKg - bookingBagLimit);
@@ -1238,8 +1265,8 @@ export function useGame() {
     const idx = findInv(state.inv, state.selInv);
     return idx >= 0 ? state.inv[idx] : null;
   })();
-  const invUnit = selInvItem ? marketPriceAt(selInvItem.id, state.city, 'sell', worldEvents) : 0;
-  const invGross = selInvItem ? invUnit * state.invQty : 0;
+  const invGross = selInvItem ? saleQuote(state, selInvItem, state.invQty, worldEvents) : 0;
+  const invUnit = selInvItem ? invGross / state.invQty : 0;
 
   const achievements = useMemo(() => ACHIEVEMENTS.map((a) => ({
     ...a,
@@ -1261,6 +1288,11 @@ export function useGame() {
 
   return {
     state,
+    chooseJourney,
+    acceptMerchantOrder: (id) => setState((s) => acceptOrder(s, id)),
+    abandonMerchantOrder: () => setState(abandonOrder),
+    equipMerchantAbility: (id) => setState((s) => equipAbility(s, id)),
+    dismissMerchantAbility: (id) => setState((s) => dismissAbility(s, id)),
     loaded,
     city,
     destId,
@@ -1312,7 +1344,8 @@ export function useGame() {
     hm: (m) => hm(m, loc),
     hhmm,
     money,
-    priceAt: (pid, cityId, side = 'sell') => marketPriceAt(pid, cityId, side, worldEvents),
+    flightFare: (price) => merchantFare(state, price),
+    priceAt: (pid, cityId, side = 'sell') => merchantUnit(state, pid, cityId, side, worldEvents),
     marketIntel: (pid, cityId, destinationId) => intel(pid, cityId, destinationId, loc, worldEvents),
     setTab,
     setPage,

@@ -19,6 +19,8 @@ static func buy(product_id: String, qty: int, as_cargo: bool = false, discount_f
 		return "该商品暂无报价"
 	price *= discount_factor
 	var total: float = price * float(qty)
+	total -= MerchantSystem.purchase_discount(total)
+	price = total / float(qty)
 	if total > AppState.cash_usd:
 		return "资金不足"
 	var p: Dictionary = DataService.get_product(product_id)
@@ -40,6 +42,7 @@ static func buy(product_id: String, qty: int, as_cargo: bool = false, discount_f
 		var used_p: float = AppState.inventory_weight_kg(false, true)
 		if used_p + add_w > AppState.personal_baggage_limit_kg() + 0.001:
 			return "行李超重：请加购行李扩展(+10/+20/+50)或改走货运"
+	MerchantSystem.purchase_discount(price * float(qty), true)
 	AppState.add_cash(-total)
 	AppState.inventory.append({
 		"product_id": product_id,
@@ -88,9 +91,12 @@ static func sell(index: int, qty: int) -> Dictionary:
 	var unit := _Economy.sell_price(city_id, product_id, q)
 	for k in range(qty):
 		var pressure := minf(0.7, base_pressure + decay * float(k))
-		unit = _Economy.sell_price(city_id, product_id, q, pressure)
+		unit = MerchantSystem.lot_quote(item, _Economy.sell_price(city_id, product_id, q, pressure))
 		revenue += unit
-		full_quality_revenue += _Economy.sell_price(city_id, product_id, 1.0, pressure)
+		full_quality_revenue += MerchantSystem.lot_quote(item, _Economy.sell_price(city_id, product_id, 1.0, pressure))
+	var order_bonus := MerchantSystem.record_sale(product_id, qty, revenue)
+	revenue += order_bonus
+	full_quality_revenue += order_bonus
 	var unit_cost: float = float(item.get("unit_cost", 0))
 	var total_unit_cost: float = unit_cost * float(qty)
 	var margin: float = revenue - total_unit_cost
@@ -114,6 +120,7 @@ static func sell(index: int, qty: int) -> Dictionary:
 		"success": true,
 		"msg": msg,
 		"revenue": revenue,
+		"order_bonus": order_bonus,
 		"qty": qty,
 		"product_id": product_id,
 		"unit_price": unit,
