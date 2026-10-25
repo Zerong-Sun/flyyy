@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:AUH",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_abu_dhabi_photo_720"
 }

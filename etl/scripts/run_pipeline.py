@@ -150,8 +150,11 @@ def build_cities_500_from_ourairports(
         # A municipality/neighborhood rename must not silently rewrite its airport
         # sentence or change the content writer's truncation boundaries.
         authored_city = CONTENT / 'cities' / f'{city_id}.json'
+        authored_name_zh = ""
         if authored_city.is_file():
-            municipality = json.loads(authored_city.read_text(encoding='utf-8')).get('name_en') or municipality
+            authored = json.loads(authored_city.read_text(encoding='utf-8'))
+            municipality = authored.get('name_en') or municipality
+            authored_name_zh = authored.get('name_zh') or ""
 
         # Derive country and timezone
         country_id = info.get("iso_country", "XX")
@@ -159,10 +162,12 @@ def build_cities_500_from_ourairports(
         timezone = _guess_timezone(info.get("continent", ""), country_id)
 
         # Get Chinese city name and airport name
-        city_zh = _get_city_zh(municipality, country_id)
+        city_zh = authored_name_zh or _get_city_zh(municipality, country_id)
         city_en = municipality
-        name_zh = f"{city_zh}国际机场"
-        name_en = f"{municipality} International Airport" if "International" not in municipality else municipality
+        name_zh = "天津滨海国际机场" if iata == "TSN" else f"{city_zh}国际机场"
+        name_en = "Tianjin Binhai International Airport" if iata == "TSN" else (
+            f"{municipality} International Airport" if "International" not in municipality else municipality
+        )
 
         additional.append({
             "iata": iata,
@@ -1883,7 +1888,7 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
         blur = load_city_blurb(cid, h.get("city_zh", cid), h.get("city_en", cid),
                                country_id, country_zh, h.get("timezone", "UTC"))
         has_content = h.get("has_content_file", True)
-        image_id = h.get("image_asset_id", f"city_{cid}_hero_720")
+        image_id = blur.get("image_asset_id", h.get("image_asset_id", f"city_{cid}_hero_720"))
         conf = "C" if _is_template_filler(blur) else blur.get("content_confidence", "C")
         cities.append(
             {
@@ -1899,6 +1904,7 @@ def build_cities_products(hubs_cfg: dict, eco: dict) -> tuple[list[dict], list[d
                 "geography_summary": blur["geography_summary"],
                 "economy_summary": blur["economy_summary"],
                 "food_summary": blur["food_summary"],
+                "culture_note": blur.get("culture_note", ""),
                 "travel_note": blur["travel_note"],
                 "content_confidence": conf,
                 "source_ids": blur.get("source_ids", []),

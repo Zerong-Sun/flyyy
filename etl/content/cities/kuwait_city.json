@@ -1,0 +1,21 @@
+{
+  "city_id": "kuwait_city",
+  "name_zh": "科威特城",
+  "name_en": "Kuwait City",
+  "country_id": "KW",
+  "country_zh": "科威特",
+  "timezone": "UTC",
+  "short_description": "科威特城是科威特的首都，人口约298.9万，邻近波斯湾，海拔16米。科威特城有记载的城市历史可追溯至1752年。在科威特的饮食传统中，香料米饭马奇布斯是值得留意的风味。",
+  "overview": "科威特城位于科威特（北纬29.4°）。科威特城地处波斯湾沿岸。作为科威特的首都，科威特城是当地行政与商业活动的中心。城市人口约298.9万（2018年）。机场三字码为KWI；实际可达航线以航班页为准。",
+  "history_summary": "科威特城有记载的城市历史可追溯至1752年。",
+  "geography_summary": "科威特城地处北纬29.4°、海拔16米、邻近波斯湾。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在科威特的饮食传统中，香料米饭马奇布斯是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为KWI。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q35178",
+    "ourairports:KWI"
+  ],
+  "image_asset_id": "city_kuwait_city_hero_720"
+}

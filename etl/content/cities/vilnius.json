@@ -1,0 +1,21 @@
+{
+  "city_id": "vilnius",
+  "name_zh": "维尔纽斯",
+  "name_en": "Vilnius",
+  "country_id": "LT",
+  "country_zh": "立陶宛",
+  "timezone": "UTC",
+  "short_description": "维尔纽斯是立陶宛的首都，人口约61.9万，邻近内里斯河，海拔98米。维尔纽斯有记载的城市历史可追溯至1201年。在立陶宛的饮食传统中，土豆肉馅团塞佩利奈是值得留意的风味。",
+  "overview": "维尔纽斯位于立陶宛（北纬54.7°）。维尔纽斯地处内里斯河沿岸。作为立陶宛的首都，维尔纽斯是当地行政与商业活动的中心。城市人口约61.9万（2026年）。机场三字码为VNO；实际可达航线以航班页为准。",
+  "history_summary": "维尔纽斯有记载的城市历史可追溯至1201年。",
+  "geography_summary": "维尔纽斯地处北纬54.7°、海拔98米、邻近内里斯河。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在立陶宛的饮食传统中，土豆肉馅团塞佩利奈是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为VNO。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q216",
+    "ourairports:VNO"
+  ],
+  "image_asset_id": "city_vilnius_hero_720"
+}

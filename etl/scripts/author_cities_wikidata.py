@@ -106,6 +106,8 @@ def _load_airports() -> dict[str, dict]:
 
 
 def _tz_offset_zh(timezone: str) -> str | None:
+    if timezone in ("", "UTC"):
+        return None  # UTC is also the ETL fallback for unknown airport zones.
     try:
         tz = ZoneInfo(timezone)
         off = tz.utcoffset(datetime(2025, 3, 1, 12))
@@ -138,16 +140,28 @@ class CityWriter:
         elev = f.get("elevation_m")
         lat = f.get("lat")
         region = zh(f.get("region_zh"))
+        if f.get("region_id") and f.get("region_id") == f.get("country_wd_id"):
+            region = ""
         if region and (region == name or region.endswith(name) or name in region
                        or re.search(r"[A-Za-z]", region)):
             region = ""
         # Curated simplified names win over Wikidata labels (zh labels are
         # often traditional or regional variants, e.g. 奈及利亞 vs 尼日利亚).
-        country_zh = cf.get("name_zh", "") or zh(f.get("country_zh"))
-        water = zh(f.get("water_zh"))
+        country_zh = cf.get("name_zh", "") or blob.get("country_zh", "") or zh(f.get("country_zh"))
+        if region == country_zh:
+            region = ""
+        water = re.split(r"[（(]", zh(f.get("water_zh")))[0].strip()
         capital_of = zh(f.get("capital_of_zh"))
-        if capital_of == country_zh or capital_of == region:
+        if capital_of == name:
             capital_of = ""
+        # This former 19th-century entity is still present in Wikidata's
+        # capital-of claim, but Montréal is no longer its capital.
+        if cid == "montréal" and capital_of == "加拿大省":
+            capital_of = ""
+        # Wikidata's zh label can use traditional characters while the
+        # curated country label is simplified; treat both as the same state.
+        if capital_of and capital_of == zh(f.get("country_zh")):
+            capital_of = country_zh
         inception = f.get("inception_year")
         tz_off = _tz_offset_zh(blob.get("timezone", ""))
 
@@ -157,7 +171,7 @@ class CityWriter:
         elev_s = f"海拔{int(elev)}米" if elev is not None else ""
 
         if capital_of:
-            if capital_of.endswith(("国", "共和国")):
+            if capital_of == country_zh or capital_of.endswith(("国", "共和国")):
                 cap_role = "首都"
             elif capital_of.endswith("县"):
                 cap_role = "行政中心"
@@ -189,7 +203,7 @@ class CityWriter:
             parts.append(f"人口{pop_s}")
         industry = _first_clause_items(economy1)
         if industry:
-            parts.append(f"以{industry}等产业闻名")
+            parts.append(f"所在国家以{industry}等产业闻名")
         short = "，".join(parts) + "。"
         for extra in ([f"邻近{water}"] if water else []) + ([elev_s] if elev_s else []):
             if _len(short) >= 80:
@@ -222,10 +236,11 @@ class CityWriter:
                         if pop_year and pop_year.isdigit() and int(pop_year) > 1900 else "")
                      + "。")
         if ap.get("iata"):
-            ap_name = f"，即{ap.get('name_zh')}" if ap.get("name_zh") else ""
-            s.append(f"机场（{ap['iata']}{ap_name}）通达区域与国际航线网络。")
+            ap_name = str(ap.get("name_zh", ""))
+            ap_name = f"，即{ap_name}" if ap_name and not re.search(r"[A-Za-z]", ap_name) else ""
+            s.append(f"机场三字码为{ap['iata']}{ap_name}；实际可达航线以航班页为准。")
         if economy1:
-            s.append(economy1 + "。")
+            s.append("从全国经济背景看，" + economy1 + "。")
         for extra in (geo1, climate1,
                       hist_parts[0] if hist_parts else "", hist_extra, economy2):
             if _len("".join(s)) >= 150 or not extra:
@@ -239,11 +254,14 @@ class CityWriter:
         if inception:
             s.append(f"{name}有记载的城市历史可追溯至{inception}年。")
         for hp in hist_parts[:2]:
-            s.append(hp + "。")
+            s.append("放在" + country_zh + "的历史脉络中，" + hp + "。")
         if capital_of and region:
             s.append(f"如今{name}仍是{region}的重要城市。")
         if _len("".join(s)) < 50 and hist_extra:
             s.append(hist_extra + "。")
+        if not s:
+            loc = f"位于{country_zh}的{region}" if region else f"位于{country_zh}"
+            s.append(f"{name}{loc}。现有结构化资料可确认其地理与行政位置，具体建城年代不宜由机场资料推断。")
         history = "".join(s)
         history = history[:250]
 
@@ -253,9 +271,9 @@ class CityWriter:
         if geo_clauses:
             s.append(f"{name}地处{'、'.join(geo_clauses)}。")
         if climate1:
-            s.append(climate1 + "。")
+            s.append("全国气候背景：" + climate1 + "。")
         if geo1:
-            s.append(geo1 + "。")
+            s.append("全国地理背景：" + geo1 + "。")
         if _len("".join(s)) < 50 and ap.get("iata"):
             s.append(f"该城机场通达区域航线网络。")
         geography = "".join(s)
@@ -264,13 +282,18 @@ class CityWriter:
         # ---- economy_summary (80-200) ----
         s = []
         if economy1:
-            s.append(economy1 + "。")
+            s.append("全国经济背景：" + economy1 + "。")
         if capital_of:
             s.append(f"{cap_role}地位带来稳定的行政与商务需求。")
         if _len("".join(s)) < 50 and economy2:
             s.append(economy2 + "。")
         if _len("".join(s)) < 50 and geo1:
             s.append(geo1 + "。")
+        if not s:
+            if pop_s:
+                s.append(f"资料所载{name}人口{pop_s}；这一数字对应{pop_year or '资料'}年的统计口径。")
+            if ap.get("iata"):
+                s.append(f"机场三字码{ap['iata']}连接该地区的客运网络，机场周边的地面交通与旅客服务是理解本地流通的一个入口。")
         economy = "".join(s)
         economy = economy[:200]
 
@@ -278,7 +301,7 @@ class CityWriter:
         food_parts = [p.strip("。") for p in cf.get("food", "").split("。") if p.strip()]
         s = []
         for fp in food_parts[:2]:
-            s.append(fp + "。")
+            s.append("在" + country_zh + "的饮食中，" + fp + "。")
             if _len("".join(s)) >= 80:
                 break
         if _len("".join(s)) < 50 and food_extra:
@@ -304,7 +327,7 @@ class CityWriter:
                 if tip.startswith(prefix):
                     tip = tip[len(prefix):]
                     break
-            s.append(f"当地属{tip}，出行留意天气变化")
+            s.append(f"全国气候参考为{tip}；具体天气以目的地预报为准")
         travel = "，".join(s) + "。" if s else "出行前查询当地航班与天气信息。"
 
         out = {

@@ -1,0 +1,84 @@
+{
+  "tocumen": {
+    "history_summary": "托库门是巴拿马城东部的航空门户。托库门国际机场的成长，把这片城区与首都的商业和跨洲往来连在一起。若从机场向市中心走，巴拿马旧城的遗址和后来重建的老城区，正好展示这座首都从殖民时期到现代交通枢纽的不同层次。",
+    "source_ids": [
+      "https://www.tourismpanama.com/plan-your-trip/getting-here/",
+      "https://www.tourismpanama.com/places-to-visit/panama-city/things-to-do/historical-sites/"
+    ]
+  },
+  "sint_maarten": {
+    "history_summary": "菲利普斯堡位于大湾和大盐池之间的狭长地带。18世纪的新城以指挥官约翰·菲利普斯命名；盐池出产的海盐曾经从海湾装船外运。今天沿着前街、后街行走，仍能从盐工纪念像和地名读到这段贸易史。",
+    "culture_note": "菲利普斯堡的盐工纪念像提醒游客：过去制盐靠人们在浅水中辛苦劳作。如今热闹的邮轮码头和海滨步道，站在同一片曾为盐船装货的海岸上。",
+    "source_ids": [
+      "https://www.visitstmaarten.com/areas/philipsburg/",
+      "https://www.visitstmaarten.com/areas/the-great-salt-pond/"
+    ]
+  },
+  "minsk": {
+    "history_summary": "明斯克沿斯维斯拉奇河展开，是白俄罗斯的首都，也是全国政治、文化和交通的中心。它的城市规模与河流位置一道说明了这里为何长期承担区域往来的枢纽角色。观察河岸、广场与街道，比单看机场更能理解这座城市的层次。",
+    "source_ids": [
+      "https://www.admkrsk.ru/sites/eng/rel/Pages/minsk.aspx"
+    ]
+  },
+  "nadi": {
+    "history_summary": "楠迪位于维提岛西侧。随着机场成为斐济主要国际入口，城镇发展出市场、餐饮和连接岛屿的旅行服务。市区南端的斯里湿婆苏布拉马尼亚神庙，则让印度裔斐济人的宗教与饮食传统在日常街景中可见。",
+    "culture_note": "楠迪的文化并非只有海滩：在市场里能看到本地食材，印度教神庙旁能尝到香料茶和素食；斐济的地炉烹饪 lovo 也常在节庆或聚会中出现。",
+    "source_ids": [
+      "https://www.fiji.travel/places-to-go/nadi/locations/nadi-the-perfect-base-to-explore-fiji",
+      "https://www.fiji.travel/things-to-do/arts/best-cultural-experiences-in-nadi"
+    ]
+  },
+  "plaine_magnien": {
+    "history_summary": "马尼安平原附近的机场旧称普莱桑斯机场。第二次世界大战期间，机场所在区域承担航空任务，战后逐步转向民用。1987年机场以毛里求斯首任总理西沃萨古尔·拉姆古兰命名；从这一名字也能读到岛国独立后的历史记忆。",
+    "source_ids": [
+      "https://aml.mru.aero/index.php/corporate/history",
+      "https://mauritiusmuseums.govmu.org/mauritiusmuseums/?page_id=1869"
+    ]
+  },
+  "khartoum": {
+    "history_summary": "喀土穆的城市故事从青尼罗河和白尼罗河交汇处展开。1821年这里形成军事营地，后来与隔河的北喀土穆、恩图曼共同构成河流两岸的都市区。三座城区各有不同的发展轨迹，交汇处既是地理地标，也是理解城市形成的起点。",
+    "source_ids": [
+      "https://visitsudan.org/en/article-khartoum"
+    ]
+  },
+  "tallinn": {
+    "history_summary": "塔林老城保留了中世纪北欧商埠的街道、城墙和商人住宅。13至16世纪，这里是汉萨同盟的重要贸易中心；高处的托姆比亚与低处的市镇分担行政和商业功能。今天走过窄巷和城门，仍能看见当年的城市格局。",
+    "culture_note": "塔林老城的上城和下城并非单纯的观景分区：城堡、教堂与商人的房屋曾对应不同的权力和职业。顺着坡道走，两种城市生活会在同一次散步里相遇。",
+    "source_ids": [
+      "https://whc.unesco.org/en/list/822"
+    ]
+  },
+  "rinas": {
+    "history_summary": "里纳斯与地拉那机场的历史紧密相连。机场于1955至1957年间建成，早年航班很少；20世纪90年代阿尔巴尼亚对外往来增加后，航班和旅客数也逐渐上升。机场从小规模设施变为首都航空门户，记录了国家交通开放的过程。",
+    "source_ids": [
+      "https://www.tirana-airport.com/en/article/24/History-of-the-Airport"
+    ]
+  },
+  "port_of_spain": {
+    "history_summary": "西班牙港是特立尼达和多巴哥的首都，也是狂欢节的核心舞台。街头游行、角色装扮、卡利普索和钢鼓比赛，把加勒比地区多种文化传统汇入城市公共空间。了解这座港城的近现代故事，可以从狂欢节的音乐和街道开始。",
+    "culture_note": "狂欢节里的 J'ouvert 从清晨开启，参与者以泥、颜料或粉末装扮；随后出现服饰华丽的队伍和传统角色。钢鼓演奏与卡利普索歌曲则把节庆变成能听见的城市记忆。",
+    "source_ids": [
+      "https://tntairports.com/tourist_attraction/carnival/"
+    ]
+  },
+  "zgornji_brnik": {
+    "history_summary": "兹戈尔尼布尔尼克附近的布尔尼克机场在1963年迎来首架客机，并于1964年开通定期航班。当地居民当年步行前往观看飞机起降。如今的卢布尔雅那机场仍以这一村镇为所在地，航空交通也成为其现代历史的一部分。",
+    "culture_note": "1963年机场开放时，周边居民特意走上几公里去看客机起降。对今天的旅客来说稀松平常的一幕，当时却是当地值得围观的新鲜事。",
+    "source_ids": [
+      "https://www.gov.si/en/news/2023-12-01-new-airport-and-the-landing-of-the-first-passenger-plane-at-brnik/"
+    ]
+  },
+  "providenciales": {
+    "history_summary": "普罗维登西亚莱斯岛的现代旅游业始于20世纪后半叶。1968年的简易跑道、随后兴建的旅馆，以及20世纪80年代的新机场和度假设施，逐渐把岛上的海滩带入国际旅行版图。航空交通与旅游开发改变了这座岛的人口和经济面貌。",
+    "source_ids": [
+      "https://www.visittci.com/nature-and-history/history",
+      "https://www.tcilondon.org.uk/the-islands/a-brief-history-of-the-islands/"
+    ]
+  },
+  "ilinden": {
+    "history_summary": "伊林登市镇内的斯科普里机场见证了北马其顿首都航空交通的转移。1963年地震影响旧机场后，新航站楼于1968年在彼得罗韦茨附近建成；位于伊林登的新航站楼则在2011年投入使用。村镇与机场的关系，是这片地区现代发展的线索。",
+    "source_ids": [
+      "https://skp.airports.com.mk/en-EN/about-tav-airport/page/history"
+    ]
+  }
+}

@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:BCN",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_barcelona_photo_720"
 }

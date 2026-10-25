@@ -1,0 +1,21 @@
+{
+  "city_id": "luxembourg",
+  "name_zh": "卢森堡市",
+  "name_en": "Luxembourg",
+  "country_id": "LU",
+  "country_zh": "卢森堡",
+  "timezone": "UTC",
+  "short_description": "卢森堡市是卢森堡的首都，人口约13.8万，邻近阿尔泽特河，海拔300米。如今卢森堡市仍是卢森堡县的重要城市。在卢森堡的饮食传统中，熏猪颈肉配蚕豆是值得留意的风味。",
+  "overview": "卢森堡市位于卢森堡的卢森堡县（北纬49.6°）。卢森堡市地处阿尔泽特河沿岸。作为卢森堡的首都，卢森堡市是当地行政与商业活动的中心。城市人口约13.8万（2026年）。机场三字码为LUX；实际可达航线以航班页为准。",
+  "history_summary": "如今卢森堡市仍是卢森堡县的重要城市。",
+  "geography_summary": "卢森堡市地处北纬49.6°、海拔300米、邻近阿尔泽特河。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在卢森堡的饮食传统中，熏猪颈肉配蚕豆是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为LUX。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q1842",
+    "ourairports:LUX"
+  ],
+  "image_asset_id": "city_luxembourg_hero_720"
+}

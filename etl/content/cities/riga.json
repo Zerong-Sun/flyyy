@@ -1,0 +1,21 @@
+{
+  "city_id": "riga",
+  "name_zh": "里加",
+  "name_en": "Riga",
+  "country_id": "LV",
+  "country_zh": "拉脱维亚",
+  "timezone": "UTC",
+  "short_description": "里加是拉脱维亚的首都，人口约58.9万，邻近道加瓦河，海拔6米。里加有记载的城市历史可追溯至1201年。在拉脱维亚的饮食传统中，黑麦面包与培根卷皮拉吉是值得留意的风味。",
+  "overview": "里加位于拉脱维亚（北纬56.9°）。里加地处道加瓦河沿岸。作为拉脱维亚的首都，里加是当地行政与商业活动的中心。城市人口约58.9万（2026年）。机场三字码为RIX；实际可达航线以航班页为准。",
+  "history_summary": "里加有记载的城市历史可追溯至1201年。",
+  "geography_summary": "里加地处北纬56.9°、海拔6米、邻近道加瓦河。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在拉脱维亚的饮食传统中，黑麦面包与培根卷皮拉吉是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为RIX。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q1773",
+    "ourairports:RIX"
+  ],
+  "image_asset_id": "city_riga_photo_720"
+}

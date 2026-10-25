@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:DOH",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_doha_photo_720"
 }

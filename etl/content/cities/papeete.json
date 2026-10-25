@@ -1,0 +1,21 @@
+{
+  "city_id": "papeete",
+  "name_zh": "帕皮提",
+  "name_en": "Papeete",
+  "country_id": "PF",
+  "country_zh": "法属波利尼西亚",
+  "timezone": "UTC",
+  "short_description": "帕皮提是法屬玻里尼西亞的首府，人口约2.7万，邻近Port de Papeete，海拔9米。帕皮提有记载的城市历史可追溯至1818年。如今帕皮提仍是向风群岛的重要城市。",
+  "overview": "帕皮提位于法属波利尼西亚的向风群岛（南纬17.5°）。帕皮提地处Port de Papeete沿岸。作为法屬玻里尼西亞的首府，帕皮提是当地行政与商业活动的中心。城市人口约2.7万（2022年）。机场三字码为PPT；实际可达航线以航班页为准。",
+  "history_summary": "帕皮提有记载的城市历史可追溯至1818年。如今帕皮提仍是向风群岛的重要城市。",
+  "geography_summary": "帕皮提地处南纬17.5°、海拔9米、邻近Port de Papeete。该城机场通达区域航线网络。",
+  "economy_summary": "首府地位带来稳定的行政与商务需求。",
+  "food_summary": "在法属波利尼西亚的饮食传统中，椰奶生鱼波瓦松克鲁是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为PPT。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q130800",
+    "ourairports:PPT"
+  ],
+  "image_asset_id": "city_papeete_hero_720"
+}

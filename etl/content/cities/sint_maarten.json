@@ -1,0 +1,24 @@
+{
+  "city_id": "sint_maarten",
+  "name_zh": "菲利普斯堡",
+  "name_en": "Sint Maarten",
+  "country_id": "SX",
+  "country_zh": "荷属圣马丁",
+  "timezone": "UTC",
+  "short_description": "菲利普斯堡是荷属圣马丁的首都，人口约1338，海拔8米。菲利普斯堡位于大湾和大盐池之间的狭长地带。18世纪的新城以指挥官约翰·菲利普斯命名；盐池出产的海盐曾经从海湾装船外运。",
+  "overview": "菲利普斯堡位于荷属圣马丁（北纬18.0°）。城市海拔8米。作为荷属圣马丁的首都，菲利普斯堡是当地行政与商业活动的中心。城市人口约1338（2006年）。机场三字码为SXM；实际可达航线以航班页为准。",
+  "history_summary": "菲利普斯堡位于大湾和大盐池之间的狭长地带。18世纪的新城以指挥官约翰·菲利普斯命名；盐池出产的海盐曾经从海湾装船外运。今天沿着前街、后街行走，仍能从盐工纪念像和地名读到这段贸易史。",
+  "geography_summary": "菲利普斯堡地处北纬18.0°、海拔8米。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在荷属圣马丁的饮食传统中，加勒比海鲜与海螺菜是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为SXM。",
+  "culture_note": "菲利普斯堡的盐工纪念像提醒游客：过去制盐靠人们在浅水中辛苦劳作。如今热闹的邮轮码头和海滨步道，站在同一片曾为盐船装货的海岸上。",
+  "source_ids": [
+    "wikidata:Q30958",
+    "ourairports:SXM",
+    "https://www.visitstmaarten.com/areas/philipsburg/",
+    "https://www.visitstmaarten.com/areas/the-great-salt-pond/"
+  ],
+  "content_confidence": "B",
+  "image_asset_id": "city_sint_maarten_hero_720"
+}

@@ -1,0 +1,258 @@
+﻿IATA,city_id,现有中文显示名,英文名,国家/地区,内容状态
+SHJ,sharjah,Sharjah（阿联酋）,Sharjah,阿联酋,C：仅通用占位文案，无城市内容源文件
+TIA,rinas,Rinas（阿尔巴尼亚）,Rinas,阿尔巴尼亚,C：仅通用占位文案，无城市内容源文件
+LAD,luanda,Luanda（安哥拉）,Luanda,安哥拉,C：仅通用占位文案，无城市内容源文件
+SZG,salzburg,Salzburg（奥地利）,Salzburg,奥地利,C：仅通用占位文案，无城市内容源文件
+VIE,vienna,Vienna（奥地利）,Vienna,奥地利,C：仅通用占位文案，无城市内容源文件
+OOL,gold_coast,Gold Coast（澳大利亚）,Gold Coast,澳大利亚,C：仅通用占位文案，无城市内容源文件
+MEL,melbourne,Melbourne（澳大利亚）,Melbourne,澳大利亚,C：仅通用占位文案，无城市内容源文件
+PER,perth,Perth（澳大利亚）,Perth,澳大利亚,C：仅通用占位文案，无城市内容源文件
+SYD,sydney_(mascot),Sydney (Mascot)（澳大利亚）,Sydney (Mascot),澳大利亚,C：仅通用占位文案，无城市内容源文件
+OUA,ouagadougou,Ouagadougou（布基纳法索）,Ouagadougou,布基纳法索,C：仅通用占位文案，无城市内容源文件
+SOF,sofia,Sofia（保加利亚）,Sofia,保加利亚,C：仅通用占位文案，无城市内容源文件
+LPB,la_paz___el_alto,La Paz / El Alto（玻利维亚）,La Paz / El Alto,玻利维亚,C：仅通用占位文案，无城市内容源文件
+VVI,santa_cruz,Santa Cruz（玻利维亚）,Santa Cruz,玻利维亚,C：仅通用占位文案，无城市内容源文件
+VCP,campinas,Campinas（巴西）,Campinas,巴西,C：仅通用占位文案，无城市内容源文件
+MAO,manaus,Manaus（巴西）,Manaus,巴西,C：仅通用占位文案，无城市内容源文件
+POA,porto_alegre,Porto Alegre（巴西）,Porto Alegre,巴西,C：仅通用占位文案，无城市内容源文件
+REC,recife,Recife（巴西）,Recife,巴西,C：仅通用占位文案，无城市内容源文件
+SSA,salvador,Salvador（巴西）,Salvador,巴西,C：仅通用占位文案，无城市内容源文件
+NAS,nassau,Nassau（巴哈马）,Nassau,巴哈马,C：仅通用占位文案，无城市内容源文件
+MSQ,minsk,Minsk（白俄罗斯）,Minsk,白俄罗斯,C：仅通用占位文案，无城市内容源文件
+YYC,calgary,Calgary（加拿大）,Calgary,加拿大,C：仅通用占位文案，无城市内容源文件
+YEG,edmonton,Edmonton（加拿大）,Edmonton,加拿大,C：仅通用占位文案，无城市内容源文件
+YHZ,halifax,Halifax（加拿大）,Halifax,加拿大,C：仅通用占位文案，无城市内容源文件
+YUL,montréal,Montréal（加拿大）,Montréal,加拿大,C：仅通用占位文案，无城市内容源文件
+YOW,ottawa,Ottawa（加拿大）,Ottawa,加拿大,C：仅通用占位文案，无城市内容源文件
+YQB,quebec,Quebec（加拿大）,Quebec,加拿大,C：仅通用占位文案，无城市内容源文件
+YYZ,toronto,Toronto（加拿大）,Toronto,加拿大,C：仅通用占位文案，无城市内容源文件
+YVR,vancouver,Vancouver（加拿大）,Vancouver,加拿大,C：仅通用占位文案，无城市内容源文件
+YWG,winnipeg,Winnipeg（加拿大）,Winnipeg,加拿大,C：仅通用占位文案，无城市内容源文件
+ZRH,zurich,Zurich（瑞士）,Zurich,瑞士,C：仅通用占位文案，无城市内容源文件
+SCL,santiago,Santiago（智利）,Santiago,智利,C：仅通用占位文案，无城市内容源文件
+KWL,guilin_(lingui),Guilin (Lingui)（中国）,Guilin (Lingui),中国,C：仅通用占位文案，无城市内容源文件
+KWE,guiyang_(nanming),Guiyang (Nanming)（中国）,Guiyang (Nanming),中国,C：仅通用占位文案，无城市内容源文件
+XNN,haidong_(huzhu_tu_autonomous_c,Haidong (Huzhu Tu Autonomous County)（中国）,Haidong (Huzhu Tu Autonomous County),中国,C：仅通用占位文案，无城市内容源文件
+TXN,huangshan,Huangshan（中国）,Huangshan,中国,C：仅通用占位文案，无城市内容源文件
+SWA,jieyang_(rongcheng),Jieyang (Rongcheng)（中国）,Jieyang (Rongcheng),中国,C：仅通用占位文案，无城市内容源文件
+TNA,jinan_(licheng),Jinan (Licheng)（中国）,Jinan (Licheng),中国,C：仅通用占位文案，无城市内容源文件
+LHW,lanzhou_(yongdeng),Lanzhou (Yongdeng)（中国）,Lanzhou (Yongdeng),中国,C：仅通用占位文案，无城市内容源文件
+LJG,lijiang,Lijiang（中国）,Lijiang,中国,C：仅通用占位文案，无城市内容源文件
+NKG,nanjing,Nanjing（中国）,Nanjing,中国,C：仅通用占位文案，无城市内容源文件
+NNG,nanning_(jiangnan),Nanning (Jiangnan)（中国）,Nanning (Jiangnan),中国,C：仅通用占位文案，无城市内容源文件
+NGB,ningbo,Ningbo（中国）,Ningbo,中国,C：仅通用占位文案，无城市内容源文件
+TAO,qingdao_(jiaozhou),Qingdao (Jiaozhou)（中国）,Qingdao (Jiaozhou),中国,C：仅通用占位文案，无城市内容源文件
+SYX,sanya_(tianya),Sanya (Tianya)（中国）,Sanya (Tianya),中国,C：仅通用占位文案，无城市内容源文件
+SHA,shanghai_(minhang),Shanghai (Minhang)（中国）,Shanghai (Minhang),中国,C：仅通用占位文案，无城市内容源文件
+LXA,shannan_(gonggar),Shannan (Gonggar)（中国）,Shannan (Gonggar),中国,C：仅通用占位文案，无城市内容源文件
+SHE,shenyang,Shenyang（中国）,Shenyang,中国,C：仅通用占位文案，无城市内容源文件
+SZX,shenzhen,Shenzhen（中国）,Shenzhen,中国,C：仅通用占位文案，无城市内容源文件
+SJW,shijiazhuang,Shijiazhuang（中国）,Shijiazhuang,中国,C：仅通用占位文案，无城市内容源文件
+TYN,taiyuan,Taiyuan（中国）,Taiyuan,中国,C：仅通用占位文案，无城市内容源文件
+TSN,tianjin,天津,Tianjin,中国,C：仅通用占位文案，无城市内容源文件
+WNZ,wenzhou_(longwan),Wenzhou (Longwan)（中国）,Wenzhou (Longwan),中国,C：仅通用占位文案，无城市内容源文件
+WUH,wuhan_(huangpi),Wuhan (Huangpi)（中国）,Wuhan (Huangpi),中国,C：仅通用占位文案，无城市内容源文件
+WUX,wuxi,Wuxi（中国）,Wuxi,中国,C：仅通用占位文案，无城市内容源文件
+XIY,xi'an,Xi'an（中国）,Xi'an,中国,C：仅通用占位文案，无城市内容源文件
+XMN,xiamen,Xiamen（中国）,Xiamen,中国,C：仅通用占位文案，无城市内容源文件
+YNT,yantai,Yantai（中国）,Yantai,中国,C：仅通用占位文案，无城市内容源文件
+YCU,yuncheng_(yanhu),Yuncheng (Yanhu)（中国）,Yuncheng (Yanhu),中国,C：仅通用占位文案，无城市内容源文件
+ZUH,zhuhai_(jinwan),Zhuhai (Jinwan)（中国）,Zhuhai (Jinwan),中国,C：仅通用占位文案，无城市内容源文件
+URC,ürümqi,Ürümqi（中国）,Ürümqi,中国,C：仅通用占位文案，无城市内容源文件
+MDE,medellín,Medellín（哥伦比亚）,Medellín,哥伦比亚,C：仅通用占位文案，无城市内容源文件
+SJO,san_josé_(alajuela),San José (Alajuela)（哥斯达黎加）,San José (Alajuela),哥斯达黎加,C：仅通用占位文案，无城市内容源文件
+LCA,larnaca,Larnaca,Larnaca,未知,C：仅通用占位文案，无城市内容源文件
+PFO,paphos,Paphos,Paphos,未知,C：仅通用占位文案，无城市内容源文件
+PRG,prague,Prague（捷克）,Prague,捷克,C：仅通用占位文案，无城市内容源文件
+MUC,munich,Munich（德国）,Munich,德国,C：仅通用占位文案，无城市内容源文件
+NUE,nuremberg,Nuremberg（德国）,Nuremberg,德国,C：仅通用占位文案，无城市内容源文件
+LEJ,schkeuditz,Schkeuditz（德国）,Schkeuditz,德国,C：仅通用占位文案，无城市内容源文件
+STR,stuttgart,Stuttgart（德国）,Stuttgart,德国,C：仅通用占位文案，无城市内容源文件
+NRN,weeze,Weeze（德国）,Weeze,德国,C：仅通用占位文案，无城市内容源文件
+PUJ,punta_cana,Punta Cana（多米尼加）,Punta Cana,多米尼加,C：仅通用占位文案，无城市内容源文件
+SDQ,santo_domingo,Santo Domingo（多米尼加）,Santo Domingo,多米尼加,C：仅通用占位文案，无城市内容源文件
+ORN,es_sénia,Es-Sénia（阿尔及利亚）,Es-Sénia,阿尔及利亚,C：仅通用占位文案，无城市内容源文件
+UIO,quito,Quito（厄瓜多尔）,Quito,厄瓜多尔,C：仅通用占位文案，无城市内容源文件
+TLL,tallinn,Tallinn（爱沙尼亚）,Tallinn,爱沙尼亚,C：仅通用占位文案，无城市内容源文件
+SSH,sharm_el_sheikh,Sharm El Sheikh（埃及）,Sharm El Sheikh,埃及,C：仅通用占位文案，无城市内容源文件
+LPA,gran_canaria_island,Gran Canaria Island（西班牙）,Gran Canaria Island,西班牙,C：仅通用占位文案，无城市内容源文件
+MAD,madrid,Madrid（西班牙）,Madrid,西班牙,C：仅通用占位文案，无城市内容源文件
+MAH,mahón_(maó),Mahón (Maó)（西班牙）,Mahón (Maó),西班牙,C：仅通用占位文案，无城市内容源文件
+PMI,palma_de_mallorca,Palma de Mallorca（西班牙）,Palma de Mallorca,西班牙,C：仅通用占位文案，无城市内容源文件
+SCQ,santiago_de_compostela,Santiago de Compostela（西班牙）,Santiago de Compostela,西班牙,C：仅通用占位文案，无城市内容源文件
+SVQ,seville,Seville（西班牙）,Seville,西班牙,C：仅通用占位文案，无城市内容源文件
+TFS,tenerife,Tenerife（西班牙）,Tenerife,西班牙,C：仅通用占位文案，无城市内容源文件
+VLC,valencia,Valencia（西班牙）,Valencia,西班牙,C：仅通用占位文案，无城市内容源文件
+NAN,nadi,Nadi（斐济）,Nadi,斐济,C：仅通用占位文案，无城市内容源文件
+LYS,"colombier_saugnieu,_rhône","Colombier-Saugnieu, Rhône（法国）","Colombier-Saugnieu, Rhône",法国,C：仅通用占位文案，无城市内容源文件
+LIL,lesquin,Lesquin（法国）,Lesquin,法国,C：仅通用占位文案，无城市内容源文件
+MRS,"marignane,_bouches_du_rhône","Marignane, Bouches-du-Rhône（法国）","Marignane, Bouches-du-Rhône",法国,C：仅通用占位文案，无城市内容源文件
+MPL,montpellier_méditerranée,Montpellier/Méditerranée（法国）,Montpellier/Méditerranée,法国,C：仅通用占位文案，无城市内容源文件
+NCE,"nice,_alpes_maritimes","Nice, Alpes-Maritimes（法国）","Nice, Alpes-Maritimes",法国,C：仅通用占位文案，无城市内容源文件
+ORY,"paris_(orly,_val_de_marne)","Paris (Orly, Val-de-Marne)（法国）","Paris (Orly, Val-de-Marne)",法国,C：仅通用占位文案，无城市内容源文件
+SXB,strasbourg,Strasbourg（法国）,Strasbourg,法国,C：仅通用占位文案，无城市内容源文件
+TLS,toulouse_blagnac,Toulouse/Blagnac（法国）,Toulouse/Blagnac,法国,C：仅通用占位文案，无城市内容源文件
+LBV,libreville,Libreville（加蓬）,Libreville,加蓬,C：仅通用占位文案，无城市内容源文件
+LBA,"leeds,_west_yorkshire","Leeds, West Yorkshire（英国）","Leeds, West Yorkshire",英国,C：仅通用占位文案，无城市内容源文件
+LPL,liverpool,Liverpool（英国）,Liverpool,英国,C：仅通用占位文案，无城市内容源文件
+STN,"london,_essex","London, Essex（英国）","London, Essex",英国,C：仅通用占位文案，无城市内容源文件
+LTN,"luton,_luton","Luton, Luton（英国）","Luton, Luton",英国,C：仅通用占位文案，无城市内容源文件
+MAN,"manchester,_greater_manchester","Manchester, Greater Manchester（英国）","Manchester, Greater Manchester",英国,C：仅通用占位文案，无城市内容源文件
+NCL,"newcastle_upon_tyne,_tyne_and_","Newcastle upon Tyne, Tyne and Wear（英国）","Newcastle upon Tyne, Tyne and Wear",英国,C：仅通用占位文案，无城市内容源文件
+TBS,tbilisi,Tbilisi（格鲁吉亚）,Tbilisi,格鲁吉亚,C：仅通用占位文案，无城市内容源文件
+PTP,pointe_à_pitre,Pointe-à-Pitre,Pointe-à-Pitre,未知,C：仅通用占位文案，无城市内容源文件
+RHO,rhodes,Rhodes（希腊）,Rhodes,希腊,C：仅通用占位文案，无城市内容源文件
+SKG,thessaloniki,Thessaloniki（希腊）,Thessaloniki,希腊,C：仅通用占位文案，无城市内容源文件
+SPU,split,Split（克罗地亚）,Split,克罗地亚,C：仅通用占位文案，无城市内容源文件
+ZAG,velika_gorica,Velika Gorica（克罗地亚）,Velika Gorica,克罗地亚,C：仅通用占位文案，无城市内容源文件
+ZAD,zadar,Zadar（克罗地亚）,Zadar,克罗地亚,C：仅通用占位文案，无城市内容源文件
+PAP,port_au_prince,Port-au-Prince（海地）,Port-au-Prince,海地,C：仅通用占位文案，无城市内容源文件
+UPG,makassar,Makassar（印度尼西亚）,Makassar,印度尼西亚,C：仅通用占位文案，无城市内容源文件
+SUB,surabaya,Surabaya（印度尼西亚）,Surabaya,印度尼西亚,C：仅通用占位文案，无城市内容源文件
+ORK,cork,Cork（爱尔兰）,Cork,爱尔兰,C：仅通用占位文案，无城市内容源文件
+SNN,shannon,Shannon（爱尔兰）,Shannon,爱尔兰,C：仅通用占位文案，无城市内容源文件
+TLV,tel_aviv,Tel Aviv（以色列）,Tel Aviv,以色列,C：仅通用占位文案，无城市内容源文件
+MAA,chennai,Chennai（印度）,Chennai,印度,C：仅通用占位文案，无城市内容源文件
+PNQ,pune,Pune（印度）,Pune,印度,C：仅通用占位文案，无城市内容源文件
+TRV,thiruvananthapuram,Thiruvananthapuram（印度）,Thiruvananthapuram,印度,C：仅通用占位文案，无城市内容源文件
+MHD,mashhad,Mashhad（伊朗）,Mashhad,伊朗,C：仅通用占位文案，无城市内容源文件
+SYZ,shiraz,Shiraz（伊朗）,Shiraz,伊朗,C：仅通用占位文案，无城市内容源文件
+VRN,caselle_(vr),Caselle (VR)（意大利）,Caselle (VR),意大利,C：仅通用占位文案，无城市内容源文件
+TRN,caselle_torinese_(to),Caselle Torinese (TO)（意大利）,Caselle Torinese (TO),意大利,C：仅通用占位文案，无城市内容源文件
+MXP,ferno_(va),Ferno (VA)（意大利）,Ferno (VA),意大利,C：仅通用占位文案，无城市内容源文件
+SUF,lamezia_terme_(cz),Lamezia Terme (CZ)（意大利）,Lamezia Terme (CZ),意大利,C：仅通用占位文案，无城市内容源文件
+NAP,napoli,Napoli（意大利）,Napoli,意大利,C：仅通用占位文案，无城市内容源文件
+OLB,olbia_(ss),Olbia (SS)（意大利）,Olbia (SS),意大利,C：仅通用占位文案，无城市内容源文件
+PMO,palermo,Palermo（意大利）,Palermo,意大利,C：仅通用占位文案，无城市内容源文件
+PSA,pisa_(pi),Pisa (PI)（意大利）,Pisa (PI),意大利,C：仅通用占位文案，无城市内容源文件
+LIN,segrate_(mi),Segrate (MI)（意大利）,Segrate (MI),意大利,C：仅通用占位文案，无城市内容源文件
+TSF,treviso_(tv),Treviso (TV)（意大利）,Treviso (TV),意大利,C：仅通用占位文案，无城市内容源文件
+VCE,venezia_(ve),Venezia (VE)（意大利）,Venezia (VE),意大利,C：仅通用占位文案，无城市内容源文件
+MBJ,montego_bay,Montego Bay（牙买加）,Montego Bay,牙买加,C：仅通用占位文案，无城市内容源文件
+OKA,naha,Naha（日本）,Naha,日本,C：仅通用占位文案，无城市内容源文件
+NRT,narita,Narita（日本）,Narita,日本,C：仅通用占位文案，无城市内容源文件
+SDJ,natori,Natori（日本）,Natori,日本,C：仅通用占位文案，无城市内容源文件
+NGO,tokoname,Tokoname（日本）,Tokoname,日本,C：仅通用占位文案，无城市内容源文件
+NBO,nairobi,Nairobi（肯尼亚）,Nairobi,肯尼亚,C：仅通用占位文案，无城市内容源文件
+OSS,osh,Osh,Osh,未知,C：仅通用占位文案，无城市内容源文件
+PNH,phnom_penh_(pou_senchey),Phnom Penh (Pou Senchey)（柬埔寨）,Phnom Penh (Pou Senchey),柬埔寨,C：仅通用占位文案，无城市内容源文件
+PUS,busan,Busan（韩国）,Busan,韩国,C：仅通用占位文案，无城市内容源文件
+KWI,kuwait_city,Kuwait City（科威特）,Kuwait City,科威特,C：仅通用占位文案，无城市内容源文件
+VTE,vientiane,Vientiane（老挝）,Vientiane,老挝,C：仅通用占位文案，无城市内容源文件
+VNO,vilnius,Vilnius（立陶宛）,Vilnius,立陶宛,C：仅通用占位文案，无城市内容源文件
+LUX,luxembourg,Luxembourg,Luxembourg,未知,C：仅通用占位文案，无城市内容源文件
+RIX,riga,Riga（拉脱维亚）,Riga,拉脱维亚,C：仅通用占位文案，无城市内容源文件
+RAK,marrakesh,Marrakesh（摩洛哥）,Marrakesh,摩洛哥,C：仅通用占位文案，无城市内容源文件
+TNR,antananarivo,Antananarivo（马达加斯加）,Antananarivo,马达加斯加,C：仅通用占位文案，无城市内容源文件
+SKP,ilinden,Ilinden（北马其顿）,Ilinden,北马其顿,C：仅通用占位文案，无城市内容源文件
+RGN,yangon,Yangon（缅甸）,Yangon,缅甸,C：仅通用占位文案，无城市内容源文件
+MFM,nossa_senhora_do_carmo,Nossa Senhora do Carmo,Nossa Senhora do Carmo,未知,C：仅通用占位文案，无城市内容源文件
+MLA,valletta,Valletta,Valletta,未知,C：仅通用占位文案，无城市内容源文件
+MRU,plaine_magnien,Plaine Magnien（毛里求斯）,Plaine Magnien,毛里求斯,C：仅通用占位文案，无城市内容源文件
+MLE,malé,Malé（马尔代夫）,Malé,马尔代夫,C：仅通用占位文案，无城市内容源文件
+MEX,mexico_city,Mexico City（墨西哥）,Mexico City,墨西哥,C：仅通用占位文案，无城市内容源文件
+MTY,monterrey,Monterrey（墨西哥）,Monterrey,墨西哥,C：仅通用占位文案，无城市内容源文件
+PVR,puerto_vallarta,Puerto Vallarta（墨西哥）,Puerto Vallarta,墨西哥,C：仅通用占位文案，无城市内容源文件
+SJD,san_josé_del_cabo,San José del Cabo（墨西哥）,San José del Cabo,墨西哥,C：仅通用占位文案，无城市内容源文件
+TIJ,tijuana,Tijuana（墨西哥）,Tijuana,墨西哥,C：仅通用占位文案，无城市内容源文件
+PEN,penang,Penang（马来西亚）,Penang,马来西亚,C：仅通用占位文案，无城市内容源文件
+KUL,sepang,Sepang（马来西亚）,Sepang,马来西亚,C：仅通用占位文案，无城市内容源文件
+SZB,subang,Subang（马来西亚）,Subang,马来西亚,C：仅通用占位文案，无城市内容源文件
+LOS,lagos,Lagos（尼日利亚）,Lagos,尼日利亚,C：仅通用占位文案，无城市内容源文件
+RTM,rotterdam,Rotterdam（荷兰）,Rotterdam,荷兰,C：仅通用占位文案，无城市内容源文件
+OSL,oslo_(gardermoen),Oslo (Gardermoen)（挪威）,Oslo (Gardermoen),挪威,C：仅通用占位文案，无城市内容源文件
+TRF,sandefjord(torp),Sandefjord(Torp)（挪威）,Sandefjord(Torp),挪威,C：仅通用占位文案，无城市内容源文件
+SVG,stavanger,Stavanger（挪威）,Stavanger,挪威,C：仅通用占位文案，无城市内容源文件
+TOS,tromsø,Tromsø（挪威）,Tromsø,挪威,C：仅通用占位文案，无城市内容源文件
+TRD,trondheim,Trondheim（挪威）,Trondheim,挪威,C：仅通用占位文案，无城市内容源文件
+KTM,kathmandu,Kathmandu（尼泊尔）,Kathmandu,尼泊尔,C：仅通用占位文案，无城市内容源文件
+WLG,wellington,Wellington（新西兰）,Wellington,新西兰,C：仅通用占位文案，无城市内容源文件
+MCT,muscat_seeb,Muscat/Seeb（阿曼）,Muscat/Seeb,阿曼,C：仅通用占位文案，无城市内容源文件
+PTY,tocumen,Tocumen（巴拿马）,Tocumen,巴拿马,C：仅通用占位文案，无城市内容源文件
+LIM,lima,Lima（秘鲁）,Lima,秘鲁,C：仅通用占位文案，无城市内容源文件
+PPT,papeete,Papeete,Papeete,未知,C：仅通用占位文案，无城市内容源文件
+POM,port_moresby,Port Moresby（巴布亚新几内亚）,Port Moresby,巴布亚新几内亚,C：仅通用占位文案，无城市内容源文件
+MNL,manila_(pasay),Manila (Pasay)（菲律宾）,Manila (Pasay),菲律宾,C：仅通用占位文案，无城市内容源文件
+LHE,lahore,Lahore（巴基斯坦）,Lahore,巴基斯坦,C：仅通用占位文案，无城市内容源文件
+PEW,peshawar,Peshawar（巴基斯坦）,Peshawar,巴基斯坦,C：仅通用占位文案，无城市内容源文件
+KTW,katowice,Katowice（波兰）,Katowice,波兰,C：仅通用占位文案，无城市内容源文件
+WMI,nowy_dwór_mazowiecki,Nowy Dwór Mazowiecki（波兰）,Nowy Dwór Mazowiecki,波兰,C：仅通用占位文案，无城市内容源文件
+WAW,warsaw,Warsaw（波兰）,Warsaw,波兰,C：仅通用占位文案，无城市内容源文件
+WRO,wrocław,Wrocław（波兰）,Wrocław,波兰,C：仅通用占位文案，无城市内容源文件
+SJU,san_juan,San Juan,San Juan,未知,C：仅通用占位文案，无城市内容源文件
+LIS,lisbon,Lisbon（葡萄牙）,Lisbon,葡萄牙,C：仅通用占位文案，无城市内容源文件
+PDL,ponta_delgada,Ponta Delgada（葡萄牙）,Ponta Delgada,葡萄牙,C：仅通用占位文案，无城市内容源文件
+OPO,porto,Porto（葡萄牙）,Porto,葡萄牙,C：仅通用占位文案，无城市内容源文件
+OTP,otopeni,Otopeni（罗马尼亚）,Otopeni,罗马尼亚,C：仅通用占位文案，无城市内容源文件
+VVO,artyom,Artyom（俄罗斯）,Artyom,俄罗斯,C：仅通用占位文案，无城市内容源文件
+KZN,kazan,Kazan（俄罗斯）,Kazan,俄罗斯,C：仅通用占位文案，无城市内容源文件
+OVB,novosibirsk,Novosibirsk（俄罗斯）,Novosibirsk,俄罗斯,C：仅通用占位文案，无城市内容源文件
+ROV,rostov_on_don,Rostov-on-Don（俄罗斯）,Rostov-on-Don,俄罗斯,C：仅通用占位文案，无城市内容源文件
+KUF,samara,Samara（俄罗斯）,Samara,俄罗斯,C：仅通用占位文案，无城市内容源文件
+LED,st._petersburg,St. Petersburg（俄罗斯）,St. Petersburg,俄罗斯,C：仅通用占位文案，无城市内容源文件
+YKS,yakutsk,Yakutsk（俄罗斯）,Yakutsk,俄罗斯,C：仅通用占位文案，无城市内容源文件
+SVX,yekaterinburg,Yekaterinburg（俄罗斯）,Yekaterinburg,俄罗斯,C：仅通用占位文案，无城市内容源文件
+MED,medina,Medina（沙特阿拉伯）,Medina,沙特阿拉伯,C：仅通用占位文案，无城市内容源文件
+RUH,riyadh,Riyadh（沙特阿拉伯）,Riyadh,沙特阿拉伯,C：仅通用占位文案，无城市内容源文件
+KRT,khartoum,Khartoum（苏丹）,Khartoum,苏丹,C：仅通用占位文案，无城市内容源文件
+NYO,nyköping,Nyköping（瑞典）,Nyköping,瑞典,C：仅通用占位文案，无城市内容源文件
+LJU,zgornji_brnik,Zgornji Brnik,Zgornji Brnik,未知,C：仅通用占位文案，无城市内容源文件
+SAL,san_salvador_(san_luis_talpa),San Salvador (San Luis Talpa)（萨尔瓦多）,San Salvador (San Luis Talpa),萨尔瓦多,C：仅通用占位文案，无城市内容源文件
+SXM,sint_maarten,Sint Maarten,Sint Maarten,未知,C：仅通用占位文案，无城市内容源文件
+PLS,providenciales,Providenciales,Providenciales,未知,C：仅通用占位文案，无城市内容源文件
+LBD,khujand,Khujand（塔吉克斯坦）,Khujand,塔吉克斯坦,C：仅通用占位文案，无城市内容源文件
+TUN,tunis,Tunis,Tunis,未知,C：仅通用占位文案，无城市内容源文件
+SAW,"pendik,_istanbul","Pendik, Istanbul（土耳其）","Pendik, Istanbul",土耳其,C：仅通用占位文案，无城市内容源文件
+POS,port_of_spain,Port of Spain（特立尼达和多巴哥）,Port of Spain,特立尼达和多巴哥,C：仅通用占位文案，无城市内容源文件
+RMQ,taichung_(qingshui),Taichung (Qingshui)（中国台湾）,Taichung (Qingshui),中国台湾,C：仅通用占位文案，无城市内容源文件
+TSA,taipei_(songshan),Taipei (Songshan)（中国台湾）,Taipei (Songshan),中国台湾,C：仅通用占位文案，无城市内容源文件
+TPE,taoyuan,Taoyuan（中国台湾）,Taoyuan,中国台湾,C：仅通用占位文案，无城市内容源文件
+RSW,fort_myers,Fort Myers（美国）,Fort Myers,美国,C：仅通用占位文案，无城市内容源文件
+OGG,kahului,Kahului（美国）,Kahului,美国,C：仅通用占位文案，无城市内容源文件
+MCI,kansas_city,Kansas City（美国）,Kansas City,美国,C：仅通用占位文案，无城市内容源文件
+TYS,knoxville_maryville,Knoxville/Maryville（美国）,Knoxville/Maryville,美国,C：仅通用占位文案，无城市内容源文件
+LAS,las_vegas,Las Vegas（美国）,Las Vegas,美国,C：仅通用占位文案，无城市内容源文件
+SDF,louisville,Louisville（美国）,Louisville,美国,C：仅通用占位文案，无城市内容源文件
+MEM,memphis,Memphis（美国）,Memphis,美国,C：仅通用占位文案，无城市内容源文件
+MKE,milwaukee,Milwaukee（美国）,Milwaukee,美国,C：仅通用占位文案，无城市内容源文件
+MSP,minneapolis,Minneapolis（美国）,Minneapolis,美国,C：仅通用占位文案，无城市内容源文件
+MYR,myrtle_beach,Myrtle Beach（美国）,Myrtle Beach,美国,C：仅通用占位文案，无城市内容源文件
+MSY,new_orleans,New Orleans（美国）,New Orleans,美国,C：仅通用占位文案，无城市内容源文件
+ORF,norfolk,Norfolk（美国）,Norfolk,美国,C：仅通用占位文案，无城市内容源文件
+OAK,oakland,Oakland（美国）,Oakland,美国,C：仅通用占位文案，无城市内容源文件
+OKC,oklahoma_city,Oklahoma City（美国）,Oklahoma City,美国,C：仅通用占位文案，无城市内容源文件
+OMA,omaha,Omaha（美国）,Omaha,美国,C：仅通用占位文案，无城市内容源文件
+ONT,ontario,Ontario（美国）,Ontario,美国,C：仅通用占位文案，无城市内容源文件
+MCO,orlando,Orlando（美国）,Orlando,美国,C：仅通用占位文案，无城市内容源文件
+PSP,palm_springs,Palm Springs（美国）,Palm Springs,美国,C：仅通用占位文案，无城市内容源文件
+PHL,philadelphia,Philadelphia（美国）,Philadelphia,美国,C：仅通用占位文案，无城市内容源文件
+PHX,phoenix,Phoenix（美国）,Phoenix,美国,C：仅通用占位文案，无城市内容源文件
+PIE,pinellas_park,Pinellas Park（美国）,Pinellas Park,美国,C：仅通用占位文案，无城市内容源文件
+PIT,pittsburgh,Pittsburgh（美国）,Pittsburgh,美国,C：仅通用占位文案，无城市内容源文件
+PDX,portland,Portland（美国）,Portland,美国,C：仅通用占位文案，无城市内容源文件
+PVD,providence_warwick,Providence/Warwick（美国）,Providence/Warwick,美国,C：仅通用占位文案，无城市内容源文件
+RDU,raleigh_durham,Raleigh/Durham（美国）,Raleigh/Durham,美国,C：仅通用占位文案，无城市内容源文件
+RNO,reno,Reno（美国）,Reno,美国,C：仅通用占位文案，无城市内容源文件
+RIC,richmond,Richmond（美国）,Richmond,美国,C：仅通用占位文案，无城市内容源文件
+ROC,rochester,Rochester（美国）,Rochester,美国,C：仅通用占位文案，无城市内容源文件
+SMF,sacramento,Sacramento（美国）,Sacramento,美国,C：仅通用占位文案，无城市内容源文件
+SLC,salt_lake_city,Salt Lake City（美国）,Salt Lake City,美国,C：仅通用占位文案，无城市内容源文件
+SAT,san_antonio,San Antonio（美国）,San Antonio,美国,C：仅通用占位文案，无城市内容源文件
+SAN,san_diego,San Diego（美国）,San Diego,美国,C：仅通用占位文案，无城市内容源文件
+SFO,san_francisco,San Francisco（美国）,San Francisco,美国,C：仅通用占位文案，无城市内容源文件
+SJC,san_jose,San Jose（美国）,San Jose,美国,C：仅通用占位文案，无城市内容源文件
+SNA,santa_ana,Santa Ana（美国）,Santa Ana,美国,C：仅通用占位文案，无城市内容源文件
+SEA,seattle,Seattle（美国）,Seattle,美国,C：仅通用占位文案，无城市内容源文件
+STL,st_louis,St Louis（美国）,St Louis,美国,C：仅通用占位文案，无城市内容源文件
+SYR,syracuse,Syracuse（美国）,Syracuse,美国,C：仅通用占位文案，无城市内容源文件
+TPA,tampa,Tampa（美国）,Tampa,美国,C：仅通用占位文案，无城市内容源文件
+TUS,tucson,Tucson（美国）,Tucson,美国,C：仅通用占位文案，无城市内容源文件
+TUL,tulsa,Tulsa（美国）,Tulsa,美国,C：仅通用占位文案，无城市内容源文件
+PBI,west_palm_beach,West Palm Beach（美国）,West Palm Beach,美国,C：仅通用占位文案，无城市内容源文件
+MVD,ciudad_de_la_costa,Ciudad de la Costa（乌拉圭）,Ciudad de la Costa,乌拉圭,C：仅通用占位文案，无城市内容源文件
+TAS,tashkent,Tashkent（乌兹别克斯坦）,Tashkent,乌兹别克斯坦,C：仅通用占位文案，无城市内容源文件
+STT,charlotte_amalie,Charlotte Amalie,Charlotte Amalie,未知,C：仅通用占位文案，无城市内容源文件
+SGN,ho_chi_minh_city,Ho Chi Minh City（越南）,Ho Chi Minh City,越南,C：仅通用占位文案，无城市内容源文件
+VLI,port_vila,Port Vila（瓦努阿图）,Port Vila,瓦努阿图,C：仅通用占位文案，无城市内容源文件
+SAH,sanaa,Sanaa（也门）,Sanaa,也门,C：仅通用占位文案，无城市内容源文件
+LUN,lusaka,Lusaka（赞比亚）,Lusaka,赞比亚,C：仅通用占位文案，无城市内容源文件

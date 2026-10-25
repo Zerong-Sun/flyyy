@@ -1,0 +1,23 @@
+{
+  "city_id": "zgornji_brnik",
+  "name_zh": "茲戈爾尼-布爾尼克",
+  "name_en": "Zgornji Brnik",
+  "country_id": "SI",
+  "country_zh": "斯洛文尼亚",
+  "timezone": "UTC",
+  "short_description": "茲戈爾尼-布爾尼克位于斯洛文尼亚的戈雷尼斯卡地区采尔克列市镇，人口约720，海拔377米。兹戈尔尼布尔尼克附近的布尔尼克机场在1963年迎来首架客机，并于1964年开通定期航班。",
+  "overview": "茲戈爾尼-布爾尼克位于斯洛文尼亚的戈雷尼斯卡地区采尔克列市镇（北纬46.2°）。城市海拔377米。城市人口约720（2020年）。机场三字码为LJU；实际可达航线以航班页为准。",
+  "history_summary": "兹戈尔尼布尔尼克附近的布尔尼克机场在1963年迎来首架客机，并于1964年开通定期航班。当地居民当年步行前往观看飞机起降。如今的卢布尔雅那机场仍以这一村镇为所在地，航空交通也成为其现代历史的一部分。",
+  "geography_summary": "茲戈爾尼-布爾尼克地处北纬46.2°、海拔377米。该城机场通达区域航线网络。",
+  "economy_summary": "资料所载茲戈爾尼-布爾尼克人口约720；这一数字对应2020年的统计口径。机场三字码LJU连接该地区的客运网络，机场周边的地面交通与旅客服务是理解本地流通的一个入口。",
+  "food_summary": "在斯洛文尼亚的饮食传统中，核桃卷波蒂察是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为LJU。",
+  "culture_note": "1963年机场开放时，周边居民特意走上几公里去看客机起降。对今天的旅客来说稀松平常的一幕，当时却是当地值得围观的新鲜事。",
+  "source_ids": [
+    "wikidata:Q1851230",
+    "ourairports:LJU",
+    "https://www.gov.si/en/news/2023-12-01-new-airport-and-the-landing-of-the-first-passenger-plane-at-brnik/"
+  ],
+  "content_confidence": "B",
+  "image_asset_id": "city_zgornji_brnik_hero_720"
+}

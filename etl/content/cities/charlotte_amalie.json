@@ -1,0 +1,21 @@
+{
+  "city_id": "charlotte_amalie",
+  "name_zh": "夏洛特阿马利亚",
+  "name_en": "Charlotte Amalie",
+  "country_id": "VI",
+  "country_zh": "美属维尔京群岛",
+  "timezone": "UTC",
+  "short_description": "夏洛特阿马利亚是美属维尔京群岛的首都，人口约1.4万，海拔0米。夏洛特阿马利亚有记载的城市历史可追溯至1666年。在美属维尔京群岛的饮食传统中，秋葵叶炖菜卡拉卢是值得留意的风味。",
+  "overview": "夏洛特阿马利亚位于美属维尔京群岛（北纬18.4°）。城市海拔0米。作为美属维尔京群岛的首都，夏洛特阿马利亚是当地行政与商业活动的中心。城市人口约1.4万（2020年）。机场三字码为STT；实际可达航线以航班页为准。",
+  "history_summary": "夏洛特阿马利亚有记载的城市历史可追溯至1666年。",
+  "geography_summary": "夏洛特阿马利亚地处北纬18.4°、海拔0米。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在美属维尔京群岛的饮食传统中，秋葵叶炖菜卡拉卢是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为STT。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q51681",
+    "ourairports:STT"
+  ],
+  "image_asset_id": "city_charlotte_amalie_hero_720"
+}

@@ -259,6 +259,85 @@ def main() -> int:
             "resolved": True,
         }
 
+    # Several airports share a serviced-place item. Keep distinct municipality
+    # facts for these playable city IDs instead of dropping them during QID
+    # de-duplication. The three aliases are airport districts of the named city.
+    extra_qids = {
+        "narita": "Q273798", "pendik,_istanbul": "Q857056",
+        "luton,_luton": "Q21683239", "segrate_(mi)": "Q42902",
+        "treviso_(tv)": "Q5475", "nyköping": "Q54356",
+        "nowy_dwór_mazowiecki": "Q690039",
+    }
+    extra_facts = fetch_facts(list(extra_qids.values()))
+    extra_pops = fetch_populations(list(extra_qids.values()))
+    for city_id, qid in extra_qids.items():
+        f = extra_facts.get(qid, {})
+        if not f:
+            continue
+        pop = extra_pops.get(qid, {})
+        final[city_id] = {
+            "qid": qid, "airport_qid": "", "name_zh": "",
+            "population": pop.get("population"),
+            "population_year": pop.get("population_year"),
+            "elevation_m": f.get("elevation_m"), "lat": f.get("lat"),
+            "lon": f.get("lon"), "region_id": f.get("region_id", ""),
+            "region_zh": f.get("region_zh", ""),
+            "country_wd_id": f.get("country_wd_id", ""),
+            "country_zh": f.get("country_zh", ""),
+            "water_id": f.get("water_id", ""),
+            "water_zh": f.get("water_zh", ""),
+            "inception_year": _year_from_time(f.get("inception")),
+            "capital_of_zh": f.get("capital_of_zh", ""),
+            "timezone_zh": f.get("timezone_zh", ""),
+            "language_zh": f.get("language_zh", ""), "resolved": True,
+        }
+    for city_id, parent in {
+        "shanghai_(minhang)": "shanghai",
+        "paris_(orly,_val_de_marne)": "paris",
+        "london,_essex": "london",
+    }.items():
+        if parent in final:
+            final[city_id] = dict(final[parent])
+
+    # P931 is "place served"; it sometimes points at a nearby metropolis,
+    # district or even a country rather than the roster's airport municipality.
+    # Reviewed municipality QIDs take precedence for those cases.
+    override_path = ROOT / "config" / "city_qid_overrides.json"
+    overrides = json.loads(override_path.read_text(encoding="utf-8"))
+    override_qids = list(dict.fromkeys(overrides.values()))
+    override_facts = fetch_facts(override_qids)
+    override_pops = fetch_populations(override_qids)
+    label_query = "SELECT ?item ?itemLabel WHERE { VALUES ?item { " + " ".join(
+        f"wd:{qid}" for qid in override_qids
+    ) + ' } SERVICE wikibase:label { bd:serviceParam wikibase:language "zh,en". } }'
+    override_labels = {
+        row["item"]["value"].rsplit("/", 1)[-1]: row["itemLabel"]["value"]
+        for row in sparql(label_query)
+    }
+    for city_id, qid in overrides.items():
+        f = override_facts.get(qid, {})
+        if not f:
+            continue
+        pop = override_pops.get(qid, {})
+        old = final.get(city_id, {})
+        final[city_id] = {
+            "qid": qid, "airport_qid": old.get("airport_qid", ""),
+            "name_zh": override_labels.get(qid, ""),
+            "population": pop.get("population"),
+            "population_year": pop.get("population_year"),
+            "elevation_m": f.get("elevation_m"), "lat": f.get("lat"),
+            "lon": f.get("lon"), "region_id": f.get("region_id", ""),
+            "region_zh": f.get("region_zh", ""),
+            "country_wd_id": f.get("country_wd_id", "") or old.get("country_wd_id", ""),
+            "country_zh": f.get("country_zh", "") or old.get("country_zh", ""),
+            "water_id": f.get("water_id", ""),
+            "water_zh": f.get("water_zh", ""),
+            "inception_year": _year_from_time(f.get("inception")),
+            "capital_of_zh": f.get("capital_of_zh", ""),
+            "timezone_zh": f.get("timezone_zh", ""),
+            "language_zh": f.get("language_zh", ""), "resolved": True,
+        }
+
     print(f"facts for {len(final)} cities; unresolved: {len(unresolved)} {unresolved[:20]}")
     for key, label in (("population", "population"), ("elevation_m", "elevation"),
                        ("inception_year", "inception"), ("water_zh", "waterbody"),

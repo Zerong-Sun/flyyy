@@ -1,0 +1,21 @@
+{
+  "city_id": "antananarivo",
+  "name_zh": "塔那那利佛",
+  "name_en": "Antananarivo",
+  "country_id": "MG",
+  "country_zh": "马达加斯加",
+  "timezone": "UTC",
+  "short_description": "塔那那利佛是马达加斯加的首都，人口约127.5万，邻近伊庫帕河，海拔1276米。塔那那利佛有记载的城市历史可追溯至1625年。在马达加斯加的饮食传统中，木薯叶炖肉拉维托托是值得留意的风味。",
+  "overview": "塔那那利佛位于马达加斯加（南纬18.9°）。塔那那利佛地处伊庫帕河沿岸。作为马达加斯加的首都，塔那那利佛是当地行政与商业活动的中心。城市人口约127.5万（2018年）。机场三字码为TNR；实际可达航线以航班页为准。",
+  "history_summary": "塔那那利佛有记载的城市历史可追溯至1625年。",
+  "geography_summary": "塔那那利佛地处南纬18.9°、海拔1276米、邻近伊庫帕河。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在马达加斯加的饮食传统中，木薯叶炖肉拉维托托是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为TNR。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q3915",
+    "ourairports:TNR"
+  ],
+  "image_asset_id": "city_antananarivo_hero_720"
+}

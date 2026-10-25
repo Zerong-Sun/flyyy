@@ -1,0 +1,22 @@
+{
+  "city_id": "ilinden",
+  "name_zh": "伊林登",
+  "name_en": "Ilinden",
+  "country_id": "MK",
+  "country_zh": "北马其顿",
+  "timezone": "UTC",
+  "short_description": "伊林登是伊林登市镇的首府，人口约5161，海拔228米。伊林登市镇内的斯科普里机场见证了北马其顿首都航空交通的转移。1963年地震影响旧机场后，新航站楼于1968年在彼得罗韦茨附近建成；位于伊林登的新航站楼则在2011年投入使用。",
+  "overview": "伊林登位于北马其顿（北纬42.0°）。城市海拔228米。作为伊林登市镇的首府，伊林登是当地行政与商业活动的中心。城市人口约5161（2021年）。机场三字码为SKP；实际可达航线以航班页为准。",
+  "history_summary": "伊林登市镇内的斯科普里机场见证了北马其顿首都航空交通的转移。1963年地震影响旧机场后，新航站楼于1968年在彼得罗韦茨附近建成；位于伊林登的新航站楼则在2011年投入使用。村镇与机场的关系，是这片地区现代发展的线索。",
+  "geography_summary": "伊林登地处北纬42.0°、海拔228米。该城机场通达区域航线网络。",
+  "economy_summary": "首府地位带来稳定的行政与商务需求。",
+  "food_summary": "在北马其顿的饮食传统中，烤豆塔夫切格拉夫切是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为SKP。",
+  "source_ids": [
+    "wikidata:Q3044844",
+    "ourairports:SKP",
+    "https://skp.airports.com.mk/en-EN/about-tav-airport/page/history"
+  ],
+  "content_confidence": "B",
+  "image_asset_id": "city_ilinden_hero_720"
+}

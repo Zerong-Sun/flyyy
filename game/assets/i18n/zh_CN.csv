@@ -227,6 +227,10 @@ ui.city.history,历史
 ui.city.geography,地理
 ui.city.economy,经济
 ui.city.food,饮食
+ui.city.culture,风土轶事
+ui.city.photo,实景图
+ui.city.photo_source,图片来源
+ui.city.license,许可
 ui.city.travel,旅行提示
 ui.city.low_content,"⚠ 资料不足：该城市内容为低置信度自动生成，仅供参考。"
 ui.save.retry,存档失败，上一份存档已保留；5 秒后重试。

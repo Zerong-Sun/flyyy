@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:IAD",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_washington_photo_720"
 }

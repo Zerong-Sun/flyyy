@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:CAI",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_cairo_photo_720"
 }

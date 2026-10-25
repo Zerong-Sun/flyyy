@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:FCO",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_rome_photo_720"
 }

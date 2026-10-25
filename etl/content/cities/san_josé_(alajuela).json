@@ -1,0 +1,21 @@
+{
+  "city_id": "san_josé_(alajuela)",
+  "name_zh": "圣何塞",
+  "name_en": "San José (Alajuela)",
+  "country_id": "CR",
+  "country_zh": "哥斯达黎加",
+  "timezone": "UTC",
+  "short_description": "圣何塞是哥斯达黎加的首都，人口约33.5万，海拔1161米。圣何塞有记载的城市历史可追溯至1737年。在哥斯达黎加的饮食传统中，米豆饭加洛平托是值得留意的风味。",
+  "overview": "圣何塞位于哥斯达黎加（北纬9.9°）。城市海拔1161米。作为哥斯达黎加的首都，圣何塞是当地行政与商业活动的中心。城市人口约33.5万（2025年）。机场三字码为SJO；实际可达航线以航班页为准。",
+  "history_summary": "圣何塞有记载的城市历史可追溯至1737年。",
+  "geography_summary": "圣何塞地处北纬9.9°、海拔1161米。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在哥斯达黎加的饮食传统中，米豆饭加洛平托是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为SJO。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q3070",
+    "ourairports:SJO"
+  ],
+  "image_asset_id": "city_san_josé_(alajuela)_hero_720"
+}

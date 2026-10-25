@@ -1,0 +1,23 @@
+{
+  "city_id": "providenciales",
+  "name_zh": "普羅維登西亞萊斯島",
+  "name_en": "Providenciales",
+  "country_id": "TC",
+  "country_zh": "特克斯和凯科斯群岛",
+  "timezone": "UTC",
+  "short_description": "普羅維登西亞萊斯島位于特克斯和凯科斯群岛，邻近加勒比海。普罗维登西亚莱斯岛的现代旅游业始于20世纪后半叶。1968年的简易跑道、随后兴建的旅馆，以及20世纪80年代的新机场和度假设施，逐渐把岛上的海滩带入国际旅行版图。",
+  "overview": "普羅維登西亞萊斯島位于特克斯和凯科斯群岛（北纬21.8°）。普羅維登西亞萊斯島地处加勒比海沿岸。机场三字码为PLS；实际可达航线以航班页为准。",
+  "history_summary": "普罗维登西亚莱斯岛的现代旅游业始于20世纪后半叶。1968年的简易跑道、随后兴建的旅馆，以及20世纪80年代的新机场和度假设施，逐渐把岛上的海滩带入国际旅行版图。航空交通与旅游开发改变了这座岛的人口和经济面貌。",
+  "geography_summary": "普羅維登西亞萊斯島地处北纬21.8°、邻近加勒比海。该城机场通达区域航线网络。",
+  "economy_summary": "机场三字码PLS连接该地区的客运网络，机场周边的地面交通与旅客服务是理解本地流通的一个入口。",
+  "food_summary": "在特克斯和凯科斯群岛的饮食传统中，海螺料理是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为PLS。",
+  "source_ids": [
+    "wikidata:Q1616654",
+    "ourairports:PLS",
+    "https://www.visittci.com/nature-and-history/history",
+    "https://www.tcilondon.org.uk/the-islands/a-brief-history-of-the-islands/"
+  ],
+  "content_confidence": "B",
+  "image_asset_id": "city_providenciales_hero_720"
+}

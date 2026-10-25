@@ -1,0 +1,24 @@
+{
+  "city_id": "nadi",
+  "name_zh": "楠迪",
+  "name_en": "Nadi",
+  "country_id": "FJ",
+  "country_zh": "斐济",
+  "timezone": "UTC",
+  "short_description": "楠迪位于斐济的姆巴省，人口约7.1万，海拔10米。楠迪位于维提岛西侧。随着机场成为斐济主要国际入口，城镇发展出市场、餐饮和连接岛屿的旅行服务。",
+  "overview": "楠迪位于斐济的姆巴省（南纬17.8°）。城市海拔10米。城市人口约7.1万（2017年）。机场三字码为NAN；实际可达航线以航班页为准。",
+  "history_summary": "楠迪位于维提岛西侧。随着机场成为斐济主要国际入口，城镇发展出市场、餐饮和连接岛屿的旅行服务。市区南端的斯里湿婆苏布拉马尼亚神庙，则让印度裔斐济人的宗教与饮食传统在日常街景中可见。",
+  "geography_summary": "楠迪地处南纬17.8°、海拔10米。该城机场通达区域航线网络。",
+  "economy_summary": "资料所载楠迪人口约7.1万；这一数字对应2017年的统计口径。机场三字码NAN连接该地区的客运网络，机场周边的地面交通与旅客服务是理解本地流通的一个入口。",
+  "food_summary": "在斐济的饮食传统中，椰奶腌鱼科科达是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为NAN。",
+  "culture_note": "楠迪的文化并非只有海滩：在市场里能看到本地食材，印度教神庙旁能尝到香料茶和素食；斐济的地炉烹饪 lovo 也常在节庆或聚会中出现。",
+  "source_ids": [
+    "wikidata:Q619443",
+    "ourairports:NAN",
+    "https://www.fiji.travel/places-to-go/nadi/locations/nadi-the-perfect-base-to-explore-fiji",
+    "https://www.fiji.travel/things-to-do/arts/best-cultural-experiences-in-nadi"
+  ],
+  "content_confidence": "B",
+  "image_asset_id": "city_nadi_hero_720"
+}

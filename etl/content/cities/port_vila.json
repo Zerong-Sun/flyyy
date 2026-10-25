@@ -1,0 +1,21 @@
+{
+  "city_id": "port_vila",
+  "name_zh": "维拉港",
+  "name_en": "Port Vila",
+  "country_id": "VU",
+  "country_zh": "瓦努阿图",
+  "timezone": "UTC",
+  "short_description": "维拉港是瓦努阿图的首都，人口约4.9万，邻近太平洋，海拔59米。如今维拉港仍是谢法省的重要城市。在瓦努阿图的饮食传统中，芋叶烤食拉普拉普是值得留意的风味。",
+  "overview": "维拉港位于瓦努阿图的谢法省（南纬17.7°）。维拉港地处太平洋沿岸。作为瓦努阿图的首都，维拉港是当地行政与商业活动的中心。城市人口约4.9万（2020年）。机场三字码为VLI；实际可达航线以航班页为准。",
+  "history_summary": "如今维拉港仍是谢法省的重要城市。",
+  "geography_summary": "维拉港地处南纬17.7°、海拔59米、邻近太平洋。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在瓦努阿图的饮食传统中，芋叶烤食拉普拉普是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为VLI。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q37806",
+    "ourairports:VLI"
+  ],
+  "image_asset_id": "city_port_vila_hero_720"
+}

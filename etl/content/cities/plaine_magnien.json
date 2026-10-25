@@ -1,0 +1,23 @@
+{
+  "city_id": "plaine_magnien",
+  "name_zh": "马尼安平原",
+  "name_en": "Plaine Magnien",
+  "country_id": "MU",
+  "country_zh": "毛里求斯",
+  "timezone": "UTC",
+  "short_description": "马尼安平原位于毛里求斯的大港區，海拔57米。马尼安平原附近的机场旧称普莱桑斯机场。第二次世界大战期间，机场所在区域承担航空任务，战后逐步转向民用。",
+  "overview": "马尼安平原位于毛里求斯的大港區（南纬20.4°）。城市海拔57米。机场三字码为MRU；实际可达航线以航班页为准。",
+  "history_summary": "马尼安平原附近的机场旧称普莱桑斯机场。第二次世界大战期间，机场所在区域承担航空任务，战后逐步转向民用。1987年机场以毛里求斯首任总理西沃萨古尔·拉姆古兰命名；从这一名字也能读到岛国独立后的历史记忆。",
+  "geography_summary": "马尼安平原地处南纬20.4°、海拔57米。该城机场通达区域航线网络。",
+  "economy_summary": "机场三字码MRU连接该地区的客运网络，机场周边的地面交通与旅客服务是理解本地流通的一个入口。",
+  "food_summary": "在毛里求斯的饮食传统中，鹰嘴豆薄饼多尔普里是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为MRU。",
+  "source_ids": [
+    "wikidata:Q3390948",
+    "ourairports:MRU",
+    "https://aml.mru.aero/index.php/corporate/history",
+    "https://mauritiusmuseums.govmu.org/mauritiusmuseums/?page_id=1869"
+  ],
+  "content_confidence": "B",
+  "image_asset_id": "city_plaine_magnien_hero_720"
+}

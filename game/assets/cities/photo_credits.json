@@ -1,0 +1,902 @@
+{
+  "tianjin": {
+    "author": "Tyngrwey",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:%E5%A4%A9%E6%B4%A5%E5%A4%A9%E9%99%85%E7%BA%BF202507.jpg",
+    "commons_file": "天津天际线202507.jpg",
+    "wikidata_qid": "Q11736",
+    "route_score": 86
+  },
+  "frankfurt": {
+    "author": "Thomas Wolf, www.foto-tw.de",
+    "license": "CC BY-SA 3.0 de",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Frankfurter_Altstadt_mit_Skyline_2019_(100MP).jpg",
+    "commons_file": "Frankfurter Altstadt mit Skyline 2019 (100MP).jpg",
+    "wikidata_qid": "Q1794",
+    "route_score": 408
+  },
+  "paris": {
+    "author": "Yann Caradec from Paris, France",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques,_Paris_ao%C3%BBt_2014_(2).jpg",
+    "commons_file": "La Tour Eiffel vue de la Tour Saint-Jacques, Paris août 2014 (2).jpg",
+    "wikidata_qid": "Q90",
+    "route_score": 390
+  },
+  "london": {
+    "author": "Ilya Grigorik",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:London_Skyline_(125508655).jpeg",
+    "commons_file": "London Skyline (125508655).jpeg",
+    "wikidata_qid": "Q84",
+    "route_score": 306
+  },
+  "istanbul": {
+    "author": "AlexTref871, Piotr Matyja, Alexxx1979, Moyan Brenn, Far-gh, İhsan Deniz Kılıçoğlu, Carlos Delgado",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Istanbul_Montage_2016.png",
+    "commons_file": "Istanbul Montage 2016.png",
+    "wikidata_qid": "Q406",
+    "route_score": 302
+  },
+  "munich": {
+    "author": "Thomas Wolf, www.foto-tw.de",
+    "license": "CC BY-SA 3.0 de",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Stadtbild_M%C3%BCnchen.jpg",
+    "commons_file": "Stadtbild München.jpg",
+    "wikidata_qid": "Q1726",
+    "route_score": 302
+  },
+  "dubai": {
+    "author": "Tim Reckmann from Hamm, Deutschland",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Dubai_Skyline_mit_Burj_Khalifa_(cropped).jpg",
+    "commons_file": "Dubai Skyline mit Burj Khalifa (cropped).jpg",
+    "wikidata_qid": "Q612",
+    "route_score": 274
+  },
+  "rome": {
+    "author": "Bert Kaufmann from Roermond, Netherlands",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Rome_Skyline_(8012016319).jpg",
+    "commons_file": "Rome Skyline (8012016319).jpg",
+    "wikidata_qid": "Q220",
+    "route_score": 274
+  },
+  "new_york": {
+    "author": "Fred Hsu on en.wikipedia",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:NYC_Downtown_Manhattan_Skyline_seen_from_Paulus_Hook_2019-12-20_IMG_7347_FRD_(cropped).jpg",
+    "commons_file": "NYC Downtown Manhattan Skyline seen from Paulus Hook 2019-12-20 IMG 7347 FRD (cropped).jpg",
+    "wikidata_qid": "Q60",
+    "route_score": 272
+  },
+  "zaventem": {
+    "author": "Ank Kumar",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Brussels_view_from_Mont_des_Arts,_Brussels,_Belgium_(cropped).jpg",
+    "commons_file": "Brussels view from Mont des Arts, Brussels, Belgium (cropped).jpg",
+    "wikidata_qid": "Q239",
+    "route_score": 252
+  },
+  "barcelona": {
+    "author": "dronepicr",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_La_Sagrada_Familia,_Barcelona,_Spain_(51227006134).jpg",
+    "commons_file": "Aerial view of La Sagrada Familia, Barcelona, Spain (51227006134).jpg",
+    "wikidata_qid": "Q1492",
+    "route_score": 250
+  },
+  "beijing": {
+    "author": "N509FZ",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Skyline_of_Beijing_CBD_with_B-5906_approaching_(20211016171955).jpg",
+    "commons_file": "Skyline of Beijing CBD with B-5906 approaching (20211016171955).jpg",
+    "wikidata_qid": "Q956",
+    "route_score": 250
+  },
+  "madrid": {
+    "author": "Dmitry Dzhus from London",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Madrid_(38624991251).jpg",
+    "commons_file": "Madrid (38624991251).jpg",
+    "wikidata_qid": "Q2807",
+    "route_score": 248
+  },
+  "atlanta": {
+    "author": "AtlChampion",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:A2ATL20250614-0721_(cropped).jpg",
+    "commons_file": "A2ATL20250614-0721 (cropped).jpg",
+    "wikidata_qid": "Q23556",
+    "route_score": 242
+  },
+  "zurich": {
+    "author": "Ikiwaner",
+    "license": "CC BY-SA 3.0",
+    "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Zuerich_Fraumuenster_St_Peter.jpg",
+    "commons_file": "Zuerich Fraumuenster St Peter.jpg",
+    "wikidata_qid": "Q72",
+    "route_score": 238
+  },
+  "hong_kong": {
+    "author": "Mustang Joe",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Hong_Kong_from_Victoria_Peak1.jpg",
+    "commons_file": "Hong Kong from Victoria Peak1.jpg",
+    "wikidata_qid": "Q8646",
+    "route_score": 232
+  },
+  "toronto": {
+    "author": "Jchmrt",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Sunset_Toronto_Skyline_Panorama_Crop_from_Snake_Island.jpg",
+    "commons_file": "Sunset Toronto Skyline Panorama Crop from Snake Island.jpg",
+    "wikidata_qid": "Q172",
+    "route_score": 232
+  },
+  "manchester,_greater_manchester": {
+    "author": "Daniel Nisbet from Manchester, United Kingdom",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Manchester_from_the_Sky,_2008.jpg",
+    "commons_file": "Manchester from the Sky, 2008.jpg",
+    "wikidata_qid": "Q18125",
+    "route_score": 228
+  },
+  "düsseldorf": {
+    "author": "Kai Pilger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:D%C3%BCsseldorf_Panorama.jpg",
+    "commons_file": "Düsseldorf Panorama.jpg",
+    "wikidata_qid": "Q1718",
+    "route_score": 218
+  },
+  "dublin": {
+    "author": "瑞丽江的河水",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Dublin_-_aerial_-_2025-07-07_01.jpg",
+    "commons_file": "Dublin - aerial - 2025-07-07 01.jpg",
+    "wikidata_qid": "Q1761",
+    "route_score": 214
+  },
+  "dallas": {
+    "author": "Gattacal",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Dallas_Skyline_with_Arts_District.jpg",
+    "commons_file": "Dallas Skyline with Arts District.jpg",
+    "wikidata_qid": "Q179295",
+    "route_score": 212
+  },
+  "vienna": {
+    "author": "Andrzej Otrębski",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Wien_katedra_sw_Szczepana_widok_z_wiezy_6.jpg",
+    "commons_file": "Wien katedra sw Szczepana widok z wiezy 6.jpg",
+    "wikidata_qid": "Q1741",
+    "route_score": 212
+  },
+  "seoul": {
+    "author": "라성민",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:%EB%8D%95%EC%88%98%EA%B6%81%EC%9D%98_%EA%B0%80%EC%9D%84.jpg",
+    "commons_file": "덕수궁의 가을.jpg",
+    "wikidata_qid": "Q8684",
+    "route_score": 210
+  },
+  "shanghai": {
+    "author": "MasaneMiyaPA",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:20191222%E9%99%86%E5%AE%B6%E5%98%B4.jpg",
+    "commons_file": "20191222陆家嘴.jpg",
+    "wikidata_qid": "Q8686",
+    "route_score": 208
+  },
+  "doha": {
+    "author": "Francisco Anzola",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Doha_skyline_in_the_morning_(12544910974).jpg",
+    "commons_file": "Doha skyline in the morning (12544910974).jpg",
+    "wikidata_qid": "Q3861",
+    "route_score": 206
+  },
+  "houston": {
+    "author": "Hequals2henry",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Houston_montage.jpg",
+    "commons_file": "Houston montage.jpg",
+    "wikidata_qid": "Q16555",
+    "route_score": 206
+  },
+  "los_angeles": {
+    "author": "Alek Leckszas",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Los_Angeles_with_Mount_Baldy.jpg",
+    "commons_file": "Los Angeles with Mount Baldy.jpg",
+    "wikidata_qid": "Q65",
+    "route_score": 204
+  },
+  "miami": {
+    "author": "Marc Averette",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Downtown_Miami_aerial_2008.jpg",
+    "commons_file": "Downtown Miami aerial 2008.jpg",
+    "wikidata_qid": "Q8652",
+    "route_score": 204
+  },
+  "bangkok": {
+    "author": "Preecha.MJ",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Temple_of_the_Emerald_of_buddha_or_Wat_Phra_Kaew_(cropped).jpg",
+    "commons_file": "Temple of the Emerald of buddha or Wat Phra Kaew (cropped).jpg",
+    "wikidata_qid": "Q1861",
+    "route_score": 198
+  },
+  "copenhagen": {
+    "author": "Pudelek",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Copenhagen_-_view_from_Christiansborg_castle.jpg",
+    "commons_file": "Copenhagen - view from Christiansborg castle.jpg",
+    "wikidata_qid": "Q1748",
+    "route_score": 196
+  },
+  "singapore": {
+    "author": "Ramir Borja.",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Raffles_Place.jpg",
+    "commons_file": "Raffles Place.jpg",
+    "wikidata_qid": "Q334",
+    "route_score": 196
+  },
+  "philadelphia": {
+    "author": "颐园居",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Philadelphia_skyline_20240528_(cropped).jpg",
+    "commons_file": "Philadelphia skyline 20240528 (cropped).jpg",
+    "wikidata_qid": "Q1345",
+    "route_score": 182
+  },
+  "guangzhou": {
+    "author": "Tim Wu",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Canton_Tower_20220626_(cropped).jpg",
+    "commons_file": "Canton Tower 20220626 (cropped).jpg",
+    "wikidata_qid": "Q16572",
+    "route_score": 180
+  },
+  "london,_essex": {
+    "author": "Ilya Grigorik",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:London_Skyline_(125508655).jpeg",
+    "commons_file": "London Skyline (125508655).jpeg",
+    "wikidata_qid": "Q84",
+    "route_score": 178
+  },
+  "narita": {
+    "author": "User:Nanashinodensyaku\nHoku-sou-san at Japanese Wikipedia\nUser:Unaaari\nUser:名無し野電車区\nja:user:Katorisi\nUser:Rodrigo.Argenton",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Narita_montage2.jpg",
+    "commons_file": "Narita montage2.jpg",
+    "wikidata_qid": "Q273798",
+    "route_score": 176
+  },
+  "charlotte": {
+    "author": "Greengrass090",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Charlotte_collage.jpg",
+    "commons_file": "Charlotte collage.jpg",
+    "wikidata_qid": "Q16565",
+    "route_score": 174
+  },
+  "geneva": {
+    "author": "Yann (talk)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Geneva_from_Mount_Sal%C3%A8ve.jpg",
+    "commons_file": "Geneva from Mount Salève.jpg",
+    "wikidata_qid": "Q71",
+    "route_score": 172
+  },
+  "taoyuan": {
+    "author": "Foxy Who \\(^∀^)/",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Taoyuan_City_-_panoramio_(1).jpg",
+    "commons_file": "Taoyuan City - panoramio (1).jpg",
+    "wikidata_qid": "Q115256",
+    "route_score": 170
+  },
+  "málaga": {
+    "author": "Viktar Palstsiuk",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Malaga_2023.jpg",
+    "commons_file": "Malaga 2023.jpg",
+    "wikidata_qid": "Q8851",
+    "route_score": 168
+  },
+  "detroit": {
+    "author": "User21343321",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Detroit_montage_2020.jpg",
+    "commons_file": "Detroit montage 2020.jpg",
+    "wikidata_qid": "Q12439",
+    "route_score": 166
+  },
+  "lisbon": {
+    "author": "Lacobrigo",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Lisboa837.png",
+    "commons_file": "Lisboa837.png",
+    "wikidata_qid": "Q597",
+    "route_score": 166
+  },
+  "denver": {
+    "author": "Quintin Soloviev",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Denver,_Colorado_skyline_(cropped).jpg",
+    "commons_file": "Denver, Colorado skyline (cropped).jpg",
+    "wikidata_qid": "Q16554",
+    "route_score": 162
+  },
+  "moscow": {
+    "author": "U.S. Department of State",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Saint_Basil%27s_Cathedral_and_the_Red_Square.jpg",
+    "commons_file": "Saint Basil's Cathedral and the Red Square.jpg",
+    "wikidata_qid": "Q649",
+    "route_score": 162
+  },
+  "sepang": {
+    "author": "Wiki Farazi",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Jalan_Jenderam-Sepang_1.jpg",
+    "commons_file": "Jalan Jenderam-Sepang 1.jpg",
+    "wikidata_qid": "Q20460195",
+    "route_score": 162
+  },
+  "stockholm": {
+    "author": "JZ",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Stockholm_gamlastan_etc.jpg",
+    "commons_file": "Stockholm gamlastan etc.jpg",
+    "wikidata_qid": "Q1754",
+    "route_score": 162
+  },
+  "prague": {
+    "author": "Deror_avi",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pet%C5%99%C3%ADn_Tower_View_IMG_3020.JPG",
+    "commons_file": "Petřín Tower View IMG 3020.JPG",
+    "wikidata_qid": "Q1085",
+    "route_score": 160
+  },
+  "las_vegas": {
+    "author": "Ken Lund from Las Vegas, Nevada, USA",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Downtown_Las_Vegas_from_Stratosphere_3.jpg",
+    "commons_file": "Downtown Las Vegas from Stratosphere 3.jpg",
+    "wikidata_qid": "Q23768",
+    "route_score": 158
+  },
+  "boston": {
+    "author": "Robert Linsdell from St. Andrews, Canada",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Boston_from_the_Harbour,_Massachusetts_(493360)_(10772382303).jpg",
+    "commons_file": "Boston from the Harbour, Massachusetts (493360) (10772382303).jpg",
+    "wikidata_qid": "Q100",
+    "route_score": 156
+  },
+  "palma_de_mallorca": {
+    "author": "Thomas Wolf, www.foto-tw.de",
+    "license": "CC BY-SA 3.0 de",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Palma_von_Castell_de_Bellver.jpg",
+    "commons_file": "Palma von Castell de Bellver.jpg",
+    "wikidata_qid": "Q8826",
+    "route_score": 156
+  },
+  "san_francisco": {
+    "author": "Lightandtruth",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:San_Francisco_from_the_Marin_Headlands_in_March_2019.jpg",
+    "commons_file": "San Francisco from the Marin Headlands in March 2019.jpg",
+    "wikidata_qid": "Q62",
+    "route_score": 156
+  },
+  "minneapolis": {
+    "author": "Bobak Ha'Eri",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:2008-0712-MPLS-panorama.JPG",
+    "commons_file": "2008-0712-MPLS-panorama.JPG",
+    "wikidata_qid": "Q36091",
+    "route_score": 154
+  },
+  "abu_dhabi": {
+    "author": "Валерий Дед",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:%D0%90%D0%B1%D1%83-%D0%94%D0%B0%D0%B1%D0%B8_(Abu_Dhabi)_-_panoramio_(1).jpg",
+    "commons_file": "Абу-Даби (Abu Dhabi) - panoramio (1).jpg",
+    "wikidata_qid": "Q1519",
+    "route_score": 150
+  },
+  "hamburg": {
+    "author": "kallerna",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Hamburg_view_St._Nikolai.jpg",
+    "commons_file": "Hamburg view St. Nikolai.jpg",
+    "wikidata_qid": "Q1055",
+    "route_score": 148
+  },
+  "orlando": {
+    "author": "Quintin Soloviev",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Orlando,_Florida_(cropped).jpg",
+    "commons_file": "Orlando, Florida (cropped).jpg",
+    "wikidata_qid": "Q49233",
+    "route_score": 146
+  },
+  "paris_(orly,_val_de_marne)": {
+    "author": "Yann Caradec from Paris, France",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques,_Paris_ao%C3%BBt_2014_(2).jpg",
+    "commons_file": "La Tour Eiffel vue de la Tour Saint-Jacques, Paris août 2014 (2).jpg",
+    "wikidata_qid": "Q90",
+    "route_score": 144
+  },
+  "chengdu_(shuangliu)": {
+    "author": "FISU",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:%E9%9B%AA%E5%B1%B1%E4%B8%8B%E7%9A%84%E6%88%90%E9%83%BD%E5%B8%82%E5%A4%A9%E9%99%85%E7%BA%BF_Chengdu_skyline_with_snow_capped_mountains.jpg",
+    "commons_file": "雪山下的成都市天际线 Chengdu skyline with snow capped mountains.jpg",
+    "wikidata_qid": "Q30002",
+    "route_score": 142
+  },
+  "köln_(cologne)": {
+    "author": "Thomas Wolf, www.foto-tw.de",
+    "license": "CC BY-SA 3.0 de",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Stadtbild_K%C3%B6ln_(50MP).jpg",
+    "commons_file": "Stadtbild Köln (50MP).jpg",
+    "wikidata_qid": "Q365",
+    "route_score": 142
+  },
+  "spata_artemida": {
+    "author": "Thomas Wolf, www.foto-tw.de",
+    "license": "CC BY-SA 3.0 de",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Akropolis_2015.jpg",
+    "commons_file": "Akropolis 2015.jpg",
+    "wikidata_qid": "Q1524",
+    "route_score": 140
+  },
+  "nice,_alpes_maritimes": {
+    "author": "Moody Dreiza (Moody751 at English Wikipedia)",
+    "license": "CC BY 2.5",
+    "license_url": "https://creativecommons.org/licenses/by/2.5",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Port_Of_Nice,_C%C3%B4te_d%27Azur.jpg",
+    "commons_file": "Port Of Nice, Côte d'Azur.jpg",
+    "wikidata_qid": "Q33959",
+    "route_score": 138
+  },
+  "alicante": {
+    "author": "Diego Delso",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Vista_de_Alicante,_Espa%C3%B1a,_2014-07-04,_DD_49.JPG",
+    "commons_file": "Vista de Alicante, España, 2014-07-04, DD 49.JPG",
+    "wikidata_qid": "Q11959",
+    "route_score": 136
+  },
+  "phoenix": {
+    "author": "Bigmikebmw",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Phoenix,_Arizona.JPG",
+    "commons_file": "Phoenix, Arizona.JPG",
+    "wikidata_qid": "Q16556",
+    "route_score": 136
+  },
+  "budapest": {
+    "author": "Thomas Depenbusch (Depi) from Cologne, Germany",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Budapest,_Hungary_(explored)_(14995308504).jpg",
+    "commons_file": "Budapest, Hungary (explored) (14995308504).jpg",
+    "wikidata_qid": "Q1781",
+    "route_score": 134
+  },
+  "oslo_(gardermoen)": {
+    "author": "Jonipoon",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Oslo_newer_montage_2013.png",
+    "commons_file": "Oslo newer montage 2013.png",
+    "wikidata_qid": "Q585",
+    "route_score": 134
+  },
+  "edinburgh": {
+    "author": "瑞丽江的河水",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Edinburgh_cityscapes_-_aerial_-_2025-04-19_20.jpg",
+    "commons_file": "Edinburgh cityscapes - aerial - 2025-04-19 20.jpg",
+    "wikidata_qid": "Q23436",
+    "route_score": 132
+  },
+  "fort_lauderdale": {
+    "author": "KeanoManu",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Skyline_of_Fort_Lauderdale,_Nov-15.jpg",
+    "commons_file": "Skyline of Fort Lauderdale, Nov-15.jpg",
+    "wikidata_qid": "Q165972",
+    "route_score": 132
+  },
+  "montréal": {
+    "author": "https://www.pxfuel.com/",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Montreal-canada-parc-urban.jpg",
+    "commons_file": "Montreal-canada-parc-urban.jpg",
+    "wikidata_qid": "Q340",
+    "route_score": 132
+  },
+  "warsaw": {
+    "author": "Rhododendrites",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Castle_Square_(22346p).jpg",
+    "commons_file": "Castle Square (22346p).jpg",
+    "wikidata_qid": "Q270",
+    "route_score": 130
+  },
+  "stuttgart": {
+    "author": "Julian Herzog (Website)",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Neues_Schloss_Schlossplatzspringbrunnen_Jubil%C3%A4umss%C3%A4ule_Schlossplatz_Stuttgart_2015_01.jpg",
+    "commons_file": "Neues Schloss Schlossplatzspringbrunnen Jubiläumssäule Schlossplatz Stuttgart 2015 01.jpg",
+    "wikidata_qid": "Q1022",
+    "route_score": 128
+  },
+  "tel_aviv": {
+    "author": "חיים שפיר",
+    "license": "CC BY 2.5",
+    "license_url": "https://creativecommons.org/licenses/by/2.5",
+    "source_url": "https://commons.wikimedia.org/wiki/File:PikiWiki_Israel_68164_port_of_jaffa.jpg",
+    "commons_file": "PikiWiki Israel 68164 port of jaffa.jpg",
+    "wikidata_qid": "Q33935",
+    "route_score": 128
+  },
+  "tenerife": {
+    "author": "European Space Agency",
+    "license": "CC BY-SA 3.0 igo",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/igo/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Tenerife,_Canary_Islands_ESA23970088.jpeg",
+    "commons_file": "Tenerife, Canary Islands ESA23970088.jpeg",
+    "wikidata_qid": "Q40846",
+    "route_score": 128
+  },
+  "jeddah": {
+    "author": "Saudi Press Agency (SPA)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:%D8%A7%D9%84%D9%88%D8%A7%D8%AC%D9%87%D8%A9_%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%D9%8A%D8%A9_%D9%81%D9%8A_%D9%85%D8%AF%D9%8A%D9%86%D8%A9_%D8%AC%D8%AF%D8%A9_%D8%BA%D8%B1%D8%A8_%D8%A7%D9%84%D8%B3%D8%B9%D9%88%D8%AF%D9%8A%D8%A9_(2025).jpg",
+    "commons_file": "الواجهة البحرية في مدينة جدة غرب السعودية (2025).jpg",
+    "wikidata_qid": "Q374365",
+    "route_score": 126
+  },
+  "valletta": {
+    "author": "Bengt Nyman",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Malta,_2010_-_panoramio_-_Bengt_Nyman_(23).jpg",
+    "commons_file": "Malta, 2010 - panoramio - Bengt Nyman (23).jpg",
+    "wikidata_qid": "Q23800",
+    "route_score": 126
+  },
+  "birmingham,_west_midlands": {
+    "author": "JimmyGuano",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Birmingham-Skyline-from-Edgbaston-crop.jpg",
+    "commons_file": "Birmingham-Skyline-from-Edgbaston-crop.jpg",
+    "wikidata_qid": "Q2256",
+    "route_score": 124
+  },
+  "gran_canaria_island": {
+    "author": "European Space Agency",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Gran_Canaria_wildfire_(48590670831).jpg",
+    "commons_file": "Gran Canaria wildfire (48590670831).jpg",
+    "wikidata_qid": "Q178925",
+    "route_score": 124
+  },
+  "helsinki_(vantaa)": {
+    "author": "Old Pionear",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Helsinki_Lutheran_Cathedral_(panoraaman%C3%A4k%C3%B6ala)-2_(s%C3%A4%C3%A4t%C3%B6).jpg",
+    "commons_file": "Helsinki Lutheran Cathedral (panoraamanäköala)-2 (säätö).jpg",
+    "wikidata_qid": "Q1757",
+    "route_score": 124
+  },
+  "baltimore": {
+    "author": "Quintin Soloviev",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Baltimore,_Maryland_skyline.jpg",
+    "commons_file": "Baltimore, Maryland skyline.jpg",
+    "wikidata_qid": "Q5092",
+    "route_score": 122
+  },
+  "washington": {
+    "author": "Carol M. Highsmith",
+    "license": "Public domain",
+    "license_url": "",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_White_House_and_downtown,_Washington,_D.C_LCCN2010630891.jpg",
+    "commons_file": "Aerial view of White House and downtown, Washington, D.C LCCN2010630891.jpg",
+    "wikidata_qid": "Q61",
+    "route_score": 122
+  },
+  "cancún": {
+    "author": "Microstar",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Canc%C3%BAnCollage.jpg",
+    "commons_file": "CancúnCollage.jpg",
+    "wikidata_qid": "Q8969",
+    "route_score": 120
+  },
+  "casablanca": {
+    "author": "Иерей Максим Массалитин from Rabat, Maroc",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Au_centre_de_Casablanca_(8177200639).jpg",
+    "commons_file": "Au centre de Casablanca (8177200639).jpg",
+    "wikidata_qid": "Q7903",
+    "route_score": 120
+  },
+  "new_delhi": {
+    "author": "Navonildutta4",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:India_Gate_Legendary_Saga_Of_Supreme_Sacrifice.jpg",
+    "commons_file": "India Gate Legendary Saga Of Supreme Sacrifice.jpg",
+    "wikidata_qid": "Q987",
+    "route_score": 120
+  },
+  "seattle": {
+    "author": "Spicypepper999",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Seattle_aerial_2,_May_2023.png",
+    "commons_file": "Seattle aerial 2, May 2023.png",
+    "wikidata_qid": "Q5083",
+    "route_score": 120
+  },
+  "cairo": {
+    "author": "Faris El-Gwely",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Cairo_Skyline_(2020).jpg",
+    "commons_file": "Cairo Skyline (2020).jpg",
+    "wikidata_qid": "Q85",
+    "route_score": 118
+  },
+  "orio_al_serio_(bg)": {
+    "author": "Ввласенко",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:The_Upper_City_of_Bergamo._View_from_Via_al_Castello._Italy.jpg",
+    "commons_file": "The Upper City of Bergamo. View from Via al Castello. Italy.jpg",
+    "wikidata_qid": "Q628",
+    "route_score": 116
+  },
+  "st._petersburg": {
+    "author": "Florstein (Telegram:WikiPhoto.Space)",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Peter_%26_Paul_fortress_in_SPB_03.jpg",
+    "commons_file": "Peter & Paul fortress in SPB 03.jpg",
+    "wikidata_qid": "Q656",
+    "route_score": 116
+  },
+  "bâle___mulhouse": {
+    "author": "Norbert Aepli, Switzerland (User:Noebu)",
+    "license": "CC BY 2.5",
+    "license_url": "https://creativecommons.org/licenses/by/2.5",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Rhine_Rhein_Basel_2006_871.JPG",
+    "commons_file": "Rhine Rhein Basel 2006 871.JPG",
+    "wikidata_qid": "Q78",
+    "route_score": 114
+  },
+  "kunming": {
+    "author": "瑞丽江的河水",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:%E4%BA%94%E5%8D%8E%E5%8C%BA%E4%B8%8E%E7%9B%98%E9%BE%99%E5%8C%BA%E5%A4%A9%E9%99%85%E7%BA%BF_-_%E8%88%AA%E6%8B%8D_-_2025-05-16_03.jpg",
+    "commons_file": "五华区与盘龙区天际线 - 航拍 - 2025-05-16 03.jpg",
+    "wikidata_qid": "Q182852",
+    "route_score": 114
+  },
+  "pendik,_istanbul": {
+    "author": "FurkanYalcin3",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pendik_wiki.jpg",
+    "commons_file": "Pendik wiki.jpg",
+    "wikidata_qid": "Q857056",
+    "route_score": 114
+  },
+  "hangzhou": {
+    "author": "User:CatOnMars",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Huanglong_%26_Broken_Bridge_-_Hangzhou_City_%26_West_Lake_near_Broken_Bridge.jpg",
+    "commons_file": "Huanglong & Broken Bridge - Hangzhou City & West Lake near Broken Bridge.jpg",
+    "wikidata_qid": "Q4970",
+    "route_score": 112
+  },
+  "riga": {
+    "author": "Diego Delso",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Vistas_desde_la_iglesia_de_San_Pedro,_Riga,_Letonia,_2012-08-07,_DD_12.JPG",
+    "commons_file": "Vistas desde la iglesia de San Pedro, Riga, Letonia, 2012-08-07, DD 12.JPG",
+    "wikidata_qid": "Q1773",
+    "route_score": 112
+  },
+  "são_paulo": {
+    "author": "Thomas Hobbs",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Sao_Paulo_Skyline_in_Brazil.jpg",
+    "commons_file": "Sao Paulo Skyline in Brazil.jpg",
+    "wikidata_qid": "Q174",
+    "route_score": 112
+  },
+  "tocumen": {
+    "author": "AnelGTR",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Aeropuerto_Internacional_de_Tocumen_-_Panam%C3%A1_-_2015.jpg",
+    "commons_file": "Aeropuerto Internacional de Tocumen - Panamá - 2015.jpg",
+    "wikidata_qid": "Q186116",
+    "route_score": 110
+  },
+  "bologna": {
+    "author": "Ввласенко",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Bologna_Panorama.jpg",
+    "commons_file": "Bologna Panorama.jpg",
+    "wikidata_qid": "Q1891",
+    "route_score": 106
+  },
+  "colombier_saugnieu,_rhône": {
+    "author": "This picture belongs to Xavier Caré.\nPlease credit : Xavier Caré / Wikimedia Commons / CC-BY-SA.\nIf you would like special permission to use, license, or purchase the image please contact me to negotiate terms.\nI'd appreciate if you could let me know about it or mail me ( xavier.carepm.me) if you want to use this picture out of the Wikimedia project scope.",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Hotel_de_ville_Colombier-Saugnieu.JPG",
+    "commons_file": "Hotel de ville Colombier-Saugnieu.JPG",
+    "wikidata_qid": "Q752476",
+    "route_score": 106
+  },
+  "marignane,_bouches_du_rhône": {
+    "author": "kallerna",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:View_of_Marseille_from_Notre-Dame_de_la_Garde_4.jpg",
+    "commons_file": "View of Marseille from Notre-Dame de la Garde 4.jpg",
+    "wikidata_qid": "Q23482",
+    "route_score": 106
+  },
+  "tampa": {
+    "author": "Averette (compilation)",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:City_of_Tampa_montage.jpg",
+    "commons_file": "City of Tampa montage.jpg",
+    "wikidata_qid": "Q49255",
+    "route_score": 106
+  },
+  "wuhan_(huangpi)": {
+    "author": "螺钉",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:%E6%AD%A6%E6%B1%89%E9%BB%84%E9%B9%A4%E6%A5%BC%E4%BF%AF%E7%9E%B0.jpg",
+    "commons_file": "武汉黄鹤楼俯瞰.jpg",
+    "wikidata_qid": "Q11746",
+    "route_score": 106
+  },
+  "changsha_(changsha)": {
+    "author": "Calton",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Helong_Stadium.jpg",
+    "commons_file": "Helong Stadium.jpg",
+    "wikidata_qid": "Q174091",
+    "route_score": 104
+  },
+  "pisa_(pi)": {
+    "author": "Luca Aless",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pisa_-_veduta_dall%27aereo_4.JPG",
+    "commons_file": "Pisa - veduta dall'aereo 4.JPG",
+    "wikidata_qid": "Q13375",
+    "route_score": 104
+  },
+  "riyadh": {
+    "author": "B.alotaby",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Riyadh_Skyline.jpg",
+    "commons_file": "Riyadh Skyline.jpg",
+    "wikidata_qid": "Q3692",
+    "route_score": 104
+  },
+  "otopeni": {
+    "author": "Mark Ahsmann",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:20140703_leaving_Otopeni_09.jpg",
+    "commons_file": "20140703 leaving Otopeni 09.jpg",
+    "wikidata_qid": "Q727421",
+    "route_score": 102
+  }
+}

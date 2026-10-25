@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:DUB",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_dublin_photo_720"
 }

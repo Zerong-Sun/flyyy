@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:BRU",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_zaventem_photo_720"
 }

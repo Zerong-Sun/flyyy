@@ -107,9 +107,13 @@ func _run() -> void:
 
 	if data != null:
 		var cities: Dictionary = data.get("cities_by_id")
-		if cities.size() < 20:
+		if cities.size() != 500:
 			ok = false
-			errors.append("expected ≥20 cities, got %d" % cities.size())
+			errors.append("expected 500 cities, got %d" % cities.size())
+		var tianjin: Dictionary = data.call("get_city", "tianjin")
+		if str(tianjin.get("name_zh", "")) != "天津" or str(tianjin.get("image_asset_id", "")) != "city_tianjin_photo_720":
+			ok = false
+			errors.append("Tianjin localization or photo id missing")
 		var tags: Dictionary = data.get("product_market_tags")
 		if tags.size() < 1:
 			ok = false
@@ -165,6 +169,10 @@ func _run() -> void:
 			if tex == null:
 				ok = false
 				errors.append("IconFactory.make_texture failed")
+			var city_photo: Texture2D = icf.call("load_art", "city_tianjin_photo_720") as Texture2D
+			if city_photo == null:
+				ok = false
+				errors.append("Tianjin city photograph failed to load")
 			# A2 art integration: typed dirs + key loaders
 			for art_path in [
 				"res://assets/brand/app_icon.webp",

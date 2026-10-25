@@ -1,0 +1,22 @@
+{
+  "city_id": "minsk",
+  "name_zh": "明斯克",
+  "name_en": "Minsk",
+  "country_id": "BY",
+  "country_zh": "白俄罗斯",
+  "timezone": "UTC",
+  "short_description": "明斯克是白俄罗斯的首都，人口约199.5万，邻近斯維斯拉奇河，海拔280米。明斯克沿斯维斯拉奇河展开，是白俄罗斯的首都，也是全国政治、文化和交通的中心。",
+  "overview": "明斯克位于白俄罗斯（北纬53.9°）。明斯克地处斯維斯拉奇河沿岸。作为白俄罗斯的首都，明斯克是当地行政与商业活动的中心。城市人口约199.5万（2026年）。机场三字码为MSQ；实际可达航线以航班页为准。",
+  "history_summary": "明斯克沿斯维斯拉奇河展开，是白俄罗斯的首都，也是全国政治、文化和交通的中心。它的城市规模与河流位置一道说明了这里为何长期承担区域往来的枢纽角色。观察河岸、广场与街道，比单看机场更能理解这座城市的层次。",
+  "geography_summary": "明斯克地处北纬53.9°、海拔280米、邻近斯維斯拉奇河。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在白俄罗斯的饮食传统中，土豆煎饼德拉尼基是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为MSQ。",
+  "source_ids": [
+    "wikidata:Q2280",
+    "ourairports:MSQ",
+    "https://www.admkrsk.ru/sites/eng/rel/Pages/minsk.aspx"
+  ],
+  "content_confidence": "B",
+  "image_asset_id": "city_minsk_hero_720"
+}

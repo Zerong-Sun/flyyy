@@ -6,7 +6,7 @@
 
 > 航班网络基于公开航空数据重建，不代表真实购票信息。
 
-Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-Sun/flyyy/releases/latest)。 当前桌面版 v0.6.0 提供「午夜港口 · Dark」和「电光集市 · Light」，可在游戏设置中切换。Windows 解压后运行 `WanliTrader.exe`，并保留同目录的 `.pck` 文件；macOS 解压后运行 `WanliTrader.app`。macOS 版本为通用架构，支持 Apple Silicon 与 Intel。当前桌面包没有开发者证书公证，首次打开如被系统拦截，请在“系统设置 → 隐私与安全性”中选择“仍要打开”。发布包附有 SHA-256 校验文件。
+Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-Sun/flyyy/releases/latest)。当前桌面版 v0.6.1 提供「午夜港口 · Dark」和「电光集市 · Light」，可在游戏设置中切换。Windows 解压后运行 `WanliTrader.exe`，并保留同目录的 `.pck` 文件；macOS 解压后运行 `WanliTrader.app`。macOS 版本为通用架构，支持 Apple Silicon 与 Intel。当前桌面包没有开发者证书公证，首次打开如被系统拦截，请在“系统设置 → 隐私与安全性”中选择“仍要打开”。发布包附有 SHA-256 校验文件。
 
 ---
 
@@ -74,6 +74,12 @@ Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-
 
 规则、双端差异和验证入口见 [行商玩法说明](docs/implementation/2026-10-25-merchant-gameplay.md)。
 
+### v0.6.1 城市内容
+
+桌面版 500 座城市都有独立的中文正文，覆盖地点背景、地理、经济、饮食、文化与旅行提示；天津补入海河、港口、津味早点和杨柳青年画等内容。按航线连接度选出的 100 座重点城市加入实景照片，城市页可查看作者、许可及原始图片页面。市场采购区的行李扩容和货运额度操作也增加了独立说明，避免与商品买入混淆。
+
+内容覆盖、来源和重建方法见 [城市文案缺口报告](docs/reports/2026-10-25-city-content-gaps.md)。照片逐张署名见 [`game/assets/cities/photo_credits.json`](game/assets/cities/photo_credits.json)。
+
 ### 游戏模式
 
 - **沙盒模式** — 无固定结束时间，持续环球旅行（Demo 默认）  
@@ -91,10 +97,10 @@ Windows 与 macOS 桌面版下载：[GitHub Releases](https://github.com/Zerong-
 
 | 客户端 | 范围 | 说明 |
 |--------|------|------|
-| **Godot 4.7**（桌面主客户端） | 500 个机场、2500 件商品 | 3D 地球、航班、贸易、存档与双外观；[v0.6.0 Windows / macOS 下载](https://github.com/Zerong-Sun/flyyy/releases/tag/v0.6.0) |
+| **Godot 4.7**（桌面主客户端） | 500 个机场、2500 件商品、500 座城市正文、100 座城市照片 | 3D 地球、航班、贸易、存档与双外观；[v0.6.1 Windows / macOS 下载](https://github.com/Zerong-Sun/flyyy/releases/tag/v0.6.1) |
 | **React Native / Expo SDK 54**（[`ios/expo/`](ios/expo/)） | 20 座枢纽、精选商品 | 可玩的手机端：地球、市场、航班、行李、交易记录、成就、音效、存档与双外观；目前通过 Expo Go 本地预览 |
 
-Expo Go 是开发预览容器，不是《万里行商》的手机版安装包。`ios/expo/app.json` 的 `1.1.0` 是源代码版本；尚未发布新的 iOS / Android 安装包。当前公开的 v0.6.0 Release 仅包含 Windows 和 macOS。
+Expo Go 是开发预览容器，不是《万里行商》的手机版安装包。`ios/expo/app.json` 的 `1.1.0` 是源代码版本；尚未发布新的 iOS / Android 安装包。当前公开的 v0.6.1 Release 仅包含 Windows 和 macOS。
 
 **首版里程碑验收 = 可玩 Demo（PRD §27）**  
 对照表：[docs/superpowers/plans/2026-07-26-demo-acceptance.md](docs/superpowers/plans/2026-07-26-demo-acceptance.md)  
@@ -121,10 +127,10 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python scripts/01_fetch_sources.py --strict
-python scripts/run_pipeline.py
+python scripts/run_pipeline.py --full
 ```
 
-管线将校验用 SQLite 与运行时 **JSON** 写出到 `game/data/`（客户端主读 `world.json` / `flights.json`）。
+`--full` 生成桌面版的 500 城数据。管线将校验用 SQLite 与运行时 **JSON** 写出到 `game/data/`（客户端主读 `world.json` / `flights.json`）。城市正文源文件位于 `etl/content/cities/`。
 
 ### 2. 打开游戏（Godot）
 
@@ -172,6 +178,7 @@ cd ios/expo && npm test                    # 逻辑单测
 | BTS On-Time (DOT) | 美国国内真实航班号与计划时刻（2025-03） | 美国联邦政府公开数据 |
 | AeroSCOPE 2019 (Zenodo) | 全球航线年度频次（相对归一化） | 研究用途（商用前需联系作者） |
 | Wikidata | 城市人口、地理与行政区等结构化事实 | CC0 1.0 |
+| Wikimedia Commons | 100 座重点城市的照片 | 逐张作者、许可和原始页面见 [`photo_credits.json`](game/assets/cities/photo_credits.json) |
 | 游戏原创 | 城市简介与商品 | 原创内容 |
 | Noto Sans SC / JetBrains Mono | UI 字体 | OFL 1.1 |
 

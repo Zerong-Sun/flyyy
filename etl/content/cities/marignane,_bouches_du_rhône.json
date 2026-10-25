@@ -1,0 +1,21 @@
+{
+  "city_id": "marignane,_bouches_du_rhône",
+  "name_zh": "马赛",
+  "name_en": "Marignane, Bouches-du-Rhône",
+  "country_id": "FR",
+  "country_zh": "法国",
+  "timezone": "Europe/Paris",
+  "short_description": "马赛是canton of Marseille-La Pointe-Rouge的首府，人口约88.6万，所在国家以航空航天、奢侈品等产业闻名，邻近Bay of Marseille。",
+  "overview": "马赛位于法国的罗讷河口省（北纬43.3°）。马赛地处Bay of Marseille沿岸。作为canton of Marseille-La Pointe-Rouge的首府，马赛是当地行政与商业活动的中心。城市人口约88.6万（2023年）。机场三字码为MRS；实际可达航线以航班页为准。从全国经济背景看，航空航天、奢侈品、葡萄酒与农业（欧盟最大农业国）并重，核电比例全球领先。",
+  "history_summary": "放在法国的历史脉络中，欧洲老牌大国，1789年大革命深刻影响世界。放在法国的历史脉络中，今日为欧盟核心成员国，拥有联合国安理会常任席位。如今马赛仍是罗讷河口省的重要城市。",
+  "geography_summary": "马赛地处北纬43.3°、海拔6米、邻近Bay of Marseille。全国气候背景：西部温带海洋性，南部地中海气候，冬季温和，夏季凉爽或干热。全国地理背景：西欧面积最大的国家，南部有阿尔卑斯与比利牛斯山脉，中部为平原丘陵。",
+  "economy_summary": "全国经济背景：航空航天、奢侈品、葡萄酒与农业（欧盟最大农业国）并重，核电比例全球领先。首府地位带来稳定的行政与商务需求。",
+  "food_summary": "在法国的饮食中，面包、奶酪、葡萄酒与鹅肝、蜗牛等经典法餐举世闻名，可颂与马卡龙亦是标志。法国的集市每周数次开张，奶酪与面包摊是日常采购点。",
+  "travel_note": "机场三字码为MRS，时区UTC+1，主要使用法语，当地结算货币为欧元，全国气候参考为西部温带海洋性，南部地中海气候，冬季温和，夏季凉爽或干热；具体天气以目的地预报为准。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q23482",
+    "ourairports:MRS"
+  ],
+  "image_asset_id": "city_marignane,_bouches_du_rhône_photo_720"
+}

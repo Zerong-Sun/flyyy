@@ -1,0 +1,21 @@
+{
+  "city_id": "lusaka",
+  "name_zh": "路沙卡",
+  "name_en": "Lusaka",
+  "country_id": "ZM",
+  "country_zh": "赞比亚",
+  "timezone": "UTC",
+  "short_description": "路沙卡是赞比亚的首都，人口约220.4万，海拔1279米。路沙卡有记载的城市历史可追溯至1905年。如今路沙卡仍是卢萨卡省的重要城市。在赞比亚的饮食传统中，玉米糊恩希马是值得留意的风味。",
+  "overview": "路沙卡位于赞比亚的卢萨卡省（南纬15.4°）。城市海拔1279米。作为赞比亚的首都，路沙卡是当地行政与商业活动的中心。城市人口约220.4万（2022年）。机场三字码为LUN；实际可达航线以航班页为准。",
+  "history_summary": "路沙卡有记载的城市历史可追溯至1905年。如今路沙卡仍是卢萨卡省的重要城市。",
+  "geography_summary": "路沙卡地处南纬15.4°、海拔1279米。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在赞比亚的饮食传统中，玉米糊恩希马是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为LUN。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q3881",
+    "ourairports:LUN"
+  ],
+  "image_asset_id": "city_lusaka_hero_720"
+}

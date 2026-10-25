@@ -1,0 +1,23 @@
+{
+  "city_id": "tocumen",
+  "name_zh": "托库门",
+  "name_en": "Tocumen",
+  "country_id": "PA",
+  "country_zh": "巴拿马",
+  "timezone": "UTC",
+  "short_description": "托库门位于巴拿马的巴拿馬區，人口约10.3万。托库门是巴拿马城东部的航空门户。托库门国际机场的成长，把这片城区与首都的商业和跨洲往来连在一起。",
+  "overview": "托库门位于巴拿马的巴拿馬區（北纬9.1°）。城市人口约10.3万（2010年）。机场三字码为PTY；实际可达航线以航班页为准。",
+  "history_summary": "托库门是巴拿马城东部的航空门户。托库门国际机场的成长，把这片城区与首都的商业和跨洲往来连在一起。若从机场向市中心走，巴拿马旧城的遗址和后来重建的老城区，正好展示这座首都从殖民时期到现代交通枢纽的不同层次。",
+  "geography_summary": "托库门地处北纬9.1°。该城机场通达区域航线网络。",
+  "economy_summary": "资料所载托库门人口约10.3万；这一数字对应2010年的统计口径。机场三字码PTY连接该地区的客运网络，机场周边的地面交通与旅客服务是理解本地流通的一个入口。",
+  "food_summary": "在巴拿马的饮食传统中，炖汤桑科乔是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为PTY。",
+  "source_ids": [
+    "wikidata:Q186116",
+    "ourairports:PTY",
+    "https://www.tourismpanama.com/plan-your-trip/getting-here/",
+    "https://www.tourismpanama.com/places-to-visit/panama-city/things-to-do/historical-sites/"
+  ],
+  "content_confidence": "B",
+  "image_asset_id": "city_tocumen_photo_720"
+}

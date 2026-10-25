@@ -1,0 +1,21 @@
+{
+  "city_id": "san_salvador_(san_luis_talpa)",
+  "name_zh": "聖薩爾瓦多",
+  "name_en": "San Salvador (San Luis Talpa)",
+  "country_id": "SV",
+  "country_zh": "萨尔瓦多",
+  "timezone": "UTC",
+  "short_description": "聖薩爾瓦多是萨尔瓦多的首都，人口约33.1万，海拔670米。聖薩爾瓦多有记载的城市历史可追溯至1525年。在萨尔瓦多的饮食传统中，玉米饼普普萨是值得留意的风味。",
+  "overview": "聖薩爾瓦多位于萨尔瓦多（北纬13.7°）。城市海拔670米。作为萨尔瓦多的首都，聖薩爾瓦多是当地行政与商业活动的中心。城市人口约33.1万（2024年）。机场三字码为SAL；实际可达航线以航班页为准。",
+  "history_summary": "聖薩爾瓦多有记载的城市历史可追溯至1525年。",
+  "geography_summary": "聖薩爾瓦多地处北纬13.7°、海拔670米。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在萨尔瓦多的饮食传统中，玉米饼普普萨是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为SAL。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q3110",
+    "ourairports:SAL"
+  ],
+  "image_asset_id": "city_san_salvador_(san_luis_talpa)_hero_720"
+}

@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:JED",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_jeddah_photo_720"
 }

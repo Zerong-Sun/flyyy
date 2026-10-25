@@ -1,0 +1,21 @@
+{
+  "city_id": "pointe_à_pitre",
+  "name_zh": "皮特尔角城",
+  "name_en": "Pointe-à-Pitre",
+  "country_id": "GP",
+  "country_zh": "瓜德罗普",
+  "timezone": "UTC",
+  "short_description": "皮特尔角城是皮特尔角城区的首府，人口约1.5万，海拔0米。如今皮特尔角城仍是瓜德羅普的重要城市。在瓜德罗普的饮食传统中，炸面包夹馅博基特是值得留意的风味。",
+  "overview": "皮特尔角城位于瓜德罗普的瓜德羅普（北纬16.2°）。城市海拔0米。作为皮特尔角城区的首府，皮特尔角城是当地行政与商业活动的中心。城市人口约1.5万（2023年）。机场三字码为PTP；实际可达航线以航班页为准。",
+  "history_summary": "如今皮特尔角城仍是瓜德羅普的重要城市。",
+  "geography_summary": "皮特尔角城地处北纬16.2°、海拔0米。该城机场通达区域航线网络。",
+  "economy_summary": "首府地位带来稳定的行政与商务需求。",
+  "food_summary": "在瓜德罗普的饮食传统中，炸面包夹馅博基特是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为PTP。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q335322",
+    "ourairports:PTP"
+  ],
+  "image_asset_id": "city_pointe_à_pitre_hero_720"
+}

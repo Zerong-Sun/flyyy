@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:DEL",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_new_delhi_photo_720"
 }

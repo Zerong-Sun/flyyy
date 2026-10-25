@@ -227,6 +227,10 @@ ui.city.history,History
 ui.city.geography,Geography
 ui.city.economy,Economy
 ui.city.food,Food
+ui.city.culture,Local stories
+ui.city.photo,City photo
+ui.city.photo_source,Photo source
+ui.city.license,License
 ui.city.travel,Travel tips
 ui.city.low_content,"Warning: limited info. This entry is auto-generated with low confidence and is for reference only."
 ui.save.retry,Save failed. Previous progress is safe; retrying in 5 seconds.

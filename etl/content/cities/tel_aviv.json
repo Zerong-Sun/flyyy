@@ -1,0 +1,21 @@
+{
+  "city_id": "tel_aviv",
+  "name_zh": "特拉维夫",
+  "name_en": "Tel Aviv",
+  "country_id": "IL",
+  "country_zh": "以色列",
+  "timezone": "Asia/Jerusalem",
+  "short_description": "特拉维夫是特拉维夫区的首府，人口约46.8万，邻近黎凡特海，海拔5米。特拉维夫有记载的城市历史可追溯至1909年。在以色列的饮食传统中，鹰嘴豆泥与沙拉三明治是值得留意的风味。",
+  "overview": "特拉维夫位于以色列（北纬32.1°）。特拉维夫地处黎凡特海沿岸。作为特拉维夫区的首府，特拉维夫是当地行政与商业活动的中心。城市人口约46.8万（2021年）。机场三字码为TLV；实际可达航线以航班页为准。",
+  "history_summary": "特拉维夫有记载的城市历史可追溯至1909年。",
+  "geography_summary": "特拉维夫地处北纬32.1°、海拔5米、邻近黎凡特海。该城机场通达区域航线网络。",
+  "economy_summary": "首府地位带来稳定的行政与商务需求。",
+  "food_summary": "在以色列的饮食传统中，鹰嘴豆泥与沙拉三明治是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为TLV，时区UTC+2。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q33935",
+    "ourairports:TLV"
+  ],
+  "image_asset_id": "city_tel_aviv_photo_720"
+}

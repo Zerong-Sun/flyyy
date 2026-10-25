@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:GVA",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_geneva_photo_720"
 }

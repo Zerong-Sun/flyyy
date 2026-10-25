@@ -1,0 +1,22 @@
+{
+  "city_id": "rinas",
+  "name_zh": "里纳斯",
+  "name_en": "Rinas",
+  "country_id": "AL",
+  "country_zh": "阿尔巴尼亚",
+  "timezone": "UTC",
+  "short_description": "里纳斯位于阿尔巴尼亚。里纳斯与地拉那机场的历史紧密相连。机场于1955至1957年间建成，早年航班很少；20世纪90年代阿尔巴尼亚对外往来增加后，航班和旅客数也逐渐上升。",
+  "overview": "里纳斯位于阿尔巴尼亚（北纬41.4°）。机场三字码为TIA；实际可达航线以航班页为准。",
+  "history_summary": "里纳斯与地拉那机场的历史紧密相连。机场于1955至1957年间建成，早年航班很少；20世纪90年代阿尔巴尼亚对外往来增加后，航班和旅客数也逐渐上升。机场从小规模设施变为首都航空门户，记录了国家交通开放的过程。",
+  "geography_summary": "里纳斯地处北纬41.4°。该城机场通达区域航线网络。",
+  "economy_summary": "机场三字码TIA连接该地区的客运网络，机场周边的地面交通与旅客服务是理解本地流通的一个入口。",
+  "food_summary": "在阿尔巴尼亚的饮食传统中，酥皮馅饼拜雷克是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为TIA。",
+  "source_ids": [
+    "wikidata:Q7334581",
+    "ourairports:TIA",
+    "https://www.tirana-airport.com/en/article/24/History-of-the-Airport"
+  ],
+  "content_confidence": "B",
+  "image_asset_id": "city_rinas_hero_720"
+}

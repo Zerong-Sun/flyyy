@@ -13,5 +13,8 @@
   "food_summary": "德州烧烤（Texan BBQ）以慢烤牛腩为绝对核心，烟熏用橡木和山核桃木赋予独特风味。山核桃派的香甜浓郁是配套甜点。Tex-Mex 融合菜式如法吉塔和塔可饼遍布全城。当地精酿啤酒和手工糖果近年来进入区域特色商品名单。",
   "travel_note": "DFW机场距达拉斯市中心约30公里，DART轻轨橙线可到达。机场规模庞大（面积超过曼哈顿），五个航站楼之间需预留充分中转时间。夏季高温使易融商品加速变质，携带糖果和巧克力需放保温袋。",
   "content_confidence": "A",
-  "source_ids": ["wikidata:Q16557"]
+  "source_ids": [
+    "wikidata:Q16557"
+  ],
+  "image_asset_id": "city_dallas_photo_720"
 }

@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:CMN",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_casablanca_photo_720"
 }

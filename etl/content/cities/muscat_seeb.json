@@ -1,0 +1,21 @@
+{
+  "city_id": "muscat_seeb",
+  "name_zh": "马斯喀特",
+  "name_en": "Muscat/Seeb",
+  "country_id": "OM",
+  "country_zh": "阿曼",
+  "timezone": "UTC",
+  "short_description": "马斯喀特是阿曼的首都，人口约142.1万，邻近阿曼灣，海拔69米。如今马斯喀特仍是馬斯喀特省的重要城市。在阿曼的饮食传统中，慢烤肉舒瓦是值得留意的风味。",
+  "overview": "马斯喀特位于阿曼的馬斯喀特省（北纬23.6°）。马斯喀特地处阿曼灣沿岸。作为阿曼的首都，马斯喀特是当地行政与商业活动的中心。城市人口约142.1万（2019年）。机场三字码为MCT；实际可达航线以航班页为准。",
+  "history_summary": "如今马斯喀特仍是馬斯喀特省的重要城市。",
+  "geography_summary": "马斯喀特地处北纬23.6°、海拔69米、邻近阿曼灣。该城机场通达区域航线网络。",
+  "economy_summary": "首都地位带来稳定的行政与商务需求。",
+  "food_summary": "在阿曼的饮食传统中，慢烤肉舒瓦是值得留意的风味。这些是国家或地区层面的饮食线索；具体到这座城市，可以从市场与街头小店观察当地做法，留意食材、香料与节庆时令的变化。",
+  "travel_note": "机场三字码为MCT。",
+  "content_confidence": "B",
+  "source_ids": [
+    "wikidata:Q3826",
+    "ourairports:MCT"
+  ],
+  "image_asset_id": "city_muscat_seeb_hero_720"
+}

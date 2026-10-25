@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:ARN",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_stockholm_photo_720"
 }

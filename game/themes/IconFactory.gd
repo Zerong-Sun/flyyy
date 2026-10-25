@@ -157,7 +157,7 @@ static func load_art(stem: String) -> Texture2D:
 	if _tex_cache.has(stem):
 		return _tex_cache[stem]
 	for dir_path in _dirs_for_stem(stem):
-		for ext in [".webp", ".png"]:
+		for ext in [".webp", ".png", ".jpg", ".jpeg"]:
 			var path: String = str(dir_path) + stem + str(ext)
 			if ResourceLoader.exists(path):
 				var tex: Texture2D = load(path) as Texture2D

@@ -1373,6 +1373,35 @@ func _show_city() -> void:
 		hero.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		hero.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		col.add_child(hero)
+	var credits_path := "res://assets/cities/photo_credits.json"
+	if FileAccess.file_exists(credits_path):
+		var credits = JSON.parse_string(FileAccess.get_file_as_string(credits_path))
+		if credits is Dictionary and credits.has(city_id):
+			var credit: Dictionary = credits[city_id]
+			var credit_row := HBoxContainer.new()
+			col.add_child(credit_row)
+			var credit_label := Label.new()
+			credit_label.text = "%s：%s · %s" % [I18nService.t("ui.city.photo"), credit.get("author", ""), credit.get("license", "")]
+			credit_label.tooltip_text = credit_label.text
+			credit_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+			credit_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			credit_label.add_theme_font_size_override("font_size", 11)
+			credit_label.add_theme_color_override("font_color", _Colors.TEXT_SECONDARY)
+			credit_row.add_child(credit_label)
+			var source_url := str(credit.get("source_url", ""))
+			if source_url != "":
+				var source_button := Button.new()
+				source_button.text = I18nService.t("ui.city.photo_source")
+				source_button.tooltip_text = source_url
+				source_button.pressed.connect(func (): OS.shell_open(source_url))
+				credit_row.add_child(source_button)
+			var license_url := str(credit.get("license_url", ""))
+			if license_url != "":
+				var license_button := Button.new()
+				license_button.text = I18nService.t("ui.city.license")
+				license_button.tooltip_text = license_url
+				license_button.pressed.connect(func (): OS.shell_open(license_url))
+				credit_row.add_child(license_button)
 	_city_text = RichTextLabel.new()
 	_city_text.bbcode_enabled = true
 	_city_text.custom_minimum_size = Vector2(700, 280)
@@ -1389,6 +1418,7 @@ func _show_city() -> void:
 		"geography_summary": I18nService.t("ui.city.geography"),
 		"economy_summary": I18nService.t("ui.city.economy"),
 		"food_summary": I18nService.t("ui.city.food"),
+		"culture_note": I18nService.t("ui.city.culture"),
 		"travel_note": I18nService.t("ui.city.travel"),
 	}
 	var body := "[b]%s[/b]\n\n%s" % [
@@ -1515,12 +1545,17 @@ func _build_market_buy_tab() -> void:
 	next.text = "›"
 	next.pressed.connect(func (): _market_buy_page += 1; _refresh_market_buy())
 	pager.add_child(next)
+	var right_scroll := ScrollContainer.new()
+	right_scroll.custom_minimum_size = Vector2(330, 0)
+	right_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	right_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	page.add_child(right_scroll)
 	var right := VBoxContainer.new()
-	right.custom_minimum_size = Vector2(330, 0)
-	page.add_child(right)
+	right.custom_minimum_size = Vector2(320, 0)
+	right_scroll.add_child(right)
 	_market_buy_detail = RichTextLabel.new()
 	_market_buy_detail.bbcode_enabled = true
-	_market_buy_detail.custom_minimum_size = Vector2(320, 170)
+	_market_buy_detail.custom_minimum_size = Vector2(320, 130)
 	_market_buy_detail.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_market_buy_detail.text = "选择商品查看采购与目的地利润。"
 	right.add_child(_market_buy_detail)
@@ -1600,6 +1635,11 @@ func _add_market_buy_actions(parent: VBoxContainer) -> void:
 	buy_cargo.text = "买入（货运）"
 	buy_cargo.pressed.connect(func (): _buy_selected(true))
 	actions.add_child(buy_cargo)
+	var capacity_title := Label.new()
+	capacity_title.text = "行李扩容 / 货运额度添加"
+	capacity_title.tooltip_text = "需先购票。前三项增加行李额度；最后一项增加货运额度。"
+	capacity_title.add_theme_color_override("font_color", _Colors.ACCENT_AMBER)
+	parent.add_child(capacity_title)
 	var capacity := GridContainer.new()
 	capacity.columns = 2
 	parent.add_child(capacity)
@@ -1607,10 +1647,12 @@ func _add_market_buy_actions(parent: VBoxContainer) -> void:
 		var extend := Button.new()
 		var tier: String = pair[1]
 		extend.text = "%s $%.0f" % [pair[0], _baggage_tier_price(tier)]
+		extend.tooltip_text = "行李额度添加 %s" % pair[0]
 		extend.pressed.connect(func (): _show_hint(_Inventory.expand_baggage(tier)); _refresh_bags())
 		capacity.add_child(extend)
 	var cargo := Button.new()
-	cargo.text = "+50kg货运 $%.0f" % _cargo_block_price()
+	cargo.text = "货运+50kg $%.0f" % _cargo_block_price()
+	cargo.tooltip_text = "货运额度添加 +50kg"
 	cargo.pressed.connect(func (): _show_hint(_Inventory.expand_cargo(1)); _refresh_bags())
 	capacity.add_child(cargo)
 

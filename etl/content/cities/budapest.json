@@ -16,5 +16,6 @@
   "source_ids": [
     "ourairports:iata:BUD",
     "openflights:routes"
-  ]
+  ],
+  "image_asset_id": "city_budapest_photo_720"
 }
