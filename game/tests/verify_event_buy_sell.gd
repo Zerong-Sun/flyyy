@@ -1,15 +1,15 @@
 extends Node
 ## Headless regression for the arrival-discount (热卖/偶遇商机) popup and the sell
-## result card.
+## nonblocking sale feedback and explicitly requested event cards.
 ##
 ## Scenario 1 — 热卖折扣弹出后「趁机买入」：
 ##   1. 直接触发 _on_arrival_discount_accepted（相当于确认热卖弹窗）；
 ##   2. 断言：商品立即被按折扣价买入（资金减少 25% 折扣、库存出现该商品）；
 ##   3. 断言：市场采购列表把该商品置顶显示。
 ##
-## Scenario 2 — 售出结果卡片：
-##   1. 调用 _show_sell_result_card 展示一笔盈利售出；
-##   2. 断言：PopupEvent 已加入场景树且 visible（修复 add_child/popup_centered 顺序）。
+## Scenario 2 — 普通出售反馈：
+##   1. 实际出售一件商品，校验库存和现金；
+##   2. 断言：提示可见，不弹窗、不暂停、不排队。
 ##
 ## Run:
 ##   /Applications/Godot.app/Contents/MacOS/Godot --headless --path game res://tests/verify_event_buy_sell.tscn
@@ -104,51 +104,12 @@ func _ready() -> void:
 		await _frames(3)
 		_check(_inventory_qty(product_id) == qty_before_sell - 1, "sell did not reduce inventory")
 		_check(AppState.cash_usd > cash_mid, "sell did not add cash")
-	var popup_seen := false
-	var sell_popup = null
-	for child in hud.get_children():
-		if child is PopupEvent and child.visible:
-			popup_seen = true
-			sell_popup = child
-			break
-	_check(popup_seen, "sell result card did not show (BUG: add_child/popup_centered order)")
-	if sell_popup != null:
-		_check(hud.get("_active_event_popup") == sell_popup,
-			"sell result bypassed the serialized event queue")
-		_check(GameClock.paused, "sell result card must pause game time")
-		var ok_btn: Button = sell_popup.get_ok_button()
-		_check(ok_btn != null and not ok_btn.visible,
-			"default OK button must be hidden on sell result card (BUG: duplicate OK/继续)")
-		var visible_buttons := 0
-		for b_v in sell_popup.find_children("*", "Button", true, false):
-			var b: Button = b_v
-			if b.visible:
-				visible_buttons += 1
-		_check(visible_buttons == 1,
-			"sell result card must show exactly one visible button, got %d" % visible_buttons)
-		# Real click on the close button must fire event_confirmed and close the
-		# card (regression: hiding the default OK left custom buttons dead).
-		var signal_state := {"confirmed": false}
-		sell_popup.event_confirmed.connect(func(_r): signal_state.confirmed = true)
-		for b_v in sell_popup.find_children("*", "Button", true, false):
-			var b: Button = b_v
-			if b.visible:
-				b.emit_signal("pressed")
-				break
-		await _frames(3)
-		_check(bool(signal_state.confirmed), "clicking sell-card close button did not fire event_confirmed")
-		_check(not is_instance_valid(sell_popup) or not sell_popup.visible,
-			"sell result card did not close after accept")
-	# A discovery card may legitimately follow the sale, but it must appear only
-	# after the result card and the whole chain must restore the clock afterward.
-	var post_sell_popup: PopupEvent = hud.get("_active_event_popup") as PopupEvent
-	if post_sell_popup != null:
-		_check(post_sell_popup.title.find("意外发现") >= 0,
-			"unexpected popup followed the sell result: %s" % post_sell_popup.title)
-		_press_button(post_sell_popup, "暂不处理")
-		await _frames(4)
-	_check(hud.get("_active_event_popup") == null, "sell-result event chain did not drain")
-	_check(not GameClock.paused, "sell-result event chain did not restore the clock")
+	_check(_visible_popup_count(hud) == 0, "ordinary sales must not open a blocking result card")
+	_check(hud.get("_active_event_popup") == null, "ordinary sales must not create an active popup")
+	_check((hud.get("_event_queue") as Array).is_empty(), "ordinary sales must not queue follow-up popups")
+	_check(bool(hud.get("_hint_panel").visible), "sale feedback must be visible")
+	_check(not str(hud.get("_hint").text).is_empty(), "sale feedback must describe the result")
+	_check(not GameClock.paused, "ordinary sales must keep the game clock running")
 
 	# ── Scenario 3: real button click must accept an event popup ──
 	var accept_state := {"accepted": false, "cancelled": false}

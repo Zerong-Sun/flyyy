@@ -56,6 +56,9 @@ func _ready() -> void:
 		_finish()
 		return
 	ops.set_process(false)  # board manually; keep the clock autonomous
+	# The journey now waits for a player choice. Exercise the real decline button
+	# before awaiting arrival, including on any future event-bearing leg.
+	MerchantSystem.journey_requested.connect(func(_event): _decline_journey.call_deferred(hud))
 
 	var conns: Array = flight_search.search_connections(str(target.iata))
 	var conn: Dictionary = {}
@@ -119,6 +122,18 @@ func _finish() -> void:
 		for f in _failures:
 			printerr("  - ", f)
 		get_tree().quit(1)
+
+
+func _decline_journey(hud: Control) -> void:
+	var card := hud.find_child("JourneyChoice", true, false) as Control
+	_check(card != null and card.visible, "journey choice must appear before flight resumes")
+	if card == null:
+		_finish()
+		return
+	var buttons: Node = card.get_child(0).get_child(2)
+	_check(buttons.get_child_count() == 2, "journey must offer exactly two choices")
+	(buttons.get_child(1) as Button).pressed.emit()
+	_check(MerchantSystem.pending_event.is_empty(), "declining journey choice must resume the flight")
 
 
 func _frames(n: int) -> void:
